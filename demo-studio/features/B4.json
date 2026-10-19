@@ -1,0 +1,44 @@
+{
+  "id": "B4",
+  "name": "Chat with the building",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "Este es el chat de su edificio. Usted le escribe a Tata como le escribe a una persona, y Tata le responde con la información del conjunto."
+      }
+    },
+    {
+      "id": "2-rules",
+      "voice": {
+        "es": "Por ejemplo, pregúntele por el reglamento: si se pueden tener perros. Tata le responde con lo que dice el reglamento, y le muestra el artículo."
+      }
+    },
+    {
+      "id": "3-money",
+      "voice": {
+        "es": "También le puede preguntar por la plata. ¿Quién debe más de dos meses? Tata le dice qué apartamentos, y cuánto debe cada uno, según los extractos del banco."
+      }
+    },
+    {
+      "id": "4-law",
+      "voice": {
+        "es": "Y por las fechas que exige la ley, como cuándo convocar la asamblea. Tata le responde con el artículo de la Ley 675."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Pregúntele lo que necesite sobre su edificio."
+      }
+    }
+  ]
+}

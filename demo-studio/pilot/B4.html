@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Chat del edificio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<style>
+/* Platata guided demo, feature B4 "Chat with the building" (Edificios, Colombia, Spanish only, light theme).
+   ?mode=demo: the person taps. ?mode=video&dur=a,b,c,d,e: plays by itself on a clock, for recording.
+   Look and words come from the app: PaperColor.kt (EDIFICIOS accent, chat colors), ChatHilo.kt, PaperChat.kt,
+   InstalacionEncabezado.kt, EdificiosTabBar.kt and values-es (edif_chat_*). */
+:root{
+  --page:#F4EBDD; --potato:#3A2A1F;
+  --bg:#FBFAF7; --surface:#FFFFFF; --ink:#17181B; --ink2:#464A52; --muted:#737883; --line:#E6E2D9; --line2:#D9D4C9;
+  --chatbg:#ECEEEA; --mine:#D6EBE1; --tata:#FFFFFF; --tataName:#B8742A;
+  --accent:#177E73; --soft:#E4EEEA; --hint:#F59E0B;
+  --app:"Roboto",system-ui,sans-serif; --brand:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hidden}
+.stage{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px 16px 12px}
+.topline{width:min(100%,420px);display:flex;align-items:center;justify-content:space-between}
+.brand{font:600 22px var(--brand);color:var(--potato)}
+.tag{font:500 13px var(--app);color:var(--potato);background:#fff;border-radius:99px;padding:6px 12px;border:1px solid rgba(58,42,31,.2)}
+.phone{position:relative;height:min(78vh,760px);aspect-ratio:9/19.5;max-width:100%;border-radius:22px;box-shadow:0 14px 40px rgba(58,42,31,.22)}
+.screen{position:relative;width:100%;height:100%;background:var(--bg);border-radius:22px;overflow:hidden;container-type:size}
+.caption{width:min(100%,420px);min-height:52px;background:#fff;border-radius:16px;padding:10px 14px;display:flex;align-items:center;gap:10px;font:500 16px/1.3 var(--app);box-shadow:0 4px 14px rgba(58,42,31,.12)}
+.caption .n{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--potato);color:#fff;display:grid;place-items:center;font:600 14px var(--brand)}
+.install{width:min(100%,420px);height:54px;border-radius:16px;background:var(--potato);color:#fff;font:600 19px var(--brand);display:flex;align-items:center;justify-content:center;text-decoration:none}
+
+/* Android chrome */
+.statusbar{position:absolute;top:0;left:0;right:0;height:7.4cqw;padding:0 5.4cqw;display:flex;align-items:center;justify-content:space-between;font:500 3.7cqw var(--app);color:var(--ink);background:var(--surface);z-index:26}
+.statusbar .icons{display:flex;align-items:center;gap:1.6cqw}
+.statusbar svg{height:3.6cqw;width:auto;display:block}
+.navbar{position:absolute;left:0;right:0;bottom:0;height:5.6cqw;display:grid;place-items:center;z-index:26;background:var(--surface)}
+.navbar i{display:block;width:28cqw;height:1.2cqw;border-radius:1cqw;background:#1C1B1F}
+
+/* the app */
+.app{position:absolute;inset:7.4cqw 0 5.6cqw 0;display:flex;flex-direction:column;font-size:4.2cqw}
+.head{display:flex;align-items:center;gap:3cqw;padding:1.2cqw 3.8cqw 2.4cqw;background:var(--surface);border-bottom:1px solid var(--line);flex:0 0 auto}
+.ibox{width:10cqw;height:10cqw;border-radius:3cqw;background:var(--soft);display:grid;place-items:center;flex:0 0 auto}
+.ibox svg{width:6cqw;height:6cqw}
+.head .t{flex:1;min-width:0}
+.head .t b{display:block;font:600 5.2cqw/1.2 var(--brand);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.head .t span{display:block;font:400 3.4cqw var(--app);color:var(--muted)}
+.head .acct{width:9cqw;height:9cqw;border-radius:50%;display:grid;place-items:center;color:var(--ink2)}
+.head .acct svg{width:5.4cqw;height:5.4cqw}
+.chat{flex:1;min-height:0;background:var(--chatbg);display:flex;flex-direction:column;justify-content:flex-end;gap:2.2cqw;padding:2.6cqw 3.8cqw;overflow:hidden}
+.day{align-self:center;background:var(--surface);color:var(--muted);font:500 3.2cqw var(--app);border-radius:99px;padding:1cqw 3cqw;flex:0 0 auto}
+.msg{display:flex;gap:2cqw;align-items:flex-start;flex:0 0 auto}
+.msg.mine{justify-content:flex-end}
+.av{width:7.4cqw;height:7.4cqw;border-radius:50%;background:#F4EBDD;flex:0 0 auto;display:grid;place-items:center}
+.av svg{width:5.4cqw;height:5.4cqw}
+.bub{max-width:80%;background:var(--tata);border-radius:1cqw 4cqw 4cqw 4cqw;padding:2.2cqw 3.2cqw 1.6cqw;font:400 3.9cqw/1.38 var(--app);color:var(--ink)}
+.mine .bub{background:var(--mine);border-radius:4cqw 1cqw 4cqw 4cqw}
+.bub .who{display:block;font:600 3.3cqw var(--app);color:var(--tataName);margin-bottom:.6cqw}
+.bub .src{display:block;margin-top:1.4cqw;font-size:3.3cqw;color:var(--muted)}
+.bub .tm{display:block;text-align:right;font-size:3cqw;color:var(--muted);margin-top:.6cqw}
+.typing{font:italic 400 3.6cqw var(--app);color:var(--muted);padding-left:9.4cqw;flex:0 0 auto}
+.inbar{display:flex;align-items:center;gap:2.4cqw;padding:2.4cqw 3.8cqw;background:var(--surface);border-top:1px solid var(--line);flex:0 0 auto}
+.rb{width:10cqw;height:10cqw;border-radius:50%;display:grid;place-items:center;flex:0 0 auto}
+.rb svg{width:5.2cqw;height:5.2cqw}
+.rb.plus{background:var(--soft);color:var(--accent)}
+.rb.send{background:var(--accent);color:#fff}
+.rb.send.off{opacity:.45}
+.box{flex:1;min-width:0;min-height:10cqw;border-radius:5cqw;background:var(--bg);border:1px solid var(--line);padding:2.2cqw 3.6cqw;font:400 3.9cqw/1.3 var(--app);color:var(--ink);display:flex;align-items:center}
+.box .ph{color:var(--muted)}
+.box .caret{display:inline-block;width:.35cqw;height:4.6cqw;background:var(--accent);margin-left:.3cqw;vertical-align:-.9cqw}
+.tabs{display:flex;background:var(--surface);border-top:1px solid var(--line);flex:0 0 auto;height:15cqw}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.8cqw;font:500 3.2cqw var(--app);color:var(--muted);position:relative}
+.tab svg{width:6cqw;height:6cqw}
+.tab.on{color:var(--accent)}
+.tab .badge{position:absolute;top:1.6cqw;left:54%;min-width:4.4cqw;height:4.4cqw;border-radius:99px;background:#C2412D;color:#fff;font:600 2.8cqw/4.4cqw var(--app);text-align:center;padding:0 1cqw}
+.flag{width:7.4cqw;height:5cqw;border-radius:1cqw;overflow:hidden;box-shadow:0 0 0 1px rgba(0,0,0,.08);display:flex;flex-direction:column}
+.flag i{display:block}.flag i:nth-child(1){flex:2;background:#FCD116}.flag i:nth-child(2){flex:1;background:#003893}.flag i:nth-child(3){flex:1;background:#CE1126}
+/* keyboard (Gboard-like) */
+.kb{background:#E8EAED;padding:2cqw 1.2cqw 2.4cqw;display:flex;flex-direction:column;gap:2cqw;flex:0 0 auto}
+.kb .r{display:flex;gap:1.3cqw;justify-content:center}
+.kb .k{flex:0 0 8.4cqw;height:10.4cqw;border-radius:1.6cqw;background:#fff;display:grid;place-items:center;font:400 4.6cqw var(--app);color:#202124;box-shadow:0 .3cqw 0 rgba(0,0,0,.12)}
+.kb .k.w{flex:0 0 13cqw;background:#D3D6DA;font-size:3.6cqw}
+.kb .k.sp{flex:1 1 auto}
+.kb .k.on{background:#BFC4CA}
+.end{position:absolute;inset:0;background:var(--page);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5cqw;padding:10cqw;text-align:center;z-index:40}
+.end .logo{font:600 15cqw var(--brand);color:var(--potato)}
+.end p{margin:0;font:500 5.4cqw/1.35 var(--app);color:var(--potato)}
+.end .again{font:500 4.4cqw var(--app);color:var(--potato);text-decoration:underline;background:none;border:0;cursor:pointer}
+.end .play{background:var(--potato);color:#fff;border-radius:4cqw;padding:4cqw 7cqw;font:600 5.6cqw var(--brand)}
+.ring{position:absolute;pointer-events:none;border-radius:6cqw;box-shadow:0 0 0 .9cqw var(--hint),0 0 0 3cqw rgba(245,158,11,.25);z-index:20;transition:all .25s ease}
+.touch{position:absolute;pointer-events:none;width:12cqw;height:12cqw;margin:-6cqw 0 0 -6cqw;border-radius:50%;background:rgba(58,42,31,.35);border:.6cqw solid rgba(255,255,255,.9);z-index:21;opacity:0}
+@media (prefers-reduced-motion:no-preference){
+  .demo .ring{animation:pulse 1.3s ease-in-out infinite}
+  @keyframes pulse{50%{box-shadow:0 0 0 .9cqw var(--hint),0 0 0 5.5cqw rgba(245,158,11,0)}}
+  .nudge{animation:nudge .35s} @keyframes nudge{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  .demo .bub.new{animation:pop .25s ease-out} @keyframes pop{from{opacity:0;transform:translateY(2cqw)}}
+}
+/* video: screen fills the frame, subtitles in a band below */
+.video body{background:#000}
+.video .stage{padding:0;gap:0}
+.video .topline,.video .install,.video .caption{display:none}
+.video .phone{height:100%;width:100%;aspect-ratio:auto;border-radius:0;box-shadow:none}
+.video .screen{border-radius:0}
+.subtitle{display:none}
+.video .app{bottom:29.6cqw} .video .navbar{bottom:24cqw}
+.video .screen::after{content:"";position:absolute;left:0;right:0;bottom:0;height:24cqw;background:var(--potato);z-index:25}
+.video .subtitle{display:flex;position:absolute;left:0;right:0;bottom:0;height:24cqw;z-index:30;color:#fff;padding:0 7cqw;align-items:center;justify-content:center;font:500 5.6cqw/1.3 var(--app);text-align:center;opacity:0}
+.video .subtitle.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="topline"><div class="brand">Platata</div><div class="tag">Edificios · Colombia</div></div>
+  <div class="phone"><div class="screen" id="screen">
+    <div class="statusbar"><span>9:41</span><span class="icons">
+      <svg viewBox="0 0 18 14"><path d="M1 13h2.5V9.5H1zm4.5 0H8V7H5.5zM10 13h2.5V4.5H10zm4.5 0H17V1h-2.5z" fill="currentColor"/></svg>
+      <svg viewBox="0 0 20 15"><path d="M10 14.5 0 4.2a14.3 14.3 0 0 1 20 0z" fill="currentColor"/></svg>
+      <svg viewBox="0 0 26 13"><rect x=".7" y=".7" width="21.6" height="11.6" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.6" y="2.6" width="15.4" height="7.8" rx="1.4" fill="currentColor"/><rect x="23.4" y="4.2" width="2" height="4.6" rx="1" fill="currentColor"/></svg>
+      <span style="font-size:3.3cqw">78%</span></span></div>
+    <div class="app" id="app"></div>
+    <div class="navbar"><i></i></div>
+    <div class="ring" id="ring" hidden></div>
+    <div class="touch" id="touch"></div>
+    <div class="subtitle" id="sub"></div>
+  </div></div>
+  <div class="caption" id="caption" aria-live="polite"><span class="n" id="capN">1</span><span id="capT"></span></div>
+  <a class="install" id="install" target="_blank" rel="noopener">Instalar Platata</a>
+</div>
+<script>
+(function(){
+"use strict";
+const Q = new URLSearchParams(location.search);
+const MODE = Q.get("mode")==="video" ? "video" : "demo";
+document.documentElement.classList.add(MODE);
+const SRC = (Q.get("src")||"demo").replace(/[^a-z0-9_-]/gi,"").slice(0,40);
+document.getElementById("install").href = "https://play.google.com/store/apps/details?id=tata.fijando.su.plata&referrer=" +
+  encodeURIComponent(`utm_source=${SRC}&utm_medium=demo&utm_campaign=B4-CO-es`);
+
+/* ---------- the demo building (made up, complete) ---------- */
+const B = { name:"Conjunto Los Almendros", line:"40 unidades · Cuota $ 410.000" };
+const EARLIER = [
+  {who:"tata", text:"Octubre entró: 52 movimientos. La cuenta cierra en $ 18.420.300.", tm:"8:02"},
+  {who:"tata", text:"Ya repartí los pagos de octubre por apartamento. 36 de 40 pagaron la cuota.", tm:"8:02"}
+];
+const QA = [
+  { q:"¿Se pueden tener perros en el conjunto?",
+    a:"Sí. El reglamento permite perros y gatos dentro de los apartamentos. En las zonas comunes deben ir con correa, y el dueño recoge lo que su mascota ensucie.",
+    src:"Reglamento del conjunto, artículo 42." },
+  { q:"¿Quién debe más de dos meses?",
+    a:"Dos apartamentos. El 302 debe 4 meses: $ 1.640.000. El 504 debe 3 meses: $ 1.230.000. Los demás están al día hasta octubre.",
+    src:"Sale de los extractos del banco de julio a octubre." },
+  { q:"¿Cuándo tengo que convocar la asamblea?",
+    a:"La asamblea ordinaria se reúne al menos una vez al año. Si el reglamento no fija la fecha, es dentro de los tres primeros meses del año: a más tardar el 31 de marzo. Usted la convoca con al menos 15 días calendario de anticipación.",
+    src:"Ley 675 de 2001, artículo 39. Esto no es asesoría legal." }
+];
+const HINT = { tapBox:["Toque aquí para escribirle a Tata","Pregúntele otra cosa","Pregúntele otra cosa"], tapSend:"Toque Enviar", end:"Pregúntele lo que quiera, como le escribe a una persona." };
+const SUBS = ["Escríbale a Tata como a una persona","Pregunte por el reglamento","Pregunte por la plata del edificio","Pregunte por las fechas de la ley","Pregúntele lo que necesite"];
+
+/* ---------- state ---------- */
+// qi: which question (0..2), ph: 'idle' | 'typing' | 'ready' | 'thinking' | 'answered'; n: letters typed; done: answered count
+let S = {qi:0, ph:"idle", n:0, done:0, end:false};
+
+const ICON = {
+  bldg:'<svg viewBox="0 0 24 24" fill="none" stroke="#177E73" stroke-width="1.8" stroke-linejoin="round"><path d="M4 21V5l8-3v19M12 21V9l8 3v9M2 21h20M7 8h2M7 12h2M7 16h2M15 14h2M15 18h2"/></svg>',
+  acct:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  send:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 20.5 21 12 3 3.5 3 10l12 2-12 2z"/></svg>',
+  chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  cal:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4M9 15l2 2 4-4"/></svg>',
+  chart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 20V11M12 20V5M19 20v-6"/></svg>',
+  potato:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="12.5" rx="8" ry="9" fill="#D9A66A"/><circle cx="9.2" cy="11" r="1.1" fill="#3A2A1F"/><circle cx="14.8" cy="11" r="1.1" fill="#3A2A1F"/><path d="M9.5 14.8q2.5 2 5 0" stroke="#3A2A1F" stroke-width="1.1" fill="none" stroke-linecap="round"/><circle cx="7" cy="16" r=".6" fill="#B07F48"/><circle cx="16.5" cy="7.5" r=".5" fill="#B07F48"/></svg>'
+};
+const esc = s => s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const tataMsg = (text,src,tm,isNew) => `<div class="msg"><div class="av">${ICON.potato}</div><div class="bub${isNew?" new":""}"><span class="who">Tata</span>${esc(text)}${src?`<span class="src">${esc(src)}</span>`:""}<span class="tm">${tm}</span></div></div>`;
+const myMsg = (text,tm,isNew) => `<div class="msg mine"><div class="bub${isNew?" new":""}">${esc(text)}<span class="tm">${tm}</span></div></div>`;
+const KB = [["q","w","e","r","t","y","u","i","o","p"],["a","s","d","f","g","h","j","k","l","ñ"],["⇧","z","x","c","v","b","n","m","⌫"],["?123",",","espacio",".","↵"]];
+
+function render(){
+  const app = document.getElementById("app");
+  let chat = `<div class="day">Hoy</div>` + EARLIER.map(m=>tataMsg(m.text,null,m.tm,false)).join("");
+  for(let i=0;i<S.done;i++){ chat += myMsg(QA[i].q,"9:4"+(1+i),false) + tataMsg(QA[i].a,QA[i].src,"9:4"+(1+i), i===S.done-1 && S.ph==="answered"); }
+  if(S.ph==="thinking"){ chat += myMsg(QA[S.qi].q,"9:4"+(1+S.qi),true) + `<div class="typing">Tata está escribiendo…</div>`; }
+  const typingNow = S.ph==="typing"||S.ph==="ready";
+  const typed = typingNow ? QA[S.qi].q.slice(0,S.n) : "";
+  const box = typingNow ? `<span>${esc(typed)}<span class="caret"></span></span>` : `<span class="ph">Escríbale a Tata…</span>`;
+  const lastCh = typed.slice(-1).toLowerCase();
+  const kb = typingNow ? `<div class="kb">${KB.map(r=>`<div class="r">${r.map(k=>`<div class="k${k.length>1&&k!=="espacio"?" w":""}${k==="espacio"?" sp":""}${(k===lastCh||(k==="espacio"&&lastCh===" "))&&S.ph==="typing"?" on":""}">${k}</div>`).join("")}</div>`).join("")}</div>` : "";
+  const tabs = typingNow ? "" : `<div class="tabs"><div class="tab on">${ICON.chat}Chat</div><div class="tab">${ICON.cal}<span class="badge">3</span>Pendientes</div><div class="tab">${ICON.chart}Reportes</div><div class="tab"><span class="flag"><i></i><i></i><i></i></span></div></div>`;
+  app.innerHTML = `<div class="head"><div class="ibox">${ICON.bldg}</div><div class="t"><b>${B.name}</b><span>${B.line}</span></div><div class="acct">${ICON.acct}</div></div>
+    <div class="chat">${chat}</div>
+    <div class="inbar"><div class="rb plus">${ICON.plus}</div><div class="box" data-t="box">${box}</div><div class="rb send${S.ph==="ready"?"":" off"}" data-t="send">${ICON.send}</div></div>
+    ${kb}${tabs}
+    ${S.end?`<div class="end"><div class="logo">Platata</div><p>${HINT.end}</p>${MODE==="video"?`<div class="play">Disponible en Google Play</div>`:`<button class="again" data-t="again">Ver otra vez</button>`}</div>`:""}`;
+  // hint under the phone
+  const capN=document.getElementById("capN"), capT=document.getElementById("capT");
+  if(S.end){ capN.textContent="✓"; capT.textContent=HINT.end; }
+  else if(S.ph==="ready"){ capN.textContent=String(S.qi+1); capT.textContent=HINT.tapSend; }
+  else { capN.textContent=String(Math.min(S.qi+1,3)); capT.textContent=HINT.tapBox[Math.min(S.qi,2)]; }
+  placeRing();
+}
+function target(){
+  if(S.end) return null;
+  if(S.ph==="idle") return document.querySelector('[data-t="box"]');
+  if(S.ph==="ready") return document.querySelector('[data-t="send"]');
+  return null;
+}
+function placeRing(){
+  const ring=document.getElementById("ring"), el = MODE==="demo"?target():null;
+  if(!el){ ring.hidden=true; return; }
+  const a=document.getElementById("screen").getBoundingClientRect(), b=el.getBoundingClientRect(), p=4;
+  ring.hidden=false;
+  Object.assign(ring.style,{left:(b.left-a.left-p)+"px",top:(b.top-a.top-p)+"px",width:(b.width+p*2)+"px",height:(b.height+p*2)+"px"});
+}
+
+/* ---------- demo mode ---------- */
+if(MODE==="demo"){
+  let timer=null;
+  const typeOut = () => { S.ph="typing"; S.n=0; render();
+    timer = setInterval(()=>{ S.n++; if(S.n>=QA[S.qi].q.length){ clearInterval(timer); S.ph="ready"; } render(); }, 45); };
+  const send = () => { S.ph="thinking"; render();
+    setTimeout(()=>{ S.done++; S.ph="answered"; render();
+      setTimeout(()=>{ if(S.done>=3){ S.end=true; } else { S.qi++; S.ph="idle"; } render(); }, 900);
+    }, 1300); };
+  document.getElementById("screen").addEventListener("click", e=>{
+    if(S.end){ if(e.target.closest('[data-t="again"]')){ S={qi:0,ph:"idle",n:0,done:0,end:false}; render(); } return; }
+    const t=target();
+    if(t && t.contains(e.target)){ if(S.ph==="idle") typeOut(); else if(S.ph==="ready") send(); return; }
+    const cap=document.getElementById("caption"); cap.classList.remove("nudge"); void cap.offsetWidth; cap.classList.add("nudge");
+  });
+  window.addEventListener("resize", placeRing);
+  render(); document.fonts && document.fonts.ready.then(placeRing);
+}
+
+/* ---------- video mode: clock-driven ----------
+   Line 1 over the open chat; lines 2-4 each cover one question (tap box, type, send, answer); line 5 on the end card. */
+if(MODE==="video"){
+  const dur=(Q.get("dur")||"4,6,7,7,3").split(",").map(Number);
+  const CH=0.045, THINK=1.3;
+  const ev=[]; const starts=[]; let T=0.6;
+  starts.push(T); T+=dur[0]+0.3;
+  for(let i=0;i<3;i++){
+    const segStart=T; starts.push(segStart);
+    ev.push({at:T,type:"tapBox",qi:i}); T+=0.3;
+    const tStart=T, tEnd=T+QA[i].q.length*CH; ev.push({at:tStart,type:"typeStart",qi:i,end:tEnd}); T=tEnd+0.35;
+    ev.push({at:T,type:"tapSend",qi:i}); T+=THINK; ev.push({at:T,type:"answer",qi:i});
+    T = Math.max(T+2.2, segStart+dur[i+1]+0.4);
+  }
+  ev.push({at:T,type:"end"}); starts.push(T+0.4);
+  const total=T+0.4+dur[4]+1.6;
+  window.__timeline={starts,total};
+  const touch=document.getElementById("touch"), sub=document.getElementById("sub");
+  function stateAt(t){
+    S={qi:0,ph:"idle",n:0,done:0,end:false};
+    for(const e of ev){ if(e.at>t) break;
+      if(e.type==="typeStart"){ S.qi=e.qi; S.ph="typing"; const L=QA[e.qi].q.length; S.n=Math.min(L,Math.floor((t-e.at)/CH)); if(t>=e.end){S.n=L;S.ph="ready";} }
+      if(e.type==="tapSend"){ S.ph="thinking"; }
+      if(e.type==="answer"){ S.done=e.qi+1; S.ph="answered"; S.qi=Math.min(e.qi+1,2); }
+      if(e.type==="end"){ S.end=true; }
+    }
+  }
+  window.__frame=function(t){
+    const tap=ev.filter(e=>(e.type==="tapBox"||e.type==="tapSend")&&e.at<=t&&t-e.at<0.45).pop();
+    stateAt(tap? tap.at-1e-6 : t); render();
+    if(tap){
+      const el=document.querySelector(tap.type==="tapBox"?'[data-t="box"]':'[data-t="send"]');
+      if(el){ const a=document.getElementById("screen").getBoundingClientRect(), b=el.getBoundingClientRect(), p=(t-tap.at)/0.45;
+        touch.style.left=(b.left-a.left+b.width/2)+"px"; touch.style.top=(b.top-a.top+b.height/2)+"px";
+        touch.style.opacity=String(Math.max(0,1-p)); touch.style.transform=`scale(${0.7+p*0.6})`; }
+      if(t-tap.at>0.12){ stateAt(t); render(); }
+    } else touch.style.opacity="0";
+    let li=-1; starts.forEach((s,j)=>{ if(t>=s-0.05 && t<=s+dur[j]+0.3) li=j; });
+    if(li>=0){ sub.textContent=SUBS[li]; sub.classList.add("on"); } else sub.classList.remove("on");
+  };
+  window.__frame(0);
+}
+})();
+</script>
+</body>
+</html>

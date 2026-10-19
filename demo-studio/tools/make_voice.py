@@ -50,7 +50,9 @@ def main():
         feat = json.load(open(path, encoding="utf-8"))
         for step in feat["steps"]:
             for lang, text in step["voice"].items():
-                v = voices[lang]
+                v = dict(voices[lang])
+                # a feature may set its own voice settings per language (e.g. a calmer delivery)
+                v["settings"] = feat.get("voice_settings", {}).get(lang, v["settings"])
                 key = f"{feat['id']}/{lang}/{step['id']}"
                 h = hashlib.sha1(json.dumps([text, v["voice_id"], v["settings"], model]).encode()).hexdigest()
                 out = os.path.join(AUDIO, feat["id"], lang, step["id"] + ".mp3")
