@@ -20,6 +20,7 @@ KEY = os.environ.get("ELEVENLABS_API_KEY", "")
 HERE = os.path.join("demo-studio", "voice-test")
 OUT = os.path.join(HERE, "out")
 MODEL = "eleven_multilingual_v2"
+RUN = 2  # bump to re-run the job
 
 # Several searches per language; results are merged and de-duplicated.
 SEARCHES = {
