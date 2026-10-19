@@ -1,0 +1,87 @@
+/* Platata demo kit: the register (POS) screens for restaurant demos. Load AFTER edif.css.
+   Built from the app's own code and screenshots (HomeScreen footer pair C-17, CurrentSaleStrip, OpenTicketBanner,
+   ParkTicketDialog, DiningChooserContent, CheckoutSheetBody pay block, ReceiptOptions). Light theme only.
+   Class names are prefixed "p-" so they never clash with edif.css or a page's own styles. */
+
+/* ---------- register header + tabs ---------- */
+.p-head{display:flex;align-items:center;gap:3cqw;padding:1.2cqw 3.8cqw 2.4cqw;background:var(--surface);flex:0 0 auto}
+.p-head .ibox svg{width:6.4cqw;height:6.4cqw}
+.p-head .t{flex:1;min-width:0}
+.p-head .t b{display:block;font:600 5.2cqw/1.2 var(--brand);color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-head .t span{display:block;font:400 3.4cqw var(--app);color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-head .acct{width:9cqw;height:9cqw;border-radius:50%;display:grid;place-items:center;color:var(--ink2)}
+.p-head .acct svg{width:5.4cqw;height:5.4cqw}
+.p-tabs{display:flex;gap:1.6cqw;padding:0 3.8cqw 2.2cqw;background:var(--surface);border-bottom:1px solid var(--line);flex:0 0 auto}
+.p-tabs span{flex:1;height:9cqw;border-radius:3cqw;display:grid;place-items:center;font:500 3.8cqw var(--app);color:var(--ink2);background:var(--bg);border:1px solid var(--line)}
+.p-tabs span.on{background:var(--soft);border-color:transparent;color:#BE4927;font-weight:600}
+
+/* ---------- category chips + dish tiles ---------- */
+.p-cats{display:flex;gap:1.8cqw;overflow:hidden;padding:2.6cqw 3.8cqw 1.4cqw;flex:0 0 auto}
+.p-cats span{flex:0 0 auto;height:8.4cqw;padding:0 3.4cqw;border-radius:99px;border:1px solid var(--line2);background:var(--surface);display:grid;place-items:center;font:500 3.5cqw var(--app);color:var(--ink2);white-space:nowrap}
+.p-cats span.on{background:var(--ink);border-color:var(--ink);color:#fff}
+.p-grid{flex:1;min-height:0;overflow:hidden;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:max-content;gap:2.4cqw;padding:1.4cqw 3.8cqw 2.4cqw;align-content:start}
+.p-tile{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:4cqw;padding:2.2cqw;display:flex;flex-direction:column;gap:1.4cqw;min-width:0}
+.p-tile .pic{height:14cqw;border-radius:3cqw;background:var(--soft);display:grid;place-items:center;font:600 7cqw var(--brand);color:#BE4927}
+.p-tile b{font:500 3.7cqw/1.2 var(--app);color:var(--ink);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:8.9cqw}
+.p-tile .pr{font:600 3.9cqw var(--brand);color:var(--ink)}
+.p-tile .qty{position:absolute;top:1.4cqw;right:1.4cqw;min-width:6.4cqw;height:6.4cqw;border-radius:99px;background:var(--accent);color:#fff;font:600 3.4cqw/6.4cqw var(--app);text-align:center;padding:0 1.4cqw}
+.p-tile.hit{border-color:var(--accent)}
+
+/* ---------- current sale strip, open-ticket bar, footer pair ---------- */
+.p-strip{display:flex;align-items:center;justify-content:space-between;padding:2.6cqw 4.4cqw;font:400 3.8cqw var(--app);color:var(--ink);background:var(--bg);border-top:1px solid var(--line);flex:0 0 auto}
+.p-strip .chev{font-size:4.6cqw;color:var(--ink2)}
+.p-open{display:flex;align-items:center;justify-content:space-between;height:9.4cqw;padding:0 4.4cqw;background:#FF8F00;color:#fff;font:700 3.9cqw var(--app);flex:0 0 auto}
+.p-foot{display:flex;gap:3cqw;padding:2.6cqw 4cqw 3.4cqw;background:var(--bg);flex:0 0 auto}
+.p-foot>div{height:13cqw;border-radius:4.4cqw;display:grid;place-items:center;font:600 4.3cqw var(--brand);white-space:nowrap;padding:0 2cqw}
+.p-foot .l{flex:0 1 auto;min-width:38%;background:var(--surface);color:var(--ink);border:.5cqw solid var(--line2)}
+.p-foot .r{flex:1 1 auto;background:var(--potato);color:#fff}
+.p-foot .off{opacity:.45}
+
+/* ---------- toast ---------- */
+.p-toast{position:absolute;left:50%;bottom:36cqw;transform:translateX(-50%);background:#2B2722;color:#fff;font:500 3.8cqw var(--app);padding:2.8cqw 5cqw;border-radius:99px;white-space:nowrap;z-index:18;box-shadow:0 1cqw 3cqw rgba(0,0,0,.18)}
+.video .p-toast{bottom:30cqw}
+
+/* ---------- Material alert dialog (park ticket) ---------- */
+.p-scrim{position:absolute;inset:0;background:rgba(20,16,12,.45);display:grid;grid-template-columns:minmax(0,1fr);place-items:center;padding:6cqw;z-index:15}
+.p-dlg{min-width:0;background:var(--surface);border-radius:7cqw;padding:6cqw 5.4cqw 3cqw;width:100%;display:flex;flex-direction:column;gap:3.6cqw}
+.p-dlg h3{margin:0;font:400 5.6cqw/1.3 var(--app);color:var(--ink)}
+.p-field{position:relative;border:.4cqw solid var(--line2);border-radius:2cqw;height:14cqw;display:flex;align-items:center;padding:0 3.6cqw;font:400 4.2cqw var(--app);color:var(--ink)}
+.p-field label{position:absolute;top:-2.4cqw;left:2.6cqw;background:var(--surface);padding:0 1cqw;font:400 3.1cqw var(--app);color:var(--muted)}
+.p-field .ph{color:var(--muted)}
+.p-field.on{border-color:var(--accent)} .p-field.on label{color:var(--accent)}
+.p-chips{display:flex;gap:1.6cqw;overflow:hidden}
+.p-chips span{flex:0 0 auto;min-width:11cqw;height:8.6cqw;padding:0 3cqw;border-radius:2cqw;border:.3cqw solid var(--line2);display:flex;align-items:center;justify-content:center;gap:1cqw;font:500 3.8cqw var(--app);color:var(--ink2);background:var(--surface)}
+.p-chips span.on{background:var(--soft);border-color:transparent;color:#BE4927}
+.p-chips span.on svg{width:3.8cqw;height:3.8cqw}
+.p-acts{display:flex;justify-content:flex-end;gap:2cqw}
+.p-acts span{font:500 4.2cqw var(--app);color:var(--btn);padding:2.6cqw 3cqw;border-radius:99px}
+
+/* ---------- dining gate (¿Cómo sale este pedido? / ¿Qué mesa?) ---------- */
+.p-gate{min-width:0;background:var(--surface);border-radius:5cqw;padding:5cqw;width:100%;display:flex;flex-direction:column;gap:3cqw}
+.p-gate h3{margin:0;font:700 4.6cqw var(--app);color:var(--ink)}
+.p-gate .opt{height:13.6cqw;border-radius:4cqw;background:#F1EEE8;display:grid;place-items:center;font:700 4.8cqw var(--app);color:var(--ink)}
+.p-tables{display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw}
+.p-tables span{aspect-ratio:1;border-radius:3cqw;background:#F1EEE8;display:grid;place-items:center;font:700 4.4cqw var(--app);color:var(--ink)}
+.p-tables span.on{background:var(--accent);color:#fff}
+
+/* ---------- checkout pay block ---------- */
+.p-pay{background:var(--surface);border-top:1px solid var(--line);padding:3cqw 3.4cqw 3.6cqw;display:flex;flex-direction:column;gap:2.6cqw;flex:0 0 auto}
+.p-pay .tot{display:flex;justify-content:space-between;align-items:flex-end}
+.p-pay .tot small{font:400 3.2cqw var(--app);color:var(--muted)}
+.p-pay .tot b{font:500 8.2cqw/1 var(--app);color:var(--ink);white-space:nowrap}
+.p-pay .links{display:flex;justify-content:space-between;align-items:center;gap:2cqw}
+.p-pay .links u{font:500 3.9cqw var(--app);color:var(--ink);text-underline-offset:.8cqw}
+.p-pay .cashin{flex:0 0 46%;height:10.6cqw;border-radius:2.6cqw;background:#F1EEE8;display:flex;align-items:center;justify-content:space-between;padding:0 3cqw;font:400 3.5cqw var(--app);color:var(--ink2)}
+.p-pay .ways{display:flex;gap:2cqw}
+.p-pay .ways span{flex:1;height:12.4cqw;border-radius:99px;border:.5cqw solid var(--ink);display:flex;align-items:center;justify-content:center;gap:1.4cqw;font:600 4cqw var(--app);color:var(--ink);white-space:nowrap}
+.p-pay .ways span svg{width:4.6cqw;height:4.6cqw}
+.p-pay .ways span.main{flex:1.3;background:var(--btn);border-color:var(--btn);color:#fff}
+.p-pay .save{height:11.6cqw;border-radius:99px;border:.4cqw solid var(--ink);display:grid;place-items:center;font:500 4cqw var(--app);color:var(--ink)}
+
+/* ---------- receipt options (after paying) ---------- */
+.p-done{flex:1;display:flex;flex-direction:column;align-items:center;gap:3cqw;padding:8cqw 6cqw 4cqw;text-align:center}
+.p-done .ok{width:18cqw;height:18cqw;border-radius:50%;background:var(--okbg);color:var(--oktx);display:grid;place-items:center}
+.p-done .ok svg{width:10cqw;height:10cqw}
+.p-done h2{margin:0;font:600 6.4cqw var(--brand);color:var(--ink)}
+.p-done .wa{width:100%;height:13cqw;border-radius:4.4cqw;background:#25D366;color:#fff;display:flex;align-items:center;justify-content:center;gap:2cqw;font:600 4.4cqw var(--brand)}
+.p-done .wa svg{width:6cqw;height:6cqw}

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Pedido en la mesa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/pos.css">
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/pos.js"></script>
+<script>
+/* R4 "Pedido en la mesa" (Take an order at a table). App flow (HomeScreen C-17 + ParkTicketDialog):
+   tap the dishes → footer "Enviar a cocina" → "Nombre o mesa" pop-up → table chip 4 → Guardar → toast "Guardado: Mesa 4".
+   The sale is parked as an open ticket (PENDING) and the comanda goes to the kitchen; nothing is charged. */
+const P = POS.ctx(), O = P.C.order, D = O.map(P.item);
+const W = {
+  es:{ beats:["Anota el pedido de la mesa en la caja","Toca cada plato que pidieron","Toca Enviar a cocina","Elige la mesa 4 y toca Guardar","La cocina recibe el pedido; cobras después"],
+       dish:n=>`Toca ${n}`, send:"Toca Enviar a cocina", table:"Elige la mesa 4", save:"Toca Guardar",
+       end:"Así tomas el pedido de una mesa con Platata." },
+  pt:{ beats:["Anote o pedido da mesa no caixa","Toque em cada prato pedido","Toque em Enviar para a cozinha","Escolha a mesa 4 e toque em Salvar","A cozinha recebe; você cobra depois"],
+       dish:n=>`Toque em ${n}`, send:"Toque em Enviar para a cozinha", table:"Escolha a mesa 4", save:"Toque em Salvar",
+       end:"É assim que você anota o pedido de uma mesa com o Platata." },
+  en:{ beats:["Take the table's order at the register","Tap each dish they ordered","Tap Send to kitchen","Pick table 4 and tap Save","The kitchen gets it; you charge later"],
+       dish:n=>`Tap ${n}`, send:"Tap Send to kitchen", table:"Pick table 4", save:"Tap Save",
+       end:"That's how you take a table's order with Platata." }
+}[P.lang];
+const LIST = POS.gridOrder(P);
+const add = id => st => { st.qty[id] = (st.qty[id]||0) + 1; st.hit = id; };
+
+POS.start(P, {
+  id:"R4", endText:W.end, beats:W.beats,
+  state:{qty:{}, hit:null, dlg:false, table:null, toast:null},
+  render(st){
+    const amt = POS.total(P, st.qty), n = POS.count(st.qty);
+    let html = POS.head(P) + POS.tabs(P,"library") + POS.cats(P) + POS.grid(P, st.qty, LIST, st.hit)
+      + POS.strip(P, n) + POS.foot(P, {amount:amt}) + POS.toast(st.toast);
+    if(st.dlg) html += POS.park(P, {table:st.table});
+    return html;
+  },
+  steps:[
+    {beat:1, hint:W.dish(D[0].name), target:`[data-t="dish-${O[0]}"]`, tap:add(O[0])},
+    {beat:1, hint:W.dish(D[1].name), target:`[data-t="dish-${O[1]}"]`, tap:add(O[1])},
+    {beat:1, hint:W.dish(D[2].name), target:`[data-t="dish-${O[2]}"]`, tap:add(O[2])},
+    {beat:2, hint:W.send, target:'[data-t="send"]', tap(st){ st.hit=null; st.dlg=true; }},
+    {beat:3, hint:W.table, target:'[data-t="table-4"]', tap(st){ st.table=4; }},
+    {beat:3, hint:W.save, target:'[data-t="park-save"]', tap(st){
+      st.dlg=false; st.qty={}; st.table=null; st.toast=P.t("saved", P.t("table_chip",4));
+    }}
+  ]
+});
+</script>
+</body>
+</html>
