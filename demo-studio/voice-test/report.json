@@ -9,11 +9,56 @@
   "voice_limit": 160,
   "next_reset_unix": 1794158233
  },
- "candidates": {
-  "es": 40,
-  "pt": 40,
-  "en": 40,
-  "fr": 40
+ "made": [
+  {
+   "file": "es-female-diana.mp3",
+   "voice": "Diana García - Sales, Warm & Persuasive",
+   "chars": 233
+  },
+  {
+   "file": "es-male-carlos.mp3",
+   "voice": "Carlos - Colombian Spanish Narrator",
+   "chars": 233
+  },
+  {
+   "file": "pt-female-yasmin.mp3",
+   "voice": "Yasmin Alves - Light, Clear and Musical",
+   "chars": 227
+  },
+  {
+   "file": "pt-male-beto.mp3",
+   "voice": "Beto - Native Brazilian Specialist (PT-BR)",
+   "chars": 227
+  },
+  {
+   "file": "en-female-megan.mp3",
+   "voice": "Megan - Warm & Trusted Training",
+   "chars": 240
+  },
+  {
+   "file": "en-male-louis.mp3",
+   "voice": "Louis - Friendly Instructor",
+   "chars": 240
+  },
+  {
+   "file": "fr-female-jeanne.mp3",
+   "voice": "Jeanne Mance - Charming, Clear and Young",
+   "chars": 283
+  },
+  {
+   "file": "fr-male-thomas.mp3",
+   "voice": "Thomas - Clear, Warm and Professional",
+   "chars": 283
+  }
+ ],
+ "credits_after": {
+  "tier": "pro",
+  "used": 726883,
+  "limit": 1034030,
+  "left": 307147,
+  "voice_slots_used": 22,
+  "voice_limit": 160,
+  "next_reset_unix": 1794158233
  },
- "finished_utc": "2026-10-19 13:24:28"
+ "finished_utc": "2026-10-19 13:26:08"
 }
