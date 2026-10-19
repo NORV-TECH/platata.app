@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Cerrar caja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<style>
+/* Platata guided demo, feature S10 "Close the register".
+   One file. Two modes: ?mode=demo (the person taps, no voice) and ?mode=video (plays by itself, driven by a clock, for recording).
+   Screens are rebuilt from the app's own screenshots and strings (CloseRegisterScreen, RegisterClosedScreen, RegisterStatusScreen). */
+:root{
+  --page:#F4EBDD; --ink:#1C1B1F; --ink2:#5F6368; --line:#E7E3DC; --card:#FFFFFF; --screen:#FFFFFF;
+  --key:#EEF0F4; --btn:#1C1B1F; --btnInk:#FFFFFF; --short:#E53935; --over:#2E7D32; --open:#2E7D32;
+  --potato:#3A2A1F; --potatoInk:#FFFFFF; --hint:#F59E0B;
+  --app:"Roboto",system-ui,sans-serif; --brand:"Fredoka","Trebuchet MS",system-ui,sans-serif;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hidden}
+
+/* ---------- stage: phone + caption + install ---------- */
+.stage{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px 16px 12px}
+.topline{width:min(100%,420px);display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{font-family:var(--brand);font-weight:600;font-size:22px;color:var(--potato);letter-spacing:.2px}
+.gear{border:1px solid rgba(58,42,31,.25);background:#fff;color:var(--potato);border-radius:999px;height:36px;padding:0 12px;font:500 14px var(--app);display:flex;align-items:center;gap:6px;cursor:pointer}
+.gear svg{width:18px;height:18px}
+.phone{position:relative;height:min(78vh,760px);aspect-ratio:9/18.5;max-width:100%;background:#111;border-radius:36px;padding:10px;box-shadow:0 18px 50px rgba(58,42,31,.28)}
+.screen{position:relative;width:100%;height:100%;background:var(--screen);border-radius:27px;overflow:hidden;container-type:size}
+.caption{width:min(100%,420px);min-height:52px;background:#fff;border-radius:16px;padding:10px 14px;display:flex;align-items:center;gap:10px;font:500 16px/1.3 var(--app);box-shadow:0 4px 14px rgba(58,42,31,.12)}
+.caption .n{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--potato);color:#fff;display:grid;place-items:center;font:600 14px var(--brand)}
+.install{width:min(100%,420px);height:54px;border:0;border-radius:16px;background:var(--potato);color:var(--potatoInk);font:600 19px var(--brand);cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.install:focus-visible,.gear:focus-visible{outline:3px solid var(--hint);outline-offset:2px}
+
+/* ---------- inside the app screen (sizes in cqw so it scales with the phone) ---------- */
+.app{position:absolute;inset:0;display:flex;flex-direction:column;font-size:4.4cqw}
+.bar{height:15cqw;display:flex;align-items:center;gap:4cqw;padding:0 4.5cqw;flex:0 0 auto}
+.bar .back{width:6.5cqw;height:6.5cqw}
+.bar h1{margin:0;font:500 6.2cqw var(--app)}
+.bar .nav{flex:1;display:flex;align-items:center;justify-content:center;gap:3cqw;font:500 4.6cqw var(--app)}
+.bar .nav span.chev{color:var(--ink2);font-size:6cqw}
+.bar .link{font:500 4.2cqw var(--app);color:var(--ink)}
+.body{flex:1;overflow:hidden;padding:0 4.4cqw;display:flex;flex-direction:column;gap:3cqw}
+.body>*,.card>*{flex-shrink:0}
+.card{background:var(--card);border-radius:3.4cqw;box-shadow:0 .3cqw 1.6cqw rgba(0,0,0,.10);padding:4.4cqw 8.8cqw;display:flex;flex-direction:column;gap:3.6cqw}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:3cqw;color:var(--ink2);font-size:4.1cqw}
+.row b{color:var(--ink);font-weight:400}
+.row.strong{color:var(--ink);font-weight:500}
+.row.strong b{font-weight:500}
+.row.sub{padding-left:4.4cqw}
+.pill{align-self:flex-start;font:700 3.6cqw var(--app);color:var(--open);background:#E8F5E9;border-radius:99px;padding:1.4cqw 3.4cqw;letter-spacing:.04em}
+.btn{height:13.4cqw;border-radius:3.8cqw;border:0;background:var(--btn);color:var(--btnInk);font:500 4.8cqw var(--app);width:100%;display:grid;place-items:center;flex:0 0 auto}
+.btn.sec{background:#fff;color:var(--ink);border:.35cqw solid #D7D2C8}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:2.6cqw}
+.foot{padding:3cqw 4.4cqw 4.4cqw;flex:0 0 auto}
+.label{color:var(--ink2);font-size:4.4cqw;margin-top:1cqw}
+.big{font:500 13.5cqw/1.05 var(--app);letter-spacing:-.02em;white-space:nowrap}
+.diff{display:flex;justify-content:space-between;align-items:baseline;font-size:4.1cqw;color:var(--ink2)}
+.diff b{font-weight:500}
+.short{color:var(--short)} .over{color:var(--over)}
+.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:1.6cqw}
+.key{height:14.4cqw;border-radius:2.4cqw;background:var(--key);display:grid;place-items:center;font:500 8.6cqw var(--app);color:var(--ink)}
+.key svg{width:7cqw;height:7cqw}
+.hero{text-align:center;font:500 7.8cqw var(--app);margin:2cqw 0 1cqw}
+.scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;padding:7cqw}
+.dialog{background:#F7F3FA;border-radius:7cqw;padding:7cqw 6.4cqw 4.4cqw;width:100%;display:flex;flex-direction:column;gap:6cqw}
+.dialog h2{margin:0;font:400 6.2cqw/1.3 var(--app)}
+.dialog .acts{display:flex;justify-content:flex-end;gap:5cqw}
+.dialog .acts span{font:500 4.4cqw var(--app);color:#6750A4;padding:2.4cqw 2cqw}
+.end{position:absolute;inset:0;background:var(--page);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5cqw;padding:10cqw;text-align:center}
+.end .logo{font:600 15cqw var(--brand);color:var(--potato)}
+.end p{margin:0;font:500 5.4cqw/1.35 var(--app);color:var(--potato)}
+.end .again{font:500 4.4cqw var(--app);color:var(--potato);text-decoration:underline;cursor:pointer;background:none;border:0}
+.end .play{background:var(--potato);color:#fff;border-radius:4cqw;padding:4cqw 7cqw;font:600 5.6cqw var(--brand)}
+
+/* the "tap here" ring */
+.ring{position:absolute;pointer-events:none;border-radius:4cqw;box-shadow:0 0 0 .9cqw var(--hint),0 0 0 3cqw rgba(245,158,11,.25);z-index:20;transition:all .25s ease}
+.ring.dot{border-radius:50%}
+.touch{position:absolute;pointer-events:none;width:12cqw;height:12cqw;margin:-6cqw 0 0 -6cqw;border-radius:50%;background:rgba(58,42,31,.35);border:.6cqw solid rgba(255,255,255,.9);z-index:21;opacity:0}
+@media (prefers-reduced-motion:no-preference){
+  .demo .ring{animation:pulse 1.3s ease-in-out infinite}
+  @keyframes pulse{50%{box-shadow:0 0 0 .9cqw var(--hint),0 0 0 5.5cqw rgba(245,158,11,0)}}
+  .nudge{animation:nudge .35s}
+  @keyframes nudge{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+}
+
+/* settings sheet */
+.sheet{position:fixed;inset:0;background:rgba(28,27,31,.4);display:none;align-items:flex-end;justify-content:center;z-index:50}
+.sheet.on{display:flex}
+.sheet .panel{background:#fff;width:min(100%,460px);border-radius:20px 20px 0 0;padding:18px 16px 22px;display:flex;flex-direction:column;gap:14px}
+.sheet h3{margin:0;font:600 20px var(--brand);color:var(--potato)}
+.sheet .grp{display:flex;flex-direction:column;gap:8px}
+.sheet .grp>span{font:500 13px var(--app);color:var(--ink2);text-transform:uppercase;letter-spacing:.06em}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid #D7D2C8;background:#fff;border-radius:999px;padding:8px 14px;font:500 15px var(--app);cursor:pointer;color:var(--ink)}
+.chip[aria-pressed="true"]{background:var(--potato);border-color:var(--potato);color:#fff}
+.sheet .close{align-self:stretch;height:46px;border-radius:14px;border:0;background:var(--key);font:500 16px var(--app);cursor:pointer}
+
+/* ---------- video mode: the screen fills the frame, subtitles at the bottom ---------- */
+.video body{background:#000}
+.video .stage{padding:0;gap:0}
+.video .topline,.video .install,.video .caption{display:none}
+.video .phone{height:100%;width:100%;aspect-ratio:auto;border-radius:0;padding:0;box-shadow:none;background:#fff}
+.video .screen{border-radius:0}
+.subtitle{display:none}
+.video .app{bottom:24cqw}
+.video .key{height:12cqw}
+.video .keys{gap:1.4cqw}
+.video .screen::after{content:"";position:absolute;left:0;right:0;bottom:0;height:24cqw;background:var(--potato);z-index:25}
+.video .subtitle{display:flex;position:absolute;left:0;right:0;bottom:0;height:24cqw;z-index:30;color:#fff;padding:0 7cqw;align-items:center;justify-content:center;font:500 5.6cqw/1.3 var(--app);text-align:center;opacity:0}
+.video .subtitle.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="topline">
+    <div class="brand">Platata</div>
+    <button class="gear" id="gear" aria-haspopup="dialog">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+      <span id="gearLabel"></span>
+    </button>
+  </div>
+  <div class="phone"><div class="screen" id="screen">
+    <div class="app" id="app"></div>
+    <div class="ring" id="ring" hidden></div>
+    <div class="touch" id="touch"></div>
+    <div class="subtitle" id="sub"></div>
+  </div></div>
+  <div class="caption" id="caption" aria-live="polite"><span class="n" id="capN">1</span><span id="capT"></span></div>
+  <a class="install" id="install" target="_blank" rel="noopener"></a>
+</div>
+
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="panel">
+    <h3 id="sheetTitle"></h3>
+    <div class="grp"><span id="langLabel"></span><div class="chips" id="langChips"></div></div>
+    <div class="grp"><span id="countryLabel"></span><div class="chips" id="countryChips"></div></div>
+    <button class="close" id="sheetClose"></button>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const Q = new URLSearchParams(location.search);
+const MODE = Q.get("mode") === "video" ? "video" : "demo";
+document.documentElement.classList.add(MODE);
+
+/* ---------------- words: the app's own strings (values, -es, -pt-rBR, -fr) ---------------- */
+const S = {
+ es:{close_title:"Cerrar caja",expected:"Esperado",see_breakdown:"Ver dinero por forma de pago ›",counted:"Contado",diff:"Diferencia",short:"Faltante %s",over:"Sobrante %s",balanced:"Cuadrado",confirm:"Cerrar caja",confirm_title:"¿Cerrar la caja con %s contados?",keep:"Seguir contando",closed_title:"Caja cerrada",opened_at:"Abierta",closed_at:"Cerrado",closed_by:"Cerrado por",net:"Ventas netas",by_method:"Dinero por forma de pago",start:"Efectivo inicial",cash_sales:"Ventas en efectivo",should:"Debe haber en la caja",pill:"● ABIERTO",today:"Hoy · %s",opened_by:"Abierta por",cash_in:"Meter efectivo",cash_out:"Sacar efectivo",drawer:"Abrir cajón de dinero",reports:"Reportes",done:"Listo",
+     m_cash:"Efectivo",m_qr:"QR",m_card:"Tarjeta",m_pix:"Pix",
+     ui_install:"Instalar Platata",ui_settings:"Ajustes",ui_lang:"Idioma",ui_country:"País",ui_close:"Cerrar",ui_end:"Así cierras la caja con Platata.",ui_again:"Ver otra vez",ui_play:"Disponible en Google Play",ui_wrong:"Toca donde está marcado"},
+ pt:{close_title:"Fechar caixa",expected:"Esperado",see_breakdown:"Ver dinheiro por forma de pagamento ›",counted:"Contado",diff:"Diferença",short:"Falta %s",over:"Sobra %s",balanced:"Fechado exato",confirm:"Fechar caixa",confirm_title:"Fechar o caixa com %s contados?",keep:"Continuar contando",closed_title:"Caixa fechado",opened_at:"Aberta em",closed_at:"Fechado",closed_by:"Fechado por",net:"Vendas líquidas",by_method:"Por forma de pagamento",start:"Dinheiro inicial",cash_sales:"Vendas em dinheiro",should:"Deve haver no caixa",pill:"● ABERTO",today:"Hoje · %s",opened_by:"Aberta por",cash_in:"Colocar dinheiro",cash_out:"Retirar dinheiro",drawer:"Abrir gaveta de dinheiro",reports:"Relatórios",done:"Concluído",
+     m_cash:"Dinheiro",m_qr:"QR",m_card:"Cartão",m_pix:"Pix",
+     ui_install:"Instalar o Platata",ui_settings:"Ajustes",ui_lang:"Idioma",ui_country:"País",ui_close:"Fechar",ui_end:"É assim que você fecha o caixa com o Platata.",ui_again:"Ver de novo",ui_play:"Disponível no Google Play",ui_wrong:"Toque onde está marcado"},
+ en:{close_title:"Close register",expected:"Expected",see_breakdown:"See money by payment method ›",counted:"Counted",diff:"Difference",short:"Short %s",over:"Over %s",balanced:"Balanced",confirm:"Close register",confirm_title:"Close the register with %s counted?",keep:"Keep counting",closed_title:"Register closed",opened_at:"Opened",closed_at:"Closed",closed_by:"Closed by",net:"Net sales",by_method:"Money by payment method",start:"Starting cash",cash_sales:"Cash sales",should:"Should be in the drawer",pill:"● OPEN",today:"Today · %s",opened_by:"Opened by",cash_in:"Cash in",cash_out:"Cash out",drawer:"Open cash drawer",reports:"Reports",done:"Done",
+     m_cash:"Cash",m_qr:"QR",m_card:"Card",m_pix:"Pix",
+     ui_install:"Install Platata",ui_settings:"Settings",ui_lang:"Language",ui_country:"Country",ui_close:"Close",ui_end:"That's how you close the register with Platata.",ui_again:"Watch again",ui_play:"Get it on Google Play",ui_wrong:"Tap where it's marked"},
+ fr:{close_title:"Fermer la caisse",expected:"Attendu",see_breakdown:"Voir l’argent par moyen de paiement ›",counted:"Compté",diff:"Différence",short:"Manquant %s",over:"Excédent %s",balanced:"Équilibrée",confirm:"Fermer la caisse",confirm_title:"Fermer la caisse avec %s comptés ?",keep:"Continuer à compter",closed_title:"Caisse fermée",opened_at:"Ouverte",closed_at:"Fermée",closed_by:"Fermée par",net:"Ventes nettes",by_method:"Encaissements par mode",start:"Fonds de départ",cash_sales:"Ventes en espèces",should:"Doit être dans la caisse",pill:"● OUVERTE",today:"Aujourd'hui · %s",opened_by:"Ouverte par",cash_in:"Entrée d'espèces",cash_out:"Sortie d'espèces",drawer:"Ouvrir le tiroir-caisse",reports:"Rapports",done:"Terminé",
+     m_cash:"Espèces",m_qr:"QR",m_card:"Carte",m_pix:"Pix",
+     ui_install:"Installer Platata",ui_settings:"Réglages",ui_lang:"Langue",ui_country:"Pays",ui_close:"Fermer",ui_end:"Voilà comment fermer la caisse avec Platata.",ui_again:"Revoir",ui_play:"Disponible sur Google Play",ui_wrong:"Touchez l'endroit indiqué"}
+};
+const CAPTIONS = {
+ es:["Toca Cerrar caja","Cuenta la plata y escribe cuánto hay","Platata ya sabe cuánto debería haber","¡Listo! Tu día quedó guardado"],
+ pt:["Toque em Fechar caixa","Conte o dinheiro e digite quanto tem","O Platata já sabe quanto deveria ter","Pronto! Seu dia ficou salvo"],
+ en:["Tap Close register","Count the cash and type what you have","Platata already knows what should be there","Done! Your day is saved"],
+ fr:["Touchez Fermer la caisse","Comptez l'argent et entrez le montant","Platata sait déjà ce qui devrait y être","C'est fait! Votre journée est enregistrée"]
+};
+const LANG_NAMES = {es:"Español",pt:"Português",en:"English",fr:"Français"};
+
+/* ---------------- one business, numbers per country ---------------- */
+/* dec = currency decimals (decides the 000 or 00 key, like the app). Amounts in whole units. */
+const C = {
+ CO:{name:"Colombia",lang:"es",loc:"es-CO",cur:"COP",dec:0,owner:"Marta",start:50000,cash:213590,other:[["m_qr",120000],["m_card",79000]],count:"250000"},
+ MX:{name:"México",lang:"es",loc:"es-MX",cur:"MXN",dec:2,owner:"Lupita",start:500,cash:2135.9,other:[["m_qr",1180]],count:"260000"},
+ PE:{name:"Perú",lang:"es",loc:"es-PE",cur:"PEN",dec:2,owner:"Rosa",start:100,cash:527.9,other:[["m_qr",310]],count:"60000"},
+ CL:{name:"Chile",lang:"es",loc:"es-CL",cur:"CLP",dec:0,owner:"Rosa",start:20000,cash:85390,other:[["m_qr",46000]],count:"100000"},
+ EC:{name:"Ecuador",lang:"es",loc:"es-EC",cur:"USD",dec:2,owner:"Rosa",start:50,cash:263.9,other:[["m_qr",140]],count:"30000"},
+ AR:{name:"Argentina",lang:"es",loc:"es-AR",cur:"ARS",dec:2,owner:"Rosa",start:20000,cash:85390,other:[["m_qr",46000]],count:"10000000"},
+ PA:{name:"Panamá",lang:"es",loc:"es-PA",cur:"USD",dec:2,owner:"Rosa",start:50,cash:263.9,other:[["m_qr",140]],count:"30000"},
+ BR:{name:"Brasil",lang:"pt",loc:"pt-BR",cur:"BRL",dec:2,owner:"Cida",start:100,cash:527.9,other:[["m_pix",380]],count:"60000"},
+ US:{name:"United States",lang:"en",loc:"en-US",cur:"USD",dec:2,owner:"Maria",start:100,cash:527.9,other:[["m_card",410]],count:"60000"},
+ CA:{name:"Canada",lang:"fr",loc:"fr-CA",cur:"CAD",dec:2,owner:"Marie",start:100,cash:527.9,other:[["m_card",410]],count:"60000"}
+};
+const ORDER = ["CO","MX","PE","CL","EC","AR","PA","BR","US","CA"];
+
+let country = (Q.get("country")||"CO").toUpperCase(); if(!C[country]) country="CO";
+let lang = Q.get("lang") || C[country].lang; if(!S[lang]) lang="es";
+const SRC = (Q.get("src")||"demo").replace(/[^a-z0-9_-]/gi,"").slice(0,40);
+
+const t = k => S[lang][k];
+const fmtLoc = () => (lang==="es"||lang==="pt") ? C[country].loc : (lang==="fr" ? (country==="CA"?"fr-CA":"fr-FR") : (country==="CA"?"en-CA":"en-US"));
+function money(v){
+  const c=C[country];
+  // The app writes "$ 263.590" with a space after the symbol; Intl gives the right separators per country.
+  let s = new Intl.NumberFormat(c.loc,{style:"currency",currency:c.cur,minimumFractionDigits:c.dec,maximumFractionDigits:c.dec}).format(Math.abs(v));
+  s = s.replace(/ /g," ");
+  if(/^[^\d\s-]+\d/.test(s)) s = s.replace(/^([^\d\s-]+)(\d)/,"$1 $2");
+  return s.replace(/ /g,"\u00a0");   // never break "$ 250.000" across two lines
+}
+const fill = (s,v) => s.replace("%s",v);
+
+/* ---------------- state ---------------- */
+let step = 0;          // 0 status, 1 typing, 2 difference, 3 confirm dialog, 4 closed, 5 end
+let typed = "";        // digits typed so far
+let keyIdx = 0;        // which key of the count we are on
+const openedAt = new Date(); openedAt.setHours(7,2,0,0);
+const closedAt = new Date(); closedAt.setHours(19,48,0,0);
+const keySeq = () => {
+  const c=C[country], z=c.dec===0?"000":"00", out=[]; let d=c.count;
+  // type digit by digit, but use the 000 / 00 key for the trailing zeros like a cashier would
+  if(d.endsWith(z)){ d=d.slice(0,-z.length); for(const ch of d) out.push(ch); out.push(z); }
+  else for(const ch of d) out.push(ch);
+  return out;
+};
+const expected = () => C[country].start + C[country].cash;
+const counted = () => typed ? Number(typed)/Math.pow(10,C[country].dec) : 0;
+
+/* ---------------- screens ---------------- */
+const ICON_BACK = '<svg class="back" viewBox="0 0 24 24"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z" fill="currentColor"/></svg>';
+const ICON_DEL = '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M22 3H7c-.7 0-1.2.3-1.6.9L0 12l5.4 8.1c.4.5.9.9 1.6.9h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.6L17.6 17 14 13.4 10.4 17 9 15.6 12.6 12 9 8.4 10.4 7 14 10.6 17.6 7 19 8.4 15.4 12z"/></svg>';
+const dt = d => new Intl.DateTimeFormat(fmtLoc(),{day:"numeric",month:"short",year:"numeric",hour:"numeric",minute:"2-digit"}).format(d);
+const dshort = d => new Intl.DateTimeFormat(fmtLoc(),{day:"numeric",month:"short"}).format(d);
+const tm = d => new Intl.DateTimeFormat(fmtLoc(),{hour:"numeric",minute:"2-digit"}).format(d);
+
+function statusScreen(){
+  const c=C[country];
+  return `<div class="bar"><div class="nav"><span class="chev">‹</span><span>${fill(t("today"),dshort(openedAt))}</span><span class="chev">›</span></div><span class="link">${t("reports")}</span></div>
+  <div class="body">
+    <span class="pill">${t("pill")}</span>
+    <div class="card"><div class="row">${t("opened_at")}<b>${tm(openedAt)}</b></div><div class="row">${t("opened_by")}<b>${c.owner}</b></div></div>
+    <div class="card"><div class="row">${t("start")}<b>${money(c.start)}</b></div><div class="row">${t("cash_sales")}<b>${money(c.cash)}</b></div><div class="row strong">${t("should")}<b>${money(expected())}</b></div></div>
+    <div class="two"><div class="btn sec">${t("cash_out")}</div><div class="btn sec">${t("cash_in")}</div></div>
+    <div class="btn sec">${t("drawer")}</div>
+  </div>
+  <div class="foot"><div class="btn sec" data-t="close">${t("close_title")}</div></div>`;
+}
+function closeScreen(){
+  const z = C[country].dec===0?"000":"00";
+  const has = typed.length>0, diff = counted()-expected();
+  const diffTxt = !has ? "" : (Math.abs(diff)<1e-9 ? `<b>${t("balanced")}</b>` : `<b class="${diff<0?"short":"over"}">${fill(t(diff<0?"short":"over"),money(diff))}</b>`);
+  const keys = ["1","2","3","4","5","6","7","8","9",z,"0","del"].map(k=>`<div class="key" data-k="${k}">${k==="del"?ICON_DEL:k}</div>`).join("");
+  return `<div class="bar">${ICON_BACK}<h1>${t("close_title")}</h1></div>
+  <div class="body" style="gap:2cqw">
+    <div class="card" style="padding:6cqw 8.8cqw"><div class="row">${t("expected")}<b>${money(expected())}</b></div><div class="row" style="color:var(--ink)">${t("see_breakdown")}</div></div>
+    <div class="label">${t("counted")}</div>
+    <div class="big">${money(counted())}</div>
+    <div class="diff" data-t="diff"><span>${t("diff")}</span>${diffTxt}</div>
+    <div class="keys">${keys}</div>
+  </div>
+  <div class="foot"><div class="btn" data-t="confirm" style="${has?"":"opacity:.4"}">${t("confirm")}</div></div>`;
+}
+function dialog(){
+  return `<div class="scrim"><div class="dialog"><h2>${fill(t("confirm_title"),money(counted()))}</h2><div class="acts"><span>${t("keep")}</span><span data-t="really">${t("confirm")}</span></div></div></div>`;
+}
+function closedScreen(){
+  const c=C[country], diff=counted()-expected();
+  const net = c.cash + c.other.reduce((a,o)=>a+o[1],0);
+  const methods = [["m_cash",c.cash],...c.other].map(([k,v])=>`<div class="row sub">${t(k)}<b>${money(v)}</b></div>`).join("");
+  return `<div class="bar">${ICON_BACK}<h1>${t("closed_title")}</h1></div>
+  <div class="body">
+    <div class="hero ${diff<0?"short":"over"}">${Math.abs(diff)<1e-9?t("balanced"):fill(t(diff<0?"short":"over"),money(diff))}</div>
+    <div class="card"><div class="row">${t("opened_at")}<b>${dt(openedAt)}</b></div><div class="row">${t("closed_at")}<b>${dt(closedAt)}</b></div><div class="row">${t("closed_by")}<b>${c.owner}</b></div></div>
+    <div class="card"><div class="row strong">${t("net")}<b>${money(net)}</b></div><div class="row">${t("by_method")}</div>${methods}</div>
+    <div class="card"><div class="row">${t("start")}<b>${money(c.start)}</b></div><div class="row">${t("cash_sales")}<b>${money(c.cash)}</b></div></div>
+  </div>
+  <div class="foot"><div class="btn" data-t="done">${t("done")}</div></div>`;
+}
+function endScreen(){
+  return `<div class="end"><div class="logo">Platata</div><p>${t("ui_end")}</p>${MODE==="video"?`<div class="play">${t("ui_play")}</div>`:`<button class="again" data-t="again">${t("ui_again")}</button>`}</div>`;
+}
+
+/* ---------------- render ---------------- */
+const app = document.getElementById("app"), ring = document.getElementById("ring"), screen = document.getElementById("screen");
+function target(){
+  if(step===0) return app.querySelector('[data-t="close"]');
+  if(step===1){ const k=keySeq()[keyIdx]; return app.querySelector(`[data-k="${k}"]`); }
+  if(step===2) return app.querySelector('[data-t="confirm"]');
+  if(step===3) return app.querySelector('[data-t="really"]');
+  if(step===4) return app.querySelector('[data-t="done"]');
+  return null;
+}
+function capIndex(){ return step===0?0: step===1?1: (step===2||step===3)?2: 3; }
+function render(){
+  document.documentElement.lang = lang;
+  let html = step===0?statusScreen(): (step<=3?closeScreen(): step===4?closedScreen(): endScreen());
+  if(step===3) html += dialog();
+  app.innerHTML = html;
+  // chrome
+  document.getElementById("gearLabel").textContent = `${LANG_NAMES[lang].slice(0,2).toUpperCase()} · ${country}`;
+  const ins = document.getElementById("install");
+  ins.textContent = t("ui_install");
+  const ref = encodeURIComponent(`utm_source=${SRC}&utm_medium=demo&utm_campaign=S10-${country}-${lang}`);
+  ins.href = `https://play.google.com/store/apps/details?id=tata.fijando.su.plata&referrer=${ref}`;
+  const ci = capIndex();
+  document.getElementById("capN").textContent = step===5 ? "✓" : String(ci+1);
+  document.getElementById("capT").textContent = step===5 ? t("ui_end") : CAPTIONS[lang][ci];
+  placeRing();
+}
+function placeRing(){
+  const el = MODE==="demo" ? target() : null;
+  if(!el){ ring.hidden = true; return; }
+  const a = screen.getBoundingClientRect(), b = el.getBoundingClientRect(), pad = 4;
+  ring.hidden = false;
+  ring.classList.toggle("dot", step===1);
+  Object.assign(ring.style,{left:(b.left-a.left-pad)+"px",top:(b.top-a.top-pad)+"px",width:(b.width+pad*2)+"px",height:(b.height+pad*2)+"px"});
+}
+function advance(){
+  if(step===0){ step=1; keyIdx=0; typed=""; }
+  else if(step===1){ const k=keySeq()[keyIdx]; typed += k; keyIdx++; if(keyIdx>=keySeq().length) step=2; }
+  else if(step===2){ step=3; }
+  else if(step===3){ step=4; }
+  else if(step===4){ step=5; }
+  else if(step===5){ step=0; typed=""; keyIdx=0; }
+  render();
+}
+
+/* ---------------- demo mode: the person taps ---------------- */
+if(MODE==="demo"){
+  screen.addEventListener("click", e=>{
+    const tg = target();
+    const again = e.target.closest('[data-t="again"]');
+    if(step===5 && again){ advance(); return; }
+    if(tg && tg.contains(e.target)){ advance(); return; }
+    const cap = document.getElementById("caption");
+    cap.classList.remove("nudge"); void cap.offsetWidth; cap.classList.add("nudge");
+  });
+  window.addEventListener("resize", placeRing);
+  // settings sheet
+  const sheet=document.getElementById("sheet");
+  function chips(){
+    document.getElementById("sheetTitle").textContent=t("ui_settings");
+    document.getElementById("langLabel").textContent=t("ui_lang");
+    document.getElementById("countryLabel").textContent=t("ui_country");
+    document.getElementById("sheetClose").textContent=t("ui_close");
+    document.getElementById("langChips").innerHTML = Object.keys(S).map(l=>`<button class="chip" data-l="${l}" aria-pressed="${l===lang}">${LANG_NAMES[l]}</button>`).join("");
+    document.getElementById("countryChips").innerHTML = ORDER.map(k=>`<button class="chip" data-c="${k}" aria-pressed="${k===country}">${C[k].name}</button>`).join("");
+  }
+  document.getElementById("gear").onclick=()=>{chips();sheet.classList.add("on");};
+  document.getElementById("sheetClose").onclick=()=>sheet.classList.remove("on");
+  sheet.addEventListener("click",e=>{
+    if(e.target===sheet){sheet.classList.remove("on");return;}
+    const l=e.target.closest("[data-l]"), c=e.target.closest("[data-c]");
+    if(l){ lang=l.dataset.l; chips(); render(); }                       // language: keep the step, change every word
+    if(c){ country=c.dataset.c; lang=C[country].lang; step=0; typed=""; keyIdx=0; chips(); render(); } // country: new money, start over
+  });
+  render();
+  document.fonts && document.fonts.ready.then(placeRing);
+}
+
+/* ---------------- video mode: driven by a clock so the recording is frame-exact ----------------
+   ?mode=video&dur=d1,d2,d3,d4  (narration lengths in seconds). The recorder calls __frame(t) for each frame. */
+if(MODE==="video"){
+  const dur = (Q.get("dur")||"4,4,7,3").split(",").map(Number);
+  const touch=document.getElementById("touch"), sub=document.getElementById("sub");
+  // timeline
+  const ev=[]; let T=0.6; const starts=[];
+  starts.push(T); T+=dur[0];                       // line 1 over the status screen
+  ev.push({at:T-0.2,tap:"close"}); T+=0.5;
+  starts.push(T);                                  // line 2 while typing
+  const keys=keySeq(), span=Math.max(1.2,dur[1]-0.6), gap=span/keys.length;
+  keys.forEach((k,i)=>ev.push({at:T+0.4+i*gap,tap:"key",k}));
+  T += Math.max(dur[1], 0.4+keys.length*gap) + 0.4;
+  starts.push(T); T+=dur[2];                       // line 3 on the difference
+  ev.push({at:T+0.1,tap:"confirm"}); ev.push({at:T+1.1,tap:"really"}); T+=1.5;
+  starts.push(T); T+=dur[3];                       // line 4 on the summary
+  ev.push({at:T+0.4,tap:"done"}); T+=0.6;
+  const total = T + 2.8;                           // end card
+  window.__timeline = {starts, total};
+  const capAt = tt => { let i=0; starts.forEach((s,j)=>{ if(tt>=s-0.05) i=j; }); return i; };
+  let applied = 0, lastTap=null;
+  function stateAt(tt){
+    step=0; typed=""; keyIdx=0;
+    for(const e of ev){ if(e.at>tt) break;
+      if(e.tap==="close"){step=1;} else if(e.tap==="key"){typed+=e.k; keyIdx++; if(keyIdx>=keys.length) step=2;}
+      else if(e.tap==="confirm"){step=3;} else if(e.tap==="really"){step=4;} else if(e.tap==="done"){step=5;}
+    }
+  }
+  function tapEl(e){
+    if(e.tap==="key") return app.querySelector(`[data-k="${e.k}"]`);
+    return app.querySelector(`[data-t="${e.tap}"]`);
+  }
+  window.__frame = function(tt){
+    // state just before the most recent tap, so the finger lands on the element it presses
+    const recent = ev.filter(e=>e.at<=tt && tt-e.at<0.45).pop();
+    stateAt(recent ? recent.at-1e-6 : tt);
+    render();
+    if(recent){
+      const el=tapEl(recent);
+      if(el){ const a=screen.getBoundingClientRect(), b=el.getBoundingClientRect(), p=(tt-recent.at)/0.45;
+        touch.style.left=(b.left-a.left+b.width/2)+"px"; touch.style.top=(b.top-a.top+b.height/2)+"px";
+        touch.style.opacity=String(Math.max(0,1-p)); touch.style.transform=`scale(${0.7+p*0.6})`; }
+      if(tt-recent.at>0.12){ stateAt(tt); render(); }
+    } else touch.style.opacity="0";
+    // subtitles = the step caption, shown while its line plays
+    const ci=capIndex(), inLine = starts.some((s,j)=>tt>=s-0.05 && tt<=s+dur[j]+0.3);
+    if(step<5 && inLine){ sub.textContent=CAPTIONS[lang][capAt(tt)]; sub.classList.add("on"); } else sub.classList.remove("on");
+  };
+  window.__frame(0);
+}
+})();
+</script>
+</body>
+</html>
