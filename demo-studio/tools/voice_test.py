@@ -20,7 +20,7 @@ KEY = os.environ.get("ELEVENLABS_API_KEY", "")
 HERE = os.path.join("demo-studio", "voice-test")
 OUT = os.path.join(HERE, "out")
 MODEL = "eleven_multilingual_v2"
-RUN = 2  # bump to re-run the job
+RUN = 3  # bump to re-run the job
 
 # Several searches per language; results are merged and de-duplicated.
 SEARCHES = {
@@ -136,7 +136,14 @@ def my_voice_ids():
 
 def generate_mode(picks):
     with open(os.path.join(HERE, "lines.json"), encoding="utf-8") as f:
-        lines = json.load(f)["lines"]
+        cfg = json.load(f)
+    lines = cfg["lines"]
+    script = cfg.get("script", {})
+    model = cfg.get("model", MODEL)
+    settings = cfg.get("voice_settings", {"stability": 0.5, "similarity_boost": 0.75,
+                                          "style": 0.15, "use_speaker_boost": True})
+    for old in os.listdir(OUT) if os.path.isdir(OUT) else []:
+        os.remove(os.path.join(OUT, old))
     os.makedirs(OUT, exist_ok=True)
     mine = my_voice_ids()
     made = []
@@ -147,13 +154,8 @@ def generate_mode(picks):
                 call("POST", f"/v1/voices/add/{p['public_owner_id']}/{vid}",
                      body={"new_name": f"Platata {label}"})
                 mine.add(vid)
-            text = "\n\n".join(lines[lang])
-            body = {
-                "text": text,
-                "model_id": MODEL,
-                "voice_settings": {"stability": 0.5, "similarity_boost": 0.75,
-                                   "style": 0.15, "use_speaker_boost": True},
-            }
+            text = script.get(lang) or "\n\n".join(lines[lang])
+            body = {"text": text, "model_id": model, "voice_settings": settings}
             if p.get("language_code"):
                 body["language_code"] = p["language_code"]
             audio = call("POST", f"/v1/text-to-speech/{vid}",
@@ -161,10 +163,22 @@ def generate_mode(picks):
             name = f"{lang}-{label}.mp3"
             with open(os.path.join(OUT, name), "wb") as f:
                 f.write(audio)
-            made.append({"file": name, "voice": p.get("name"), "chars": len(text)})
+            made.append({"file": name, "voice": p.get("name"), "chars": len(text), "model": model})
         except Exception as e:  # noqa: BLE001
             report["errors"].append(f"{label}: {e}")
     report["made"] = made
+
+
+def dump_my_voices():
+    try:
+        res = call("GET", "/v1/voices")
+        mine = [{"voice_id": v.get("voice_id"), "name": v.get("name"), "category": v.get("category"),
+                 "labels": v.get("labels"), "created_unix": v.get("created_at_unix")}
+                for v in res.get("voices", [])]
+        with open(os.path.join(HERE, "my_voices.json"), "w", encoding="utf-8") as f:
+            json.dump(mine, f, ensure_ascii=False, indent=1)
+    except Exception as e:  # noqa: BLE001
+        report["errors"].append(f"my voices: {e}")
 
 
 def main():
@@ -172,6 +186,7 @@ def main():
         report["errors"].append("ELEVENLABS_API_KEY secret is missing or empty")
     else:
         report["credits_before"] = credits()
+        dump_my_voices()
         picks_path = os.path.join(HERE, "picks.json")
         if os.path.exists(picks_path):
             with open(picks_path, encoding="utf-8") as f:

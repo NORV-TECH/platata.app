@@ -1,58 +1,86 @@
 [
  {
   "lang": "es",
-  "voice_id": "irla3teuChAApguKnzms",
-  "public_owner_id": "af36747c11789e9834459f42c92dd76a108f2ec34aa805e081aff07014923653",
-  "label": "female-diana",
-  "name": "Diana García - Sales, Warm & Persuasive"
+  "voice_id": "yfUfwZTRubVrsUZWqzwp",
+  "public_owner_id": "66d033d11da179eec4b048fcc0cdb470a20c49c65d723c90c3533cddf3ca0b33",
+  "label": "female-lina",
+  "name": "Lina - Colombian Warm & Confident"
  },
  {
   "lang": "es",
-  "voice_id": "Y4HwpMNrBWN5dFKi5Lw8",
-  "public_owner_id": "fc2d8cb153663926d7ba2f19a7e067b42cd93c82c14585c87c6d3a4f81238ebc",
-  "label": "male-carlos",
-  "name": "Carlos - Colombian Spanish Narrator"
+  "voice_id": "FA1FBP9TKxnBiw45fHmS",
+  "public_owner_id": "bfededef119bd9abb2b18fbf17d86d58267c725eac0d59db6fe86938f99736fd",
+  "label": "male-juan",
+  "name": "Juan - Clear & Expressive"
+ },
+ {
+  "lang": "es",
+  "voice_id": "sv5TkBbFxLHfFVQpMSah",
+  "public_owner_id": "968ddc39f82f67836ca8085d9704cac093fed9cd1de9444ac4ec75498b0ad3e0",
+  "label": "male-mateo",
+  "name": "Mateo - Regular 30-year-old male"
  },
  {
   "lang": "pt",
-  "voice_id": "lWq4KDY8znfkV0DrK8Vb",
-  "public_owner_id": "b26c5241fcdc8d3fabbec8c14eb4f4463bfd123418a45badf3683da1eb3e284a",
-  "label": "female-yasmin",
-  "name": "Yasmin Alves - Light, Clear and Musical"
+  "voice_id": "PznTnBc8X6pvixs9UkQm",
+  "public_owner_id": "cbc071de297fa325a7542bb199021a93e5c96233bbf48599dfa083e6498aa76d",
+  "label": "female-dani",
+  "name": "Dani - Warm Brazilian Social Media Voice"
  },
  {
   "lang": "pt",
-  "voice_id": "xNGAXaCH8MaasNuo7Hr7",
-  "public_owner_id": "263a01d642f1349044009f0132e2b79d9002b9e5c9511a031a875d7c121ab171",
-  "label": "male-beto",
-  "name": "Beto - Native Brazilian Specialist (PT-BR)"
+  "voice_id": "Fy0y2P2qP6NrsDcvbxmJ",
+  "public_owner_id": "22320de528f7dddc1843db4cc322e1f8399b719d17b095c7d9224d5485aada48",
+  "label": "female-thayane",
+  "name": "Thayane - Northern Brazilian accent"
+ },
+ {
+  "lang": "pt",
+  "voice_id": "czvzJwIVS2asEKnthV40",
+  "public_owner_id": "27d56dd54bb252adba9ed220bfa174bad331d002ab72fb52a56154dc7906f658",
+  "label": "male-daniel",
+  "name": "Daniel - Brazilian Conversational Voice"
  },
  {
   "lang": "en",
-  "voice_id": "1FmDfZG0Nx2dCk793S1a",
-  "public_owner_id": "38ed2e7f6cf3eb7bd9d263059bb913bf8d7fb35a6bd622ca008e03864316aac0",
-  "label": "female-megan",
-  "name": "Megan - Warm & Trusted Training"
+  "voice_id": "6fLd3vCll0LutxnciLI8",
+  "public_owner_id": "107ae1f104629f4ad52b47a86e7cb251721e40feb33531e038605685a1b60966",
+  "label": "female-tiffany",
+  "name": "Tiffany - Warm, Conversational Narrator"
  },
  {
   "lang": "en",
-  "voice_id": "MlIxnl4hUPbFzWffsZ76",
-  "public_owner_id": "cb427a4eade8ed16ca42c5c8d34a99c20b349d9f0899204c84b358cfd43e0819",
-  "label": "male-louis",
-  "name": "Louis - Friendly Instructor"
+  "voice_id": "cBTYF7NiJbR8Bvmdeuse",
+  "public_owner_id": "00976227c40f2d924bfbf79bd756231b0b131a1474bd7a5f4f55c1d494377ef8",
+  "label": "male-mike",
+  "name": "Mike - Animation, Explainers & Gaming"
+ },
+ {
+  "lang": "en",
+  "voice_id": "gwU7DXdLrTvWCiUTPZG8",
+  "public_owner_id": "1f981f37bfa31a40945d3b81b9611be5bc7dfd81651994a266f934c213b589ea",
+  "label": "male-daniel",
+  "name": "Daniel - Bright, warm, commanding"
  },
  {
   "lang": "fr",
-  "voice_id": "K7gx0ylJdff0yjM2uVQS",
+  "voice_id": "UJCi4DDncuo0VJDSIegj",
+  "public_owner_id": "44e9634824a1e2010ac23aacc34cb4bcf5200e32cd7637b03e3d88ee6b6fafc8",
+  "label": "female-amelie",
+  "name": "Amélie - Young, Confident and Friendly"
+ },
+ {
+  "lang": "fr",
+  "voice_id": "93nuHbke4dTER9x2pDwE",
   "public_owner_id": "a1254f9da709d4a8ae8b568746606d2ef3418390a67380e88423da83da5a874e",
-  "label": "female-jeanne",
-  "name": "Jeanne Mance - Charming, Clear and Young"
+  "label": "male-adam",
+  "name": "Adam - warm and friendly"
  },
  {
   "lang": "fr",
-  "voice_id": "4FLkNETtL5THnClfpjpb",
-  "public_owner_id": "3904a545879d7e7203f99aa4a00cbbc1f48030e8e2c1cae4386c59ddd92584b3",
-  "label": "male-thomas",
-  "name": "Thomas - Clear, Warm and Professional"
+  "voice_id": "2dxaXwaYxEEIDjoHj0V4",
+  "public_owner_id": "b6af890d9ac8c33c53506ea13332451b31b577c0a6513e75a4e0782d0e787baf",
+  "label": "male-leo",
+  "name": "Léo - Gentle and Enthusiastic"
  }
 ]

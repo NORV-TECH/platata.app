@@ -26,5 +26,16 @@
       "Platata sait déjà combien il devrait y avoir. S'il manque quelque chose, vous le savez aujourd'hui, pas le mois prochain.",
       "C'est fait. Votre journée est enregistrée, chaque vente."
     ]
+  },
+  "model": "eleven_v3",
+  "voice_settings": {
+    "stability": 0.5,
+    "similarity_boost": 0.75
+  },
+  "script": {
+    "es": "[sighs] Uf, se acabó el día. Toque Cerrar caja.\n\n[warmly] Ahora cuente la plata que tiene en la caja... y escriba cuánto hay.\n\n[playfully] ¿Y sabe qué? Platata ya sabe cuánto debería haber. Si falta algo, se lo dice hoy mismo, no a fin de mes.\n\n[cheerfully] ¡Listo! Su día quedó guardado, venta por venta.",
+    "pt": "[sighs] Ufa, o dia acabou. Toca em Fechar caixa.\n\n[warmly] Agora conta o dinheiro que tem no caixa... e digita quanto deu.\n\n[playfully] E sabe de uma coisa? O Platata já sabe quanto deveria ter. Se faltar alguma coisa, ele te avisa hoje mesmo, não no fim do mês.\n\n[cheerfully] Pronto! Seu dia ficou salvo, venda por venda.",
+    "en": "[sighs] Phew, long day. Tap Close register.\n\n[warmly] Now count the cash in the drawer... and type in what you've got.\n\n[playfully] And here's the thing: Platata already knows what should be in there. If anything's missing, you find out today, not at the end of the month.\n\n[cheerfully] Done! Your whole day is saved, every single sale.",
+    "fr": "[sighs] Ouf, grosse journée. Touchez Fermer la caisse.\n\n[warmly] Maintenant, comptez l'argent dans la caisse... et entrez le montant.\n\n[playfully] Et vous savez quoi? Platata sait déjà combien il devrait y avoir. S'il manque quelque chose, vous le savez aujourd'hui, pas à la fin du mois.\n\n[cheerfully] C'est fait! Votre journée est enregistrée, vente par vente."
   }
 }
