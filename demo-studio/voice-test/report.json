@@ -2,63 +2,95 @@
  "errors": [],
  "credits_before": {
   "tier": "pro",
-  "used": 726547,
+  "used": 727499,
   "limit": 1034030,
-  "left": 307483,
+  "left": 306531,
   "voice_slots_used": 22,
   "voice_limit": 160,
   "next_reset_unix": 1794158233
  },
  "made": [
   {
-   "file": "es-female-diana.mp3",
-   "voice": "Diana García - Sales, Warm & Persuasive",
-   "chars": 233
+   "file": "es-female-lina.mp3",
+   "voice": "Lina - Colombian Warm & Confident",
+   "chars": 305,
+   "model": "eleven_v3"
   },
   {
-   "file": "es-male-carlos.mp3",
-   "voice": "Carlos - Colombian Spanish Narrator",
-   "chars": 233
+   "file": "es-male-juan.mp3",
+   "voice": "Juan - Clear & Expressive",
+   "chars": 305,
+   "model": "eleven_v3"
   },
   {
-   "file": "pt-female-yasmin.mp3",
-   "voice": "Yasmin Alves - Light, Clear and Musical",
-   "chars": 227
+   "file": "es-male-mateo.mp3",
+   "voice": "Mateo - Regular 30-year-old male",
+   "chars": 305,
+   "model": "eleven_v3"
   },
   {
-   "file": "pt-male-beto.mp3",
-   "voice": "Beto - Native Brazilian Specialist (PT-BR)",
-   "chars": 227
+   "file": "pt-female-dani.mp3",
+   "voice": "Dani - Warm Brazilian Social Media Voice",
+   "chars": 322,
+   "model": "eleven_v3"
   },
   {
-   "file": "en-female-megan.mp3",
-   "voice": "Megan - Warm & Trusted Training",
-   "chars": 240
+   "file": "pt-female-thayane.mp3",
+   "voice": "Thayane - Northern Brazilian accent",
+   "chars": 322,
+   "model": "eleven_v3"
   },
   {
-   "file": "en-male-louis.mp3",
-   "voice": "Louis - Friendly Instructor",
-   "chars": 240
+   "file": "pt-male-daniel.mp3",
+   "voice": "Daniel - Brazilian Conversational Voice",
+   "chars": 322,
+   "model": "eleven_v3"
   },
   {
-   "file": "fr-female-jeanne.mp3",
-   "voice": "Jeanne Mance - Charming, Clear and Young",
-   "chars": 283
+   "file": "en-female-tiffany.mp3",
+   "voice": "Tiffany - Warm, Conversational Narrator",
+   "chars": 336,
+   "model": "eleven_v3"
   },
   {
-   "file": "fr-male-thomas.mp3",
-   "voice": "Thomas - Clear, Warm and Professional",
-   "chars": 283
+   "file": "en-male-mike.mp3",
+   "voice": "Mike - Animation, Explainers & Gaming",
+   "chars": 336,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "en-male-daniel.mp3",
+   "voice": "Daniel - Bright, warm, commanding",
+   "chars": 336,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "fr-female-amelie.mp3",
+   "voice": "Amélie - Young, Confident and Friendly",
+   "chars": 362,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "fr-male-adam.mp3",
+   "voice": "Adam - warm and friendly",
+   "chars": 362,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "fr-male-leo.mp3",
+   "voice": "Léo - Gentle and Enthusiastic",
+   "chars": 362,
+   "model": "eleven_v3"
   }
  ],
  "credits_after": {
   "tier": "pro",
-  "used": 726883,
+  "used": 728900,
   "limit": 1034030,
-  "left": 307147,
+  "left": 305130,
   "voice_slots_used": 22,
   "voice_limit": 160,
   "next_reset_unix": 1794158233
  },
- "finished_utc": "2026-10-19 13:26:08"
+ "finished_utc": "2026-10-19 13:31:26"
 }
