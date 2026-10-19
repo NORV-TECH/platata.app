@@ -10,9 +10,9 @@
   "chars": 83
  },
  "S10/en/1-tap-close": {
-  "hash": "46519148ca3dd55c272f2a175b480e7867c97ce4",
+  "hash": "2ef0312e75b6e543dc5e9193b45135a20e80e634",
   "file": "demo-studio/audio/S10/en/1-tap-close.mp3",
-  "chars": 59
+  "chars": 54
  },
  "S10/fr/1-tap-close": {
   "hash": "c44988502bc5e134edce4f361a19f5c5947b43da",
@@ -30,9 +30,9 @@
   "chars": 76
  },
  "S10/en/2-count": {
-  "hash": "b879fc6c94d107ace73845225d88cfea0be1ccba",
+  "hash": "f5fe45a3aaeb4e6d6aef0df517f44728cc86f2e9",
   "file": "demo-studio/audio/S10/en/2-count.mp3",
-  "chars": 73
+  "chars": 67
  },
  "S10/fr/2-count": {
   "hash": "089ce5a8918dc6a4aaef9812e68341b4a466c6ae",
@@ -50,9 +50,9 @@
   "chars": 153
  },
  "S10/en/3-difference": {
-  "hash": "d0baccf660481bf61b540142ed8d53dc6d471273",
+  "hash": "157de253911393c7562c3aca328e3abd5ecbc11f",
   "file": "demo-studio/audio/S10/en/3-difference.mp3",
-  "chars": 152
+  "chars": 149
  },
  "S10/fr/3-difference": {
   "hash": "32e33b6e3e0fe69e8babef13217f2e1d34a0b60e",
@@ -70,9 +70,9 @@
   "chars": 58
  },
  "S10/en/4-done": {
-  "hash": "840cfec3422acd2ddfe073769d2155ee65d21c48",
+  "hash": "d84805c270970fc40869bb8b218eb2ce296a46a0",
   "file": "demo-studio/audio/S10/en/4-done.mp3",
-  "chars": 62
+  "chars": 60
  },
  "S10/fr/4-done": {
   "hash": "5c47caa672893b25c43fa3c2695681ad5895a365",
