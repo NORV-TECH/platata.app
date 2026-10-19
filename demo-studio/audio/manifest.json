@@ -1,0 +1,82 @@
+{
+ "S10/es/1-tap-close": {
+  "hash": "6aaa076241399bb7b1df438a7a8771399619540a",
+  "file": "demo-studio/audio/S10/es/1-tap-close.mp3",
+  "chars": 86
+ },
+ "S10/pt/1-tap-close": {
+  "hash": "89c072c721ce1392c496f5758c019c7679a7d7e5",
+  "file": "demo-studio/audio/S10/pt/1-tap-close.mp3",
+  "chars": 83
+ },
+ "S10/en/1-tap-close": {
+  "hash": "46519148ca3dd55c272f2a175b480e7867c97ce4",
+  "file": "demo-studio/audio/S10/en/1-tap-close.mp3",
+  "chars": 59
+ },
+ "S10/fr/1-tap-close": {
+  "hash": "c44988502bc5e134edce4f361a19f5c5947b43da",
+  "file": "demo-studio/audio/S10/fr/1-tap-close.mp3",
+  "chars": 64
+ },
+ "S10/es/2-count": {
+  "hash": "a5b050ac25a6d4dd9d4437bdc0141c9903b8e3ef",
+  "file": "demo-studio/audio/S10/es/2-count.mp3",
+  "chars": 92
+ },
+ "S10/pt/2-count": {
+  "hash": "6cf1b765308516ad638547310810e71676b7e71c",
+  "file": "demo-studio/audio/S10/pt/2-count.mp3",
+  "chars": 76
+ },
+ "S10/en/2-count": {
+  "hash": "b879fc6c94d107ace73845225d88cfea0be1ccba",
+  "file": "demo-studio/audio/S10/en/2-count.mp3",
+  "chars": 73
+ },
+ "S10/fr/2-count": {
+  "hash": "089ce5a8918dc6a4aaef9812e68341b4a466c6ae",
+  "file": "demo-studio/audio/S10/fr/2-count.mp3",
+  "chars": 77
+ },
+ "S10/es/3-difference": {
+  "hash": "eed86a713eceebf244f86df45b79da6f881e037f",
+  "file": "demo-studio/audio/S10/es/3-difference.mp3",
+  "chars": 165
+ },
+ "S10/pt/3-difference": {
+  "hash": "3dbd83acdb3f0c0fda86a190bd86a68b4b2b66cd",
+  "file": "demo-studio/audio/S10/pt/3-difference.mp3",
+  "chars": 153
+ },
+ "S10/en/3-difference": {
+  "hash": "d0baccf660481bf61b540142ed8d53dc6d471273",
+  "file": "demo-studio/audio/S10/en/3-difference.mp3",
+  "chars": 152
+ },
+ "S10/fr/3-difference": {
+  "hash": "32e33b6e3e0fe69e8babef13217f2e1d34a0b60e",
+  "file": "demo-studio/audio/S10/fr/3-difference.mp3",
+  "chars": 153
+ },
+ "S10/es/4-done": {
+  "hash": "609c880679c6ed85be3b3f80472ff3d7cd3b1312",
+  "file": "demo-studio/audio/S10/es/4-done.mp3",
+  "chars": 62
+ },
+ "S10/pt/4-done": {
+  "hash": "f16391689293591596525051c290354d3db7e945",
+  "file": "demo-studio/audio/S10/pt/4-done.mp3",
+  "chars": 58
+ },
+ "S10/en/4-done": {
+  "hash": "840cfec3422acd2ddfe073769d2155ee65d21c48",
+  "file": "demo-studio/audio/S10/en/4-done.mp3",
+  "chars": 62
+ },
+ "S10/fr/4-done": {
+  "hash": "5c47caa672893b25c43fa3c2695681ad5895a365",
+  "file": "demo-studio/audio/S10/fr/4-done.mp3",
+  "chars": 72
+ }
+}
