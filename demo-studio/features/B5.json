@@ -1,0 +1,38 @@
+{
+  "id": "B5",
+  "name": "Tata's questions",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "Cuando Tata encuentra algo que no puede resolver solo, se lo pregunta. No inventa cifras."
+      }
+    },
+    {
+      "id": "2-deposit",
+      "voice": {
+        "es": "Por ejemplo, una consignación doble. Usted toca la respuesta, y Tata la anota en el apartamento correcto."
+      }
+    },
+    {
+      "id": "3-promise",
+      "voice": {
+        "es": "También le puede contar cosas, como una promesa de pago. Tata se la guarda, y ese día se la muestra en Pendientes."
+      }
+    },
+    {
+      "id": "4-end",
+      "voice": {
+        "es": "Usted responde con un toque, y las cuentas quedan claras."
+      }
+    }
+  ]
+}

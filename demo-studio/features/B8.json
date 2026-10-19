@@ -1,0 +1,44 @@
+{
+  "id": "B8",
+  "name": "Run the assembly",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "En la asamblea, Platata lleva la cuenta por usted: quién está, el quórum y los votos."
+      }
+    },
+    {
+      "id": "2-attendance",
+      "voice": {
+        "es": "Toque cada apartamento que llega. Platata suma los coeficientes y le dice cuándo ya hay quórum."
+      }
+    },
+    {
+      "id": "3-art46",
+      "voice": {
+        "es": "En cada punto, toque Votar. Esta cuota extra necesita el setenta por ciento del edificio entero, y Platata lo sabe."
+      }
+    },
+    {
+      "id": "4-ordinary",
+      "voice": {
+        "es": "Las decisiones de siempre se cuentan sobre los presentes. Platata suma los votos y marca si quedó aprobada."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así, cada decisión queda con su quórum y sus votos."
+      }
+    }
+  ]
+}

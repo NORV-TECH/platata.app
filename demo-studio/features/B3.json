@@ -1,0 +1,44 @@
+{
+  "id": "B3",
+  "name": "Who owes (morosos)",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "Platata le dice quién está atrasado con la cuota, y cuánto debe cada uno."
+      }
+    },
+    {
+      "id": "2-open",
+      "voice": {
+        "es": "Toque Reportes, luego Cobro, y abra Atrasados."
+      }
+    },
+    {
+      "id": "3-list",
+      "voice": {
+        "es": "Ahí están los apartamentos que deben, con cuántos meses y cuánto. Toque uno para ver el detalle."
+      }
+    },
+    {
+      "id": "4-mora",
+      "voice": {
+        "es": "Para cobrar intereses de mora, Platata necesita la tasa certificada del mes. Sin ella, no le cobra un peso de más a nadie."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así tiene a la mano los morosos para la convocatoria de la asamblea."
+      }
+    }
+  ]
+}

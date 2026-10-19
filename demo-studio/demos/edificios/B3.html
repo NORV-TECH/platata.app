@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Morosos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<style>
+.seg{gap:1.2cqw;padding:2.4cqw 3.6cqw 0}
+.seg span{padding:0 2.3cqw;font:500 3.3cqw var(--app);letter-spacing:0;height:8cqw}
+.month{display:flex;align-items:center;justify-content:space-between}
+.month .mp{height:9.4cqw;padding:0 3.4cqw;border:.4cqw solid var(--line2);border-radius:4.7cqw;display:flex;align-items:center;font:500 3.8cqw var(--app);background:var(--surface)}
+.month a{color:var(--accent);font:500 3.8cqw var(--app);text-decoration:underline}
+.donut{display:flex;align-items:center;gap:4cqw}
+.donut .dn{position:relative;width:20cqw;height:20cqw;flex:0 0 auto}
+.donut .dn svg{width:100%;height:100%;transform:rotate(-90deg)}
+.donut .dn div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 5.6cqw/1 var(--brand)}
+.donut .dn small{font:400 3cqw var(--app);color:var(--muted);margin-top:.6cqw}
+.donut .txt{display:flex;flex-direction:column;gap:.6cqw;font:400 3.4cqw/1.35 var(--app);color:var(--muted)}
+.donut .txt b{font:500 6cqw var(--app);color:var(--ink)}
+.links{padding:0 4.2cqw;gap:0}
+.links .li{justify-content:space-between}
+.links .li b{font-weight:500;color:var(--accent);white-space:nowrap}
+.links .li b.bad-tx{color:var(--badtx)}
+.debtor{display:flex;align-items:center;gap:3cqw;padding:3cqw 0;border-bottom:1px solid var(--line)}
+.debtor:last-child{border-bottom:0}
+.debtor .u{width:12cqw;height:10cqw;border-radius:2.6cqw;background:var(--badbg);color:var(--badtx);display:grid;place-items:center;font:600 4cqw var(--app);flex:0 0 auto}
+.debtor .g{flex:1;min-width:0;font:400 3.4cqw/1.35 var(--app);color:var(--muted)}
+.debtor .g b{display:block;font:500 4.4cqw var(--app);color:var(--ink)}
+.total{display:flex;justify-content:space-between;align-items:baseline}
+.total b{font:600 6.4cqw var(--brand);color:var(--badtx)}
+.mrow{display:flex;gap:1.6cqw;flex-wrap:wrap}
+.mrow span{padding:1.2cqw 2.4cqw;border-radius:2cqw;background:var(--badbg);color:var(--badtx);font:500 3.3cqw var(--app)}
+.video .body{gap:2cqw;padding-top:2.4cqw}
+.video .card{padding:2.8cqw 4cqw}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script>
+const {K} = Demo;
+function chatScreen(){
+  const chat = `<div class="day">1 oct</div>` +
+    K.tata("Septiembre entró: 49 movimientos. La cuenta cierra en $ 16.905.120.",{tm:"8:01"}) +
+    `<div class="day">Hoy</div>` +
+    K.tata("Octubre entró: 52 movimientos. La cuenta cierra en $ 18.420.300.",{tm:"8:02"}) +
+    K.tata("Ya repartí los pagos de octubre por apartamento. 17 de 20 pagaron la cuota.",{tm:"8:02"});
+  return K.head() + `<div class="chat">${chat}</div>` + K.inbar() + K.tabs("chat");
+}
+function seg(on){
+  return `<div class="seg">${["Plata","Cobro","Papeles","Unidades","Asambleas"].map(x=>`<span class="${x===on?"on":""}" data-t="seg-${x}">${x}</span>`).join("")}</div>`;
+}
+function plataScreen(){
+  return K.head({title:"Reportes", sub:K.building.name}) + seg("Plata") + `<div class="body">
+    <div class="month"><span class="mp">Octubre 2026 ▾</span><span class="small">Cuenta ····4821</span></div>
+    <div class="card"><div class="row">Saldo inicial<b>$ 16.905.120</b></div><div class="row">Entradas<b class="ok-tx">+ $ 7.410.000</b></div><div class="row">Salidas<b class="bad-tx">− $ 5.894.820</b></div><div class="row big">Saldo final<b>$ 18.420.300</b></div></div>
+  </div>` + K.tabs("rep");
+}
+function cobroScreen(){
+  const C = 2*Math.PI*40;
+  return K.head({title:"Reportes", sub:K.building.name}) + seg("Cobro") + `<div class="body">
+    <div class="month"><span class="mp">Octubre 2026 ▾</span><a>Cuota $ 410.000 ›</a></div>
+    <div class="card"><div class="donut"><div class="dn"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#E6E2D9" stroke-width="12"/><circle cx="50" cy="50" r="40" fill="none" stroke="#177E73" stroke-width="12" stroke-dasharray="${C*0.85} ${C}"/></svg><div>17<small>de 20</small></div></div>
+      <div class="txt">Entró<b>$ 6.970.000</b>de $ 8.200.000 · faltan $ 1.230.000</div></div></div>
+    <div class="card links">
+      <div class="li" data-t="atrasados"><span>Atrasados (3)</span><b class="bad-tx">$ 3.280.000 ›</b></div>
+      <div class="li"><span>Consignaciones sin unidad</span><b>0 ›</b></div>
+      <div class="li"><span>Intereses de mora</span><b>Falta la tasa ›</b></div>
+    </div>
+  </div>` + K.tabs("rep");
+}
+function listScreen(){
+  const d = (u,meses,cuando,monto) => `<div class="debtor" data-t="d-${u}"><span class="u">${u}</span><div class="g"><b>${monto}</b>${meses} · ${cuando}</div><span class="chev">›</span></div>`;
+  return K.head({back:true, title:"Atrasados (3)", sub:"Octubre 2026 · Conjunto Los Almendros"}) + `<div class="body">
+    <div class="card bad"><div class="total"><span>Deben en total</span><b>$ 3.280.000</b></div><div class="small">Sin contar intereses de mora</div></div>
+    <div class="card" style="padding-top:0;padding-bottom:0;gap:0">
+      ${d("302","4 cuotas","julio a octubre","$ 1.640.000")}
+      ${d("504","3 cuotas","agosto a octubre","$ 1.230.000")}
+      ${d("103","1 cuota","octubre","$ 410.000")}
+    </div>
+  </div>` + K.tabs("rep");
+}
+function unitScreen(){
+  return K.head({back:true, title:"Unidad 302", sub:"coef. 5,00% · Conjunto Los Almendros"}) + `<div class="body">
+    <div class="card"><div class="total"><span class="muted">Debe</span><b>$ 1.640.000</b></div>
+      <div class="small">4 cuotas sin pagar, más intereses de mora</div>
+      <div class="mrow"><span>Julio $ 410.000</span><span>Agosto $ 410.000</span><span>Septiembre $ 410.000</span><span>Octubre $ 410.000</span></div></div>
+    <div class="card soft"><b style="font:600 4.4cqw var(--brand)">Intereses de mora</b>
+      <div style="font:400 3.6cqw/1.4 var(--app);color:var(--ink2)">Hay plata en mora y no tengo la tasa certificada de octubre, así que no estoy cobrando un solo peso de interés.</div>
+      <div class="btn out sm">Poner la tasa de octubre</div></div>
+  </div>` + K.tabs("rep");
+}
+Demo.start({
+  id:"B3", campaign:"B3-CO-es", label:"Edificios · Colombia",
+  endText:"Los morosos, a la mano para la convocatoria.",
+  beats:["Quién está atrasado, y cuánto debe","Toque Reportes, Cobro y Atrasados","Toque un apartamento para ver el detalle","Intereses solo con la tasa certificada","Los morosos, a la mano para la asamblea"],
+  state:{screen:"chat"},
+  render(st){
+    return {chat:chatScreen, plata:plataScreen, cobro:cobroScreen, lista:listScreen, unidad:unitScreen}[st.screen]();
+  },
+  steps:[
+    {beat:1, hint:"Toque Reportes", target:'[data-t="tab-rep"]', tap(st){ st.screen="plata"; }},
+    {beat:1, hint:"Toque Cobro", target:'[data-t="seg-Cobro"]', tap(st){ st.screen="cobro"; }},
+    {beat:1, hint:"Toque Atrasados", target:'[data-t="atrasados"]', tap(st){ st.screen="lista"; }},
+    {beat:2, hint:"Toque el 302", target:'[data-t="d-302"]', tap(st){ st.screen="unidad"; }}
+  ]
+});
+</script>
+</body>
+</html>

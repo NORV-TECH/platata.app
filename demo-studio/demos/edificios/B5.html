@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Preguntas de Tata</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<style>
+.waiting{align-self:center;display:flex;align-items:center;gap:1.6cqw;background:var(--surface);border:1px solid var(--line);color:var(--accent);font:500 3.3cqw var(--app);border-radius:99px;padding:1.2cqw 3.2cqw;flex:0 0 auto}
+.waiting i{width:2cqw;height:2cqw;border-radius:50%;background:#C2412D;display:block}
+.waiting.ok{color:var(--muted)} .waiting.ok i{background:var(--oktx)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script>
+const {K} = Demo;
+const KB = [["q","w","e","r","t","y","u","i","o","p"],["a","s","d","f","g","h","j","k","l","ñ"],["⇧","z","x","c","v","b","n","m","⌫"],["?123",",","espacio",".","↵"]];
+const kb = typed => { const last=(typed||"").slice(-1).toLowerCase();
+  return `<div class="kb">${KB.map(r=>`<div class="r">${r.map(k=>`<div class="k${k.length>1&&k!=="espacio"?" w":""}${k==="espacio"?" sp":""}${(k===last||(k==="espacio"&&last===" "))?" on":""}">${k}</div>`).join("")}</div>`).join("")}</div>`; };
+const PROMISE = "El 302 me dijo que paga el 30 de octubre";
+Demo.start({
+  id:"B5", campaign:"B5-CO-es", label:"Edificios · Colombia",
+  endText:"Usted responde con un toque, y las cuentas quedan claras.",
+  beats:["Tata le pregunta lo que no sabe","Una consignación doble: usted responde","Una promesa de pago: Tata se la guarda","Las cuentas quedan claras"],
+  state:{ans1:false, ack1:false, typing:false, typed:"", ready:false, sent:false, asked2:false, saved:false, ack2:false},
+  render(st){
+    const waiting = (st.ans1?0:1) + (st.asked2&&!st.saved?1:0);
+    let chat = `<div class="day">Hoy</div>` +
+      K.tata("Octubre entró: 52 movimientos. La cuenta cierra en $ 18.420.300.",{tm:"8:02"}) +
+      `<div class="waiting${waiting?"":" ok"}"><i></i>${waiting?`Esperando su respuesta (${waiting})`:"Nada esperando su respuesta"}</div>`;
+    const opt = (id,label,on) => `<span class="opt${on?" on":""}" data-t="opt-${id}">${label}</span>`;
+    chat += K.tata("",{tm:"8:02", html:`Entró una consignación de <b>$ 820.000</b> el 15 de octubre, con la referencia «203». Son dos cuotas. ¿Es el 203 pagando octubre y noviembre?`,
+      opts:`<div class="opts">${opt("si","Sí",st.ans1)}${opt("no","No, es otro",false)}</div>`});
+    if(st.ans1) chat += K.mine("Usted respondió: Sí",{isNew:!st.ack1});
+    if(st.ack1) chat += K.tata("Listo. El 203 quedó con octubre y noviembre pagados.",{isNew:!st.sent});
+    if(st.sent) chat += K.mine(PROMISE,{isNew:!st.asked2});
+    if(st.asked2) chat += K.tata("",{html:`¿Guardar como promesa: el 302 paga el 30 de octubre?`,
+      opts:`<div class="opts">${opt("guardar","Guardar",st.saved)}${opt("nop","No",false)}</div>`, isNew:!st.saved});
+    if(st.ack2) chat += K.tata("Guardada en Pendientes. El 30 de octubre se la recuerdo, y reviso en el extracto si el 302 pagó.",{isNew:true});
+    let html = K.head() + `<div class="chat">${chat}</div>` + K.inbar({text: st.typing ? st.typed : "", ready: st.ready});
+    html += st.typing ? kb(st.typed) : K.tabs("chat", 3);
+    return html;
+  },
+  steps:[
+    {beat:1, hint:"Toque la respuesta", target:'[data-t="opt-si"]', tap(st,E){ st.ans1=true; E.after(1100, ()=>{ st.ack1=true; }); }},
+    {beat:2, hint:"Toque aquí para escribir", target:'[data-t="box"]', tap(st,E){ st.typing=true; st.typed=""; E.type("typed", PROMISE, ()=>{ st.ready=true; }); }},
+    {beat:2, hint:"Toque Enviar", target:'[data-t="send"]', tap(st,E){ st.typing=false; st.ready=false; st.typed=""; st.sent=true; E.after(1300, ()=>{ st.asked2=true; }); }},
+    {beat:2, hint:"Toque Guardar", target:'[data-t="opt-guardar"]', tap(st,E){ st.saved=true; E.after(1100, ()=>{ st.ack2=true; }); }}
+  ]
+});
+</script>
+</body>
+</html>

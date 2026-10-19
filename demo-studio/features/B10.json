@@ -1,0 +1,50 @@
+{
+  "id": "B10",
+  "name": "Building reports",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "En Reportes está todo el edificio, en cinco partes."
+      }
+    },
+    {
+      "id": "2-plata",
+      "voice": {
+        "es": "En Plata: lo que entró, lo que salió, y el saldo de la cuenta, mes a mes."
+      }
+    },
+    {
+      "id": "3-cobro",
+      "voice": {
+        "es": "En Cobro: quién pagó la cuota, y quién no."
+      }
+    },
+    {
+      "id": "4-papeles",
+      "voice": {
+        "es": "En Papeles: el reglamento, las actas, los extractos y las facturas, guardados tal como llegaron."
+      }
+    },
+    {
+      "id": "5-unidades",
+      "voice": {
+        "es": "En Unidades, cada apartamento con su coeficiente y sus pagos. Y en Asambleas, cada reunión con su quórum y sus decisiones."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Todo el edificio, en un solo lugar."
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "B9",
+  "name": "The minutes, drafted",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "Cuando termina la asamblea, Platata le redacta el acta con todo lo que se decidió."
+      }
+    },
+    {
+      "id": "2-draft",
+      "voice": {
+        "es": "Toque Redactar el acta. Platata revisa que tenga las diez cosas que pide el artículo 47 de la Ley 675."
+      }
+    },
+    {
+      "id": "3-read",
+      "voice": {
+        "es": "El acta trae quién asistió, el quórum y cada decisión con sus votos. Y le dice hasta cuándo tiene para entregarla."
+      }
+    },
+    {
+      "id": "4-share",
+      "voice": {
+        "es": "Compártala en PDF por WhatsApp, o imprímala para las firmas."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "El acta, lista el mismo día de la asamblea."
+      }
+    }
+  ]
+}

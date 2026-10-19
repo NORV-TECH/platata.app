@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Reglamento y actas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<style>
+.seg span{padding:0 2.6cqw;font-size:3.1cqw;letter-spacing:.02em}
+.search{display:flex;align-items:center;gap:2.4cqw;height:10.6cqw;border-radius:5cqw;border:1px solid var(--line);background:var(--surface);padding:0 3.6cqw;font:400 3.7cqw var(--app);color:var(--muted)}
+.search svg{width:4.6cqw;height:4.6cqw}
+.li .ibox{width:9.4cqw;height:9.4cqw;color:var(--accent)}
+.li .ibox svg{width:5cqw;height:5cqw}
+.doc{font-size:3.4cqw;line-height:1.5;flex:1 1 auto;min-height:0;overflow:hidden}
+.doc .ttl{text-align:center;font:700 3.5cqw var(--app);letter-spacing:.03em;margin-bottom:2.4cqw}
+.doc mark{display:block;border-radius:1.6cqw;padding:1.6cqw 2cqw;margin:0 -2cqw 2cqw}
+.share{display:grid;grid-template-columns:repeat(4,1fr);gap:3cqw;padding:2cqw 0 1cqw}
+.share div{display:flex;flex-direction:column;align-items:center;gap:1.6cqw;font:400 3.2cqw var(--app);color:var(--ink2)}
+.share i{width:13cqw;height:13cqw;border-radius:50%;display:grid;place-items:center;color:#fff;font:600 4cqw var(--app);font-style:normal}
+.share i svg{width:7cqw;height:7cqw}
+.body.tight{gap:2.2cqw}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script>
+const {K} = Demo, I = K.icons;
+const SEARCH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>';
+const PAPERS = [
+  {id:"reg", t:"Reglamento de propiedad horizontal", d:"NIT 900.123.456-7 · Archivado el 3 feb 2026", type:"Reglamento"},
+  {id:"acta", t:"Acta de la asamblea ordinaria", d:"21 de marzo de 2026 · Archivado el 28 mar 2026", type:"Acta"},
+  {id:"ext10", t:"Extracto de octubre", d:"Cuenta ····4821 · 52 movimientos", type:"Extracto"},
+  {id:"ext09", t:"Extracto de septiembre", d:"Cuenta ····4821 · 49 movimientos", type:"Extracto"},
+  {id:"fac", t:"Factura del aseo · octubre", d:"$ 1.150.000 · Lo subió usted", type:"Factura"}
+];
+const header = (title, sub, back) => K.head({title, sub, back});
+Demo.start({
+  id:"B6", campaign:"B6-CO-es", label:"Edificios · Colombia",
+  endText:"Nada se pierde, y todo se encuentra.",
+  beats:["Los papeles del edificio, guardados","Reportes, Papeles: todo el archivo","Abra el reglamento y léalo","Compártalo en un toque","Nada se pierde, y todo se encuentra"],
+  state:{view:"chat", seg:"plata", share:false},
+  render(st){
+    if(st.view==="chat"){
+      const chat = `<div class="day">Hoy</div>` +
+        K.tata("Octubre entró: 52 movimientos. La cuenta cierra en $ 18.420.300.",{tm:"8:02"}) +
+        K.tata("Guardé el extracto de octubre en Papeles, tal como llegó.",{tm:"8:02"});
+      return K.head() + `<div class="chat">${chat}</div>` + K.inbar() + K.tabs("chat", 3);
+    }
+    if(st.view==="rep"){
+      const segs = [["plata","Plata"],["cobro","Cobro"],["pap","Papeles"],["uni","Unidades"],["asa","Asambleas"]]
+        .map(([id,l])=>`<span class="${st.seg===id?"on":""}" data-t="seg-${id}">${l}</span>`).join("");
+      let body;
+      if(st.seg==="plata"){
+        body = `<div class="h2">Octubre 2026</div><div class="card">
+          <div class="row">Saldo inicial<b>$ 16.905.120</b></div><div class="row">Entradas<b class="ok-tx">$ 7.410.000</b></div>
+          <div class="row">Salidas<b class="bad-tx">$ 5.894.820</b></div><div class="row big">Saldo final<b>$ 18.420.300</b></div></div>
+          <div class="small">Cuenta ····4821 · 10 meses con extracto</div>`;
+      } else {
+        body = `<div class="search">${SEARCH}Buscar: póliza, marzo, 302</div><div class="small">14 papeles archivados</div>
+          <div class="card" style="padding:1cqw 4cqw">${PAPERS.map(p=>`<div class="li" data-t="pap-${p.id}"><span class="ibox">${I.doc}</span><span class="grow">${p.t}<small>${p.d}</small></span><span class="pill gray">${p.type}</span></div>`).join("")}</div>`;
+      }
+      return header("Reportes", K.building.name) + `<div class="seg">${segs}</div><div class="body tight">${body}</div>` + K.tabs("rep", 3);
+    }
+    // the reglamento open
+    let html = header("Reglamento de propiedad horizontal", "NIT 900.123.456-7 · Archivado el 3 feb 2026", true) +
+      `<div class="body tight"><div class="doc"><div class="ttl">REGLAMENTO DE PROPIEDAD HORIZONTAL<br>CONJUNTO LOS ALMENDROS</div>
+        <p><b>Artículo 41. Ruido.</b> Entre las 10 de la noche y las 7 de la mañana no se permite música ni ruido que se oiga fuera de la unidad.</p>
+        <mark><b>Artículo 42. Mascotas.</b> Se permite tener perros y gatos dentro de los apartamentos. En las zonas comunes deben ir con correa, y su dueño recoge lo que ensucien.</mark>
+        <p><b>Artículo 43. Parqueaderos.</b> Cada unidad usa solo el parqueadero que le corresponde. Los de visitantes no se usan para guardar vehículos.</p>
+        <p><b>Artículo 44. Zonas comunes.</b> El salón social se reserva con la administración con tres días de anticipación.</p></div></div>
+      <div class="foot"><div class="btns"><div class="btn" data-t="share">Compartir</div><div class="btn out">Abrir</div></div></div>` + K.tabs("rep", 3);
+    if(st.share) html += `<div class="sheet-scrim"><div class="sheet"><div class="grip"></div><div class="h2">Compartir</div>
+      <div class="file"><span class="pdf">PDF</span><span>Reglamento_Los_Almendros.pdf<small>1,8 MB</small></span></div>
+      <div class="share"><div><i style="background:#25D366">${I.wa}</i>WhatsApp</div><div><i style="background:#EA4335">M</i>Gmail</div><div><i style="background:#1A73E8">D</i>Drive</div><div><i style="background:#5F6368">…</i>Más</div></div></div></div>`;
+    return html;
+  },
+  steps:[
+    {beat:1, hint:"Toque Reportes", target:'[data-t="tab-rep"]', tap(st){ st.view="rep"; st.seg="plata"; }},
+    {beat:1, hint:"Toque Papeles", target:'[data-t="seg-pap"]', tap(st){ st.seg="pap"; }},
+    {beat:2, hint:"Abra el reglamento", target:'[data-t="pap-reg"]', tap(st){ st.view="doc"; }},
+    {beat:3, hint:"Toque Compartir", target:'[data-t="share"]', tap(st,E){ st.share=true; E.after(1800, ()=>{}); }}
+  ]
+});
+</script>
+</body>
+</html>

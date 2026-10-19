@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Reportes del edificio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<style>
+.seg{gap:1.2cqw;padding:2.4cqw 3.6cqw 0}
+.seg span{padding:0 2.3cqw;font:500 3.3cqw var(--app);letter-spacing:0;height:8cqw}
+.month{display:flex;align-items:center;justify-content:space-between}
+.month .mp{height:9.4cqw;padding:0 3.4cqw;border:.4cqw solid var(--line2);border-radius:4.7cqw;display:flex;align-items:center;font:500 3.8cqw var(--app);background:var(--surface)}
+.month a{color:var(--accent);font:500 3.8cqw var(--app);text-decoration:underline}
+.donut{display:flex;align-items:center;gap:4cqw}
+.donut .dn{position:relative;width:20cqw;height:20cqw;flex:0 0 auto}
+.donut .dn svg{width:100%;height:100%;transform:rotate(-90deg)}
+.donut .dn div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 5.6cqw/1 var(--brand)}
+.donut .dn small{font:400 3cqw var(--app);color:var(--muted);margin-top:.6cqw}
+.donut .txt{display:flex;flex-direction:column;gap:.6cqw;font:400 3.4cqw/1.35 var(--app);color:var(--muted)}
+.donut .txt b{font:500 6cqw var(--app);color:var(--ink)}
+.units span{height:8.4cqw;font-size:3.6cqw}
+.search{height:10cqw;border-radius:5cqw;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;padding:0 4cqw;font:400 3.7cqw var(--app);color:var(--muted)}
+.paper{display:flex;align-items:center;gap:3cqw;padding:2.6cqw 0;border-bottom:1px solid var(--line)}
+.paper:last-child{border-bottom:0}
+.paper .ibox{width:9.4cqw;height:9.4cqw;color:var(--accent)}
+.paper .ibox svg{width:5.4cqw;height:5.4cqw}
+.paper .g{flex:1;min-width:0;font:400 3.3cqw/1.35 var(--app);color:var(--muted)}
+.paper .g b{display:block;font:500 4cqw var(--app);color:var(--ink)}
+.urow{display:flex;align-items:center;gap:3cqw;padding:2.4cqw 0;border-bottom:1px solid var(--line);font:400 3.7cqw var(--app)}
+.urow:last-child{border-bottom:0}
+.urow .n{width:11cqw;font:600 4cqw var(--app)}
+.urow .c{flex:1;color:var(--muted)}
+.asam .t{font:600 4.6cqw/1.25 var(--brand)}
+.qbar{height:2.4cqw;border-radius:2cqw;background:var(--line);overflow:hidden}
+.qbar i{display:block;height:100%;width:85%;background:var(--oktx)}
+.dec{display:flex;justify-content:space-between;align-items:center;gap:2cqw;font:400 3.7cqw var(--app);padding:1.4cqw 0}
+.video .body{gap:2cqw;padding-top:2.4cqw}
+.video .card{padding:2.8cqw 4cqw}
+.video .units{gap:1.4cqw}
+.video .units span{height:7.4cqw}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script>
+const {K} = Demo, I = K.icons;
+const UNITS = ["101","102","103","104","201","202","203","204","301","302","303","304","401","402","403","404","501","502","503","504"];
+const UNPAID = ["103","302","504"];
+function chatScreen(){
+  const chat = `<div class="day">1 oct</div>` +
+    K.tata("Septiembre entró: 49 movimientos. La cuenta cierra en $ 16.905.120.",{tm:"8:01"}) +
+    `<div class="day">Hoy</div>` +
+    K.tata("Octubre entró: 52 movimientos. La cuenta cierra en $ 18.420.300.",{tm:"8:02"}) +
+    K.tata("Ya repartí los pagos de octubre por apartamento. 17 de 20 pagaron la cuota.",{tm:"8:02"});
+  return K.head() + `<div class="chat">${chat}</div>` + K.inbar() + K.tabs("chat");
+}
+const reportTop = on => K.head({title:"Reportes", sub:K.building.name}) +
+  `<div class="seg">${["Plata","Cobro","Papeles","Unidades","Asambleas"].map(x=>`<span class="${x===on?"on":""}" data-t="seg-${x}">${x}</span>`).join("")}</div>`;
+const SCREENS = {
+  Plata: () => `<div class="body">
+    <div class="month"><span class="mp">Octubre 2026 ▾</span><span class="small">Cuenta ····4821</span></div>
+    <div class="card"><div class="row">Saldo inicial<b>$ 16.905.120</b></div><div class="row">Entradas<b class="ok-tx">+ $ 7.410.000</b></div><div class="row">Salidas<b class="bad-tx">− $ 5.894.820</b></div><div class="row big">Saldo final<b>$ 18.420.300</b></div></div>
+    <div class="card"><div class="row">Vigilancia<b>$ 3.200.000</b></div><div class="row">Aseo<b>$ 1.150.000</b></div><div class="row">Energía zonas comunes<b>$ 612.400</b></div><div class="row">Mantenimiento ascensor<b>$ 500.000</b></div></div>
+  </div>`,
+  Cobro: () => { const C=2*Math.PI*40; return `<div class="body">
+    <div class="month"><span class="mp">Octubre 2026 ▾</span><a>Cuota $ 410.000 ›</a></div>
+    <div class="card"><div class="donut"><div class="dn"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#E6E2D9" stroke-width="12"/><circle cx="50" cy="50" r="40" fill="none" stroke="#177E73" stroke-width="12" stroke-dasharray="${C*0.85} ${C}"/></svg><div>17<small>de 20</small></div></div>
+      <div class="txt">Entró<b>$ 6.970.000</b>de $ 8.200.000 · faltan $ 1.230.000</div></div></div>
+    <div class="units">${UNITS.map(u=>`<span class="${UNPAID.includes(u)?"bad":"on"}">${u}</span>`).join("")}</div>
+  </div>`; },
+  Papeles: () => { const p=(t,d)=>`<div class="paper"><span class="ibox">${I.doc}</span><div class="g"><b>${t}</b>${d}</div><span class="chev">›</span></div>`; return `<div class="body">
+    <div class="search">Buscar: póliza, marzo, 302</div>
+    <div class="small">24 papeles archivados</div>
+    <div class="card" style="padding-top:0;padding-bottom:0;gap:0">
+      ${p("Reglamento","NIT 900.123.456-7 · Archivado el 3 feb 2026")}
+      ${p("Acta","Asamblea ordinaria · 21 de marzo de 2026")}
+      ${p("Extracto","Cuenta ····4821 · octubre 2026 · 52 movimientos")}
+      ${p("Factura","Aseo · octubre 2026 · $ 1.150.000")}
+      ${p("Extracto","Cuenta ····4821 · septiembre 2026 · 49 movimientos")}
+    </div></div>`; },
+  Unidades: () => { const r=(n,st,cls)=>`<div class="urow"><span class="n">${n}</span><span class="c">coef. 5,00%</span><span class="pill ${cls}">${st}</span></div>`; return `<div class="body">
+    <div class="card"><div class="row big">20 unidades privadas<b></b></div><div class="row">Los coeficientes suman<b class="ok-tx">100,00</b></div></div>
+    <div class="card" style="padding-top:.6cqw;padding-bottom:.6cqw;gap:0">
+      ${r("101","Al día","ok")}${r("102","Al día","ok")}${r("103","Debe $ 410.000","bad")}${r("104","Al día","ok")}${r("201","Al día","ok")}${r("202","Al día","ok")}
+    </div></div>`; },
+  Asambleas: () => `<div class="body">
+    <div class="card asam"><div class="t">Asamblea ordinaria</div><div class="small">21 de marzo de 2026 · Presencial · Primera convocatoria</div>
+      <div class="row">Quórum<b class="ok-tx">85,0 de 100,0</b></div><div class="qbar"><i></i></div>
+      <div class="small">17 unidades presentes</div>
+      <div class="dec">1. Presupuesto 2026<span class="pill ok">Aprobada</span></div>
+      <div class="dec">2. Cuota de $ 410.000 desde abril<span class="pill ok">Aprobada</span></div>
+      <div class="dec">3. Elección del consejo<span class="pill ok">Aprobada</span></div>
+    </div>
+    <div class="small">La próxima ordinaria: a más tardar el 31 de marzo de 2027.</div>
+  </div>`
+};
+Demo.start({
+  id:"B10", campaign:"B10-CO-es", label:"Edificios · Colombia",
+  endText:"Todo el edificio, en un solo lugar.",
+  beats:["Todo el edificio, en cinco partes","Plata: entradas, salidas y saldo","Cobro: quién pagó y quién no","Papeles: todo guardado como llegó","Unidades y asambleas","Todo el edificio, en un solo lugar"],
+  state:{tab:null},
+  render(st){ return st.tab ? reportTop(st.tab) + SCREENS[st.tab]() + K.tabs("rep") : chatScreen(); },
+  steps:[
+    {beat:1, hint:"Toque Reportes", target:'[data-t="tab-rep"]', tap(st){ st.tab="Plata"; }},
+    {beat:2, hint:"Toque Cobro", target:'[data-t="seg-Cobro"]', tap(st){ st.tab="Cobro"; }},
+    {beat:3, hint:"Toque Papeles", target:'[data-t="seg-Papeles"]', tap(st){ st.tab="Papeles"; }},
+    {beat:4, hint:"Toque Unidades", target:'[data-t="seg-Unidades"]', tap(st){ st.tab="Unidades"; }},
+    {beat:4, hint:"Toque Asambleas", target:'[data-t="seg-Asambleas"]', tap(st){ st.tab="Asambleas"; }}
+  ]
+});
+</script>
+</body>
+</html>

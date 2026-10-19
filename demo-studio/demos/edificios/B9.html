@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · El acta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<style>
+/* Look from the app's acta screen (cu-r25/acta-light.png) and edif_asa_acta_* / edif_asam_acta_* strings. */
+.q{border-radius:4.6cqw;padding:3.4cqw 4.2cqw;display:flex;flex-direction:column;gap:2.2cqw;background:var(--okbg)}
+.q b{font:600 4.6cqw/1.25 var(--brand);color:var(--oktx)}
+.q .bar{background:#fff} .q .bar i{background:var(--oktx)}
+.who{display:flex;justify-content:space-between;align-items:baseline;gap:2cqw}
+.who b{font:600 4.4cqw var(--brand)} .who span{font-size:3.4cqw;color:var(--muted)}
+.pt{background:var(--surface);border:1px solid var(--line);border-radius:4.6cqw;padding:3.2cqw 4cqw;display:flex;flex-direction:column;gap:1.8cqw}
+.pt .top{display:flex;justify-content:space-between;align-items:flex-start;gap:2cqw}
+.pt .top b{font:500 4.4cqw/1.3 var(--app);color:var(--ink)}
+.pt .cnt{font-size:3.4cqw;color:var(--muted);line-height:1.35}
+.pt .cls{font-size:3.2cqw;color:var(--accent)}
+.okc{background:var(--okbg);color:var(--oktx);border-radius:4.6cqw;padding:3.2cqw 4.2cqw;font:400 3.9cqw/1.4 var(--app)}
+.okc b{font-weight:600}
+.due{font:400 3.8cqw/1.4 var(--app);color:var(--ink2)}
+.due b{color:var(--ink);font-weight:700}
+.paper{flex:1 1 auto!important;min-height:0;background:var(--surface);border-radius:3cqw;box-shadow:0 .4cqw 2cqw rgba(0,0,0,.08);overflow:hidden;position:relative}
+.paper pre{margin:0;padding:4cqw 4.6cqw;font:400 3.15cqw/1.55 "Roboto Mono",ui-monospace,monospace;color:#222;white-space:pre-wrap;transition:transform .5s ease}
+.video .paper pre{transition:none}
+.drafting{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3cqw;color:var(--muted);font:italic 400 3.8cqw var(--app)}
+.link{text-align:center;font:500 4cqw var(--brand);text-decoration:underline;color:var(--ink)}
+.share .apps{display:grid;grid-template-columns:repeat(4,1fr);gap:2cqw;text-align:center;font:400 3.2cqw var(--app);color:var(--ink2)}
+.share .sapp{display:flex;flex-direction:column;align-items:center;gap:1.4cqw}
+.share .sapp i{width:12cqw;height:12cqw;border-radius:50%;display:grid;place-items:center;color:#fff;font:700 4cqw var(--app);font-style:normal}
+.share .sapp i svg{width:7cqw;height:7cqw}
+.share .fileline{display:flex;align-items:center;gap:2.4cqw;font:500 3.6cqw var(--app)}
+.share .fileline .pdf{width:8cqw;height:9.6cqw;border-radius:1.2cqw;background:#D93F33;color:#fff;font:700 2.6cqw var(--app);display:grid;place-items:center}
+.snack{position:absolute;left:4cqw;right:4cqw;bottom:24cqw;background:#2B2A28;color:#fff;border-radius:2.4cqw;padding:3cqw 4cqw;font:400 3.7cqw var(--app);z-index:14}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script>
+const {K} = Demo, I = K.icons;
+const PRESENT = ["101","102","104","201","202","203","204","301","302","304","401","402","403","404","501","502"];
+// The drafted acta: Ley 675 de 2001 — quórum art. 45, art. 46 (70% del edificio), acta art. 47.
+const ACTA = [
+"ACTA DE ASAMBLEA GENERAL DE COPROPIETARIOS",
+"Conjunto Los Almendros",
+"",
+"Asamblea extraordinaria, primera convocatoria.",
+"Modalidad: presencial.",
+"Fecha: 19 de octubre de 2026, 7:00 p. m.",
+"Lugar: salón comunal del conjunto.",
+"",
+"ASISTENTES (16 de 20 unidades)",
+...PRESENT.map(u=>`- Unidad ${u} · coeficiente 5,00`),
+"",
+"QUÓRUM",
+"Coeficientes representados: 80,0 de 100,0.",
+"Hay quórum: más de la mitad (art. 45).",
+"",
+"PRESIDENTE Y SECRETARIO",
+"Presidente: Marta Gómez, unidad 201.",
+"Secretario: Jorge Ríos, unidad 402.",
+"",
+"ORDEN DEL DÍA Y DECISIONES",
+"1. Cuota extra para la fachada.",
+"   Art. 46: necesita el 70% del edificio.",
+"   A favor: 75,0. En contra: 5,0.",
+"   Se necesitaban 70,0 sobre el edificio",
+"   entero. APROBADA.",
+"2. Contrato de vigilancia 2027.",
+"   Ordinaria: mayoría de los presentes.",
+"   A favor: 60,0. En contra: 20,0.",
+"   Se necesitaban 40,0 sobre los presentes.",
+"   APROBADA.",
+"",
+"Se levanta la sesión a las 8:40 p. m.",
+"",
+"_____________________   _____________________",
+"Presidente               Secretario"
+].join("\n");
+const WA = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>';
+Demo.start({
+  id:"B9", campaign:"B9-CO-es", label:"Edificios · Colombia",
+  endText:"El acta, lista el mismo día de la asamblea.",
+  beats:["Platata le redacta el acta","Revisa las diez cosas del art. 47","Asistentes, quórum, votos y fecha límite","Compártala en PDF o imprímala","El acta, lista el mismo día"],
+  state:{screen:"asamblea", drafting:false, scroll:0, share:false, sent:false},
+  render(st){
+    if(st.screen==="asamblea"){
+      return K.head({back:true, title:"Asamblea extraordinaria", sub:"En curso · Presencial"}) +
+        `<div class="body"><div class="q"><b>Hay quórum: 80,0 de 100,0</b><div class="bar"><i style="width:80%"></i></div></div>
+          <div class="who"><b>Quién está</b><span>16 de 20 · 80,0 de 100,0</span></div>
+          <div class="pt"><div class="top"><b>1. Cuota extra para la fachada</b><span class="pill ok">Aprobada</span></div><div class="cls">Art. 46 — necesita el 70% del edificio</div><div class="cnt">75,0 a favor, 5,0 en contra · se necesitan 70,0 · sobre el edificio entero</div></div>
+          <div class="pt"><div class="top"><b>2. Contrato de vigilancia 2027</b><span class="pill ok">Aprobada</span></div><div class="cls">Ordinaria — de plata</div><div class="cnt">60,0 a favor, 20,0 en contra · se necesitan 40,0 · sobre los presentes</div></div>
+        </div>
+        <div class="foot"><div class="btns"><div class="btn out">+ Punto</div><div class="btn" data-t="redactar">Redactar el acta</div></div></div>`;
+    }
+    let html = K.head({back:true, title:"Acta de la asamblea", sub:"19 de octubre de 2026"});
+    if(st.drafting){
+      html += `<div class="drafting"><span class="spin"></span>Redactando el acta…</div>`;
+    } else {
+      html += `<div class="body">
+        <div class="okc"><b>Completa.</b> El art. 47 pide diez cosas y están las diez.</div>
+        <div class="due">Póngala a disposición antes del <b>18 de noviembre de 2026</b>.</div>
+        <div class="paper" data-t="paper"><pre style="transform:translateY(-${st.scroll}cqw)">${K.esc(ACTA)}</pre></div>
+      </div>
+      <div class="foot"><div class="btns"><div class="btn" data-t="pdf">Compartir PDF</div><div class="btn out">Imprimir</div></div><div class="link">Subir el acta firmada</div></div>`;
+    }
+    if(st.share) html += `<div class="sheet-scrim"><div class="sheet share"><div class="grip"></div>
+      <div class="fileline"><span class="pdf">PDF</span>Acta_Los_Almendros_2026-10-19.pdf</div>
+      <div class="apps">
+        <div class="sapp" data-t="wa"><i style="background:#25D366">${WA}</i>WhatsApp</div>
+        <div class="sapp"><i style="background:#EA4335">M</i>Gmail</div>
+        <div class="sapp"><i style="background:#1E8E3E">D</i>Drive</div>
+        <div class="sapp"><i style="background:#5F6368">${I.doc}</i>Imprimir</div>
+      </div></div></div>`;
+    if(st.sent) html += `<div class="snack">Acta enviada por WhatsApp</div>`;
+    return html;
+  },
+  steps:[
+    {beat:1, hint:"Toque Redactar el acta", target:'[data-t="redactar"]', tap(st,E){
+      st.screen="acta"; st.drafting=true; E.after(1500, ()=>{ st.drafting=false; });
+    }},
+    {beat:2, hint:"Toque el acta para leerla", target:'[data-t="paper"]', tap(st,E){
+      [30,62,96,Demo.MODE==="video"?162:128].forEach((y,k)=>E.after(700*(k+1), ()=>{ st.scroll=y; }));   // the video frame shows less paper
+    }},
+    {beat:3, hint:"Toque Compartir PDF", target:'[data-t="pdf"]', tap(st){ st.share=true; }},
+    {beat:3, hint:"Envíela por WhatsApp", target:'[data-t="wa"]', tap(st,E){ st.share=false; st.sent=true; E.after(2200, ()=>{ st.sent=false; }); }}
+  ]
+});
+</script>
+</body>
+</html>

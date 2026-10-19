@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · La asamblea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<style>
+/* Look from the app's asamblea screen (cu-r25/asamblea-light.png) and edif_asam_* strings. */
+.q{border-radius:4.6cqw;padding:3.4cqw 4.2cqw;display:flex;flex-direction:column;gap:2.2cqw}
+.q.ok{background:var(--okbg)} .q.no{background:var(--badbg)}
+.q b{font:600 4.6cqw/1.25 var(--brand)}
+.q.ok b{color:var(--oktx)} .q.no b{color:var(--badtx)}
+.q .bar{background:#fff}
+.q.ok .bar i{background:var(--oktx)} .q.no .bar i{background:var(--badtx)}
+.who{display:flex;justify-content:space-between;align-items:baseline;gap:2cqw}
+.who b{font:600 4.4cqw var(--brand)} .who span{font-size:3.4cqw;color:var(--muted)}
+.units span{height:9.4cqw}
+.pt{background:var(--surface);border:1px solid var(--line);border-radius:4.6cqw;padding:3.2cqw 4cqw;display:flex;flex-direction:column;gap:1.8cqw}
+.pt.cur{border:.6cqw solid var(--accent)}
+.pt .top{display:flex;justify-content:space-between;align-items:flex-start;gap:2cqw}
+.pt .top b{font:500 4.4cqw/1.3 var(--app);color:var(--ink)}
+.pt .cnt{font-size:3.4cqw;color:var(--muted);line-height:1.35}
+.pt .cls{font-size:3.2cqw;color:var(--accent)}
+.vs .units span.no{background:var(--badbg);border-color:transparent;color:var(--badtx)}
+.legend{display:flex;gap:3cqw;font-size:3.3cqw;color:var(--ink2)}
+.legend i{display:inline-block;width:3cqw;height:3cqw;border-radius:1cqw;margin-right:1cqw;vertical-align:-.3cqw}
+.van{font-size:3.6cqw;color:var(--ink2)}
+.van b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script>
+const {K} = Demo, I = K.icons;
+const ALL = ["101","102","103","104","201","202","203","204","301","302","303","304","401","402","403","404","501","502","503","504"];
+const fmt = n => n.toFixed(1).replace(".",",");
+// point 1 is art. 46 (70% of the whole building), point 2 is ordinary (majority of those present)
+const PTS = [
+  {t:"Cuota extra para la fachada", cls:"Art. 46 — necesita el 70% del edificio", base:"sobre el edificio entero", need:70, contra:["403"]},
+  {t:"Contrato de vigilancia 2027", cls:"Ordinaria — de plata", base:"sobre los presentes", need:null, contra:["202","301","402","502"]}
+];
+function need(p, present){ return p.need!=null ? p.need : present*5/2; }
+Demo.start({
+  id:"B8", campaign:"B8-CO-es", label:"Edificios · Colombia",
+  endText:"Cada decisión queda con su quórum y sus votos.",
+  beats:["Platata lleva la cuenta de la asamblea","Toque cada apartamento que llega","Cada punto, con la mayoría que pide la ley","Platata cuenta los votos por usted","Cada decisión, con su quórum y sus votos"],
+  state:{present:["101","102","104","201","202","203","204","301","302"], voting:-1, closed:[false,false], arriving:false},
+  render(st){
+    const pres = st.present.length*5, quorum = pres > 50;
+    const falta = Math.max(0.1, 50 - pres);
+    const qcard = quorum
+      ? `<div class="q ok"><b>Hay quórum: ${fmt(pres)} de 100,0</b><div class="bar"><i style="width:${pres}%"></i></div></div>`
+      : `<div class="q no"><b>Todavía no hay quórum: ${fmt(pres)} de 100,0. Faltan ${fmt(falta)}.</b><div class="bar"><i style="width:${pres}%"></i></div></div>`;
+    const anyVote = st.voting>=0 || st.closed[0];
+    const grid = anyVote
+      ? `<div class="who"><b>Quién está</b><span>${st.present.length} de 20 · ${fmt(pres)} de 100,0</span></div>`
+      : `<div class="who"><b>Quién está</b><span>${st.present.length} de 20 · toque para cambiar</span></div>
+         <div class="units">${ALL.map(u=>`<span class="${st.present.includes(u)?"on":""}" data-t="u-${u}">${u}</span>`).join("")}</div>`;
+    const ptCard = (p,i) => {
+      const done = st.closed[i], cur = (st.voting===i) || (!done && st.closed.slice(0,i).every(Boolean) && st.present.length===16);
+      const favor = (st.present.length - p.contra.length)*5, contra = p.contra.length*5, n = need(p, st.present.length);
+      let pill = done ? `<span class="pill ok">Aprobada</span>` : (cur ? `<span class="pill acc">Votando</span>` : `<span class="pill gray">Sin votar</span>`);
+      let body = done
+        ? `<div class="cnt">${fmt(favor)} a favor, ${fmt(contra)} en contra · se necesitan ${fmt(n)} · ${p.base}</div>`
+        : (cur && st.voting!==i ? `<div class="btn out sm" data-t="votar-${i}">Votar</div>` : `<div class="cls">${p.cls}</div>`);
+      return `<div class="pt${cur&&!done?" cur":""}"><div class="top"><b>${i+1}. ${p.t}</b>${pill}</div>${done?`<div class="cls">${p.cls}</div>`:""}${body}</div>`;
+    };
+    let html = K.head({back:true, title:"Asamblea extraordinaria", sub:"En curso · Presencial"}) +
+      `<div class="body">${qcard}${grid}${PTS.map(ptCard).join("")}</div>
+       <div class="foot"><div class="btns"><div class="btn out">+ Punto</div><div class="btn${st.closed[1]?"":" off"}">Redactar el acta</div></div></div>`;
+    if(st.voting>=0){
+      const p = PTS[st.voting], favor = (st.present.length - p.contra.length)*5, n = need(p, st.present.length);
+      html += `<div class="sheet-scrim"><div class="sheet vs"><div class="grip"></div>
+        <div class="h2">${st.voting+1}. ${p.t}</div><div class="small">${p.cls}</div>
+        <div class="legend"><span><i style="background:var(--accent)"></i>A favor</span><span><i style="background:var(--badbg)"></i>En contra</span><span><i style="border:1px solid var(--line2)"></i>No está</span></div>
+        <div class="units">${ALL.map(u=>{ const here=st.present.includes(u); return `<span class="${!here?"":(p.contra.includes(u)?"no":"on")}">${u}</span>`; }).join("")}</div>
+        <div class="van">Van <b>${fmt(favor)} a favor</b> · se necesitan ${fmt(n)}, ${p.base}</div>
+        <div class="btn" data-t="cerrar">Cerrar la votación</div></div></div>`;
+    }
+    return html;
+  },
+  steps:[
+    {beat:1, hint:"Llegó el 304: tóquelo", target:'[data-t="u-304"]', tap(st){ st.present.push("304"); }},
+    {beat:1, hint:"Llegó el 401: tóquelo", target:'[data-t="u-401"]', tap(st,E){
+      st.present.push("401");
+      ["402","403","404","501","502"].forEach((u,k)=>E.after(450*(k+1), ()=>{ st.present.push(u); }));
+    }},
+    {beat:2, hint:"Toque Votar", target:'[data-t="votar-0"]', tap(st){ st.voting=0; }},
+    {beat:2, hint:"Toque Cerrar la votación", target:'[data-t="cerrar"]', tap(st){ st.voting=-1; st.closed[0]=true; }},
+    {beat:3, hint:"Toque Votar en el punto 2", target:'[data-t="votar-1"]', tap(st,E){
+      st.voting=1; E.after(1600, ()=>{ st.voting=-1; st.closed[1]=true; });
+    }}
+  ]
+});
+</script>
+</body>
+</html>

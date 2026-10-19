@@ -1,0 +1,44 @@
+{
+  "id": "B2",
+  "name": "Dues per apartment",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "En Cobro, usted ve mes a mes qué apartamentos pagaron la cuota, y cuáles no."
+      }
+    },
+    {
+      "id": "2-open",
+      "voice": {
+        "es": "Toque Reportes, y luego Cobro."
+      }
+    },
+    {
+      "id": "3-grid",
+      "voice": {
+        "es": "El círculo dice cuántos pagaron este mes: 17 de 20. Los apartamentos en rojo todavía no han pagado."
+      }
+    },
+    {
+      "id": "4-unit",
+      "voice": {
+        "es": "Toque un apartamento para ver su año completo: qué meses pagó, y cuánto debe."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así sabe quién pagó, sin revisar el extracto línea por línea."
+      }
+    }
+  ]
+}

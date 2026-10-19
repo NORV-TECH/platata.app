@@ -1,0 +1,44 @@
+{
+  "id": "B7",
+  "name": "Legal deadlines",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "Platata conoce las fechas que la ley le exige al administrador, y se las muestra a tiempo."
+      }
+    },
+    {
+      "id": "2-list",
+      "voice": {
+        "es": "Toque Pendientes. Ahí está lo vencido, lo de hoy, y lo que viene, con la norma que lo pide."
+      }
+    },
+    {
+      "id": "3-done",
+      "voice": {
+        "es": "Cuando lo haga, toque Ya lo hice, y sale de la lista."
+      }
+    },
+    {
+      "id": "4-record",
+      "voice": {
+        "es": "En Hechas queda la constancia, con la fecha en que lo cerró."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así no se le pasa ninguna fecha."
+      }
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "B6",
+  "name": "Bylaws and minutes",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "Todos los papeles del edificio quedan guardados en Platata, tal como llegaron."
+      }
+    },
+    {
+      "id": "2-archive",
+      "voice": {
+        "es": "En Reportes, toque Papeles. Ahí están el reglamento, las actas, los extractos y las facturas."
+      }
+    },
+    {
+      "id": "3-open",
+      "voice": {
+        "es": "Abra el reglamento y lea cualquier artículo, como el de las mascotas."
+      }
+    },
+    {
+      "id": "4-share",
+      "voice": {
+        "es": "Y si un propietario lo pide, compártalo en un toque."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Nada se pierde, y todo se encuentra."
+      }
+    }
+  ]
+}

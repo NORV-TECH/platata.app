@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Cuotas por apartamento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<style>
+.seg{gap:1.2cqw;padding:2.4cqw 3.6cqw 0}
+.seg span{padding:0 2.3cqw;font:500 3.3cqw var(--app);letter-spacing:0;height:8cqw}
+.month{display:flex;align-items:center;justify-content:space-between}
+.month .mp{height:9.4cqw;padding:0 3.4cqw;border:.4cqw solid var(--line2);border-radius:4.7cqw;display:flex;align-items:center;gap:1.6cqw;font:500 3.8cqw var(--app);background:var(--surface)}
+.month a{color:var(--accent);font:500 3.8cqw var(--app);text-decoration:underline}
+.donut{display:flex;align-items:center;gap:4cqw}
+.donut .dn{position:relative;width:22cqw;height:22cqw;flex:0 0 auto}
+.donut .dn svg{width:100%;height:100%;transform:rotate(-90deg)}
+.donut .dn div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;font:600 6cqw/1 var(--brand)}
+.donut .dn small{font:400 3cqw var(--app);color:var(--muted);margin-top:.6cqw}
+.donut .txt{display:flex;flex-direction:column;gap:.6cqw;font:400 3.4cqw/1.35 var(--app);color:var(--muted)}
+.donut .txt b{font:500 6cqw var(--app);color:var(--ink)}
+.who{display:flex;justify-content:space-between;align-items:flex-start;gap:2cqw}
+.who b{display:block;font:600 4.4cqw var(--brand)}
+.who small{display:block;font-size:3.3cqw;color:var(--muted);line-height:1.35}
+.who .btn{width:auto;padding:0 3cqw;height:9cqw;font:500 3.4cqw var(--app);color:var(--accent);flex:0 0 auto}
+.units span{height:8.6cqw;font-size:3.6cqw}
+.legend{display:flex;gap:3cqw;font-size:3.1cqw;color:var(--muted)}
+.legend i{display:inline-block;width:2.6cqw;height:2.6cqw;border-radius:.8cqw;margin-right:1cqw;vertical-align:-.3cqw}
+.months{display:grid;grid-template-columns:repeat(4,1fr);gap:1.6cqw}
+.months div{border-radius:2.4cqw;padding:1.8cqw 1.6cqw;font:500 3.2cqw var(--app);display:flex;flex-direction:column;gap:.4cqw}
+.months div small{font:400 2.8cqw var(--app)}
+.months .p{background:var(--okbg);color:var(--oktx)}
+.months .n{background:var(--badbg);color:var(--badtx)}
+.months .f{background:#EFEDE8;color:var(--muted)}
+.debe{display:flex;align-items:baseline;justify-content:space-between}
+.debe b{font:600 6cqw var(--brand);color:var(--badtx)}
+.months div{padding:1.4cqw 1.6cqw}
+.video .body{gap:2cqw;padding-top:2.4cqw}
+.video .donut .dn{width:17cqw;height:17cqw}
+.video .card{padding:2.6cqw 4cqw}
+.video .units{gap:1.4cqw}
+.video .units span{height:7.4cqw}
+.video .legend{display:none}
+.video .who small{display:none}
+.video .sheet{gap:1.6cqw;padding-bottom:3cqw}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script>
+const {K} = Demo;
+const UNITS = ["101","102","103","104","201","202","203","204","301","302","303","304","401","402","403","404","501","502","503","504"];
+const UNPAID = ["103","302","504"];
+function chatScreen(){
+  const chat = `<div class="day">1 oct</div>` +
+    K.tata("Septiembre entró: 49 movimientos. La cuenta cierra en $ 16.905.120.",{tm:"8:01"}) +
+    `<div class="day">Hoy</div>` +
+    K.tata("Octubre entró: 52 movimientos. La cuenta cierra en $ 18.420.300.",{tm:"8:02"}) +
+    K.tata("Ya repartí los pagos de octubre por apartamento. 17 de 20 pagaron la cuota.",{tm:"8:02"});
+  return K.head() + `<div class="chat">${chat}</div>` + K.inbar() + K.tabs("chat");
+}
+function seg(on){
+  return `<div class="seg">${["Plata","Cobro","Papeles","Unidades","Asambleas"].map(x=>`<span class="${x===on?"on":""}" data-t="seg-${x}">${x}</span>`).join("")}</div>`;
+}
+function plataScreen(){
+  return K.head({title:"Reportes", sub:K.building.name}) + seg("Plata") + `<div class="body">
+    <div class="month"><span class="mp">Octubre 2026 ▾</span><span class="small">Cuenta ····4821</span></div>
+    <div class="card"><div class="row">Saldo inicial<b>$ 16.905.120</b></div><div class="row">Entradas<b class="ok-tx">+ $ 7.410.000</b></div><div class="row">Salidas<b class="bad-tx">− $ 5.894.820</b></div><div class="row big">Saldo final<b>$ 18.420.300</b></div></div>
+    <div class="card"><div class="row">Vigilancia<b>$ 3.200.000</b></div><div class="row">Aseo<b>$ 1.150.000</b></div><div class="row">Energía zonas comunes<b>$ 612.400</b></div></div>
+  </div>` + K.tabs("rep");
+}
+function cobroScreen(st){
+  const C = 2*Math.PI*40, paid = 17/20;
+  const units = UNITS.map(u=>`<span class="${UNPAID.includes(u)?"bad":"on"}" data-t="u-${u}">${u}</span>`).join("");
+  let html = K.head({title:"Reportes", sub:K.building.name}) + seg("Cobro") + `<div class="body">
+    <div class="month"><span class="mp">Octubre 2026 ▾</span><a>Cuota $ 410.000 ›</a></div>
+    <div class="card"><div class="donut"><div class="dn"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="#E6E2D9" stroke-width="12"/><circle cx="50" cy="50" r="40" fill="none" stroke="#177E73" stroke-width="12" stroke-dasharray="${C*paid} ${C}"/></svg><div>17<small>de 20</small></div></div>
+      <div class="txt">Entró<b>$ 6.970.000</b>de $ 8.200.000 · faltan $ 1.230.000</div></div></div>
+    <div class="who"><div><b>Quién pagó</b><small>El banco vio 17 cuotas. Toque una unidad para ver su año.</small></div><div class="btn out sm">Todas menos…</div></div>
+    <div class="units">${units}</div>
+    <div class="legend"><span><i style="background:var(--accent)"></i>Pagó</span><span><i style="background:var(--badbg)"></i>No pagó</span></div>
+  </div>` + K.tabs("rep");
+  if(st.unit) html += unitSheet();
+  return html;
+}
+function unitSheet(){
+  const M = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+  const cells = M.map((m,i)=>{
+    if(i<3) return `<div class="p">${m}<small>$ 340.000</small></div>`;
+    if(i<6) return `<div class="p">${m}<small>$ 410.000</small></div>`;
+    if(i<10) return `<div class="n">${m}<small>No pagó</small></div>`;
+    return `<div class="f">${m}<small>Todavía no</small></div>`;
+  }).join("");
+  return `<div class="sheet-scrim"><div class="sheet new"><div class="grip"></div>
+    <div class="row"><span class="h2" style="margin:0">Unidad 302</span><span class="pill gray">coef. 5,00%</span></div>
+    <div class="debe"><span class="muted">Debe</span><b>$ 1.640.000</b></div>
+    <div class="small" style="margin-top:-1.6cqw">4 cuotas, julio a octubre · más intereses de mora</div>
+    <div class="small">2026 · Cuota $ 410.000</div>
+    <div class="months">${cells}</div>
+  </div></div>`;
+}
+Demo.start({
+  id:"B2", campaign:"B2-CO-es", label:"Edificios · Colombia",
+  endText:"Quién pagó, sin revisar el extracto línea por línea.",
+  beats:["Vea mes a mes quién pagó la cuota","Toque Reportes, y luego Cobro","17 de 20 pagaron. En rojo, los que no","Toque un apartamento y vea su año","Sin revisar el extracto línea por línea"],
+  state:{screen:"chat", unit:false},
+  render(st){
+    if(st.screen==="chat") return chatScreen();
+    if(st.screen==="plata") return plataScreen();
+    return cobroScreen(st);
+  },
+  steps:[
+    {beat:1, hint:"Toque Reportes", target:'[data-t="tab-rep"]', tap(st){ st.screen="plata"; }},
+    {beat:1, hint:"Toque Cobro", target:'[data-t="seg-Cobro"]', tap(st){ st.screen="cobro"; }},
+    {beat:3, hint:"Toque el 302", target:'[data-t="u-302"]', tap(st){ st.unit=true; }}
+  ]
+});
+</script>
+</body>
+</html>
