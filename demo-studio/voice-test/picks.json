@@ -1,0 +1,58 @@
+[
+ {
+  "lang": "es",
+  "voice_id": "irla3teuChAApguKnzms",
+  "public_owner_id": "af36747c11789e9834459f42c92dd76a108f2ec34aa805e081aff07014923653",
+  "label": "female-diana",
+  "name": "Diana García - Sales, Warm & Persuasive"
+ },
+ {
+  "lang": "es",
+  "voice_id": "Y4HwpMNrBWN5dFKi5Lw8",
+  "public_owner_id": "fc2d8cb153663926d7ba2f19a7e067b42cd93c82c14585c87c6d3a4f81238ebc",
+  "label": "male-carlos",
+  "name": "Carlos - Colombian Spanish Narrator"
+ },
+ {
+  "lang": "pt",
+  "voice_id": "lWq4KDY8znfkV0DrK8Vb",
+  "public_owner_id": "b26c5241fcdc8d3fabbec8c14eb4f4463bfd123418a45badf3683da1eb3e284a",
+  "label": "female-yasmin",
+  "name": "Yasmin Alves - Light, Clear and Musical"
+ },
+ {
+  "lang": "pt",
+  "voice_id": "xNGAXaCH8MaasNuo7Hr7",
+  "public_owner_id": "263a01d642f1349044009f0132e2b79d9002b9e5c9511a031a875d7c121ab171",
+  "label": "male-beto",
+  "name": "Beto - Native Brazilian Specialist (PT-BR)"
+ },
+ {
+  "lang": "en",
+  "voice_id": "1FmDfZG0Nx2dCk793S1a",
+  "public_owner_id": "38ed2e7f6cf3eb7bd9d263059bb913bf8d7fb35a6bd622ca008e03864316aac0",
+  "label": "female-megan",
+  "name": "Megan - Warm & Trusted Training"
+ },
+ {
+  "lang": "en",
+  "voice_id": "MlIxnl4hUPbFzWffsZ76",
+  "public_owner_id": "cb427a4eade8ed16ca42c5c8d34a99c20b349d9f0899204c84b358cfd43e0819",
+  "label": "male-louis",
+  "name": "Louis - Friendly Instructor"
+ },
+ {
+  "lang": "fr",
+  "voice_id": "K7gx0ylJdff0yjM2uVQS",
+  "public_owner_id": "a1254f9da709d4a8ae8b568746606d2ef3418390a67380e88423da83da5a874e",
+  "label": "female-jeanne",
+  "name": "Jeanne Mance - Charming, Clear and Young"
+ },
+ {
+  "lang": "fr",
+  "voice_id": "4FLkNETtL5THnClfpjpb",
+  "public_owner_id": "3904a545879d7e7203f99aa4a00cbbc1f48030e8e2c1cae4386c59ddd92584b3",
+  "label": "male-thomas",
+  "name": "Thomas - Clear, Warm and Professional"
+ }
+]
