@@ -2,95 +2,89 @@
  "errors": [],
  "credits_before": {
   "tier": "pro",
-  "used": 727499,
+  "used": 729428,
   "limit": 1034030,
-  "left": 306531,
+  "left": 304602,
   "voice_slots_used": 22,
   "voice_limit": 160,
   "next_reset_unix": 1794158233
  },
  "made": [
   {
+   "file": "es-yours-fercho.mp3",
+   "voice": "MUNDI co-fercho",
+   "chars": 410,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "es-yours-jhony.mp3",
+   "voice": "MUNDI co-jhony",
+   "chars": 410,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "es-yours-faraon.mp3",
+   "voice": "MUNDI co-faraon",
+   "chars": 410,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "pt-yours-mario.mp3",
+   "voice": "MUNDI br-mario",
+   "chars": 376,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "pt-yours-lucas.mp3",
+   "voice": "MUNDI br-lucas",
+   "chars": 376,
+   "model": "eleven_v3"
+  },
+  {
+   "file": "pt-yours-victor.mp3",
+   "voice": "MUNDI br-victor",
+   "chars": 376,
+   "model": "eleven_v3"
+  },
+  {
    "file": "es-female-lina.mp3",
    "voice": "Lina - Colombian Warm & Confident",
-   "chars": 305,
+   "chars": 410,
    "model": "eleven_v3"
   },
   {
-   "file": "es-male-juan.mp3",
-   "voice": "Juan - Clear & Expressive",
-   "chars": 305,
+   "file": "es-female-iconica.mp3",
+   "voice": "Icónica - Confident, Vibrant & Magnetic",
+   "chars": 410,
    "model": "eleven_v3"
   },
   {
-   "file": "es-male-mateo.mp3",
-   "voice": "Mateo - Regular 30-year-old male",
-   "chars": 305,
+   "file": "es-female-amaf.mp3",
+   "voice": "Amaf - Melodic Colombian ",
+   "chars": 410,
    "model": "eleven_v3"
   },
   {
    "file": "pt-female-dani.mp3",
    "voice": "Dani - Warm Brazilian Social Media Voice",
-   "chars": 322,
+   "chars": 376,
    "model": "eleven_v3"
   },
   {
    "file": "pt-female-thayane.mp3",
    "voice": "Thayane - Northern Brazilian accent",
-   "chars": 322,
-   "model": "eleven_v3"
-  },
-  {
-   "file": "pt-male-daniel.mp3",
-   "voice": "Daniel - Brazilian Conversational Voice",
-   "chars": 322,
-   "model": "eleven_v3"
-  },
-  {
-   "file": "en-female-tiffany.mp3",
-   "voice": "Tiffany - Warm, Conversational Narrator",
-   "chars": 336,
-   "model": "eleven_v3"
-  },
-  {
-   "file": "en-male-mike.mp3",
-   "voice": "Mike - Animation, Explainers & Gaming",
-   "chars": 336,
-   "model": "eleven_v3"
-  },
-  {
-   "file": "en-male-daniel.mp3",
-   "voice": "Daniel - Bright, warm, commanding",
-   "chars": 336,
-   "model": "eleven_v3"
-  },
-  {
-   "file": "fr-female-amelie.mp3",
-   "voice": "Amélie - Young, Confident and Friendly",
-   "chars": 362,
-   "model": "eleven_v3"
-  },
-  {
-   "file": "fr-male-adam.mp3",
-   "voice": "Adam - warm and friendly",
-   "chars": 362,
-   "model": "eleven_v3"
-  },
-  {
-   "file": "fr-male-leo.mp3",
-   "voice": "Léo - Gentle and Enthusiastic",
-   "chars": 362,
+   "chars": 376,
    "model": "eleven_v3"
   }
  ],
  "credits_after": {
   "tier": "pro",
-  "used": 728900,
+  "used": 730389,
   "limit": 1034030,
-  "left": 305130,
+  "left": 303641,
   "voice_slots_used": 22,
   "voice_limit": 160,
   "next_reset_unix": 1794158233
  },
- "finished_utc": "2026-10-19 13:31:26"
+ "finished_utc": "2026-10-19 13:34:19"
 }
