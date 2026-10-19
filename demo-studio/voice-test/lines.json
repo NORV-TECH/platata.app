@@ -1,0 +1,30 @@
+{
+  "feature": "S10",
+  "title": "Close the register",
+  "lines": {
+    "es": [
+      "Se acabó el día. Toque Cerrar caja.",
+      "Cuente la plata que tiene en la caja y escriba cuánto hay.",
+      "Platata ya sabe cuánto debería haber. Si falta algo, se lo dice hoy, no el mes que viene.",
+      "Listo. Su día queda guardado, con cada venta."
+    ],
+    "pt": [
+      "O dia acabou. Toque em Fechar caixa.",
+      "Conte o dinheiro do caixa e digite quanto tem.",
+      "O Platata já sabe quanto deveria ter. Se faltar alguma coisa, ele avisa hoje, não no fim do mês.",
+      "Pronto. Seu dia fica salvo, com cada venda."
+    ],
+    "en": [
+      "End of the day? Tap Close register.",
+      "Count the cash in the drawer and type in what you have.",
+      "Platata already knows what should be there. If anything's missing, you find out today, not next month.",
+      "Done. Your whole day is saved, every sale."
+    ],
+    "fr": [
+      "La journée est finie? Touchez Fermer la caisse.",
+      "Comptez l'argent dans la caisse et entrez le montant.",
+      "Platata sait déjà combien il devrait y avoir. S'il manque quelque chose, vous le savez aujourd'hui, pas le mois prochain.",
+      "C'est fait. Votre journée est enregistrée, chaque vente."
+    ]
+  }
+}

@@ -1,0 +1,42 @@
+name: voice-test
+
+# Runs only on the demo-studio branch, only when the voice-test inputs change.
+# The live site (main) is never touched.
+on:
+  push:
+    branches: [demo-studio]
+    paths:
+      - "demo-studio/voice-test/lines.json"
+      - "demo-studio/voice-test/picks.json"
+      - "demo-studio/tools/voice_test.py"
+      - ".github/workflows/voice-test.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: voice-test
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: demo-studio
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Voice test
+        env:
+          ELEVENLABS_API_KEY: ${{ secrets.ELEVENLABS_API_KEY }}
+        run: python demo-studio/tools/voice_test.py
+      - name: Save results to the branch
+        run: |
+          git config user.name "platata-voice-bot"
+          git config user.email "voice-bot@users.noreply.github.com"
+          git add demo-studio/voice-test
+          git diff --cached --quiet || git commit -m "voice-test results [skip ci]"
+          git push origin HEAD:demo-studio
