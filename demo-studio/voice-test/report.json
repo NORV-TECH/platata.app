@@ -1,27 +1,19 @@
 {
- "errors": [
-  "GET /v1/user/subscription -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"44ef9a1b2ba851602802035dd5e96c5b\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"d5270d2c80c9eb8df267f22888f786b9\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"e22452e412b3bc97a0366506dc6ecbff\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"e0ef30c15affa3bb6175a1434c9e477d\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"f9005492deee4a1050dd4934c0dbd58f\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"1415a3ac01f0b8588f682a08585c006f\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"0e6a56ec11fbb1587e7a4911db65f060\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"20ce7b13eebd9a7093a083603f3dc0ee\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"fd141edf6e86442204f5e76743fd12c0\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"d43053c1bc29712df86ea1217f2411e1\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"dfe435f06c1f706073ef03f35ef9dbad\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"3b4725b14acf724debc12a7da7e2b832\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"3cec55f4a65d0ac58625466ee82c063d\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"e3fb9d7cf5a9d68797991ce50b298e99\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}",
-  "GET /v1/shared-voices -> 400: {\"detail\":{\"type\":\"authentication_error\",\"code\":\"invalid_api_key\",\"message\":\"API key ID used as API key - only valid API keys can be used. API keys start with 'sk_' and are shown when the key is created or rotated.\",\"status\":\"api_key_id_used_as_api_key\",\"request_id\":\"f13dd9bf84fba425e7ff0a2491ad1fe4\",\"param\":\"api_key\",\"docs_url\":\"https://elevenlabs.io/docs/api-reference/authentication\"}}"
- ],
- "credits_before": null,
- "candidates": {
-  "es": 0,
-  "pt": 0,
-  "en": 0,
-  "fr": 0
+ "errors": [],
+ "credits_before": {
+  "tier": "pro",
+  "used": 726547,
+  "limit": 1034030,
+  "left": 307483,
+  "voice_slots_used": 22,
+  "voice_limit": 160,
+  "next_reset_unix": 1794158233
  },
- "finished_utc": "2026-10-19 13:17:51"
+ "candidates": {
+  "es": 40,
+  "pt": 40,
+  "en": 40,
+  "fr": 40
+ },
+ "finished_utc": "2026-10-19 13:24:28"
 }
