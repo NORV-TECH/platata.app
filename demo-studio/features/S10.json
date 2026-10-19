@@ -8,7 +8,7 @@
       "voice": {
         "es": "[excited] ¡Uy, qué día! [laughs] Bueno, a cerrar la caja... toca aquí, en Cerrar caja.",
         "pt": "[excited] Nossa, que dia! [laughs] Bora fechar o caixa? Toca aqui, em Fechar caixa.",
-        "en": "[sighs] Phew, long day. Let's close up. Tap Close register.",
+        "en": "[warmly] Long day? Let's close up. Tap Close register.",
         "fr": "[sighs] Ouf, grosse journée. On ferme? Touchez Fermer la caisse."
       },
       "caption": {
@@ -23,7 +23,7 @@
       "voice": {
         "es": "[warmly] Ahora sí, cuenta la platica que tienes en la caja, con calma, y escribe cuánto hay.",
         "pt": "[warmly] Agora conta o dinheirinho do caixa, com calma, e digita quanto deu.",
-        "en": "[warmly] Now count the cash in the drawer... and type in what you've got.",
+        "en": "[calmly] Count the cash in the drawer, and type in what you've got.",
         "fr": "[warmly] Maintenant, comptez l'argent dans la caisse... et entrez le montant."
       },
       "caption": {
@@ -38,7 +38,7 @@
       "voice": {
         "es": "[playfully] ¿Y sabes qué es lo mejor? ¡Platata ya sabe cuánto debería haber! Si falta algo, te lo dice hoy mismo... no a fin de mes, cuando ya no hay nada que hacer.",
         "pt": "[playfully] E sabe o melhor? O Platata já sabe quanto deveria ter! Se faltar alguma coisa, ele te avisa hoje mesmo... e não no fim do mês, quando já era.",
-        "en": "[playfully] And here's the thing: Platata already knows what should be in there. If anything's missing, you find out today, not at the end of the month.",
+        "en": "[warmly] Here's the nice part: Platata already knows what should be in there. If something's missing, you'll know today, not at the end of the month.",
         "fr": "[playfully] Et vous savez quoi? Platata sait déjà combien il devrait y avoir. S'il manque quelque chose, vous le savez aujourd'hui, pas à la fin du mois."
       },
       "caption": {
@@ -53,7 +53,7 @@
       "voice": {
         "es": "[cheerfully] ¡Listo! Tu día quedó guardadito, venta por venta.",
         "pt": "[cheerfully] Prontinho! Seu dia tá salvo, venda por venda.",
-        "en": "[cheerfully] Done! Your whole day is saved, every single sale.",
+        "en": "[warmly] And that's it. Your whole day is saved, every sale.",
         "fr": "[cheerfully] C'est fait! Votre journée est enregistrée, vente par vente."
       },
       "caption": {

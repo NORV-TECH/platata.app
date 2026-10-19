@@ -35,7 +35,13 @@ body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hid
 .install:focus-visible,.gear:focus-visible{outline:3px solid var(--hint);outline-offset:2px}
 
 /* ---------- inside the app screen (sizes in cqw so it scales with the phone) ---------- */
-.app{position:absolute;inset:0;display:flex;flex-direction:column;font-size:4.4cqw}
+.app{position:absolute;inset:7.4cqw 0 5.6cqw 0;display:flex;flex-direction:column;font-size:4.4cqw}
+.statusbar{position:absolute;top:0;left:0;right:0;height:7.4cqw;padding:0 5.4cqw;display:flex;align-items:center;justify-content:space-between;font:500 3.7cqw var(--app);color:var(--ink);z-index:26;background:var(--screen)}
+.statusbar .icons{display:flex;align-items:center;gap:1.6cqw}
+.statusbar svg{height:3.6cqw;width:auto;display:block}
+.statusbar .pct{font-size:3.3cqw}
+.navbar{position:absolute;left:0;right:0;bottom:0;height:5.6cqw;display:grid;place-items:center;z-index:26;background:var(--screen)}
+.navbar i{display:block;width:28cqw;height:1.2cqw;border-radius:1cqw;background:#1C1B1F}
 .bar{height:15cqw;display:flex;align-items:center;gap:4cqw;padding:0 4.5cqw;flex:0 0 auto}
 .bar .back{width:6.5cqw;height:6.5cqw}
 .bar h1{margin:0;font:500 6.2cqw var(--app)}
@@ -105,7 +111,8 @@ body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hid
 .video .phone{height:100%;width:100%;aspect-ratio:auto;border-radius:0;padding:0;box-shadow:none;background:#fff}
 .video .screen{border-radius:0}
 .subtitle{display:none}
-.video .app{bottom:24cqw}
+.video .app{bottom:29.6cqw}
+.video .navbar{bottom:24cqw}
 .video .key{height:12cqw}
 .video .keys{gap:1.4cqw}
 .video .screen::after{content:"";position:absolute;left:0;right:0;bottom:0;height:24cqw;background:var(--potato);z-index:25}
@@ -123,7 +130,13 @@ body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hid
     </button>
   </div>
   <div class="phone"><div class="screen" id="screen">
+    <div class="statusbar"><span id="clock">7:48</span><span class="icons">
+      <svg viewBox="0 0 18 14"><path d="M1 13h2.5V9.5H1zm4.5 0H8V7H5.5zM10 13h2.5V4.5H10zm4.5 0H17V1h-2.5z" fill="currentColor"/></svg>
+      <svg viewBox="0 0 20 15"><path d="M10 14.5 0 4.2a14.3 14.3 0 0 1 20 0z" fill="currentColor"/></svg>
+      <svg viewBox="0 0 26 13"><rect x=".7" y=".7" width="21.6" height="11.6" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.6" y="2.6" width="15.4" height="7.8" rx="1.4" fill="currentColor"/><rect x="23.4" y="4.2" width="2" height="4.6" rx="1" fill="currentColor"/></svg>
+      <span class="pct">78%</span></span></div>
     <div class="app" id="app"></div>
+    <div class="navbar"><i></i></div>
     <div class="ring" id="ring" hidden></div>
     <div class="touch" id="touch"></div>
     <div class="subtitle" id="sub"></div>
