@@ -17,22 +17,25 @@ html,body{height:100%}
 body{background:var(--page);color:var(--ink);font-family:var(--body);overflow:hidden}
 button{font:inherit;color:inherit;cursor:pointer}
 button:focus-visible,a:focus-visible{outline:3px solid var(--hint);outline-offset:2px}
-.wrap{height:100%;display:grid;grid-template-columns:1fr;grid-template-rows:auto 1fr auto;max-width:520px;margin:0 auto;
+.wrap{height:100%;display:grid;grid-template-columns:1fr;grid-template-rows:auto auto 1fr;max-width:520px;margin:0 auto;
   padding-left:max(12px, env(safe-area-inset-left, 0px));padding-right:max(12px, env(safe-area-inset-right, 0px));padding-block:8px 10px;gap:8px}
 @media (min-width:980px){
-  .wrap{max-width:1100px;grid-template-columns:360px 1fr;grid-template-rows:auto 1fr auto;column-gap:24px}
+  .wrap{max-width:1100px;grid-template-columns:360px 1fr;grid-template-rows:auto auto 1fr;column-gap:24px}
   header{grid-column:1 / -1}
   .side{display:flex!important;grid-row:2 / 4;grid-column:1}
-  main{grid-column:2} footer{grid-column:2}
+  footer{grid-column:2;grid-row:2} main{grid-column:2;grid-row:3}
   .featBtn{display:none!important}
 }
 header{display:flex;align-items:center;gap:8px;min-width:0}
 .logo{font:600 22px var(--display);color:var(--potato);flex:0 0 auto}
-.pick{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:8px;height:42px;padding:0 12px;border-radius:14px;border:1px solid var(--line);background:var(--surface);text-align:left}
+.pick{flex:1 1 auto;min-width:0;display:flex;align-items:center;gap:10px;height:54px;padding:0 12px;border-radius:16px;border:1px solid var(--line);background:var(--surface);text-align:left}
 .pick .dot{width:12px;height:12px;border-radius:50%;flex:0 0 auto}
-.pick .lbl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:500 15px var(--body)}
+.pick .lbl{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+.pick .lbl small,.pick .lbl b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pick .lbl small{font:500 12px var(--body);color:var(--muted);letter-spacing:.02em}
+.pick .lbl b{font:500 16px var(--body);color:var(--ink)}
 .pick .caret{color:var(--muted);flex:0 0 auto}
-.vid{flex:0 0 auto;height:42px;padding:0 14px 0 10px;border-radius:14px;border:0;background:var(--potato);color:var(--potatoInk);display:flex;align-items:center;gap:6px;font:600 15px var(--display)}
+.vid{flex:0 0 auto;height:54px;padding:0 14px 0 10px;border-radius:14px;border:0;background:var(--potato);color:var(--potatoInk);display:flex;align-items:center;gap:6px;font:600 15px var(--display)}
 .vid svg{width:22px;height:22px}
 .vid[disabled]{background:#CFC4B6;cursor:default}
 main{position:relative;min-height:0;border-radius:18px;overflow:hidden;background:var(--page)}
@@ -45,7 +48,7 @@ main iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background
 footer{display:flex;gap:8px}
 .featBtn{flex:0 0 auto;height:52px;padding:0 14px;border-radius:16px;border:1px solid var(--line);background:var(--surface);display:flex;align-items:center;gap:8px;font:500 15px var(--body)}
 .featBtn small{color:var(--muted);font-size:13px}
-.install{flex:1;height:52px;border-radius:16px;background:var(--potato);color:var(--potatoInk);font:600 18px var(--display);display:flex;align-items:center;justify-content:center;text-decoration:none}
+.install{flex:1;height:60px;border-radius:18px;background:var(--potato);color:var(--potatoInk);font:600 22px var(--display);box-shadow:0 8px 22px rgba(58,42,31,.28);display:flex;align-items:center;justify-content:center;text-decoration:none}
 /* feature list (sheet on phone, sidebar on desktop) */
 .side{display:none;flex-direction:column;min-height:0;background:var(--surface);border-radius:18px;border:1px solid var(--line);overflow:hidden}
 .listHead{padding:14px 16px 10px;border-bottom:1px solid var(--line)}
@@ -85,6 +88,11 @@ footer{display:flex;gap:8px}
 .chip{border:1px solid var(--line);background:var(--paper);border-radius:99px;padding:8px 14px;font:500 14px var(--body)}
 .chip[aria-pressed="true"]{background:var(--potato);border-color:var(--potato);color:#fff}
 .chip[disabled]{opacity:.4;cursor:default}
+.more{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:12px 14px;border-radius:14px;border:1px dashed var(--line);background:var(--paper);font:500 14px var(--body);color:var(--ink2)}
+.more[aria-expanded="true"] .mc{transform:rotate(180deg)}
+.chooser{display:flex;flex-direction:column;gap:14px}
+.sheetSub{font-size:13px;color:var(--muted);margin-top:-8px}
+.sideChange{margin-top:6px;border:0;background:none;padding:0;font:500 13px var(--body);color:var(--ink2);text-decoration:underline}
 .done{height:48px;border:0;border-radius:14px;background:var(--potato);color:#fff;font:600 17px var(--display)}
 /* video */
 .vbox{position:fixed;inset:0;background:rgba(15,12,10,.92);z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px}
@@ -98,28 +106,28 @@ footer{display:flex;gap:8px}
 <div class="wrap">
   <header>
     <div class="logo">Platata</div>
-    <button class="pick" id="pick" aria-haspopup="dialog"><span class="dot" id="pickDot"></span><span class="lbl" id="pickLbl"></span><span class="caret">▾</span></button>
+    <button class="pick" id="pick" aria-haspopup="dialog"><span class="dot" id="pickDot"></span><span class="lbl"><small id="pickBiz"></small><b id="pickFeat"></b></span><span class="caret">▾</span></button>
     <button class="vid" id="vid" aria-label="Video"><svg viewBox="0 0 24 24" fill="none"><rect x="2.5" y="5" width="13" height="14" rx="3" stroke="currentColor" stroke-width="2"/><path d="M15.5 10.5 21 7.5v9l-5.5-3z" fill="currentColor"/></svg><span id="vidLbl">Video</span></button>
   </header>
-  <aside class="side" id="side"><div class="listHead"><b id="sideTitle"></b><span id="sideSub"></span></div><div class="list" id="sideList"></div></aside>
-  <main id="main"></main>
+  <aside class="side" id="side"><div class="listHead"><b id="sideTitle"></b><span id="sideSub"></span><br><button class="sideChange" id="sideChange"></button></div><div class="list" id="sideList"></div></aside>
   <footer>
-    <button class="featBtn" id="featBtn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/></svg><span id="featLbl"></span></button>
     <a class="install" id="install" target="_blank" rel="noopener"></a>
   </footer>
+  <main id="main"></main>
 </div>
 
 <div class="scrim" id="pickSheet" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="pickTitle"><div class="grip"></div><div class="sbody">
-  <h3 id="pickTitle"></h3>
-  <div class="sec"><span id="lblBiz"></span><div class="bizs" id="bizList"></div></div>
-  <div class="sec"><span id="lblCountry"></span><div class="chips" id="countryList"></div></div>
-  <div class="sec"><span id="lblLang"></span><div class="chips" id="langList"></div></div>
+  <h3 id="pickTitle"></h3><div class="sheetSub" id="pickSub"></div>
+  <div id="featList"></div>
+  <button class="more" id="more" aria-expanded="false"><span id="moreLbl"></span><span class="mc">▾</span></button>
+  <div class="chooser" id="chooser" hidden>
+    <div class="sec"><span id="lblBiz"></span><div class="bizs" id="bizList"></div></div>
+    <div class="sec"><span id="lblCountry"></span><div class="chips" id="countryList"></div></div>
+    <div class="sec"><span id="lblLang"></span><div class="chips" id="langList"></div></div>
+  </div>
   <button class="done" id="pickDone"></button>
 </div></div></div>
 
-<div class="scrim" id="featSheet" hidden><div class="sheet" role="dialog" aria-modal="true" aria-labelledby="featTitle"><div class="grip"></div><div class="sbody">
-  <h3 id="featTitle"></h3><div id="featList"></div>
-</div></div></div>
 
 <div class="vbox" id="vbox" hidden role="dialog" aria-modal="true" aria-label="Video"><video id="video" controls playsinline></video><div class="none" id="vnone" hidden></div><button class="x" id="vclose"></button></div>
 
@@ -128,13 +136,13 @@ footer{display:flex;gap:8px}
 "use strict";
 /* ================= the tree: every business, country, language and feature ================= */
 const UI = {
- es:{biz:"Negocio",country:"País",lang:"Idioma",done:"Listo",pickT:"Ver la demo de…",feats:"Funciones",ready:"listas",install:"Instalar Platata",video:"Video",close:"Cerrar",
+ es:{more:"Ver otro negocio, país o idioma",chg:"Ver otro negocio o país",biz:"Negocio",country:"País",lang:"Idioma",done:"Listo",pickT:"Ver la demo de…",feats:"Funciones",ready:"listas",install:"Instalar Platata",video:"Video",close:"Cerrar",
      soonT:"En construcción",soonP:"Esta demo todavía se está haciendo. Elija otra en Funciones.",next:"Siguiente:",demo:"Demo",noVideo:"El video de esta función todavía no está en este idioma.",shared:"Para todos los negocios",own:"De este negocio"},
- pt:{biz:"Negócio",country:"País",lang:"Idioma",done:"Pronto",pickT:"Ver a demo de…",feats:"Funções",ready:"prontas",install:"Instalar o Platata",video:"Vídeo",close:"Fechar",
+ pt:{more:"Ver outro negócio, país ou idioma",chg:"Ver outro negócio ou país",biz:"Negócio",country:"País",lang:"Idioma",done:"Pronto",pickT:"Ver a demo de…",feats:"Funções",ready:"prontas",install:"Instalar o Platata",video:"Vídeo",close:"Fechar",
      soonT:"Em construção",soonP:"Esta demo ainda está sendo feita. Escolha outra em Funções.",next:"Próxima:",demo:"Demo",noVideo:"O vídeo desta função ainda não está neste idioma.",shared:"Para todos os negócios",own:"Deste negócio"},
- en:{biz:"Business",country:"Country",lang:"Language",done:"Done",pickT:"Show the demo for…",feats:"Features",ready:"ready",install:"Install Platata",video:"Video",close:"Close",
+ en:{more:"See another business, country or language",chg:"See another business or country",biz:"Business",country:"Country",lang:"Language",done:"Done",pickT:"Show the demo for…",feats:"Features",ready:"ready",install:"Install Platata",video:"Video",close:"Close",
      soonT:"Being built",soonP:"This demo is still being made. Pick another one in Features.",next:"Next:",demo:"Demo",noVideo:"The video for this feature isn't in this language yet.",shared:"For every business",own:"For this business"},
- fr:{biz:"Commerce",country:"Pays",lang:"Langue",done:"Terminé",pickT:"Voir la démo pour…",feats:"Fonctions",ready:"prêtes",install:"Installer Platata",video:"Vidéo",close:"Fermer",
+ fr:{more:"Voir un autre commerce, pays ou langue",chg:"Voir un autre commerce ou pays",biz:"Commerce",country:"Pays",lang:"Langue",done:"Terminé",pickT:"Voir la démo pour…",feats:"Fonctions",ready:"prêtes",install:"Installer Platata",video:"Vidéo",close:"Fermer",
      soonT:"En préparation",soonP:"Cette démo est en préparation. Choisissez-en une autre dans Fonctions.",next:"Suivante :",demo:"Démo",noVideo:"La vidéo de cette fonction n'est pas encore dans cette langue.",shared:"Pour tous les commerces",own:"Pour ce commerce"}
 };
 const LANGS = {es:"Español",pt:"Português",en:"English",fr:"Français"};
@@ -230,6 +238,7 @@ const ONLY = { S5:["CO","US","CA"], T2:["CO"] };
 // what is built: demo page per feature, and the languages that have a video
 const BUILT = {
  S10:{ page:(c,l)=>`pilot/S10.html?embed=1&country=${c}&lang=${l}`, video:{es:"video/S10-es.mp4",pt:"video/S10-pt.mp4",en:"video/S10-en.mp4",fr:"video/S10-fr.mp4"} },
+ B1:{ page:()=>`demos/edificios/B1.html?embed=1`, video:{} },
  B4:{ page:()=>`pilot/B4.html?embed=1`, video:{es:"video/B4-es.mp4"} }
 };
 
@@ -275,9 +284,11 @@ function render(){
   document.documentElement.lang = st.l;
   const b=biz();
   $("pickDot").style.background=b.color;
-  $("pickLbl").textContent = `${b.n[st.l]||b.n.es} · ${COUNTRIES[st.c].n[st.l]} · ${st.l.toUpperCase()}`;
+  const fsAll=[...featuresOf(b,st.c).own,...featuresOf(b,st.c).shared];
+  $("pickBiz").textContent = `${b.n[st.l]||b.n.es} · ${COUNTRIES[st.c].n[st.l]} · ${st.l.toUpperCase()}`;
+  $("pickFeat").textContent = `${fsAll.indexOf(st.f)+1}. ${fname(st.f)}`;
   $("vidLbl").textContent=u().video; $("vid").disabled = !videoOf(st.f);
-  const k=counts(); $("featLbl").innerHTML = `${u().feats} <small>${k.ready}/${k.total}</small>`;
+  const k=counts(); $("sideChange").textContent=u().chg;
   $("sideTitle").textContent=`${u().feats} · ${b.n[st.l]||b.n.es}`; $("sideSub").textContent=`${k.ready} ${u().ready} · ${k.total}`;
   $("sideList").innerHTML=listHTML();
   const ins=$("install"); ins.textContent=u().install;
@@ -299,29 +310,36 @@ function nextBuilt(){
 }
 
 /* ================= events ================= */
-function openPick(){
+function fillChooser(){
   const b=biz();
-  $("pickTitle").textContent=u().pickT; $("lblBiz").textContent=u().biz; $("lblCountry").textContent=u().country; $("lblLang").textContent=u().lang; $("pickDone").textContent=u().done;
+  $("lblBiz").textContent=u().biz; $("lblCountry").textContent=u().country; $("lblLang").textContent=u().lang;
   $("bizList").innerHTML = BIZ.map(x=>`<button class="biz" data-b="${x.id}" aria-pressed="${x.id===st.biz}"><span class="dot" style="background:${x.color}"></span><span><b>${x.n[st.l]||x.n.es}</b><small>${x.sub[st.l]||x.sub.es}</small></span></button>`).join("");
   $("countryList").innerHTML = ALL.map(c=>{ const dis = b.countries && !b.countries.includes(c); return `<button class="chip" data-c="${c}" aria-pressed="${c===st.c}"${dis?" disabled":""}>${COUNTRIES[c].n[st.l]}</button>`; }).join("");
   const langs = b.langs || COUNTRIES[st.c].langs;
   $("langList").innerHTML = Object.keys(LANGS).map(l=>`<button class="chip" data-l="${l}" aria-pressed="${l===st.l}"${langs.includes(l)?"":" disabled"}>${LANGS[l]}</button>`).join("");
+}
+function openPick(showChooser){
+  const b=biz(), k=counts();
+  $("pickTitle").textContent = `${b.n[st.l]||b.n.es} · ${COUNTRIES[st.c].n[st.l]}`;
+  $("pickSub").textContent = `${u().feats}: ${k.ready} ${u().ready} · ${k.total}`;
+  $("featList").innerHTML = listHTML();
+  $("moreLbl").textContent = u().more; $("pickDone").textContent=u().done;
+  const open = !!showChooser; $("chooser").hidden = !open; $("more").setAttribute("aria-expanded", String(open));
+  if(open) fillChooser();
   $("pickSheet").hidden=false;
 }
-$("pick").onclick=openPick;
+$("pick").onclick=()=>openPick(false);
+$("sideChange").onclick=()=>openPick(true);
+$("more").onclick=()=>{ const open=$("chooser").hidden; $("chooser").hidden=!open; $("more").setAttribute("aria-expanded",String(open)); if(open) fillChooser(); };
 $("pickDone").onclick=()=>{ $("pickSheet").hidden=true; };
 $("pickSheet").addEventListener("click",e=>{
   if(e.target===$("pickSheet")){ $("pickSheet").hidden=true; return; }
   const b=e.target.closest("[data-b]"), c=e.target.closest("[data-c]:not([disabled])"), l=e.target.closest("[data-l]:not([disabled])");
-  if(b){ st.biz=b.dataset.b; render(); openPick(); }
-  if(c){ st.c=c.dataset.c; st.l=COUNTRIES[st.c].langs[0]; render(); openPick(); }
-  if(l){ st.l=l.dataset.l; render(); openPick(); }
-});
-function openFeats(){ $("featTitle").textContent=`${u().feats} · ${biz().n[st.l]||biz().n.es}`; $("featList").innerHTML=listHTML(); $("featSheet").hidden=false; }
-$("featBtn").onclick=openFeats;
-$("featSheet").addEventListener("click",e=>{
-  if(e.target===$("featSheet")){ $("featSheet").hidden=true; return; }
-  const f=e.target.closest("[data-f]"); if(f){ st.f=f.dataset.f; $("featSheet").hidden=true; render(); }
+  const f=e.target.closest("[data-f]");
+  if(f){ st.f=f.dataset.f; $("pickSheet").hidden=true; render(); return; }
+  if(b){ st.biz=b.dataset.b; render(); openPick(true); }
+  if(c){ st.c=c.dataset.c; st.l=COUNTRIES[st.c].langs[0]; render(); openPick(true); }
+  if(l){ st.l=l.dataset.l; render(); openPick(true); }
 });
 $("sideList").addEventListener("click",e=>{ const f=e.target.closest("[data-f]"); if(f){ st.f=f.dataset.f; render(); } });
 // video
@@ -333,7 +351,7 @@ $("vid").onclick=()=>{
 };
 const closeVideo=()=>{ const el=$("video"); el.pause(); el.removeAttribute("src"); el.load(); $("vbox").hidden=true; };
 $("vclose").onclick=closeVideo;
-document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeVideo(); $("pickSheet").hidden=true; $("featSheet").hidden=true; } });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeVideo(); $("pickSheet").hidden=true; } });
 // when a demo ends, offer the next built one
 window.addEventListener("message",e=>{
   if(!e.data || e.data.type!=="platata-demo-end") return;

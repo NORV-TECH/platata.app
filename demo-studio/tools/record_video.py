@@ -28,7 +28,9 @@ async def record(feature, lang, country):
     adir = os.path.join(ROOT, "audio", feature, lang)
     clips = sorted(f for f in os.listdir(adir) if f.endswith(".mp3"))
     durs = [duration(os.path.join(adir, c)) for c in clips]
-    page_url = "file://" + os.path.abspath(os.path.join(ROOT, "pilot", f"{feature}.html"))
+    import glob
+    found = glob.glob(os.path.join(ROOT, "demos", "*", f"{feature}.html")) + glob.glob(os.path.join(ROOT, "pilot", f"{feature}.html"))
+    page_url = "file://" + os.path.abspath(found[0])
     url = f"{page_url}?mode=video&lang={lang}&country={country}&dur=" + ",".join(f"{d:.3f}" for d in durs)
     tmp = tempfile.mkdtemp()
     async with async_playwright() as p:
@@ -38,10 +40,17 @@ async def record(feature, lang, country):
         await pg.evaluate("document.fonts.ready")
         await pg.wait_for_timeout(300)
         tl = await pg.evaluate("window.__timeline")
-        n = int(tl["total"] * FPS)
-        for i in range(n):
-            await pg.evaluate(f"window.__frame({i / FPS})")
+        i = 0
+        while True:
+            t = i / FPS
+            await pg.evaluate(f"window.__frame({t})")
             await pg.screenshot(path=os.path.join(tmp, f"{i:05d}.jpg"), type="jpeg", quality=92)
+            i += 1
+            tl = await pg.evaluate("window.__timeline")
+            if tl.get("total") and t >= tl["total"]:
+                break
+            if t > 240:
+                raise RuntimeError("video never ended")
         await b.close()
     os.makedirs(os.path.join(ROOT, "video"), exist_ok=True)
     out = os.path.join(ROOT, "video", f"{feature}-{lang}.mp4")

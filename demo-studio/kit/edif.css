@@ -13,6 +13,7 @@
 .biz-servicios{--accent:#7C55E0;--btn:#7C55E0;--soft:#EEEAF5}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;height:100%}
+#root{height:100%}
 body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hidden}
 
 /* ---------- stage (standalone page) ---------- */

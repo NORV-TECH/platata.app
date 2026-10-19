@@ -1,0 +1,44 @@
+{
+  "id": "B1",
+  "name": "Upload the bank statement",
+  "business": "edificios",
+  "country": "CO",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-intro",
+      "voice": {
+        "es": "Cada mes, usted sube el extracto del banco, y Platata hace las cuentas del edificio."
+      }
+    },
+    {
+      "id": "2-upload",
+      "voice": {
+        "es": "Toque el botón de agregar, elija Extracto del banco, y escoja el archivo que le mandó el banco."
+      }
+    },
+    {
+      "id": "3-read",
+      "voice": {
+        "es": "Platata lee cada movimiento, y pone cada pago en su apartamento."
+      }
+    },
+    {
+      "id": "4-ask",
+      "voice": {
+        "es": "Si encuentra un pago que no sabe de quién es, le pregunta. Usted toca la respuesta, y queda anotado."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así, cada mes, sin hojas de cálculo."
+      }
+    }
+  ]
+}

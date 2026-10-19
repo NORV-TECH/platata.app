@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Subir el extracto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<style>
+.addrow{display:flex;align-items:center;gap:3cqw;padding:3cqw 1cqw;border-bottom:1px solid var(--line);font:500 4cqw var(--app)}
+.addrow:last-child{border-bottom:0}
+.addrow .ibox{width:9cqw;height:9cqw}
+.picker{position:absolute;inset:0;background:#fff;z-index:16;display:flex;flex-direction:column}
+.picker .pbar{display:flex;align-items:center;gap:3cqw;padding:3cqw 4cqw;font:500 4.6cqw var(--app);border-bottom:1px solid #E0E0E0}
+.picker .pbar svg{width:5.4cqw;height:5.4cqw}
+.picker .crumb{padding:2.4cqw 4cqw;font:500 3.4cqw var(--app);color:#1A73E8}
+.picker .frow{display:flex;align-items:center;gap:3.4cqw;padding:3cqw 4cqw}
+.picker .frow small{display:block;color:#5F6368;font-size:3.2cqw}
+.reading{display:flex;align-items:center;gap:2.4cqw;padding-left:9.4cqw;font:italic 400 3.6cqw var(--app);color:var(--muted);flex:0 0 auto}
+.reading .spin{width:4.4cqw;height:4.4cqw;border-width:.7cqw}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script>
+const {K} = Demo, I = K.icons;
+const PDF = '<span class="pdf">PDF</span>';
+Demo.start({
+  id:"B1", campaign:"B1-CO-es", label:"Edificios · Colombia",
+  endText:"Así, cada mes, sin hojas de cálculo.",
+  beats:["Suba el extracto del banco cada mes","Toque +, Extracto del banco, y el archivo","Platata pone cada pago en su apartamento","Si no sabe de quién es un pago, le pregunta","Cada mes, sin hojas de cálculo"],
+  state:{sheet:false, picker:false, file:false, reading:false, read:false, asked:false, answered:false, reply:false},
+  render(st){
+    let chat = `<div class="day">1 oct</div>` +
+      K.tata("Septiembre entró: 49 movimientos. La cuenta cierra en $ 16.905.120.",{tm:"8:01"}) +
+      K.tata("Tiene 1 pendiente: subir el extracto de octubre.",{tm:"8:01"}) + `<div class="day">Hoy</div>`;
+    if(st.file) chat += K.mine("",{html:`<div class="file">${PDF}<span>Extracto_Octubre_2026.pdf<small>Bancolombia · 240 KB</small></span></div>`, isNew:!st.reading&&!st.read});
+    if(st.reading) chat += `<div class="reading"><span class="spin"></span>Tata está leyendo el extracto…</div>`;
+    if(st.read){
+      chat += K.tata("Octubre entró: 52 movimientos. La cuenta cierra en $ 18.420.300.",{isNew:!st.asked});
+      chat += K.tata("Ya repartí los pagos de octubre por apartamento: 16 de 20 tienen nombre.",{isNew:!st.asked});
+    }
+    if(st.asked){
+      const opt = n => `<span class="opt${st.answered===n?" on":""}" data-t="opt-${n}">${n}</span>`;
+      chat += K.tata("",{html:`Hay una consignación de <b>$ 410.000</b> del 12 de octubre que no trae nombre. ¿De qué apartamento es?`, opts:`<div class="opts">${opt("203")}${opt("402")}${opt("Otro")}</div>`, isNew:!st.answered});
+    }
+    if(st.answered) chat += K.mine("Usted respondió: 203",{isNew:!st.reply});
+    if(st.reply) chat += K.tata("Listo, quedó en el 203. Ya van 17 de 20 apartamentos con la cuota de octubre.",{isNew:true});
+    let html = K.head() + `<div class="chat">${chat}</div>` + K.inbar() + K.tabs("chat", 1);
+    if(st.sheet) html += `<div class="sheet-scrim"><div class="sheet"><div class="grip"></div><div class="h2">Agregar</div>
+      <div class="addrow" data-t="add-extracto"><span class="ibox">${I.doc}</span>Extracto del banco</div>
+      <div class="addrow"><span class="ibox">${I.doc}</span>Factura de un proveedor</div>
+      <div class="addrow"><span class="ibox">${I.doc}</span>Acta o reglamento</div></div></div>`;
+    if(st.picker) html += `<div class="picker"><div class="pbar">${I.back}Elegir un archivo</div><div class="crumb">Descargas</div>
+      <div class="frow" data-t="file"><div class="file" style="border:0;padding:0">${PDF}</div><span>Extracto_Octubre_2026.pdf<small>240 KB · hoy</small></span></div>
+      <div class="frow"><div class="file" style="border:0;padding:0">${PDF}</div><span>Extracto_Septiembre_2026.pdf<small>236 KB · 1 oct</small></span></div>
+      <div class="frow"><div class="file" style="border:0;padding:0">${PDF}</div><span>Factura_Aseo_Oct.pdf<small>88 KB · 3 oct</small></span></div></div>`;
+    return html;
+  },
+  steps:[
+    {beat:1, hint:"Toque + para agregar", target:'[data-t="plus"]', tap(st){ st.sheet=true; }},
+    {beat:1, hint:"Toque Extracto del banco", target:'[data-t="add-extracto"]', tap(st){ st.sheet=false; st.picker=true; }},
+    {beat:1, hint:"Elija el extracto de octubre", target:'[data-t="file"]', tap(st,E){
+      st.picker=false; st.file=true;
+      E.after(500, ()=>{ st.reading=true; });
+      E.after(2600, ()=>{ st.reading=false; st.read=true; });
+      E.after(4200, ()=>{ st.asked=true; });
+    }},
+    {beat:3, hint:"Toque de qué apartamento es", target:'[data-t="opt-203"]', tap(st,E){
+      st.answered="203"; E.after(1200, ()=>{ st.reply=true; });
+    }}
+  ]
+});
+</script>
+</body>
+</html>
