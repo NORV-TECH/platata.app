@@ -34,5 +34,6 @@
         "es": "Usted responde con un toque, y las cuentas quedan claras."
       }
     }
-  ]
+  ],
+  "notes": "Building reminders exist in the app (AgendaEdificioWorker). Keep the reminder wording."
 }

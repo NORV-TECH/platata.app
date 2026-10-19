@@ -40,5 +40,6 @@
         "es": "Así no se le pasa ninguna fecha."
       }
     }
-  ]
+  ],
+  "notes": "Building reminders exist in the app (AgendaEdificioWorker). Keep the reminder wording."
 }
