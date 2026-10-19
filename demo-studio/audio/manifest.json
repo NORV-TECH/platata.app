@@ -78,5 +78,30 @@
   "hash": "5c47caa672893b25c43fa3c2695681ad5895a365",
   "file": "demo-studio/audio/S10/fr/4-done.mp3",
   "chars": 72
+ },
+ "B4/es/1-intro": {
+  "hash": "19da02dd682355d585062f5e8dd33f97ba28647d",
+  "file": "demo-studio/audio/B4/es/1-intro.mp3",
+  "chars": 138
+ },
+ "B4/es/2-rules": {
+  "hash": "91640099b6177d0e1fc855f75177b13d520569ca",
+  "file": "demo-studio/audio/B4/es/2-rules.mp3",
+  "chars": 143
+ },
+ "B4/es/3-money": {
+  "hash": "1938c76aa9fae972880edf6614b3898943239c34",
+  "file": "demo-studio/audio/B4/es/3-money.mp3",
+  "chars": 156
+ },
+ "B4/es/4-law": {
+  "hash": "467ddee6e55d96af47abc3e51082f68aa83a62bd",
+  "file": "demo-studio/audio/B4/es/4-law.mp3",
+  "chars": 116
+ },
+ "B4/es/5-end": {
+  "hash": "d90e137ecd679b421e029c3ffcf1abd0a585c748",
+  "file": "demo-studio/audio/B4/es/5-end.mp3",
+  "chars": 45
  }
 }
