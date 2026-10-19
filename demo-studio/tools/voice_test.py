@@ -20,7 +20,7 @@ KEY = os.environ.get("ELEVENLABS_API_KEY", "")
 HERE = os.path.join("demo-studio", "voice-test")
 OUT = os.path.join(HERE, "out")
 MODEL = "eleven_multilingual_v2"
-RUN = 3  # bump to re-run the job
+RUN = 4  # bump to re-run the job
 
 # Several searches per language; results are merged and de-duplicated.
 SEARCHES = {
@@ -155,7 +155,8 @@ def generate_mode(picks):
                      body={"new_name": f"Platata {label}"})
                 mine.add(vid)
             text = script.get(lang) or "\n\n".join(lines[lang])
-            body = {"text": text, "model_id": model, "voice_settings": settings}
+            vs = cfg.get("voice_settings_by_lang", {}).get(lang, settings)
+            body = {"text": text, "model_id": model, "voice_settings": vs}
             if p.get("language_code"):
                 body["language_code"] = p["language_code"]
             audio = call("POST", f"/v1/text-to-speech/{vid}",
