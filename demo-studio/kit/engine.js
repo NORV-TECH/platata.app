@@ -54,11 +54,12 @@ function start(cfg){
   document.documentElement.classList.add(MODE);
   if(Q.get("embed")) document.documentElement.classList.add("embed");
   if(cfg.bizClass) document.documentElement.classList.add(cfg.bizClass);
+  if(cfg.tallVideo) document.documentElement.classList.add("tall");   // video: whole phone at its true shape, subtitles below it
   const SRC = (Q.get("src")||"demo").replace(/[^a-z0-9_-]/gi,"").slice(0,40);
   root.innerHTML = `<div class="stage">
     <div class="topline"><div class="brand">Platata</div><div class="tag">${esc(cfg.label||"Edificios · Colombia")}</div></div>
     <div class="phone"><div class="screen" id="screen">
-      <div class="statusbar"><span>9:41</span><span class="icons">
+      <div class="statusbar"><span>${esc(cfg.clock||"9:41")}</span><span class="icons">
         <svg viewBox="0 0 18 14"><path d="M1 13h2.5V9.5H1zm4.5 0H8V7H5.5zM10 13h2.5V4.5H10zm4.5 0H17V1h-2.5z" fill="currentColor"/></svg>
         <svg viewBox="0 0 20 15"><path d="M10 14.5 0 4.2a14.3 14.3 0 0 1 20 0z" fill="currentColor"/></svg>
         <svg viewBox="0 0 26 13"><rect x=".7" y=".7" width="21.6" height="11.6" rx="3" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.6" y="2.6" width="15.4" height="7.8" rx="1.4" fill="currentColor"/><rect x="23.4" y="4.2" width="2" height="4.6" rx="1" fill="currentColor"/></svg>
@@ -69,6 +70,7 @@ function start(cfg){
       <div class="touch" id="touch"></div>
       <div class="subtitle" id="sub"></div>
     </div></div>
+    <div class="subtitle2" id="sub2"></div>
     <div class="caption" id="caption" aria-live="polite"><span class="n" id="capN">1</span><span id="capT"></span></div>
     <a class="install" id="install" target="_blank" rel="noopener">Instalar Platata</a></div>`;
   document.getElementById("install").href = "https://play.google.com/store/apps/details?id=tata.fijando.su.plata&referrer=" +
@@ -182,7 +184,8 @@ function start(cfg){
     if(ripple && t - ripple.t0 < 0.45){ const p=(t-ripple.t0)/0.45; touch.style.left=ripple.x+"px"; touch.style.top=ripple.y+"px"; touch.style.opacity=String(1-p); touch.style.transform=`scale(${0.7+p*0.6})`; }
     else touch.style.opacity="0";
     let li=-1; starts.forEach((s,j)=>{ if(t>=s-0.05 && t<=s+(dur[j]||4)+0.3) li=j; });
-    if(li>=0 && cfg.beats[li]){ sub.textContent=cfg.beats[li]; sub.classList.add("on"); } else sub.classList.remove("on");
+    const sub2=document.getElementById("sub2");
+    if(li>=0 && cfg.beats[li]){ sub.textContent=cfg.beats[li]; sub.classList.add("on"); sub2.textContent=cfg.beats[li]; sub2.classList.add("on"); } else { sub.classList.remove("on"); sub2.classList.remove("on"); }
     window.__timeline = {starts: starts.slice(), total: isFinite(total)?total:null, done};
   };
   window.__frame(0);

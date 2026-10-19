@@ -1,57 +1,17 @@
 {
   "id": "R4",
-  "name": "Take an order at a table",
+  "name": "Take an order at a table (waiter phone)",
   "business": "restaurante",
-  "voice_settings": {
-    "es": {
-      "stability": 0.5,
-      "similarity_boost": 0.75
-    },
-    "pt": {
-      "stability": 0.5,
-      "similarity_boost": 0.75
-    }
-  },
+  "country": "CO",
+  "voice_settings": { "es": { "stability": 0.5, "similarity_boost": 0.75 } },
   "steps": [
-    {
-      "id": "1-intro",
-      "voice": {
-        "es": "Cuando una mesa te pide, anotas el pedido aquí mismo, en la caja.",
-        "pt": "Quando uma mesa faz o pedido, você anota tudo aqui mesmo, no caixa.",
-        "en": "When a table orders, you take the order right here, at the register."
-      }
-    },
-    {
-      "id": "2-dishes",
-      "voice": {
-        "es": "Toca cada plato que pidieron. Van sumando abajo, en la venta actual.",
-        "pt": "Toque em cada prato que pediram. Eles vão somando embaixo, na venda atual.",
-        "en": "Tap each dish they ordered. They add up below, in the current sale."
-      }
-    },
-    {
-      "id": "3-send",
-      "voice": {
-        "es": "Cuando terminen de pedir, toca Enviar a cocina.",
-        "pt": "Quando terminarem de pedir, toque em Enviar para a cozinha.",
-        "en": "When they're done ordering, tap Send to kitchen."
-      }
-    },
-    {
-      "id": "4-table",
-      "voice": {
-        "es": "Elige la mesa, en este caso la cuatro, y toca Guardar. El pedido llega a la cocina, y la cuenta de la mesa queda abierta.",
-        "pt": "Escolha a mesa, aqui é a quatro, e toque em Salvar. O pedido chega na cozinha, e a conta da mesa fica aberta.",
-        "en": "Pick the table, here it's table four, and tap Save. The order goes to the kitchen, and the table's bill stays open."
-      }
-    },
-    {
-      "id": "5-end",
-      "voice": {
-        "es": "Así la cocina recibe el pedido, y tú cobras cuando la mesa quiera pagar.",
-        "pt": "Assim a cozinha recebe o pedido, e você cobra quando a mesa quiser pagar.",
-        "en": "The kitchen gets the order, and you charge when the table is ready to pay."
-      }
-    }
+    { "id": "1-pin", "voice": { "es": "Este es el celular de tu mesero. Cada mesero toma los pedidos en su propio celular, y entra con su PIN." } },
+    { "id": "2-dish", "voice": { "es": "Toca los platos que pide la mesa. Si un plato tiene opciones, como el término de la carne, se abren primero." } },
+    { "id": "3-option", "voice": { "es": "Elige la opción y toca Agregar a la venta." } },
+    { "id": "4-more", "voice": { "es": "Los platos sin opciones entran con un solo toque. Cuando la mesa termine de pedir, toca Cobrar." } },
+    { "id": "5-table", "voice": { "es": "Elige el número de la mesa." } },
+    { "id": "6-save", "voice": { "es": "La mesa paga al final, así que toca Guardar." } },
+    { "id": "7-open", "voice": { "es": "El pedido queda guardado con el número de la mesa. Lo ves en Abiertas, y también llega a tu caja, y a la cocina si tienes una pantalla de cocina." } },
+    { "id": "8-end", "voice": { "es": "Así toman tus meseros los pedidos en la mesa, con Platata." } }
   ]
 }
