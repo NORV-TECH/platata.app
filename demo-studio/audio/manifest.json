@@ -103,5 +103,30 @@
   "hash": "d90e137ecd679b421e029c3ffcf1abd0a585c748",
   "file": "demo-studio/audio/B4/es/5-end.mp3",
   "chars": 45
+ },
+ "B1/es/1-intro": {
+  "hash": "12dc605a1919f14fd3c58c923ad6f8793a97fc29",
+  "file": "demo-studio/audio/B1/es/1-intro.mp3",
+  "chars": 84
+ },
+ "B1/es/2-upload": {
+  "hash": "28513f304c533f505f6554d8691fe6ed927187f0",
+  "file": "demo-studio/audio/B1/es/2-upload.mp3",
+  "chars": 95
+ },
+ "B1/es/3-read": {
+  "hash": "bfa665d5bdff4403f169464b63d7e07bbeaf3a4b",
+  "file": "demo-studio/audio/B1/es/3-read.mp3",
+  "chars": 64
+ },
+ "B1/es/4-ask": {
+  "hash": "41533e2fa2c8cbf5fcc703384e30a2a586ddff44",
+  "file": "demo-studio/audio/B1/es/4-ask.mp3",
+  "chars": 100
+ },
+ "B1/es/5-end": {
+  "hash": "76912ab129b71a4fa5510593b843ce9e6ac328ba",
+  "file": "demo-studio/audio/B1/es/5-end.mp3",
+  "chars": 36
  }
 }
