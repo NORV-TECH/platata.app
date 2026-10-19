@@ -328,5 +328,80 @@
   "hash": "9a8cb4a0ef8168913269578b62424c96938e688b",
   "file": "demo-studio/audio/B9/es/5-end.mp3",
   "chars": 43
+ },
+ "R4/es/1-intro": {
+  "hash": "d3afcd5cefa8a7e5cc670a08e3d9088f4239235a",
+  "file": "demo-studio/audio/R4/es/1-intro.mp3",
+  "chars": 65
+ },
+ "R4/pt/1-intro": {
+  "hash": "9b8e723255e36fe498d499723e0053b12e27a0ac",
+  "file": "demo-studio/audio/R4/pt/1-intro.mp3",
+  "chars": 67
+ },
+ "R4/en/1-intro": {
+  "hash": "896f66f3f4c884b40a95967d34a8f981530b305b",
+  "file": "demo-studio/audio/R4/en/1-intro.mp3",
+  "chars": 68
+ },
+ "R4/es/2-dishes": {
+  "hash": "350c3134d0c15e4706fc720596f772fd66db61ac",
+  "file": "demo-studio/audio/R4/es/2-dishes.mp3",
+  "chars": 68
+ },
+ "R4/pt/2-dishes": {
+  "hash": "c41e1a07a74b87cdee4f33c716546da896421a3d",
+  "file": "demo-studio/audio/R4/pt/2-dishes.mp3",
+  "chars": 74
+ },
+ "R4/en/2-dishes": {
+  "hash": "7057a90846a97909529a18107305603da55c09bb",
+  "file": "demo-studio/audio/R4/en/2-dishes.mp3",
+  "chars": 67
+ },
+ "R4/es/3-send": {
+  "hash": "be65bb1b57cfb7220a29887f16bf50fe7477cda5",
+  "file": "demo-studio/audio/R4/es/3-send.mp3",
+  "chars": 47
+ },
+ "R4/pt/3-send": {
+  "hash": "9a85add9b63d98146497ee84fd386b259c81c9e9",
+  "file": "demo-studio/audio/R4/pt/3-send.mp3",
+  "chars": 59
+ },
+ "R4/en/3-send": {
+  "hash": "4b473c22f18b4468edfbe9af64e0cc3e86dc9146",
+  "file": "demo-studio/audio/R4/en/3-send.mp3",
+  "chars": 48
+ },
+ "R4/es/4-table": {
+  "hash": "ffa8488fd77cddda68a5cb4563f6fdf04925b966",
+  "file": "demo-studio/audio/R4/es/4-table.mp3",
+  "chars": 121
+ },
+ "R4/pt/4-table": {
+  "hash": "ab584e520c859144b1e59e8ab366b056a754178b",
+  "file": "demo-studio/audio/R4/pt/4-table.mp3",
+  "chars": 109
+ },
+ "R4/en/4-table": {
+  "hash": "18d9c75ccc51c405375c195a979be32f519165a4",
+  "file": "demo-studio/audio/R4/en/4-table.mp3",
+  "chars": 115
+ },
+ "R4/es/5-end": {
+  "hash": "a4ddefaeb8964146269e04e853bab13123bdfe32",
+  "file": "demo-studio/audio/R4/es/5-end.mp3",
+  "chars": 72
+ },
+ "R4/pt/5-end": {
+  "hash": "acd6de227536328b30c3eb5df29f32fbb56420cc",
+  "file": "demo-studio/audio/R4/pt/5-end.mp3",
+  "chars": 73
+ },
+ "R4/en/5-end": {
+  "hash": "32ba6b6eb76507733e5d95121faab5aac395d10f",
+  "file": "demo-studio/audio/R4/en/5-end.mp3",
+  "chars": 74
  }
 }
