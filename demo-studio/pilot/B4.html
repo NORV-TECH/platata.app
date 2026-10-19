@@ -179,7 +179,7 @@ const KB = [["q","w","e","r","t","y","u","i","o","p"],["a","s","d","f","g","h","
 
 function render(){
   const app = document.getElementById("app");
-  let chat = `<div class="day">Hoy</div>` + EARLIER.map(m=>tataMsg(m.text,null,m.tm,false)).join("");
+  let chat = `<div class="day">1 oct</div>` + tataMsg("Septiembre entró: 49 movimientos. La cuenta cierra en $ 16.905.120.",null,"8:01",false) + tataMsg("Tiene 2 pendientes: confirmar la tasa de mora de octubre y subir la factura del aseo.",null,"8:01",false) + `<div class="day">Hoy</div>` + EARLIER.map(m=>tataMsg(m.text,null,m.tm,false)).join("");
   for(let i=0;i<S.done;i++){ chat += myMsg(QA[i].q,"9:4"+(1+i),false) + tataMsg(QA[i].a,QA[i].src,"9:4"+(1+i), i===S.done-1 && S.ph==="answered"); }
   if(S.ph==="thinking"){ chat += myMsg(QA[S.qi].q,"9:4"+(1+S.qi),true) + `<div class="typing">Tata está escribiendo…</div>`; }
   const typingNow = S.ph==="typing"||S.ph==="ready";
