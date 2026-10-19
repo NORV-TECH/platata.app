@@ -189,7 +189,7 @@ const CAPTIONS = {
  en:["Tap Close register","Count the cash and type what you have","Platata already knows what should be there","Done! Your day is saved"],
  fr:["Touchez Fermer la caisse","Comptez l'argent et entrez le montant","Platata sait déjà ce qui devrait y être","C'est fait! Votre journée est enregistrée"]
 };
-const LANG_NAMES = {es:"Español",pt:"Português",en:"English",fr:"Français"};
+const LANG_NAMES = {es:"Español",pt:"Português",en:"English"};
 
 /* ---------------- one business, numbers per country ---------------- */
 /* dec = currency decimals (decides the 000 or 00 key, like the app). Amounts in whole units. */
@@ -203,7 +203,7 @@ const C = {
  PA:{name:"Panamá",lang:"es",loc:"es-PA",cur:"USD",dec:2,owner:"Rosa",start:50,cash:263.9,other:[["m_qr",140]],count:"30000"},
  BR:{name:"Brasil",lang:"pt",loc:"pt-BR",cur:"BRL",dec:2,owner:"Cida",start:100,cash:527.9,other:[["m_pix",380]],count:"60000"},
  US:{name:"United States",lang:"en",loc:"en-US",cur:"USD",dec:2,owner:"Maria",start:100,cash:527.9,other:[["m_card",410]],count:"60000"},
- CA:{name:"Canada",lang:"fr",loc:"fr-CA",cur:"CAD",dec:2,owner:"Marie",start:100,cash:527.9,other:[["m_card",410]],count:"60000"}
+ CA:{name:"Canada",lang:"en",loc:"en-CA",cur:"CAD",dec:2,owner:"Marie",start:100,cash:527.9,other:[["m_card",410]],count:"60000"}
 };
 const ORDER = ["CO","MX","PE","CL","EC","AR","PA","BR","US","CA"];
 
@@ -356,7 +356,7 @@ if(MODE==="demo"){
     document.getElementById("langLabel").textContent=t("ui_lang");
     document.getElementById("countryLabel").textContent=t("ui_country");
     document.getElementById("sheetClose").textContent=t("ui_close");
-    document.getElementById("langChips").innerHTML = Object.keys(S).map(l=>`<button class="chip" data-l="${l}" aria-pressed="${l===lang}">${LANG_NAMES[l]}</button>`).join("");
+    document.getElementById("langChips").innerHTML = Object.keys(LANG_NAMES).map(l=>`<button class="chip" data-l="${l}" aria-pressed="${l===lang}">${LANG_NAMES[l]}</button>`).join("");
     document.getElementById("countryChips").innerHTML = ORDER.map(k=>`<button class="chip" data-c="${k}" aria-pressed="${k===country}">${C[k].name}</button>`).join("");
   }
   document.getElementById("gear").onclick=()=>{chips();sheet.classList.add("on");};

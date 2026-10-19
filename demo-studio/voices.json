@@ -18,15 +18,6 @@
     },
     "style": "lively, casual Brazilian, você"
   },
-  "fr": {
-    "name": "Amélie - Quebec",
-    "voice_id": "UJCi4DDncuo0VJDSIegj",
-    "settings": {
-      "stability": 0.5,
-      "similarity_boost": 0.75
-    },
-    "style": "warm Québec, vous"
-  },
   "en": {
     "name": "Daniel - Bright, warm",
     "voice_id": "gwU7DXdLrTvWCiUTPZG8",

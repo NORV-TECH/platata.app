@@ -145,7 +145,7 @@ const UI = {
  fr:{more:"Voir un autre commerce, pays ou langue",chg:"Voir un autre commerce ou pays",biz:"Commerce",country:"Pays",lang:"Langue",done:"Terminé",pickT:"Voir la démo pour…",feats:"Fonctions",ready:"prêtes",install:"Installer Platata",video:"Vidéo",close:"Fermer",
      soonT:"En préparation",soonP:"Cette démo est en préparation. Choisissez-en une autre dans Fonctions.",next:"Suivante :",demo:"Démo",noVideo:"La vidéo de cette fonction n'est pas encore dans cette langue.",shared:"Pour tous les commerces",own:"Pour ce commerce"}
 };
-const LANGS = {es:"Español",pt:"Português",en:"English",fr:"Français"};
+const LANGS = {es:"Español",pt:"Português",en:"English"};
 const COUNTRIES = {
  CO:{n:{es:"Colombia",pt:"Colômbia",en:"Colombia",fr:"Colombie"},langs:["es"]},
  MX:{n:{es:"México",pt:"México",en:"Mexico",fr:"Mexique"},langs:["es"]},
@@ -156,7 +156,7 @@ const COUNTRIES = {
  PA:{n:{es:"Panamá",pt:"Panamá",en:"Panama",fr:"Panama"},langs:["es"]},
  BR:{n:{es:"Brasil",pt:"Brasil",en:"Brazil",fr:"Brésil"},langs:["pt"]},
  US:{n:{es:"Estados Unidos",pt:"Estados Unidos",en:"United States",fr:"États-Unis"},langs:["en","es"]},
- CA:{n:{es:"Canadá",pt:"Canadá",en:"Canada",fr:"Canada"},langs:["en","fr"]}
+ CA:{n:{es:"Canadá",pt:"Canadá",en:"Canada",fr:"Canada"},langs:["en"]}
 };
 const ALL = Object.keys(COUNTRIES);
 // feature names: [es, pt, en, fr]
@@ -237,7 +237,7 @@ const BIZ = [
 const ONLY = { S5:["CO","US","CA"], T2:["CO"] };
 // what is built: demo page per feature, and the languages that have a video
 const BUILT = {
- S10:{ page:(c,l)=>`pilot/S10.html?embed=1&country=${c}&lang=${l}`, video:{es:"video/S10-es.mp4",pt:"video/S10-pt.mp4",en:"video/S10-en.mp4",fr:"video/S10-fr.mp4"} },
+ S10:{ page:(c,l)=>`pilot/S10.html?embed=1&country=${c}&lang=${l}`, video:{es:"video/S10-es.mp4",pt:"video/S10-pt.mp4",en:"video/S10-en.mp4"} },
  B1:{ page:()=>`demos/edificios/B1.html?embed=1`, video:{es:"video/B1-es.mp4"} },
  B2:{ page:()=>`demos/edificios/B2.html?embed=1`, video:{es:"video/B2-es.mp4"} },
  B3:{ page:()=>`demos/edificios/B3.html?embed=1`, video:{es:"video/B3-es.mp4"} },

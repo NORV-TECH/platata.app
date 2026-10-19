@@ -8,14 +8,12 @@
       "voice": {
         "es": "[excited] ¡Uy, qué día! [laughs] Bueno, a cerrar la caja... toca aquí, en Cerrar caja.",
         "pt": "[excited] Nossa, que dia! [laughs] Bora fechar o caixa? Toca aqui, em Fechar caixa.",
-        "en": "[warmly] Long day? Let's close up. Tap Close register.",
-        "fr": "[sighs] Ouf, grosse journée. On ferme? Touchez Fermer la caisse."
+        "en": "[warmly] Long day? Let's close up. Tap Close register."
       },
       "caption": {
         "es": "Toca Cerrar caja",
         "pt": "Toque em Fechar caixa",
-        "en": "Tap Close register",
-        "fr": "Touchez Fermer la caisse"
+        "en": "Tap Close register"
       }
     },
     {
@@ -23,14 +21,12 @@
       "voice": {
         "es": "[warmly] Ahora sí, cuenta la platica que tienes en la caja, con calma, y escribe cuánto hay.",
         "pt": "[warmly] Agora conta o dinheirinho do caixa, com calma, e digita quanto deu.",
-        "en": "[calmly] Count the cash in the drawer, and type in what you've got.",
-        "fr": "[warmly] Maintenant, comptez l'argent dans la caisse... et entrez le montant."
+        "en": "[calmly] Count the cash in the drawer, and type in what you've got."
       },
       "caption": {
         "es": "Cuenta la plata y escribe cuánto hay",
         "pt": "Conte o dinheiro e digite quanto tem",
-        "en": "Count the cash and type what you have",
-        "fr": "Comptez l'argent et entrez le montant"
+        "en": "Count the cash and type what you have"
       }
     },
     {
@@ -38,14 +34,12 @@
       "voice": {
         "es": "[playfully] ¿Y sabes qué es lo mejor? ¡Platata ya sabe cuánto debería haber! Si falta algo, te lo dice hoy mismo... no a fin de mes, cuando ya no hay nada que hacer.",
         "pt": "[playfully] E sabe o melhor? O Platata já sabe quanto deveria ter! Se faltar alguma coisa, ele te avisa hoje mesmo... e não no fim do mês, quando já era.",
-        "en": "[warmly] Here's the nice part: Platata already knows what should be in there. If something's missing, you'll know today, not at the end of the month.",
-        "fr": "[playfully] Et vous savez quoi? Platata sait déjà combien il devrait y avoir. S'il manque quelque chose, vous le savez aujourd'hui, pas à la fin du mois."
+        "en": "[warmly] Here's the nice part: Platata already knows what should be in there. If something's missing, you'll know today, not at the end of the month."
       },
       "caption": {
         "es": "Platata ya sabe cuánto debería haber",
         "pt": "O Platata já sabe quanto deveria ter",
-        "en": "Platata already knows what should be there",
-        "fr": "Platata sait déjà ce qui devrait y être"
+        "en": "Platata already knows what should be there"
       }
     },
     {
@@ -53,14 +47,12 @@
       "voice": {
         "es": "[cheerfully] ¡Listo! Tu día quedó guardadito, venta por venta.",
         "pt": "[cheerfully] Prontinho! Seu dia tá salvo, venda por venda.",
-        "en": "[warmly] And that's it. Your whole day is saved, every sale.",
-        "fr": "[cheerfully] C'est fait! Votre journée est enregistrée, vente par vente."
+        "en": "[warmly] And that's it. Your whole day is saved, every sale."
       },
       "caption": {
         "es": "¡Listo! Tu día quedó guardado",
         "pt": "Pronto! Seu dia ficou salvo",
-        "en": "Done! Your day is saved",
-        "fr": "C'est fait! Votre journée est enregistrée"
+        "en": "Done! Your day is saved"
       }
     }
   ]
