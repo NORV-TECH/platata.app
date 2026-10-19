@@ -1,0 +1,39 @@
+{
+  "model": "eleven_v3",
+  "es": {
+    "name": "Lina - Colombian Warm (Paisa)",
+    "voice_id": "yfUfwZTRubVrsUZWqzwp",
+    "settings": {
+      "stability": 0.0,
+      "similarity_boost": 0.75
+    },
+    "style": "lively, warm, colloquial Colombian, usted"
+  },
+  "pt": {
+    "name": "MUNDI br-victor",
+    "voice_id": "LuQ9eaWO9yCQrR73VQFa",
+    "settings": {
+      "stability": 0.0,
+      "similarity_boost": 0.75
+    },
+    "style": "lively, casual Brazilian, você"
+  },
+  "fr": {
+    "name": "Amélie - Quebec",
+    "voice_id": "UJCi4DDncuo0VJDSIegj",
+    "settings": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "style": "warm Québec, vous"
+  },
+  "en": {
+    "name": "Daniel - Bright, warm",
+    "voice_id": "gwU7DXdLrTvWCiUTPZG8",
+    "settings": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "style": "warm American, friendly"
+  }
+}
