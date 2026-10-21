@@ -93,8 +93,11 @@
 /* FOLLOW-1 (CheckoutSheetBody.kt:954-957, CheckoutPayBlock.kt:276-282): the tablet pane is shorter than the roomy height (t < 1),
    so with cash on and nothing typed the links flow in ONE row across the whole width (FlowRow, 16 dp apart, 9 dp between lines)
    and the Received / Change column is not drawn. */
-.k9right .mpay .links{min-height:calc(var(--u)*60);flex-direction:row;flex-wrap:wrap;align-content:flex-start;column-gap:calc(var(--u)*16);row-gap:calc(var(--u)*9)}
-.k9right .mpay .kp span{height:calc(var(--u)*40)}
+.k9right .mpay .links{min-height:calc(var(--u)*28);flex-direction:row;flex-wrap:wrap;align-content:flex-start;column-gap:calc(var(--u)*16);row-gap:calc(var(--u)*9)}
+.k9right .mpay .kp{margin-top:calc(var(--u)*8)}
+.k9right .mpay .kp span{height:calc(var(--u)*34)}
+/* demo tablet is 512 units tall (real one ~800 dp): exact + send-to-kitchen packed so both stay on screen */
+.k9right .mpay .exact,.k9right .mpay .save{height:calc(var(--u)*42);margin-top:calc(var(--u)*6)}
 /* RECEIPT step: ReceiptOptionsScreen.kt SaleCompleteContent (pane < 700 dp: potato 88 dp) */
 .k9rec{flex:1;min-height:0;display:flex;flex-direction:column}
 .k9rec .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 calc(var(--u)*20);text-align:center}
