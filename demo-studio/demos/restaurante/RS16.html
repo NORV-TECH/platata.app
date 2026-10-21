@@ -391,14 +391,14 @@ RKIT.start(R, {
 .mat .dc-card{border-radius:calc(var(--u)*12);padding:calc(var(--u)*16)}
 .mat .dc-card .r{display:flex}
 .mat .dc-card .li{width:calc(var(--u)*24);height:calc(var(--u)*24);margin-right:calc(var(--u)*12);flex:0 0 auto}
-.mat .dc-card .li svg{width:100%;height:100%;fill:currentColor}
+.mat .dc-card .li svg{width:calc(var(--u)*24)!important;height:calc(var(--u)*24)!important;fill:currentColor!important;display:block}
 .mat .dc-card .tx{flex:1;min-width:0}
 .mat .dc-card .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700}
 .mat .dc-card .tx strong{display:block;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:700}
 .mat .dc-card .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
 .mat .dc-card .ctl{display:flex;justify-content:flex-end;align-items:center}
 .mat .dc-card .cell{min-width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
-.mat .dc-card .cell svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.mat .dc-card .cell>svg{width:calc(var(--u)*24)!important;height:calc(var(--u)*24)!important;fill:currentColor!important}
 .mat .dc-card .cell .rs-sw{margin:0 calc(var(--u)*4)}
 .mat .dc-form{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
 .mat .dc-seg{display:flex;border:1px solid var(--m-outline);border-radius:calc(var(--u)*24);overflow:hidden;min-height:calc(var(--u)*48)}
@@ -407,7 +407,7 @@ RKIT.start(R, {
 .mat .dc-seg span.on{background:var(--m-ovar)}
 .mat .dc-seg svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:var(--m-on)}
 .mat .dc-swr{display:flex;align-items:center;min-height:calc(var(--u)*48);font-size:calc(var(--u)*14)}
-.mat .dc-swr span{flex:1}
+.mat .dc-swr>span:first-child{flex:1}
 .mat .dc-what{margin:calc(var(--u)*4) 0 0;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
 .mat .dc-hr{border:0;border-top:1px solid var(--m-ovar);margin:0;width:100%}
 .mat .dc-form .dc-sec{margin:0}
@@ -419,10 +419,10 @@ RKIT.start(R, {
 .mat .dc-pick{padding:calc(var(--u)*16)}
 .mat .dc-ch{display:flex;align-items:center;min-height:calc(var(--u)*48);margin-bottom:calc(var(--u)*8)}
 .mat .dc-ch b{flex:1;font-size:calc(var(--u)*16);font-weight:700}
-.mat .dc-ch span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.mat .dc-ch>span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
 .mat .dc-pc{border-radius:calc(var(--u)*12);background:rgba(242,242,247,.3);margin-bottom:calc(var(--u)*16)}
 .mat .dc-pr{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*12);min-height:calc(var(--u)*48)}
-.mat .dc-pr span{font-size:calc(var(--u)*16)}
+.mat .dc-pr>span:last-child{font-size:calc(var(--u)*16)}
 .mat .dc-cb{width:calc(var(--u)*18);height:calc(var(--u)*18);border:calc(var(--u)*2) solid var(--m-onv);border-radius:calc(var(--u)*2);display:grid;place-items:center;box-sizing:border-box;margin:calc(var(--u)*15)}
 .mat .dc-cb.on{background:var(--m-on);border-color:var(--m-on)}
 .mat .dc-cb svg{width:calc(var(--u)*14);height:calc(var(--u)*14);fill:#fff}
