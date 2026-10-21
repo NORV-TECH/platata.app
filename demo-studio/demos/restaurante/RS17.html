@@ -309,7 +309,7 @@ function form(st){
   const chips = st.edit ? "" : PRESETS.map(p => `<span class="tx-chip"${p===PICK?' data-t="chip"':""}>${esc(p[0]+" "+rate(p[1]))}</span>`).join("");
   return topbar(S(st.edit?"tax_edit_section":"tax_add_section")) + `<div class="tx-form">
     ${chips?`<div class="tx-chips">${chips}</div>`:""}
-    ${st.picked && R.country==="CO" ? `<p class="tx-note">${esc(S("tax_preset_one_or_other"))}</p>` : ""}
+    ${st.picked && !st.edit && R.country==="CO" ? `<p class="tx-note">${esc(S("tax_preset_one_or_other"))}</p>` : ""}
     ${field(S("tax_field_name"), st.name, {focus:st.focus==="name", tag:"f-name"})}
     ${field(S("tax_field_pct"), st.pct, {focus:st.focus==="pct", tag:"f-pct"})}
     ${st.edit ? `<p class="tx-edit">${esc(S("tax_edit_note"))}</p>` :

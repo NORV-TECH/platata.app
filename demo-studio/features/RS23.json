@@ -1,0 +1,77 @@
+{
+  "id": "RS23",
+  "name": "Huella para borrar o quitar cargos",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-abrir",
+      "voice": {
+        "es": "Con la seguridad activa, tu negocio se abre con tu huella, tu cara o el PIN de tu teléfono.",
+        "pt": "Com a segurança ativa, seu negócio abre com a sua digital, seu rosto ou o PIN do celular.",
+        "en": "With security on, your business opens with your fingerprint, your face, or your phone's PIN."
+      }
+    },
+    {
+      "id": "2-seguridad",
+      "voice": {
+        "es": "Entra a Configuración y toca Seguridad.",
+        "pt": "Entre em Configurações e toque em Segurança.",
+        "en": "Go to Settings and tap Security."
+      }
+    },
+    {
+      "id": "3-pin",
+      "voice": {
+        "es": "Aquí está tu PIN para devoluciones. Para verlo, el teléfono te pide tu huella.",
+        "pt": "Aqui está o seu PIN para devoluções. Para vê-lo, o celular pede a sua digital.",
+        "en": "Here's your refund PIN. To see it, the phone asks for your fingerprint."
+      }
+    },
+    {
+      "id": "4-borrar",
+      "voice": {
+        "es": "Borrar artículos, empleados o clientes también pide tu huella.",
+        "pt": "Apagar itens, funcionários ou clientes também pede a sua digital.",
+        "en": "Deleting items, employees, or clients asks for it too."
+      }
+    },
+    {
+      "id": "5-cargos",
+      "voice": {
+        "es": "Si quieres, actívalo también para quitar un cargo al cobrar.",
+        "pt": "Se quiser, ative também para remover uma taxa ao cobrar.",
+        "en": "If you want, turn it on for removing a fee at checkout too."
+      }
+    },
+    {
+      "id": "6-bloqueo",
+      "voice": {
+        "es": "Y la caja se bloquea sola si nadie la toca en 5 minutos.",
+        "pt": "E o caixa bloqueia sozinho se ninguém tocar nele em 5 minutos.",
+        "en": "And the register locks itself if nobody touches it for 5 minutes."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así proteges tu negocio con Platata.",
+        "pt": "Assim você protege seu negócio com o Platata.",
+        "en": "That's how you protect your business with Platata."
+      }
+    }
+  ]
+}

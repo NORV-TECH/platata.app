@@ -36,8 +36,8 @@
     {
       "id": "3-net",
       "voice": {
-        "es": "Ventas brutas, menos descuentos y devoluciones: tus ventas netas, antes de impuestos, propinas y cargos.",
-        "pt": "Vendas brutas, menos descontos e devoluções: suas vendas líquidas, antes de impostos, gorjetas e taxas.",
+        "es": "Ventas brutas, menos descuentos y devoluciones: tus ventas netas, antes de impuestos y cargos.",
+        "pt": "Vendas brutas, menos descontos e devoluções: suas vendas líquidas, antes de impostos e taxas.",
         "en": "Gross sales, minus discounts and refunds, gives your net sales, before tax, tips and charges."
       }
     },
