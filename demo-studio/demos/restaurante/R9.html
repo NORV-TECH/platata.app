@@ -90,7 +90,10 @@
 .k9right .mpay .hd{height:calc(var(--u)*44)}
 .k9right .mpay .cust{height:calc(var(--u)*52)}
 .k9right .mpay .blk{padding-top:calc(var(--u)*8);padding-bottom:calc(var(--u)*12)}
-.k9right .mpay .links{min-height:calc(var(--u)*60)}
+/* FOLLOW-1 (CheckoutSheetBody.kt:954-957, CheckoutPayBlock.kt:276-282): the tablet pane is shorter than the roomy height (t < 1),
+   so with cash on and nothing typed the links flow in ONE row across the whole width (FlowRow, 16 dp apart, 9 dp between lines)
+   and the Received / Change column is not drawn. */
+.k9right .mpay .links{min-height:calc(var(--u)*60);flex-direction:row;flex-wrap:wrap;align-content:flex-start;column-gap:calc(var(--u)*16);row-gap:calc(var(--u)*9)}
 .k9right .mpay .kp span{height:calc(var(--u)*40)}
 /* RECEIPT step: ReceiptOptionsScreen.kt SaleCompleteContent (pane < 700 dp: potato 88 dp) */
 .k9rec{flex:1;min-height:0;display:flex;flex-direction:column}
@@ -132,7 +135,7 @@
 <script>
 /* R9 "Tablet en el mostrador": the counter tablet (MamaPos) wakes from "Caja bloqueada", a cashier picks her face and types
    her PIN, rings two dishes, picks the table, charges cash and the order lands on the kitchen screen.
-   Every screen follows the app at sim/usa-canada (6736ddfb). Paths under app/src/main/java/com/example/.
+   Every screen follows the app at sim/usa-canada (f93f1c77). Paths under app/src/main/java/com/example/.
    locked        ui/screens/mamapos/MamaPosScreen.kt:279-311: Color.White, Lock 64 dp outline, mamaship_locked_title 30 sp Bold,
                  mamaship_tap_to_login 16 sp, the whole screen is the tap target; gear 48 dp bottom-right (owner PIN, F-03).
    profiles      :387-488: padding 40/48, "← Atrás" (TABLES-1), PlatataWordmark 32 sp, business name in that font 56 sp SumaBlue,
