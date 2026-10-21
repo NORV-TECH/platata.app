@@ -1,0 +1,85 @@
+{
+  "id": "TS8",
+  "name": "Refund a sale (shop, owner phone)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-sales",
+      "voice": {
+        "es": "Para devolver una venta, toca Ventas.",
+        "pt": "Para devolver uma venda, toque em Vendas.",
+        "en": "To refund a sale, tap Sales."
+      }
+    },
+    {
+      "id": "2-sale",
+      "voice": {
+        "es": "Busca la venta y tócala.",
+        "pt": "Encontre a venda e toque nela.",
+        "en": "Find the sale and tap it."
+      }
+    },
+    {
+      "id": "3-refund",
+      "voice": {
+        "es": "Toca Devolver.",
+        "pt": "Toque em Devolver.",
+        "en": "Tap Refund."
+      }
+    },
+    {
+      "id": "4-all",
+      "voice": {
+        "es": "El cliente lo devuelve todo: toca Seleccionar todos los artículos.",
+        "pt": "O cliente devolve tudo: toque em Selecionar todos os itens.",
+        "en": "The customer brings it all back: tap Select all items."
+      }
+    },
+    {
+      "id": "5-confirm",
+      "voice": {
+        "es": "Platata te dice que entregues el dinero en efectivo. Toca Devolver y confírmalo.",
+        "pt": "O Platata diz para devolver o dinheiro em espécie. Toque em Devolver e confirme.",
+        "en": "Platata tells you to hand back the cash. Tap Refund and confirm."
+      }
+    },
+    {
+      "id": "6-pin",
+      "voice": {
+        "es": "Apruébalo con tu PIN.",
+        "pt": "Aprove com o seu PIN.",
+        "en": "Approve it with your PIN."
+      }
+    },
+    {
+      "id": "7-done",
+      "voice": {
+        "es": "La venta queda devuelta, y los productos que cuentas vuelven a tu inventario.",
+        "pt": "A venda fica devolvida, e os produtos que você conta voltam ao estoque.",
+        "en": "The sale is refunded, and the items you count go back into your stock."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así devuelves una venta con Platata.",
+        "pt": "Assim você faz uma devolução com o Platata.",
+        "en": "That's how you refund a sale with Platata."
+      }
+    }
+  ]
+}
