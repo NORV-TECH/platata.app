@@ -8,6 +8,7 @@ on:
       - "demo-studio/features/**"
       - "demo-studio/voices.json"
       - "demo-studio/tools/make_voice.py"
+      - "demo-studio/voice-ready.txt"
       - ".github/workflows/make-voice.yml"
 
 permissions:

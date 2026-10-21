@@ -26,9 +26,9 @@
                     dish takes the next rank, DB-1)
    dish form EDIT   ItemsScreen.kt:995-1023 ("Editar plato", status Guardando… / Guardado / Sin guardar), body :1045-1170
                     (96 dp photo box + Nombre; Precio = the plain internal form, no grouping; Categoría), DishAddOnsRow.kt
-                    (Adiciones / Ninguna), red "Eliminar artículo" :1471-1481; autosave 2 s after typing :873-882
+                    (Adiciones / Ninguna), red "Eliminar plato" (items_delete_dish) :1476-1486; autosave 2 s after typing :873-882
    dish form NEW    same file: X, "Nuevo " + blue "Plato" :1024-1039, the category the "+" came from pre-picked (E-31),
-                    pill "Crear Plato" :1447-1469 (off until name, price and category)
+                    pill "Crear plato" (prefix + lowercase segment) :1452-1474 (off until name, price and category)
    Ordenar          ReorderParts.kt (OrderToggleButton "Ordenar"/"Listo", hint menu_order_hint, 48 dp arrows; saved at once)
    support strip    under every LEVEL_2_PLUS page (items_workspace, category_items, item_edit, item_new); hidden while the keyboard is up */
 /* ---- shared pieces of the menu demos (R1 R2 R3 RS18), copied into each page; kit/ is not edited ---- */
@@ -164,6 +164,24 @@ function yourMenu(o){ o=o||{};
       <div class="row dn"><div><b>${esc(P(YM.dining))}</b><small>${esc(P(YM.diningSub))}</small></div><span class="ch">›</span></div>
     </div></div>${strip()}</div>`;
 }
+/* ---- the waiter's phone (Mini POS): MiniPosSellScreen.kt (tabs home_tab_library / tx_tab_all / tx_tab_open, ProductLibraryView with
+   the "Todos" chip = products A-Z, footer link scan_row_manual, cart bar common_charge_items), bottom bar Caja + Mi negocio.
+   No combo pill on these tiles: only HomeScreen passes comboBadgeForProduct (ProductLibraryView.kt:191) ---- */
+const WT = {
+  tabs:{es:["Catálogo","Ventas","Abiertas"],pt:["Catálogo","Vendas","Abertas"],en:["Library","Sales","Open"]},
+  chargeItems:{es:["Cobrar %1$s · %2$d artículo","Cobrar %1$s · %2$d artículos"],pt:["Cobrar %1$s · %2$d item","Cobrar %1$s · %2$d itens"],en:["Charge %1$s · %2$d item","Charge %1$s · %2$d items"]},
+  hopLine:{es:"El menú nuevo",pt:"O cardápio novo",en:"The new menu"},
+  hopNote:{es:"Los cambios del menú viajan por internet: tu teléfono y el del mesero necesitan conexión.",
+           pt:"As mudanças do cardápio vão pela internet: seu celular e o do garçom precisam de conexão.",
+           en:"Menu changes travel over the internet: your phone and the server's phone need a connection."}
+};
+function waiterSell(o){ o=o||{};
+  const tabs = `<div class="mtabs">${P(WT.tabs).map((t,i)=>`<span class="${i===0?"on":""}">${esc(t)}</span>`).join("")}</div>`;
+  const grid = `<div class="mgrid">` + C.itemsByName.map(it=>tile(it)).join("") + `</div>`;
+  let h = tabs + chipsRow(0) + grid + `<div class="mlink"><span>${esc(P(W.keypadTab))}</span></div>`;
+  if(o.count) h += `<div class="mcart" data-t="cart"><span>${esc(fmt(P(WT.chargeItems)[o.count===1?0:1], R.money(o.total), o.count))}</span></div>`;
+  return h + staffNav();
+}
 
 const S = {
   more:{es:"Más opciones",pt:"Mais opções",en:"More options"},
@@ -175,7 +193,7 @@ const S = {
   addPhoto:{es:"Agregar foto",pt:"Adicionar foto",en:"Add Photo"},
   name:{es:"Nombre",pt:"Nome",en:"Name"}, price:{es:"Precio",pt:"Preço",en:"Price"}, category:{es:"Categoría",pt:"Categoria",en:"Category"},
   addons:{es:"Adiciones",pt:"Adicionais",en:"Add-ons"}, none:{es:"Ninguna",pt:"Nenhum",en:"None"},
-  del:{es:"Eliminar artículo",pt:"Excluir Item",en:"Delete Item"}
+  del:{es:"Eliminar plato",pt:"Excluir prato",en:"Delete dish"}
 };
 const T = (k, ...a) => fmt(P(S[k]), ...a);
 /* the edited dish (the category's first) and its new price; the new dish typed by hand (owner's words, the country's language) */
@@ -209,7 +227,7 @@ function form(st, isNew){
     <div class="r2"><div style="flex:1;min-width:0">${field({label:T("price"), value:priceTxt, foc:foc==="price", t:"f-price"})}</div>
       <div style="flex:1;min-width:0">${field({label:T("category"), value:MAIN.name, trail:`<span class="tr">${I.drop}</span>`})}</div></div>
     <div class="x-addons"><i>${I.list}</i><div><b>${esc(T("addons"))}</b><small>${esc(T("none"))}</small></div><span>${I.chev}</span></div>
-    ${isNew ? btn(T("create")+" "+T("dish"), {pill:true, off:!(st.nName && st.nPrice), t:"create"}) : `<div class="x-del">${esc(T("del"))}</div>`}
+    ${isNew ? btn(T("create")+" "+T("dish").toLowerCase(), {pill:true, off:!(st.nName && st.nPrice), t:"create"}) : `<div class="x-del">${esc(T("del"))}</div>`}
   </div>`;
   return `<div class="x-col">${top}${body}<div class="x-scroll"></div>${st.focus ? kbd(st.focus==="price"?"num":"text") : strip()}</div>`;
 }
@@ -224,9 +242,9 @@ RKIT.start(R, {
   id:"R2", tallVideo:true, clock:"12:41",
   endText:P({es:"Así editas tu menú, con Platata.",pt:"Assim você edita seu cardápio, com o Platata.",en:"That's how you edit your menu, with Platata."}),
   beats:P({
-    es:["Tu menú: toca una categoría","Toca un plato para cambiarlo","Cambia el precio: se guarda solo","Con el + agregas un plato aquí","Escribe el nombre y el precio","Toca Crear Plato","Ordenar cambia el orden en la caja","Así editas tu menú, con Platata."],
-    pt:["Seu cardápio: toque numa categoria","Toque num prato para mudar","Mude o preço: salva sozinho","Com o + você adiciona um prato aqui","Escreva o nome e o preço","Toque em Criar Prato","Ordenar muda a ordem no caixa","Assim você edita seu cardápio."],
-    en:["Your menu: tap a category","Tap a dish to change it","Change the price: it saves itself","Tap + to add a dish here","Type the name and the price","Tap Create Dish","Reorder changes the order on the register","That's how you edit your menu, with Platata."]}),
+    es:["Tu menú: toca una categoría","Toca un plato para cambiarlo","Cambia el precio: se guarda solo","Con el + agregas un plato aquí","Escribe el nombre y el precio","Toca Crear plato","Ordenar cambia el orden en la caja","Así editas tu menú, con Platata."],
+    pt:["Seu cardápio: toque numa categoria","Toque num prato para mudar","Mude o preço: salva sozinho","Com o + você adiciona um prato aqui","Escreva o nome e o preço","Toque em Criar prato","Ordenar muda a ordem no caixa","Assim você edita seu cardápio, com o Platata."],
+    en:["Your menu: tap a category","Tap a dish to change it","Change the price: it saves itself","Tap + to add a dish here","Type the name and the price","Tap Create dish","Reorder changes the order on the register","That's how you edit your menu, with Platata."]}),
   state:{screen:"menu", edPrice:ED.price, edTyped:inputForm(ED.price), status:"saved", focus:null, added:false, movedUp:false, ordering:false, nName:"", nPrice:""},
   render,
   device: () => "phone",
@@ -241,7 +259,7 @@ RKIT.start(R, {
     {beat:3, hint:P({es:"Toca el +",pt:"Toque no +",en:"Tap the +"}), target:'[data-t="cat-add"]', tap(st){ st.screen="new"; }},
     {beat:4, hint:P({es:"Toca Nombre",pt:"Toque em Nome",en:"Tap Name"}), target:'[data-t="f-name"]', tap(st,E){ st.focus="name"; E.after(300,()=>E.type("nName", NEW.name, null, 75)); }},
     {beat:4, hint:P({es:"Toca Precio",pt:"Toque em Preço",en:"Tap Price"}), target:'[data-t="f-price"]', tap(st,E){ st.focus="price"; E.after(300,()=>E.type("nPrice", inputForm(NEW.price), null, 150)); }},
-    {beat:5, hint:P({es:"Toca Crear Plato",pt:"Toque em Criar Prato",en:"Tap Create Dish"}), target:'[data-t="create"]', tap(st){ st.focus=null; st.added=true; st.screen="cat"; }},
+    {beat:5, hint:P({es:"Toca Crear plato",pt:"Toque em Criar prato",en:"Tap Create dish"}), target:'[data-t="create"]', tap(st){ st.focus=null; st.added=true; st.screen="cat"; }},
     {beat:6, hint:P({es:"Toca Ordenar",pt:"Toque em Ordenar",en:"Tap Reorder"}), target:'[data-t="order"]', tap(st){ st.ordering=true; }},
     {beat:6, hint:P({es:"Sube ",pt:"Suba ",en:"Move up "})+NEW.name, target:'[data-t="up-new"]', tap(st){ st.movedUp=true; }}
   ]

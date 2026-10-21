@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Adiciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* R3 "Adiciones y opciones": the OWNER makes an add-on from an idea (Salsas), puts a price on the extra he charges for, picks the
+   dishes it goes on, and the WAITER's phone offers it when the dish is tapped. Every country (R.C data), es/pt/en.
+   Screens follow the app (paths under app/src/main/java/com/example/):
+   Tu menú          ui/screens/items/YourMenuScreen.kt + MenuLayoutParts.kt (dock row "Adiciones", "0 en uso" = add-ons on a dish)
+   ideas page       ui/screens/items/CategoryHubScreen.kt:189-260 (tab 0, SumaTopBar addon_ideas_title, ModifierCard: 48 dp circle
+                    accent 12 % / 30 %, IdeaEmoji, name titleMedium, first 3 choices + "…", "›" #B0B0AA; the ideas of
+                    data/ModifierTemplates.kt in that order, then "Tu propia adición"); the card words are in the APP's language
+   add-on editor    ui/screens/modifiers/ModifiersManagementScreen.kt:438-720 (SumaTopBar = the name, no arrow, "Listo";
+                    AddOnDishesRow.kt; Nombre; modmgmt_selection_rules + "+ Agregar" + the 32 dp eye box; mod_add_your_price (sauce);
+                    one card per choice: Nombre + Precio (placeholder Gratis) + trash, "Luego preguntar…"; Elegir VARIOS / UNO; Requerido).
+                    The saved name and choices are in the SHOP's language (ModifierTemplates savedName, choke 12). It saves on every change.
+   dish chooser     same file :838-945 ModifierAllItemsPickerScreen (title mod_items_for, "Listo" bold; per category "Name (n/m)",
+                    common_select_all / common_clear_all, collapsed)
+   Listo            a NEW add-on lands on CategoryHub tab 1 (ui/navigation/CatalogNavGraph.kt:322-333): mod_tab_my, "+ Nuevo",
+                    card name + your_menu_linked_items_count + pill mod_status_active + red trash + "›"
+   the trip         owner phone -> reference snapshot in the cloud (ReferenceSyncActions.startReferenceAutoPush: the add-on row
+                    changes when it gets dishes, 1.5 s debounce) -> the waiter phone's reference listener (Mini POS = cloud only)
+   waiter's till    MiniPosSellScreen.kt + ProductSheetHost -> ModifierSelectionSheet.kt:180-300 / ModifierSheetContent.kt (title =
+                    the dish, group "Salsas" + modifiers_hint_optional, chips 42 dp with "+$ price", 48 dp − / + (MENU-2), "1 extra",
+                    "Agregar a la venta · $X" = (price + extras) × qty)
+   support strip    under Tu menú, the ideas page and the editor (LEVEL_2_PLUS), hidden while the keyboard is up; not on the till */
+/* ---- shared pieces of the menu demos (R1 R2 R3 RS18), copied into each page; kit/ is not edited ---- */
+const R = RKIT.ctx(), C = R.C, esc = RKIT.esc, L = R.lang;
+const SH = C.lang;   // the shop's own language: names the app WRITES into the shop (add-on ideas) use it (choke 12)
+const P = o => R.pick(o);
+const fmt = (s, ...a) => { a.forEach((v,i) => { s = s.replace(new RegExp("%"+(i+1)+"\\$[sd]","g"), v).replace(/%[sd]/, v); }); return s; };
+const item = id => C.items.find(x=>x.id===id);
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const ALL_C = "#607D8B";                                   // CategoryChipNeutral
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+/* MoneyVisualTransformation: the separators of the CURRENCY's locale (CurrencyUtils.kt:189 localeForCurrency; USD -> en-US) */
+const CUR_LOC = {COP:"es-CO",MXN:"es-MX",PEN:"es-PE",CLP:"es-CL",USD:"en-US",ARS:"es-AR",BRL:"pt-BR",CAD:"en-CA"};
+const fieldMoney = v => new Intl.NumberFormat(CUR_LOC[C.cur]||C.loc,{minimumFractionDigits:C.dec,maximumFractionDigits:C.dec}).format(v);
+/* formatAmountForInput (CurrencyUtils.kt:338): the INTERNAL form a plain money field shows: "38000", "45.00" (a dot, even in Brazil) */
+const inputForm = v => v.toFixed(C.dec);
+const cats = C.catList;                 // creation order (ids 1..n)
+const MAIN = cats[0], DRINK = cats.find(c=>/Bebid|Drink/i.test(c.name)) || cats[cats.length-1];
+const inCat = c => C.items.filter(it=>it.cat===c.name);        // creation order = the stored rank (DB-1: a new dish takes the next rank)
+const I = {
+  back:'<svg class="mi" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  close:'<svg class="mi" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+  edit:'<svg class="mi" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  receipt:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  add:'<svg class="mi" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>',
+  rest:'<svg class="mi" viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>',
+  cam:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 100-6.4 3.2 3.2 0 000 6.4zM9 2 7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>',
+  addPhoto:'<svg class="mi" viewBox="0 0 24 24"><path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"/></svg>',
+  list:'<svg class="mi" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>',
+  chev:'<svg class="mi" viewBox="0 0 24 24"><path d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  drop:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>',
+  up:'<svg class="mi" viewBox="0 0 24 24"><path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/></svg>',
+  down:'<svg class="mi" viewBox="0 0 24 24"><path d="M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>',
+  more:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  trash:'<svg class="mi" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+  eye:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>',
+  expMore:'<svg class="mi" viewBox="0 0 24 24"><path d="M16.59 8.59 12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>',
+  expLess:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></svg>',
+  support:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12-2.78 1.15a5.01 5.01 0 00-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78a5.05 5.05 0 00-2.98 2.97L4.54 9.13a7.96 7.96 0 014.59-4.59zM4.54 14.87l2.78-1.15a5.02 5.02 0 002.97 2.96l-1.17 2.78a7.96 7.96 0 01-4.58-4.59zm10.34 4.59-1.15-2.78a5.02 5.02 0 002.95-2.97l2.78 1.17a7.96 7.96 0 01-4.58 4.58z"/></svg>',
+  person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'
+};
+/* common words (values / values-es / values-pt-rBR at the checked commit) */
+const W = {
+  back:{es:"Atrás",pt:"Voltar",en:"Back"},
+  keypadTab:{es:"Teclado",pt:"Teclado",en:"Keypad"}, libTab:{es:"Catálogo",pt:"Catálogo",en:"Library"},   // home_tab_manual / home_tab_library
+  edit:{es:"Editar",pt:"Editar",en:"Edit"}, editing:{es:"Editando",pt:"Editando",en:"Editing"}, done:{es:"Listo",pt:"Pronto",en:"Done"},  // common_edit / home_editing / where_done
+  all:{es:"Todos",pt:"Todos",en:"All"},                     // items_filter_all
+  addTile:{es:"+ Agregar",pt:"+ Adicionar",en:"+ Add"},     // home_add_tile
+  save:{es:"Guardar",pt:"Salvar",en:"Save"},                // common_save
+  charge:{es:"Cobrar %s",pt:"Cobrar %s",en:"Charge %s"},    // common_charge
+  register:{es:"Caja",pt:"Caixa",en:"Register"}, sales:{es:"Ventas",pt:"Vendas",en:"Sales"}, myBiz:{es:"Mi negocio",pt:"Meu negócio",en:"My business"},
+  support:{es:"Soporte",pt:"Suporte",en:"Support"}, supportSub:{es:"Reporta un problema aquí",pt:"Relatar um problema aqui",en:"Report a problem here"},
+  myReports:{es:"Mis reportes",pt:"Meus relatos",en:"My reports"}, noReports:{es:"Aún no hay reportes",pt:"Ainda não há relatos",en:"No reports yet"},
+  owner:{es:"Tu teléfono",pt:"Seu celular",en:"Your phone"},
+  staff:{es:"Teléfono de empleado",pt:"Celular de funcionário",en:"Employee phone"}
+};
+/* ---- SumaTopBar (ui/components/SumaTopBar.kt): 64 dp, nav 48, title titleLarge bold, action at the end ---- */
+function topbar(o){ o=o||{};
+  const nav = o.nav ? `<span class="nb" data-t="${o.navT||"nav"}">${o.nav==="close"?I.close:I.back}</span>` : "";
+  const title = o.html || (o.sub ? `<b class="two">${esc(o.title)}</b><small>${esc(o.sub)}</small>` : esc(o.title||""));
+  return `<div class="x-top"><div class="tt${o.nav?"":" nonav"}${o.sub?" hs":""}">${nav}<div class="t">${title}</div></div>${o.action||""}</div>`;
+}
+/* ---- SUPPORT-3 strip (ui/screens/reports/SupportStrip.kt): every LEVEL_2_PLUS page, under the page; hidden while the keyboard is up ---- */
+const strip = () => `<div class="x-strip"><div class="h"><span class="bd">${I.support}</span><span class="tx"><b>${esc(P(W.support))}</b><small>${esc(P(W.supportSub))}</small></span></div>
+  <i class="dv"></i><div class="h"><span class="tx"><b>${esc(P(W.myReports))}</b><small>${esc(P(W.noReports))}</small></span><span class="cv">${I.chev}</span></div></div>`;
+/* ---- the phone's own keyboard (Gboard look; NOT the app). Hides the strip, as the app does (rememberImeVisible) ---- */
+function kbd(kind){
+  const row = (keys, cls) => `<div class="r">${keys.map(k=>`<span class="${cls||""}${k.length>1?" w":""}">${esc(k)}</span>`).join("")}</div>`;
+  if(kind==="num"){
+    const sep = (CUR_LOC[C.cur]||C.loc).startsWith("en") ? "." : ",";
+    return `<div class="x-kbd num">${row(["1","2","3","−"])}${row(["4","5","6","␣"])}${row(["7","8","9","⌫"])}${row([sep,"0",".","↵"])}</div>`;
+  }
+  return `<div class="x-kbd">${row("qwertyuiop".split(""))}${row("asdfghjklñ".split(""))}${row(["⇧"].concat("zxcvbnm".split("")).concat(["⌫"]))}${row(["?123",",","          ",".","↵"])}</div>`;
+}
+/* ---- OutlinedTextField (M3, shape extraSmall 6 dp, outline #C7C7CC; focused 2 dp primary; error #FF3B30) ---- */
+function field(o){ o=o||{};
+  const cls = ["x-f"]; if(o.foc) cls.push("foc"); if(o.err) cls.push("err"); if(o.ro) cls.push("ro");
+  const v = o.value!=null && o.value!=="" ? `<span class="v">${esc(o.value)}${o.foc?'<i class="caret"></i>':""}</span>` : `<span class="v ph">${o.foc?'<i class="caret"></i>':""}${esc(o.ph||"")}</span>`;
+  const lab = o.label ? `<label class="${o.value||o.foc?"up":""}">${esc(o.label)}</label>` : "";
+  return `<div class="${cls.join(" ")}" ${o.t?`data-t="${o.t}"`:""} style="${o.style||""}">${lab}${v}${o.sfx?`<span class="sfx">${esc(o.sfx)}</span>`:""}${o.trail||""}</div>${o.sup?`<div class="x-sup${o.err?" e":""}">${esc(o.sup)}</div>`:""}`;
+}
+/* ---- SumaButton: 52 dp min, radius 12 (pill 26), primary #1C1C1E / outlined; disabled = M3 12 % / 38 % ---- */
+const btn = (text, o) => { o=o||{}; return `<div class="x-btn${o.pill?" pill":""}${o.sec?" sec":""}${o.off?" off":""}" ${o.t?`data-t="${o.t}"`:""} style="${o.style||""}">${esc(text)}</div>`; };
+/* ---- owner phone bottom bar: Caja / Ventas / the flag "Mi negocio" (ui/app/PlatataApp.kt NavigationBar, navLabelRes) ---- */
+const ownerNav = () => `<div class="mnav"><div class="on"><span class="pill">${I.cart}</span>${esc(P(W.register))}</div><div><span class="pill">${I.receipt}</span>${esc(P(W.sales))}</div><div><span class="flagc">${R.flag()}</span>${esc(P(W.myBiz))}</div></div>`;
+const staffNav = () => `<div class="mnav"><div class="on"><span class="pill">${I.cart}</span>${esc(P(W.register))}</div><div><span class="flagc">${R.flag()}</span>${esc(P(W.myBiz))}</div></div>`;
+/* category chips: ProductLibraryView.kt:213-280 ("Todos" first, then the categories sortOrder, name) */
+const chipsRow = (selId) => `<div class="mcats">` + [{id:0,name:P(W.all),color:ALL_C}].concat(C.catsByName).map(c=>{
+    const on = (selId||0)===c.id;
+    const st = on ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${st}" data-t="chip-${c.id}">${on?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+/* a dish tile: ProductCard.kt (plain tile: tint 12 %, border 35 %, titleMedium bold, price bodyLarge; photo tile: crop + black gradient, titleSmall white) */
+function tile(it, o){ o=o||{}; const c=colorOf(it); const price = R.money(o.price!=null?o.price:it.price);
+  if(o.photo) return `<div class="mtile ph" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><img src="${o.photo}" alt=""><div class="gr"><b>${esc(it.name)}</b><span>${price}</span></div></div>`;
+  return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${price}</span></div>${o.badge?`<em class="cb">${esc(o.badge)}</em>`:""}</div>`;
+}
+const snack = (text, bottom) => `<div class="msnack" style="bottom:calc(var(--u)*${bottom})">${esc(text)}</div>`;
+/* ---- "Tu menú" (ui/screens/items/YourMenuScreen.kt + MenuLayoutParts.kt, MenuSpacing.Ceiling on a 412 dp phone):
+   header card 58 dp (back, "N platos · M categorías", black 48 dp "+"), CATEGORÍAS + "Ordenar" (2+ categories), two-row strip of 132 dp
+   cards in sortOrder,name order ending in the blue "+ Categoría" tile, then the dock: ADICIONES / COMBOS / OTROS ---- */
+const YM = {
+  pill:{es:"%1$d platos · %2$d categorías",pt:"%1$d pratos · %2$d categorias",en:"%1$d dishes · %2$d categories"},
+  catsLabel:{es:"CATEGORÍAS",pt:"CATEGORIAS",en:"CATEGORIES"}, order:{es:"Ordenar",pt:"Ordenar",en:"Reorder"},
+  one:{es:"1 plato",pt:"1 prato",en:"1 dish"}, n:{es:"%1$d platos",pt:"%1$d pratos",en:"%1$d dishes"},
+  addCat:{es:"Categoría",pt:"Categoria",en:"Category"},
+  addonsH:{es:"ADICIONES",pt:"ADICIONAIS",en:"ADD-ONS"}, addons:{es:"Adiciones",pt:"Adicionais",en:"Add-ons"},
+  inUse:{es:"%1$d en uso",pt:"%1$d em uso",en:"%1$d in use"}, inUse1:{es:"1 en uso",pt:"1 em uso",en:"1 in use"},
+  combosH:{es:"COMBOS",pt:"COMBOS",en:"COMBOS"}, combos:{es:"Combos",pt:"Combos",en:"Combos"},
+  comboNone:{es:"Vende varios productos juntos",pt:"Venda vários itens juntos",en:"Sell a few items together"},
+  combo1:{es:"1 combo",pt:"1 combo",en:"1 combo"},
+  otherH:{es:"OTROS",pt:"OUTROS",en:"OTHER"}, dining:{es:"Opciones de servicio",pt:"Opções de atendimento",en:"Dining options"},
+  diningSub:{es:"Para aquí, para llevar, a domicilio",pt:"Para comer aqui, para viagem, entrega",en:"For here, to go, delivery routing"}
+};
+const dishCount = (c, extra) => inCat(c).length + (extra||0);
+function yourMenu(o){ o=o||{};
+  const nItems = C.items.length + (o.extraDishes||0);
+  const cards = C.catsByName.map(c => { const n = dishCount(c, (o.extraIn===c.id)?1:0);
+    return `<div class="ymc" data-t="cat-${c.id}"><b>${esc(c.name)}</b><small>${esc(n===1?P(YM.one):fmt(P(YM.n),n))}</small></div>`; }).join("")
+    + `<div class="ymc add"><span>+</span><small>${esc(P(YM.addCat))}</small></div>`;
+  const used = o.addons||0, combos = o.combos||0;
+  return `<div class="x-col tint"><div class="ymh"><span class="nb">${I.back}</span><b>${esc(fmt(P(YM.pill), nItems, C.cats.length))}</b><span class="pl">＋</span></div>
+    <div class="yml"><span>${esc(P(YM.catsLabel))}</span><em>${esc(P(YM.order))}</em></div>
+    <div class="yms"><div class="g">${cards}</div><i class="fr"></i></div>
+    <div class="x-scroll"></div>
+    <div class="ymd"><div class="p">
+      <div class="lb">${esc(P(YM.addonsH))}</div>
+      <div class="row" data-t="row-addons"><div><b>${esc(P(YM.addons))}</b><small>${esc(used===1?P(YM.inUse1):fmt(P(YM.inUse),used))}</small></div><span class="pc">+</span></div>
+      <div class="lb s">${esc(P(YM.combosH))}</div>
+      <div class="row" data-t="row-combos"><div><b>${esc(P(YM.combos))}</b><small>${esc(combos===0?P(YM.comboNone):combos===1?P(YM.combo1):combos+" combos")}</small></div><span class="pc">+</span></div>
+      <div class="lb s">${esc(P(YM.otherH))}</div>
+      <div class="row dn"><div><b>${esc(P(YM.dining))}</b><small>${esc(P(YM.diningSub))}</small></div><span class="ch">›</span></div>
+    </div></div>${strip()}</div>`;
+}
+/* ---- the waiter's phone (Mini POS): MiniPosSellScreen.kt (tabs home_tab_library / tx_tab_all / tx_tab_open, ProductLibraryView with
+   the "Todos" chip = products A-Z, footer link scan_row_manual, cart bar common_charge_items), bottom bar Caja + Mi negocio.
+   No combo pill on these tiles: only HomeScreen passes comboBadgeForProduct (ProductLibraryView.kt:191) ---- */
+const WT = {
+  tabs:{es:["Catálogo","Ventas","Abiertas"],pt:["Catálogo","Vendas","Abertas"],en:["Library","Sales","Open"]},
+  chargeItems:{es:["Cobrar %1$s · %2$d artículo","Cobrar %1$s · %2$d artículos"],pt:["Cobrar %1$s · %2$d item","Cobrar %1$s · %2$d itens"],en:["Charge %1$s · %2$d item","Charge %1$s · %2$d items"]},
+  hopLine:{es:"El menú nuevo",pt:"O cardápio novo",en:"The new menu"},
+  hopNote:{es:"Los cambios del menú viajan por internet: tu teléfono y el del mesero necesitan conexión.",
+           pt:"As mudanças do cardápio vão pela internet: seu celular e o do garçom precisam de conexão.",
+           en:"Menu changes travel over the internet: your phone and the server's phone need a connection."}
+};
+function waiterSell(o){ o=o||{};
+  const tabs = `<div class="mtabs">${P(WT.tabs).map((t,i)=>`<span class="${i===0?"on":""}">${esc(t)}</span>`).join("")}</div>`;
+  const grid = `<div class="mgrid">` + C.itemsByName.map(it=>tile(it)).join("") + `</div>`;
+  let h = tabs + chipsRow(0) + grid + `<div class="mlink"><span>${esc(P(W.keypadTab))}</span></div>`;
+  if(o.count) h += `<div class="mcart" data-t="cart"><span>${esc(fmt(P(WT.chargeItems)[o.count===1?0:1], R.money(o.total), o.count))}</span></div>`;
+  return h + staffNav();
+}
+
+const S = {
+  ideasTitle:{es:"Ideas de adiciones",pt:"Ideias de adicionais",en:"Add-on ideas"},
+  own:{es:"Tu propia adición",pt:"Seu próprio adicional",en:"Your own add-on"},
+  ownSub:{es:"Empieza desde cero — crea el tuyo",pt:"Comece do zero — crie o seu",en:"Start from zero — build your own"},
+  done:{es:"Listo",pt:"Concluído",en:"Done"},
+  onWhich:{es:"¿En qué platos?",pt:"Em quais pratos?",en:"On which dishes?"},
+  onNone:{es:"Aún no está en ningún plato. Toca para elegir",pt:"Ainda não está em nenhum prato. Toque para escolher",en:"Not on any dish yet. Tap to choose"},
+  onSome:{es:"En %1$d de %2$d platos",pt:"Em %1$d de %2$d pratos",en:"On %1$d of %2$d dishes"},
+  onAll:{es:"En los %1$d platos",pt:"Em todos os %1$d pratos",en:"On all %1$d dishes"},
+  name:{es:"Nombre",pt:"Nome",en:"Name"}, price:{es:"Precio",pt:"Preço",en:"Price"}, free:{es:"Gratis",pt:"Grátis",en:"Free"},
+  howMany:{es:"¿Cuántos pueden elegir?",pt:"Quantos podem escolher?",en:"How many can they pick?"},
+  addOne:{es:"+ Agregar",pt:"+ Adicionar",en:"+ Add one"},
+  yourPrice:{es:"Pon el precio a los extras que cobras",pt:"Coloque o preço nos extras que você cobra",en:"Add your price next to the extras you charge for"},
+  thenAsk:{es:"Luego preguntar…",pt:"Depois perguntar…",en:"Then ask…"},
+  many:{es:"Elegir VARIOS",pt:"Escolher VÁRIOS",en:"Pick MANY"}, manySub:{es:"Cualquier combinación",pt:"Qualquer combinação",en:"Any combination"},
+  one:{es:"Elegir UNO",pt:"Escolher UM",en:"Pick ONE"}, oneSub:{es:"Una opción",pt:"Uma escolha",en:"One Choice"},
+  required:{es:"Requerido",pt:"Obrigatório",en:"Required"},
+  dishesFor:{es:"Platos para %1$s",pt:"Pratos para %1$s",en:"Dishes for %1$s"},
+  selAll:{es:"Elegir todos",pt:"Selecionar todos",en:"Select all"}, clrAll:{es:"Quitar todos",pt:"Limpar todos",en:"Clear all"},
+  myAddons:{es:"Mis adiciones",pt:"Meus adicionais",en:"My add-ons"}, newShort:{es:"+ Nuevo",pt:"+ Novo",en:"+ New"},
+  linked:{es:"Vinculado a %1$d platos",pt:"Vinculado a %1$d pratos",en:"Linked to %1$d dishes"},
+  active:{es:"Activa",pt:"Ativo",en:"Active"},
+  optional:{es:"opcional",pt:"opcional",en:"Optional"}, extra1:{es:"1 extra",pt:"1 extra",en:"1 extra"},
+  addToSale:{es:"Agregar a la venta",pt:"Adicionar à venda",en:"Add to sale"}
+};
+const T = (k, ...a) => fmt(P(S[k]), ...a);
+/* the ideas, in data/ModifierTemplates.kt order; name + first choices in the APP's language (CategoryHubScreen.kt:212-218) */
+const IDEAS = [
+  ["sauce","🥫","#D94F2F",{es:"Salsas",pt:"Molhos",en:"Sauce"},{es:["Ketchup","Mayonesa","BBQ","Salsa picante"],pt:["Ketchup","Maionese","BBQ","Molho apimentado"],en:["Ketchup","Mayo","BBQ","Spicy Sauce"]}],
+  ["temperature","🥩","#D98A2F",{es:"Término de cocción",pt:"Ponto da carne",en:"Temperature"},{es:["Poco asado","Jugoso","Término medio","Tres cuartos"],pt:["Mal passado","Ao ponto para mal","Ao ponto","Ao ponto para bem"],en:["Rare","Medium Rare","Medium","Medium Well"]}],
+  ["level","🌶️","#9C6B2F",{es:"Nivel de picante",pt:"Nível",en:"Level"},{es:["Suave","Medio","Picante"],pt:["Fraco","Médio","Forte"],en:["Mild","Medium","Hot"]}],
+  ["size","📏","#3A6FB8",{es:"Tamaño",pt:"Tamanho",en:"Size"},{es:["Chico","Mediano","Grande"],pt:["Pequeno","Médio","Grande"],en:["Small","Medium","Large"]}],
+  ["toppings","🧅","#178A3F",{es:"Ingredientes / Extras",pt:"Ingredientes / Extras",en:"Toppings / Extras"},{es:["Lechuga","Tomate","Cebolla","Pepinillos"],pt:["Alface","Tomate","Cebola","Picles"],en:["Lettuce","Tomato","Onion","Pickles"]}],
+  ["protein_cheese","🧀","#C9A227",{es:"Proteína / Queso a elegir",pt:"Escolha de proteína / queijo",en:"Protein / Cheese Choice"},{es:["Pollo","Carne de res","Tofu"],pt:["Frango","Carne bovina","Tofu"],en:["Chicken","Beef","Tofu"]}]
+];
+const SAUCE = IDEAS[0];
+const AON = SAUCE[3][SH], OPTS = SAUCE[4][SH];          // saved in the shop's language
+const SPICY = 3;                                        // "Salsa picante"
+const SPICE_PRICE = {CO:2000,MX:15,PE:3,CL:500,EC:1,AR:800,PA:1,BR:3,US:1,CA:1}[R.country];
+const DISHES = inCat(MAIN).length, ALLD = C.items.length;
+const DISH = item(C.order[0]);                          // a MAIN dish in every country
+function ideasPage(){
+  const card = ([key,emo,col,nm,op]) => { const o=P(op); const sub=o.slice(0,3).join(", ")+(o.length>3?"…":"");
+    return `<div class="x-idea" data-t="idea-${key}"><span class="em" style="background:${hexA(col,.12)};border-color:${hexA(col,.3)}">${emo}</span>
+      <div class="tx"><b>${esc(P(nm))}</b><small>${esc(sub)}</small></div><span class="cv">›</span></div>`; };
+  const own = `<div class="x-idea"><span class="em" style="background:${hexA("#7A5AB8",.12)};border-color:${hexA("#7A5AB8",.3)}">✨</span><div class="tx"><b>${esc(T("own"))}</b><small>${esc(T("ownSub"))}</small></div><span class="cv">›</span></div>`;
+  return `<div class="x-col">${topbar({nav:"back", title:T("ideasTitle")})}<div class="x-scroll"><div class="x-ideas">${IDEAS.map(card).join("")}${own}</div></div>${strip()}</div>`;
+}
+function editor(st){
+  const n = st.linked ? DISHES : 0;
+  const pill = n===0 ? `<div class="pr er">${esc(T("onNone"))}<span>›</span></div>` : `<div class="pr am">${esc(n>=ALLD?T("onAll",n):T("onSome",n,ALLD))}<span>›</span></div>`;
+  const dr = `<div class="x-dr ${n===0?"er":"ok"}" data-t="dishes-row"><b>${esc(T("onWhich"))}</b>${pill}</div>`;
+  const opts = OPTS.map((o,i)=>{ const isS=i===SPICY; const pv = isS ? st.price : "";
+    return `<div class="x-opt"><div class="r">${field({label:T("name"), value:o, style:"flex:1"})}
+      ${field({label:T("price"), value:pv, ph:T("free"), foc:isS&&st.focus, t:"price-"+i, style:"flex:.7;margin-left:calc(var(--u)*8)"})}<span class="tr">${I.trash}</span></div>
+      <span class="ta">${esc(T("thenAsk"))}</span></div>`; }).join("");
+  const body = `<div class="x-ed" style="margin-top:calc(var(--u)*${st.focus?-372:0})">${dr}${field({label:T("name"), value:AON})}
+    <div class="x-hm"><b>${esc(T("howMany"))}</b><span class="tb">${esc(T("addOne"))}</span><span class="ey">${I.eye}</span></div>
+    <div class="x-yp">${esc(T("yourPrice"))}</div>${opts}
+    <div class="x-pk"><div class="on"><b>${esc(T("many"))}</b><small>${esc(T("manySub"))}</small></div><div><b>${esc(T("one"))}</b><small>${esc(T("oneSub"))}</small></div></div>
+    <hr class="x-hr"><div class="x-sw"><i></i>${esc(T("required"))}</div></div>`;
+  return `<div class="x-col">${topbar({title:AON, action:`<span class="tbtn" data-t="ed-done">${esc(T("done"))}</span>`})}<div class="x-scroll">${body}</div>${st.focus?kbd("num"):strip()}</div>`;
+}
+function chooser(st){
+  const rows = C.catsByName.map(c=>{ const m=inCat(c).length, on = st.linked && c.id===MAIN.id;
+    return `<div class="x-cr"><b>${esc(c.name)} (${on?m:0}/${m})</b><span class="sa" data-t="selall-${c.id}">${esc(on?T("clrAll"):T("selAll"))}</span><span class="ex">${I.expMore}</span></div>`; }).join("");
+  return `<div class="x-col tint">${topbar({nav:"back", title:T("dishesFor",AON), action:`<span class="tbtn b" data-t="ch-done">${esc(T("done"))}</span>`})}<div class="x-scroll"><div class="x-cl">${rows}</div></div>${strip()}</div>`;
+}
+function myAddons(st){
+  return `<div class="x-col">${topbar({nav:"back", title:T("myAddons"), action:`<span class="tbtn b">${esc(T("newShort"))}</span>`})}<div class="x-scroll"><div class="x-ideas">
+    <div class="x-mine"><div class="tx"><b>${esc(AON)}</b><small>${esc(T("linked",DISHES))}</small><em>${esc(T("active"))}</em></div><span class="del">${I.trash}</span><span class="cv">›</span></div>
+    </div></div>${strip()}${st.hop?RKIT.hop(R,{from:P(W.owner), to:P(W.staff), line:P(WT.hopLine), note:P(WT.hopNote)}):""}</div>`;
+}
+function till(st){
+  const extras = st.pick ? SPICE_PRICE : 0;
+  let h = waiterSell({count: st.lines, total: st.lines ? DISH.price + SPICE_PRICE : 0});
+  if(st.sheet){
+    const chips = OPTS.map((o,i)=>{ const on = st.pick && i===SPICY, pr = i===SPICY ? `<em>+${esc(R.money(SPICE_PRICE))}</em>` : "";
+      return `<span class="chip${on?" on":""}" data-t="mod-${i}">${on?I.check:""}${esc(o)}${pr}</span>`; }).join("");
+    h += `<div class="mscrim"><div class="msheet"><h2>${esc(DISH.name)}</h2>
+      <div class="gh"><b>${esc(AON)}</b><small>${esc(T("optional"))}</small></div><div class="chips">${chips}</div>
+      <hr><div class="qty"><div class="st"><span class="sb">−</span><span class="n">1</span><span class="sb">+</span></div>${st.pick?`<small>${esc(T("extra1"))}</small>`:""}</div>
+      <div class="add" data-t="mod-add">${esc(T("addToSale"))} · ${esc(R.money(DISH.price+extras))}</div></div></div>`;
+  }
+  return h;
+}
+function render(st){
+  if(st.screen==="menu") return yourMenu({});
+  if(st.screen==="ideas") return ideasPage();
+  if(st.screen==="edit") return editor(st);
+  if(st.screen==="choose") return chooser(st);
+  if(st.screen==="mine") return myAddons(st);
+  if(st.screen==="till") return till(st);
+  return "";
+}
+RKIT.start(R, {
+  id:"R3", tallVideo:true, clock:"12:41",
+  endText:P({es:"Así agregas adiciones a tus platos, con Platata.",pt:"Assim você põe adicionais nos seus pratos, com o Platata.",en:"That's how you add add-ons to your dishes, with Platata."}),
+  beats:P({
+    es:["Tu menú: toca Adiciones","Elige una idea, como Salsas","Elige en qué platos sale","Ponle precio a lo que cobras","Toca Listo: ya está activa","El mesero toca el plato y salen las salsas","Marca la salsa y agrégala a la venta","Así agregas adiciones a tus platos, con Platata."],
+    pt:["Seu cardápio: toque em Adicionais","Escolha uma ideia, como Molhos","Escolha em quais pratos ele aparece","Coloque preço no que você cobra","Toque em Concluído: já está ativo","O garçom toca no prato e os molhos aparecem","Marque o molho e adicione à venda","Assim você põe adicionais nos seus pratos, com o Platata."],
+    en:["Your menu: tap Add-ons","Pick an idea, like Sauce","Choose which dishes it goes on","Put a price on what you charge for","Tap Done: it's active","The server taps the dish and the sauces show","Pick the sauce and add it to the sale","That's how you add add-ons to your dishes, with Platata."]}),
+  state:{screen:"menu", linked:false, price:"", focus:false, hop:false, sheet:false, pick:false, lines:0},
+  render,
+  device: () => "phone",
+  who: st => st.screen==="till" ? P(W.staff) : P(W.owner),
+  steps:[
+    {beat:0, hint:P({es:"Toca Adiciones",pt:"Toque em Adicionais",en:"Tap Add-ons"}), target:'[data-t="row-addons"]', tap(st){ st.screen="ideas"; }},
+    {beat:1, hint:P({es:"Toca ",pt:"Toque em ",en:"Tap "})+P(SAUCE[3]), target:'[data-t="idea-sauce"]', tap(st){ st.screen="edit"; }},
+    {beat:2, hint:P({es:"Toca ¿En qué platos?",pt:"Toque em Em quais pratos?",en:"Tap On which dishes?"}), target:'[data-t="dishes-row"]', tap(st){ st.screen="choose"; }},
+    {beat:2, hint:P({es:"Elegir todos en ",pt:"Selecionar todos em ",en:"Select all in "})+MAIN.name, target:`[data-t="selall-${MAIN.id}"]`, tap(st){ st.linked=true; }},
+    {beat:2, hint:P({es:"Toca Listo",pt:"Toque em Concluído",en:"Tap Done"}), target:'[data-t="ch-done"]', tap(st){ st.screen="edit"; }},
+    {beat:3, hint:P({es:"Toca el precio de ",pt:"Toque no preço de ",en:"Tap the price of "})+OPTS[SPICY], target:`[data-t="price-${SPICY}"]`, tap(st,E){
+        st.focus=true; E.after(350,()=>E.type("price", inputForm(SPICE_PRICE).replace(/\.0+$/,""), null, 180)); }},
+    {beat:4, hint:P({es:"Toca Listo",pt:"Toque em Concluído",en:"Tap Done"}), target:'[data-t="ed-done"]', tap(st,E){
+        st.focus=false; st.screen="mine"; E.after(1500,()=>{ st.hop=true; }); E.after(3300,()=>{ st.hop=false; st.screen="till"; }); }},
+    {beat:5, hint:P({es:"Toca ",pt:"Toque em ",en:"Tap "})+DISH.name, target:`[data-t="dish-${DISH.id}"]`, tap(st){ st.sheet=true; }},
+    {beat:6, hint:P({es:"Toca ",pt:"Toque em ",en:"Tap "})+OPTS[SPICY], target:`[data-t="mod-${SPICY}"]`, tap(st){ st.pick=true; }},
+    {beat:6, hint:P({es:"Toca Agregar a la venta",pt:"Toque em Adicionar à venda",en:"Tap Add to sale"}), target:'[data-t="mod-add"]', tap(st){ st.sheet=false; st.lines=1; }}
+  ]
+});
+</script>
+<style>
+/* shared look of the menu demos; values from ui/theme (Color.kt, Theme.kt, Type.kt) and the files named beside each block */
+.mat .app{font-family:"Roboto",system-ui,sans-serif}
+.x-col{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;position:relative}
+.x-col.tint{background:#FCFCFD}                         /* surfaceVariant #F2F2F7 at 25 % over white (menu pages) */
+.x-scroll{flex:1;min-height:0;overflow:hidden;position:relative}
+/* SumaTopBar */
+.x-top{height:calc(var(--u)*64);flex:0 0 auto;display:flex;align-items:center;background:#fff;padding:0 calc(var(--u)*4)}
+.x-top .tt{flex:1;min-width:0;display:flex;align-items:center}
+.x-top .tt.nonav{padding-left:calc(var(--u)*12)}
+.x-top .nb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.x-top .t{flex:1;min-width:0;padding-left:calc(var(--u)*8);font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--m-on)}
+.x-top .t b.two{display:block;font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);overflow:hidden;text-overflow:ellipsis}
+.x-top .t small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);font-weight:500;color:var(--m-onv)}
+.x-top .act{flex:0 0 auto;display:flex;align-items:center}
+.x-top .tbtn{min-height:calc(var(--u)*48);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on);letter-spacing:.1px}
+.x-top .tbtn.b{font-weight:700}
+.x-top .st{font-size:calc(var(--u)*12);font-weight:500;padding-right:calc(var(--u)*16)}
+/* support strip (SupportStrip.kt: 56 dp min, two equal halves, hairline #E6E2D9, restaurant badge #C44B28) */
+.x-strip{flex:0 0 auto;position:relative;display:flex;min-height:calc(var(--u)*56);background:#fff;border-top:1px solid #E6E2D9}
+.x-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12)}
+.x-strip .dv{position:absolute;left:50%;top:calc(var(--u)*10);bottom:calc(var(--u)*10);width:1px;background:#E6E2D9}
+.x-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;display:grid;place-items:center;color:#fff;flex:0 0 auto}
+.x-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.x-strip .tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.x-strip b{font-size:calc(var(--u)*15);line-height:calc(var(--u)*19);font-weight:700;color:#17181B}
+.x-strip small{font-size:calc(var(--u)*13);line-height:calc(var(--u)*17);color:#737883}
+.x-strip .cv{color:#737883}.x-strip .cv svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+/* the phone's keyboard (system, not the app) */
+.x-kbd{flex:0 0 auto;background:#E8EAED;padding:calc(var(--u)*8) calc(var(--u)*4) calc(var(--u)*10);display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.x-kbd .r{display:flex;gap:calc(var(--u)*5);justify-content:center}
+.x-kbd span{flex:1;max-width:calc(var(--u)*38);height:calc(var(--u)*44);border-radius:calc(var(--u)*6);background:#fff;box-shadow:0 1px 0 #B5B9BE;display:grid;place-items:center;font-size:calc(var(--u)*20);color:#202124}
+.x-kbd span.w{max-width:none;flex:1.6;background:#D3D6DB;font-size:calc(var(--u)*15)}
+.x-kbd .r span:nth-child(3).w{flex:5;background:#fff}
+.x-kbd.num span{max-width:none;height:calc(var(--u)*48)}
+.x-kbd.num span.w{background:#fff;font-size:calc(var(--u)*20);flex:1}
+/* OutlinedTextField */
+.x-f{position:relative;height:calc(var(--u)*56);border:1px solid #C7C7CC;border-radius:calc(var(--u)*6);display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16);color:var(--m-on);background:#fff;flex:0 0 auto}
+.x-f.foc{border:2px solid var(--m-on);padding:0 calc(var(--u)*15)}
+.x-f.err{border-color:#FF3B30}
+.x-f label{position:absolute;left:calc(var(--u)*16);top:50%;transform:translateY(-50%);font-size:calc(var(--u)*16);color:var(--m-onv);background:#fff;line-height:1;white-space:nowrap}
+.x-f label.up{top:0;left:calc(var(--u)*12);padding:0 calc(var(--u)*4);font-size:calc(var(--u)*12)}
+.x-f.foc label{color:var(--m-on)}.x-f.err label{color:#FF3B30}
+.x-f .v{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x-f .v.ph{color:var(--m-onv)}
+.x-f .sfx{color:var(--m-onv);margin-left:calc(var(--u)*4)}
+.x-f .tr{color:var(--m-onv);margin-right:calc(var(--u)*-8)}
+.caret{display:inline-block;width:2px;height:calc(var(--u)*20);background:var(--m-on);vertical-align:middle;margin:0 1px}
+.x-sup{font-size:calc(var(--u)*12);color:var(--m-onv);padding:calc(var(--u)*4) calc(var(--u)*16) 0}.x-sup.e{color:#FF3B30}
+/* SumaButton */
+.x-btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:var(--m-on);color:#fff;display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*24);text-align:center;white-space:nowrap;flex:0 0 auto}
+.x-btn.pill{border-radius:calc(var(--u)*26)}
+.x-btn.sec{background:transparent;color:var(--m-on);border:1px solid #C7C7CC}
+.x-btn.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.x-btn.sec.off{background:transparent;border-color:rgba(28,28,30,.12)}
+/* photo tile (ProductCard.kt:119-155) */
+.mat .mtile{position:relative}
+.mat .mtile.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.mat .mtile.ph .gr{position:absolute;left:0;right:0;bottom:0;padding:calc(var(--u)*8);background:linear-gradient(rgba(0,0,0,0),rgba(0,0,0,.65))}
+.mat .mtile.ph .gr b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:700;color:#fff}
+.mat .mtile.ph .gr span{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:rgba(255,255,255,.85);font-weight:400}
+.mat .mtile .cb{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);background:#10B981;color:#fff;border-radius:calc(var(--u)*6);padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*11);font-weight:700;font-style:normal;max-width:calc(100% - var(--u)*12);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .mnav{border-top:0}
+/* Tu menú (MenuLayoutParts.kt; MenuSpacing.Ceiling) */
+.ymh{flex:0 0 auto;margin:calc(var(--u)*6) calc(var(--u)*12) 0;height:calc(var(--u)*58);border-radius:calc(var(--u)*16);background:#fff;box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.16);display:flex;align-items:center;padding:0 calc(var(--u)*14)}
+.ymh .nb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;margin-left:calc(var(--u)*-4)}
+.ymh b{flex:1;text-align:center;font-size:calc(var(--u)*15);font-weight:700;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ymh .pl{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#111;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*20);font-weight:700}
+.yml{flex:0 0 auto;min-height:calc(var(--u)*48);display:flex;align-items:center;padding:0 calc(var(--u)*8) 0 calc(var(--u)*14)}
+.yml span{flex:1;font-size:calc(var(--u)*11);font-weight:700;letter-spacing:.6px;color:var(--m-onv)}
+.yml em{font-style:normal;min-height:calc(var(--u)*48);display:grid;place-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:700;color:var(--m-on)}
+.yms{flex:0 0 auto;position:relative;height:calc(var(--u)*157.5);overflow:hidden}
+.yms .g{height:100%;display:grid;grid-auto-flow:column;grid-template-rows:repeat(2,1fr);grid-auto-columns:calc(var(--u)*132);gap:calc(var(--u)*12.5);padding:0 calc(var(--u)*12)}
+.yms .fr{position:absolute;right:0;top:0;bottom:0;width:calc(var(--u)*34);background:linear-gradient(90deg,rgba(252,252,253,0),#FCFCFD)}
+.ymc{background:#fff;border-radius:calc(var(--u)*14);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.16);padding:calc(var(--u)*13.75) calc(var(--u)*15);display:flex;flex-direction:column;justify-content:center;gap:calc(var(--u)*3.75);min-width:0}
+.ymc b{font-size:calc(var(--u)*13.5);line-height:calc(var(--u)*16);font-weight:700;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ymc small{font-size:calc(var(--u)*11.5);line-height:calc(var(--u)*14);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ymc.add{background:transparent;box-shadow:none;border:1.5px solid #007AFF;align-items:center;gap:calc(var(--u)*2)}
+.ymc.add span{font-size:calc(var(--u)*19);font-weight:300;color:#007AFF;line-height:calc(var(--u)*20)}
+.ymc.add small{font-size:calc(var(--u)*11);font-weight:600;color:#007AFF}
+.ymd{flex:0 0 auto;padding:0 calc(var(--u)*12) calc(var(--u)*12)}
+.ymd .p{background:#F2F2F7;border-radius:calc(var(--u)*16);padding:calc(var(--u)*15) calc(var(--u)*12) calc(var(--u)*12.5);display:flex;flex-direction:column;gap:calc(var(--u)*8.75)}
+.ymd .lb{padding-left:calc(var(--u)*2);font-size:calc(var(--u)*11);font-weight:700;letter-spacing:.6px;color:var(--m-onv)}
+.ymd .lb.s{margin-top:calc(var(--u)*6.25)}
+.ymd .row{background:#fff;border:1px solid #E5E5EA;border-radius:calc(var(--u)*14);padding:calc(var(--u)*13.75) calc(var(--u)*17.5);display:flex;align-items:center;gap:calc(var(--u)*8)}
+.ymd .row.dn{padding-top:calc(var(--u)*16.25);padding-bottom:calc(var(--u)*16.25)}
+.ymd .row>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:calc(var(--u)*2.5)}
+.ymd .row b{font-size:calc(var(--u)*14.5);line-height:calc(var(--u)*17);font-weight:700;letter-spacing:-.2px}
+.ymd .row small{font-size:calc(var(--u)*11.5);line-height:calc(var(--u)*14);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ymd .pc{width:calc(var(--u)*32.5);height:calc(var(--u)*32.5);border-radius:50%;border:1.5px solid #007AFF;color:#007AFF;display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:300}
+.ymd .ch{font-size:calc(var(--u)*22);color:var(--m-onv)}
+/* ideas page cards (CategoryHubScreen.kt ModifierCard: SumaCard r16, border #EBEAE2, padding 16, 48 dp circle) */
+.x-ideas{padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.x-idea{background:#fff;border:1px solid #EBEAE2;border-radius:calc(var(--u)*16);box-shadow:0 1px 2px rgba(0,0,0,.08);padding:calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.x-idea .em{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;border:1px solid;display:grid;place-items:center;font-size:calc(var(--u)*22);flex:0 0 auto}
+.x-idea .tx,.x-mine .tx{flex:1;min-width:0}
+.x-idea b{display:block;font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x-idea small{display:block;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.x-idea .cv,.x-mine .cv{font-size:calc(var(--u)*18);color:#B0B0AA}
+/* "Mis adiciones" card */
+.x-mine{background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 1px 3px rgba(0,0,0,.14);padding:calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*4)}
+.x-mine b{display:block;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:600}
+.x-mine small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.x-mine em{display:inline-block;margin-top:calc(var(--u)*4);font-style:normal;font-size:calc(var(--u)*11);font-weight:800;color:#1F5C33;background:#EEF4EC;border:1px solid #CFE3D2;border-radius:calc(var(--u)*8);padding:calc(var(--u)*4) calc(var(--u)*8)}
+.x-mine .del{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:#FF3B30}
+/* the add-on editor (ModifiersManagementScreen.kt: padding 16, spacedBy 16) */
+.x-ed{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16);transition:margin-top .25s}
+.x-dr{border:1px solid;border-radius:calc(var(--u)*16);padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*4);background:#fff}
+.x-dr.er{border-color:#ECCACA}.x-dr.ok{border-color:#178A3F}
+.x-dr b{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:700}
+.x-dr .pr{display:flex;align-items:center;border:1px solid;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12);font-size:calc(var(--u)*12);font-weight:600}
+.x-dr .pr span{margin-left:auto;font-size:calc(var(--u)*18);color:#B0B0AA}
+.x-dr .pr.er{background:#FBEEEE;border-color:#ECCACA;color:#8F2F2F}
+.x-dr .pr.am{background:#FDF2E3;border-color:#ECCF9E;color:#8A5A1F}
+.x-hm{display:flex;align-items:center;margin-bottom:calc(var(--u)*-8);padding-top:calc(var(--u)*8)}
+.x-hm b{flex:1;font-size:calc(var(--u)*18);font-weight:500}
+.x-hm .tb{min-height:calc(var(--u)*40);display:grid;place-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.x-hm .ey{width:calc(var(--u)*32);height:calc(var(--u)*32);border:1px solid #178A3F;border-radius:calc(var(--u)*8);display:grid;place-items:center;color:#178A3F}
+.x-hm .ey svg{width:calc(var(--u)*18);height:calc(var(--u)*18)}
+.x-yp{font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);margin:calc(var(--u)*-8) 0 calc(var(--u)*-8)}
+.x-opt{background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 1px 3px rgba(0,0,0,.14);padding:calc(var(--u)*12);margin-bottom:calc(var(--u)*-8)}
+.x-opt .r{display:flex;align-items:center}
+.x-opt .tr{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-onv);margin-left:calc(var(--u)*8)}
+.x-opt .ta{display:inline-flex;min-height:calc(var(--u)*40);align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*12);font-weight:500;color:var(--m-on)}
+.x-pk{display:flex;gap:calc(var(--u)*12);margin-top:calc(var(--u)*4)}
+.x-pk>div{flex:1;border:1px solid #EBEAE2;border-radius:calc(var(--u)*16);padding:calc(var(--u)*16);background:#fff}
+.x-pk>div.on{border-color:#178A3F;background:#EEF4EC}
+.x-pk b{display:block;font-size:calc(var(--u)*18);font-weight:700}.x-pk .on b{color:#178A3F}
+.x-pk small{display:block;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*12);color:var(--m-onv)}
+.x-hr{border:0;border-top:1px solid #EBEAE2;margin:0}
+.x-sw{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*16);margin-top:calc(var(--u)*-8)}
+.x-sw i{width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:2px solid #79747E;background:#E6E0E9;position:relative;box-sizing:border-box}
+.x-sw i::after{content:"";position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E}
+/* dish chooser (ModifierAllItemsPickerScreen) */
+.x-cl{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.x-cr{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*8) 0;border-bottom:1px solid #EBEAE2}
+.x-cr b{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:600}
+.x-cr .sa{font-size:calc(var(--u)*12);font-weight:500;color:#178A3F;padding:calc(var(--u)*4) 0}
+.x-cr .ex{color:var(--m-on)}
+/* the till's add-ons sheet: price on a chip, 48 dp − / + (MENU-2 item 6) */
+.msheet .chip em{font-style:normal;font-size:calc(var(--u)*11);font-weight:500;color:var(--m-onv)}
+.msheet .chip.on em{color:rgba(255,255,255,.7)}
+.msheet .qty .sb{width:calc(var(--u)*48);height:calc(var(--u)*48)}
+</style>
+</body>
+</html>

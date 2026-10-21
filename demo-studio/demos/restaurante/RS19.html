@@ -385,7 +385,7 @@ function toast(text){ return `<div class="otoast">${esc(text)}</div>`; }
 /* how far (in dp) the page must scroll so that `sel` sits above the bottom of .cpage (the real pages scroll; the demo moves
    the page's inner column with a transform kept in state, so a re-render keeps the place) */
 function scrollFor(sel){
-  const el=document.querySelector('#app '+sel), pg=document.querySelector('#app .cpage'); if(!el||!pg) return 0;
+  const el=document.querySelector('#app '+sel), pg=document.querySelector('#app .cpage, #app .spage'); if(!el||!pg) return 0;
   const u=document.getElementById('screen').getBoundingClientRect().width/412;
   const over=el.getBoundingClientRect().bottom - pg.getBoundingClientRect().bottom + 16*u;
   return over>0 ? Math.ceil(over/u) : 0;

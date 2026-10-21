@@ -46,8 +46,25 @@ def main():
     report = {"made": 0, "skipped": 0, "chars": 0, "errors": []}
     if not KEY:
         report["errors"].append("ELEVENLABS_API_KEY secret is missing or empty")
+    # only scripts that were reviewed: listed in voice-ready.txt (one id per line), or already voiced before
+    ready_file = os.path.join(ROOT, "voice-ready.txt")
+    ready = None
+    if os.path.exists(ready_file):
+        ready = {l.strip() for l in open(ready_file, encoding="utf-8") if l.strip() and not l.startswith("#")}
+        ready |= {k.split("/")[0] for k in manifest}
     for path in sorted(glob.glob(os.path.join(ROOT, "features", "*.json"))):
         feat = json.load(open(path, encoding="utf-8"))
+        if ready is not None and feat["id"] not in ready:
+            report["skipped_not_ready"] = report.get("skipped_not_ready", 0) + 1
+            continue
+        # drop clips of steps that no longer exist (the video recorder plays every mp3 in the folder)
+        for lang_dir in glob.glob(os.path.join(AUDIO, feat["id"], "*")):
+            keep = {st["id"] for st in feat["steps"] if os.path.basename(lang_dir) in st["voice"]}
+            for mp3 in glob.glob(os.path.join(lang_dir, "*.mp3")):
+                sid = os.path.basename(mp3)[:-4]
+                if sid not in keep:
+                    os.remove(mp3)
+                    manifest.pop(f"{feat['id']}/{os.path.basename(lang_dir)}/{sid}", None)
         for step in feat["steps"]:
             for lang, text in step["voice"].items():
                 v = dict(voices[lang])

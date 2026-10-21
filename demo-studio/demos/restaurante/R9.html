@@ -132,7 +132,7 @@
 <script>
 /* R9 "Tablet en el mostrador": the counter tablet (MamaPos) wakes from "Caja bloqueada", a cashier picks her face and types
    her PIN, rings two dishes, picks the table, charges cash and the order lands on the kitchen screen.
-   Every screen follows the app at sim/usa-canada (abb8fddb). Paths under app/src/main/java/com/example/.
+   Every screen follows the app at sim/usa-canada (6736ddfb). Paths under app/src/main/java/com/example/.
    locked        ui/screens/mamapos/MamaPosScreen.kt:279-311: Color.White, Lock 64 dp outline, mamaship_locked_title 30 sp Bold,
                  mamaship_tap_to_login 16 sp, the whole screen is the tap target; gear 48 dp bottom-right (owner PIN, F-03).
    profiles      :387-488: padding 40/48, "← Atrás" (TABLES-1), PlatataWordmark 32 sp, business name in that font 56 sp SumaBlue,
@@ -146,8 +146,8 @@
                  Right: MamaSwitchPersonRow (SwitchAccount icon, name 15 SemiBold, mamaship_switch, SumaBlue), then the step machine:
                  CART (CartSheetContent mamaCartStep 1: trash, lines name / price / − n +, divider, SumaButton common_charge_items),
                  DINING (DiningChooserContent table grid, startOnTableGrid because Mesas is the only option on), PAY (CheckoutSheetBody
-                 inline: customer row, Total, Artículos / Mesa links, keypad, cash_exact, checkout_save_ticket - a NEW sale says
-                 "Guardar", CheckoutSheetBody.kt:315-332), RECEIPT (ReceiptOptionsScreen inline: potato 88 dp, receipt_opt_completed,
+                 inline: customer row, Total, Artículos / Mesa links, keypad, cash_exact, checkout_send_kitchen - a NEW sale with a kitchen
+                 screen known says "Enviar a cocina", CheckoutSheetBody.kt:315-332, MKT2-1 item 5), RECEIPT (ReceiptOptionsScreen inline: potato 88 dp, receipt_opt_completed,
                  receipt_opt_received, receipt_opt_how_receipt; WhatsApp, or Text / Email in US/CA (ReceiptSendRoute); Ver recibo;
                  Nueva venta · Sin recibo with no printer; Aviso de privacidad). A staff session gets no "set up" pay link.
    the trip      a tablet sale -> cloud -> owner phone (on, Platata open, online) -> shop Wi-Fi -> kitchen screen. A paid order with no
@@ -159,28 +159,28 @@ const L = R.pick({
   es:{locked:"Caja bloqueada", tap:"Toca para iniciar sesión", back:"Atrás", choose:"Elige tu perfil", owner:"Dueño", team:"Equipo", cashier:"Cajera",
       pin:"Ingresa tu PIN", clear:"Borrar", welcome:n=>`Bienvenido/a, ${n}`, tabs:["Teclado","Catálogo","Ventas","Abiertas"], all:"Todos",
       sw:"Cambiar", charge:(v,n)=>`Cobrar ${v} · ${n} ${n===1?"artículo":"artículos"}`, table:"¿Qué mesa?",
-      cust:"Agrega un cliente a la venta", total:"Total", items:n=>`Artículos (${n}) ›`, mesa:n=>`Mesa ${n}`, exact:v=>`Exacto · ${v}`, save:"Guardar",
+      cust:"Agrega un cliente a la venta", total:"Total", items:n=>`Artículos (${n}) ›`, mesa:n=>`Mesa ${n}`, exact:v=>`Exacto · ${v}`, save:"Enviar a cocina",
       done:"¡Venta completada!", got:v=>`Recibiste ${v}`, how:"¿Cómo envías el recibo?", wa:"WhatsApp", text:"Recibo por mensaje", email:"Recibo por correo",
       view:"Ver recibo", newSale:"Nueva venta · Sin recibo", priv:"Aviso de privacidad", stn:"Cocina", hist:"Historial", active:"Pedidos activos", new0:"0m – NUEVO",
       tablet:"Tablet de mostrador", kds:"Pantalla de cocina"},
-  pt:{locked:"PDV BLOQUEADO", tap:"Toque para entrar", back:"Voltar", choose:"Escolha seu perfil", owner:"Dono", team:"Equipe", cashier:"Caixa",
+  pt:{locked:"Caixa bloqueado", tap:"Toque para entrar", back:"Voltar", choose:"Escolha seu perfil", owner:"Dono", team:"Equipe", cashier:"Caixa",
       pin:"Digite seu PIN", clear:"Limpar", welcome:n=>`Bem-vindo(a), ${n}`, tabs:["Teclado","Catálogo","Vendas","Abertas"], all:"Todos",
       sw:"Trocar", charge:(v,n)=>`Cobrar ${v} · ${n} ${n===1?"item":"itens"}`, table:"Qual mesa?",
-      cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, mesa:n=>`Mesa ${n}`, exact:v=>`Exato · ${v}`, save:"Salvar",
+      cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, mesa:n=>`Mesa ${n}`, exact:v=>`Exato · ${v}`, save:"Enviar para a cozinha",
       done:"Venda concluída!", got:v=>`Você recebeu ${v}`, how:"Como você envia o recibo?", wa:"WhatsApp", text:"Recibo por mensagem", email:"Recibo por e-mail",
       view:"Ver recibo", newSale:"Nova venda · Sem recibo", priv:"Aviso de privacidade", stn:"Cozinha", hist:"Histórico", active:"Pedidos ativos", new0:"0m – NOVO",
       tablet:"Tablet do balcão", kds:"Tela da cozinha"},
   en:{locked:"POS LOCKED", tap:"Tap to login", back:"Back", choose:"Choose your profile", owner:"Owner", team:"Team", cashier:"Cashier",
       pin:"Enter your PIN", clear:"Clear", welcome:n=>`Welcome, ${n}`, tabs:["Keypad","Library","Sales","Open"], all:"All",
       sw:"Switch", charge:(v,n)=>`Charge ${v} · ${n} ${n===1?"item":"items"}`, table:"Which table?",
-      cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, mesa:n=>`Table ${n}`, exact:v=>`Exact · ${v}`, save:"Save",
+      cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, mesa:n=>`Table ${n}`, exact:v=>`Exact · ${v}`, save:"Send to kitchen",
       done:"Sale complete!", got:v=>`You received ${v}`, how:"How do you send the receipt?", wa:"WhatsApp", text:"Text receipt", email:"Email receipt",
       view:"View receipt", newSale:"New sale · No receipt", priv:"Privacy notice", stn:"Kitchen", hist:"History", active:"Active Orders", new0:"0m – NEW",
       tablet:"Counter tablet", kds:"Kitchen display"}
 });
 /* strings: mamaship_locked_title, mamaship_tap_to_login, common_back, mamaship_choose_profile, team_role_owner, team_badge_team, pin_enter_pin,
    mamaship_clear, mamaship_welcome, home_tab_manual/library, tx_tab_all/open, items_filter_all, mamaship_switch, common_charge_items (plural),
-   checkout_dining_gate_table_title, checkout_add_customer_cta, checkout_items_link, park_ticket_table_chip, cash_exact, checkout_save_ticket,
+   checkout_dining_gate_table_title, checkout_add_customer_cta, checkout_items_link, park_ticket_table_chip, cash_exact, checkout_send_kitchen,
    receipt_opt_*, receipt_text_receipt, receipt_email_receipt, kds_history, kds_active_orders, kds_status_new (values / values-es / values-pt-rBR).
    "Cajera" / "Caixa" / "Cashier" is the job title the owner typed for her, not an app word. */
 const TABLE = 7;

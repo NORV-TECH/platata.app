@@ -73,9 +73,9 @@
 <script>
 /* R7 "Pantalla de cocina": an order saved on the waiter's phone shows up on the kitchen screen; the cook marks one dish
    ready for every table ("Todo listo"), opens a ticket, taps LISTO, and finds it in Historial.
-   Every screen follows the app at sim/usa-canada (abb8fddb). Paths under app/src/main/java/com/example/.
-   waiter pay step   ui/screens/home/CheckoutSheetBody.kt:315-332 (a NEW sale's button is "Guardar", checkout_save_ticket;
-                     "Enviar a cocina" only for a reopened ticket with new lines) + material.css .mpay (R4)
+   Every screen follows the app at sim/usa-canada (6736ddfb). Paths under app/src/main/java/com/example/.
+   waiter pay step   ui/screens/home/CheckoutSheetBody.kt:315-332 (a NEW sale with a kitchen screen known says "Enviar a cocina",
+                     checkout_send_kitchen, MKT2-1 item 5; toast park_ticket_sent_toast) + material.css .mpay (R4)
    the trip          VERIFY-ALL §5: waiter phone -> cloud -> owner phone (on, Platata open, online) -> shop Wi-Fi -> kitchen screen
    kitchen screen    ui/screens/kds/KitchenDisplayScreen.kt:279-357 top row (ticker | Historial chip | green dot when connected,
                      KdsConnectionBar.kt:65 | station name, KITCHEN-3 | logout icon); grid Adaptive(180dp) = 5 columns at 1024 dp
@@ -85,30 +85,30 @@
                      "Todo listo · X" marks ONLY that dish's lines (DB-2) -> undo bar kds_bumped_undo
    detail            ui/components/KdsTicketDetailDialog.kt: 85% x 85%, title "#" + local id (round2 #3 flags it), right "Mesa N"
    LISTO             KitchenDisplayScreen.kt:549-563 -> undo bar kds_ready_one_undo "Listo: Mesa 7"
-   history           chip flips to "Pedidos activos"; grey cards "Enviado a las h:mm a" (KdsTicketCard.kt:73-78)
+   history           chip flips to "Pedidos activos"; grey cards "Enviado a las <short time of the language>" (KdsTicketCard.kt:73-78, MKT2-2)
    The station is the "Cocina" screen (all dishes) that R8 starts from; R8 adds the bar. */
 const R = RKIT.ctx(), C = R.C, esc = R.esc;
 const L = R.pick({
-  es:{save:"Guardar", cust:"Agrega un cliente a la venta", total:"Total", items:n=>`Artículos (${n}) ›`, table:n=>`Mesa ${n}`,
-      exact:v=>`Exacto · ${v}`, saved:"Guardado: Mesa 4", caja:"Caja", biz:"Mi negocio",
+  es:{save:"Enviar a cocina", cust:"Agrega un cliente a la venta", total:"Total", items:n=>`Artículos (${n}) ›`, table:n=>`Mesa ${n}`,
+      exact:v=>`Exacto · ${v}`, saved:"Enviado a cocina: Mesa 4", caja:"Caja", biz:"Mi negocio",
       hist:"Historial", active:"Pedidos activos", waiting:"¡Esperando pedidos!", stn:"Cocina",
       st:(m)=> m>=10?`${m}m – CRÍTICO`: m>=5?`${m}m – URGENTE`:`${m}m – NUEVO`, all:x=>`Todo listo  ·  ${x}`, cancel:"CANCELAR",
-      bumped:(x,n)=>`Enviado ${x} × ${n}`, ready:x=>`Listo: ${x}`, undo:"DESHACER", close:"CERRAR", ok:"LISTO",
-      sentAt:"Enviado a las 12:44 p. m.", rare:"Jugoso", med:"Término medio"},
-  pt:{save:"Salvar", cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, table:n=>`Mesa ${n}`,
-      exact:v=>`Exato · ${v}`, saved:"Salvo: Mesa 4", caja:"Caixa", biz:"Meu negócio",
+      bumped:(x,n)=>`Listo: ${x} × ${n}`, ready:x=>`Listo: ${x}`, undo:"DESHACER", close:"CERRAR", ok:"LISTO",
+      sentAt:"Enviado a las 12:44", rare:"Jugoso", med:"Término medio"},
+  pt:{save:"Enviar para a cozinha", cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, table:n=>`Mesa ${n}`,
+      exact:v=>`Exato · ${v}`, saved:"Enviado para a cozinha: Mesa 4", caja:"Caixa", biz:"Meu negócio",
       hist:"Histórico", active:"Pedidos ativos", waiting:"Aguardando pedidos!", stn:"Cozinha",
       st:(m)=> m>=10?`${m}m – CRÍTICO`: m>=5?`${m}m – URGENTE`:`${m}m – NOVO`, all:x=>`Tudo pronto  ·  ${x}`, cancel:"CANCELAR",
-      bumped:(x,n)=>`Enviado ${x} × ${n}`, ready:x=>`Pronto: ${x}`, undo:"DESFAZER", close:"FECHAR", ok:"PRONTO",
-      sentAt:"Enviado às 12:44 PM", rare:"Ao ponto para mal", med:"Ao ponto"},
-  en:{save:"Save", cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, table:n=>`Table ${n}`,
-      exact:v=>`Exact · ${v}`, saved:"Saved: Table 4", caja:"Register", biz:"My business",
+      bumped:(x,n)=>`Pronto: ${x} × ${n}`, ready:x=>`Pronto: ${x}`, undo:"DESFAZER", close:"FECHAR", ok:"PRONTO",
+      sentAt:"Enviado às 12:44", rare:"Ao ponto para mal", med:"Ao ponto"},
+  en:{save:"Send to kitchen", cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, table:n=>`Table ${n}`,
+      exact:v=>`Exact · ${v}`, saved:"Sent to kitchen: Table 4", caja:"Register", biz:"My business",
       hist:"History", active:"Active Orders", waiting:"Waiting for orders!", stn:"Kitchen",
       st:(m)=> m>=10?`${m}m – CRITICAL`: m>=5?`${m}m – URGENT`:`${m}m – NEW`, all:x=>`All done  ·  ${x}`, cancel:"CANCEL",
-      bumped:(x,n)=>`Bumped ${x} × ${n}`, ready:x=>`Marked ready: ${x}`, undo:"UNDO", close:"CLOSE", ok:"MARK READY",
+      bumped:(x,n)=>`Ready: ${x} × ${n}`, ready:x=>`Marked ready: ${x}`, undo:"UNDO", close:"CLOSE", ok:"MARK READY",
       sentAt:"Bumped 12:44 PM", rare:"Medium Rare", med:"Medium"}
 });
-/* strings: park_ticket_saved_toast, checkout_save_ticket, checkout_add_customer_cta, checkout_items_link, table_label, cash_exact,
+/* strings: park_ticket_sent_toast, checkout_send_kitchen, checkout_add_customer_cta, checkout_items_link, table_label, cash_exact,
    mamaship_tab_register, home_tab_my_business, kds_*, modifier_template_temperature_option_* (values / values-es / values-pt-rBR) */
 
 const it = id => R.item(id);
@@ -180,7 +180,7 @@ function kds(st){
   else if(st.spot) h += `<div class="kbar"><span class="all" data-t="bumpall">${esc(L.all(st.spot))}</span><span class="cancel">${L.cancel}</span></div>`;
   if(st.open){
     const t = st.tickets.find(x=>x.table===st.open);
-    h += `<div class="scrim"><div class="dlg ${color(t.min)}"><div class="t"><b>#${t.id}</b><span>${esc(L.table(t.table))}</span></div>
+    h += `<div class="scrim"><div class="dlg ${color(t.min)}"><div class="t"><b>${esc(L.table(t.table))}</b><span>${esc(L.table(t.table))}</span></div>
       <div class="st">${esc(L.st(t.min))}</div><div class="div"></div>
       <div class="items">${t.lines.filter(l=>!l.done).map(l=>`<div class="it"><b>${esc(`1x  ${l.p.name}`)}</b>${l.mod?`<small>${esc(`  • ${l.mod}`)}</small>`:""}</div>`).join("")}</div>
       <div class="btns"><span class="close">${L.close}</span><span class="ok" data-t="listo">${L.ok}</span></div></div></div>`;
@@ -202,15 +202,15 @@ RKIT.start(R, {
   id:"R7", tallVideo:true, clock:"12:41",
   endText:R.pick({es:"Así trabaja tu cocina con Platata.", pt:"Assim trabalha a sua cozinha com o Platata.", en:"That's how your kitchen works with Platata."}),
   beats:R.pick({
-    es:["El mesero guarda el pedido de la mesa","Llega a la pantalla de cocina como tarjeta","Arriba: cuántos hay de cada plato","Todo listo marca ese plato en todas las mesas","Toca una tarjeta para verla grande","LISTO: el pedido salió","En Historial ves lo que ya salió","Así trabaja tu cocina con Platata"],
-    pt:["O garçom salva o pedido da mesa","Chega à tela da cozinha como um cartão","Em cima: quantos há de cada prato","Tudo pronto marca esse prato em todas as mesas","Toque num cartão para vê-lo grande","PRONTO: o pedido saiu","No Histórico você vê o que já saiu","Assim trabalha a sua cozinha com o Platata"],
-    en:["The waiter saves the table's order","It reaches the kitchen display as a card","On top: how many of each dish","All done marks that dish on every table","Tap a card to see it big","MARK READY: the order is out","History shows what already went out","That's how your kitchen works with Platata"]}),
+    es:["El mesero envía el pedido de la mesa a cocina","Llega a la pantalla de cocina como tarjeta","Arriba: cuántos hay de cada plato","Todo listo marca ese plato en todas las mesas","Toca una tarjeta para verla grande","LISTO: el pedido salió","En Historial ves lo que ya salió","Así trabaja tu cocina con Platata"],
+    pt:["O garçom envia o pedido da mesa para a cozinha","Chega à tela da cozinha como um cartão","Em cima: quantos há de cada prato","Tudo pronto marca esse prato em todas as mesas","Toque num cartão para vê-lo grande","PRONTO: o pedido saiu","No Histórico você vê o que já saiu","Assim trabalha a sua cozinha com o Platata"],
+    en:["The waiter sends the table's order to the kitchen","It reaches the kitchen display as a card","On top: how many of each dish","All done marks that dish on every table","Tap a card to see it big","MARK READY: the order is out","History shows what already went out","That's how your kitchen works with Platata"]}),
   state:{screen:"pay", hop:false, snack:false, lines0:[{p:steak},{p:side},{p:drink}], tickets:T().slice(1), spot:null, undo:null, open:null, history:false, done:[], fresh:false},
   render,
   device: st => st.hop ? "phone" : (st.screen==="pay" ? "phone" : "kds"),
   who: st => st.hop ? "" : who(st),
   steps:[
-    {beat:0, hint:R.pick({es:"Toca Guardar", pt:"Toque em Salvar", en:"Tap Save"}), target:'[data-t="save"]', tap(st,E){
+    {beat:0, hint:R.pick({es:"Toca Enviar a cocina", pt:"Toque em Enviar para a cozinha", en:"Tap Send to kitchen"}), target:'[data-t="save"]', tap(st,E){
       st.snack = true;
       E.after(1300, ()=>{ st.snack=false; st.hop=true; });
       E.after(3200, ()=>{ st.hop=false; st.screen="kds"; st.tickets = T(); st.fresh = true; });

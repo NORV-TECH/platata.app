@@ -102,7 +102,7 @@
 <script>
 /* R10 "Imprimir comanda y recibo": the owner adds a Bluetooth printer in four steps (it prints a test page), then a cash sale
    prints the customer's receipt and the kitchen's comanda on it.
-   Every screen follows the app at sim/usa-canada (abb8fddb). Paths under app/src/main/java/com/example/.
+   Every screen follows the app at sim/usa-canada (6736ddfb). Paths under app/src/main/java/com/example/.
    printers page   ui/screens/onboarding/PrinterListScreen.kt (PRINT-5): empty -> EmptyListLayout (printer_empty_title,
                    workspace_printers_desc, printer_add_first); with one -> OutlinedCard (name titleMedium SemiBold, "Recibos + Pedidos de
                    cocina" printer_card_kinds_both + the "Bluetooth" tag, the PRINT-3 status line in primary), the waiter-orders switch
@@ -125,7 +125,7 @@
                    buildOrderTicket / testPageText at 32 columns: center(), leftRight(), divider = 32 "-"; receipt date
                    "MMM d yyyy  HH:mm" in the phone's language; payment = localizedPaymentMethod upper-cased; footer = the Receipts
                    setting customFooterMessage, whose default is the English "Thank you for shopping with us!" (data/ReceiptConfig.kt:24);
-                   comanda: label, "HH:mm", "MESA 7", "<receipt_label_waiter>: <currentUser>" = the owner's name on the owner phone.
+                   comanda: label, "HH:mm", "MESA 7", "<receipt_label_waiter>: <currentUser>" = the owner's name on the owner phone; no label line (no typed name, MKT2-2 dropped "#id").
    Demo setup: no receipt header lines, no taxes (the app has no country tax presets), receipt numbers off (mode not MANUAL /
    AUTO), cash drawer not connected. */
 const R = RKIT.ctx(), C = R.C, esc = R.esc;
@@ -146,8 +146,8 @@ const L = R.pick({
       drawerAsk:"¿Tienes un cajón de dinero conectado a esta impresora?", drawerSw:"Abrir el cajón después de una venta en efectivo",
       drawerHint:"Actívalo y el cajón se abre solo después de cada venta. Cada forma de pago puede abrirlo o no.", openDrawer:"Abrir cajón de dinero",
       added:"Impresora agregada", kinds:"Recibos + Pedidos de cocina", printed:t=>`Imprimió bien a las ${t}`,
-      waiter:"Imprimir aquí los pedidos de los meseros", waiterHint:"Desactívalo si el teléfono del mesero ya imprime en la misma impresora Wi-Fi.",
-      routing:"Cada recibo sale en las impresoras marcadas para recibos; cada comanda, en las marcadas para comandas.",
+      waiter:"Imprimir aquí los pedidos de los meseros", waiterHint:"Cada pedido que envíe un mesero se imprime aquí.",
+      routing:"Cada recibo sale en las impresoras marcadas para recibos; cada pedido de cocina, en las marcadas para pedidos de cocina.",
       tabs:["Teclado","Catálogo"], all:"Todos", cur:n=>`Venta actual · ${n} ${n===1?"artículo":"artículos"}`, send:"Enviar a cocina", charge:v=>`Cobrar ${v}`,
       nav:["Caja","Ventas","Mi negocio"], table:"¿Qué mesa?", cust:"Agrega un cliente a la venta", total:"Total", items:n=>`Artículos (${n}) ›`, mesa:n=>`Mesa ${n}`,
       exact:v=>`Exacto · ${v}`, save:"Guardar", done:"¡Venta completada!", got:v=>`Recibiste ${v}`, how:"¿Cómo envías el recibo?", wa:"WhatsApp",
@@ -169,8 +169,8 @@ const L = R.pick({
       drawerAsk:"Há uma gaveta de dinheiro ligada a esta impressora?", drawerSw:"Abrir a gaveta depois de uma venda em dinheiro",
       drawerHint:"Ative e a gaveta abre sozinha depois de cada venda. Cada forma de pagamento pode abri-la ou não.", openDrawer:"Abrir gaveta de dinheiro",
       added:"Impressora adicionada", kinds:"Recibos + Pedidos da cozinha", printed:t=>`Imprimiu bem às ${t}`,
-      waiter:"Imprimir aqui os pedidos dos garçons", waiterHint:"Desative se o telefone do garçom já imprime na mesma impressora Wi-Fi.",
-      routing:"Cada recibo sai nas impressoras marcadas para recibos; cada comanda, nas marcadas para comandas.",
+      waiter:"Imprimir aqui os pedidos dos garçons", waiterHint:"Cada pedido enviado por um garçom é impresso aqui.",
+      routing:"Cada recibo sai nas impressoras marcadas para recibos; cada pedido da cozinha, nas marcadas para pedidos da cozinha.",
       tabs:["Teclado","Catálogo"], all:"Todos", cur:n=>`Venda atual · ${n} ${n===1?"item":"itens"}`, send:"Enviar para a cozinha", charge:v=>`Cobrar ${v}`,
       nav:["Caixa","Vendas","Meu negócio"], table:"Qual mesa?", cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, mesa:n=>`Mesa ${n}`,
       exact:v=>`Exato · ${v}`, save:"Salvar", done:"Venda concluída!", got:v=>`Você recebeu ${v}`, how:"Como você envia o recibo?", wa:"WhatsApp",
@@ -192,8 +192,8 @@ const L = R.pick({
       drawerAsk:"Is a cash drawer connected to this printer?", drawerSw:"Open the drawer after a cash sale",
       drawerHint:"Turn this on and the drawer opens by itself after each sale. Each payment method can open it or not.", openDrawer:"Open cash drawer",
       added:"Printer added", kinds:"Receipts + Kitchen orders", printed:t=>`Printed fine at ${t}`,
-      waiter:"Print waiters’ orders here", waiterHint:"Turn this off if the waiter’s phone already prints to the same Wi-Fi printer.",
-      routing:"Each receipt prints on the printers marked for receipts; each order, on the ones marked for orders.",
+      waiter:"Print waiters’ orders here", waiterHint:"Each order a waiter sends prints here.",
+      routing:"Each receipt prints on the printers marked for receipts; each kitchen order, on the ones marked for kitchen orders.",
       tabs:["Keypad","Library"], all:"All", cur:n=>`Current sale · ${n} ${n===1?"item":"items"}`, send:"Send to kitchen", charge:v=>`Charge ${v}`,
       nav:["Register","Sales","My business"], table:"Which table?", cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, mesa:n=>`Table ${n}`,
       exact:v=>`Exact · ${v}`, save:"Save", done:"Sale complete!", got:v=>`You received ${v}`, how:"How do you send the receipt?", wa:"WhatsApp",

@@ -1,0 +1,12 @@
+# Restaurant scripts reviewed by Claude and cleared for voice (one id per line)
+R4
+R5
+R6
+R11
+RS3
+RS4
+RS5
+RS5-US
+RS6
+RS7
+RS7-US

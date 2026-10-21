@@ -8,10 +8,10 @@
     "en": { "stability": 0.5, "similarity_boost": 0.75 }
   },
   "steps": [
-    { "id": "1-guardar", "voice": {
-      "es": "Tu mesero guarda el pedido de la mesa.",
-      "pt": "O seu garçom salva o pedido da mesa.",
-      "en": "Your server saves the table's order." } },
+    { "id": "1-enviar", "voice": {
+      "es": "Tu mesero envía el pedido de la mesa a cocina.",
+      "pt": "O seu garçom envia o pedido da mesa para a cozinha.",
+      "en": "Your server sends the table's order to the kitchen." } },
     { "id": "2-llega", "voice": {
       "es": "Pasa por tu teléfono en el Wi-Fi del local y llega a la cocina como una tarjeta.",
       "pt": "Passa pelo seu celular no Wi-Fi do restaurante e chega à cozinha como um cartão.",
