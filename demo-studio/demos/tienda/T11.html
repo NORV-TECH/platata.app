@@ -719,8 +719,8 @@ SKIT.start(S, {
   endText: pick({es:"Así vendes por unidad, por peso o por bulto, con Platata.", pt:"Assim você vende por unidade, por peso ou por saco, com o Platata.", en:"That's how you sell by the unit, by weight or by the sack, with Platata."}),
   beats: pick({
     es: ["En el producto, toca Unidad de Venta", "Elige cómo se vende: aquí por " + display(IT.unit).toLowerCase(), "¿Otra? Toca Más unidades", "O crea la tuya: + Nueva unidad", "Escribe el nombre y la abreviatura", "Toca Guardar y queda elegida", "Así vendes por unidad, por peso o por bulto."],
-    pt: ["No produto, toque em Unidade de Venda", "Escolha como vende: aqui por " + display(IT.unit).toLowerCase(), "Outra? Toque em Mais unidades", "Ou crie a sua: + Nova unidade", "Digite o nome e a abreviatura", "Toque em Salvar e ela fica escolhida", "Assim você vende por unidade, por peso ou por saco."],
-    en: ["In the product, tap Unit of Sale", "Pick how it sells: here by the " + display(IT.unit).toLowerCase(), "Need another? Tap More units", "Or make your own: + New unit", "Type the name and the abbreviation", "Tap Save and it's picked", "That's how you sell by the unit, by weight or by the sack."]}),
+    pt: ["No produto, toque em Unidade de Venda", "Escolha como vende: aqui por " + display(IT.unit).toLowerCase(), "Outra? Toque em Mais unidades", "Ou crie a sua: + Nova unidade", "Digite o nome e a abreviação", "Toque em Salvar e ela fica escolhida", "Assim você vende por unidade, por peso ou por saco."],
+    en: ["In the product, tap Unit of Sale", "Pick how it sells: here by the " + display(IT.unit).toLowerCase(), "Need another? Tap More units", "Or make your own: + New unit", "Type the name and the short name", "Tap Save and it's picked", "That's how you sell by the unit, by weight or by the sack."]}),
   state: {unit: "Per Item", menu: false, more: false, end: false, newForm: false, nn: "", na: "", nfocus: null, chipHl: false, fieldHl: false},
   render: form,
   device: () => "phone",
@@ -732,7 +732,7 @@ SKIT.start(S, {
     {beat: 2, hint: pick({es:"Toca Más unidades…", pt:"Toque em Mais unidades…", en:"Tap More units…"}), target: '[data-t="u-more"]', tap(st, E){ st.more = true; E.after(1700, () => { st.end = true; }); }},
     {beat: 3, hint: pick({es:"Toca + Nueva unidad", pt:"Toque em + Nova unidade", en:"Tap + New unit"}), target: '[data-t="u-new"]', tap(st){ st.menu = false; st.more = false; st.end = false; st.newForm = true; }},
     {beat: 4, hint: pick({es:"Toca Nombre", pt:"Toque em Nome", en:"Tap Name"}), target: '[data-t="nu-name"]', tap(st, E){ st.nfocus = "n"; E.type("nn", NEWU.n, null, 110); }},
-    {beat: 4, hint: pick({es:"Toca Abreviatura", pt:"Toque em Abreviatura", en:"Tap Abbreviation"}), target: '[data-t="nu-abbr"]', tap(st, E){ st.nfocus = "a"; E.type("na", NEWU.a, null, 130); }},
+    {beat: 4, hint: pick({es:"Toca Abreviatura", pt:"Toque em Abreviação", en:"Tap Short name"}), target: '[data-t="nu-abbr"]', tap(st, E){ st.nfocus = "a"; E.type("na", NEWU.a, null, 130); }},
     {beat: 5, hint: pick({es:"Toca Guardar", pt:"Toque em Salvar", en:"Tap Save"}), target: '[data-t="nu-save"]', tap(st){
         st.nfocus = null; st.newForm = false; st.unit = NEWU.n; st.fieldHl = true; st.chipHl = true; }}
   ]

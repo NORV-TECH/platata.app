@@ -53,8 +53,8 @@
    "id": "5-type",
    "voice": {
     "es": "Escribe el nombre y la abreviatura.",
-    "pt": "Digite o nome e a abreviatura.",
-    "en": "Type the name and the abbreviation."
+    "pt": "Digite o nome e a abreviação.",
+    "en": "Type the name and a short name."
    }
   },
   {
