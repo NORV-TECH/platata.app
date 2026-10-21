@@ -29,7 +29,8 @@ async def record(feature, lang, country):
     clips = sorted(f for f in os.listdir(adir) if f.endswith(".mp3"))
     durs = [duration(os.path.join(adir, c)) for c in clips]
     import glob
-    found = glob.glob(os.path.join(ROOT, "demos", "*", f"{feature}.html")) + glob.glob(os.path.join(ROOT, "pilot", f"{feature}.html"))
+    base = feature.split("-")[0]   # a country version ("S4-PE") plays the feature's own page with ?country=PE
+    found = glob.glob(os.path.join(ROOT, "demos", "*", f"{base}.html")) + glob.glob(os.path.join(ROOT, "pilot", f"{base}.html"))
     page_url = "file://" + os.path.abspath(found[0])
     url = f"{page_url}?mode=video&lang={lang}&country={country}&dur=" + ",".join(f"{d:.3f}" for d in durs)
     tmp = tempfile.mkdtemp()

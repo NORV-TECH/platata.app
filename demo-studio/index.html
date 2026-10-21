@@ -268,10 +268,11 @@ function fix(){
   const langs = b.langs || COUNTRIES[st.c].langs;
   if(!langs.includes(st.l)) st.l=langs[0];
   const fs=featuresOf(b,st.c), all=[...fs.own,...fs.shared];
-  if(!all.includes(st.f)) st.f = all.find(id=>BUILT[id]) || all[0];
+  if(!all.includes(st.f)) st.f = all.find(id=>B(id)) || all[0];
 }
-const isBuilt = id => !!BUILT[id] && (!BUILT[id].only || BUILT[id].only.includes(st.c+"-"+st.l));
-const videoOf = id => isBuilt(id) && BUILT[id].video[st.l];
+const B = id => BUILT[st.biz+":"+id] || BUILT[id];   // a business can have its own version of a shared feature ("restaurante:S3")
+const isBuilt = id => !!B(id) && (!B(id).only || B(id).only.includes(st.c+"-"+st.l));
+const videoOf = id => isBuilt(id) && (B(id).video[st.c+"-"+st.l] || B(id).video[st.l]);
 
 /* ================= render ================= */
 const $ = id => document.getElementById(id);
@@ -305,7 +306,7 @@ function render(){
   // the demo
   const main=$("main"), all=[...featuresOf(b,st.c).own,...featuresOf(b,st.c).shared], pos=all.indexOf(st.f)+1;
   if(isBuilt(st.f)){
-    const src = BUILT[st.f].page(st.c, st.l);
+    const src = B(st.f).page(st.c, st.l);
     const cur = main.querySelector("iframe");
     if(!cur || cur.dataset.src!==src){ main.innerHTML = `<iframe title="${fname(st.f)}" data-src="${src}" src="${src}"></iframe>`; }
   } else {

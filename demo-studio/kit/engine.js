@@ -8,7 +8,9 @@
      render(st, E) -> html for the app area,    // called after every change
      beats: [ "subtitle 0", "subtitle 1", ... ],// one per narration line (video subtitles)
      steps: [ {beat, hint, target:"css", tap(st,E)} ],  // the taps, in order
-     endText                                    // end card line
+     endText,                                   // end card line
+     device(st) -> "phone" | "tablet" | "kds",  // optional: which device is on screen now (tablet/kds = landscape)
+     who(st) -> "Celular del mesero"            // optional: a label above the device, so a trip between devices reads
    }
    Inside tap/after callbacks use E.after(ms, fn) for anything that happens later (typing, loading, replies). */
 (function(){
@@ -58,7 +60,8 @@ function start(cfg){
   const SRC = (Q.get("src")||"demo").replace(/[^a-z0-9_-]/gi,"").slice(0,40);
   root.innerHTML = `<div class="stage">
     <div class="topline"><div class="brand">Platata</div><div class="tag">${esc(cfg.label||"Edificios · Colombia")}</div></div>
-    <div class="phone"><div class="screen" id="screen">
+    <div class="devwho" id="who" hidden></div>
+    <div class="phone" id="phone"><div class="screen" id="screen">
       <div class="statusbar"><span>${esc(cfg.clock||"9:41")}</span><span class="icons">
         <svg viewBox="0 0 18 14"><path d="M1 13h2.5V9.5H1zm4.5 0H8V7H5.5zM10 13h2.5V4.5H10zm4.5 0H17V1h-2.5z" fill="currentColor"/></svg>
         <svg viewBox="0 0 20 15"><path d="M10 14.5 0 4.2a14.3 14.3 0 0 1 20 0z" fill="currentColor"/></svg>
@@ -96,7 +99,13 @@ function start(cfg){
   function endCard(){
     return `<div class="end"><div class="logo">Platata</div><p>${esc(cfg.endText||"")}</p>${MODE==="video"?`<div class="play">Disponible en Google Play</div>`:`<button class="again" data-t="again">Ver otra vez</button>`}</div>`;
   }
+  const phoneEl=document.getElementById("phone"), whoEl=document.getElementById("who");
   function draw(){
+    const dev = (cfg.device && !ended && cfg.device(st)) || "phone";
+    if(phoneEl.dataset.dev !== dev){ phoneEl.dataset.dev = dev; phoneEl.classList.toggle("land", dev!=="phone"); phoneEl.classList.toggle("dark", dev==="kds"); }
+    const w = (cfg.who && !ended && cfg.who(st)) || "";
+    if(whoEl.textContent !== w){ whoEl.textContent = w; }
+    whoEl.hidden = !w;
     app.innerHTML = cfg.render(st, E) + (ended ? endCard() : "");
     const s = cfg.steps[si];
     document.getElementById("capN").textContent = ended ? "✓" : String(s ? s.n || (cfg.steps.slice(0,si+1).filter(x=>x.hint!==undefined).length) : "✓");
@@ -122,6 +131,7 @@ function start(cfg){
     if(MODE==="demo") setTimeout(wait, 50);   // in a video the last narration line brings the end card
   }
 
+  window.__demoState = () => ({si, ended, pending, steps: cfg.steps.length, beats: (cfg.beats||[]).length});   // for tools/check_demo.py
   if(MODE==="demo"){
     screen.addEventListener("click", e=>{
       if(ended){ if(e.target.closest('[data-t="again"]')){ st=fresh(); si=0; ended=false; draw(); } return; }

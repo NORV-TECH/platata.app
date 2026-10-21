@@ -17,20 +17,17 @@ const M = (cats, rows) => ({ cats, items: rows.map(([id, cat, name, price]) => (
 
 window.RESTO = {
  CO: Object.assign({ name:"Colombia", lang:"es", loc:"es-CO", cur:"COP", dec:0,
-   place:"La Fonda de Marta", city:"Medellín", owner:"Marta",
-   pay:{card:"wompi", qr:"bank", tips:false}, tables:12, order:["bandeja","ajiaco","limonada"] },
-   M(["Platos fuertes","Antojos","Bebidas","Postres"], [
-    ["bandeja","Platos fuertes","Bandeja paisa",32000],
-    ["ajiaco","Platos fuertes","Ajiaco santafereño",28000],
-    ["sancocho","Platos fuertes","Sancocho de gallina",26000],
-    ["churrasco","Platos fuertes","Churrasco",38000],
-    ["empanadas","Antojos","Empanadas x3",8000],
-    ["patacon","Antojos","Patacón con hogao",12000],
-    ["arepa","Antojos","Arepa de choclo",9000],
-    ["limonada","Bebidas","Limonada de coco",9000],
-    ["lulo","Bebidas","Jugo de lulo",7000],
-    ["tinto","Bebidas","Café tinto",3000],
-    ["natas","Postres","Postre de natas",8000]])),
+   place:"La Fonda de Marta", city:"Medellín", owner:"Marta Gómez",
+   pay:{card:"wompi", qr:"bank", tips:false}, tables:12, order:["churrasco","ajiaco","limonada"] },
+   M(["Platos fuertes","Sopas","Bebidas"], [
+    ["ajiaco","Sopas","Ajiaco",28000],
+    ["bandeja","Platos fuertes","Bandeja paisa",38000],
+    ["churrasco","Platos fuertes","Churrasco",42000],
+    ["gaseosa","Bebidas","Gaseosa",5000],
+    ["jugo","Bebidas","Jugo natural",8000],
+    ["limonada","Bebidas","Limonada de coco",12000],
+    ["pechuga","Platos fuertes","Pechuga a la plancha",32000],
+    ["sancocho","Sopas","Sancocho",26000]])),
 
  MX: Object.assign({ name:"México", lang:"es", loc:"es-MX", cur:"MXN", dec:2,
    place:"Fonda Lupita", city:"Ciudad de México", owner:"Lupita",
@@ -164,4 +161,26 @@ window.RESTO = {
     ["tart","Desserts","Butter tart",4.5],
     ["nanaimo","Desserts","Nanaimo bar",4.5]]))
 };
+/* people and the "steak" dish (the one with the cooking-point add-on, "Término de cocción") per country */
+const PEOPLE = {
+ CO:{waiter:"Carlos Pérez", waiter2:"Laura Ruiz", cook:"Pedro", customer:"Juan Restrepo", phone:"300 123 4567"},
+ MX:{waiter:"Carlos Hernández", waiter2:"Laura Ruiz", cook:"Pedro", customer:"Juan Martínez", phone:"55 1234 5678"},
+ PE:{waiter:"Carlos Quispe", waiter2:"Laura Rojas", cook:"Pedro", customer:"Juan Torres", phone:"987 654 321"},
+ CL:{waiter:"Carlos Muñoz", waiter2:"Laura Soto", cook:"Pedro", customer:"Juan González", phone:"9 8765 4321"},
+ EC:{waiter:"Carlos Vera", waiter2:"Laura Mora", cook:"Pedro", customer:"Juan Cedeño", phone:"099 123 4567"},
+ AR:{waiter:"Carlos Fernández", waiter2:"Laura Díaz", cook:"Pedro", customer:"Juan López", phone:"11 2345 6789"},
+ PA:{waiter:"Carlos Castillo", waiter2:"Laura Pérez", cook:"Pedro", customer:"Juan Rodríguez", phone:"6123 4567"},
+ BR:{waiter:"Rafael Souza", waiter2:"Ana Lima", cook:"Pedro", customer:"João Silva", phone:"31 91234 5678"},
+ US:{waiter:"Jake Miller", waiter2:"Emma Davis", cook:"Luis", customer:"John Smith", phone:"(713) 555 0142"},
+ CA:{waiter:"Liam Tremblay", waiter2:"Emma Roy", cook:"Luis", customer:"John Martin", phone:"(416) 555 0142"}
+};
+Object.keys(window.RESTO).forEach(k=>{ const C=window.RESTO[k]; C.people=PEOPLE[k]; C.steak=C.order[0];
+  /* category id = creation order (cats array), chip colour = CategoryChipPalette[id % 10] (Color.kt:225, HomeScreen) */
+  const PAL=["#E57373","#4FC3F7","#81C784","#FFD54F","#BA68C8","#FFB74D","#4DB6AC","#AED581","#F06292","#7986CB"];
+  C.catList = C.cats.map((name,i)=>({id:i+1, name, color:PAL[(i+1)%10]}));
+  C.catOf = name => C.catList.find(c=>c.name===name);
+  /* the app lists products ORDER BY name (PosDao) and categories ORDER BY sortOrder, name */
+  C.itemsByName = C.items.slice().sort((a,b)=>a.name.localeCompare(b.name, C.loc));
+  C.catsByName = C.catList.slice().sort((a,b)=>a.name.localeCompare(b.name, C.loc));
+});
 })();
