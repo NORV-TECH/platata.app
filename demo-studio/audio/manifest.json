@@ -910,9 +910,9 @@
   "chars": 62
  },
  "RS5-US/es/4-approved": {
-  "hash": "c7e386eae9c37fcd3df0787137923fc603e30847",
+  "hash": "fa5643115b417128344821f13b77cc776d48386b",
   "file": "demo-studio/audio/RS5-US/es/4-approved.mp3",
-  "chars": 57
+  "chars": 39
  },
  "RS5-US/es/5-end": {
   "hash": "d3a37937e5b3442e5fe7d06611a1b0193aadbeea",
@@ -965,9 +965,9 @@
   "chars": 62
  },
  "RS5/es/4-approved": {
-  "hash": "28c3c8130ccaf21fbc5545c2b013f81c6d64ad18",
+  "hash": "f7b43df0149985122a93313c33f1623792a43c5c",
   "file": "demo-studio/audio/RS5/es/4-approved.mp3",
-  "chars": 66
+  "chars": 48
  },
  "RS5/pt/4-approved": {
   "hash": "bca7005c74ab1145711925b276f4b9c2751290a8",
@@ -975,9 +975,9 @@
   "chars": 52
  },
  "RS5/en/4-approved": {
-  "hash": "a7696020dfbaf8189745d476d736814bb407d4bb",
+  "hash": "af061298df8125c6dcd23e93d408312545476f5b",
   "file": "demo-studio/audio/RS5/en/4-approved.mp3",
-  "chars": 45
+  "chars": 31
  },
  "RS5/es/5-end": {
   "hash": "d3a37937e5b3442e5fe7d06611a1b0193aadbeea",
