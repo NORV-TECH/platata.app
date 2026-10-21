@@ -1,0 +1,67 @@
+{
+  "id": "TS20-US",
+  "name": "Vender en línea",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-abrir",
+      "voice": {
+        "es": "Abre tu negocio y toca Vender en línea."
+      }
+    },
+    {
+      "id": "2-conexion",
+      "voice": {
+        "es": "En Estados Unidos y Canadá, tu tienda en línea ya viene incluida."
+      }
+    },
+    {
+      "id": "3-direccion",
+      "voice": {
+        "es": "Enciéndela: eliges tu dirección y tu horario."
+      }
+    },
+    {
+      "id": "4-encender",
+      "voice": {
+        "es": "Toca Encender la tienda. Lo que vendes por peso no sale en la página; abajo ves la lista."
+      }
+    },
+    {
+      "id": "5-compartir",
+      "voice": {
+        "es": "Comparte tu enlace por WhatsApp o Instagram."
+      }
+    },
+    {
+      "id": "6-cliente",
+      "voice": {
+        "es": "Tu cliente elige un producto y lo agrega al pedido."
+      }
+    },
+    {
+      "id": "7-pedido",
+      "voice": {
+        "es": "Pone su nombre y hace el pedido. Paga cuando lo recoge."
+      }
+    },
+    {
+      "id": "8-aviso",
+      "voice": {
+        "es": "El aviso llega a tu teléfono. Deja Platata abierta para oírlo."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así vendes en línea con Platata."
+      }
+    }
+  ]
+}

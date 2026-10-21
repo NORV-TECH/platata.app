@@ -706,7 +706,7 @@ function saldar(st){
     return `<div class="sl${isFull?" full":""}"><span>${esc(shortDM(tabDate(x.d, x.h)))}</span><b style="color:${isFull?FGREEN:part?AMBER:"var(--m-on)"}">${esc(right)}</b></div>`; }).join("");
   const hint = t("fiado_saldar_result", full, money(owing));
   return `<div class="t-pg">${topbar(t("fiado_saldar") + " — " + ANA.name)}
-    <div class="t-scroll sd${st.typed?" end":""}"><div class="in">
+    <div class="t-scroll sd${st.typed?" up":""}"><div class="in">
       <div class="hd"><small>${esc(t("fiado_te_debe"))}</small><b>${money(OWES)}</b></div>
       ${lines}
       <span class="t-chip" style="align-self:flex-start;margin-top:calc(var(--u)*12)">${esc(t("fiado_saldar_all", money(OWES)))}</span>
@@ -804,7 +804,8 @@ SKIT.start(S, {
 .x-fiar{margin-top:calc(var(--u)*10);height:calc(var(--u)*54);border-radius:calc(var(--u)*27);border:1px solid #000;background:#E5E5EA;display:grid;place-items:center;font-size:calc(var(--u)*17);font-weight:700;color:rgba(110,110,115,.6)}
 .x-fiar.on{background:#F2F2F7;color:#1C1C1E}
 
-.mat .sd .in{padding:calc(var(--u)*16);display:flex;flex-direction:column}
+.mat .sd .in{padding:calc(var(--u)*16);display:flex;flex-direction:column;transition:margin-top .4s ease}
+.mat .sd.up .in{margin-top:calc(var(--u)*-150)}   /* the page scrolled to its button (FiadoSaldarContent is a verticalScroll) */
 .mat .sd .hd{text-align:center}.mat .sd .hd small{display:block;font-size:calc(var(--u)*12);font-weight:700;color:var(--m-onv)}
 .mat .sd .hd b{display:block;font-size:calc(var(--u)*28);font-weight:900}
 .mat .sd .sl{display:flex;justify-content:space-between;padding:calc(var(--u)*8) 0;font-size:calc(var(--u)*16)}

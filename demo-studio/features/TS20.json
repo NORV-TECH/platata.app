@@ -1,0 +1,93 @@
+{
+  "id": "TS20",
+  "name": "Vender en línea",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-abrir",
+      "voice": {
+        "es": "Abre tu negocio y toca Vender en línea.",
+        "pt": "Abra seu negócio e toque em Vender online.",
+        "en": "Open your business and tap Sell online."
+      }
+    },
+    {
+      "id": "2-conexion",
+      "voice": {
+        "es": "Tu tienda en línea se abre cuando una tablet o un teléfono de empleado usa tu tercera conexión.",
+        "pt": "Sua loja online abre quando um tablet ou um celular de funcionário usa sua terceira conexão.",
+        "en": "In the United States and Canada, your online store is already included."
+      }
+    },
+    {
+      "id": "3-direccion",
+      "voice": {
+        "es": "Enciéndela: eliges tu dirección y tu horario.",
+        "pt": "Ligue a loja: você escolhe seu endereço e seu horário.",
+        "en": "Turn it on: you pick your address and your hours."
+      }
+    },
+    {
+      "id": "4-encender",
+      "voice": {
+        "es": "Toca Encender la tienda. Lo que vendes por peso no sale en la página; abajo ves la lista.",
+        "pt": "Toque em Ligar a loja. O que você vende por peso não aparece na página; embaixo você vê a lista.",
+        "en": "Tap Turn on the store. Anything you sell by weight stays off the page; the list is at the bottom."
+      }
+    },
+    {
+      "id": "5-compartir",
+      "voice": {
+        "es": "Comparte tu enlace por WhatsApp o Instagram.",
+        "pt": "Compartilhe seu link pelo WhatsApp ou Instagram.",
+        "en": "Share your link on WhatsApp or Instagram."
+      }
+    },
+    {
+      "id": "6-cliente",
+      "voice": {
+        "es": "Tu cliente elige un producto y lo agrega al pedido.",
+        "pt": "Seu cliente escolhe um produto e adiciona ao pedido.",
+        "en": "Your customer picks a product and adds it to the order."
+      }
+    },
+    {
+      "id": "7-pedido",
+      "voice": {
+        "es": "Pone su nombre y hace el pedido. Paga cuando lo recoge.",
+        "pt": "Ele põe o nome e faz o pedido. Paga quando retira.",
+        "en": "They add their name and place the order. They pay at pickup."
+      }
+    },
+    {
+      "id": "8-aviso",
+      "voice": {
+        "es": "El aviso llega a tu teléfono. Deja Platata abierta para oírlo.",
+        "pt": "O aviso chega ao seu celular. Deixe a Platata aberta para ouvir.",
+        "en": "The alert reaches your phone. Keep Platata open to hear it."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así vendes en línea con Platata.",
+        "pt": "Assim você vende online com o Platata.",
+        "en": "That's how you sell online with Platata."
+      }
+    }
+  ]
+}

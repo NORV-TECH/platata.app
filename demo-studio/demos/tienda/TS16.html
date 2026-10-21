@@ -563,8 +563,7 @@ const cssTS16 = document.createElement("style"); cssTS16.textContent = `
 .mat .dc-idea .ft{display:flex;align-items:center;justify-content:space-between;margin-top:calc(var(--u)*12)}
 .mat .dc-idea strong{font-size:calc(var(--u)*22);font-weight:700;color:var(--m-on)}
 .mat .dc-idea .use{min-height:calc(var(--u)*48);display:grid;place-items:center;padding:0 calc(var(--u)*24);border-radius:calc(var(--u)*8);background:var(--m-on);color:#fff;font-size:calc(var(--u)*14);font-weight:700}
-.mat .dc-idea .use.off{background:#E5E5EA;color:#AEAEB2}
-.mat .dc-pick{transition:transform .5s ease}`; document.head.appendChild(cssTS16);
+.mat .dc-idea .use.off{background:#E5E5EA;color:#AEAEB2}`; document.head.appendChild(cssTS16);
 
 const HINT = (es,pt,en) => pick({es:"Toca "+es, pt:"Toque em "+pt, en:"Tap "+en});
 const H1 = k => HINT(S(k),S(k),S(k));
@@ -584,7 +583,7 @@ SKIT.start(R, {
     {beat:1, hint:H1("settings_hub_discounts"), target:'[data-t="hub-discounts"]', tap(st){ st.screen="list"; }},
     {beat:2, hint:H1("disc_tab_templates"), target:'[data-t="tab-ideas"]', tap(st,E){ st.tab="ideas"; E.after(700,()=>{ st.iscroll=150; }); }},
     {beat:3, hint:H1("disc_use_template"), target:'[data-t="use"]', tap(st){ st.screen="form"; st.tab="saved"; }},
-    {beat:4, hint:H1("disc_choose_items"), target:'[data-t="choose"]', tap(st,E){ st.screen="pick"; st.pscroll=0; E.after(500,()=>{ st.pscroll=PICK_SCROLL; }); }},
+    {beat:4, hint:H1("disc_choose_items"), target:'[data-t="choose"]', tap(st,E){ st.screen="pick"; st.pscroll=PICK_SCROLL; }},
     {beat:4, hint:HINT(TARGET.name,TARGET.name,TARGET.name), target:'[data-t="pick-item"]', tap(st){ st.pick=true; }},
     {beat:4, hint:H1("disc_associate_button"), target:'[data-t="done"]', tap(st){ st.items=true; st.screen="form"; }},
     {beat:5, hint:H1("common_save"), target:'[data-t="save"]', tap(st,E){ st.screen="list"; st.saved=true; st.toast=true; E.after(2200,()=>{ st.toast=false; }); }}
