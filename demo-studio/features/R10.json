@@ -3,46 +3,91 @@
   "name": "Print order tickets and receipts",
   "business": "restaurante",
   "voice_settings": {
-    "es": { "stability": 0.5, "similarity_boost": 0.75 },
-    "pt": { "stability": 0.5, "similarity_boost": 0.75 },
-    "en": { "stability": 0.5, "similarity_boost": 0.75 }
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
   },
   "steps": [
-    { "id": "1-agregar", "voice": {
-      "es": "En Impresoras, toca Agregar impresora.",
-      "pt": "Em Impressoras, toque em Adicionar impressora.",
-      "en": "In Printers, tap Add printer." } },
-    { "id": "2-bluetooth", "voice": {
-      "es": "Elige Bluetooth y toca tu impresora.",
-      "pt": "Escolha Bluetooth e toque na sua impressora.",
-      "en": "Pick Bluetooth and tap your printer." } },
-    { "id": "3-prueba", "voice": {
-      "es": "Marca recibos y comandas. Sale una hoja de prueba.",
-      "pt": "Marque recibos e comandas. Sai uma página de teste.",
-      "en": "Tick receipts and kitchen orders. A test page prints." } },
-    { "id": "4-guardar", "voice": {
-      "es": "¿Salió? Guarda la impresora.",
-      "pt": "Saiu? Salve a impressora.",
-      "en": "Did it print? Save the printer." } },
-    { "id": "5-platos", "voice": {
-      "es": "Ahora una venta: toca los platos.",
-      "pt": "Agora uma venda: toque nos pratos.",
-      "en": "Now a sale: tap the dishes." } },
-    { "id": "6-cobrar", "voice": {
-      "es": "Toca Cobrar y elige la mesa.",
-      "pt": "Toque em Cobrar e escolha a mesa.",
-      "en": "Tap Charge and pick the table." } },
-    { "id": "7-exacto", "voice": {
-      "es": "Te pagan justo en efectivo: toca Exacto.",
-      "pt": "Pagam o valor certo em dinheiro: toque em Exato.",
-      "en": "They pay the exact amount in cash: tap Exact." } },
-    { "id": "8-papel", "voice": {
-      "es": "La impresora saca el recibo del cliente y la comanda para la cocina.",
-      "pt": "A impressora tira o recibo do cliente e a comanda para a cozinha.",
-      "en": "The printer prints the customer's receipt and the kitchen ticket." } },
-    { "id": "9-fin", "voice": {
-      "es": "Así imprimes recibos y comandas con Platata.",
-      "pt": "Assim você imprime recibos e comandas com o Platata.",
-      "en": "That's how you print tickets and receipts with Platata." } }
+    {
+      "id": "1-agregar",
+      "voice": {
+        "es": "En Impresoras, toca Agregar impresora.",
+        "pt": "Em Impressoras, toque em Adicionar impressora.",
+        "en": "In Printers, tap Add printer."
+      }
+    },
+    {
+      "id": "2-bluetooth",
+      "voice": {
+        "es": "Elige Bluetooth y toca tu impresora.",
+        "pt": "Escolha Bluetooth e toque na sua impressora.",
+        "en": "Pick Bluetooth and tap your printer."
+      }
+    },
+    {
+      "id": "3-prueba",
+      "voice": {
+        "es": "Marca recibos y comandas. Sale una hoja de prueba.",
+        "pt": "Marque recibos e comandas. Sai uma página de teste.",
+        "en": "Tick receipts and kitchen orders. A test page prints."
+      }
+    },
+    {
+      "id": "4-guardar",
+      "voice": {
+        "es": "¿Salió? Guarda la impresora.",
+        "pt": "Saiu? Salve a impressora.",
+        "en": "Did it print? Save the printer."
+      }
+    },
+    {
+      "id": "5-platos",
+      "voice": {
+        "es": "Ahora una venta: toca los platos.",
+        "pt": "Agora uma venda: toque nos pratos.",
+        "en": "Now a sale: tap the dishes."
+      }
+    },
+    {
+      "id": "6-cobrar",
+      "voice": {
+        "es": "Toca Cobrar y elige la mesa.",
+        "pt": "Toque em Cobrar e escolha a mesa.",
+        "en": "Tap Charge and pick the table."
+      }
+    },
+    {
+      "id": "7-exacto",
+      "voice": {
+        "es": "Te pagan justo en efectivo: toca Exacto.",
+        "pt": "Pagam o valor certo em dinheiro: toque em Exato.",
+        "en": "They pay exact cash: tap Exact."
+      }
+    },
+    {
+      "id": "8-papel",
+      "voice": {
+        "es": "La impresora saca el recibo del cliente y la comanda para la cocina.",
+        "pt": "A impressora tira o recibo do cliente e a comanda para a cozinha.",
+        "en": "The printer prints the customer's receipt and the kitchen ticket."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así imprimes recibos y comandas con Platata.",
+        "pt": "Assim você imprime recibos e comandas com o Platata.",
+        "en": "That's how you print tickets and receipts with Platata."
+      }
+    }
   ]
 }

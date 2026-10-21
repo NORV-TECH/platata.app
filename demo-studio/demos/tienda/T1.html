@@ -432,7 +432,7 @@ function eanSvg(code){
   const guard = i => i < 3 || (i >= 45 && i < 50) || i >= 92;
   let rects = "";
   for(let i = 0; i < bits.length; i++) if(bits[i] === "1") rects += `<rect x="${i+9}" y="0" width="1" height="${guard(i)?58:52}"/>`;
-  const txt = `<text x="4" y="64">${d[0]}</text><text x="31" y="64">${code.slice(1,7).split("").join(" ")}</text><text x="78" y="64">${code.slice(7).split("").join(" ")}</text>`;
+  const txt = `<text x="1" y="65">${d[0]}</text><text x="13" y="65" textLength="40" lengthAdjust="spacing">${code.slice(1,7)}</text><text x="60" y="65" textLength="40" lengthAdjust="spacing">${code.slice(7)}</text>`;
   return `<svg class="ean" viewBox="0 0 113 66"><rect width="113" height="66" fill="#fff"/><g fill="#111">${rects}</g><g class="d" fill="#111">${txt}</g></svg>`;
 }
 

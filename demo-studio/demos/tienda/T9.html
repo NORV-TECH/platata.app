@@ -1,0 +1,823 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Abonos al fiado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/shop-data.js"></script>
+<script src="../../kit/skit.js"></script>
+<script>
+
+/* T9 "Abonos al fiado" — a client pays part of the tab, on the shop OWNER phone only (fiadoMoneyOn: RetailRules + DeviceRole.OWNER,
+   CustomerCrmScreen.kt:119). Panel (HomeScreen.kt:1676: the amber Clientes row) -> Clients (CustomerCrmScreen.kt:270-445) -> the client's
+   page (CustomerPage.kt + FiadoOwesBlock, FiadoMoneyScreens.kt:59-113) -> "Saldar" = FiadoSaldarContent (FiadoMoneyScreens.kt:160-337:
+   "Saldar — <name>", TE DEBE + balance, one line per open tab oldest first ("d MMM", covered ones struck through in green, a partly covered
+   one amber "· faltan"), chip "Todo: $X", the amount typed with the pay-screen rule (MoneyKeypadEntry: whole units, "000" for COP/CLP),
+   tender chips = active non-card / non-tab / non-comp methods (Cash preselected), the hint box, the CashKeypad, "Recibir $X") ->
+   FiadoSettleReceipt (:342-394: ✅, "Recibiste $X", amber "Te sigue debiendo $Y", Listo). The write is CustomerFiadoActions ->
+   FiadoStore.applyFiadoPayment (oldest tab first). A cash abono lands in the OPEN shift's drawer (the register is open here).
+   Demo setup (shop-data.js): Ana owes her kit balance as three tab sales (22, 15 and 8 days ago); she pays enough to close the two oldest.
+   The page stops on the receipt: the client page after it would say "1 fiados" (the plural fix R7 lands tonight). */
+// TITLE: Platata · Abonos al fiado
+// PARTS: common.js,shop.js,mine.js,cust.js
+// CSS: shop.css
+// KEYS: fiado_saldar_all,fiado_saldar_result,fiado_faltan,fiado_recibir,fiado_recibiste,fiado_te_sigue_debiendo,payment_method_cash,fiado_te_debe
+const STR={"card_approved_title": {"en": "Payment approved", "es": "Pago aprobado", "pt": "Pagamento aprovado"}, "cash_exact": {"en": "Exact · %s", "es": "Exacto · %s", "pt": "Exato · %s"}, "cash_exact_short": {"en": "Exact", "es": "Exacto", "pt": "Exato"}, "cash_movement_in": {"en": "Cash in", "es": "Meter efectivo", "pt": "Colocar dinheiro"}, "cash_movement_out": {"en": "Cash out", "es": "Sacar efectivo", "pt": "Retirar dinheiro"}, "cash_movement_reason_change": {"en": "Change", "es": "Sencillo", "pt": "Troco"}, "cash_movement_reason_other": {"en": "Other", "es": "Otro", "pt": "Outro"}, "cash_movement_reason_owner_took": {"en": "Owner took it", "es": "Retiro del dueño", "pt": "Retirada do dono"}, "cash_movement_reason_supplier": {"en": "Supplier", "es": "Proveedor", "pt": "Fornecedor"}, "cash_movement_saved": {"en": "Saved", "es": "Guardado", "pt": "Salvo"}, "cash_movement_void": {"en": "Void", "es": "Anular", "pt": "Anular"}, "cash_rounding_line": {"en": "Cash rounding %s", "es": "Redondeo en efectivo %s", "pt": "Arredondamento em dinheiro %s"}, "cash_shortfall": {"en": "Short %s", "es": "Faltan %s", "pt": "Faltam %s"}, "checkout_add_customer_cta": {"en": "Add a client to the sale", "es": "Agrega un cliente a la venta", "pt": "Adicione um cliente à venda"}, "checkout_cash_label": {"en": "Cash", "es": "Efectivo", "pt": "Dinheiro"}, "checkout_change_row_label": {"en": "Change", "es": "Cambio", "pt": "Troco"}, "checkout_clear": {"en": "Clear", "es": "Borrar", "pt": "Limpar"}, "checkout_desglose_delivery_table": {"en": "Table %1$d", "es": "Mesa %1$d", "pt": "Mesa %1$d"}, "checkout_dining_gate_table_title": {"en": "Which table?", "es": "¿Qué mesa?", "pt": "Qual mesa?"}, "checkout_items_link": {"en": "Items (%1$d)", "es": "Artículos (%1$d)", "pt": "Itens (%1$d)"}, "checkout_other_method": {"en": "Other payment method (%d)", "es": "Otro método de pago (%d)", "pt": "Outra forma de pagamento (%d)"}, "checkout_other_method_subtitle": {"en": "Total %s · you confirm before it is charged", "es": "Total %s · confirmas antes de cobrar", "pt": "Total %s · você confirma antes de cobrar"}, "checkout_other_method_title": {"en": "Other payment method", "es": "Otro método de pago", "pt": "Outra forma de pagamento"}, "checkout_received_label": {"en": "Received", "es": "Recibido", "pt": "Recebido"}, "common_add": {"en": "Add", "es": "Agregar", "pt": "Adicionar"}, "common_cancel": {"en": "Cancel", "es": "Cancelar", "pt": "Cancelar"}, "common_charge": {"en": "Charge %s", "es": "Cobrar %s", "pt": "Cobrar %s"}, "common_done": {"en": "Done", "es": "Listo", "pt": "Concluído"}, "common_edit": {"en": "Edit", "es": "Editar", "pt": "Editar"}, "common_new_short": {"en": "+ New", "es": "+ Nuevo", "pt": "+ Novo"}, "common_save": {"en": "Save", "es": "Guardar", "pt": "Salvar"}, "common_send": {"en": "Send", "es": "Enviar", "pt": "Enviar"}, "common_total": {"en": "Total", "es": "Total", "pt": "Total"}, "conn_slot_phone": {"en": "Your phone", "es": "Tu teléfono", "pt": "Seu celular"}, "crm_metric_last_visit": {"en": "Last Visit", "es": "Última visita", "pt": "Última visita"}, "crm_metric_visits": {"en": "Visits", "es": "Visitas", "pt": "Visitas"}, "crm_search_placeholder": {"en": "By name, phone…", "es": "Por nombre, teléfono…", "pt": "Por nome, telefone…"}, "crm_title_directory": {"en": "Clients (%d)", "es": "Clientes (%d)", "pt": "Clientes (%d)"}, "crm_title_select": {"en": "Select Client", "es": "Seleccionar cliente", "pt": "Selecionar cliente"}, "customer_page_purchases": {"en": "Purchases", "es": "Compras", "pt": "Compras"}, "customer_page_whatsapp": {"en": "WhatsApp", "es": "WhatsApp", "pt": "WhatsApp"}, "customer_page_whatsapp_write": {"en": "Message on WhatsApp", "es": "Escribir por WhatsApp", "pt": "Escrever pelo WhatsApp"}, "fiado_chip_fiar": {"en": "Put on tab", "es": "Fiar", "pt": "Fiar"}, "fiado_chip_fiar_customer": {"en": "Put %1$s on tab", "es": "Fiar a %1$s", "pt": "Fiar para %1$s"}, "fiado_clientes_header": {"en": "%1$d of %2$d clients", "es": "%1$d de %2$d clientes", "pt": "%1$d de %2$d clientes"}, "fiado_faltan": {"en": "%1$s · %2$s to go", "es": "%1$s · faltan %2$s", "pt": "%1$s · faltam %2$s"}, "fiado_monto_manual": {"en": "＋ Manual amount", "es": "＋ Monto manual", "pt": "＋ Valor manual"}, "fiado_page_debts_age": {"en": "%1$d tabs · oldest %2$d days ago", "es": "%1$d fiados · el más viejo hace %2$d días", "pt": "%1$d fiados · o mais antigo há %2$d dias"}, "fiado_perdonar_deuda": {"en": "Forgive debt", "es": "Perdonar deuda", "pt": "Perdoar dívida"}, "fiado_recibir": {"en": "Receive %1$s", "es": "Recibir %1$s", "pt": "Receber %1$s"}, "fiado_recibiste": {"en": "Received %1$s", "es": "Recibiste %1$s", "pt": "Recebido %1$s"}, "fiado_recordarle": {"en": "Remind", "es": "Recordarle", "pt": "Lembrar"}, "fiado_row_name": {"en": "Tab", "es": "Fiado", "pt": "Fiado"}, "fiado_saldar": {"en": "Settle", "es": "Saldar", "pt": "Quitar"}, "fiado_saldar_all": {"en": "All: %1$s", "es": "Todo: %1$s", "pt": "Tudo: %1$s"}, "fiado_saldar_result": {"en": "Settles %1$d full tabs. They still owe you %2$s.", "es": "Salda %1$d fiados completos. Le quedan debiendo %2$s.", "pt": "Quita %1$d fiados completos. Ainda te devem %2$s."}, "fiado_sort_amount": {"en": "Most owed", "es": "Más plata", "pt": "Maior dívida"}, "fiado_sort_az": {"en": "A–Z", "es": "A–Z", "pt": "A–Z"}, "fiado_sort_oldest": {"en": "Oldest", "es": "Más viejo", "pt": "Mais antigos"}, "fiado_te_debe": {"en": "OWES YOU", "es": "TE DEBE", "pt": "TE DEVE"}, "fiado_te_deben": {"en": "THEY OWE YOU", "es": "TE DEBEN", "pt": "TE DEVEM"}, "fiado_te_sigue_debiendo": {"en": "Still owes you %1$s", "es": "Te sigue debiendo %1$s", "pt": "Ainda te deve %1$s"}, "home_tab_library": {"en": "Library", "es": "Catálogo", "pt": "Catálogo"}, "home_tab_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "invoices_row_this_month": {"en": "%1$d this month", "es": "%1$d este mes", "pt": "%1$d neste mês"}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "items_filter_all": {"en": "All", "es": "Todos", "pt": "Todos"}, "mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "more_my_products_count": {"en": "%1$d items", "es": "%1$d artículos", "pt": "%1$d itens"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "pay_card_setup_hint": {"en": "Set up", "es": "Configurar", "pt": "Configurar"}, "pay_card_short": {"en": "Card", "es": "Tarjeta", "pt": "Cartão"}, "pay_methods_comp_note": {"en": "Only you and people you allow in Team > Permissions.", "es": "Solo tú y quien autorices en Equipo > Permisos.", "pt": "Só você e quem você autorizar em Equipe > Permissões."}, "pay_methods_dialog_title": {"en": "Add Payment Method", "es": "Agregar método de pago", "pt": "Adicionar forma de pagamento"}, "pay_methods_example_transfer": {"en": "Bank transfer", "es": "Transferencia", "pt": "Transferência"}, "pay_methods_field_name": {"en": "Name (e.g. %1$s)", "es": "Nombre (ej. %1$s)", "pt": "Nome (ex. %1$s)"}, "pay_methods_title": {"en": "Payment methods", "es": "Métodos de pago", "pt": "Formas de pagamento"}, "pay_qr_short": {"en": "QR", "es": "QR", "pt": "QR"}, "pay_setup_link_dismiss": {"en": "No thanks", "es": "No, gracias", "pt": "Não, obrigado"}, "payment_method_card": {"en": "Card", "es": "Tarjeta", "pt": "Cartão"}, "payment_method_cash": {"en": "Cash", "es": "Efectivo", "pt": "Dinheiro"}, "payment_method_comp": {"en": "On the house", "es": "Cortesía", "pt": "Cortesia"}, "payment_method_qr": {"en": "QR Payment", "es": "Pago QR", "pt": "Pagamento QR"}, "qr_no_receipt_needed": {"en": "Paid · No photo", "es": "Pagó · Sin foto", "pt": "Pago · Sem foto"}, "qr_options_row": {"en": "QR code & cashier note", "es": "Código QR y nota del cajero", "pt": "Código QR e nota do caixa"}, "qr_payment_default_message": {"en": "Check in your bank app that the payment arrived before you hand over the order.", "es": "Revisa en tu app del banco que el pago llegó antes de entregar.", "pt": "Confira no app do banco que o pagamento chegou antes de entregar."}, "qr_payment_receipt_btn": {"en": "Paid · Photo of transfer", "es": "Pagó · Foto del pago", "pt": "Pago · Foto do comprovante"}, "qr_scan_hint": {"en": "Have the client scan\nwith their bank app", "es": "Que el cliente escanee\ncon su app del banco", "pt": "Peça ao cliente que escaneie\ncom o app do banco"}, "qr_terms_note_bold": {"en": "Platata is not responsible for QR payments.", "es": "Platata no es responsable por los pagos QR.", "pt": "A Platata não é responsável por pagamentos por QR."}, "qr_terms_note_rest": {"en": "Before you hand over each sale, check in your bank that the payment arrived.", "es": "Antes de entregar cada compra, revisa en tu banco que el pago haya llegado.", "pt": "Antes de entregar cada compra, confira no seu banco se o pagamento chegou."}, "qr_total_to_charge": {"en": "Total to charge", "es": "Total a cobrar", "pt": "Total a cobrar"}, "receipt_action_print": {"en": "Print", "es": "Imprimir", "pt": "Imprimir"}, "receipt_dlg_title": {"en": "Receipt", "es": "Recibo", "pt": "Recibo"}, "receipt_email_receipt": {"en": "Email receipt", "es": "Recibo por correo", "pt": "Recibo por e-mail"}, "receipt_label_change_due": {"en": "Change Due", "es": "Cambio", "pt": "Troco"}, "receipt_label_date": {"en": "Date", "es": "Fecha", "pt": "Data"}, "receipt_label_each": {"en": "ea", "es": "c/u", "pt": "un"}, "receipt_label_order_number": {"en": "Sale #", "es": "Venta n.º", "pt": "Venda nº"}, "receipt_label_subtotal": {"en": "Subtotal", "es": "Subtotal", "pt": "Subtotal"}, "receipt_label_tip": {"en": "Tip", "es": "Propina", "pt": "Gorjeta"}, "receipt_label_total": {"en": "TOTAL", "es": "TOTAL", "pt": "TOTAL"}, "receipt_opt_change_label": {"en": "CHANGE", "es": "CAMBIO", "pt": "TROCO"}, "receipt_opt_completed": {"en": "Sale complete!", "es": "¡Venta completada!", "pt": "Venda concluída!"}, "receipt_opt_how_receipt": {"en": "How do you send the receipt?", "es": "¿Cómo envías el recibo?", "pt": "Como você envia o recibo?"}, "receipt_opt_privacy": {"en": "Privacy notice", "es": "Aviso de privacidad", "pt": "Aviso de privacidade"}, "receipt_opt_received": {"en": "You received %s", "es": "Recibiste %s", "pt": "Você recebeu %s"}, "receipt_opt_show_receipt": {"en": "View receipt", "es": "Ver recibo", "pt": "Ver recibo"}, "receipt_opt_tendered": {"en": "from %s received", "es": "de %s recibidos", "pt": "de %s recebidos"}, "receipt_opt_whatsapp_btn": {"en": "WhatsApp", "es": "WhatsApp", "pt": "WhatsApp"}, "receipt_print_again": {"en": "Print again", "es": "Imprimir otra vez", "pt": "Imprimir de novo"}, "receipt_text_receipt": {"en": "Text receipt", "es": "Recibo por mensaje", "pt": "Recibo por mensagem"}, "register_list_title": {"en": "Register history", "es": "Historial de caja", "pt": "Histórico de caixa"}, "register_nav_today": {"en": "Today · %1$s", "es": "Hoy · %1$s", "pt": "Hoje · %1$s"}, "register_open_amount_hint": {"en": "Starting cash", "es": "Efectivo inicial", "pt": "Troco inicial"}, "register_open_confirm": {"en": "Open register", "es": "Abrir caja", "pt": "Abrir caixa"}, "register_open_title": {"en": "Open register", "es": "Abrir caja", "pt": "Abrir caixa"}, "register_status_cash_all": {"en": "All cash since it opened", "es": "Todo el efectivo desde que abrió", "pt": "Todo o dinheiro desde a abertura"}, "register_status_cash_sales_here": {"en": "Cash sales (this register)", "es": "Ventas en efectivo (esta caja)", "pt": "Vendas em dinheiro (neste caixa)"}, "register_status_close_btn": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_status_expected": {"en": "Should be in the drawer", "es": "Debe haber en la caja", "pt": "Deve haver no caixa"}, "register_status_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "register_status_opened_at": {"en": "Opened", "es": "Abierta", "pt": "Aberto em"}, "register_status_opened_by": {"en": "Opened by", "es": "Abierta por", "pt": "Aberto por"}, "register_status_pill_open": {"en": "● OPEN", "es": "● ABIERTA", "pt": "● ABERTO"}, "register_status_starting_cash": {"en": "Starting cash", "es": "Efectivo inicial", "pt": "Troco inicial"}, "reports_total_collected": {"en": "Total collected", "es": "Total cobrado", "pt": "Total recebido"}, "rp_my_title": {"en": "My reports", "es": "Mis reportes", "pt": "Meus relatos"}, "rp_sheet_my_reports_none": {"en": "No reports yet", "es": "Aún no hay reportes", "pt": "Ainda não há relatos"}, "rp_strip_support": {"en": "Support", "es": "Soporte", "pt": "Suporte"}, "rp_strip_support_sub": {"en": "Report a problem here", "es": "Reporta un problema aquí", "pt": "Relatar um problema aqui"}, "scan_btn_scan_barcodes": {"en": "Add items", "es": "Agregar productos", "pt": "Adicionar produtos"}, "scan_btn_scan_more": {"en": "Scan more", "es": "Escanear más", "pt": "Escanear mais"}, "scan_checkout_added_another": {"en": "Added another · %1$s × %2$d", "es": "Otra más · %1$s × %2$d", "pt": "Mais um · %1$s × %2$d"}, "scan_no_barcode_btn": {"en": "No barcode", "es": "Sin código", "pt": "Sem código"}, "scan_row_inventory": {"en": "Inventory", "es": "Inventario", "pt": "Estoque"}, "scan_row_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Líquido hoje · %s"}, "scan_tap_to_scan": {"en": "TAP ON SCREEN TO SCAN", "es": "TOCA LA PANTALLA PARA ESCANEAR", "pt": "TOQUE NA TELA PARA ESCANEAR"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "settings_gate_subtitle": {"en": "Confirm your identity to open your business", "es": "Confirma tu identidad para abrir tu negocio", "pt": "Confirme sua identidade para abrir o seu negócio"}, "settings_gate_title": {"en": "Open your business?", "es": "¿Abrir tu negocio?", "pt": "Abrir o seu negócio?"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "tx_tab_all": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "workspace_items_title": {"en": "Items", "es": "Artículos", "pt": "Itens"}, "workspace_menu_title": {"en": "Menu", "es": "Menú", "pt": "Cardápio"}, "workspace_register_closed": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "workspace_register_closed_sub": {"en": "Open it to start selling", "es": "Ábrela para empezar a vender", "pt": "Abra para começar a vender"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_open_action": {"en": "Open", "es": "Abrir", "pt": "Abrir"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "qr_terms_note_bold_pix": {"en": "Platata is not responsible for Pix payments.", "es": "Platata no es responsable por los pagos con Pix.", "pt": "A Platata não é responsável por pagamentos por Pix."}, "qr_options_row_pix": {"en": "Pix QR code & cashier note", "es": "QR de Pix y nota del cajero", "pt": "QR do Pix e nota do caixa"}};
+const PLU={"fiado_row_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_clientes_owed": {"en": {"one": "%1$d owes you · %2$s", "other": "%1$d owe you · %2$s"}, "es": {"one": "%1$d te debe · %2$s", "other": "%1$d te deben · %2$s"}, "pt": {"one": "%1$d te deve · %2$s", "other": "%1$d te devem · %2$s"}}, "home_current_sale_items": {"en": {"one": "Current sale · %d item", "other": "Current sale · %d items"}, "es": {"one": "Venta actual · %d artículo", "other": "Venta actual · %d artículos"}, "pt": {"one": "Venda atual · %d item", "other": "Venda atual · %d itens"}}, "home_equipo_count_phones": {"en": {"one": "%1$d employee · %2$s", "other": "%1$d employees · %2$s"}, "es": {"one": "%1$d empleado · %2$s", "other": "%1$d empleados · %2$s"}, "pt": {"one": "%1$d funcionário · %2$s", "other": "%1$d funcionários · %2$s"}}, "home_equipo_on_phones": {"en": {"one": "%1$d on a phone", "other": "%1$d on phones"}, "es": {"one": "%1$d en celular", "other": "%1$d en celular"}, "pt": {"one": "%1$d no celular", "other": "%1$d no celular"}}, "stock_headline_low": {"en": {"one": "%d running low", "other": "%d running low"}, "es": {"one": "%d queda poco", "other": "%d quedan pocos"}, "pt": {"one": "%d acabando", "other": "%d acabando"}}, "stock_headline_uncounted": {"en": {"one": "%d not counted", "other": "%d not counted"}, "es": {"one": "%d sin contar", "other": "%d sin contar"}, "pt": {"one": "%d não contado", "other": "%d não contados"}}};
+const ASSET={"ic": {}, "pot": {"celebrating": "data:image/webp;base64,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"}};
+
+const S = SKIT.ctx(), R = S;
+/* ---- shared by the shop pages TS1..TS8 (copied into each page at build time by tools in the scratchpad; strings come from the values files) ---- */
+// KEYS: scan_row_reports_today_net,register_open_title,register_open_confirm,register_open_amount_hint,workspace_register_closed,workspace_register_open,workspace_register_open_action,workspace_register_sales,workspace_register_closed_sub,common_charge,common_save,home_tab_manual,home_tab_library,items_filter_all,common_edit,mamaship_tab_register,tx_tab_all,home_tab_my_business,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,workspace_menu_title,more_customers_title,more_my_products_count,workspace_full_reports,scan_row_reports_today,register_nav_today,register_status_full_reports,register_status_pill_open,register_status_opened_at,register_status_opened_by,register_status_starting_cash,register_status_cash_sales_here,register_status_expected,cash_movement_out,cash_movement_in,register_status_cash_all,reports_total_collected,register_list_title,register_status_close_btn,cash_movement_void,payment_method_cash,cash_movement_reason_supplier,cash_movement_reason_owner_took,cash_movement_reason_other,cash_movement_reason_change,cash_movement_saved,settings_gate_title,settings_gate_subtitle
+// PLURALS: home_current_sale_items,home_clientes_count
+const C = R.C, esc = SKIT.esc, LG = R.lang;
+const AL = {es:"es", pt:"pt-BR", en:"en"}[LG];          // the app's language tag (choke 12); Java Locale.getDefault()
+const fmtS = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : v; }); };
+const t = (k, ...a) => { const o = STR[k]; if(!o) return "??"+k; return fmtS(o[LG], a); };
+const plCat = n => LG==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other");
+const tp = (k, n, ...a) => { const p = PLU[k][LG]; return fmtS(p[plCat(n)] || p.other, a.length ? a : [n]); };
+const money = v => R.money(v);
+/* dates: the demo day is Tue 20 Oct 2026 */
+const D = (h, m) => new Date(2026, 9, 20, h, m);
+const fmtDT = d => new Intl.DateTimeFormat(AL, {dateStyle:"medium", timeStyle:"short"}).format(d);     // DateFormat MEDIUM, SHORT
+const fmtTime = d => new Intl.DateTimeFormat(AL, {timeStyle:"short"}).format(d);                       // DateFormat SHORT time
+const shortDay = d => new Intl.DateTimeFormat(AL, {day:"numeric", month:"short"}).format(d).replace(/ de /, " ");   // utils/ShortDay.kt drops "de"
+/* the money keypad rule (ui/screens/cash/MoneyKeypadEntry.kt): whole units typed, the bottom-left key is the
+   decimal mark where the currency has cents, "000" where it has none */
+const DECMARK = new Intl.NumberFormat(C.loc).formatToParts(1.5).find(p=>p.type==="decimal").value;
+const ZKEY = C.dec===0 ? "000" : DECMARK;
+const press = (cur, key) => {
+  if(key==="del") return cur.slice(0,-1);
+  if(key==="z"){ if(C.dec===0) return cur ? cur+"000" : cur; if(cur.includes(".")) return cur; return (cur||"0")+"."; }
+  if(cur.includes(".") && cur.split(".")[1].length>=C.dec) return cur;
+  if(cur==="0") return key;
+  return cur+key;
+};
+const amountOf = s => parseFloat(s||"0")||0;
+/* keys a demo types: "5,0,z" -> ["5","0","z"]; z = the bottom-left key */
+const keysFor = amount => {      // the taps that type `amount` with the rule above
+  if(C.dec===0 && amount%1000===0 && amount>=1000) return String(amount/1000).split("").concat(["z"]);
+  const w = Math.floor(amount), c = Math.round((amount-w)*100);
+  const k = String(w).split("");
+  if(c) { k.push("z"); k.push(...String(c).padStart(2,"0").replace(/0$/,"").split("")); }
+  return k;
+};
+const I = {
+  back:'<svg class="mi" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  receipt:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  edit:'<svg class="mi" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  check:'<svg class="mi" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  bksp:'<svg class="mi" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"/></svg>',
+  chevL:'<svg class="mi" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>',
+  chevR:'<svg class="mi" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  down:'<svg class="mi" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>',
+  clock:'<svg class="mi" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
+  close:'<svg class="mi" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+  person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  rest:'<svg class="mi" viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>',
+  rlong:'<svg class="mi" viewBox="0 0 24 24"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14z"/><path d="M9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"/></svg>',
+  share:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>',
+  search:'<svg class="mi" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
+  wa:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>',
+  fp:'<svg class="mi" viewBox="0 0 24 24"><path d="M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z"/></svg>'
+};
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const ALL_C = "#607D8B";
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+const item = id => C.item(id);
+const OWNER = C.owner, OWNER_FIRST = OWNER.split(" ")[0];
+
+/* SumaTopBar: TopAppBar 64 dp, back arrow, titleLarge bold (ui/components/SumaTopBar.kt) */
+const topbar = (title, o={}) => `<div class="tb">${o.noBack?"":`<span class="ib" data-t="${o.backT||"back"}">${o.close?I.close:I.back}</span>`}<div class="tt">${o.html||esc(title)}</div>${o.action||""}</div>`;
+/* SumaButton: 52 dp, radius 12 (pill = 50), titleMedium SemiBold */
+const btn = (text, kind, dt, o={}) => `<div class="sb ${kind||"pri"}${o.pill?" pill":""}${o.off?" off":""}" ${dt?`data-t="${dt}"`:""}>${o.icon||""}<span>${esc(text)}</span></div>`;
+/* CashKeypad (OpenRegisterScreen.kt:191): 4 rows sharing the height, 48..72 dp, 4 dp gaps, grey keys r12, headlineLarge bold */
+const keypad = (pre, rowH) => { const rows=[["1","2","3"],["4","5","6"],["7","8","9"],["z","0","del"]];
+  return `<div class="ck" style="--kh:${rowH||64}">${rows.map(r=>`<div class="kr">${r.map(k=>`<span data-t="${pre}-${k}">${k==="del"?I.bksp:k==="z"?esc(ZKEY):k}</span>`).join("")}</div>`).join("")}</div>`; };
+/* owner bottom NavigationBar (PlatataApp.kt:505-700): Caja (ShoppingCart), Ventas (Receipt), Mi negocio (32 dp flag circle;
+   a fingerprint while Security is locked, isSecurityLocked) */
+const nav = (on, o={}) => `<div class="mnav">
+  <div class="${on==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${I.cart}</span>${esc(t("mamaship_tab_register"))}</div>
+  <div class="${on==="ventas"?"on":""}" data-t="nav-ventas"><span class="pill">${I.receipt}</span>${esc(t("tx_tab_all"))}</div>
+  <div class="${on==="biz"?"on":""}" data-t="nav-biz"><span class="flagc${on==="biz"?" lit":""}">${o.locked?`<i class="fp">${I.fp}</i>`:R.flag()}</span>${esc(t("home_tab_my_business"))}</div></div>`;
+/* product grid: ProductLibraryView.kt chips (first "All") + 3-column cards */
+const cats = () => `<div class="mcats">` + [{name:t("items_filter_all"),color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const st = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${st}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+const grid = () => `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+/* owner Home, Catálogo tab (HomeScreen.kt:610-690 top, FooterButtonPair bottom). o.top = html of the one top strip */
+function home(o){
+  o = o||{};
+  const tabs = `<div class="htabs"><span class="${o.tab===0?"on":""}">${I.edit}${esc(t("home_tab_manual"))}</span><span class="${o.tab!==0?"on":""}">${esc(t("home_tab_library"))}</span></div>`;
+  const n = o.count||0, tot = o.total||0;
+  let h = (o.warn||"") + tabs + (o.top||"") + (o.body!=null ? o.body : `<div class="hedit"><span>${I.edit}${esc(t("common_edit"))}</span></div>` + cats() + grid());
+  h += `<div class="hfoot">${n?`<div class="cstrip"><span>${esc(tp("home_current_sale_items", n, n))}</span><i>›</i></div>`:""}
+    <div class="fpair">${btn(t("common_save"),"sec","save",{pill:true,off:!n})}${btn(t("common_charge", money(tot)),"pri","charge",{pill:true,off:!n})}</div></div>`;
+  return h + nav("caja", {locked:o.locked});
+}
+/* RegisterClosedBar.kt: #FEF3C7 row, titleSmall bold #856404, orange pill "Abrir" */
+const closedBar = () => `<div class="cbar"><b>${esc(t("workspace_register_closed"))}</b><span data-t="bar-open">${esc(t("workspace_register_open_action"))}</span></div>`;
+
+/* Open register (cash/OpenRegisterScreen.kt): top bar, "Efectivo inicial", the amount (displaySmall bold), keypad, button at the bottom */
+const openRegister = (typed, rowH) => `<div class="pg">${topbar(t("register_open_title"))}
+  <div class="pb"><div class="lbl" style="text-align:center">${esc(t("register_open_amount_hint"))}</div><div class="amt">${money(amountOf(typed))}</div>
+  <div class="grow"></div>${keypad("k", rowH)}</div>
+  <div class="pf">${btn(t("register_open_confirm"),"pri","open-confirm")}</div></div>`;
+
+/* the business panel (HomeScreen.kt ~1400-1760): name header, register card, Sell online, "Día a día", Menú, Clientes, Reportes */
+function panel(o){
+  const open = o.open, tot = o.sales||0;
+  const card = open
+    ? `<div class="wr reg on" data-t="reg-card"><i class="dot">●</i><div class="tx"><b>${esc(t("workspace_register_open"))}</b><small>${esc(t("workspace_register_sales"))}</small></div><b class="amt">${money(tot)}</b></div>`
+    : `<div class="wr reg off" data-t="reg-card"><i class="dot">●</i><div class="tx"><b>${esc(t("workspace_register_closed"))}</b><small>${esc(t("workspace_register_closed_sub"))}</small></div><b class="act">${esc(t("workspace_register_open_action"))}</b></div>`;
+  const row = (ic, ti, sub, tr) => `<div class="wr"><span class="ic">${ic}</span><div class="tx"><b>${esc(ti)}</b><small>${esc(sub)}</small></div>${tr||""}</div>`;
+  return `<div class="wp"><div class="wph"><b>${esc(C.place)}</b>${I.down}</div>
+    <div class="wpl">${card}
+    ${row(I.cart, t("sell_online_title"), t("sell_online_row_off"), `<span class="opill">${esc(t("sell_online_pill_off"))}</span>`)}
+    <div class="wps">${esc(t("panel_heading_every_day"))}</div>
+    ${row(I.rest, t("workspace_menu_title"), t("more_my_products_count", C.items.length))}
+    ${row(I.person, t("more_customers_title"), tp("home_clientes_count", o.clients||0, o.clients||0))}
+    ${row(I.rlong, t("workspace_full_reports"), t((R.country==="US"||R.country==="CA") ? "scan_row_reports_today" : "scan_row_reports_today_net", money(o.today||tot)))}
+    </div></div>` + nav("biz");
+}
+/* the system biometric sheet that the flag tap opens (PlatataApp.kt flag gate -> showBiometricPrompt, settings_gate_*) */
+const bioSheet = (ok) => `<div class="mscrim"><div class="bio"><b>${esc(t("settings_gate_title"))}</b><small>${esc(t("settings_gate_subtitle"))}</small>
+  <span class="fpb${ok?" ok":""}" data-t="fingerprint">${ok?I.check:I.fp}</span></div></div>`;
+
+/* Register screen (cash/RegisterStatusScreen.kt:130-520), 0/1 register: no tab row. o = {start, cashSales, moves:[{kind,reason,amount,at}], scroll} */
+function registerScreen(o){
+  const out = (o.moves||[]).filter(m=>m.kind==="out").reduce((s,m)=>s+m.amount,0), inn = (o.moves||[]).filter(m=>m.kind==="in").reduce((s,m)=>s+m.amount,0);
+  const exp = o.start + o.cashSales + inn - out;
+  const reason = r => t({supplier:"cash_movement_reason_supplier",owner:"cash_movement_reason_owner_took",other:"cash_movement_reason_other",change:"cash_movement_reason_change"}[r]);
+  const moves = (o.moves||[]).map(m=>`<div class="mv${m.isNew?" new":""}"><span>${esc(t(m.kind==="out"?"cash_movement_out":"cash_movement_in"))} · ${esc(reason(m.reason))} · ${esc(fmtTime(m.at))}</span><b class="${m.kind}">${m.kind==="out"?"-":"+"}${money(m.amount)}</b><i>${esc(t("cash_movement_void"))}</i></div>`).join("");
+  const tbar = topbar("", {html:`<div class="navd"><span class="dim">${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(o.openedAt)))}</b><span class="dim">${I.chevR}</span></div>`,
+                 action:`<span class="tba">${esc(t("register_status_full_reports"))}</span>`});
+  const body = `<div class="rs" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+    <div class="pillrow"><span class="spill">${esc(t("register_status_pill_open"))}</span></div>
+    <div class="scard"><div class="lr"><span>${esc(t("register_status_opened_at"))}</span><span>${esc(fmtDT(o.openedAt))}</span></div>
+      <div class="lr"><span>${esc(t("register_status_opened_by"))}</span><span>${esc(OWNER)}</span></div></div>
+    <div class="scard"><div class="lr"><span>${esc(t("register_status_starting_cash"))}</span><span>${money(o.start)}</span></div>
+      <div class="lr"><span>${esc(t("register_status_cash_sales_here"))}</span><span>${money(o.cashSales)}</span></div>
+      ${moves}<hr><div class="lr em${o.expFlash?" flash":""}"><span>${esc(t("register_status_expected"))}</span><span class="pri">${money(exp)}</span></div></div>
+    ${btn(t("cash_movement_out"),"sec","cash-out")}${btn(t("cash_movement_in"),"sec","cash-in")}
+    <div class="scard"><div class="lr ms"><span>${esc(t("register_status_cash_all"))}</span><span>${money(o.cashSales)}</span></div>
+      ${o.cashSales?`<div class="lr ind"><span>${esc(OWNER)}</span><span>${money(o.cashSales)}</span></div>`:""}
+      <hr><div class="lr em"><span>${esc(t("reports_total_collected"))}</span><span>${money(o.cashSales)}</span></div></div>
+    <div class="hist">${I.clock}<span>${esc(t("register_list_title"))}</span></div>
+    ${btn(t("register_status_close_btn"),"sec","close-reg")}<div style="height:calc(var(--u)*16)"></div></div>`;
+  return `<div class="pg">${tbar}<div class="pscroll">${body}</div>${o.snack?`<div class="msnack" style="bottom:calc(var(--u)*16)">${esc(o.snack)}</div>`:""}</div>`;
+}
+const COMMON_CSS = `
+.mat .tb{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff}
+.mat .tb .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on)}
+.mat .tb .tt{flex:1;min-width:0;padding-left:calc(var(--u)*4);font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .tb .tba{padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);color:var(--m-on)}
+.mat .navd{display:flex;align-items:center}.mat .navd b{flex:1;text-align:center;font-size:calc(var(--u)*18);font-weight:700}
+.mat .navd span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}.mat .navd .dim{color:rgba(28,28,30,.25)}
+.mat .pg{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;position:relative}
+.mat .pb{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 calc(var(--u)*16)}
+.mat .pf{padding:calc(var(--u)*16);flex:0 0 auto}
+.mat .lbl{margin-top:calc(var(--u)*24);font-size:calc(var(--u)*16);color:var(--m-onv)}
+.mat .amt{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*57);line-height:1.12;font-weight:700;white-space:nowrap;overflow:hidden}
+.mat .grow{flex:1}
+.mat .ck{display:flex;flex-direction:column;gap:calc(var(--u)*4);margin-bottom:calc(var(--u)*16)}
+.mat .ck .kr{display:flex;gap:calc(var(--u)*4);height:calc(var(--u)*var(--kh))}
+.mat .ck span{flex:1;border-radius:calc(var(--u)*12);background:var(--m-sv);display:grid;place-items:center;font-size:calc(var(--u)*32);font-weight:700}
+.mat .sb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center}
+.mat .sb.pill{border-radius:calc(var(--u)*50)}
+.mat .sb.pri{background:var(--m-on);color:#fff}
+.mat .sb.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .sb.dst{background:var(--m-err);color:#fff}
+.mat .sb.off.pri{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .sb.off.sec{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.mat .sb svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:currentColor}
+.mat .htabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.mat .htabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);font-weight:400;color:var(--m-onv);position:relative}
+.mat .htabs span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.mat .htabs span.on{color:var(--m-on);font-weight:700}
+.mat .htabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.mat .hedit{display:flex;justify-content:flex-end;padding:calc(var(--u)*4) calc(var(--u)*16) 0;flex:0 0 auto}
+.mat .hedit span{display:flex;align-items:center;gap:calc(var(--u)*6);height:calc(var(--u)*36);padding:0 calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .hedit svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.mat .hfoot{flex:0 0 auto;background:#fff}
+.mat .cstrip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:600}
+.mat .cstrip i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.mat .fpair{display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16)}
+.mat .fpair .sb{flex:1}.mat .fpair .sb.pri{flex:1.4}
+.mat .cbar{display:flex;align-items:center;justify-content:space-between;background:#FEF3C7;padding:calc(var(--u)*8) calc(var(--u)*16);flex:0 0 auto}
+.mat .cbar b{font-size:calc(var(--u)*14);color:#856404}
+.mat .cbar span{min-height:calc(var(--u)*44);display:grid;place-items:center;padding:0 calc(var(--u)*24);border-radius:calc(var(--u)*50);background:#FF9500;color:#fff;font-size:calc(var(--u)*14);font-weight:700}
+.mat .mnav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.mat .mnav .flagc .fp{display:grid;place-items:center;color:var(--m-onv)}
+.mat .mnav .flagc .fp svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+.mat .wp{flex:1;min-height:0;overflow:hidden;background:#fff}
+.mat .wph{display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*20) calc(var(--u)*24)}
+.mat .wph b{font-size:calc(var(--u)*28);font-weight:900;color:var(--m-blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .wph svg{width:calc(var(--u)*28);height:calc(var(--u)*28);fill:var(--m-blue);flex:0 0 auto}
+.mat .wpl{display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .wr .tx{flex:1;min-width:0}.mat .wr .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700}
+.mat .wr .tx small{display:block;margin-top:calc(var(--u)*2);font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .wr.reg.on{background:#E8F5E9;color:#2E7D32}.mat .wr.reg.off{background:#FFEBEE;color:#C62828}
+.mat .wr.reg .tx small{color:inherit;opacity:.7}.mat .wr.reg .dot{font-style:normal;font-size:calc(var(--u)*16)}
+.mat .wr.reg .amt{font-size:calc(var(--u)*18)}.mat .wr.reg .act{font-size:calc(var(--u)*14)}
+.mat .opill{font-size:calc(var(--u)*11);font-weight:700;color:var(--m-onv);background:#fff;border-radius:99px;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.mat .wps{padding:calc(var(--u)*16) calc(var(--u)*28) calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.mat .bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*32) calc(var(--u)*24) calc(var(--u)*40);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*8);text-align:center}
+.mat .bio b{font-size:calc(var(--u)*22);font-weight:500}.mat .bio small{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .bio .fpb{margin-top:calc(var(--u)*28);width:calc(var(--u)*64);height:calc(var(--u)*64);border-radius:50%;display:grid;place-items:center;color:#1A73E8;border:calc(var(--u)*2) solid #1A73E8}
+.mat .bio .fpb svg{width:calc(var(--u)*40);height:calc(var(--u)*40)}.mat .bio .fpb.ok{background:#1A73E8;color:#fff}
+.mat .pscroll{flex:1;min-height:0;overflow:hidden}
+.mat .rs{padding:0 calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16);transition:transform .5s ease}
+.mat .pillrow{display:flex;justify-content:center;padding-top:calc(var(--u)*8)}
+.mat .spill{border-radius:calc(var(--u)*50);background:#E8F5E9;color:#2E7D32;font-size:calc(var(--u)*12);font-weight:700;padding:calc(var(--u)*8) calc(var(--u)*16)}
+.mat .scard{background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.2),0 calc(var(--u)*1) calc(var(--u)*1) rgba(0,0,0,.08);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .lr{display:flex;justify-content:space-between;gap:calc(var(--u)*12);font-size:calc(var(--u)*14)}
+.mat .lr span:first-child{color:var(--m-onv)}.mat .lr span:last-child{text-align:right;white-space:nowrap}
+.mat .lr.em span{font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}.mat .lr.em span:last-child{font-size:calc(var(--u)*18)}
+.mat .lr .pri{color:var(--m-on)}.mat .lr.ms span{font-weight:600;color:var(--m-on)}
+.mat .lr.ind{padding-left:calc(var(--u)*16)}.mat .lr.ind span{color:var(--m-onv)!important}
+.mat .lr.flash span:last-child{animation:fl 1.2s ease}
+@keyframes fl{0%{background:#FFF3C4}100%{background:transparent}}
+.mat .scard hr{border:0;border-top:1px solid var(--m-ovar);margin:0}
+.mat .mv{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14)}
+.mat .mv span{flex:1;color:var(--m-on)}.mat .mv b{font-weight:600}.mat .mv b.out{color:var(--m-err)}.mat .mv b.in{color:var(--m-on)}
+.mat .mv i{font-style:normal;font-size:calc(var(--u)*12);color:var(--m-err);padding:0 calc(var(--u)*4)}
+.mat .mv.new{animation:fl 1.4s ease}
+.mat .hist{height:calc(var(--u)*40);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500}
+.mat .hist svg{width:calc(var(--u)*24);height:calc(var(--u)*24)}
+.mat .dlg-s{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*24)}
+.mat .dlg{background:#ECECF1;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24);width:100%}
+.mat .dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:1.3}
+.mat .dlg p{margin:0;font-size:calc(var(--u)*14);color:var(--m-onv);line-height:1.45}
+.mat .dlg .bt{display:flex;justify-content:flex-end;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:500}
+.mat .dlg .bt span{padding:calc(var(--u)*10) calc(var(--u)*12)}
+`;
+(function(){ const s=document.createElement("style"); s.textContent=COMMON_CSS; document.head.appendChild(s); })();
+
+/* ======== the pay block (from RS3, CheckoutSheetBody / CheckoutPayBlock / ReceiptOptionsScreen) ======== */
+const L = LG, CC = R.country;
+const STRIPE = CC==="US" || CC==="CA";          // Stripe country: no QR row at all, Card = Tap to Pay (PayWaysVisibility.kt)
+const WOMPI = CC==="CO";                          // Wompi country: the typed card form
+const PIX = C.cur==="BRL";                        // QR is "Pix" and carries the amount (utils/PixLabels.kt, QR-2)
+const TEXT_ROUTE = STRIPE;                        // sync/ReceiptSendRoute: own {US, CA} set
+const DIAL = {CO:"+57",MX:"+52",PE:"+51",CL:"+56",EC:"+593",AR:"+54",PA:"+507",BR:"+55",US:"+1",CA:"+1"}[CC];
+/* utils/CashRounding.kt: CL to $10 (1-5 down, 6-9 up), PE always down to S/ 0.10, CA to the nearest 5 cents. Cash only. */
+function cashDue(v){
+  if(CC==="CL"){ const r = Math.round(v) % 10; return r<=5 ? Math.round(v)-r : Math.round(v)-r+10; }
+  if(CC==="PE") return Math.floor(v*10+1e-6)/10;
+  if(CC==="CA") return Math.round(v*20)/20;
+  return v;
+}
+const DECKEY = C.dec===0 ? "000" : new Intl.NumberFormat(C.loc).formatToParts(1.5).find(p=>p.type==="decimal").value;  // CheckoutPayBlock zeroKey
+/* the amount a customer hands over: the next round note above what is due (whole units, MoneyKeypadEntry) */
+function received(due){ let k = 1; while(k*10 <= due) k *= 10; for(const m of [1,2,5,10]) if(m*k > due+1e-9) return m*k; return 10*k; }
+function payKeys(v){ return (C.dec===0 && v>=1000 && v%1000===0) ? [...String(v/1000), "000"] : [...String(v)]; }
+const typedValue = s => s ? Number(s) : 0;
+/* a sale line: an item id, or {id, qty} */
+const lineOf = l => typeof l==="string" ? {id:l, qty:1} : l;
+const saleTotal = lines => lines.reduce((s,l)=>{ l=lineOf(l); return s + item(l.id).price*l.qty; }, 0);
+const unitCount = lines => lines.reduce((s,l)=>s+lineOf(l).qty, 0);
+const SALE_NO = 27;
+const DATE = "20/10/2026 12:41";                  // ReceiptFormatter.receiptDateText: fixed "dd/MM/yyyy HH:mm"
+const J = {
+  pen:'<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  receipt:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  person:'<svg class="i" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  back:'<svg class="i" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  more:'<svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  card:'<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>',
+  trash:'<svg class="i" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+  camera:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>',
+  image:'<svg class="i" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
+  chev:'<svg class="i" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  down:'<svg class="i" viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>',
+  close:'<svg class="i" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+  print:'<svg class="i" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>',
+  send:'<svg class="i" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
+  camAlt:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>'
+};
+const X = h => `<div class="x">${h}</div>`;
+
+/* ---------- pay screen ---------- o: {lines, typed, table, others, qr, card:"none"|"ready"|"setup", cashDisabled} */
+function payScreen(o){
+  const total = saleTotal(o.lines), due = cashDue(total), typed = o.typed||"";
+  const qr = !!o.qr, cardOn = o.card && o.card!=="none", cardReady = o.card==="ready";
+  const cardPrimary = STRIPE && cardReady;
+  /* PayWaysVisibility.link: owner, not dismissed, not a Stripe country, something not set up yet; Colombia always asks "QR or card" */
+  const qrNotSetUp = !qr, cardNotSetUp = WOMPI && !cardReady;
+  let link = (STRIPE || !(qrNotSetUp || cardNotSetUp)) ? null : WOMPI ? "pay_setup_link_qr_card" : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");
+  if(o.noLink) link = null;
+  let rc = "";
+  if(typed){ const v = typedValue(typed); const ch = v - due;
+    rc = `<div class="ln"><small>${esc(t("checkout_received_label"))}</small><b>${money(v)}</b></div>` +
+      (ch >= -1e-9 ? `<div class="ln"><small>${esc(t("checkout_change_row_label"))}</small><b class="chg">${money(ch)}</b></div>`
+                   : `<div class="short">${esc(t("cash_shortfall", money(-ch)))}</div>`); }
+  const keys = ["1","2","3","4","5","6","7","8","9",DECKEY,"0","⌫"];
+  const enough = !typed || typedValue(typed) >= due-1e-9;
+  const cashW = cardPrimary ? 1.2 : (cardOn && qr) ? 1.3 : qr ? 2 : 1;
+  const exactLabel = cardOn ? t("cash_exact_short") : t("cash_exact", money(due));
+  let btns = `<div style="flex:${cashW}" class="${!typed?"exact":enough?"cash":"dis"}" data-t="${typed?"cash":"exact"}">${esc(typed?t("checkout_cash_label"):exactLabel)}</div>`;
+  if(qr) btns += `<div style="flex:1" class="ob" data-t="qr"><i class="x-qrg"></i>${esc(PIX?"Pix":t("pay_qr_short"))}</div>`;
+  if(cardOn) btns += cardReady ? `<div style="flex:${cardPrimary?2:1}" class="ob" data-t="card">${J.card}${esc(t("pay_card_short"))}</div>`
+                               : `<div style="flex:1" class="nudge" data-t="card-setup"><span>+ ${esc(t("pay_card_short"))}</span><small>${esc(t("pay_card_setup_hint"))}</small></div>`;
+  const rounding = Math.abs(due-total) > 1e-9 ? `<div class="x-round">${esc(t("cash_rounding_line", (due-total<0?"-":"+")+money(Math.abs(due-total))))}</div>` : "";
+  const links = `<span>${esc(t("checkout_items_link", unitCount(o.lines)))} ›</span>` +
+    (o.table ? `<span>${esc(t("checkout_desglose_delivery_table", o.table))}</span>` : "") +
+    (o.others ? `<span class="oth" data-t="other">${J.more}<span>${esc(t("checkout_other_method", o.others))}</span></span>` : "");
+  return `<div class="x-phd"><span class="chev">‹</span><span class="wm">Platata</span><span class="clr">${esc(t("checkout_clear"))}</span></div><div class="grow"></div>
+    <div class="x-pb"><div class="x-tot"><small>${esc(t("common_total"))}</small><b>${money(total)}</b></div>${rounding}
+    <div class="x-amt"><div class="x-links">${links}</div><div class="x-rc">${rc}</div></div>
+    <div class="x-kp">${keys.map(k=>`<span class="${k===DECKEY||k==="⌫"?"s":""}" data-t="key-${k}">${esc(k)}</span>`).join("")}</div>
+    <div class="x-btns">${btns}</div>
+    ${link?`<div class="x-slink"><span>${esc(t(link))}</span><span>${esc(t("pay_setup_link_dismiss"))}</span></div>`:`<div style="height:calc(var(--u)*14)"></div>`}</div>
+    <div class="x-sec">${custField(o.customer)}${fiarButton(o.customer)}</div>`;
+}
+/* the customer field on the phone pay screen: CheckoutCustomerField.kt CustomerOnlyRow (Points off): 62 dp, surfaceVariant r14,
+   person icon + "Agrega un cliente a la venta", or the client's name bold + the X (ClearCustomerButton, BACKOFFICE-2 C1) */
+function custField(name){
+  return `<div class="x-cust${name?" on":""}" data-t="cust">${J.person}${name?`<b>${esc(name)}</b><span class="xx">${J.close}</span>`:esc(t("checkout_add_customer_cta"))}</div>`; }
+/* retail/pharmacy: the Save slot reads "Fiar" (dim, inert) or "Fiar a Ana" (CheckoutSheetBody.kt:322-341, CheckoutSaveButton
+   CheckoutPayBlock.kt:608: 54 dp, r27, 1 dp black border; live = surfaceContainer, dim = outlineVariant + onSurfaceVariant 60 %) */
+function fiarButton(name){
+  const first = name ? name.trim().split(" ")[0] : null;
+  return `<div class="x-fiar${first?" on":""}"${first?' data-t="fiar"':""}>${esc(first ? t("fiado_chip_fiar_customer", first) : t("fiado_chip_fiar"))}</div>`; }
+function tableGate(){ return `<div class="x-scrim"><div class="x-gate"><h3>${esc(t("checkout_dining_gate_table_title"))}</h3><div class="g">${Array.from({length:C.tables},(_,i)=>`<span data-t="table-${i+1}">${i+1}</span>`).join("")}</div></div></div>`; }
+/* "Otro método de pago" sheet: OtherPaymentSheetContent.kt (title + total line pinned, one 48 dp row per method) */
+function otherSheet(total, names){ return `<div class="x-sheet-scrim"><div class="x-sheet"><div class="handle"></div><h3>${esc(t("checkout_other_method_title"))}</h3><div class="st">${esc(t("checkout_other_method_subtitle", money(total)))}</div>
+  <div class="rows">${names.map((n,i)=>`<div class="row" data-t="om-${i}"><span>${esc(n)}</span>${J.chev}</div>`).join("")}</div></div></div>`; }
+
+/* ---------- sale complete ---------- hero: {kind:"change",change,received} | {kind:"exact",received} | {kind:"title"} | {kind:"card",line} */
+function doneScreen(hero, o){ o=o||{};
+  let b = `<img src="${ASSET.pot.celebrating}" alt="">`;
+  if(hero.kind==="change") b += `<div class="lbl">${esc(t("receipt_opt_change_label"))}</div><div class="big">${money(hero.change)}</div><div class="sub">${esc(t("receipt_opt_tendered", money(hero.received)))}</div>`;
+  else if(hero.kind==="exact") b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div><div class="sub">${esc(t("receipt_opt_received", money(hero.received)))}</div>`;
+  else if(hero.kind==="card") b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div><div class="ok">${esc(t("card_approved_title"))}</div><div class="sub">${esc(hero.line)}</div>`;
+  else b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div>`;
+  b += `<div class="q">${esc(t("receipt_opt_how_receipt"))}</div>`;
+  let f = TEXT_ROUTE ? `<div class="b pri" data-t="text">${esc(t("receipt_text_receipt"))}</div><div class="b ol" data-t="email">${esc(t("receipt_email_receipt"))}</div>`
+                     : `<div class="b wa" data-t="wa">${esc(t("receipt_opt_whatsapp_btn"))}</div>`;
+  if(o.printer) f += `<div class="b ol" data-t="print">${esc(t("receipt_print_again"))}</div>`;
+  f += `<div class="b ol" data-t="view">${esc(t("receipt_opt_show_receipt"))}</div><div class="b pri" data-t="new">${esc(t(o.printer?"receipt_opt_new_sale":"receipt_opt_new_sale_no_receipt"))}</div><div class="pv">${esc(t("receipt_opt_privacy"))}</div>`;
+  return `<div class="x-sc-body">${b}</div><div class="x-sc-foot">${f}</div>`;
+}
+/* the receipt the customer gets: ReceiptFormatter.generatePastPlainTextReceipt (store name = the business name, footer = the
+   ReceiptConfig default, which the app writes in English for every new shop) */
+function receiptText(lines, o){ o=o||{};
+  const each = t("receipt_label_each"), total = saleTotal(lines);
+  let s = `${C.place}\n${t("receipt_label_order_number")}: ${SALE_NO}\n${t("receipt_label_date")}: ${DATE}\n===============================\n`;
+  lines.forEach(l=>{ l=lineOf(l); const it=item(l.id); s += `${l.qty}x ${it.name}\n   @ ${money(it.price)} ${each} ... ${money(it.price*l.qty)}\n`; });
+  s += `-------------------------------\n${t("receipt_label_subtotal")}: ${money(total)}\n`;
+  if(o.tip) s += `${t("receipt_label_tip")}: ${money(o.tip)}\n`;
+  s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
+  if(o.cardLine) s += o.cardLine + "\n";
+  if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
+  s += `${o.method}\n\nThank you for shopping with us!`;
+  return s;
+}
+function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
+  <span class="ac">${J.print}${esc(t("receipt_action_print"))}</span><span class="ac${TEXT_ROUTE?"":" wa"}">${J.send}${esc(t("common_send"))}</span><span class="xb" data-t="rv-close">${J.close}</span></div></div>
+  <div class="x-paper">${esc(text)}</div></div>`; }
+const toast = msg => `<div class="x-toast">${esc(msg)}</div>`;
+function dialog(title, body, acts){ return `<div class="x-dlgscrim"><div class="x-dlg">${title?`<h3>${esc(title)}</h3>`:""}${body?`<div class="body">${body}</div>`:""}
+  <div class="acts">${acts.map(a=>`<span class="${a.fill?"fb":"tb"}" data-t="${a.t||""}">${esc(a.label)}</span>`).join("")}</div></div></div>`; }
+const field = (label, value, focus) => `<div class="x-field${focus?" focus":""}"><label>${esc(label)}</label><span>${esc(value)}${focus?'<i class="x-caret"></i>':""}</span></div>`;
+
+/* ---------- Payment methods: ui/screens/settings/PaymentMethodsScreen.kt ---------- */
+function pmTop(){ return `<div class="x-top"><span class="nb">${J.back}</span><h1>${esc(t("pay_methods_title"))}</h1><span class="act" data-t="pm-new">${esc(t("common_new_short"))}</span></div>`; }
+function pmSwitch(on, tag){ return `<span class="x-sw${on?" on":""}"${tag?` data-t="${tag}"`:""}></span>`; }
+function pmRow(name, on, opts){ opts=opts||{};
+  return `<div class="x-pmh"><div class="nm"><b>${esc(name)}</b>${opts.note?`<small>${esc(opts.note)}</small>`:""}</div>${pmSwitch(on, opts.tag)}${opts.del?`<span class="del">${J.trash}</span>`:""}</div>`; }
+const qrS = k => PIX && STR[k+"_pix"] ? t(k+"_pix") : t(k);            // utils/PixLabels.kt PIX_TEXT_RES
+function pmScreen(st){
+  const qrName = PIX ? "Pix" : t("payment_method_qr");
+  let h = `<div class="x-pml">`;
+  h += `<div class="x-pmc">${pmRow(t("payment_method_cash"), true)}</div>`;
+  if(!STRIPE) h += `<div class="x-pmc">${pmRow(qrName, !!st.qrOn, {tag:"sw-qr"})}<div class="x-qrnote"><i>!</i><span><b>${esc(qrS("qr_terms_note_bold"))}</b> ${esc(t("qr_terms_note_rest"))}</span></div>${st.qrOn?`<div class="x-acc"><span>${esc(qrS("qr_options_row"))}</span>${J.down}</div>`:""}</div>`;
+  const cu = st.customs||[], mp = cu.filter(n=>n==="Mercado Pago"), rest = cu.filter(n=>n!=="Mercado Pago");   // PosViewModel.paymentMethods sort
+  mp.forEach(n => { h += `<div class="x-pmc">${pmRow(n, true, {del:true})}</div>`; });
+  if(WOMPI || STRIPE) h += `<div class="x-pmc">${pmRow(t("payment_method_card"), !!st.cardOn)}</div>`;
+  h += `<div class="x-pmc">${pmRow(t("payment_method_comp"), true, {note:t("pay_methods_comp_note")})}</div>`;
+  rest.forEach(n => { h += `<div class="x-pmc">${pmRow(n, true, {del:true})}</div>`; });
+  return pmTop() + h + `</div>`;
+}
+/* the "Otro método de pago" sheet lists the active methods that are not cash, QR or card, in the same order (Mercado Pago first) */
+const othersList = customs => customs.filter(n=>n==="Mercado Pago").concat([t("payment_method_comp")], customs.filter(n=>n!=="Mercado Pago"));
+const EXAMPLE = ({CO:"Nequi",PE:"Yape",AR:"Mercado Pago",MX:"Mercado Pago",US:"Zelle",CA:"Interac e-Transfer"})[CC] || null;   // sync/PaymentMethodExample.kt
+function addMethodDialog(typed){ const ex = EXAMPLE || t("pay_methods_example_transfer");
+  return dialog(t("pay_methods_dialog_title"), field(t("pay_methods_field_name", ex), typed, true), [{label:t("common_cancel")},{label:t("common_add"), fill:true, t:"pm-add"}]); }
+/* a placeholder QR picture (not scannable): the shop's own bank QR is a photo the owner uploads */
+function fakeQr(seed, mod){ mod = mod||29; let x = seed>>>0 || 7; const rnd = () => (x = (x*1103515245+12345)>>>0, (x>>>16)&1);
+  let r = ""; const fp = (cx,cy)=>{ r += `<rect x="${cx}" y="${cy}" width="7" height="7" fill="#000"/><rect x="${cx+1}" y="${cy+1}" width="5" height="5" fill="#fff"/><rect x="${cx+2}" y="${cy+2}" width="3" height="3" fill="#000"/>`; };
+  for(let yy=0; yy<mod; yy++) for(let xx=0; xx<mod; xx++){ const inF = (xx<8&&yy<8)||(xx>=mod-8&&yy<8)||(xx<8&&yy>=mod-8); if(!inF && rnd()) r += `<rect x="${xx}" y="${yy}" width="1" height="1" fill="#000"/>`; }
+  fp(0,0); fp(mod-7,0); fp(0,mod-7);
+  return `<svg viewBox="-2 -2 ${mod+4} ${mod+4}" shape-rendering="crispEdges"><rect x="-2" y="-2" width="${mod+4}" height="${mod+4}" fill="#fff"/>${r}</svg>`; }
+/* QrPaymentOverlay.kt */
+function qrOverlay(total){ return `<div class="x-qro"><span class="bk">${J.back}</span><div class="lb">${esc(t("qr_total_to_charge").toUpperCase())}</div><div class="am">${money(total)}</div>
+  <div class="mid"><div class="card">${fakeQr(PIX ? Math.round(total*100)+11 : 4242)}</div><div class="hint">${esc(t("qr_scan_hint"))}</div></div>
+  <div class="note">${esc(t("qr_payment_default_message"))}</div>
+  <div class="bb"><div class="g">${I.camAlt}${esc(t("qr_payment_receipt_btn"))}</div><div class="o" data-t="qr-paid">${esc(t("qr_no_receipt_needed"))}</div></div></div>`; }
+
+
+
+/* ======== shop pieces (TS1..TS8): the owner phone's Scan register and the camera ========
+   Shop register   ui/screens/home/ScanCheckoutTab.kt:39-99 (no tab row for retail, HomeScreen.kt:609), OwnerRegisterCard :231-282
+                   (white card r16, padding 24, rows TappableMilestoneRow :323: surfaceContainerLow #F7F7FA r8, min 56 dp,
+                   bodyLarge label, chevron), ScanBottomBar :295 / SmartScanButton :459 (empty: one black pill "Agregar productos";
+                   with items: Outline "Escanear más" (weight 1) + FilledAccent "Cobrar $X" (weight 1.4) in the Tienda colour
+                   #188448, Fredoka 500 18, 54 dp r18 — PaperThemeOnSurface(accent = rules.colorKey))
+   Camera          ui/screens/home/ScannerScreen.kt:59-266 (black 75 % strip "TOCA LA PANTALLA PARA ESCANEAR" titleLarge ExtraBold +
+                   the status line; BarcodeCameraBox.kt guide box 260x320 dp, 2 dp white 80 % r12; a tap on the preview captures),
+                   ScanCartBar :575 (white bar: back arrow, grey pill "Sin código", black pill "Cobrar $X" + white count badge)
+   Emoji rows      the app draws the ledger and tag as emoji (📒 🏷); the headless browser has no emoji font, so small drawn icons stand in. */
+const SI = {
+  ledger:'<svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2" fill="#F2B53A" stroke="#7A5A12" stroke-width="1.2"/><rect x="7" y="3" width="2" height="18" fill="#C98A14"/><path d="M11 8h6M11 11h6M11 14h4" stroke="#7A5A12" stroke-width="1.2"/></svg>',
+  tag:'<svg viewBox="0 0 24 24"><path d="M3 12.2V4.5A1.5 1.5 0 0 1 4.5 3h7.7l8.8 8.8a1.5 1.5 0 0 1 0 2.1l-7 7a1.5 1.5 0 0 1-2.1 0z" fill="#F5B841" stroke="#9A6A10" stroke-width="1.2"/><circle cx="7.8" cy="7.8" r="1.6" fill="#fff" stroke="#9A6A10" stroke-width="1"/></svg>',
+  calc:'<svg class="mi" viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5.97 4.06L14.09 6l1.41 1.41L16.91 6l1.06 1.06-1.41 1.41 1.41 1.41-1.06 1.06-1.41-1.4-1.41 1.41-1.06-1.06 1.41-1.41-1.41-1.42zm-6.78.66h5v1.5h-5v-1.5zM11.5 16h-2v2H8v-2H6v-1.5h2v-2h1.5v2h2V16zm6.5 1.25h-5v-1.5h5v1.5zm0-2.5h-5v-1.5h5v1.5z"/></svg>',
+  chevR:'<svg class="mi" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  offer:'<svg class="mi" viewBox="0 0 24 24"><path d="M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"/></svg>'
+};
+const TIENDA = {main:"#1E9E55", btn:"#188448", soft:"#E5F1E7", ink:"#178046"};      // ui/theme/PaperColor.kt:52-53
+const BARCODED = (R.isPharm ? C.pharmItems : C.items).filter(x=>x.barcode);           // what a shop owner can scan
+const fiadoOwed = () => C.fiado.reduce((s,f)=>s+f.owes,0);
+/* the register card rows; o.fiado = show the Fiado row (owner, someone owes) */
+function regCard(o){
+  const row = (ic, txt, val, sub, dt) => `<div class="srw"${dt?` data-t="${dt}"`:""}><span class="sic">${ic}</span><span class="stx">${esc(txt)}</span>${val?`<span class="sval"><b>${esc(val)}</b><small>${esc(sub)}</small></span>`:""}<span class="sch">${SI.chevR}</span></div>`;
+  return `<div class="scardw">${o.fiado?row(SI.ledger, t("fiado_row_name"), money(fiadoOwed()), tp("fiado_row_count", C.fiado.length, C.fiado.length), "fiado-row"):""}
+    ${row(SI.tag, t("scan_no_barcode_btn"))}${row(`<i class="calc">${SI.calc}</i>`, t("scan_row_manual"))}</div>`;
+}
+/* the whole owner Home for a shop. o = {top:html, lines:[...], fiado:bool, locked:bool, overlay:html} */
+function shopReg(o){
+  o = o||{};
+  const lines = o.lines||[], has = lines.length>0;
+  const bar = has ? `<div class="sbb two"><div class="pb2 out" data-t="scan-more">${esc(t("scan_btn_scan_more"))}</div><div class="pb2 acc" data-t="charge">${esc(t("common_charge", money(saleTotal(lines))))}</div></div>`
+                  : `<div class="sbb"><div class="scanbtn" data-t="add-items">${esc(t("scan_btn_scan_barcodes"))}</div></div>`;
+  return (o.top||"") + `<div class="sreg">${regCard(o)}</div>${bar}` + nav("caja", {locked:o.locked!==false}) + (o.overlay||"");
+}
+/* a product as the camera sees it: a plain package (no brand) with its name and its EAN-13 */
+function packArt(it){
+  const b = it.barcode, bars = [];
+  let x = 6; for(let i=0;i<b.length;i++){ const d=+b[i]; bars.push(`<rect x="${x}" y="0" width="${1+(d%3)}" height="40" fill="#111"/>`); x += 3+(d%2); bars.push(`<rect x="${x}" y="0" width="1" height="40" fill="#111"/>`); x += 3; }
+  const hue = {beverages:"#2F7FB8",dairy:"#4A90C8",cereals:"#C8962E",personal_care:"#9B6BC0",home_care:"#3AA59B",condiments:"#D9A23A",sweets:"#D86A8C",pharmacy:"#3E8E6B",baby:"#6FA7D8"}[it.cat]||"#7A8A99";
+  return `<div class="pack" style="--h:${hue}"><div class="pk-top"></div><div class="pk-nm">${esc(it.name)}</div>
+    <div class="pk-bc"><svg viewBox="0 0 ${x+6} 40" preserveAspectRatio="none">${bars.join("")}</svg><span>${esc(b)}</span></div></div>`;
+}
+/* ScannerScreen: o = {status, error, lines, product(item), capturing} */
+function camera(o){
+  o = o||{};
+  const lines = o.lines||[], n = lines.length;
+  return `<div class="cam"><div class="cam-top"><b>${esc(t("scan_tap_to_scan"))}</b>${o.status?`<small class="${o.error?"err":""}">${esc(o.status)}</small>`:""}</div>
+    <div class="cam-view" data-t="cam">${o.product?packArt(o.product):""}<div class="guide"></div>${o.capturing?'<div class="cspin"></div>':""}${o.flash?'<div class="cflash"></div>':""}</div>
+    <div class="cam-bar"><span class="cb-back" data-t="cam-back">${I.back}</span><div class="cb-mid"><span class="nbp">${SI.offer}${esc(t("scan_no_barcode_btn"))}</span></div>
+    ${n?`<div class="cb-charge" data-t="cam-charge"><span>${esc(t("common_charge", money(saleTotal(lines))))}</span><i>${n}</i></div>`:""}</div></div>`;
+}
+/* scanning in a demo step: the product slides into the guide, a short capture spinner, then it is in the sale */
+function scanInto(st, E, it, done){
+  st.product = it; st.capturing = true; st.status = "";
+  E.after(650, ()=>{ st.capturing=false; const ex = st.lines.find(l=>lineOf(l).id===it.id);
+    if(ex){ const i = st.lines.indexOf(ex); const q = lineOf(ex).qty+1; st.lines[i] = {id:it.id, qty:q}; st.status = t("scan_checkout_added_another", it.name, q); }
+    else { st.lines.push(it.id); st.status = it.name; }
+    if(done) done(); });
+}
+
+/* ======== T6..T10 pieces: the shop OWNER phone's back office (copied into each page at build time) ======== */
+// KEYS: rp_strip_support,rp_strip_support_sub,rp_my_title,rp_sheet_my_reports_none,workspace_items_title,more_my_products_count,scan_row_inventory,more_customers_title,invoices_title,invoices_row_this_month,more_team_title,settings_title,panel_settings_row_sub,workspace_register_open,workspace_register_sales,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,workspace_full_reports,scan_row_reports_today,scan_row_reports_today_net,mamaship_tab_register,tx_tab_all,home_tab_my_business
+// PLURALS: stock_headline_low,stock_headline_uncounted,home_clientes_owed,home_equipo_count_phones,home_equipo_on_phones
+const TI = {
+  /* the panel's 📦 (InventoryPanelRow.kt:41) — the headless browser has no emoji font, so a small drawn box stands in */
+  box:'<svg viewBox="0 0 24 24"><path d="M3.5 7.2 12 3l8.5 4.2v9.6L12 21l-8.5-4.2z" fill="#D9A15B" stroke="#8A5A22" stroke-width="1.1" stroke-linejoin="round"/><path d="M3.5 7.2 12 11.4l8.5-4.2M12 11.4V21" fill="none" stroke="#8A5A22" stroke-width="1.1"/><path d="M7.6 5.1l8.6 4.2v3" fill="none" stroke="#F6E2BE" stroke-width="1.4"/></svg>',
+  group:'<svg class="mi" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>',
+  gear:'<svg class="mi" viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>',
+  rlong:'<svg class="mi" viewBox="0 0 24 24"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14z"/><path d="M9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"/></svg>',
+  chev:'<svg class="mi" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  search:'<svg class="mi" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
+  cam:'<svg class="mi" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>',
+  doc:'<svg class="mi" viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>',
+  info:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>',
+  pen:'<svg class="mi" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  support:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z"/></svg>'
+};
+const AMBER = "#B07500", AMBER_T = "#FFF6E5", AMBER_B = "#F0DCB0", FGREEN = "#1A7F3C", FGREY = "#6B6B70", ERR_T = "#C62828", WARN_T = "#E65100";
+const S_RED = "#FF3B30", S_YEL = "#FF9500", S_GRN = "#34C759";
+const SHOP_ITEMS = S.isPharm ? C.pharmItems : C.items;
+const SHOP_NEWEST = S.isPharm ? C.pharmNewest : C.itemsNewest;
+const FIRST = n => String(n).trim().split(" ")[0];
+/* TODAY's sales on the register card / Reports row: one of each of the first six products (shop-data.js), a made-up but data-derived day */
+const TODAY_SALES = SHOP_ITEMS.slice(0, 6).reduce((s, x) => s + x.price, 0);
+
+/* Support strip (ui/screens/reports/SupportStrip.kt): LEVEL_2 pages only (items_workspace, suppliers, customers...), hidden while a
+   sheet / dialog holds the window focus. Badge = the business accent (Tienda #1E9E55). */
+const strip = () => `<div class="t-strip"><div class="h"><span class="bd">${TI.support}</span><div><b>${esc(t("rp_strip_support"))}</b><small>${esc(t("rp_strip_support_sub"))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(t("rp_my_title"))}</b><small>${esc(t("rp_sheet_my_reports_none"))}</small></div>${TI.chev}</div></div>`;
+
+/* The shop owner's panel (HomeScreen.kt:1483-1830): register card, Sell online, "Día a día", Artículos, Inventario (InventoryPanelRow.kt),
+   Clientes (amber when someone owes, :1676-1709), Facturas (:1713), Equipo (:1739), Reportes, a divider, Configuración.
+   o = {low, unc, owedN, owedTotal, invMonth, flash} */
+function shopPanel(o){
+  o = o||{};
+  const usca = S.country==="US" || S.country==="CA";
+  const card = `<div class="wr reg on" data-t="reg-card"><i class="dot">●</i><div class="tx"><b>${esc(t("workspace_register_open"))}</b><small>${esc(t("workspace_register_sales"))}</small></div><b class="amt">${money(TODAY_SALES)}</b></div>`;
+  const row = (ic, ti, sub, dt, x) => { x = x||{};
+    return `<div class="wr${x.cls?" "+x.cls:""}"${dt?` data-t="${dt}"`:""}${x.style?` style="${x.style}"`:""}><span class="ic"${x.icStyle?` style="${x.icStyle}"`:""}>${ic}</span><div class="tx"><b${x.tStyle?` style="${x.tStyle}"`:""}>${esc(ti)}</b>${x.subHtml||`<small${x.sStyle?` style="${x.sStyle}"`:""}>${esc(sub||"")}</small>`}</div>${x.tr!=null?x.tr:`<span class="tch"${x.sStyle?` style="${x.sStyle}"`:""}>${TI.chev}</span>`}</div>`; };
+  const inv = (o.low||o.unc) ? `<small class="ih">${o.low?`<b>${esc(tp("stock_headline_low", o.low, o.low))}</b>`:""}${o.low&&o.unc?" · ":""}${o.unc?esc(tp("stock_headline_uncounted", o.unc, o.unc)):""}</small>` : `<small></small>`;
+  const owed = o.owedN > 0;
+  const cli = owed ? {style:`background:${AMBER_T}`, tStyle:`color:${AMBER}`, sStyle:`color:${AMBER}`, icStyle:`color:${AMBER}`} : {};
+  const cliSub = owed ? tp("home_clientes_owed", o.owedN, o.owedN, money(o.owedTotal)) : "";
+  const onPh = 1, team = 1;   // the shop's one employee (shop-data people.cashier), on a phone
+  return `<div class="wp t-wp"><div class="wph"><b>${esc(S.place)}</b>${I.down}</div>
+    <div class="wpl">${card}
+    ${row(I.cart, t("sell_online_title"), t("sell_online_row_off"), "", {tr:`<span class="opill">${esc(t("sell_online_pill_off"))}</span>`})}
+    <div class="wps">${esc(t("panel_heading_every_day"))}</div>
+    ${row(TI.cart, t("workspace_items_title"), t("more_my_products_count", SHOP_ITEMS.length), "items-row")}
+    ${row(`<i class="emo">${TI.box}</i>`, t("scan_row_inventory"), "", "inv-row", {subHtml:inv, cls:o.flash==="inv"?"flash":""})}
+    ${row(TI.person, t("more_customers_title"), cliSub, "cli-row", Object.assign(cli, {cls:o.flash==="cli"?"flash":""}))}
+    ${row(TI.rlong, t("invoices_title"), t("invoices_row_this_month", o.invMonth||0), "inv-doc-row")}
+    ${row(TI.group, t("more_team_title"), tp("home_equipo_count_phones", team, team, tp("home_equipo_on_phones", onPh, onPh)))}
+    ${row(TI.rlong, t("workspace_full_reports"), t(usca ? "scan_row_reports_today" : "scan_row_reports_today_net", money(TODAY_SALES)))}
+    <div class="t-div"></div>
+    ${row(TI.gear, t("settings_title"), t("panel_settings_row_sub"))}
+    </div></div>` + nav("biz");
+}
+
+const MINE_CSS = `
+.mat .t-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .t-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .t-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .t-strip .h>div{flex:1;min-width:0}
+.mat .t-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#1E9E55;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .t-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .t-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
+.mat .t-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .t-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .t-wp .wpl{gap:calc(var(--u)*8)}
+.mat .t-wp .wr .ic{color:var(--m-onv)}
+.mat .t-wp .wr .ic .emo{display:grid;place-items:center}.mat .t-wp .wr .ic .emo svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .t-wp .wr .tch{color:var(--m-onv);display:grid;place-items:center}
+.mat .t-wp .wr .tch svg{width:calc(var(--u)*24);height:calc(var(--u)*24)}
+.mat .t-wp .wr .ih{display:block;margin-top:calc(var(--u)*2);font-size:calc(var(--u)*12);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .t-wp .wr .tx .ih b{display:inline;font-size:inherit;color:var(--m-err);font-weight:600}
+.mat .t-wp .wr.flash{animation:tfl 1.6s ease}
+@keyframes tfl{0%{box-shadow:0 0 0 calc(var(--u)*3) #FF9500}100%{box-shadow:0 0 0 0 transparent}}
+.mat .t-div{margin:calc(var(--u)*8) calc(var(--u)*24);border-top:1px solid var(--m-ovar)}
+.mat .t-pg{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;position:relative;overflow:hidden}
+.mat .t-scroll{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column}
+.mat .t-scroll.end{justify-content:flex-end}
+.mat .t-scroll>*{flex:0 0 auto}
+.mat .t-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:12;display:flex;flex-direction:column;justify-content:flex-end}
+.mat .t-sheet{background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:0 calc(var(--u)*24) calc(var(--u)*24);display:flex;flex-direction:column}
+.mat .t-sheet .hdl{align-self:center;width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#C7C7CC;margin:calc(var(--u)*22) 0 calc(var(--u)*22)}
+.mat .t-chip{display:inline-flex;align-items:center;justify-content:center;height:calc(var(--u)*32);padding:0 calc(var(--u)*12);border-radius:calc(var(--u)*8);border:1px solid var(--m-ovar);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on);white-space:nowrap;background:#fff}
+.mat .t-chip.sel{background:var(--m-ovar);border-color:var(--m-ovar)}
+.mat .t-chip.sel svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor;margin-right:calc(var(--u)*6)}
+.mat .t-tbtn{min-height:calc(var(--u)*48);display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+`;
+(function(){ const s=document.createElement("style"); s.textContent=MINE_CSS; document.head.appendChild(s); })();
+
+/* ======== T8..T10: clients, the tab (fiado) money screens, WhatsApp — OWNER phone only (fiadoMoneyOn needs DeviceRole.OWNER) ======== */
+// KEYS: crm_title_select,crm_title_directory,crm_search_placeholder,fiado_te_deben,fiado_clientes_header,fiado_sort_oldest,fiado_sort_amount,fiado_sort_az,common_new_short,common_edit,fiado_te_debe,fiado_page_debts_age,fiado_saldar,fiado_perdonar_deuda,fiado_monto_manual,fiado_recordarle,customer_page_whatsapp,customer_page_whatsapp_write,crm_metric_visits,crm_metric_last_visit,customer_page_purchases
+/* the two clients of shop-data.js. Ana's balance is three tab sales (22, 15 and 8 days ago, made up as about 40 % / 33 % / the rest of
+   her kit balance); Juan's is one sale 6 days ago. Each tab IS a purchase (a fiado sale is a PAID order). */
+const STEP = C.dec===0 ? 1000 : 1;
+const r2 = v => Math.round(v*100)/100;
+const ANA_T = (() => { const o = C.fiado[0].owes, s = C.dec===0 ? 1000 : (o>=100 ? 10 : 1); const a = Math.round(o*0.4/s)*s, b = Math.round(o/3/s)*s; return [a, b, r2(o-a-b)]; })();
+const DAYS_AGO = d => new Date(Date.UTC(2026, 9, 20 - d, 15, 0));
+const CLIENTS = [
+  {key:"ana", name:C.fiado[0].customer, tabs:[{d:22,amt:ANA_T[0],no:12,h:"10:15"},{d:15,amt:ANA_T[1],no:19,h:"18:40"},{d:8,amt:ANA_T[2],no:23,h:"11:05"}]},
+  {key:"juan", name:C.fiado[1].customer, tabs:[{d:6,amt:C.fiado[1].owes,no:25,h:"17:30"}]}
+];
+const owesOf = c => r2(c.tabs.reduce((s,x)=>s+x.amt, 0));
+const oldestOf = c => Math.max(...c.tabs.map(x=>x.d));
+const ageColor = d => d > 30 ? ERR_T : d >= 15 ? AMBER : FGREEN;            // CustomerCrmScreen.kt:648-663
+const tabDate = (d, h) => { const [hh, mm] = h.split(":").map(Number); return new Date(2026, 9, 20 - d, hh, mm); };
+const shortDM = dt => new Intl.DateTimeFormat(AL, {day:"numeric", month:"short"}).format(dt).replace(/ de /, " ");   // SimpleDateFormat("d MMM")
+const visitDate = dt => new Intl.DateTimeFormat(AL, {dateStyle:"medium"}).format(dt);                                // formatVisitDate MEDIUM
+
+/* the WhatsApp number as the client form stored it (WA-FIX-1: country code, trunk 0 out, AR mobile 9) and as the page writes it
+   for reading (utils/WhatsappUtils.kt:132 formatWhatsappForReading: 10 digits 3-3-4, 9 -> 3-3-3, 8 -> 4-4, else threes) */
+const DIALD = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54",PA:"507",BR:"55",US:"1",CA:"1"}[S.country];
+const WA_NAT = (() => { let n = C.people.phone.replace(/\D/g, ""); if(S.country==="EC") n = n.replace(/^0/, ""); if(S.country==="AR") n = "9" + n; return n; })();
+const WA_READ = (() => { const n = WA_NAT; if(DIALD==="1" && n.length===10) return `+1 (${n.slice(0,3)}) ${n.slice(3,6)}-${n.slice(6)}`;
+  const sizes = {10:[3,3,4], 9:[3,3,3], 8:[4,4]}[n.length]; const g = []; let rest = n;
+  if(sizes) sizes.forEach(k=>{ g.push(rest.slice(0,k)); rest = rest.slice(k); }); else { while(rest.length>4){ g.push(rest.slice(0,3)); rest = rest.slice(3); } if(rest) g.push(rest); }
+  return `+${DIALD} ${g.join(" ")}`; })();
+
+/* ListScreenHeader.kt: back arrow, titleLarge, "+ Nuevo" (NewTextAction); the search box (r12) on its own line */
+const listHeader = (title) => `<div class="cl-h"><span class="bk">${I.back}</span><b>${esc(title)}</b><span class="nw">${esc(t("common_new_short"))}</span></div>
+  <div class="cl-s">${TI.search}<span>${esc(t("crm_search_placeholder"))}</span></div>`;
+const initialOf = n => n.trim().charAt(0).toUpperCase();
+
+/* the attach-to-sale picker (CheckoutCustomerField.kt:767 FullScreenDialog -> CustomerCrmScreen, picker mode): no balances, A–Z with
+   letter bands (titleSmall bold on surfaceVariant 40 %), each row ends in the Info icon (crm_view_profile_cd) */
+function picker(){
+  const sorted = CLIENTS.slice().sort((a,b)=>a.name.localeCompare(b.name, AL));
+  return `<div class="t-pg">${listHeader(t("crm_title_select"))}<div class="t-scroll">` + sorted.map(c=>`<div class="cl-l">${esc(initialOf(c.name))}</div>
+    <div class="cl-r" data-t="pick-${c.key}"><span class="av">${esc(initialOf(c.name))}</span><b>${esc(c.name)}</b><span class="inf">${TI.info}</span></div>`).join("") + `</div></div>`;
+}
+/* the owner's Clients directory with the fiado money header (CustomerCrmScreen.kt:270-445): cream band TE DEBEN, total, "2 de 2 clientes";
+   chips Más viejo (on) · Más plata · A–Z; debtors oldest first, amount coloured by the age of the oldest open tab */
+function clients(o){
+  const list = (o && o.list) || CLIENTS, total = list.reduce((s,c)=>s+owesOf(c), 0);
+  const sorted = list.slice().sort((a,b)=>oldestOf(b)-oldestOf(a));
+  return `<div class="t-pg">${listHeader(t("crm_title_directory", list.length))}
+    <div class="cl-m"><small>${esc(t("fiado_te_deben"))}</small><b>${money(total)}</b><span>${esc(t("fiado_clientes_header", list.length, list.length))}</span></div>
+    <div class="t-scroll"><div class="cl-c"><span class="t-chip sel">${esc(t("fiado_sort_oldest"))}</span><span class="t-chip">${esc(t("fiado_sort_amount"))}</span><span class="t-chip">${esc(t("fiado_sort_az"))}</span></div>
+    ${sorted.map(c=>`<div class="cl-r" data-t="cli-${c.key}"><span class="av">${esc(initialOf(c.name))}</span><b>${esc(c.name)}</b><b class="am" style="color:${ageColor(oldestOf(c))}">${money(owesOf(c))}</b><span class="ch">${TI.chev}</span></div>`).join("")}
+    </div>${strip()}</div>`;
+}
+/* the client page (CustomerPage.kt:107-190) with the amber FiadoOwesBlock (FiadoMoneyScreens.kt:59-113) */
+function clientPage(c, o){
+  o = o||{};
+  const purchases = c.tabs.slice().sort((a,b)=>a.d-b.d);
+  const last = tabDate(purchases[0].d, purchases[0].h);
+  return `<div class="t-pg">${topbar(c.name, {action:`<span class="tba" style="font-weight:700">${esc(t("common_edit"))}</span>`})}
+    <div class="t-scroll"><div class="ow">
+      <small>${esc(t("fiado_te_debe"))}</small><b class="bal">${money(owesOf(c))}</b><span class="age">${esc(t("fiado_page_debts_age", c.tabs.length, oldestOf(c)))}</span>
+      <div class="sb pri" data-t="saldar" style="margin-top:calc(var(--u)*12)"><span>${esc(t("fiado_saldar"))}</span></div>
+      <div class="t-tbtn" style="color:${FGREY};font-weight:700">${esc(t("fiado_perdonar_deuda"))}</div>
+      <div class="sb sec" style="background:#fff;border-color:#1C1C1E"><span>${esc(t("fiado_monto_manual"))}</span></div>
+      <div class="sb sec" data-t="remind" style="background:#fff;border-color:#1C1C1E;margin-top:calc(var(--u)*8)"><span>${esc(t("fiado_recordarle"))}</span></div></div>
+      <div class="cp-d"><div class="dr"><span>${esc(t("customer_page_whatsapp"))}</span><b>${esc(WA_READ)}</b></div>
+        <div class="sb sec" style="margin:calc(var(--u)*4) 0 calc(var(--u)*8)"><span>${esc(t("customer_page_whatsapp_write"))}</span></div>
+        <div class="dr"><span>${esc(t("crm_metric_visits"))}</span><b>${purchases.length}</b></div>
+        <div class="dr"><span>${esc(t("crm_metric_last_visit"))}</span><b>${esc(visitDate(last))}</b></div></div>
+      <div class="cp-ph">${esc(t("customer_page_purchases"))}</div>
+      ${purchases.map(p=>`<div class="cp-p"><div><b>#${p.no}</b><small>${esc(fmtDT(tabDate(p.d, p.h)))}</small></div><b class="am">${money(p.amt)}</b></div>`).join("")}
+    </div>${o.noStrip ? "" : strip()}</div>`;
+}
+const CUST_CSS = `
+.mat .cl-h{display:flex;align-items:center;padding:calc(var(--u)*8) calc(var(--u)*8) 0;min-height:calc(var(--u)*56);flex:0 0 auto}
+.mat .cl-h .bk{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.mat .cl-h b{flex:1;min-width:0;padding-left:calc(var(--u)*4);font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .cl-h .nw{min-height:calc(var(--u)*48);display:grid;place-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:700}
+.mat .cl-s{margin:calc(var(--u)*8);height:calc(var(--u)*56);border:1px solid var(--m-outline);border-radius:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);color:var(--m-onv);font-size:calc(var(--u)*16);flex:0 0 auto}
+.mat .cl-m{background:#FFF6E5;padding:calc(var(--u)*12) calc(var(--u)*16);flex:0 0 auto}
+.mat .cl-m small{display:block;font-size:calc(var(--u)*12);font-weight:700;color:#B07500;letter-spacing:.4px}
+.mat .cl-m b{display:block;font-size:calc(var(--u)*24);font-weight:900;color:#1C1C1E}
+.mat .cl-m span{display:block;font-size:calc(var(--u)*14);color:#6E6E73}
+.mat .cl-c{display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*16)}
+.mat .cl-l{background:rgba(242,242,247,.4);padding:calc(var(--u)*6) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:700}
+.mat .cl-r{display:flex;align-items:center;gap:calc(var(--u)*16);padding:calc(var(--u)*12) calc(var(--u)*16);border-bottom:1px solid rgba(229,229,234,.5)}
+.mat .cl-r .av{width:calc(var(--u)*44);height:calc(var(--u)*44);border-radius:50%;background:var(--m-sv);display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:700;flex:0 0 auto}
+.mat .cl-r>b{flex:1;min-width:0;font-size:calc(var(--u)*16);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .cl-r>b.am{flex:0 0 auto;font-size:calc(var(--u)*14)}
+.mat .cl-r .ch{color:var(--m-outline)}.mat .cl-r .inf{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on)}
+.mat .ow{background:#FFF6E5;border:1px solid #F0DCB0;padding:calc(var(--u)*16)}
+.mat .ow>small{display:block;font-size:calc(var(--u)*12);font-weight:700;color:#B07500;letter-spacing:.4px}
+.mat .ow .bal{display:block;font-size:calc(var(--u)*52);line-height:1.15;font-weight:900;color:#1C1C1E;white-space:nowrap}
+.mat .ow .age{display:block;font-size:calc(var(--u)*14);color:#6E6E73}
+.mat .cp-d{padding:calc(var(--u)*16) calc(var(--u)*16) 0}
+.mat .cp-d .dr{display:flex;justify-content:space-between;padding:calc(var(--u)*8) 0;font-size:calc(var(--u)*16)}
+.mat .cp-d .dr span{color:var(--m-onv)}.mat .cp-d .dr b{font-weight:700}
+.mat .cp-ph{padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*18);font-weight:700}
+.mat .cp-p{display:flex;align-items:center;padding:calc(var(--u)*12) calc(var(--u)*16);border-bottom:1px solid rgba(229,229,234,.5)}
+.mat .cp-p div{flex:1}.mat .cp-p div b{display:block;font-size:calc(var(--u)*16);font-weight:700}.mat .cp-p div small{display:block;font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .cp-p .am{font-size:calc(var(--u)*18);font-weight:700}
+`;
+(function(){ const s=document.createElement("style"); s.textContent=CUST_CSS; document.head.appendChild(s); })();
+
+const ANA = CLIENTS[0], OWES = owesOf(ANA);
+const PSTEP = C.dec===0 ? 1000 : (C.fiado[0].owes >= 100 ? 10 : 1);
+const PAY = r2(ANA.tabs[0].amt + ANA.tabs[1].amt + Math.round(ANA.tabs[2].amt*0.4/PSTEP)*PSTEP);
+const KEYS = C.dec===0 ? String(PAY/1000).split("").concat(["z"]) : String(PAY).split("");
+const typedOf = s => s ? Number(s) : 0;
+const CHECK_BOX = '<svg viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" fill="#34C759"/><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';   // the ✅ emoji, drawn
+function saldar(st){
+  const amt = typedOf(st.typed);
+  let left = amt; const tabs = ANA.tabs.slice().sort((a,b)=>b.d-a.d).map(x=>{ const cov = Math.min(left, x.amt); left = r2(left - cov); return {x, cov}; });
+  const full = tabs.filter(o=>o.cov >= o.x.amt - 1e-9).length, owing = Math.max(0, r2(OWES - amt));
+  const lines = tabs.map(({x, cov})=>{ const isFull = cov >= x.amt - 1e-9, part = cov > 0 && !isFull;
+    const right = part ? t("fiado_faltan", money(x.amt), money(r2(x.amt - cov))) : money(x.amt);
+    return `<div class="sl${isFull?" full":""}"><span>${esc(shortDM(tabDate(x.d, x.h)))}</span><b style="color:${isFull?FGREEN:part?AMBER:"var(--m-on)"}">${esc(right)}</b></div>`; }).join("");
+  const hint = t("fiado_saldar_result", full, money(owing));
+  return `<div class="t-pg">${topbar(t("fiado_saldar") + " — " + ANA.name)}
+    <div class="t-scroll sd${st.typed?" end":""}"><div class="in">
+      <div class="hd"><small>${esc(t("fiado_te_debe"))}</small><b>${money(OWES)}</b></div>
+      ${lines}
+      <span class="t-chip" style="align-self:flex-start;margin-top:calc(var(--u)*12)">${esc(t("fiado_saldar_all", money(OWES)))}</span>
+      <div class="am">${money(amt)}</div>
+      <div><span class="t-chip sel">${esc(t("payment_method_cash"))}</span></div>
+      <div class="hs${amt>0?" on":""}"><span class="ghost">${esc(t("fiado_saldar_result", ANA.tabs.length, money(OWES)))}</span>${amt>0?`<span class="real">${esc(hint)}</span>`:""}</div>
+      ${keypad("k", 72)}
+      <div class="sb pri${amt>0?"":" off"}" data-t="recibir"><span>${esc(t("fiado_recibir", money(amt)))}</span></div>
+    </div></div>${strip()}</div>`;
+}
+function receipt(){
+  const owing = r2(OWES - PAY);
+  return `<div class="t-pg"><div class="rc"><i class="ok">${CHECK_BOX}</i><b>${esc(t("fiado_recibiste", money(PAY)))}</b>
+    <div class="ow2">${esc(t("fiado_te_sigue_debiendo", money(owing)))}</div>
+    <div class="sb pri" style="align-self:stretch"><span>${esc(t("common_done"))}</span></div></div>${strip()}</div>`;
+}
+function render(st){
+  if(st.screen==="panel"){ const lowN = SHOP_ITEMS.filter(x=>x.stock!=null && x.stock<=x.low).length, unc = SHOP_ITEMS.filter(x=>x.stock==null).length;
+    return shopPanel({low:lowN, unc, owedN:CLIENTS.length, owedTotal:CLIENTS.reduce((s,c)=>s+owesOf(c),0), invMonth:C.suppliers.length}); }
+  if(st.screen==="cli") return clients();
+  if(st.screen==="page") return clientPage(ANA);
+  if(st.screen==="saldar") return saldar(st);
+  return receipt();
+}
+const H = (es,pt,en) => S.pick({es,pt,en});
+const tap = w => H("Toca ","Toque em ","Tap ") + w;
+const keyName = k => k==="z" ? ZKEY : k;
+SKIT.start(S, {
+  id:"T9", tallVideo:true, clock:"12:41",
+  endText:H("Así recibes abonos al fiado con Platata.","Assim você recebe pagamentos do fiado com o Platata.","That's how you take tab payments with Platata."),
+  beats:S.pick({
+    es:["En Mi negocio, toca Clientes","Toca al cliente que viene a pagar","En su página, toca Saldar","Escribe cuánto paga: se tachan sus fiados","Toca Recibir","Listo: ves lo que le queda debiendo","Así recibes abonos al fiado con Platata."],
+    pt:["Em Meu negócio, toque em Clientes","Toque no cliente que veio pagar","Na página dele, toque em Quitar","Digite quanto ele paga: os fiados são riscados","Toque em Receber","Pronto: você vê quanto ainda falta","Assim você recebe pagamentos do fiado com o Platata."],
+    en:["In My business, tap Clients","Tap the client who came to pay","On their page, tap Settle","Type what they pay: their tabs get crossed off","Tap Receive","Done: you see what they still owe","That's how you take tab payments with Platata."]}),
+  state:{screen:"panel", typed:""},
+  render,
+  device: () => "phone",
+  who: () => t("conn_slot_phone"),
+  steps:[
+    {beat:0, hint:tap(t("more_customers_title")), target:'[data-t="cli-row"]', tap(st){ st.screen="cli"; }},
+    {beat:1, hint:tap(ANA.name), target:'[data-t="cli-ana"]', tap(st){ st.screen="page"; }},
+    {beat:2, hint:tap(t("fiado_saldar")), target:'[data-t="saldar"]', tap(st){ st.screen="saldar"; }},
+    {beat:3, hint:tap(KEYS.map(keyName).join(" ")), target:`[data-t="k-${KEYS[0]}"]`, tap(st,E){ st.typed = KEYS[0];
+        KEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed = k==="z" ? st.typed+"000" : st.typed+k; })); }},
+    {beat:4, hint:tap(t("fiado_recibir", money(PAY))), target:'[data-t="recibir"]', tap(st){ st.screen="rec"; }}
+  ]
+});
+</script>
+<style>
+/* ---- shop register: ScanCheckoutTab.kt ---- */
+.mat .sreg{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16) calc(var(--u)*16) 0;background:#fff}
+.mat .scardw{border-radius:calc(var(--u)*16);background:#fff;padding:calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .srw{min-height:calc(var(--u)*56);border-radius:calc(var(--u)*8);background:#F7F7FA;display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12)}
+.mat .srw .sic{width:calc(var(--u)*24);height:calc(var(--u)*24);display:grid;place-items:center;flex:0 0 auto}.mat .srw .sic svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .srw .calc svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-on)}.mat .srw .calc{display:grid}
+.mat .srw .stx{flex:1;min-width:0;font-size:calc(var(--u)*16);color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .srw .sval{display:flex;flex-direction:column;align-items:flex-end;max-width:calc(var(--u)*150)}
+.mat .srw .sval b{font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}.mat .srw .sval small{font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .srw .sch svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-onv)}
+.mat .sbb{padding:0 calc(var(--u)*16) calc(var(--u)*16);background:#fff;flex:0 0 auto}
+.mat .sbb.two{display:flex;gap:calc(var(--u)*12)}
+.mat .scanbtn{height:calc(var(--u)*56);border-radius:calc(var(--u)*50);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:800}
+.mat .pb2{height:calc(var(--u)*54);border-radius:calc(var(--u)*18);display:grid;place-items:center;font:500 calc(var(--u)*18) Fredoka,sans-serif;white-space:nowrap;padding:0 calc(var(--u)*12);overflow:hidden}
+.mat .pb2.out{flex:1;border:calc(var(--u)*1.5) solid #D9D4C9;color:#17181B}
+.mat .pb2.acc{flex:1.4;background:#188448;color:#fff}
+/* ---- camera: ScannerScreen.kt + BarcodeCameraBox.kt + ScanCartBar ---- */
+.mat .cam{flex:1;min-height:0;display:flex;flex-direction:column;background:#000;position:relative}
+.mat .cam-top{background:rgba(0,0,0,.75);padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*4);text-align:center;flex:0 0 auto;position:relative;z-index:2}
+.mat .cam-top b{color:#fff;font-size:calc(var(--u)*22);font-weight:800;line-height:1.25}
+.mat .cam-top small{color:#fff;font-size:calc(var(--u)*14);line-height:1.35}.mat .cam-top small.err{color:#FF3B30}
+.mat .cam-view{flex:1;min-height:0;position:relative;overflow:hidden;background:radial-gradient(ellipse at 50% 55%,#5b5348 0%,#3a342d 45%,#1d1a17 100%)}
+.mat .cam-view::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.03) 0 calc(var(--u)*60),rgba(0,0,0,.05) calc(var(--u)*60) calc(var(--u)*120));filter:blur(2px)}
+.mat .guide{position:absolute;left:50%;top:50%;width:calc(var(--u)*260);height:calc(var(--u)*320);transform:translate(-50%,-50%);border:calc(var(--u)*2) solid rgba(255,255,255,.8);border-radius:calc(var(--u)*12)}
+.mat .cspin{position:absolute;left:50%;top:50%;width:calc(var(--u)*48);height:calc(var(--u)*48);margin:calc(var(--u)*-24) 0 0 calc(var(--u)*-24);border-radius:50%;border:calc(var(--u)*4) solid rgba(255,255,255,.25);border-top-color:#fff;animation:xspin 1s linear infinite}
+.mat .pack{position:absolute;left:50%;top:50%;width:calc(var(--u)*200);height:calc(var(--u)*250);transform:translate(-50%,-50%) rotate(-3deg);border-radius:calc(var(--u)*10);background:#F4F1EA;box-shadow:0 calc(var(--u)*10) calc(var(--u)*30) rgba(0,0,0,.5);overflow:hidden;display:flex;flex-direction:column;align-items:center;animation:packin .5s ease}
+@keyframes packin{from{transform:translate(-30%,-40%) rotate(8deg);opacity:0}to{transform:translate(-50%,-50%) rotate(-3deg);opacity:1}}
+.mat .pk-top{align-self:stretch;height:calc(var(--u)*70);background:var(--h)}
+.mat .pk-nm{margin-top:calc(var(--u)*12);padding:0 calc(var(--u)*12);font:600 calc(var(--u)*17)/1.2 Roboto,sans-serif;color:#222;text-align:center}
+.mat .pk-bc{margin-top:auto;margin-bottom:calc(var(--u)*14);background:#fff;padding:calc(var(--u)*6) calc(var(--u)*8) calc(var(--u)*2);display:flex;flex-direction:column;align-items:center}
+.mat .pk-bc svg{width:calc(var(--u)*140);height:calc(var(--u)*44);display:block}
+.mat .pk-bc span{font:500 calc(var(--u)*11) "Roboto Mono",monospace;letter-spacing:.12em;color:#111}
+.mat .cflash{position:absolute;inset:0;background:rgba(255,255,255,.25)}
+.mat .cam-bar{background:#fff;box-shadow:0 calc(var(--u)*-2) calc(var(--u)*6) rgba(0,0,0,.15);display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*12);flex:0 0 auto}
+.mat .cb-back{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on)}
+.mat .cb-mid{flex:1;display:flex;justify-content:center}
+.mat .nbp{display:flex;align-items:center;gap:calc(var(--u)*4);background:#F2F2F7;border-radius:calc(var(--u)*50);padding:calc(var(--u)*8) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv)}
+.mat .nbp svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:var(--m-onv)}
+.mat .cb-charge{height:calc(var(--u)*40);border-radius:calc(var(--u)*50);background:#1C1C1E;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:700;white-space:nowrap}
+.mat .cb-charge i{font-style:normal;background:#fff;color:#1C1C1E;border-radius:calc(var(--u)*6);padding:0 calc(var(--u)*8);font-size:calc(var(--u)*11);font-weight:500}
+/* ---- pay screen bottom section for a shop: customer field + Fiar ---- */
+.x-cust{cursor:default}
+.x-cust.on{justify-content:flex-start;padding:0 calc(var(--u)*4) 0 calc(var(--u)*16);color:#6E6E73}
+.x-cust.on b{flex:1;color:#1C1C1E;font-size:calc(var(--u)*17);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x-cust .xx{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.x-fiar{margin-top:calc(var(--u)*10);height:calc(var(--u)*54);border-radius:calc(var(--u)*27);border:1px solid #000;background:#E5E5EA;display:grid;place-items:center;font-size:calc(var(--u)*17);font-weight:700;color:rgba(110,110,115,.6)}
+.x-fiar.on{background:#F2F2F7;color:#1C1C1E}
+
+.mat .sd .in{padding:calc(var(--u)*16);display:flex;flex-direction:column}
+.mat .sd .hd{text-align:center}.mat .sd .hd small{display:block;font-size:calc(var(--u)*12);font-weight:700;color:var(--m-onv)}
+.mat .sd .hd b{display:block;font-size:calc(var(--u)*28);font-weight:900}
+.mat .sd .sl{display:flex;justify-content:space-between;padding:calc(var(--u)*8) 0;font-size:calc(var(--u)*16)}
+.mat .sd .sl b{font-weight:700}.mat .sd .sl.full span,.mat .sd .sl.full b{text-decoration:line-through;color:#1A7F3C}
+.mat .sd .am{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*36);font-weight:700;white-space:nowrap}
+.mat .sd .hs{margin-top:calc(var(--u)*12);padding:calc(var(--u)*12);border-radius:calc(var(--u)*12);position:relative;font-size:calc(var(--u)*14);font-weight:700;color:#1A7F3C}
+.mat .sd .hs .ghost{visibility:hidden}.mat .sd .hs .real{position:absolute;inset:calc(var(--u)*12)}
+.mat .sd .hs.on{background:rgba(26,127,60,.12)}
+.mat .sd .ck{margin:calc(var(--u)*12) 0 calc(var(--u)*16)}
+.mat .rc{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--u)*24);gap:calc(var(--u)*12)}
+.mat .rc .ok svg{width:calc(var(--u)*44);height:calc(var(--u)*44)}
+.mat .rc>b{font-size:calc(var(--u)*24);font-weight:900;text-align:center}
+.mat .rc .ow2{align-self:stretch;margin:calc(var(--u)*4) 0 calc(var(--u)*12);border-radius:calc(var(--u)*12);background:#FFF6E5;color:#B07500;font-size:calc(var(--u)*16);font-weight:700;padding:calc(var(--u)*16);text-align:center}
+</style>
+</body>
+</html>
