@@ -555,8 +555,7 @@ RKIT.start(R, {
   steps: [
     {beat:0, hint:P({es:"Toca Mi negocio",pt:"Toque em Meu negócio",en:"Tap My business"}), target:'[data-t="flag"]', tap(st){ st.screen="panel"; }},
     {beat:0, hint:P({es:"Toca Configuración",pt:"Toque em Configurações",en:"Tap Settings"}), target:'[data-t="settings"]', tap(st){ st.screen="hub"; }},
-    {beat:0, hint:P({es:"Toca Conexiones",pt:"Toque em Conexões",en:"Tap Connections"}), target:'[data-t="hub-conn"]', tap(st,E){ st.screen="conn";
-        if(FREE) E.after(5200,()=>scrollTo(st,'.scard')); }},
+    {beat:0, hint:P({es:"Toca Conexiones",pt:"Toque em Conexões",en:"Tap Connections"}), target:'[data-t="hub-conn"]', tap(st){ st.screen="conn"; }},
   ].concat(FREE ? [
     {beat:3, hint:P({es:"Toca Conectar",pt:"Toque em Conectar",en:"Tap Connect"}), target:'[data-t="conn-connect"]', tap(st){ st.sheet=true; }},
   ] : [

@@ -33,7 +33,8 @@
 .kds .kcard.fresh{animation:kdsin .9s ease-out}
 @keyframes kdsin{0%{transform:scale(.85);opacity:0}60%{transform:scale(1.04);opacity:1}100%{transform:scale(1)}}
 .kds .hrow{display:flex;gap:calc(var(--u)*6);font-size:calc(var(--u)*14);font-weight:700}
-.kds .hrow b{flex:1;min-width:0}
+.kds .hrow b{flex:1 1 auto;min-width:min-content}
+.kds .hrow span{min-width:0;text-align:right}
 .kds .who{font-size:calc(var(--u)*12);opacity:.75}
 .kds .div{height:1px;background:currentColor;opacity:.3;margin:calc(var(--u)*6) 0}
 .kds .ln{font-size:calc(var(--u)*16);font-weight:600;white-space:pre}
@@ -94,19 +95,19 @@ const L = R.pick({
       hist:"Historial", active:"Pedidos activos", waiting:"¡Esperando pedidos!", stn:"Cocina",
       st:(m)=> m>=10?`${m}m – CRÍTICO`: m>=5?`${m}m – URGENTE`:`${m}m – NUEVO`, all:x=>`Todo listo  ·  ${x}`, cancel:"CANCELAR",
       bumped:(x,n)=>`Listo: ${x} × ${n}`, ready:x=>`Listo: ${x}`, undo:"DESHACER", close:"CERRAR", ok:"LISTO",
-      sentAt:"Enviado a las 12:44", rare:"Jugoso", med:"Término medio"},
+      sentAt:"Enviado a las 12:41", rare:"Jugoso", med:"Término medio"},
   pt:{save:"Enviar para a cozinha", cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, table:n=>`Mesa ${n}`,
       exact:v=>`Exato · ${v}`, saved:"Enviado para a cozinha: Mesa 4", caja:"Caixa", biz:"Meu negócio",
       hist:"Histórico", active:"Pedidos ativos", waiting:"Aguardando pedidos!", stn:"Cozinha",
       st:(m)=> m>=10?`${m}m – CRÍTICO`: m>=5?`${m}m – URGENTE`:`${m}m – NOVO`, all:x=>`Tudo pronto  ·  ${x}`, cancel:"CANCELAR",
       bumped:(x,n)=>`Pronto: ${x} × ${n}`, ready:x=>`Pronto: ${x}`, undo:"DESFAZER", close:"FECHAR", ok:"PRONTO",
-      sentAt:"Enviado às 12:44", rare:"Ao ponto para mal", med:"Ao ponto"},
+      sentAt:"Enviado às 12:41", rare:"Ao ponto para mal", med:"Ao ponto"},
   en:{save:"Send to kitchen", cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, table:n=>`Table ${n}`,
       exact:v=>`Exact · ${v}`, saved:"Sent to kitchen: Table 4", caja:"Register", biz:"My business",
       hist:"History", active:"Active Orders", waiting:"Waiting for orders!", stn:"Kitchen",
       st:(m)=> m>=10?`${m}m – CRITICAL`: m>=5?`${m}m – URGENT`:`${m}m – NEW`, all:x=>`All done  ·  ${x}`, cancel:"CANCEL",
       bumped:(x,n)=>`Ready: ${x} × ${n}`, ready:x=>`Marked ready: ${x}`, undo:"UNDO", close:"CLOSE", ok:"MARK READY",
-      sentAt:"Bumped 12:44 PM", rare:"Medium Rare", med:"Medium"}
+      sentAt:"Bumped 12:41 PM", rare:"Medium Rare", med:"Medium"}
 });
 /* strings: park_ticket_sent_toast, checkout_send_kitchen, checkout_add_customer_cta, checkout_items_link, table_label, cash_exact,
    mamaship_tab_register, home_tab_my_business, kds_*, modifier_template_temperature_option_* (values / values-es / values-pt-rBR) */
@@ -195,7 +196,7 @@ function render(st){
                  en:"It goes through your phone: keep it on, with Platata open and on the restaurant's Wi-Fi."})});
   return st.screen==="pay" ? payStep(st) : kds(st);
 }
-function who(st){ return st.screen==="pay" ? R.pick({es:"Celular del mesero", pt:"Celular do garçom", en:"Waiter's phone"})
+function who(st){ return st.screen==="pay" ? R.pick({es:"Teléfono de empleado", pt:"Celular de funcionário", en:"Employee phone"})
                                          : R.pick({es:"Pantalla de cocina", pt:"Tela da cozinha", en:"Kitchen display"}); }
 
 RKIT.start(R, {

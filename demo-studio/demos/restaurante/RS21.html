@@ -478,11 +478,11 @@ RKIT.start(R, {
     {beat:1, hint:P({es:"Toca Cobrar",pt:"Toque em Cobrar",en:"Tap Charge"}), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
     {beat:2, hint:P({es:"Toca Exacto",pt:"Toque em Exato",en:"Tap Exact"}), target:'[data-t="exact"]', tap(st){ st.paid = total(st); st.screen="done"; }},
     {beat:3, hint:P({es:"Toca Nueva venta",pt:"Toque em Nova venda",en:"Tap New sale"}), target:'[data-t="newsale"]', tap(st,E){ st.lines=[]; st.screen="home";
-        E.after(1400,()=>{ st.hop=true; });
-        E.after(3600,()=>{ st.hop=false; st.screen="waiter"; st.flash=true; });
-        E.after(5000,()=>{ st.flash=false; }); }},
+        E.after(800,()=>{ st.hop=true; });
+        E.after(2600,()=>{ st.hop=false; st.screen="waiter"; st.flash=true; });
+        E.after(3600,()=>{ st.flash=false; }); }},
     {beat:5, hint:P({es:"Toca Abiertas",pt:"Toque em Abertas",en:"Tap Open"}), target:'[data-t="wtab-2"]', tap(st,E){ st.wtab=2;
-        E.after(2600,()=>{ st.held=false; }); }}
+        E.after(500,()=>{ st.held=false; }); }}
   ]
 });
 

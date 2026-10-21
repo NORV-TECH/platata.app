@@ -351,7 +351,7 @@ function render(st){
   if(st.screen==="panel") return panel({regTotal:fromMoney(862980), today:fromMoney(739125), menuCount:C.items.length, clients:8, invoices:3, team:2, phones:2});
   if(st.screen==="consent") return consent();
   if(st.screen==="ask") return ask(st);
-  const card = st.time ? `<div class="rs-time"><div><b>${esc(pick({es:"5 de noviembre",pt:"5 de novembro",en:"November 5"}))}</b><small>${esc(pick({es:"Al abrir Platata, te pregunta por "+OCT+".",pt:"Ao abrir o Platata, ele pergunta sobre "+OCT+".",en:"When you open Platata, it asks about "+OCT+"."}))}</small></div></div>` : "";
+  const card = st.time ? `<div class="rs-time" data-t="time"><div><b>${esc(pick({es:"5 de noviembre",pt:"5 de novembro",en:"November 5"}))}</b><small>${esc(pick({es:"Al abrir Platata, te pregunta por "+OCT+".",pt:"Ao abrir o Platata, ele pergunta sobre "+OCT+".",en:"When you open Platata, it asks about "+OCT+"."}))}</small></div></div>` : "";
   return team(st) + card;
 }
 const HINT = (es,pt,en) => pick({es:"Toca "+es, pt:"Toque em "+pt, en:"Tap "+en});
@@ -374,7 +374,8 @@ RKIT.start(R, {
     {beat:3, hint:HINT([W1,W2][ORD[0]],[W1,W2][ORD[0]],[W1,W2][ORD[0]]), target:`[data-t="pay-${ORD[0]}"]`, tap(st,E){ st.focus=ORD[0]; E.type("p"+ORD[0], String(PAY[ORD[0]]), ()=>{ E.after(200,()=>{ st.scroll=150; }); }, 90); }},
     {beat:3, hint:HINT([W1,W2][ORD[1]],[W1,W2][ORD[1]],[W1,W2][ORD[1]]), target:`[data-t="pay-${ORD[1]}"]`, tap(st,E){ st.focus=ORD[1]; E.type("p"+ORD[1], String(PAY[ORD[1]]), null, 90); }},
     {beat:4, hint:H1("employee_pay_turn_on"), target:'[data-t="turn-on"]', tap(st,E){ st.mode="on"; st.focus=-1; st.scroll=0;
-        E.after(2600,()=>{ st.time=true; }); E.after(5200,()=>{ st.time=false; st.screen="ask"; }); }},
+        E.after(900,()=>{ st.time=true; }); }},
+    {beat:5, hint:pick({es:"Toca la tarjeta",pt:"Toque no cartão",en:"Tap the card"}), target:'[data-t="time"]', tap(st){ st.time=false; st.screen="ask"; }},
     {beat:5, hint:H1("employee_pay_ask_all_paid"), target:'[data-t="all-paid"]', tap(st){ st.paid=true; }}
   ]
 });

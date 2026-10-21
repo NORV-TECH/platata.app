@@ -60,9 +60,9 @@
     {
       "id": "6-pin",
       "voice": {
-        "es": "El PIN aparece una sola vez. Anótalo y dáselo.",
-        "pt": "O PIN aparece uma única vez. Anote e entregue.",
-        "en": "The PIN shows just once. Write it down and hand it over."
+        "es": "Aquí está su PIN. Anótalo y dáselo; luego lo ves en su ficha con Mostrar.",
+        "pt": "Aqui está o PIN. Anote e entregue; depois você o vê na ficha, em Mostrar.",
+        "en": "Here's their PIN. Write it down and hand it over; you can see it later with Show."
       }
     },
     {

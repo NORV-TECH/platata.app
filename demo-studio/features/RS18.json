@@ -68,13 +68,21 @@
     {
       "id": "7-pick",
       "voice": {
-        "es": "Lo toca, elige la bebida y el descuento se aplica solo.",
-        "pt": "Ele toca, escolhe a bebida e o desconto entra sozinho.",
-        "en": "They tap it, pick the drink, and the discount applies itself."
+        "es": "Lo toca y elige la bebida.",
+        "pt": "Ele toca e escolhe a bebida.",
+        "en": "They tap it and pick the drink."
       }
     },
     {
-      "id": "8-end",
+      "id": "8-discount",
+      "voice": {
+        "es": "Al cobrar, en Artículos ves el Descuento de combo: se aplica solo.",
+        "pt": "Ao cobrar, em Itens aparece o Desconto do combo: ele entra sozinho.",
+        "en": "At checkout, Items shows the Combo discount: it applies on its own."
+      }
+    },
+    {
+      "id": "9-end",
       "voice": {
         "es": "Así armas combos en tu restaurante, con Platata.",
         "pt": "Assim você monta combos no seu restaurante, com o Platata.",

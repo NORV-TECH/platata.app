@@ -344,9 +344,9 @@ RKIT.start(R, {
   id:"RS14", tallVideo:true, clock:"16:40",
   endText:pick({es:"Así armas tu equipo, con Platata.",pt:"Assim você monta sua equipe, com o Platata.",en:"That's how you build your team, with Platata."}),
   beats:pick({
-    es:["En Mi negocio, toca Equipo","Tu equipo y el código del negocio. Toca + Nuevo","Nombre, WhatsApp y cargo","Elige qué puede hacer","Su PIN se crea solo. Toca Guardar","El PIN se muestra una vez: anótalo","Así armas tu equipo"],
-    pt:["Em Meu negócio, toque em Equipe","Sua equipe e o código do negócio. Toque em + Novo","Nome, WhatsApp e cargo","Escolha o que a pessoa pode fazer","O PIN é criado sozinho. Toque em Salvar","O PIN aparece uma vez: anote","Assim você monta sua equipe"],
-    en:["In My business, tap Team","Your team and the business code. Tap + New","Name, WhatsApp and job title","Choose what they can do","Their PIN is made for you. Tap Save","The PIN shows once: write it down","That's how you build your team"]}),
+    es:["En Mi negocio, toca Equipo","Tu equipo y el código del negocio. Toca + Nuevo","Nombre, WhatsApp y cargo","Elige qué puede hacer","Su PIN se crea solo. Toca Guardar","Su PIN: anótalo y dáselo","Así armas tu equipo"],
+    pt:["Em Meu negócio, toque em Equipe","Sua equipe e o código do negócio. Toque em + Novo","Nome, WhatsApp e cargo","Escolha o que a pessoa pode fazer","O PIN é criado sozinho. Toque em Salvar","O PIN: anote e entregue","Assim você monta sua equipe"],
+    en:["In My business, tap Team","Your team and the business code. Tap + New","Name, WhatsApp and job title","Choose what they can do","Their PIN is made for you. Tap Save","Their PIN: write it down and hand it over","That's how you build your team"]}),
   state:{screen:"panel", name:"", wa:"", job:"", focus:"", sheet:false, perm:{}, added:false, pinDlg:false},
   render,
   device: () => "phone",
@@ -360,8 +360,7 @@ RKIT.start(R, {
     {beat:3, hint:H1("perm_label"), target:'[data-t="perms"]', tap(st){ st.focus=""; st.sheet=true; }},
     {beat:3, hint:H1("perm_can_close_shift"), target:'[data-t="chip-perm_can_close_shift"]', tap(st){ st.perm.perm_can_close_shift=true; }},
     {beat:3, hint:pick({es:"Toca afuera para cerrar",pt:"Toque fora para fechar",en:"Tap outside to close"}), target:'[data-t="outside"]', tap(st){ st.sheet=false; }},
-    {beat:4, hint:H1("common_save"), target:'[data-t="save"]', tap(st){ st.screen="list"; st.added=true; st.pinDlg=true; }},
-    {beat:5, hint:HINT("OK","OK","OK"), target:'[data-t="ok"]', tap(st){ st.pinDlg=false; }}
+    {beat:4, hint:H1("common_save"), target:'[data-t="save"]', tap(st){ st.screen="list"; st.added=true; st.pinDlg=true; }}
   ]
 });
 </script>

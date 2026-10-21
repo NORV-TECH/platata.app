@@ -185,6 +185,8 @@
 .wbar b{flex:1;font-size:calc(var(--u)*14);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wbar span{font-size:calc(var(--u)*14);font-weight:700}
 .wtx small.inv{display:flex;gap:0;white-space:nowrap}.wtx small .lo{color:#FF3B30;font-weight:600}
+/* demo plumbing: the ring jumps straight to the next target (a gliding ring was read mid-way by tools/check_demo.py) */
+#ring{transition:none}
 
 /* Every class here starts with k8 so nothing in kit/edif.css or kit/material.css can reach it. 1 dp = var(--u). */
 /* ---- owner phone, plain Material light (Theme.kt LightColorScheme): SumaTopBar.kt (TopAppBar 64 dp, titleLarge Bold) ---- */
@@ -607,6 +609,18 @@ function scrollFor(sel){
   return over>0 ? Math.ceil(over/u) : 0;
 }
 /* ===== end shared ===== */
+/* demo plumbing only (not an app screen): the hint ring glides for 0.25 s after every redraw, so each tap keeps the engine "busy"
+   until 0.45 s after its last scheduled change; then the ring sits on its target before the next tap is read. */
+function settled(steps){
+  return steps.map(s=>Object.assign({}, s, {tap(st, E){
+    let last = 0;
+    const E2 = Object.create(E);
+    E2.after = (ms, fn) => { last = Math.max(last, ms); return E.after(ms, fn); };
+    E2.type = (key, text, done, ms) => { last = Math.max(last, (String(text).length + 1) * (ms||45)); return E.type(key, text, done, ms); };
+    s.tap(st, E2);
+    E.after(last + 450, ()=>{});
+  }}));
+}
 
 
 /*TITLE: Otro celular o tableta*/
@@ -769,7 +783,7 @@ SKIT.start(S, {
   render,
   device: st => st.hop ? "phone" : (onTablet(st) ? "tablet" : "phone"),
   who: st => st.hop ? "" : (onTablet(st) ? DEV_TABLET : DEV_OWNER),
-  steps:[
+  steps:settled([
     {beat:0, hint:P({es:"Toca Conectar", pt:"Toque em Conectar", en:"Tap Connect"}), target:'[data-t="nudge-connect"]', tap(st){ st.sheet = true; }},
     {beat:0, hint:P({es:"Toca ",pt:"Toque em ",en:"Tap "}) + T("conn_opt_register"), target:'[data-t="opt-reg"]', tap(st,E){
       st.sheet = false; st.screen = "name"; E.after(500, ()=>E.type("name", REG_NAME, null, 120)); }},
@@ -787,7 +801,7 @@ SKIT.start(S, {
       st.pin = 1; E.after(220, ()=>{ st.pin = 2; }); E.after(440, ()=>{ st.pin = 3; }); E.after(660, ()=>{ st.pin = 4; });
       E.after(1100, ()=>{ st.screen = "sell"; }); }},
     {beat:5, hint:P({es:"Toca Escanear", pt:"Toque em Escanear", en:"Tap Scan"}), target:'[data-t="tab-scan"]', tap(st){ st.tab = 0; }}
-  ]
+  ])
 });
 </script>
 </body>

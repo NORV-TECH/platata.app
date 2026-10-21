@@ -613,7 +613,7 @@ function render(st){
   if(st.screen==="wcart") return webCart(st);
   if(st.screen==="wreview") return webReview(st);
   if(st.screen==="wdone") return webDone() + (st.hop ? RKIT.hop(R,{from:t("custPhone"), to:T("devOwner"), line:t("newOrderLine",REF), note:t("keepOpen")}) : "");
-  if(st.screen==="owner") return home({nav:{on:"reg", badge:1}}) + `<div class="hun"><span class="ai">P</span><span class="ht"><small>Platata · ${esc(nowTime(13,1))}</small><b>${esc(t("alertT",REF))}</b><span>${esc(t("alertN",1))}</span></span></div>`;
+  if(st.screen==="owner") return home({nav:{on:"reg", badge:1}}) + `<div class="hun"><span class="ai">P</span><span class="ht"><small>Platata · ${esc(nowTime(12,41))}</small><b>${esc(t("alertT",REF))}</b><span>${esc(t("alertN",1))}</span></span></div>`;
   return "";
 }
 RKIT.start(R, {

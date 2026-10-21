@@ -631,8 +631,8 @@ RKIT.start(R, {
   steps:[
     {beat:0, hint:HINT("Reportes","Relatórios","Reports"), target:'[data-t="row-reports"]', tap(st){ st.screen="reports"; }},
     {beat:1, hint:pick({es:"Toca la barra más alta",pt:"Toque na barra mais alta",en:"Tap the tallest bar"}), target:'[data-t="bar"]', tap(st){ st.marker=true; }},
-    {beat:2, hint:HINT(F("refunds_with_count",1), F("refunds_with_count",1), F("refunds_with_count",1)), target:'[data-t="line-refunds"]', tap(st){ st.screen="line"; st.line="refunds"; }},
-    {beat:3, hint:pick({es:"Toca la flecha para volver",pt:"Toque na seta para voltar",en:"Tap the arrow to go back"}), target:'[data-t="line-back"]', tap(st,E){ st.screen="reports"; E.after(500,()=>{ st.scroll=LINE_SCROLL; }); }},
+    {beat:3, hint:HINT(F("refunds_with_count",1), F("refunds_with_count",1), F("refunds_with_count",1)), target:'[data-t="line-refunds"]', tap(st){ st.screen="line"; st.line="refunds"; }},
+    {beat:4, hint:pick({es:"Toca la flecha para volver",pt:"Toque na seta para voltar",en:"Tap the arrow to go back"}), target:'[data-t="line-back"]', tap(st,E){ st.screen="reports"; E.after(500,()=>{ st.scroll=LINE_SCROLL; }); }},
     {beat:4, hint:HINT(lineWord,lineWord,lineWord), target:`[data-t="${lineTag}"]`, tap(st){ st.screen="line"; st.line=LINE; }},
     {beat:5, hint:pick({es:"Toca la flecha para volver",pt:"Toque na seta para voltar",en:"Tap the arrow to go back"}), target:'[data-t="line-back"]', tap(st,E){ st.screen="reports"; E.after(500,()=>{ st.scroll=SCROLL_PAY; }); }},
     {beat:6, hint:HINT(S("reports_period_this_month"),S("reports_period_this_month"),S("reports_period_this_month")), target:'[data-t="chip-this_month"]', tap(st,E){ st.range="month"; st.marker=false; E.after(400,()=>{ st.scroll=0; }); }}
