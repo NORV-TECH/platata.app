@@ -550,7 +550,7 @@ SKIT.start(S, {
     {beat:3, hint:TAP+ANA, target:'[data-t="pick-ana"]', tap(st){ st.screen="pay"; st.customer=ANA; }},
     {beat:4, hint:TAP+t("checkout_other_method", OTHERS.length).replace(/\s*\(.*\)/,""), target:'[data-t="other"]', tap(st){ st.sheet=true; }},
     {beat:4, hint:TAP+NEWM, target:`[data-t="om-${OTHERS.indexOf(NEWM)}"]`, tap(st){ st.sheet=false; st.confirm=true; }},
-    {beat:5, hint:TAP+t("pay_custom_confirm_yes"), target:'[data-t="yes"]', tap(st){ st.confirm=false; st.screen="done"; }}
+    {beat:5, wait:3.0, hint:TAP+t("pay_custom_confirm_yes"), target:'[data-t="yes"]', tap(st){ st.confirm=false; st.screen="done"; }}
   ]
 });
 </script>

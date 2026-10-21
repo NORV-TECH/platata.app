@@ -154,7 +154,7 @@ function start(cfg){
     beat=b; beatStart=t; starts.push(t);
     const list = stepsOf(b), D = dur[b] || 4, n = list.length;
     const gap = n ? Math.max(1.0, (D - 1.0) / n) : 0;
-    beatTapsPlanned = list.map((x,k)=>({i:x.i, at: t + 0.8 + k*gap}));
+    beatTapsPlanned = list.map((x,k)=>({i:x.i, at: t + 0.8 + k*gap + (x.s.wait||0)}));   // wait: a video-only delay, so the line can describe a button before it is tapped
     tapsDone = 0;
     if(b === nb-1){ ended = true; total = t + D + 1.6; }
   }
