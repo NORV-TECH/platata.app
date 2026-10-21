@@ -1,0 +1,85 @@
+{
+  "id": "RS18",
+  "name": "Combos (restaurant)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-combos",
+      "voice": {
+        "es": "En tu menú, toca Combos.",
+        "pt": "No seu cardápio, toque em Combos.",
+        "en": "In your menu, tap Combos."
+      }
+    },
+    {
+      "id": "2-main",
+      "voice": {
+        "es": "Elige la categoría del plato principal.",
+        "pt": "Escolha a categoria do prato principal.",
+        "en": "Pick the category of the main dish."
+      }
+    },
+    {
+      "id": "3-side",
+      "voice": {
+        "es": "Y la categoría de lo que viene con él, como las bebidas.",
+        "pt": "E a categoria do que vem junto, como as bebidas.",
+        "en": "And the category that comes with it, like drinks."
+      }
+    },
+    {
+      "id": "4-discount",
+      "voice": {
+        "es": "Toca Siguiente y activa el descuento del combo.",
+        "pt": "Toque em Avançar e ative o desconto do combo.",
+        "en": "Tap Next and turn on the combo discount."
+      }
+    },
+    {
+      "id": "5-save",
+      "voice": {
+        "es": "Toca Guardar.",
+        "pt": "Toque em Salvar.",
+        "en": "Tap Save."
+      }
+    },
+    {
+      "id": "6-waiter",
+      "voice": {
+        "es": "En el teléfono del mesero, al tocar el plato aparece Hacerlo combo.",
+        "pt": "No celular do garçom, ao tocar no prato aparece Transformar em combo.",
+        "en": "On your server's phone, tapping the dish shows Make it a combo."
+      }
+    },
+    {
+      "id": "7-pick",
+      "voice": {
+        "es": "Lo toca, elige la bebida y el descuento se aplica solo.",
+        "pt": "Ele toca, escolhe a bebida e o desconto entra sozinho.",
+        "en": "They tap it, pick the drink, and the discount applies itself."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así armas combos en tu restaurante, con Platata.",
+        "pt": "Assim você monta combos no seu restaurante, com o Platata.",
+        "en": "That's how you build combos for your restaurant, with Platata."
+      }
+    }
+  ]
+}

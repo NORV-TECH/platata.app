@@ -1,0 +1,77 @@
+{
+  "id": "R1",
+  "name": "Your menu from a photo (AI)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-photo",
+      "voice": {
+        "es": "Tu carta está vacía. Tómale una foto a tu carta de papel y Platata te arma el menú.",
+        "pt": "Seu cardápio está vazio. Tire uma foto do cardápio de papel e o Platata monta tudo para você.",
+        "en": "Your menu is empty. Take a photo of your paper menu and Platata builds it for you."
+      }
+    },
+    {
+      "id": "2-tips",
+      "voice": {
+        "es": "La primera vez ves unos consejos para que la foto salga bien.",
+        "pt": "Na primeira vez, aparecem dicas para a foto sair boa.",
+        "en": "The first time, you get a few tips for a good photo."
+      }
+    },
+    {
+      "id": "3-shots",
+      "voice": {
+        "es": "Toma una foto por página.",
+        "pt": "Tire uma foto por página.",
+        "en": "Take one photo per page."
+      }
+    },
+    {
+      "id": "4-done",
+      "voice": {
+        "es": "Toca Listo. La IA lee los platos, las categorías y los precios.",
+        "pt": "Toque em Pronto. A IA lê os pratos, as categorias e os preços.",
+        "en": "Tap Done. The AI reads the dishes, the categories and the prices."
+      }
+    },
+    {
+      "id": "5-review",
+      "voice": {
+        "es": "Revisa la lista y corrige lo que haya leído mal, como este precio.",
+        "pt": "Confira a lista e corrija o que ela leu errado, como este preço.",
+        "en": "Check the list and fix anything it misread, like this price."
+      }
+    },
+    {
+      "id": "6-add",
+      "voice": {
+        "es": "Toca Agregar y vuelves a la caja con tu menú listo para vender.",
+        "pt": "Toque em Adicionar e você volta ao caixa com o cardápio pronto para vender.",
+        "en": "Tap Add and you're back on the register, with your menu ready to sell."
+      }
+    },
+    {
+      "id": "7-end",
+      "voice": {
+        "es": "Así armas tu menú desde una foto, con Platata.",
+        "pt": "Assim você monta seu cardápio com uma foto, com o Platata.",
+        "en": "That's how you build your menu from a photo, with Platata."
+      }
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "id": "R3",
+  "name": "Add-ons for dishes",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-addons",
+      "voice": {
+        "es": "En tu menú, toca Adiciones.",
+        "pt": "No seu cardápio, toque em Adicionais.",
+        "en": "In your menu, tap Add-ons."
+      }
+    },
+    {
+      "id": "2-idea",
+      "voice": {
+        "es": "Elige una idea lista, como Salsas.",
+        "pt": "Escolha uma ideia pronta, como Molhos.",
+        "en": "Pick a ready idea, like Sauce."
+      }
+    },
+    {
+      "id": "3-dishes",
+      "voice": {
+        "es": "Toca En qué platos y elige todos los de una categoría.",
+        "pt": "Toque em Em quais pratos e selecione todos de uma categoria.",
+        "en": "Tap On which dishes and select every dish in a category."
+      }
+    },
+    {
+      "id": "4-price",
+      "voice": {
+        "es": "Las opciones salen gratis. Ponle precio solo a lo que cobras.",
+        "pt": "As opções saem grátis. Coloque preço só no que você cobra.",
+        "en": "The choices start free. Put a price only on what you charge for."
+      }
+    },
+    {
+      "id": "5-done",
+      "voice": {
+        "es": "Toca Listo y la adición queda activa.",
+        "pt": "Toque em Concluído e o adicional fica ativo.",
+        "en": "Tap Done and the add-on is active."
+      }
+    },
+    {
+      "id": "6-waiter",
+      "voice": {
+        "es": "Con internet llega al teléfono del mesero. Toca el plato y salen las salsas.",
+        "pt": "Pela internet ele chega ao celular do garçom. Ele toca no prato e os molhos aparecem.",
+        "en": "Over the internet it reaches your server's phone. They tap the dish and the sauces show."
+      }
+    },
+    {
+      "id": "7-pick",
+      "voice": {
+        "es": "Marca la salsa: su precio se suma. Luego, Agregar a la venta.",
+        "pt": "Marque o molho: o preço é somado. Depois, Adicionar à venda.",
+        "en": "Pick the sauce: its price is added. Then, Add to sale."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así agregas adiciones a tus platos, con Platata.",
+        "pt": "Assim você põe adicionais nos seus pratos, com o Platata.",
+        "en": "That's how you add add-ons to your dishes, with Platata."
+      }
+    }
+  ]
+}

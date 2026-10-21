@@ -1,0 +1,93 @@
+{
+  "id": "RS20",
+  "name": "Vender en línea",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-abrir",
+      "voice": {
+        "es": "Abre tu negocio y toca Vender en línea.",
+        "pt": "Abra seu negócio e toque em Vender online.",
+        "en": "Open your business and tap Sell online."
+      }
+    },
+    {
+      "id": "2-conexion",
+      "voice": {
+        "es": "Tu tienda online se abre cuando una tablet o un teléfono de empleado usa una conexión adicional. Agrégala y conecta el equipo.",
+        "pt": "Sua loja online abre quando um tablet ou um celular de funcionário usa uma conexão adicional. Adicione e conecte o aparelho.",
+        "en": "Your online store takes orders from one link. In the US and Canada it's included."
+      }
+    },
+    {
+      "id": "3-direccion",
+      "voice": {
+        "es": "Enciéndela, elige tu dirección y tu horario.",
+        "pt": "Ligue a loja e escolha seu endereço e seu horário.",
+        "en": "Turn it on and choose your address and your hours."
+      }
+    },
+    {
+      "id": "4-encender",
+      "voice": {
+        "es": "Toca Encender la tienda. Tu enlace queda listo.",
+        "pt": "Toque em Ligar a loja. Seu link fica pronto.",
+        "en": "Tap Turn on the store. Your link is ready."
+      }
+    },
+    {
+      "id": "5-compartir",
+      "voice": {
+        "es": "Compártelo en WhatsApp o en tu bio de Instagram.",
+        "pt": "Compartilhe no WhatsApp ou na bio do Instagram.",
+        "en": "Share it on WhatsApp or in your Instagram bio."
+      }
+    },
+    {
+      "id": "6-elige",
+      "voice": {
+        "es": "Tu cliente abre el enlace, elige un plato y lo agrega al pedido.",
+        "pt": "Seu cliente abre o link, escolhe um prato e adiciona ao pedido.",
+        "en": "Your customer opens the link, picks a dish and adds it to the order."
+      }
+    },
+    {
+      "id": "7-pedido",
+      "voice": {
+        "es": "Pone su nombre y su celular y hace el pedido. Paga al recogerlo.",
+        "pt": "Ele põe o nome e o celular e faz o pedido. Paga na retirada.",
+        "en": "They add their name and phone number and place the order. They pay at pickup."
+      }
+    },
+    {
+      "id": "8-aviso",
+      "voice": {
+        "es": "El aviso suena en tu teléfono mientras Platata está abierta.",
+        "pt": "O aviso toca no seu celular enquanto a Platata está aberta.",
+        "en": "The alert rings on your phone while Platata is open."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así vendes en línea con Platata.",
+        "pt": "Assim você vende online com o Platata.",
+        "en": "That's how you sell online with Platata."
+      }
+    }
+  ]
+}
