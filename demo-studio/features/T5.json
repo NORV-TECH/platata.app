@@ -1,0 +1,85 @@
+{
+ "id": "T5",
+ "name": "Sell by weight",
+ "business": "tienda",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "pt": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "en": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-tablet",
+   "voice": {
+    "es": "En la tablet de mostrador, toca Catálogo.",
+    "pt": "No tablet do balcão, toque em Catálogo.",
+    "en": "On the counter tablet, tap Library."
+   }
+  },
+  {
+   "id": "2-item",
+   "voice": {
+    "es": "Toca un producto que se vende por peso.",
+    "pt": "Toque num produto vendido por peso.",
+    "en": "Tap a product that's sold by weight."
+   }
+  },
+  {
+   "id": "3-type",
+   "voice": {
+    "es": "Escribe el peso y el total sale solo.",
+    "pt": "Digite o peso e o total aparece sozinho.",
+    "en": "Type the weight and the total shows up on its own."
+   }
+  },
+  {
+   "id": "4-add",
+   "voice": {
+    "es": "Toca Agregar a la venta.",
+    "pt": "Toque em Adicionar à venda.",
+    "en": "Tap Add to sale."
+   }
+  },
+  {
+   "id": "5-phone",
+   "voice": {
+    "es": "En tu teléfono, igual: toca Sin código.",
+    "pt": "No seu celular é igual: toque em Sem código.",
+    "en": "Same on your phone: tap No barcode."
+   }
+  },
+  {
+   "id": "6-quick",
+   "voice": {
+    "es": "Toca el queso y elige un peso rápido.",
+    "pt": "Toque no queijo e escolha um peso rápido.",
+    "en": "Tap the cheese and pick a quick weight."
+   }
+  },
+  {
+   "id": "7-add",
+   "voice": {
+    "es": "Toca Agregar a la venta.",
+    "pt": "Toque em Adicionar à venda.",
+    "en": "Tap Add to sale."
+   }
+  },
+  {
+   "id": "8-end",
+   "voice": {
+    "es": "Así vendes por peso, con Platata.",
+    "pt": "Assim você vende por peso, com o Platata.",
+    "en": "That's how you sell by weight, with Platata."
+   }
+  }
+ ]
+}

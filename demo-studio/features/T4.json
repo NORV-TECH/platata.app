@@ -1,0 +1,85 @@
+{
+ "id": "T4",
+ "name": "Products without a barcode",
+ "business": "tienda",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "pt": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "en": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-open",
+   "voice": {
+    "es": "¿Lo que vendes no tiene código? Toca Sin código.",
+    "pt": "O que você vende não tem código? Toque em Sem código.",
+    "en": "Selling something without a barcode? Tap No barcode."
+   }
+  },
+  {
+   "id": "2-tap",
+   "voice": {
+    "es": "Tus productos salen con su dibujo. Toca uno y entra a la venta con tu precio.",
+    "pt": "Seus produtos aparecem com desenho. Toque em um e ele entra na venda com seu preço.",
+    "en": "Your products show up with a drawing. Tap one and it goes into the sale at your price."
+   }
+  },
+  {
+   "id": "3-search",
+   "voice": {
+    "es": "¿Algo nuevo? Escribe unas letras y aparece.",
+    "pt": "Algo novo? Digite umas letras e ele aparece.",
+    "en": "Something new? Type a few letters and it shows up."
+   }
+  },
+  {
+   "id": "4-price",
+   "voice": {
+    "es": "Tócalo y ponle tu precio.",
+    "pt": "Toque nele e coloque o seu preço.",
+    "en": "Tap it and set your price."
+   }
+  },
+  {
+   "id": "5-weight",
+   "voice": {
+    "es": "Se vende por peso: escribe cuánto lleva.",
+    "pt": "É vendido por peso: digite quanto o cliente leva.",
+    "en": "It's sold by weight: type how much the customer takes."
+   }
+  },
+  {
+   "id": "6-add",
+   "voice": {
+    "es": "Toca Agregar al carrito.",
+    "pt": "Toque em Adicionar ao carrinho.",
+    "en": "Tap Add to Cart."
+   }
+  },
+  {
+   "id": "7-pay",
+   "voice": {
+    "es": "Toca Cobrar y luego Exacto.",
+    "pt": "Toque em Cobrar e depois em Exato.",
+    "en": "Tap Charge, then Exact."
+   }
+  },
+  {
+   "id": "8-end",
+   "voice": {
+    "es": "Así vendes lo que no tiene código, con Platata.",
+    "pt": "Assim você vende o que não tem código, com o Platata.",
+    "en": "That's how you sell what has no barcode, with Platata."
+   }
+  }
+ ]
+}

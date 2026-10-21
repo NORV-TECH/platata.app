@@ -1,0 +1,61 @@
+{
+  "id": "TS7-US",
+  "name": "Receipt by text, email or paper: US in Spanish (shop)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-charge",
+      "voice": {
+        "es": "Con los productos escaneados, toca Cobrar y Exacto."
+      }
+    },
+    {
+      "id": "2-print",
+      "voice": {
+        "es": "El recibo ya salió en la impresora. Si hace falta otro, toca Imprimir otra vez."
+      }
+    },
+    {
+      "id": "3-view",
+      "voice": {
+        "es": "Toca Ver recibo para mirarlo, y ciérralo."
+      }
+    },
+    {
+      "id": "4-wa",
+      "voice": {
+        "es": "Toca Recibo por mensaje y escribe el número del cliente."
+      }
+    },
+    {
+      "id": "5-send",
+      "voice": {
+        "es": "Envíalo desde tu app de mensajes."
+      }
+    },
+    {
+      "id": "6-back",
+      "voice": {
+        "es": "También va por correo: toca Recibo por correo y envíalo."
+      }
+    },
+    {
+      "id": "7-new",
+      "voice": {
+        "es": "De vuelta en Platata, toca Nueva venta."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así das el recibo por mensaje, correo o impreso, con Platata."
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+ "id": "T11",
+ "name": "Units of measure",
+ "business": "tienda",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "pt": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "en": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-field",
+   "voice": {
+    "es": "En el producto, toca Unidad de venta.",
+    "pt": "No produto, toque em Unidade de venda.",
+    "en": "In the product, tap Unit of sale."
+   }
+  },
+  {
+   "id": "2-pick",
+   "voice": {
+    "es": "Elige cómo se vende: por unidad, por peso, por litro o por docena.",
+    "pt": "Escolha como ele é vendido: por unidade, por peso, por litro ou por dúzia.",
+    "en": "Pick how it sells: by the item, by weight or by volume."
+   }
+  },
+  {
+   "id": "3-more",
+   "voice": {
+    "es": "¿Necesitas otra? Toca Más unidades y salen todas, por grupo.",
+    "pt": "Precisa de outra? Toque em Mais unidades e aparecem todas, por grupo.",
+    "en": "Need another one? Tap More units and they all show up, by group."
+   }
+  },
+  {
+   "id": "4-new",
+   "voice": {
+    "es": "O crea la tuya: toca Nueva unidad.",
+    "pt": "Ou crie a sua: toque em Nova unidade.",
+    "en": "Or make your own: tap New unit."
+   }
+  },
+  {
+   "id": "5-type",
+   "voice": {
+    "es": "Escribe el nombre y la abreviatura.",
+    "pt": "Digite o nome e a abreviatura.",
+    "en": "Type the name and the abbreviation."
+   }
+  },
+  {
+   "id": "6-save",
+   "voice": {
+    "es": "Toca Guardar y queda elegida.",
+    "pt": "Toque em Salvar e ela já fica escolhida.",
+    "en": "Tap Save and it's picked."
+   }
+  },
+  {
+   "id": "7-end",
+   "voice": {
+    "es": "Así vendes por unidad, por peso o por bulto, con Platata.",
+    "pt": "Assim você vende por unidade, por peso ou por saco, com o Platata.",
+    "en": "That's how you sell by the unit, by weight or by the sack, with Platata."
+   }
+  }
+ ]
+}

@@ -1,0 +1,85 @@
+{
+ "id": "T1",
+ "name": "Scan the barcode",
+ "business": "tienda",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "pt": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "en": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-add",
+   "voice": {
+    "es": "Para vender, toca Agregar productos y se abre la cámara.",
+    "pt": "Para vender, toque em Adicionar produtos e a câmera abre.",
+    "en": "To sell, tap Add items and the camera opens."
+   }
+  },
+  {
+   "id": "2-scan",
+   "voice": {
+    "es": "Apunta al código de barras y toca la pantalla: el producto entra en la venta.",
+    "pt": "Aponte para o código de barras e toque na tela: o produto entra na venda.",
+    "en": "Point at the barcode and tap the screen: the product goes into the sale."
+   }
+  },
+  {
+   "id": "3-again",
+   "voice": {
+    "es": "¿Lleva dos? Escanéalo otra vez y suma uno más.",
+    "pt": "Vai levar dois? Escaneie de novo e soma mais um.",
+    "en": "Buying two? Scan it again and it adds one more."
+   }
+  },
+  {
+   "id": "4-other",
+   "voice": {
+    "es": "Otro producto, otro toque.",
+    "pt": "Outro produto, outro toque.",
+    "en": "Another product, another tap."
+   }
+  },
+  {
+   "id": "5-pay",
+   "voice": {
+    "es": "Toca Cobrar y luego Exacto. Venta lista.",
+    "pt": "Toque em Cobrar e depois em Exato. Venda pronta.",
+    "en": "Tap Charge, then Exact. Sale done."
+   }
+  },
+  {
+   "id": "6-tablet",
+   "voice": {
+    "es": "En la tablet de mostrador funciona igual, con el mismo catálogo.",
+    "pt": "No tablet do balcão funciona igual, com o mesmo catálogo.",
+    "en": "On the counter tablet it works the same, with the same catalog."
+   }
+  },
+  {
+   "id": "7-unknown",
+   "voice": {
+    "es": "Un código que no está en tu catálogo no entra a la venta.",
+    "pt": "Um código que não está no seu catálogo não entra na venda.",
+    "en": "A barcode that isn't in your catalog doesn't go into the sale."
+   }
+  },
+  {
+   "id": "8-end",
+   "voice": {
+    "es": "Así escaneas y vendes en segundos, con Platata.",
+    "pt": "Assim você escaneia e vende em segundos, com o Platata.",
+    "en": "That's how you scan and sell in seconds, with Platata."
+   }
+  }
+ ]
+}

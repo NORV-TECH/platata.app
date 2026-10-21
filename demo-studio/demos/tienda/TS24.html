@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Varios negocios y sucursales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* ---- shared by RS19..RS24: owner Home, panel, Settings page, support strip, dialogs (values from ui/theme + the files named in the script) ---- */
+.ti{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor;flex:0 0 auto}
+.otabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.otabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);color:var(--m-onv);position:relative}
+.otabs span.on{color:var(--m-on);font-weight:700}
+.otabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.rcbar{flex:0 0 auto;background:#FEF3C7;color:#856404;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--u)*6) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:700}
+.rcbar b{background:#FF9500;color:#fff;border-radius:calc(var(--u)*50);padding:calc(var(--u)*6) calc(var(--u)*16);font-size:calc(var(--u)*13)}
+.offs{flex:0 0 auto;background:var(--m-sv);color:var(--m-onv);text-align:center;font-size:calc(var(--u)*12);font-weight:700;padding:calc(var(--u)*4) calc(var(--u)*16)}
+.oedit{flex:0 0 auto;display:flex;justify-content:flex-end;padding:0 calc(var(--u)*16)}
+.oedit span{display:flex;align-items:center;gap:calc(var(--u)*4);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mcats .ck{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:currentColor}
+.csale{flex:0 0 auto;min-height:calc(var(--u)*44);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:600}
+.csale i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.fpair{flex:0 0 auto;display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16)}
+.fpair span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600;white-space:nowrap}
+.fpair .pri{background:var(--m-on);color:#fff}
+.fpair .sec{border:1px solid var(--m-outline);color:var(--m-on)}
+.fpair .pri.dis{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.fpair .sec.dis{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.onav .pill{position:relative}
+.nbadge{position:absolute;top:calc(var(--u)*-2);right:calc(var(--u)*12);min-width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:calc(var(--u)*8);background:#B3261E;color:#fff;font-style:normal;font-size:calc(var(--u)*11);font-weight:600;display:grid;place-items:center;padding:0 calc(var(--u)*4)}
+.onav .flagc{font-size:0}
+.onav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.onav .flagc svg.fp{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:var(--m-onv);border-radius:0}
+/* panel */
+.panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff}
+.phd{display:flex;align-items:center;padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);color:#007AFF;flex:0 0 auto}
+.phd span{font-size:calc(var(--u)*28);font-weight:900;line-height:1.15}
+.pdn{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.plist{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--u)*8);padding-bottom:calc(var(--u)*12)}
+.wrow{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.wic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.wdot{width:calc(var(--u)*42);text-align:center;font-size:calc(var(--u)*16);flex:0 0 auto}
+.wtx{flex:1;min-width:0;display:flex;flex-direction:column}
+.wtx b{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);line-height:1.3}
+.wtx small{font-size:calc(var(--u)*12);color:var(--m-onv);line-height:1.35}
+.wtx small.red{color:var(--m-err)}
+.wch{color:var(--m-onv);flex:0 0 auto}
+.wtr{font-size:calc(var(--u)*18);font-weight:700;white-space:nowrap}.wtr.sm{font-size:calc(var(--u)*14)}
+.spill{border-radius:calc(var(--u)*50);background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.spill.on{background:var(--m-sv);color:var(--m-on)}
+.phead{margin:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.pdiv{margin:calc(var(--u)*4) calc(var(--u)*24);border-top:1px solid var(--m-ovar)}
+/* top bar + Settings page */
+.mtb{flex:0 0 auto;height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*4);background:#fff}
+.mtbb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on)}
+.mtbt{font-size:calc(var(--u)*22);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptb{height:calc(var(--u)*52);background:#FBFAF7}
+.ptb .mtbb{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;margin-left:calc(var(--u)*8)}
+.ptb .mtbt{font:600 calc(var(--u)*20) Fredoka,Roboto,sans-serif;color:#17181B}
+.hub{flex:1;min-height:0;overflow:hidden;padding:0 calc(var(--u)*16) calc(var(--u)*24);background:#fff}
+.hgrp{padding:calc(var(--u)*16) 0 calc(var(--u)*8) calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.hrow{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);margin-bottom:calc(var(--u)*8)}
+/* support strip (SupportStrip.kt) */
+.sstrip{flex:0 0 auto;display:flex;min-height:calc(var(--u)*56);background:#fff;border-top:1px solid #E6E2D9;position:relative}
+.sstrip::after{content:"";position:absolute;left:50%;top:calc(var(--u)*8);bottom:calc(var(--u)*8);width:1px;background:#E6E2D9}
+.sh{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.sb{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#188448;display:grid;place-items:center;flex:0 0 auto}
+.sbi{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
+.st{flex:1;min-width:0;display:flex;flex-direction:column}
+.st b{font-size:calc(var(--u)*15);font-weight:700;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st small{font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sch{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+/* dialogs (SumaDialog = M3 AlertDialog) */
+.dscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*40)}
+.dbox{width:100%;background:#fff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24)}
+.dtt{font-size:calc(var(--u)*24);line-height:1.3;color:var(--m-on);margin-bottom:calc(var(--u)*16)}
+.dbody{font-size:calc(var(--u)*14);line-height:1.45;color:var(--m-onv)}
+.dbody p{margin:0 0 calc(var(--u)*12)}
+.dbtn{display:flex;justify-content:flex-end;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24)}
+.dno{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.dyes{padding:calc(var(--u)*10) calc(var(--u)*24);border-radius:calc(var(--u)*20);background:var(--m-on);color:#fff;font-size:calc(var(--u)*14);font-weight:500}
+.dyes.red{background:var(--m-err)}
+.dbox.pap .dno{color:#3A2A1F}.dbox.pap .dyes{background:#3A2A1F}
+.dbox.pap .dbody{color:#17181B;font-size:calc(var(--u)*15);line-height:1.4}
+/* system prompts */
+.bios{align-items:end;place-items:end center;padding:0}
+.bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*28) calc(var(--u)*24) calc(var(--u)*40);text-align:center}
+.bio .bt{font-size:calc(var(--u)*22);color:#1F1F1F}
+.bio .bs{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*14);color:#444746}
+.bf{margin:calc(var(--u)*28) auto 0;width:calc(var(--u)*72);height:calc(var(--u)*72);border-radius:50%;display:grid;place-items:center;background:#D3E3FD}
+.bfi{width:calc(var(--u)*44);height:calc(var(--u)*44);fill:#0B57D0}
+.otoast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*110);max-width:85%;background:rgba(32,33,36,.92);color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:16;text-align:center}
+
+.cin{display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.cpage{flex:1;min-height:0;overflow:hidden;background:#FBFAF7;padding:calc(var(--u)*8) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.pcard{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.kv{font-size:calc(var(--u)*12.5);color:#737883;letter-spacing:.3px}
+.h1{font:600 calc(var(--u)*27)/1.15 Fredoka,Roboto,sans-serif;color:#17181B}
+.h2{font:600 calc(var(--u)*20)/1.2 Fredoka,Roboto,sans-serif;color:#17181B}
+.pbody{font-size:calc(var(--u)*15);line-height:1.4;color:#464A52}
+.cgrp{display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.cgrp .kv.ok{color:#2C6A35}
+.crow{display:flex;flex-wrap:wrap;gap:calc(var(--u)*8) calc(var(--u)*4)}
+.slot{width:calc(var(--u)*72);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*4);text-align:center}
+.circ{position:relative;width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:50%;display:grid;place-items:center;box-sizing:border-box}
+.circ.f{background:#188448;color:#fff}.circ.o{border:calc(var(--u)*2) solid #188448;color:#188448;font:600 calc(var(--u)*20) Fredoka,sans-serif}
+.circ.a{border:calc(var(--u)*2) dashed #D9D4C9;color:#464A52}
+.circ svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.badge{position:absolute;top:calc(var(--u)*-5);right:calc(var(--u)*-7);min-width:calc(var(--u)*18);height:calc(var(--u)*18);border-radius:calc(var(--u)*9);background:#17181B;color:#FBFAF7;font:500 calc(var(--u)*13)/calc(var(--u)*18) Roboto,sans-serif;text-align:center;padding:0 calc(var(--u)*4);box-sizing:border-box}
+.slot b{font-size:calc(var(--u)*12.5);font-weight:600;color:#17181B;line-height:1.2}
+.slot small{font-size:calc(var(--u)*12.5);color:#737883;line-height:1.2}.slot small.ok{color:#2C6A35}
+.mline{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*8) 0}
+.mline .l{flex:1}.mline .l b{display:block;font-size:calc(var(--u)*15);font-weight:400;color:#17181B}.mline .l small{font-size:calc(var(--u)*12.5);color:#737883}
+.mline .v{font-size:calc(var(--u)*16);font-weight:500;color:#17181B}.mline .v.ok{color:#2C6A35}
+.mline.big .l b{font-size:calc(var(--u)*16);font-weight:500}
+.prow{min-height:calc(var(--u)*56);background:#fff;border:calc(var(--u)*2) solid #E6E2D9;border-radius:calc(var(--u)*14);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.prow span{flex:1}.prow svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#737883}
+.dsec{display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.drow{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.dtile{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);background:#E5F1E7;display:grid;place-items:center;color:#1E9E55;flex:0 0 auto}
+.dtile svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.drow .nm{flex:1;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.drow .rt{display:flex;flex-direction:column;align-items:flex-end;gap:calc(var(--u)*2)}
+.chip{font-size:calc(var(--u)*13);font-weight:500;border-radius:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*8)}
+.chip.ok{background:#E4F0E2;color:#2C6A35}.chip.pd{background:#E6E2D9;color:#17181B}.chip.wn{background:#F6EED8;color:#8A6712}
+.rmv{font-size:calc(var(--u)*14);font-weight:500;color:#464A52;padding:calc(var(--u)*8) calc(var(--u)*4)}
+.pbtn{height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#188448;color:#fff;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font:500 calc(var(--u)*18) Fredoka,Roboto,sans-serif;flex:0 0 auto}
+.pbtn svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff}
+.pbtn.sm{height:calc(var(--u)*44);border-radius:calc(var(--u)*14);font-size:calc(var(--u)*16)}
+.pbtn.dis{background:#E6E2D9;color:#737883}
+.scard{border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12);border:1px solid #E6E2D9}
+.scard .top{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.scard .top .tx{flex:1}.scard .top b{display:block;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.sbox{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center;color:#1E9E55;flex:0 0 auto}
+.sbox svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.okpill{font-size:calc(var(--u)*13);font-weight:500;background:#E4F0E2;color:#2C6A35;border-radius:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*10)}
+.hint{border-radius:calc(var(--u)*14);background:#E5F1E7;padding:calc(var(--u)*12);font-size:calc(var(--u)*15);line-height:1.4;color:#464A52}
+.stepc{border:1px solid #E6E2D9;border-radius:calc(var(--u)*18);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.step{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.sbt{width:calc(var(--u)*52);height:calc(var(--u)*52);border-radius:50%;border:calc(var(--u)*2) solid #D9D4C9;display:grid;place-items:center;flex:0 0 auto}
+.sbt svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#17181B}.sbt.dim{opacity:.35}
+.step .mid{flex:1;text-align:center}.step .mid small{display:block;font-size:calc(var(--u)*13);color:#737883}
+.sheetp{position:absolute;inset:0;background:rgba(0,0,0,.32);display:flex;align-items:flex-end;z-index:15}
+.sheet{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*12) calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.grab{width:calc(var(--u)*44);height:calc(var(--u)*5);border-radius:calc(var(--u)*3);background:#D9D4C9;margin:0 auto calc(var(--u)*8)}
+.opt{min-height:calc(var(--u)*52);border:calc(var(--u)*2) solid #E6E2D9;border-radius:calc(var(--u)*14);padding:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);background:#fff}
+.opt .tl{width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:calc(var(--u)*14);background:#F4EBDD;display:grid;place-items:center;color:#3A2A1F;flex:0 0 auto}
+.opt .tl svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.opt b{display:block;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}.opt small{font-size:calc(var(--u)*15);color:#737883;line-height:1.35}
+.notnow{text-align:center;font:500 calc(var(--u)*18) Fredoka,sans-serif;color:#464A52;padding:calc(var(--u)*8)}
+.emp{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*14);padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.emp .r{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.av{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#E5F1E7;color:#178046;display:grid;place-items:center;font:600 calc(var(--u)*20) Fredoka,sans-serif;flex:0 0 auto}
+.emp .who{flex:1;min-width:0}.emp .who b{display:block;font-size:calc(var(--u)*16);font-weight:600;color:#17181B}.emp .who small{font-size:calc(var(--u)*13);color:#737883}
+.cbtn{width:calc(var(--u)*108);height:calc(var(--u)*44);border-radius:calc(var(--u)*14);background:#188448;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*16) Fredoka,sans-serif;flex:0 0 auto}
+.emp .code{font-size:calc(var(--u)*13);color:#464A52}
+.emp .send{font-size:calc(var(--u)*14);font-weight:500;color:#178046;padding:calc(var(--u)*4) 0}
+.addemp{font-size:calc(var(--u)*14);font-weight:500;color:#178046;padding:calc(var(--u)*8) calc(var(--u)*4)}
+.small{font-size:calc(var(--u)*13);color:#737883}
+.flash{animation:fl 1.2s ease-out}@keyframes fl{0%{box-shadow:0 0 0 calc(var(--u)*3) #188448}100%{box-shadow:0 0 0 0 transparent}}
+/* ---- shop owner Home (retail: no tab row; ScanCheckoutTab.kt) ---- */
+.shome{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;background:#fff}
+.shome .rc{margin:calc(var(--u)*16) calc(var(--u)*16) 0;border-radius:calc(var(--u)*16);background:#fff;box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.12);padding:calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mrow{min-height:calc(var(--u)*56);border-radius:calc(var(--u)*8);background:#F7F7FA;display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12)}
+.mrow .em{font-size:calc(var(--u)*16);width:calc(var(--u)*24);text-align:center}
+.mrow .ic{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E;flex:0 0 auto}
+.mrow .tx{flex:1;min-width:0;font-size:calc(var(--u)*16);color:#1C1C1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .vl{display:flex;flex-direction:column;align-items:flex-end}
+.mrow .vl b{font-size:calc(var(--u)*14);font-weight:600;color:#1C1C1E}.mrow .vl small{font-size:calc(var(--u)*12);color:#6E6E73}
+.mrow .chv{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#6E6E73;flex:0 0 auto}
+.sbar{position:absolute;left:calc(var(--u)*16);right:calc(var(--u)*16);bottom:calc(var(--u)*16);display:flex;gap:calc(var(--u)*12)}
+.sbar .q{flex:1;min-height:calc(var(--u)*56);border-radius:calc(var(--u)*50);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:800}
+.sbar .om{flex:1;height:calc(var(--u)*54);border-radius:calc(var(--u)*18);border:calc(var(--u)*2) solid #E6E2D9;display:grid;place-items:center;font:500 calc(var(--u)*17) Fredoka,Roboto,sans-serif;color:#17181B;background:#fff}
+.sbar .ch{flex:1.4;height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#188448;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*17) Fredoka,Roboto,sans-serif;white-space:nowrap}
+.nudge{min-height:calc(var(--u)*48);background:#F2F2F7;display:flex;align-items:center;padding:0 calc(var(--u)*4) 0 calc(var(--u)*12);flex:0 0 auto}
+.nudge b{flex:1;font-size:calc(var(--u)*14);font-weight:700;color:#1C1C1E}
+.nudge span{height:calc(var(--u)*40);display:grid;place-items:center;padding:0 calc(var(--u)*8);font-size:calc(var(--u)*12);font-weight:500;color:#1C1C1E}
+.nudge span.cta{font-weight:700}
+.wbar{flex:0 0 auto;background:#FEF3C7;color:#856404;display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*12) calc(var(--u)*16)}
+.wbar svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#856404;flex:0 0 auto}
+.wbar b{flex:1;font-size:calc(var(--u)*14);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wbar span{font-size:calc(var(--u)*14);font-weight:700}
+.wtx small.inv{display:flex;gap:0;white-space:nowrap}.wtx small .lo{color:#FF3B30;font-weight:600}
+/* demo plumbing: the ring jumps straight to the next target (a gliding ring was read mid-way by tools/check_demo.py) */
+#ring{transition:none}
+
+.blist{flex:1;min-height:0;overflow:hidden;background:#fff}
+.bhd{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*8);background:#fff}
+.bhd .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:flex;align-items:center;justify-content:center}
+.bhd .ib svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-on)}
+.bhd b{display:block;font-size:calc(var(--u)*22);font-weight:700;color:var(--m-on);line-height:1.25}
+.bhd small{display:block;font-size:calc(var(--u)*12);color:#6E6E73}
+.sh2{font-size:calc(var(--u)*12);font-weight:700;color:#6E6E73;padding:calc(var(--u)*16) calc(var(--u)*16) calc(var(--u)*4)}
+.brow{margin:calc(var(--u)*4) calc(var(--u)*12);border:calc(var(--u)*1.5) solid #E5E5EA;border-radius:calc(var(--u)*12);padding:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);background:#fff}
+.brow.on{border-color:#007AFF;background:rgba(0,122,255,.06)}
+.brow .bx{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:calc(var(--u)*8);display:flex;align-items:center;justify-content:center;position:relative;flex:0 0 auto}
+.brow .bx svg{width:calc(var(--u)*24);height:calc(var(--u)*24)}
+.brow .bx em{position:absolute;right:0;bottom:0;width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#007AFF;display:flex;align-items:center;justify-content:center}
+.brow .bx em svg{width:calc(var(--u)*12);height:calc(var(--u)*12);fill:#fff}
+.brow .tx{flex:1;min-width:0}
+.brow .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on)}
+.brow .tx small{display:block;font-size:calc(var(--u)*11);color:#6E6E73}
+.brow .pil{font-size:calc(var(--u)*12);font-weight:700}
+.brow .ck{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.brow .mv{width:calc(var(--u)*44);height:calc(var(--u)*44);display:flex;align-items:center;justify-content:center;flex:0 0 auto;margin:calc(var(--u)*-8) calc(var(--u)*-8) calc(var(--u)*-8) 0}
+.brow .mv svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#6E6E73}
+.band{height:calc(var(--u)*8);background:#F2F2F7;margin:calc(var(--u)*12) 0}
+.bpage{flex:1;min-height:0;overflow:hidden;background:#fff;padding:0 calc(var(--u)*16)}
+.btop{flex:0 0 auto;height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*4);background:#fff}
+.btop .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:flex;align-items:center;justify-content:center}
+.btop .ib svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-on)}
+.btop .pb{width:calc(var(--u)*34);height:calc(var(--u)*34);border-radius:calc(var(--u)*8);background:rgba(255,149,0,.14);display:flex;align-items:center;justify-content:center}
+.btop .pb svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#FF9500}
+.btop b{font-size:calc(var(--u)*22);font-weight:700;color:var(--m-on)}
+.lab{font-size:calc(var(--u)*14);font-weight:700;color:#6E6E73;margin:calc(var(--u)*16) 0 calc(var(--u)*8)}
+.fld{height:calc(var(--u)*56);border:1px solid #C7C7CC;border-radius:calc(var(--u)*12);display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16);color:var(--m-on)}
+.fld.f{border:calc(var(--u)*2) solid #1C1C1E}
+.caret{display:inline-block;width:calc(var(--u)*2);height:calc(var(--u)*20);background:#1C1C1E;margin-left:1px;vertical-align:middle}
+.sup{padding:calc(var(--u)*4) calc(var(--u)*16) 0;font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.4}
+.sup .pv{color:var(--m-on)}
+.ccard{border-radius:calc(var(--u)*12);background:#fff;box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.18)}
+.crow{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*12) calc(var(--u)*16)}
+.crow+.crow{border-top:1px solid #E5E5EA;margin:0 calc(var(--u)*16);padding-left:0;padding-right:0}
+.crow .tx{flex:1;min-width:0}
+.crow .tx b{display:block;font-size:calc(var(--u)*16);font-weight:600;color:var(--m-on)}
+.crow .tx small{display:block;font-size:calc(var(--u)*12);color:#6E6E73}
+.alw{border-radius:calc(var(--u)*50);background:rgba(16,185,129,.15);color:#10B981;font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*4) calc(var(--u)*12)}
+.sw{width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);background:#F2F2F7;border:calc(var(--u)*2) solid #8E8E93;position:relative;flex:0 0 auto;box-sizing:border-box}
+.sw::after{content:"";position:absolute;width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#8E8E93;left:calc(var(--u)*6);top:calc(var(--u)*6)}
+.sw.on{background:#1C1C1E;border-color:#1C1C1E}.sw.on::after{width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff;left:auto;right:calc(var(--u)*2);top:calc(var(--u)*2)}
+.nocar{font-size:calc(var(--u)*12);color:#6E6E73;margin-top:calc(var(--u)*8);line-height:1.4}
+.cbtn{margin-top:calc(var(--u)*24);height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#1C1C1E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*16);font-weight:600}
+.cbtn.dis{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.spin{width:calc(var(--u)*22);height:calc(var(--u)*22);border-radius:50%;border:calc(var(--u)*2.5) solid rgba(255,255,255,.35);border-top-color:#fff;animation:sp 0.8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/shop-data.js"></script>
+<script src="../../kit/skit.js"></script>
+<script>
+const STR = {"mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "tx_tab_all": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "fiado_row_name": {"en": "Tab", "es": "Fiado", "pt": "Fiado"}, "fiado_row_count": {"en": ["%1$d client", "%1$d clients"], "es": ["%1$d cliente", "%1$d clientes"], "pt": ["%1$d cliente", "%1$d clientes"]}, "scan_no_barcode_btn": {"en": "No barcode", "es": "Sin código", "pt": "Sem código"}, "scan_row_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "scan_btn_scan_barcodes": {"en": "Add items", "es": "Agregar productos", "pt": "Adicionar produtos"}, "scan_btn_scan_more": {"en": "Scan more", "es": "Escanear más", "pt": "Escanear mais"}, "common_charge": {"en": "Charge %s", "es": "Cobrar %s", "pt": "Cobrar %s"}, "nudge_connect_title": {"en": "Connect your first register", "es": "Conecta tu primera caja", "pt": "Conecte seu primeiro caixa"}, "nudge_connect_cta": {"en": "Connect", "es": "Conectar", "pt": "Conectar"}, "nudge_connect_later": {"en": "Not now", "es": "Ahora no", "pt": "Agora não"}, "offline_strip_text": {"en": "No internet", "es": "Sin internet", "pt": "Sem internet"}, "workspace_register_closed": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "workspace_register_closed_sub": {"en": "Open it to start selling", "es": "Ábrela para empezar a vender", "pt": "Abra para começar a vender"}, "workspace_register_open_action": {"en": "Open", "es": "Abrir", "pt": "Abrir"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_row_on": {"en": "On", "es": "Activo", "pt": "Ligado"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_pill_on": {"en": "ON", "es": "ACTIVO", "pt": "LIGADO"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "workspace_items_title": {"en": "Items", "es": "Artículos", "pt": "Itens"}, "more_my_products_count": {"en": "%1$d items", "es": "%1$d artículos", "pt": "%1$d itens"}, "scan_row_inventory": {"en": "Inventory", "es": "Inventario", "pt": "Estoque"}, "stock_headline_low": {"en": ["%d running low", "%d running low"], "es": ["%d queda poco", "%d quedan pocos"], "pt": ["%d acabando", "%d acabando"]}, "stock_headline_uncounted": {"en": ["%d not counted", "%d not counted"], "es": ["%d sin contar", "%d sin contar"], "pt": ["%d não contado", "%d não contados"]}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "home_clientes_owed": {"en": ["%1$d owes you · %2$s", "%1$d owe you · %2$s"], "es": ["%1$d te debe · %2$s", "%1$d te deben · %2$s"], "pt": ["%1$d te deve · %2$s", "%1$d te devem · %2$s"]}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "invoices_row_this_month": {"en": "%1$d this month", "es": "%1$d este mes", "pt": "%1$d neste mês"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "home_equipo_count_phones": {"en": ["%1$d employee · %2$s", "%1$d employees · %2$s"], "es": ["%1$d empleado · %2$s", "%1$d empleados · %2$s"], "pt": ["%1$d funcionário · %2$s", "%1$d funcionários · %2$s"]}, "home_equipo_on_phones": {"en": ["%1$d on a phone", "%1$d on phones"], "es": ["%1$d en celular", "%1$d en celular"], "pt": ["%1$d no celular", "%1$d no celular"]}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Líquido hoje · %s"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "settings_hub_group_getting_paid": {"en": "Getting paid", "es": "Cobros", "pt": "Cobranças"}, "settings_hub_group_your_business": {"en": "Your business", "es": "Tu negocio", "pt": "Seu negócio"}, "settings_hub_group_this_phone": {"en": "This phone", "es": "Este teléfono", "pt": "Este celular"}, "settings_section_account": {"en": "Account", "es": "Cuenta", "pt": "Conta"}, "settings_hub_payment_methods": {"en": "Payment methods", "es": "Métodos de pago", "pt": "Formas de pagamento"}, "settings_hub_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "settings_hub_discounts": {"en": "Discounts and charges", "es": "Descuentos y cargos", "pt": "Descontos e taxas"}, "settings_hub_receipts": {"en": "Receipts", "es": "Recibos", "pt": "Recibos"}, "settings_hub_receipts_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "receipt_layout_detailed": {"en": "Detailed", "es": "Detallado", "pt": "Detalhado"}, "settings_hub_receipts_num_auto": {"en": "numbered automatically", "es": "numeración automática", "pt": "numeração automática"}, "settings_hub_business_info": {"en": "Business info", "es": "Datos del negocio", "pt": "Dados do negócio"}, "workspace_registers_and_printers": {"en": "Connections", "es": "Conexiones", "pt": "Conexões"}, "settings_security_title": {"en": "Security", "es": "Seguridad", "pt": "Segurança"}, "settings_hub_security_on_delete": {"en": "Asks for your fingerprint before deleting", "es": "Pide huella antes de borrar", "pt": "Pede a digital antes de apagar"}, "settings_hub_backup": {"en": "Backup", "es": "Respaldo", "pt": "Backup"}, "settings_hub_backup_last": {"en": "Last copy: %1$s", "es": "Último respaldo: %1$s", "pt": "Último backup: %1$s"}, "settings_hub_backup_none": {"en": "No backup", "es": "Sin respaldo", "pt": "Sem backup"}, "notif_title": {"en": "Notifications", "es": "Notificaciones", "pt": "Notificações"}, "notif_hub_sub": {"en": "Orders, payments and your register", "es": "Pedidos, pagos y tu caja", "pt": "Pedidos, pagamentos e seu caixa"}, "settings_hub_language_appearance": {"en": "Language & appearance", "es": "Idioma y apariencia", "pt": "Idioma e aparência"}, "settings_hub_language_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "theme_light": {"en": "Light", "es": "Claro", "pt": "Claro"}, "my_account_title": {"en": "My Account", "es": "Mi cuenta", "pt": "Minha conta"}, "rp_my_title": {"en": "My reports", "es": "Mis reportes", "pt": "Meus relatos"}, "rp_my_row_sub": {"en": "What you told us and what we answered", "es": "Lo que nos contaste y lo que respondimos", "pt": "O que você nos contou e o que respondemos"}, "rp_strip_support": {"en": "Support", "es": "Soporte", "pt": "Suporte"}, "rp_strip_support_sub": {"en": "Report a problem here", "es": "Reporta un problema aquí", "pt": "Relatar um problema aqui"}, "rp_sheet_my_reports_none": {"en": "No reports yet", "es": "Aún no hay reportes", "pt": "Ainda não há relatos"}, "home_clientes_none_owe": {"en": ["%1$d client · no debts", "%1$d clients · no debts"], "es": ["%1$d cliente · nadie debe", "%1$d clientes · nadie debe"], "pt": ["%1$d cliente · ninguém deve", "%1$d clientes · ninguém deve"]}, "invoices_row_first": {"en": "Scan your first invoice", "es": "Escanea tu primera factura", "pt": "Escaneie sua primeira nota"}, "workspace_switch_title": {"en": "Businesses", "es": "Negocios", "pt": "Negócios"}, "businesses_count_of_total": {"en": "%1$d of %2$d in total", "es": "%1$d de %2$d en total", "pt": "%1$d de %2$d no total"}, "workspace_section_branches": {"en": "%1$s — your branches", "es": "%1$s — tus sucursales", "pt": "%1$s — suas filiais"}, "business_no_branches": {"en": "No branches", "es": "Sin sucursales", "pt": "Sem filiais"}, "business_branch_count": {"en": ["%1$d branch of %2$d", "%1$d branches of %2$d"], "es": ["%1$d sucursal de %2$d", "%1$d sucursales de %2$d"], "pt": ["%1$d filial de %2$d", "%1$d filiais de %2$d"]}, "workspace_row_main": {"en": "Main", "es": "Principal", "pt": "Principal"}, "employee_picker_open": {"en": "Open", "es": "Abierta", "pt": "Aberto"}, "employee_picker_closed": {"en": "Closed", "es": "Cerrada", "pt": "Fechado"}, "workspace_new_branch_of": {"en": "New branch of %1$s", "es": "Nueva sucursal de %1$s", "pt": "Nova filial de %1$s"}, "workspace_new_branch_sub": {"en": "Copies this menu · name it in one step", "es": "Copia este menú · nómbrala en un paso", "pt": "Copia este cardápio · nomeie em um passo"}, "workspace_section_other": {"en": "Your other businesses", "es": "Tus otros negocios", "pt": "Seus outros negócios"}, "workspace_new_business": {"en": "New business", "es": "Nuevo negocio", "pt": "Novo negócio"}, "workspace_new_business_sub": {"en": "Starts fresh — its own menu & team", "es": "Empieza de cero — su propio menú y equipo", "pt": "Começa do zero — cardápio e equipe próprios"}, "workspace_restore_business": {"en": "Restore a business", "es": "Restaurar un negocio", "pt": "Restaurar um negócio"}, "workspace_restore_business_sub": {"en": "Bring back a business from your backup", "es": "Recupera un negocio desde tu respaldo", "pt": "Recupere um negócio do seu backup"}, "branch_setup_title": {"en": "New Branch", "es": "Nueva sucursal", "pt": "Nova filial"}, "branch_setup_name_label": {"en": "Name this branch", "es": "Nombra esta sucursal", "pt": "Nomeie esta filial"}, "branch_name_counter": {"en": "%1$d/%2$d", "es": "%1$d/%2$d", "pt": "%1$d/%2$d"}, "branch_setup_name_preview": {"en": "It'll be called %1$s.", "es": "Se llamará %1$s.", "pt": "Vai se chamar %1$s."}, "branch_setup_carryover": {"en": "What carries over", "es": "Qué se traslada", "pt": "O que é levado"}, "branch_setup_always": {"en": "Always", "es": "Siempre", "pt": "Sempre"}, "branch_setup_opt_menu": {"en": "Menu & prices", "es": "Menú y precios", "pt": "Cardápio e preços"}, "branch_setup_opt_menu_sub": {"en": "Your whole catalogue", "es": "Todo tu catálogo", "pt": "Todo o seu catálogo"}, "branch_setup_opt_employees": {"en": "Team / employees", "es": "Equipo / empleados", "pt": "Equipe / funcionários"}, "branch_setup_opt_employees_sub": {"en": "Copy this location's staff.", "es": "Copiar el personal de esta ubicación.", "pt": "Copiar a equipe desta unidade."}, "branch_setup_opt_customers": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "branch_setup_opt_customers_sub": {"en": "Copy the client list.", "es": "Copiar la lista de clientes.", "pt": "Copiar a lista de clientes."}, "branch_setup_opt_settings": {"en": "Receipt & device settings", "es": "Ajustes de recibo y dispositivo", "pt": "Configurações de recibo e dispositivo"}, "branch_setup_opt_settings_sub": {"en": "Receipt layout and security settings.", "es": "Diseño del recibo y ajustes de seguridad.", "pt": "Layout do recibo e configurações de segurança."}, "branch_setup_no_carry": {"en": "Sales and open tickets never carry over — each branch starts its own.", "es": "Las ventas y las cuentas abiertas nunca se trasladan — cada sucursal empieza la suya.", "pt": "Vendas e comandas abertas nunca são levadas — cada filial começa a sua."}, "branch_setup_create": {"en": "Create Branch", "es": "Crear sucursal", "pt": "Criar filial"}, "workspace_now_in": {"en": "Now in %1$s", "es": "Ahora en %1$s", "pt": "Agora em %1$s"}};
+/* ===== shared by TS19..TS24 (copied into each page; kit/ is not edited). App at sim/usa-canada 6736ddfb,
+   paths under app/src/main/java/com/example/. Words come from STR (values / values-es / values-pt-rBR, injected).
+   home()   ui/screens/home/HomeScreen.kt:551-700 + ScanCheckoutTab.kt: a shop has NO tab row; top strips (one warning bar,
+            RegisterClosedBar, ConnectNudgeStrip, OfflineStrip), then OwnerRegisterCard (Fiado row only for the owner while
+            someone owes, "Sin código", "Teclado"), and SmartScanButton pinned at the bottom ("Agregar productos", or
+            "Escanear más" + "Cobrar $X" in the shop green #188448 once the sale has items)
+   nav()    ui/app/PlatataApp.kt:503-722 + navigation/NavLabels.kt (Caja · Ventas · flag "Mi negocio"; fingerprint while the
+            flag would ask, sync/FlagGate)
+   panel()  HomeScreen.kt:1440-1830 (shop: Artículos, Inventario with the two facts on the subtitle line, Clientes amber
+            while someone owes, Facturas, Equipo, Reportes; divider; Configuración)
+   hub()    ui/screens/settings/SettingsHubScreen.kt + sync/SettingsHubRules.kt (a shop has no dining-options row)
+   strip()  ui/screens/reports/SupportStrip.kt on every LEVEL_2_PLUS page */
+const S = SKIT.ctx(), C = S.C, esc = S.esc, L = S.lang, SH = C.lang;
+const FREE = (S.country === "US" || S.country === "CA");          // sync/Entitlement FREE_COUNTRIES
+const P = o => S.pick(o);
+const W = k => { const v = STR[k]; if(!v) throw new Error("no string "+k); return v[L] ?? v.es; };
+const fmt = (s, ...a) => { if(/%\d\$/.test(s)) a.forEach((v,i)=>{ s = s.split(`%${i+1}$s`).join(v).split(`%${i+1}$d`).join(v); }); else a.forEach(v=>{ s = s.replace(/%[ds]/, v); }); return s; };
+const T = (k, ...a) => fmt(W(k), ...a);
+const plOne = n => L==="pt" ? (n===0||n===1) : n===1;              // Android plural "one": pt (CLDR) 0 and 1, es/en 1
+const PL = (k, n, ...a) => fmt(W(k)[plOne(n)?0:1], n, ...a);
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const money = v => S.money(v);
+const svg = (p, cls) => `<svg class="${cls||"mi"}" viewBox="0 0 24 24"><path d="${p}"/></svg>`;
+const IP = {
+  cart:"M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z",
+  receipt:"M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z",
+  finger:"M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z",
+  add:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z",
+  chev:"M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z",
+  down:"M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z",
+  back:"M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z",
+  phone:"M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z",
+  tablet:"M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 1.99-.9 1.99-2L23 6c0-1.1-.9-2-2-2zm-2 14H5V6h14v12z",
+  lock:"M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z",
+  backup:"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z",
+  cloudOff:"M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62l1.45 1.45C23.16 18.16 24 16.68 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.75 2.74C2.56 8.15 0 10.77 0 14c0 3.31 2.69 6 6 6h11.73l2 2L21 20.73 4.27 4 3 5.27zM7.73 10l8 8H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h1.73z",
+  cloudDone:"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17 15.18 9l1.41 1.41L10 17z",
+  history:"M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z",
+  okc:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
+  warn:"M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z",
+  card:"M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z",
+  pct:"M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4 18.6L18.6 4 20 5.4 5.4 20zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z",
+  tag:"M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z",
+  store:"M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z",
+  rest:"M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z",
+  devices:"M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z",
+  bell:"M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z",
+  globe:"M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z",
+  account:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z",
+  feedback:"M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z",
+  edit:"M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z",
+  person:"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+  group:"M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
+  rlong:"M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z",
+  gear:"M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z",
+  place:"M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+  more:"M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z",
+  check:"M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z",
+  box:"M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z",
+  copy:"M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z",
+  share:"M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z",
+  qr:"M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 19h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z",
+  open:"M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z",
+  buoy:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z",
+  trash:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+};
+
+IP.calc = "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5.97 4.06L14.09 6l1.41 1.41L16.91 6l1.06 1.06-1.41 1.41 1.41 1.41-1.06 1.06-1.41-1.4-1.41 1.41-1.06-1.06 1.41-1.41-1.41-1.42zm-6.78.66h5v1.5h-5v-1.5zM11.5 16h-2v2H8v-2H6v-1.5h2v-2h1.5v2h2V16zm6.5 1.25h-5v-1.5h5v1.5zm0-2.5h-5v-1.5h5v1.5z";
+IP.swap = "M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z";
+const I = k => svg(IP[k]);
+const DEV_OWNER = P({es:"Tu teléfono",pt:"Seu celular",en:"Your phone"});
+const FIADO_TOTAL = C.fiado.reduce((a,f)=>a+f.owes,0);
+const ITEMS = S.items;
+const nowTime = (h=12, m=41) => new Intl.DateTimeFormat(L==="en"?"en-US":(L==="pt"?"pt-BR":(SH==="es"?C.loc:"es-CO")),{hour:"numeric",minute:"2-digit"}).format(new Date(2026,9,20,h,m));
+/* BackupDateFormat.dateTime: DateFormat MEDIUM date + SHORT time in the phone language */
+const backupDate = (d) => new Intl.DateTimeFormat(L==="en"?"en-US":(L==="pt"?"pt-BR":(SH==="es"?C.loc:"es-CO")),{dateStyle:"medium",timeStyle:"short"}).format(d||new Date(2026,9,20,12,41));
+/* StockHeadline.ofProducts over the shop's items: low = counted and at or under its level; not counted = never counted */
+const STOCK_LOW = ITEMS.filter(x=>x.stock!=null && x.low!=null && x.stock<=x.low).length;
+const STOCK_UNC = ITEMS.filter(x=>x.stock==null).length;
+/*@STR mamaship_tab_register tx_tab_all home_tab_my_business fiado_row_name fiado_row_count scan_no_barcode_btn scan_row_manual
+  scan_btn_scan_barcodes scan_btn_scan_more common_charge nudge_connect_title nudge_connect_cta nudge_connect_later offline_strip_text
+  workspace_register_closed workspace_register_closed_sub workspace_register_open_action workspace_register_open workspace_register_sales
+  sell_online_title sell_online_row_off sell_online_row_on sell_online_pill_off sell_online_pill_on panel_heading_every_day
+  workspace_items_title more_my_products_count scan_row_inventory stock_headline_low stock_headline_uncounted more_customers_title
+  home_clientes_owed invoices_title invoices_row_this_month more_team_title home_equipo_count_phones home_equipo_on_phones
+  workspace_full_reports scan_row_reports_today scan_row_reports_today_net settings_title panel_settings_row_sub
+  settings_hub_group_getting_paid settings_hub_group_your_business settings_hub_group_this_phone settings_section_account
+  settings_hub_payment_methods settings_hub_taxes settings_hub_discounts settings_hub_receipts settings_hub_receipts_sub
+  receipt_layout_detailed settings_hub_receipts_num_auto settings_hub_business_info workspace_registers_and_printers
+  settings_security_title settings_hub_security_on_delete settings_hub_backup settings_hub_backup_last settings_hub_backup_none
+  notif_title notif_hub_sub settings_hub_language_appearance settings_hub_language_sub theme_light my_account_title rp_my_title
+  rp_my_row_sub rp_strip_support rp_strip_support_sub rp_sheet_my_reports_none home_clientes_none_owe invoices_row_first*/
+const LANGNAME = {es:"Español",pt:"Português",en:"English"};   /* utils/AppLanguage.kt:40-43 */
+const OWNER_EMAIL = (C.owner.split(" ")[0]).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"") + "@gmail.com";
+
+/* ---------- owner Home (shop): ScanCheckoutTab ---------- */
+function home(o){ o=o||{};
+  let h = `<div class="shome">`;
+  if(o.warnBar) h += o.warnBar;
+  if(o.regClosed) h += `<div class="rcbar"><span>${esc(T("workspace_register_closed"))}</span><b>${esc(T("workspace_register_open_action"))}</b></div>`;
+  else if(o.nudge) h += `<div class="nudge"><b>${esc(T("nudge_connect_title"))}</b><span class="cta" data-t="nudge-connect">${esc(T("nudge_connect_cta"))}</span><span>${esc(T("nudge_connect_later"))}</span></div>`;
+  if(o.offline) h += `<div class="offs">${esc(T("offline_strip_text"))}</div>`;
+  h += `<div class="rc">`;
+  if(o.fiado!==false) h += `<div class="mrow"><span class="em">📒</span><span class="tx">${esc(T("fiado_row_name"))}</span><span class="vl"><b>${money(FIADO_TOTAL)}</b><small>${esc(PL("fiado_row_count", C.fiado.length))}</small></span>${svg(IP.chev,"chv")}</div>`;
+  h += `<div class="mrow"><span class="em">🏷</span><span class="tx">${esc(T("scan_no_barcode_btn"))}</span>${svg(IP.chev,"chv")}</div>`;
+  h += `<div class="mrow">${svg(IP.calc,"ic")}<span class="tx">${esc(T("scan_row_manual"))}</span>${svg(IP.chev,"chv")}</div>`;
+  h += `</div>`;
+  const tot = (o.lines||[]).reduce((a,l)=>a+l.price,0);
+  h += (o.lines&&o.lines.length)
+    ? `<div class="sbar"><span class="om" data-t="scanmore">${esc(T("scan_btn_scan_more"))}</span><span class="ch" data-t="charge">${esc(T("common_charge", money(tot)))}</span></div>`
+    : `<div class="sbar"><span class="q" data-t="scan">${esc(T("scan_btn_scan_barcodes"))}</span></div>`;
+  h += `</div>` + nav(o.nav||{});
+  return h;
+}
+function nav(o){ o=o||{};
+  const flag = o.finger ? svg(IP.finger,"fp") : S.flag();
+  return `<div class="mnav onav"><div class="${o.on==="reg"?"on":""}"><span class="pill">${I("cart")}</span>${esc(T("mamaship_tab_register"))}</div>
+    <div class="${o.on==="sales"?"on":""}"><span class="pill">${I("receipt")}${o.badge?`<em class="nbadge">${o.badge}</em>`:""}</span>${esc(T("tx_tab_all"))}</div>
+    <div data-t="flag"><span class="flagc${o.panel?" lit":""}">${flag}</span>${esc(T("home_tab_my_business"))}</div></div>`;
+}
+/* ---------- the business panel ---------- */
+function wsRow(o){
+  return `<div class="wrow${o.cls?" "+o.cls:""}" ${o.t?`data-t="${o.t}"`:""} style="${o.bg?`background:${o.bg}`:""}">
+    ${o.dot?`<span class="wdot" style="color:${o.fg}">●</span>`:`<span class="wic">${o.emoji?`<span style="font-size:calc(var(--u)*18)">${o.emoji}</span>`:I(o.icon)}</span>`}
+    <span class="wtx"><b style="${o.fg?`color:${o.fg}`:""}">${esc(o.title)}</b>${o.subHtml||(o.sub?`<small style="${o.sfg?`color:${o.sfg}`:""}">${esc(o.sub)}</small>`:"")}</span>
+    ${o.trail||""}${o.dot?"":`<span class="wch">${I("chev")}</span>`}</div>`;
+}
+function panel(o){ o=o||{};
+  const name = o.name || S.place;
+  let h = `<div class="panel"><div class="phd" data-t="pname"><span>${esc(name)}</span>${svg(IP.down,"pdn")}</div><div class="plist">`;
+  if(o.before) h += o.before;
+  const open = o.regOpen!==false;
+  h += wsRow(open ? {dot:true, title:T("workspace_register_open"), sub:T("workspace_register_sales"), bg:"#E8F5E9", fg:"#2E7D32", sfg:"rgba(46,125,50,.7)", trail:`<b class="wtr" style="color:#2E7D32">${money(o.salesToday||0)}</b>`}
+                  : {dot:true, title:T("workspace_register_closed"), sub:T("workspace_register_closed_sub"), bg:"#FFEBEE", fg:"#C62828", sfg:"rgba(198,40,40,.7)", trail:`<b class="wtr sm" style="color:#C62828">${esc(T("workspace_register_open_action"))}</b>`});
+  const on = !!o.storeOn;
+  h += wsRow({icon:"cart", title:T("sell_online_title"), sub:o.storeSub || (on?T("sell_online_row_on"):T("sell_online_row_off")), t:"sellonline",
+     trail:`<span class="spill${on?" on":""}">${esc(on?T("sell_online_pill_on"):T("sell_online_pill_off"))}</span>`});
+  h += `<div class="phead">${esc(T("panel_heading_every_day"))}</div>`;
+  h += wsRow({icon:"cart", title:T("workspace_items_title"), sub:T("more_my_products_count", ITEMS.length), t:"p-items"});
+  const inv = (STOCK_LOW||STOCK_UNC) ? `<small class="inv">${STOCK_LOW?`<span class="lo">${esc(PL("stock_headline_low",STOCK_LOW))}</span>`:""}${STOCK_LOW&&STOCK_UNC?"<span>&nbsp;·&nbsp;</span>":""}${STOCK_UNC?`<span>${esc(PL("stock_headline_uncounted",STOCK_UNC))}</span>`:""}</small>` : "";
+  h += wsRow({emoji:"📦", title:T("scan_row_inventory"), subHtml:inv});
+  h += o.clientsNone!=null   /* nobody owes: grey row, home_clientes_none_owe (HomeScreen.kt:1693) */
+    ? wsRow({icon:"person", title:T("more_customers_title"), sub:PL("home_clientes_none_owe", o.clientsNone), t:"p-clients"})
+    : wsRow({icon:"person", title:T("more_customers_title"), sub:PL("home_clientes_owed", C.fiado.length, money(FIADO_TOTAL)), bg:"#FFF6E5", fg:"#B07500", sfg:"#B07500", t:"p-clients"});
+  h += wsRow({icon:"rlong", title:T("invoices_title"), sub:o.invFirst ? T("invoices_row_first") : T("invoices_row_this_month", C.suppliers.length)});
+  const team = o.team ?? 1, ph = o.onPhones||0;
+  h += wsRow({icon:"group", title:T("more_team_title"), sub:fmt(W("home_equipo_count_phones")[plOne(team)?0:1], team, PL("home_equipo_on_phones", ph))});
+  h += wsRow({icon:"rlong", title:T("workspace_full_reports"), sub:T(FREE?"scan_row_reports_today":"scan_row_reports_today_net", money(o.salesToday||0))});
+  h += `<div class="pdiv"></div>`;
+  h += wsRow({icon:"gear", title:T("settings_title"), sub:T("panel_settings_row_sub"), t:"settings"});
+  h += `</div></div>`;
+  return h + nav({panel:true, finger:o.finger});
+}
+/* ---------- the Settings page (hub) ---------- */
+function hub(o){ o=o||{};
+  const rows = [
+    ["settings_hub_group_getting_paid", [["card","settings_hub_payment_methods"],["pct","settings_hub_taxes"],["tag","settings_hub_discounts"],
+       ["receipt","settings_hub_receipts", T("settings_hub_receipts_sub", T("receipt_layout_detailed"), T("settings_hub_receipts_num_auto"))]]],
+    ["settings_hub_group_your_business", [["store","settings_hub_business_info"],["devices","workspace_registers_and_printers",null,"hub-conn"]]],
+    ["settings_hub_group_this_phone", [["lock","settings_security_title",T("settings_hub_security_on_delete"),"hub-sec"],
+       ["backup","settings_hub_backup", o.backupLast ? T("settings_hub_backup_last", o.backupLast) : T("settings_hub_backup_none"),"hub-backup", !o.backupLast],
+       ["bell","notif_title",T("notif_hub_sub")],["globe","settings_hub_language_appearance",T("settings_hub_language_sub", LANGNAME[L], T("theme_light"))]]],
+    ["settings_section_account", [["account","my_account_title",OWNER_EMAIL],["feedback","rp_my_title",T("rp_my_row_sub")]]]
+  ];
+  let h = topbar(T("settings_title")) + `<div class="hub"><div class="cin2" style="transform:translateY(calc(var(--u)*${-(o.sc||0)}))">`;
+  rows.forEach(([g, rs])=>{
+    h += `<div class="hgrp">${esc(T(g))}</div>`;
+    rs.forEach(r=>{ h += `<div class="hrow" ${r[3]?`data-t="${r[3]}"`:""}><span class="wic">${I(r[0])}</span><span class="wtx"><b>${esc(T(r[1]))}</b>${r[2]?`<small class="${r[4]?"red":""}">${esc(r[2])}</small>`:""}</span><span class="wch">${I("chev")}</span></div>`; });
+  });
+  return h + `</div></div>` + strip();
+}
+/* ---------- small shared pieces ---------- */
+function topbar(title, o){ o=o||{};
+  return `<div class="mtb${o.paper?" ptb":""}"><span class="mtbb" data-t="${o.t||"back"}">${I("back")}</span><span class="mtbt">${esc(title)}</span>${o.action||""}</div>`;
+}
+function strip(){
+  return `<div class="sstrip"><div class="sh"><span class="sb">${svg(IP.buoy,"sbi")}</span><span class="st"><b>${esc(T("rp_strip_support"))}</b><small>${esc(T("rp_strip_support_sub"))}</small></span></div>
+    <div class="sh"><span class="st"><b>${esc(T("rp_my_title"))}</b><small>${esc(T("rp_sheet_my_reports_none"))}</small></span>${svg(IP.chev,"sch")}</div></div>`;
+}
+function dlg(o){ o=o||{};
+  return `<div class="dscrim"><div class="dbox${o.paper?" pap":""}">${o.icon||""}<div class="dtt">${esc(o.title)}</div><div class="dbody">${o.body||""}</div>
+    <div class="dbtn">${o.dismiss?`<span class="dno" ${o.tNo?`data-t="${o.tNo}"`:""}>${esc(o.dismiss)}</span>`:""}${o.confirm?`<span class="dyes${o.red?" red":""}" data-t="${o.t||"dlg-yes"}">${esc(o.confirm)}</span>`:""}</div></div></div>`;
+}
+function bio(title, sub){
+  return `<div class="dscrim bios"><div class="bio"><div class="bt">${esc(title)}</div><div class="bs">${esc(sub)}</div>
+    <div class="bf" data-t="sensor">${svg(IP.finger,"bfi")}</div></div></div>`;
+}
+function scrollFor(sel){
+  const el=document.querySelector('#app '+sel), pg=document.querySelector('#app .cpage, #app .spage, #app .wscr, #app .hub'); if(!el||!pg) return 0;
+  const u=document.getElementById('screen').getBoundingClientRect().width/412;
+  const over=el.getBoundingClientRect().bottom - pg.getBoundingClientRect().bottom + 16*u;
+  return over>0 ? Math.ceil(over/u) : 0;
+}
+/* ===== end shared ===== */
+/* demo plumbing only (not an app screen): the hint ring glides for 0.25 s after every redraw, so each tap keeps the engine "busy"
+   until 0.45 s after its last scheduled change; then the ring sits on its target before the next tap is read. */
+function settled(steps){
+  return steps.map(s=>Object.assign({}, s, {tap(st, E){
+    let last = 0;
+    const E2 = Object.create(E);
+    E2.after = (ms, fn) => { last = Math.max(last, ms); return E.after(ms, fn); };
+    E2.type = (key, text, done, ms) => { last = Math.max(last, (String(text).length + 1) * (ms||45)); return E.type(key, text, done, ms); };
+    s.tap(st, E2);
+    E.after(last + 450, ()=>{});
+  }}));
+}
+
+
+/*TITLE: Varios negocios y sucursales*/
+/* TS24 "Varios negocios y sucursales" (shop / pharmacy), the owner's phone. App at sim/usa-canada 6736ddfb
+   (paths under app/src/main/java/com/example/).
+   panel header      ui/screens/home/HomeScreen.kt: the business NAME with a small down arrow opens the Businesses list.
+   Businesses list   ui/screens/more/ContextSwitcher.kt:203-520 MyBusinessesScreen: back arrow + workspace_switch_title and
+                     businesses_count_of_total ("1 de 10 en total": a branch is not a business); workspace_section_branches ·
+                     business_no_branches / business_branch_count; the main row workspace_row_main, the open row blue with a check
+                     and the register pill (employee_picker_open/closed, only the open business); workspace_new_branch_of +
+                     workspace_new_branch_sub; workspace_section_other; workspace_new_business(+_sub); workspace_restore_business(+_sub).
+                     The words are the restaurant's ("Copia este menú", "su propio menú y equipo"): no type wording exists.
+   Branch page       ui/screens/onboarding/BranchSetupScreen.kt:236-400: "Nueva sucursal"; the field opens with "<name>-"
+                     (sync/BranchNameRule.suggestion, max 32, branch_name_counter, branch_setup_name_preview); Qué se traslada:
+                     branch_setup_opt_menu "Menú y precios / Todo tu catálogo" "Siempre", Equipo, Clientes, Ajustes (switches, off);
+                     branch_setup_no_carry; "Crear sucursal" (off while the field is only the suggestion).
+   What a shop's branch gets   data/repo/BranchSnapshotStore.kt: the catalogue rows as stored (products, barcodes, the shop
+                     categories); "Clientes" copies the people, NOT their fiado (debts belong to the shop where they were made),
+                     so the branch's Clientes row says "nadie debe" and its Home has no Fiado row; no invoices, sales, shifts or
+                     registers (choke point 13: a branch inherits nothing), so its Home shows "Caja cerrada · Abrir".
+   After creating    OnboardingNavGraph.kt:315-325 -> Home of the NEW branch (popUpTo 0, panel closed).
+   Switching back    HomeScreen.kt switchWorkspace(ws){ close list + panel; toast workspace_now_in }. No kitchen screen or tablet in
+                     this shop, so no HostSwitchWarningDialog (KDS-1). The main shop has no device yet: its Home shows the
+                     connect strip (TopStrips: nothing above it while its register is open).
+   Not opened on purpose: the branch's Inventario (the branch is born with the parent's stock counts, a known bug). */
+/*@STR workspace_switch_title businesses_count_of_total workspace_section_branches business_no_branches business_branch_count
+  workspace_row_main employee_picker_open employee_picker_closed workspace_new_branch_of workspace_new_branch_sub workspace_section_other
+  workspace_new_business workspace_new_business_sub workspace_restore_business workspace_restore_business_sub branch_setup_title
+  branch_setup_name_label branch_name_counter branch_setup_name_preview branch_setup_carryover branch_setup_always branch_setup_opt_menu
+  branch_setup_opt_menu_sub branch_setup_opt_employees branch_setup_opt_employees_sub branch_setup_opt_customers
+  branch_setup_opt_customers_sub branch_setup_opt_settings branch_setup_opt_settings_sub branch_setup_no_carry branch_setup_create
+  workspace_now_in*/
+IP.place = IP.place || "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z";
+const SALES_TODAY = ITEMS.slice(0,4).reduce((a,it)=>a+it.price,0)*3;
+const MAIN = S.place;
+const BR = MAIN + "-";                                            /* BranchNameRule.suggestion */
+const SUFFIX = P({es:"Centro",pt:"Centro",en:"Downtown"});         /* what the owner types */
+const BRANCH = BR + SUFFIX;
+const PIN_IC = () => `<span class="bx" style="background:${hexA("#FF9500",.14)}">${svg(IP.place,"").replace('<svg','<svg style="fill:#FF9500"')}</span>`;
+function bizRow(name, sub, active, pill, tag){
+  return `<div class="brow${active?" on":""}" ${tag?`data-t="${tag}"`:""}>${PIN_IC()}<span class="tx"><b>${esc(name)}</b>${sub?`<small>${esc(sub)}</small>`:""}</span>
+    ${pill!=null?`<span class="pil" style="color:${pill?"#2E7D32":"#FF3B30"}">${esc(T(pill?"employee_picker_open":"employee_picker_closed"))}</span>`:""}
+    ${active?svg(IP.check,"ck"):""}<span class="mv">${I("more")}</span></div>`;
+}
+function createRow(icon, color, title, sub, plus, tag){
+  return `<div class="brow" ${tag?`data-t="${tag}"`:""}><span class="bx" style="background:${hexA(color,.14)}">${svg(IP[icon],"").replace('<svg','<svg style="fill:'+color+'"')}${plus?`<em>${svg(IP.add,"")}</em>`:""}</span>
+    <span class="tx"><b>${esc(title)}</b><small>${esc(sub)}</small></span></div>`;
+}
+function bizList(st){
+  const onBranch = st.on==="branch";
+  let h = `<div class="bhd"><span class="ib">${I("back")}</span><span><b>${esc(T("workspace_switch_title"))}</b><small>${esc(T("businesses_count_of_total",1,10))}</small></span></div><div class="blist">`;
+  h += `<div class="sh2">${esc(T("workspace_section_branches", MAIN) + " · " + (st.made ? PL("business_branch_count",1,5) : T("business_no_branches")))}</div>`;
+  h += bizRow(MAIN, T("workspace_row_main"), !onBranch, onBranch ? null : true, "biz-main");
+  if(st.made) h += bizRow(BRANCH, null, onBranch, onBranch ? false : null, "biz-branch");
+  h += createRow("place", "#FF9500", T("workspace_new_branch_of", MAIN), T("workspace_new_branch_sub"), true, "newbranch");
+  h += `<div class="band"></div><div class="sh2">${esc(T("workspace_section_other"))}</div>`;
+  h += createRow("store", "#007AFF", T("workspace_new_business"), T("workspace_new_business_sub"), true);
+  h += createRow("history", "#007AFF", T("workspace_restore_business"), T("workspace_restore_business_sub"), false);
+  return h + `</div>`;
+}
+function branchPage(st){
+  const name = st.typed===null ? BR : BR + st.typed;
+  const ok = name.trim() !== BR.trim();
+  const sw = (on, tag) => `<span class="sw${on?" on":""}" ${tag?`data-t="${tag}"`:""}></span>`;
+  const row = (a, b, trail) => `<div class="crow"><span class="tx"><b>${esc(T(a))}</b><small>${esc(T(b))}</small></span>${trail}</div>`;
+  return `<div class="btop"><span class="ib">${I("back")}</span><span class="pb">${svg(IP.place,"")}</span><b>${esc(T("branch_setup_title"))}</b></div>
+    <div class="bpage"><div class="lab">${esc(T("branch_setup_name_label"))}</div>
+    <div class="fld${st.focus?" f":""}" data-t="bname">${esc(name)}${st.focus?'<span class="caret"></span>':""}</div>
+    <div class="sup">${esc(T("branch_name_counter", name.length, 32))}<br><span class="pv">${esc(T("branch_setup_name_preview", name))}</span></div>
+    <div class="lab">${esc(T("branch_setup_carryover"))}</div>
+    <div class="ccard">${row("branch_setup_opt_menu","branch_setup_opt_menu_sub", `<span class="alw">${esc(T("branch_setup_always"))}</span>`)}${row("branch_setup_opt_employees","branch_setup_opt_employees_sub", sw(false))}${row("branch_setup_opt_customers","branch_setup_opt_customers_sub", sw(st.cust, "cust"))}${row("branch_setup_opt_settings","branch_setup_opt_settings_sub", sw(false))}</div>
+    <div class="nocar">${esc(T("branch_setup_no_carry"))}</div>
+    <div class="cbtn${ok&&st.typedDone?"":" dis"}" data-t="create">${st.creating?'<span class="spin"></span>':esc(T("branch_setup_create"))}</div></div>`;
+}
+function render(st){
+  const br = st.on==="branch";
+  let h;
+  if(st.screen==="panel") h = br ? panel({name:BRANCH, regOpen:false, salesToday:0, team:0, onPhones:0, clientsNone:C.fiado.length, invFirst:true})
+                                 : panel({salesToday:SALES_TODAY});
+  else if(st.screen==="list") h = bizList(st);
+  else if(st.screen==="branch") h = branchPage(st);
+  else h = br ? home({regClosed:true, fiado:false, nav:{on:"reg"}}) : home({nudge:true, nav:{on:"reg"}});
+  if(st.toast) h += `<div class="otoast">${esc(st.toast)}</div>`;
+  return h;
+}
+SKIT.start(S, {
+  id:"TS24", tallVideo:true, clock:"12:41",
+  endText:P({es:"Así manejas varios negocios y sucursales con Platata.",pt:"Assim você cuida de vários negócios e filiais com o Platata.",en:"That's how you run several businesses and branches with Platata."}),
+  beats: P({
+    es:["Toca el nombre para ver tus negocios","Una sucursal copia tus productos y precios","Ponle nombre a la sucursal","Lleva tus clientes, sin sus fiados","Crea la sucursal: empieza con la caja cerrada","Pasa de un local a otro en dos toques","Así manejas varios negocios y sucursales con Platata."],
+    pt:["Toque no nome para ver seus negócios","Uma filial copia seus produtos e preços","Dê um nome à filial","Leve seus clientes, sem os fiados","Crie a filial: ela começa com o caixa fechado","Passe de uma loja para outra em dois toques","Assim você cuida de vários negócios e filiais com o Platata."],
+    en:["Tap the name to see your businesses","A branch copies your products and prices","Give the branch a name","Bring your clients, without their tabs","Create it: it starts with the register closed","Switch locations in two taps","That's how you run several businesses and branches with Platata."]}),
+  state:{screen:"panel", on:"main", made:false, typed:null, typedDone:false, focus:false, cust:false, creating:false, toast:""},
+  render,
+  who: () => DEV_OWNER,
+  steps: settled([
+    {beat:0, hint:P({es:"Toca el nombre del negocio",pt:"Toque no nome do negócio",en:"Tap the business name"}), target:'[data-t="pname"]', tap(st){ st.screen="list"; }},
+    {beat:1, hint:P({es:"Toca Nueva sucursal",pt:"Toque em Nova filial",en:"Tap New branch"}), target:'[data-t="newbranch"]', tap(st){ st.screen="branch"; }},
+    {beat:2, hint:P({es:"Toca el nombre",pt:"Toque no nome",en:"Tap the name"}), target:'[data-t="bname"]', tap(st,E){ st.focus=true;
+        E.after(500,()=>E.type("typed", SUFFIX, ()=>{ st.typedDone=true; st.focus=false; }, 110)); }},
+    {beat:3, hint:P({es:"Toca Clientes",pt:"Toque em Clientes",en:"Tap Clients"}), target:'[data-t="cust"]', tap(st){ st.cust=true; }},
+    {beat:4, hint:P({es:"Toca Crear sucursal",pt:"Toque em Criar filial",en:"Tap Create Branch"}), target:'[data-t="create"]', tap(st,E){ st.creating=true;
+        E.after(1600,()=>{ st.creating=false; st.made=true; st.on="branch"; st.screen="home"; }); }},
+    {beat:5, hint:P({es:"Toca Mi negocio",pt:"Toque em Meu negócio",en:"Tap My business"}), target:'[data-t="flag"]', tap(st){ st.screen="panel"; }},
+    {beat:5, hint:P({es:"Toca el nombre de la sucursal",pt:"Toque no nome da filial",en:"Tap the branch name"}), target:'[data-t="pname"]', tap(st){ st.screen="list"; }},
+    {beat:5, hint:P({es:"Toca "+MAIN,pt:"Toque em "+MAIN,en:"Tap "+MAIN}), target:'[data-t="biz-main"]', tap(st,E){
+        E.after(400,()=>{ st.on="main"; st.screen="home"; st.toast=T("workspace_now_in", MAIN); });
+        E.after(2600,()=>{ st.toast=""; }); }}
+  ])
+});
+</script>
+</body>
+</html>

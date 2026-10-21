@@ -692,7 +692,7 @@ function form(st){
   if(st.menu){ let rows = menuRows(st); if(st.more && !st.end){ const g = rows.findIndex(r => r.cls === "gh"); rows = rows.slice(Math.max(0, g - 1)); }
     if(st.end) rows = rows.slice(-8);
     menu = `<div class="tq-menu up">${rows.map(r => `<div class="mi ${r.cls||""}"${r.tag?` data-t="${r.tag}"`:""}>${esc(r.t)}</div>`).join("")}</div>`; }
-  const card = st.newForm ? `<div class="tq-ucard tq-hl">
+  const card = st.newForm ? `<div class="tq-ucard">
       ${field({label: t("units_name_field"), value: st.nn, foc: st.nfocus === "n", t: "nu-name"})}
       ${field({label: t("units_abbr_field"), value: st.na, foc: st.nfocus === "a", t: "nu-abbr"})}
       <div class="swr"><span>${esc(t("items_unit_by_amount"))}</span><span class="tq-sw"><i></i></span></div>

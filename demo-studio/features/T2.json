@@ -1,0 +1,61 @@
+{
+ "id": "T2",
+ "name": "3,500 products already included",
+ "business": "tienda",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "pt": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  },
+  "en": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-open",
+   "voice": {
+    "es": "Platata trae más de tres mil quinientos productos sin código de barras: pan, frutas, verduras, queso. Toca Sin código.",
+    "pt": "O Platata já vem com mais de três mil e quinhentos produtos sem código de barras: pão, frutas, verduras, queijo. Toque em Sem código.",
+    "en": "Platata comes with over thirty-five hundred products that have no barcode: bread, fruit, vegetables, cheese. Tap No barcode."
+   }
+  },
+  {
+   "id": "2-type",
+   "voice": {
+    "es": "Escribe unas letras y salen, cada uno con su dibujo.",
+    "pt": "Digite umas letras e eles aparecem, cada um com seu desenho.",
+    "en": "Type a few letters and they show up, each with its own drawing."
+   }
+  },
+  {
+   "id": "3-yours",
+   "voice": {
+    "es": "Lo que ya vendes sale primero, con tu precio.",
+    "pt": "O que você já vende aparece primeiro, com o seu preço.",
+    "en": "What you already sell comes first, with your price."
+   }
+  },
+  {
+   "id": "4-again",
+   "voice": {
+    "es": "Borra y prueba otra palabra.",
+    "pt": "Apague e tente outra palavra.",
+    "en": "Clear it and try another word."
+   }
+  },
+  {
+   "id": "5-end",
+   "voice": {
+    "es": "Así encuentras lo que vendes sin código, con Platata.",
+    "pt": "Assim você encontra o que vende sem código, com o Platata.",
+    "en": "That's how you find what you sell without a barcode, with Platata."
+   }
+  }
+ ]
+}
