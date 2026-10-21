@@ -50,6 +50,14 @@
       }
     },
     {
+      "id": "4b-done",
+      "voice": {
+        "es": "Listo: la pantalla te dice cuánto fiaste y cuánto te debe ahora. Toca Nueva venta.",
+        "pt": "Pronto: a tela mostra quanto ficou no fiado e quanto ele deve agora. Toque em Nova venda.",
+        "en": "Done: the screen shows what went on the tab and what they owe now. Tap New sale."
+      }
+    },
+    {
       "id": "5-row",
       "voice": {
         "es": "La fila Fiado suma todo lo que te deben. Tócala.",

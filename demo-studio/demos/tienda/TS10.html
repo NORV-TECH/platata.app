@@ -502,8 +502,10 @@ function summary(st){
 }
 /* the text ShiftSummaryText.build() makes for this shift, signed (WhatsappSignature) */
 function shiftText(){
-  const W = 32, rule = "-".repeat(W), out = [];
-  const row = (l, r) => { const g = W - l.length - r.length; out.push(g>0 ? l+" ".repeat(g)+r : l+" "+r); };
+  /* MKT3-2 (13): the WhatsApp copy is build(..., plain = true): "Label: value" rows, a method under its heading is "- Label: value",
+     the 32-dash rules are blank lines (WhatsApp has no fixed-width font); the printed copy keeps its columns */
+  const rule = "", out = [];
+  const row = (l, r) => { out.push((l.startsWith(" ") ? "- " : "") + l.trim() + ": " + r); };
   out.push(BIZ); out.push(S("register_closed_title").toUpperCase()); out.push(rule);
   row(S("register_status_opened_at"), fmtDT(OPENED)); row(S("register_status_closed_at"), fmtDT(CLOSED)); row(S("register_status_closed_by"), OWNER); out.push(rule);
   row(S("register_status_net_sales"), money(NET)); if(TAXES>0) row(S("reports_taxes"), "+"+money(TAXES));
@@ -539,7 +541,7 @@ const cssTS10 = document.createElement("style"); cssTS10.textContent = `
 .mat .wah{height:calc(var(--u)*56);background:#008069;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*16);padding:0 calc(var(--u)*16);font-size:calc(var(--u)*19)}
 .mat .wah svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff}
 .mat .wab{flex:1;padding:calc(var(--u)*16);display:flex;flex-direction:column;justify-content:flex-end;min-height:0;overflow:hidden}
-.mat .wam{align-self:flex-end;max-width:94%;background:#D9FDD3;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font:calc(var(--u)*12)/1.35 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;color:#111B21;box-shadow:0 1px 1px rgba(0,0,0,.1)}
+.mat .wam{align-self:flex-end;max-width:94%;background:#D9FDD3;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font:calc(var(--u)*13)/1.35 Roboto,system-ui,sans-serif;white-space:pre-wrap;color:#111B21;box-shadow:0 1px 1px rgba(0,0,0,.1)}
 .mat .wam i{display:block;text-align:right;font-style:normal;font-family:Roboto,system-ui,sans-serif;font-size:calc(var(--u)*11);color:#667781;margin-top:calc(var(--u)*2)}`; document.head.appendChild(cssTS10);
 
 const PH = s => R.isPharm ? s.replace("tu tienda","tu negocio").replace("sua loja","seu negócio").replace("your shop","your business").replace("cerrar la tienda","cerrar").replace("fechar a loja","fechar") : s;   // ?type=pharmacy: no "tienda" words

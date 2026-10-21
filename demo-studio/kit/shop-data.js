@@ -8,7 +8,7 @@
                                                                 //   tipOption true only where the Stripe tip screen exists (US/CA)
      people: { cashier, customer, customer2, supplier1, supplier2, phone },
      weightUnit,        // unit an item made in the item form is weighed in: "Libra" CO, "Kilogram" other LatAm + BR, "Pound" US/CA (sync/UnitPicker)
-     noBarcodeWeightUnit, // unit the "Sin código" page picks for a weighed item: "Libra" CO (COP), "Kilogram" EVERYWHERE else, US/CA included
+     noBarcodeWeightUnit, // unit the "Sin código" page picks for a weighed item: "Pound" US/CA, "Libra" CO (COP), "Kilogram" everywhere else
                           //   (data/NoBarcodeCatalog.kt UnitDefaults: COP only). Bananas use it, because they are sold from that page.
      items: [{id, cat, name, price, barcode, unit, stock, low, sinCodigo}],   // ~14 groceries, creation order = id order
      pharmItems: [ same shape ],                                // 8 pharmacy items (generic names only)
@@ -161,7 +161,7 @@ Object.keys(BASE).forEach(k=>{
   const C = Object.assign({}, BASE[k]), p = P[k];
   const L = C.lang, NAMES = L==="pt"?PT_NAMES:L==="en"?EN_NAMES:ES_NAMES, PH = L==="pt"?PT_PHARM:L==="en"?EN_PHARM:ES_PHARM;
   C.weightUnit = (k==="US"||k==="CA") ? "Pound" : (k==="CO" ? "Libra" : "Kilogram");
-  C.noBarcodeWeightUnit = k==="CO" ? "Libra" : "Kilogram";
+  C.noBarcodeWeightUnit = (k==="US"||k==="CA") ? "Pound" : (k==="CO" ? "Libra" : "Kilogram");   // UnitDefaults.defaultUnitName (MKT3-3 R6: US/CA weigh in pounds)
   let seq = 1;
   C.items = GROC.map(([id,cat,kind])=>{
     const sinCodigo = kind==="nb" || kind==="wnb";

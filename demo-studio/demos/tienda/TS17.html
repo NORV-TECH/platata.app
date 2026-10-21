@@ -426,7 +426,7 @@ document.addEventListener("transitionend", e => { if(e.propertyName==="transform
                  common_new_short; empty: tax_empty_state centred onSurfaceVariant; a rate = SumaCard tapping opens the edit
                  form, primaryContainer (#F2F2F7) at 50% when on; name bodyLarge bold + black badge tax_active_badge
                  labelSmall r6; tax_line_included / tax_line_added with formatTaxRate; Switch, Edit, red Delete)
-   new tax       :134-307 (tax_add_section; sync/TaxPresets chips "IVA 19%" ... (AssistChip; CO: IVA 19, Impoconsumo 8;
+   new tax       :134-307 (tax_add_section; sync/TaxPresets chips "IVA 19%" ... (AssistChip; CO: IVA 19 (a restaurant also gets Impoconsumo 8; a shop no longer, MKT3-3 R5);
                  PE IGV 18; PA ITBMS 7; MX IVA 16; CL IVA 19; AR IVA 21; EC IVA 15; BR, US, CA none) that only FILL the
                  fields; in Colombia a picked IVA/Impoconsumo shows tax_preset_one_or_other; tax_field_name, tax_field_pct;
                  tax_in_prices_question + two radios, default sync/TaxPriceDefault (included everywhere except US/CA);
@@ -435,8 +435,8 @@ document.addEventListener("transitionend", e => { if(e.propertyName==="transform
    Demo data: the preset of the country where there is one; Brazil, the US and Canada type their own (Brazil has no
    preset on purpose; US/CA a local sales tax added on top). */
 // KEYS: settings_hub_taxes,tax_title,tax_empty_state,tax_add_section,tax_edit_section,tax_field_name,tax_field_pct,tax_in_prices_question,tax_in_prices_yes,tax_in_prices_no,tax_preset_one_or_other,tax_saved_on,tax_line_included,tax_line_added,tax_active_badge,tax_edit_note,common_save
-const PRESETS = ({CO:[["IVA",19],["Impoconsumo",8]],PE:[["IGV",18]],PA:[["ITBMS",7]],MX:[["IVA",16]],CL:[["IVA",19]],AR:[["IVA",21]],EC:[["IVA",15]]})[R.country] || [];
-const PICK = PRESETS[0];                                                  // the shop's tax: the first chip (CO IVA 19%)
+const PRESETS = ({CO:[["IVA",19]],PE:[["IGV",18]],PA:[["ITBMS",7]],MX:[["IVA",16]],CL:[["IVA",19]],AR:[["IVA",21]],EC:[["IVA",15]]})[R.country] || [];
+const PICK = PRESETS[0];                                                  // the shop's tax: the first chip (CO IVA 19%); TaxesManagementScreen.kt:151 TaxPresets.forCountry(..., isRestaurantType) hides Impoconsumo from a shop (MKT3-3 R5)
 const TYPED = ({BR:["Imposto","5"],US:["Sales tax","8.25"],CA:["HST","13"]})[R.country];
 const USCA = R.country === "US" || R.country === "CA";
 const DEC = ({COP:",",MXN:".",PEN:".",CLP:",",USD:".",ARS:",",BRL:",",CAD:"."})[C.cur] || ".";

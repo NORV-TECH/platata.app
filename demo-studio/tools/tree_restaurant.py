@@ -3,7 +3,7 @@ Every restaurant feature: demo page for every country/language the tree offers (
 (es = Colombia's video, shown for every Spanish country; pt Brazil; en US/Canada) and video/<ID>-US-es.mp4 for US Spanish."""
 import os, re
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-HOLD = {"R1": ["US-en", "CA-en", "US-es"]}   # demo pages not shown there yet (see the night report)
+HOLD = {}   # demo pages not shown there yet (R1 en released after MERGE-12: whole-word photo match)
 ALL_CL = ["CO-es","MX-es","PE-es","CL-es","EC-es","AR-es","PA-es","BR-pt","US-en","US-es","CA-en"]
 lines = []
 for n in list(range(1, 12)):

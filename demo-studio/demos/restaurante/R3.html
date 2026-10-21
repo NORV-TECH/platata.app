@@ -209,7 +209,7 @@ const S = {
   dishesFor:{es:"Platos para %1$s",pt:"Pratos para %1$s",en:"Dishes for %1$s"},
   selAll:{es:"Elegir todos",pt:"Selecionar todos",en:"Select all"}, clrAll:{es:"Quitar todos",pt:"Limpar todos",en:"Clear all"},
   myAddons:{es:"Mis adiciones",pt:"Meus adicionais",en:"My add-ons"}, newShort:{es:"+ Nuevo",pt:"+ Novo",en:"+ New"},
-  linked:{es:"Vinculado a %1$d platos",pt:"Vinculado a %1$d pratos",en:"Linked to %1$d dishes"},
+  linked:{es:"Vinculada a %1$d platos",pt:"Vinculada a %1$d pratos",en:"Linked to %1$d dishes"},
   active:{es:"Activa",pt:"Ativo",en:"Active"},
   optional:{es:"opcional",pt:"opcional",en:"Optional"}, extra1:{es:"1 extra",pt:"1 extra",en:"1 extra"},
   addToSale:{es:"Agregar a la venta",pt:"Adicionar à venda",en:"Add to sale"}
@@ -448,7 +448,7 @@ RKIT.start(R, {
 .x-cl{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
 .x-cr{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*8) 0;border-bottom:1px solid #EBEAE2}
 .x-cr b{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:600}
-.x-cr .sa{font-size:calc(var(--u)*12);font-weight:500;color:#178A3F;padding:calc(var(--u)*4) 0}
+.x-cr .sa{font-size:calc(var(--u)*12);font-weight:500;color:#178A3F;min-height:calc(var(--u)*48);display:flex;align-items:center}   /* ModifiersManagementScreen.kt:911 heightIn(TouchMin 48 dp), MKT3-2 (18) */
 .x-cr .ex{color:var(--m-on)}
 /* the till's add-ons sheet: price on a chip, 48 dp − / + (MENU-2 item 6) */
 .msheet .chip em{font-style:normal;font-size:calc(var(--u)*11);font-weight:500;color:var(--m-onv)}

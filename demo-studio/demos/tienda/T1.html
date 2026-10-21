@@ -576,7 +576,7 @@ function tablet(tab, pane, lines){
 /* the raw stored unit under the big number (WeightEntryDialog.kt:119-124 prints `unitOfSale`, not its translation):
    drawn only where the stored name already reads right (Libra in Spanish, Pound in English); elsewhere it reads "Kilogram"
    in Spanish / Portuguese, which fix R6 (≈1:30 AM) changes, so the page leaves the line out until then */
-const R6_LANDED = false;
+const R6_LANDED = true;    // MKT3-3 R6 landed (2fd8f9a3): the weight keypad and the Sin código grid say the unit in the app's language (localizedUnitName)
 function rawUnitLine(u){ if(R6_LANDED) return S.unitName(u); const ok = (L === "es" && u === "Libra") || (L === "en" && (u === "Pound" || u === "Kilogram")); return ok ? u : null; }
 const wNum = s => s.replace(".", DMARK);
 const presetLabel = (p, abbr) => `${wNum(String(p))} ${abbr}`;

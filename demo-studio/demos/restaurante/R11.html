@@ -22,9 +22,9 @@
    Screens follow the app at the newest sim/usa-canada commit (paths under app/src/main/java/com/example/):
    kitchen screen   ui/screens/kds/KitchenDisplayScreen.kt (ticker chips, History chip, green dot, station name, leave
                     icon; adaptive 180 dp grid), ui/components/KdsTicketCard.kt (title kdsTicketTitle: typed name, else
-                    "Mesa N", else the dining option's own name; waiter first name under a table; kds_status_new; items
+                    "Mesa N", else the dining option's own name; waiter first name under a table, "HH:mm · first name" under an unnamed ticket (MKT3-2); kds_status_new; items
                     "1x  name"; yellow banner MESA 4 / PARA LLEVAR), KdsTicketDetailDialog.kt (85 % x 85 % r12, title
-                    26sp = the card's title, dining label 18sp at the right, status 18sp, items 20sp, CERRAR #424242 and
+                    26sp = the card's title, dining label 18sp at the right only when it is not the title's own word (MKT3-2), status 18sp, items 20sp, CERRAR #424242 and
                     LISTO #2E7D32, 56 dp r6). After LISTO: the undo bar kds_ready_one_undo + kds_action_undo
                     (KdsUndoBar #323232, KdsUndoAction #FFD740).
    the trip         kitchen screen -> owner phone (on, Platata open) -> shop Wi-Fi -> counter tablet (SyncHostService
@@ -66,13 +66,17 @@ const S = {
 const T = (k, ...a) => { let s = R.pick(S[k]); a.forEach(v => { s = s.replace(/%[ds]/, v); }); return s; };
 const TS = (k, ...a) => { let s = S[k][SH]; a.forEach(v => { s = s.replace(/%[ds]/, v); }); return s; };   // shop language
 const CUST = C.people.customer, CASHIER = C.people.waiter2;
-const MSG = TS("msg", CUST) + "\n\n" + TS("sign");
+const MSG = TS("msg", CUST.split(" ")[0]) + "\n\n" + TS("sign");   // ReadyOrderMessage.firstName (MKT3-2 (20)): "Juan", never "Juan Restrepo"
 const DIAL = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54 9",PA:"507",BR:"55",US:"1",CA:"1"}[R.country];
 const PHONE = "+" + DIAL + " " + C.people.phone.replace(/[()]/g,"").replace(/-/g," ").replace(/^0/,"");
 const item = id => C.items.find(x=>x.id===id);
 const TABLE_LINES = [{id:C.order[0]},{id:C.order[2]}];                 // Mesa 4, still cooking
 const TOGO_LINES = [{id:C.order[1], q:2},{id:C.order[2], q:1}];       // the customer's to-go order
 const W1 = C.people.waiter.split(" ")[0];
+/* MKT3-2 (11): an unnamed to-go ticket shows the time it was made and the first name of who took it (KdsTicketLines.unnamedLine,
+   SalesDayGroups.timeText = the language's SHORT time); the detail window no longer repeats "Para llevar" beside the title
+   (KdsTicketLines.diningBesideTitle). The to-go order was rung a minute ago on the counter tablet by the cashier. */
+const TOGO_SUB = new Intl.DateTimeFormat(C.loc,{timeStyle:"short"}).format(new Date(2026,9,20,12,40)).replace(/[\u202f\u00a0]/g," ") + " · " + CASHIER.split(" ")[0];
 const ALL_C = "#607D8B";
 const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
 const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
@@ -98,10 +102,10 @@ function kds(st){
   const counts = {}; all.forEach(l=>{ counts[l.id]=(counts[l.id]||0)+(l.q||1); });
   const ticker = Object.keys(counts).map(id=>`<span class="kchip">${esc(item(id).name)} × ${counts[id]}</span>`).join("");
   let h = `<div class="kds"><div class="ktop"><div class="ktick">${ticker}</div><span class="khist">${esc(T("history"))}</span><i class="kdot"></i><span class="kst">${esc(T("station"))}</span><span class="klog">${I.logout}</span></div>
-    <div class="kgrid">${kcard(T("table",4), W1, 4, TABLE_LINES, T("table",4))}${st.ready?"":kcard(T("toGo"), "", 1, TOGO_LINES, T("toGo"), "togo")}</div>
+    <div class="kgrid">${kcard(T("table",4), W1, 4, TABLE_LINES, T("table",4))}${st.ready?"":kcard(T("toGo"), TOGO_SUB, 1, TOGO_LINES, T("toGo"), "togo")}</div>
     ${st.undo?`<div class="kundo"><span>${esc(T("undo1", T("toGo")))}</span><b>${esc(T("undo"))}</b></div>`:""}</div>`;
   if(st.dialog){
-    h += `<div class="kscrim"><div class="kdlg"><div class="kdh"><b>${esc(T("toGo"))}</b><span>${esc(T("toGo"))}</span></div>
+    h += `<div class="kscrim"><div class="kdlg"><div class="kdh"><b>${esc(T("toGo"))}</b></div>
       <div class="kds2">${esc(T("kNew",1))}</div><hr>
       ${TOGO_LINES.map(l=>`<div class="kdi">${l.q||1}x&nbsp; ${esc(item(l.id).name)}</div>`).join("<hr class='th'>")}
       <div class="kdf"><span class="kclose">${esc(T("close"))}</span><span class="kready" data-t="ready">${esc(T("ready"))}</span></div></div></div>`;

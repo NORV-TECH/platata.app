@@ -511,7 +511,7 @@ const r2 = v => Math.round(v * Math.pow(10, C.dec)) / Math.pow(10, C.dec);
 /* Ana's two tabs (fiado sales), as in TS13: 60% 22 days ago, 40% 12 days ago */
 const d1 = r2(ANA.owes*0.6), d2 = r2(ANA.owes - d1);
 const DEBTS = [{at:new Date(2026,9,20-ANA.days,10,40), v:d1}, {at:new Date(2026,9,8,17,15), v:d2}];
-const ageColor = days => days > 30 ? "#C62828" : days >= 15 ? "#B07500" : "#1A7F3C";
+const ageColor = days => days > 30 ? "#C62828" : days >= 15 ? "#B07500" : "var(--m-on)";   // CustomerCrmScreen.kt:651-657: young open debt = neutral ink (MKT3-3 R7)
 const base = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"")[0].toUpperCase();
 
 function list(){

@@ -186,9 +186,20 @@ const WT = {
            pt:"As mudanças do cardápio vão pela internet: seu celular e o do garçom precisam de conexão.",
            en:"Menu changes travel over the internet: your phone and the server's phone need a connection."}
 };
+/* MKT3-2 (19): the waiter phone's tiles wear the combo pill too (MiniPosSellScreen.kt:631 -> ProductLibraryView comboBadgeForProduct ->
+   ProductCard.kt:201 SumaComboGreen box). CatalogActions.comboBadgeForProduct: any leg of the combo (main OR linked category) gets it;
+   Free ("Oferta de Combo") only when PCT of (this dish + the priciest other leg) covers that other leg, else "Oferta de Combo −10%". */
+const PILL = {pct:{es:"Oferta de Combo −%1$d%",pt:"Oferta de Combo −%1$d%",en:"Combo Offer −%1$d%"}, free:{es:"Oferta de Combo",pt:"Oferta de Combo",en:"Combo Offer"}};   // combo_label_offer_percent / _free
+function comboPill(it){
+  const inMain = it.cat===MAIN.name, inDrink = it.cat===DRINK.name;
+  if(!inMain && !inDrink) return null;
+  const others = (inMain ? inCat(DRINK) : inCat(MAIN)).map(x=>x.price);
+  const mx = Math.max(...others);
+  return (PCT*(it.price+mx)/100 >= mx) ? P(PILL.free) : fmt(P(PILL.pct), PCT);
+}
 function waiterSell(o){ o=o||{};
   const tabs = `<div class="mtabs">${P(WT.tabs).map((t,i)=>`<span class="${i===0?"on":""}">${esc(t)}</span>`).join("")}</div>`;
-  const grid = `<div class="mgrid">` + C.itemsByName.map(it=>tile(it)).join("") + `</div>`;
+  const grid = `<div class="mgrid">` + C.itemsByName.map(it=>tile(it, {badge: o.combo ? comboPill(it) : null})).join("") + `</div>`;
   let h = tabs + chipsRow(0) + grid + `<div class="mlink"><span>${esc(P(W.keypadTab))}</span></div>`;
   if(o.count) h += `<div class="mcart" data-t="cart"><span>${esc(fmt(P(WT.chargeItems)[o.count===1?0:1], R.money(o.total), o.count))}</span></div>`;
   return h + staffNav();
@@ -267,14 +278,15 @@ function summary(st){
     ${dcard}${on?`<div class="x-fh">${esc(T("freeHint", DRINK.name, FREE_PCT))}</div>`:""}</div></div>${bottom(T("save"),"save")}${strip()}</div>`;
 }
 function till(st){
-  let h = `<div class="x-tillwrap">` + waiterSell({count: st.lines.length, total: st.combo ? comboTotal() : st.lines.reduce((s,l)=>s+l.price,0)});
+  let h = `<div class="x-tillwrap">` + waiterSell({combo:true, count: st.lines.length, total: st.combo ? comboTotal() : st.lines.reduce((s,l)=>s+l.price,0)});
   if(st.offer) h += `<div class="x-offer"><span>${esc(T("inCombo", DISH.name))}</span><b data-t="make-combo">${esc(T("makeCombo"))}</b></div>`;
   if(st.sheet) h += `<div class="mscrim"><div class="msheet x-cps"><h3>${esc(T("complete", COMBO_NAME))}</h3>
-    ${DRINKS.map(d=>`<div class="r" data-t="drink-${d.id}"><span>${esc(d.name)}</span>${I.chev}</div>`).join("")}</div></div>`;
+    ${DRINKS.map(d=>`<div class="r" data-t="drink-${d.id}"><span>${esc(d.name)}</span><small>${R.money(d.price)}</small>${I.chev}</div>`).join("")}</div></div>`;
   return h + `</div>`;
 }
 /* ---- the waiter's pay step: the cart bar calls openPayDirect (MiniPosSellScreen.kt:417) -> MamaStep.PAY = CheckoutSheetBody with
-   saveOnSellScreen (no Guardar here); CheckoutPayBlock.kt:234 link "Artículos (N) ›" (checkout_items_link) opens the Desglose.
+   its own Guardar (MKT3-2 (9): saveOnSellScreen is no longer passed; checkout_save_ticket, "Enviar a cocina" only with a kitchen screen,
+   none in this story); CheckoutPayBlock.kt:234 link "Artículos (N) ›" (checkout_items_link) opens the Desglose.
    The demo shop has no dining option switched on, so no dining step and no dining link. ---- */
 const PW = {
   cust:{es:"Agrega un cliente a la venta",pt:"Adicione um cliente à venda",en:"Add a client to the sale"},   // checkout_add_customer_cta
@@ -283,7 +295,8 @@ const PW = {
   exact:{es:"Exacto · %s",pt:"Exato · %s",en:"Exact · %s"},                                                 // cash_exact
   bdTitle:{es:"Desglose",pt:"Detalhes",en:"Breakdown"}, done:{es:"Listo",pt:"Pronto",en:"Done"},          // checkout_desglose_title / checkout_done
   itemsH:{es:"Artículos",pt:"Itens",en:"Items"}, detailsH:{es:"DETALLES",pt:"DETALHES",en:"DETAILS"},       // checkout_items_heading / checkout_details_header
-  comboDisc:{es:"Descuento de combo",pt:"Desconto do combo",en:"Combo discount"}                             // home_combo_discount
+  comboDisc:{es:"Descuento de combo",pt:"Desconto do combo",en:"Combo discount"},                            // home_combo_discount
+  save:{es:"Guardar",pt:"Salvar",en:"Save"}                             // home_combo_discount
 };
 const comboSub = () => DISH.price + DRINKP.price;
 const comboOff = () => comboSub() * PCT/100;
@@ -295,7 +308,8 @@ function payStep(){
     <div class="blk"><div class="tot"><small>${esc(P(PW.total))}</small><b>${R.money(comboTotal())}</b></div>
     <div class="links"><span data-t="items-link">${esc(fmt(P(PW.items),2))} ›</span></div>
     <div class="kp">${k.map(x=>`<span class="${x==="⌫"||x.length>1?"s":""}">${x}</span>`).join("")}</div>
-    <div class="exact">${esc(fmt(P(PW.exact), R.money(comboTotal())))}</div></div></div>` + staffNav();
+    <div class="exact">${esc(fmt(P(PW.exact), R.money(comboTotal())))}</div>
+    <div class="save">${esc(P(PW.save))}</div></div></div>` + staffNav();
 }
 /* ---- Desglose: CheckoutBreakdownScreen.kt (title 19 sp bold + black "Listo" pill; ITEMS GroupCard of CheckoutItemRow with the trash
    at quantity 1; DETALLES card: the combo discount row :315 ChargeRow(home_combo_discount, DISCOUNT) = "− " + green #1A7F3C amount;
@@ -494,7 +508,8 @@ RKIT.start(R, {
 .x-offer b{min-height:calc(var(--u)*40);display:grid;place-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:800}
 .x-cps{padding-bottom:calc(var(--u)*16)}
 .x-cps h3{margin:0;padding:calc(var(--u)*16) 0;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700}
-.x-cps .r{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*8) 0;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24)}
+.x-cps .r{display:flex;align-items:center;gap:calc(var(--u)*12);min-height:calc(var(--u)*48);box-sizing:border-box;padding:calc(var(--u)*8) 0;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24)}   /* ComboLinkedItemPickerSheet.kt: heightIn(min = ComboPickRowMin 48 dp), MKT3-2 */
+.x-cps .r small{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv);white-space:nowrap}   /* combo_pick_price: bodyMedium, onSurfaceVariant */
 .x-cps .r span{flex:1}.x-cps .r svg{color:var(--m-onv)}
 /* Desglose (CheckoutBreakdownScreen.kt; DesignTokens CheckoutOv* / CheckoutLi* / CheckoutStep*) */
 .x-bd{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff}

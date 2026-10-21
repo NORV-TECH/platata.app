@@ -42,6 +42,13 @@ const ALL_C = "#607D8B";                                   // CategoryChipNeutra
 const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
 /* MoneyVisualTransformation: the separators of the CURRENCY's locale (CurrencyUtils.kt:189 localeForCurrency; USD -> en-US) */
 const CUR_LOC = {COP:"es-CO",MXN:"es-MX",PEN:"es-PE",CLP:"es-CL",USD:"en-US",ARS:"es-AR",BRL:"pt-BR",CAD:"en-CA"};
+/* MKT3-2 (18): the dish price box DRAWS the shop's money format over the plain typed number (ItemsScreen.kt:1143
+   MoneyVisualTransformation: the currency locale's grouping every three digits, its decimal mark, no padding) */
+const MSEP = (() => { const parts = new Intl.NumberFormat(CUR_LOC[C.cur]||C.loc,{minimumFractionDigits:1}).formatToParts(1234567.5);
+  return {g:(parts.find(x=>x.type==="group")||{value:","}).value, d:(parts.find(x=>x.type==="decimal")||{value:"."}).value}; })();
+function moneyShown(raw){ if(!raw || !/^\d+(\.\d*)?$/.test(raw)) return raw||"";
+  const [a,b] = raw.split("."); let out=""; for(let i=0;i<a.length;i++){ if(i>0 && (a.length-i)%3===0) out+=MSEP.g; out+=a[i]; }
+  return b===undefined ? out : out + MSEP.d + b; }
 const fieldMoney = v => new Intl.NumberFormat(CUR_LOC[C.cur]||C.loc,{minimumFractionDigits:C.dec,maximumFractionDigits:C.dec}).format(v);
 /* formatAmountForInput (CurrencyUtils.kt:338): the INTERNAL form a plain money field shows: "38000", "45.00" (a dot, even in Brazil) */
 const inputForm = v => v.toFixed(C.dec);
@@ -224,7 +231,7 @@ function form(st, isNew){
   const body = `<div class="x-form">
     <div class="r1"><div class="pb"><i>${I.addPhoto}</i><small>${esc(T("addPhoto"))}</small></div>
       ${field({label:T("name"), value:name, foc:foc==="name", t:"f-name", style:"flex:1"})}</div>
-    <div class="r2"><div style="flex:1;min-width:0">${field({label:T("price"), value:priceTxt, foc:foc==="price", t:"f-price"})}</div>
+    <div class="r2"><div style="flex:1;min-width:0">${field({label:T("price"), value:moneyShown(priceTxt), foc:foc==="price", t:"f-price"})}</div>
       <div style="flex:1;min-width:0">${field({label:T("category"), value:MAIN.name, trail:`<span class="tr">${I.drop}</span>`})}</div></div>
     <div class="x-addons"><i>${I.list}</i><div><b>${esc(T("addons"))}</b><small>${esc(T("none"))}</small></div><span>${I.chev}</span></div>
     ${isNew ? btn(T("create")+" "+T("dish").toLowerCase(), {pill:true, off:!(st.nName && st.nPrice), t:"create"}) : `<div class="x-del">${esc(T("del"))}</div>`}

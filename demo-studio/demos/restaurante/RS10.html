@@ -27,7 +27,7 @@
                         Faltante/Sobrante/Cuadrado titleMedium bold, TextButtons Seguir contando | Cerrar caja)
    summary              ui/screens/cash/RegisterClosedScreen.kt:181-322 (variance headline, times card, REPORTS-11 lines card, drawer card,
                         Enviar por WhatsApp, Listo); no Print button without a receipt printer
-   WhatsApp text        utils/ShiftSummaryText.kt build() (business name, CAJA CERRADA, 32-column rows, thermalSafe) + WhatsappSignature
+   WhatsApp text        utils/ShiftSummaryText.kt build(plain = true) (business name, CAJA CERRADA, "Label: value" rows, blank lines for rules; MKT3-2) + WhatsappSignature
                         (blank line + whatsapp_signature); RegisterClosedScreen sends it with ACTION_SEND to com.whatsapp, the owner picks the chat.
    Before: the register was opened with the starting cash (RS2), sales were rung in cash, one cash-out to a supplier (RS9). */
 // TITLE: Platata · Cerrar la caja
@@ -315,8 +315,10 @@ function summary(st){
 }
 /* the text ShiftSummaryText.build() makes for this shift, signed (WhatsappSignature) */
 function shiftText(){
-  const W = 32, rule = "-".repeat(W), out = [];
-  const row = (l, r) => { const g = W - l.length - r.length; out.push(g>0 ? l+" ".repeat(g)+r : l+" "+r); };
+  /* MKT3-2 (13): the WhatsApp copy is build(..., plain = true): "Label: value" rows, a method under its heading is "- Label: value",
+     the 32-dash rules are blank lines (WhatsApp has no fixed-width font); the printed copy keeps its columns */
+  const rule = "", out = [];
+  const row = (l, r) => { out.push((l.startsWith(" ") ? "- " : "") + l.trim() + ": " + r); };
   out.push(C.place); out.push(t("register_closed_title").toUpperCase()); out.push(rule);
   row(t("register_status_opened_at"), fmtDT(OPENED)); row(t("register_status_closed_at"), fmtDT(CLOSED)); row(t("register_status_closed_by"), OWNER); out.push(rule);
   row(t("register_status_net_sales"), money(SALES)); row(t("reports_total_collected"), money(SALES));
