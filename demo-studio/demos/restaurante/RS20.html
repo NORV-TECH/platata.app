@@ -415,7 +415,7 @@ function toast(text){ return `<div class="otoast">${esc(text)}</div>`; }
 /* how far (in dp) the page must scroll so that `sel` sits above the bottom of .cpage (the real pages scroll; the demo moves
    the page's inner column with a transform kept in state, so a re-render keeps the place) */
 function scrollFor(sel){
-  const el=document.querySelector('#app '+sel), pg=document.querySelector('#app .cpage, #app .spage'); if(!el||!pg) return 0;
+  const el=document.querySelector('#app '+sel), pg=document.querySelector('#app .cpage, #app .spage, #app .wscr'); if(!el||!pg) return 0;
   const u=document.getElementById('screen').getBoundingClientRect().width/412;
   const over=el.getBoundingClientRect().bottom - pg.getBoundingClientRect().bottom + 16*u;
   return over>0 ? Math.ceil(over/u) : 0;
@@ -483,7 +483,7 @@ const S20 = {
   skipLine:{es:"+1 conexión · tablet conectada",pt:"+1 conexão · tablet conectado",en:"+1 connection · tablet connected"},
   skipNote:{es:"Agregas la conexión en Google Play y conectas una tablet o un teléfono de empleado (mira «Otro celular o tableta»).",pt:"Você adiciona a conexão no Google Play e conecta um tablet ou um celular de funcionário (veja «Outro celular ou tablet»).",en:"You add the connection in Google Play and connect a tablet or an employee phone (see “Another phone or tablet”)."},
   custPhone:{es:"Celular del cliente",pt:"Celular do cliente",en:"Customer's phone"},
-  shareLine:{es:"Comparte tu enlace",pt:"Compartilhe seu link",en:"Share your link"},
+  shareLine:{es:"Compartir · WhatsApp, Instagram…",pt:"Compartilhar · WhatsApp, Instagram…",en:"Share · WhatsApp, Instagram…"},
   alertT:{es:"Nuevo pedido en línea · #%1$s",pt:"Novo pedido online · #%1$s",en:"New online order · #%1$s"},
   alertN:{es:"%1$d producto",pt:"%1$d item",en:"%1$d item"},
   newOrderLine:{es:"Pedido #%1$s",pt:"Pedido #%1$s",en:"Order #%1$s"}
@@ -524,7 +524,7 @@ function sellPage(st){
   } else {
     b += `<div class="bs">${esc(t("keepOpen"))}</div>`;
     if(st.checked) b += `<div class="scard"><span class="link">${esc(LINK)}</span><div class="lacts">
-       <span class="lact">${I("copy")}${esc(t("copy"))}</span><span class="lact">${I("share")}${esc(t("share"))}</span><span class="lact">${I("qr")}${esc(t("qr"))}</span><span class="lact">${I("open")}${esc(t("view"))}</span></div></div>`;
+       <span class="lact">${I("copy")}${esc(t("copy"))}</span><span class="lact" data-t="so-share">${I("share")}${esc(t("share"))}</span><span class="lact">${I("qr")}${esc(t("qr"))}</span><span class="lact">${I("open")}${esc(t("view"))}</span></div></div>`;
     b += `<div class="hd">${esc(t("howH"))}</div><div class="scard"><div class="srow"><span class="tx"><span class="ts">${esc(t("pickup"))}</span><span class="bs">${esc(t("pickupS"))}</span></span>${sw(true,"",true)}</div></div>`;
     b += `<div class="hd">${esc(t("payH"))}</div><div class="scard"><div class="srow"><span class="tx"><span class="ts">${esc(t("payP"))}</span><span class="bs">${esc(t("payPS"))}</span></span>${sw(true,"",true)}</div>`;
     if(C.pay.card==="wompi") b += `<div class="divd"></div><div class="soon"><span>${esc(t("cardOnline"))}</span><b>${esc(t("soon"))}</b></div>`;
@@ -565,10 +565,10 @@ function browser(inner){ return `<div class="brw"><div class="url">${I("lock")}<
 function webMenu(st){
   const chip = (label, c, sel) => `<span class="wchip${sel?" sel":""}" style="${c?`background:${hexA(c,.05)};border-color:${hexA(c,.3)}`:""}">${sel?"✓ ":""}${esc(label)}</span>`;
   const n = st.qty||0;
-  let h = `<div class="wscr"><div class="whead"><div class="wshop">${esc(C.place)}</div><div class="wstat">${esc(wt("open",{t:webClock(18,0)}))}</div></div>
+  let h = `<div class="wscr"><div style="transform:translateY(calc(var(--u)*${-(st.wsc||0)}))"><div class="whead"><div class="wshop">${esc(C.place)}</div><div class="wstat">${esc(wt("open",{t:webClock(18,0)}))}</div></div>
     <div class="wchips">${chip(wt("all"),null,true)}${C.catList.map(c=>chip(c.name,c.color,false)).join("")}</div>
     <div class="wgrid">${C.itemsByName.map(it=>{ const c=colorOf(it);
-      return `<div class="wpc" ${it.id===DISH.id?'data-t="w-dish"':""} style="background:${hexA(c,.12)};border-color:${hexA(c,.35)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div>`; }).join("")}</div></div>`;
+      return `<div class="wpc" ${it.id===DISH.id?'data-t="w-dish"':""} style="background:${hexA(c,.12)};border-color:${hexA(c,.35)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div>`; }).join("")}</div></div></div>`;
   if(n>0) h += `<div class="wduo"><span class="wpri" data-t="w-bar">${esc(wt("bar",{n:wt("one"),amt:R.money(DISH.price)}))}</span></div>`;
   if(st.wsheet) h += `<div class="wlayer"><div class="wscrim"></div><div class="wsheet"><div class="wdrag"></div><div class="wmt">${esc(DISH.name)}</div>
       <div class="wfoot"><span class="wstep">−</span><span class="wqty">1</span><span class="wstep">+</span></div>
@@ -620,12 +620,12 @@ RKIT.start(R, {
   id:"RS20", tallVideo:true, clock:"12:41",
   endText:P({es:"Así vendes en línea con Platata.",pt:"Assim você vende online com o Platata.",en:"That's how you sell online with Platata."}),
   beats: FREE ? P({
-    es:["Abre tu negocio y toca Vender en línea","Recibe pedidos desde un enlace","Enciéndela y elige tu dirección","Tu horario y el tiempo de preparación","Toca Encender la tienda","Comparte tu enlace","Tu cliente elige y lo agrega al pedido","Hace el pedido y suena en tu teléfono","Así vendes en línea con Platata."],
-    en:["Open your business and tap Sell online","Take orders from a link","Turn it on and pick your address","Your hours and your prep time","Tap Turn on the store","Share your link","Your customer picks and adds to the order","They place it and your phone hears it","That's how you sell online with Platata."]})
+    es:["Abre tu negocio y toca Vender en línea","Recibe pedidos desde un enlace","Enciéndela: tu dirección y tu horario","Toca Encender la tienda","Comparte tu enlace","Tu cliente elige y lo agrega al pedido","Pone su nombre y hace el pedido","El aviso llega a tu teléfono","Así vendes en línea con Platata."],
+    en:["Open your business and tap Sell online","Take orders from a link","Turn it on: your address and your hours","Tap Turn on the store","Share your link","Your customer picks and adds to the order","They add their name and place the order","The alert reaches your phone","That's how you sell online with Platata."]})
   : P({
-    es:["Abre tu negocio y toca Vender en línea","Se abre cuando un equipo usa una conexión extra","Enciéndela y elige tu dirección","Tu horario y el tiempo de preparación","Toca Encender la tienda","Comparte tu enlace","Tu cliente elige y lo agrega al pedido","Hace el pedido y suena en tu teléfono","Así vendes en línea con Platata."],
-    pt:["Abra seu negócio e toque em Vender online","Ela abre quando um aparelho usa uma conexão extra","Ligue e escolha seu endereço","Seu horário e o tempo de preparo","Toque em Ligar a loja","Compartilhe seu link","Seu cliente escolhe e adiciona ao pedido","Ele faz o pedido e seu celular avisa","Assim você vende online com o Platata."],
-    en:["Open your business and tap Sell online","It opens once a device uses an extra connection","Turn it on and pick your address","Your hours and your prep time","Tap Turn on the store","Share your link","Your customer picks and adds to the order","They place it and your phone hears it","That's how you sell online with Platata."]}),
+    es:["Abre tu negocio y toca Vender en línea","Se abre cuando un equipo usa una conexión extra","Enciéndela: tu dirección y tu horario","Toca Encender la tienda","Comparte tu enlace","Tu cliente elige y lo agrega al pedido","Pone su nombre y hace el pedido","El aviso llega a tu teléfono","Así vendes en línea con Platata."],
+    pt:["Abra seu negócio e toque em Vender online","Ela abre quando um aparelho usa uma conexão extra","Ligue a loja: seu endereço e seu horário","Toque em Ligar a loja","Compartilhe seu link","Seu cliente escolhe e adiciona ao pedido","Ele põe o nome e faz o pedido","O aviso chega ao seu celular","Assim você vende online com o Platata."],
+    en:["Open your business and tap Sell online","It opens once a device uses an extra connection","Turn it on: your address and your hours","Tap Turn on the store","Share your link","Your customer picks and adds to the order","They add their name and place the order","The alert reaches your phone","That's how you sell online with Platata."]}),
   state:{screen:"panel", dlg:false, skip:false, on:false, checked:false, typed:"", typedDone:false, sc:0, hop:false, qty:0, wsheet:false, wname:"", wphone:"", focus:"", sending:false},
   render,
   who: st => /^w/.test(st.screen) ? t("custPhone") : T("devOwner"),
@@ -636,18 +636,19 @@ RKIT.start(R, {
   ]).concat([
     {beat:2, hint:P({es:"Toca el interruptor",pt:"Toque no interruptor",en:"Tap the switch"}), target:'[data-t="so-switch"]', tap(st,E){ st.screen="addr";
         E.after(700,()=>E.type("typed", SUFFIX, ()=>{ st.typedDone=true; }, 90)); }},
-    {beat:3, hint:P({es:"Toca Siguiente",pt:"Toque em Próximo",en:"Tap Next"}), target:'[data-t="so-next"]', tap(st,E){ st.screen="hours"; st.sc=0;
+    {beat:2, hint:P({es:"Toca Siguiente",pt:"Toque em Próximo",en:"Tap Next"}), target:'[data-t="so-next"]', tap(st,E){ st.screen="hours"; st.sc=0;
         E.after(1600,()=>{ const v=scrollFor('[data-t="so-on"]'); if(v>0) st.sc=v; }); }},
-    {beat:4, hint:P({es:"Toca Encender la tienda",pt:"Toque em Ligar a loja",en:"Tap Turn on the store"}), target:'[data-t="so-on"]', tap(st,E){ st.screen="sell"; st.on=true; st.checked=false; st.sc=0;
-        E.after(1500,()=>{ st.checked=true; });
-        E.after(5200,()=>{ st.hop=true; });
-        E.after(7000,()=>{ st.hop=false; st.screen="wmenu"; }); }},
-    {beat:6, hint:P({es:"Toca "+DISH.name,pt:"Toque em "+DISH.name,en:"Tap "+DISH.name}), target:'[data-t="w-dish"]', tap(st){ st.wsheet=true; }},
-    {beat:6, hint:P({es:"Toca "+WEB[SH].add,pt:"Toque em "+WEB[SH].add,en:"Tap "+WEB[SH].add}), target:'[data-t="w-add"]', tap(st){ st.wsheet=false; st.qty=1; }},
-    {beat:6, hint:P({es:"Toca Ver pedido",pt:"Toque em Ver pedido",en:"Tap View order"}), target:'[data-t="w-bar"]', tap(st,E){ st.screen="wcart"; st.focus="name";
+    {beat:3, hint:P({es:"Toca Encender la tienda",pt:"Toque em Ligar a loja",en:"Tap Turn on the store"}), target:'[data-t="so-on"]', tap(st,E){ st.screen="sell"; st.on=true; st.checked=false; st.sc=0;
+        E.after(1500,()=>{ st.checked=true; }); }},
+    {beat:4, hint:P({es:"Toca Compartir",pt:"Toque em Compartilhar",en:"Tap Share"}), target:'[data-t="so-share"]', tap(st,E){ st.hop=true;
+        E.after(2200,()=>{ st.hop=false; st.screen="wmenu"; });
+        E.after(3000,()=>{ const v=scrollFor('[data-t="w-dish"]'); if(v>0) st.wsc=v; }); }},
+    {beat:5, hint:P({es:"Toca "+DISH.name,pt:"Toque em "+DISH.name,en:"Tap "+DISH.name}), target:'[data-t="w-dish"]', tap(st){ st.wsheet=true; }},
+    {beat:5, hint:P({es:"Toca "+WEB[SH].add,pt:"Toque em "+WEB[SH].add,en:"Tap "+WEB[SH].add}), target:'[data-t="w-add"]', tap(st){ st.wsheet=false; st.qty=1; }},
+    {beat:5, hint:P({es:"Toca Ver pedido",pt:"Toque em Ver pedido",en:"Tap View order"}), target:'[data-t="w-bar"]', tap(st,E){ st.screen="wcart"; st.focus="name";
         E.after(500,()=>E.type("wname", C.people.customer, ()=>{ st.focus="phone"; E.type("wphone", DIAL+" "+C.people.phone, ()=>{ st.focus=""; }, 55); }, 60)); }},
-    {beat:7, hint:P({es:"Toca "+WEB[SH].reviewOrder,pt:"Toque em "+WEB[SH].reviewOrder,en:"Tap "+WEB[SH].reviewOrder}), target:'[data-t="w-review"]', tap(st){ st.screen="wreview"; }},
-    {beat:7, hint:P({es:"Toca "+WEB[SH].place,pt:"Toque em "+WEB[SH].place,en:"Tap "+WEB[SH].place}), target:'[data-t="w-place"]', tap(st,E){ st.sending=true;
+    {beat:6, hint:P({es:"Toca "+WEB[SH].reviewOrder,pt:"Toque em "+WEB[SH].reviewOrder,en:"Tap "+WEB[SH].reviewOrder}), target:'[data-t="w-review"]', tap(st){ st.screen="wreview"; }},
+    {beat:6, hint:P({es:"Toca "+WEB[SH].place,pt:"Toque em "+WEB[SH].place,en:"Tap "+WEB[SH].place}), target:'[data-t="w-place"]', tap(st,E){ st.sending=true;
         E.after(1100,()=>{ st.sending=false; st.screen="wdone"; });
         E.after(3000,()=>{ st.hop=true; });
         E.after(4800,()=>{ st.hop=false; st.screen="owner"; }); }}

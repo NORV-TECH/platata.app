@@ -1,0 +1,77 @@
+{
+  "id": "RS15",
+  "name": "Employee pay",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-team",
+      "voice": {
+        "es": "En Mi negocio, toca Equipo.",
+        "pt": "Em Meu negócio, toque em Equipe.",
+        "en": "In My business, tap Team."
+      }
+    },
+    {
+      "id": "2-switch",
+      "voice": {
+        "es": "Prende Llevar la cuenta de los pagos a empleados.",
+        "pt": "Ligue Acompanhar os pagamentos dos funcionários.",
+        "en": "Turn on Track employee payments."
+      }
+    },
+    {
+      "id": "3-deal",
+      "voice": {
+        "es": "El trato es simple: el 5 de cada mes te pregunta cuánto pagaste. Si no contestas, te recuerda, y después del 25 se apaga solo.",
+        "pt": "É simples: no dia 5 de cada mês ele pergunta quanto você pagou. Se não responder, ele lembra, e depois do dia 25 desliga sozinho.",
+        "en": "It's simple: on the 5th of each month it asks what you paid. If you don't answer, it reminds you, and after the 25th it switches itself off."
+      }
+    },
+    {
+      "id": "4-amounts",
+      "voice": {
+        "es": "Escribe lo que le pagas al mes a cada persona.",
+        "pt": "Escreva quanto você paga por mês a cada pessoa.",
+        "en": "Type what you pay each person per month."
+      }
+    },
+    {
+      "id": "5-on",
+      "voice": {
+        "es": "Toca Activar.",
+        "pt": "Toque em Ativar.",
+        "en": "Tap Turn on."
+      }
+    },
+    {
+      "id": "6-ask",
+      "voice": {
+        "es": "El 5 del mes siguiente te pregunta, con los montos ya puestos. Si todo está bien, toca Todo pagado.",
+        "pt": "No dia 5 do mês seguinte ele pergunta, com os valores já preenchidos. Se estiver tudo certo, toque em Tudo pago.",
+        "en": "On the 5th of the next month it asks, with the amounts already filled in. If it's right, tap All paid."
+      }
+    },
+    {
+      "id": "7-end",
+      "voice": {
+        "es": "Así llevas la cuenta de lo que pagas, con Platata.",
+        "pt": "Assim você anota o que paga, com o Platata.",
+        "en": "That's how you keep track of what you pay, with Platata."
+      }
+    }
+  ]
+}
