@@ -653,7 +653,8 @@ function priceSheet(o){   // o: {name, price, unit, weight, focus}
    seed         data/PosDatabase.kt:3216-3267 (units ORDER BY category, name; Pound hidden outside US/CA, Libra inside)
    new unit     UnitOfSalePicker.kt:195-256 NewUnitForm (a card in the form, not a pop-up): Nombre, Abreviatura, "Se vende por peso o
                 medida" switch (off = counted), Guardar, Cancelar; a saved unit is picked as soon as its row arrives (pendingPick) */
-const IT = GROC("tomate");
+const IT = GROC("tomate");                  /* a NEW product, priced and filed like the shop's tomatoes, sold by weight */
+const NEWNAME = pick({es: "Papa", pt: "Batata", en: "Potatoes"});
 const POUND = CC === "US" || CC === "CA";
 /* the seeded units: [stored name, abbreviation, category] */
 const SEED = [["Gram","g","Weight & Mass"],["Kilogram","kg","Weight & Mass"],["Milligram","mg","Weight & Mass"],["Ounce","oz","Weight & Mass"],["Pound","lb","Weight & Mass"],["Libra","lb","Weight & Mass"],
@@ -698,7 +699,7 @@ function form(st){
       <div class="swr"><span>${esc(t("items_unit_by_amount"))}</span><span class="tq-sw"><i></i></span></div>
       <div class="tq-btn" data-t="nu-save">${esc(t("common_save"))}</div><div class="tq-btn sec">${esc(t("common_cancel"))}</div></div>` : "";
   const col = `<div class="tq-icol" style="${st.newForm ? "transform:translateY(calc(var(--u)*-372))" : ""}">
-    <div class="r1"><div class="ph">${I.photo}<small>${esc(t("items_add_photo"))}</small></div>${field({label: t("common_name"), value: IT.name})}</div>
+    <div class="r1"><div class="ph">${I.photo}<small>${esc(t("items_add_photo"))}</small></div>${field({label: t("common_name"), value: NEWNAME})}</div>
     <div class="r2">${field({label: t("items_field_price_hint"), value: price})}${field({label: t("items_field_category"), value: cat, trail: `<span class="tr">${I.drop}</span>`})}</div>
     <div class="cs"><b>${esc(t("items_count_stock"))}</b><span class="tq-sw on"><i></i></span></div>
     <div class="tq-stk"><div class="sr"><div class="l"><b>${esc(t("stock_sheet_how_many"))}</b><span class="tq-chip${st.chipHl?" tq-hl":""}">${esc(display(unit))} ▾</span></div>
