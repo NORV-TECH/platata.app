@@ -53,8 +53,8 @@
       "id": "5-impuestos",
       "voice": {
         "es": "Los impuestos van aparte, y lo fiado no cuenta como cobrado.",
-        "pt": "O fiado ainda não conta como recebido.",
-        "en": "Taxes are shown apart, and tab sales don't count as collected yet."
+        "pt": "O fiado não conta como recebido.",
+        "en": "Taxes are shown apart, and tab sales don't count as collected."
       }
     },
     {
