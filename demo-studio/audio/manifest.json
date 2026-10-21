@@ -1455,19 +1455,19 @@
   "chars": 52
  },
  "R2/es/7-order": {
-  "hash": "a167d925d989f32492182e6432d8db0c050223fc",
+  "hash": "470cdc42a61c8f497371fe6d92a2a9ed45f3de4e",
   "file": "demo-studio/audio/R2/es/7-order.mp3",
-  "chars": 82
+  "chars": 105
  },
  "R2/pt/7-order": {
-  "hash": "65fcc9d70630be5366911d59c1db130e4eedc036",
+  "hash": "25ab51e1a7b28a1fc3567db7a8aeab11ff046a97",
   "file": "demo-studio/audio/R2/pt/7-order.mp3",
-  "chars": 75
+  "chars": 95
  },
  "R2/en/7-order": {
-  "hash": "09c3f2011574df71b528fea882a7d07a2c115464",
+  "hash": "3cb8cb532b76a228ad0e8b18d10280553a6b9d2b",
   "file": "demo-studio/audio/R2/en/7-order.mp3",
-  "chars": 84
+  "chars": 104
  },
  "R2/es/8-end": {
   "hash": "bafe9867c0e5f56f0a5175150f250c8cc2792b15",
@@ -1875,34 +1875,19 @@
   "chars": 63
  },
  "RS18/es/7-pick": {
-  "hash": "cbf348232a7cb313150309063196f417cd22d301",
+  "hash": "5e1fc249fe4629340ac9322ab168fe691824df18",
   "file": "demo-studio/audio/RS18/es/7-pick.mp3",
-  "chars": 55
+  "chars": 26
  },
  "RS18/pt/7-pick": {
-  "hash": "9925aef4d424bafb66eb54b38d809f4ed8a68b2a",
+  "hash": "133ccca29de20d4b13f11c64b8e57e4b66158748",
   "file": "demo-studio/audio/RS18/pt/7-pick.mp3",
-  "chars": 54
+  "chars": 28
  },
  "RS18/en/7-pick": {
-  "hash": "bd228d8a2f8cb4289a173573ff716ef9032d12d1",
+  "hash": "81993ac9e44a90118fc0b08d03101a4c39d753fc",
   "file": "demo-studio/audio/RS18/en/7-pick.mp3",
-  "chars": 61
- },
- "RS18/es/8-end": {
-  "hash": "94cf168f03d49138a58875d5f4dfbd60afac1cde",
-  "file": "demo-studio/audio/RS18/es/8-end.mp3",
-  "chars": 48
- },
- "RS18/pt/8-end": {
-  "hash": "4ccf8ae4458334d2447c7a65ed0b9c756d575b9f",
-  "file": "demo-studio/audio/RS18/pt/8-end.mp3",
-  "chars": 58
- },
- "RS18/en/8-end": {
-  "hash": "0a268be2062691886dec4b2df07d5b71029f4251",
-  "file": "demo-studio/audio/RS18/en/8-end.mp3",
-  "chars": 62
+  "chars": 31
  },
  "RS2/es/1-cerrada": {
   "hash": "2321eee844fd9086b7435ce352571204aeb2efbe",
@@ -2320,9 +2305,9 @@
   "chars": 48
  },
  "R10/en/7-exacto": {
-  "hash": "76f64a3ec69eefe0ae62565e2f040aaf4ae31eb3",
+  "hash": "8c0e512ba492d232583f7943f99eb9df401b81ac",
   "file": "demo-studio/audio/R10/en/7-exacto.mp3",
-  "chars": 45
+  "chars": 31
  },
  "R10/es/8-papel": {
   "hash": "e5bd178d43e84da403922c85268fc8e9489d0495",
@@ -3175,19 +3160,19 @@
   "chars": 39
  },
  "RS14/es/6-pin": {
-  "hash": "688f6fc20eebdf649e45912384d3c66baa801274",
+  "hash": "92eef5ca6a6ec6f7c049e5ee3df9f7e5f48a9f78",
   "file": "demo-studio/audio/RS14/es/6-pin.mp3",
-  "chars": 46
+  "chars": 73
  },
  "RS14/pt/6-pin": {
-  "hash": "1d36d76d655e41e68c4a58bb8fe822a90fd9cb37",
+  "hash": "2624402df79b2d3d748b626e5c199ce1de71b93b",
   "file": "demo-studio/audio/RS14/pt/6-pin.mp3",
-  "chars": 46
+  "chars": 73
  },
  "RS14/en/6-pin": {
-  "hash": "4e929e12d388202aa9a201065630e4b59d1f4a16",
+  "hash": "8efe68e457f687cef28c9ccb7ea25aa95cea9d26",
   "file": "demo-studio/audio/RS14/en/6-pin.mp3",
-  "chars": 56
+  "chars": 81
  },
  "RS14/es/7-end": {
   "hash": "cb0336c4e1e9321db91aee5c0e445295069a8fca",
@@ -4353,5 +4338,35 @@
   "hash": "f2f7ae7ad6613223a79b7a478adf50d73212bbc7",
   "file": "demo-studio/audio/RS1/en/7-fin.mp3",
   "chars": 51
+ },
+ "RS18/es/8-discount": {
+  "hash": "9c12fdb6820abbe33139da2d34ce1a33b5524feb",
+  "file": "demo-studio/audio/RS18/es/8-discount.mp3",
+  "chars": 66
+ },
+ "RS18/pt/8-discount": {
+  "hash": "63e52beb745c712d7de6e194249d0a1c2804d019",
+  "file": "demo-studio/audio/RS18/pt/8-discount.mp3",
+  "chars": 67
+ },
+ "RS18/en/8-discount": {
+  "hash": "8c0d8e62ee12c933dd37bc2ef2d53ac61f7d4a9e",
+  "file": "demo-studio/audio/RS18/en/8-discount.mp3",
+  "chars": 67
+ },
+ "RS18/es/9-end": {
+  "hash": "94cf168f03d49138a58875d5f4dfbd60afac1cde",
+  "file": "demo-studio/audio/RS18/es/9-end.mp3",
+  "chars": 48
+ },
+ "RS18/pt/9-end": {
+  "hash": "4ccf8ae4458334d2447c7a65ed0b9c756d575b9f",
+  "file": "demo-studio/audio/RS18/pt/9-end.mp3",
+  "chars": 58
+ },
+ "RS18/en/9-end": {
+  "hash": "0a268be2062691886dec4b2df07d5b71029f4251",
+  "file": "demo-studio/audio/RS18/en/9-end.mp3",
+  "chars": 62
  }
 }
