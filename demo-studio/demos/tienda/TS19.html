@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Otro celular o tableta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* ---- shared by RS19..RS24: owner Home, panel, Settings page, support strip, dialogs (values from ui/theme + the files named in the script) ---- */
+.ti{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor;flex:0 0 auto}
+.otabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.otabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);color:var(--m-onv);position:relative}
+.otabs span.on{color:var(--m-on);font-weight:700}
+.otabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.rcbar{flex:0 0 auto;background:#FEF3C7;color:#856404;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--u)*6) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:700}
+.rcbar b{background:#FF9500;color:#fff;border-radius:calc(var(--u)*50);padding:calc(var(--u)*6) calc(var(--u)*16);font-size:calc(var(--u)*13)}
+.offs{flex:0 0 auto;background:var(--m-sv);color:var(--m-onv);text-align:center;font-size:calc(var(--u)*12);font-weight:700;padding:calc(var(--u)*4) calc(var(--u)*16)}
+.oedit{flex:0 0 auto;display:flex;justify-content:flex-end;padding:0 calc(var(--u)*16)}
+.oedit span{display:flex;align-items:center;gap:calc(var(--u)*4);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mcats .ck{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:currentColor}
+.csale{flex:0 0 auto;min-height:calc(var(--u)*44);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:600}
+.csale i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.fpair{flex:0 0 auto;display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16)}
+.fpair span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600;white-space:nowrap}
+.fpair .pri{background:var(--m-on);color:#fff}
+.fpair .sec{border:1px solid var(--m-outline);color:var(--m-on)}
+.fpair .pri.dis{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.fpair .sec.dis{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.onav .pill{position:relative}
+.nbadge{position:absolute;top:calc(var(--u)*-2);right:calc(var(--u)*12);min-width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:calc(var(--u)*8);background:#B3261E;color:#fff;font-style:normal;font-size:calc(var(--u)*11);font-weight:600;display:grid;place-items:center;padding:0 calc(var(--u)*4)}
+.onav .flagc{font-size:0}
+.onav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.onav .flagc svg.fp{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:var(--m-onv);border-radius:0}
+/* panel */
+.panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff}
+.phd{display:flex;align-items:center;padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);color:#007AFF;flex:0 0 auto}
+.phd span{font-size:calc(var(--u)*28);font-weight:900;line-height:1.15}
+.pdn{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.plist{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--u)*8);padding-bottom:calc(var(--u)*12)}
+.wrow{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.wic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.wdot{width:calc(var(--u)*42);text-align:center;font-size:calc(var(--u)*16);flex:0 0 auto}
+.wtx{flex:1;min-width:0;display:flex;flex-direction:column}
+.wtx b{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);line-height:1.3}
+.wtx small{font-size:calc(var(--u)*12);color:var(--m-onv);line-height:1.35}
+.wtx small.red{color:var(--m-err)}
+.wch{color:var(--m-onv);flex:0 0 auto}
+.wtr{font-size:calc(var(--u)*18);font-weight:700;white-space:nowrap}.wtr.sm{font-size:calc(var(--u)*14)}
+.spill{border-radius:calc(var(--u)*50);background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.spill.on{background:var(--m-sv);color:var(--m-on)}
+.phead{margin:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.pdiv{margin:calc(var(--u)*4) calc(var(--u)*24);border-top:1px solid var(--m-ovar)}
+/* top bar + Settings page */
+.mtb{flex:0 0 auto;height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*4);background:#fff}
+.mtbb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on)}
+.mtbt{font-size:calc(var(--u)*22);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptb{height:calc(var(--u)*52);background:#FBFAF7}
+.ptb .mtbb{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;margin-left:calc(var(--u)*8)}
+.ptb .mtbt{font:600 calc(var(--u)*20) Fredoka,Roboto,sans-serif;color:#17181B}
+.hub{flex:1;min-height:0;overflow:hidden;padding:0 calc(var(--u)*16) calc(var(--u)*24);background:#fff}
+.hgrp{padding:calc(var(--u)*16) 0 calc(var(--u)*8) calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.hrow{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);margin-bottom:calc(var(--u)*8)}
+/* support strip (SupportStrip.kt) */
+.sstrip{flex:0 0 auto;display:flex;min-height:calc(var(--u)*56);background:#fff;border-top:1px solid #E6E2D9;position:relative}
+.sstrip::after{content:"";position:absolute;left:50%;top:calc(var(--u)*8);bottom:calc(var(--u)*8);width:1px;background:#E6E2D9}
+.sh{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.sb{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#188448;display:grid;place-items:center;flex:0 0 auto}
+.sbi{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
+.st{flex:1;min-width:0;display:flex;flex-direction:column}
+.st b{font-size:calc(var(--u)*15);font-weight:700;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st small{font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sch{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+/* dialogs (SumaDialog = M3 AlertDialog) */
+.dscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*40)}
+.dbox{width:100%;background:#fff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24)}
+.dtt{font-size:calc(var(--u)*24);line-height:1.3;color:var(--m-on);margin-bottom:calc(var(--u)*16)}
+.dbody{font-size:calc(var(--u)*14);line-height:1.45;color:var(--m-onv)}
+.dbody p{margin:0 0 calc(var(--u)*12)}
+.dbtn{display:flex;justify-content:flex-end;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24)}
+.dno{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.dyes{padding:calc(var(--u)*10) calc(var(--u)*24);border-radius:calc(var(--u)*20);background:var(--m-on);color:#fff;font-size:calc(var(--u)*14);font-weight:500}
+.dyes.red{background:var(--m-err)}
+.dbox.pap .dno{color:#3A2A1F}.dbox.pap .dyes{background:#3A2A1F}
+.dbox.pap .dbody{color:#17181B;font-size:calc(var(--u)*15);line-height:1.4}
+/* system prompts */
+.bios{align-items:end;place-items:end center;padding:0}
+.bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*28) calc(var(--u)*24) calc(var(--u)*40);text-align:center}
+.bio .bt{font-size:calc(var(--u)*22);color:#1F1F1F}
+.bio .bs{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*14);color:#444746}
+.bf{margin:calc(var(--u)*28) auto 0;width:calc(var(--u)*72);height:calc(var(--u)*72);border-radius:50%;display:grid;place-items:center;background:#D3E3FD}
+.bfi{width:calc(var(--u)*44);height:calc(var(--u)*44);fill:#0B57D0}
+.otoast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*110);max-width:85%;background:rgba(32,33,36,.92);color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:16;text-align:center}
+
+.cin{display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.cpage{flex:1;min-height:0;overflow:hidden;background:#FBFAF7;padding:calc(var(--u)*8) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.pcard{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.kv{font-size:calc(var(--u)*12.5);color:#737883;letter-spacing:.3px}
+.h1{font:600 calc(var(--u)*27)/1.15 Fredoka,Roboto,sans-serif;color:#17181B}
+.h2{font:600 calc(var(--u)*20)/1.2 Fredoka,Roboto,sans-serif;color:#17181B}
+.pbody{font-size:calc(var(--u)*15);line-height:1.4;color:#464A52}
+.cgrp{display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.cgrp .kv.ok{color:#2C6A35}
+.crow{display:flex;flex-wrap:wrap;gap:calc(var(--u)*8) calc(var(--u)*4)}
+.slot{width:calc(var(--u)*72);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*4);text-align:center}
+.circ{position:relative;width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:50%;display:grid;place-items:center;box-sizing:border-box}
+.circ.f{background:#188448;color:#fff}.circ.o{border:calc(var(--u)*2) solid #188448;color:#188448;font:600 calc(var(--u)*20) Fredoka,sans-serif}
+.circ.a{border:calc(var(--u)*2) dashed #D9D4C9;color:#464A52}
+.circ svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.badge{position:absolute;top:calc(var(--u)*-5);right:calc(var(--u)*-7);min-width:calc(var(--u)*18);height:calc(var(--u)*18);border-radius:calc(var(--u)*9);background:#17181B;color:#FBFAF7;font:500 calc(var(--u)*13)/calc(var(--u)*18) Roboto,sans-serif;text-align:center;padding:0 calc(var(--u)*4);box-sizing:border-box}
+.slot b{font-size:calc(var(--u)*12.5);font-weight:600;color:#17181B;line-height:1.2}
+.slot small{font-size:calc(var(--u)*12.5);color:#737883;line-height:1.2}.slot small.ok{color:#2C6A35}
+.mline{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*8) 0}
+.mline .l{flex:1}.mline .l b{display:block;font-size:calc(var(--u)*15);font-weight:400;color:#17181B}.mline .l small{font-size:calc(var(--u)*12.5);color:#737883}
+.mline .v{font-size:calc(var(--u)*16);font-weight:500;color:#17181B}.mline .v.ok{color:#2C6A35}
+.mline.big .l b{font-size:calc(var(--u)*16);font-weight:500}
+.prow{min-height:calc(var(--u)*56);background:#fff;border:calc(var(--u)*2) solid #E6E2D9;border-radius:calc(var(--u)*14);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.prow span{flex:1}.prow svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#737883}
+.dsec{display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.drow{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.dtile{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);background:#E5F1E7;display:grid;place-items:center;color:#1E9E55;flex:0 0 auto}
+.dtile svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.drow .nm{flex:1;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.drow .rt{display:flex;flex-direction:column;align-items:flex-end;gap:calc(var(--u)*2)}
+.chip{font-size:calc(var(--u)*13);font-weight:500;border-radius:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*8)}
+.chip.ok{background:#E4F0E2;color:#2C6A35}.chip.pd{background:#E6E2D9;color:#17181B}.chip.wn{background:#F6EED8;color:#8A6712}
+.rmv{font-size:calc(var(--u)*14);font-weight:500;color:#464A52;padding:calc(var(--u)*8) calc(var(--u)*4)}
+.pbtn{height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#188448;color:#fff;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font:500 calc(var(--u)*18) Fredoka,Roboto,sans-serif;flex:0 0 auto}
+.pbtn svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff}
+.pbtn.sm{height:calc(var(--u)*44);border-radius:calc(var(--u)*14);font-size:calc(var(--u)*16)}
+.pbtn.dis{background:#E6E2D9;color:#737883}
+.scard{border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12);border:1px solid #E6E2D9}
+.scard .top{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.scard .top .tx{flex:1}.scard .top b{display:block;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.sbox{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center;color:#1E9E55;flex:0 0 auto}
+.sbox svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.okpill{font-size:calc(var(--u)*13);font-weight:500;background:#E4F0E2;color:#2C6A35;border-radius:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*10)}
+.hint{border-radius:calc(var(--u)*14);background:#E5F1E7;padding:calc(var(--u)*12);font-size:calc(var(--u)*15);line-height:1.4;color:#464A52}
+.stepc{border:1px solid #E6E2D9;border-radius:calc(var(--u)*18);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.step{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.sbt{width:calc(var(--u)*52);height:calc(var(--u)*52);border-radius:50%;border:calc(var(--u)*2) solid #D9D4C9;display:grid;place-items:center;flex:0 0 auto}
+.sbt svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#17181B}.sbt.dim{opacity:.35}
+.step .mid{flex:1;text-align:center}.step .mid small{display:block;font-size:calc(var(--u)*13);color:#737883}
+.sheetp{position:absolute;inset:0;background:rgba(0,0,0,.32);display:flex;align-items:flex-end;z-index:15}
+.sheet{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*12) calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.grab{width:calc(var(--u)*44);height:calc(var(--u)*5);border-radius:calc(var(--u)*3);background:#D9D4C9;margin:0 auto calc(var(--u)*8)}
+.opt{min-height:calc(var(--u)*52);border:calc(var(--u)*2) solid #E6E2D9;border-radius:calc(var(--u)*14);padding:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);background:#fff}
+.opt .tl{width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:calc(var(--u)*14);background:#F4EBDD;display:grid;place-items:center;color:#3A2A1F;flex:0 0 auto}
+.opt .tl svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.opt b{display:block;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}.opt small{font-size:calc(var(--u)*15);color:#737883;line-height:1.35}
+.notnow{text-align:center;font:500 calc(var(--u)*18) Fredoka,sans-serif;color:#464A52;padding:calc(var(--u)*8)}
+.emp{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*14);padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.emp .r{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.av{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#E5F1E7;color:#178046;display:grid;place-items:center;font:600 calc(var(--u)*20) Fredoka,sans-serif;flex:0 0 auto}
+.emp .who{flex:1;min-width:0}.emp .who b{display:block;font-size:calc(var(--u)*16);font-weight:600;color:#17181B}.emp .who small{font-size:calc(var(--u)*13);color:#737883}
+.cbtn{width:calc(var(--u)*108);height:calc(var(--u)*44);border-radius:calc(var(--u)*14);background:#188448;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*16) Fredoka,sans-serif;flex:0 0 auto}
+.emp .code{font-size:calc(var(--u)*13);color:#464A52}
+.emp .send{font-size:calc(var(--u)*14);font-weight:500;color:#178046;padding:calc(var(--u)*4) 0}
+.addemp{font-size:calc(var(--u)*14);font-weight:500;color:#178046;padding:calc(var(--u)*8) calc(var(--u)*4)}
+.small{font-size:calc(var(--u)*13);color:#737883}
+.flash{animation:fl 1.2s ease-out}@keyframes fl{0%{box-shadow:0 0 0 calc(var(--u)*3) #188448}100%{box-shadow:0 0 0 0 transparent}}
+/* ---- shop owner Home (retail: no tab row; ScanCheckoutTab.kt) ---- */
+.shome{flex:1;min-height:0;position:relative;display:flex;flex-direction:column;background:#fff}
+.shome .rc{margin:calc(var(--u)*16) calc(var(--u)*16) 0;border-radius:calc(var(--u)*16);background:#fff;box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.12);padding:calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mrow{min-height:calc(var(--u)*56);border-radius:calc(var(--u)*8);background:#F7F7FA;display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12)}
+.mrow .em{font-size:calc(var(--u)*16);width:calc(var(--u)*24);text-align:center}
+.mrow .ic{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E;flex:0 0 auto}
+.mrow .tx{flex:1;min-width:0;font-size:calc(var(--u)*16);color:#1C1C1E;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow .vl{display:flex;flex-direction:column;align-items:flex-end}
+.mrow .vl b{font-size:calc(var(--u)*14);font-weight:600;color:#1C1C1E}.mrow .vl small{font-size:calc(var(--u)*12);color:#6E6E73}
+.mrow .chv{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#6E6E73;flex:0 0 auto}
+.sbar{position:absolute;left:calc(var(--u)*16);right:calc(var(--u)*16);bottom:calc(var(--u)*16);display:flex;gap:calc(var(--u)*12)}
+.sbar .q{flex:1;min-height:calc(var(--u)*56);border-radius:calc(var(--u)*50);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:800}
+.sbar .om{flex:1;height:calc(var(--u)*54);border-radius:calc(var(--u)*18);border:calc(var(--u)*2) solid #E6E2D9;display:grid;place-items:center;font:500 calc(var(--u)*17) Fredoka,Roboto,sans-serif;color:#17181B;background:#fff}
+.sbar .ch{flex:1.4;height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#188448;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*17) Fredoka,Roboto,sans-serif;white-space:nowrap}
+.nudge{min-height:calc(var(--u)*48);background:#F2F2F7;display:flex;align-items:center;padding:0 calc(var(--u)*4) 0 calc(var(--u)*12);flex:0 0 auto}
+.nudge b{flex:1;font-size:calc(var(--u)*14);font-weight:700;color:#1C1C1E}
+.nudge span{height:calc(var(--u)*40);display:grid;place-items:center;padding:0 calc(var(--u)*8);font-size:calc(var(--u)*12);font-weight:500;color:#1C1C1E}
+.nudge span.cta{font-weight:700}
+.wbar{flex:0 0 auto;background:#FEF3C7;color:#856404;display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*12) calc(var(--u)*16)}
+.wbar svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#856404;flex:0 0 auto}
+.wbar b{flex:1;font-size:calc(var(--u)*14);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wbar span{font-size:calc(var(--u)*14);font-weight:700}
+.wtx small.inv{display:flex;gap:0;white-space:nowrap}.wtx small .lo{color:#FF3B30;font-weight:600}
+
+/* Every class here starts with k8 so nothing in kit/edif.css or kit/material.css can reach it. 1 dp = var(--u). */
+/* ---- owner phone, plain Material light (Theme.kt LightColorScheme): SumaTopBar.kt (TopAppBar 64 dp, titleLarge Bold) ---- */
+.k8pg{flex:1;display:flex;flex-direction:column;background:#fff;min-height:0;color:#1C1C1E;font-family:Roboto,system-ui,sans-serif}
+.k8tb{height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*4);padding:0 calc(var(--u)*4);flex:0 0 auto}
+.k8tb span.ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k8tb b{font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k8bars{display:flex;gap:calc(var(--u)*5);padding:0 calc(var(--u)*16);flex:0 0 auto}
+.k8bars i{width:calc(var(--u)*22);height:calc(var(--u)*4);border-radius:calc(var(--u)*2);background:#E5E5EA}
+.k8bars i.on{background:#1C1C1E}
+.k8body{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.k8q{font-size:calc(var(--u)*22);font-weight:700;line-height:1.25}
+.k8chips{display:flex;flex-wrap:wrap;gap:calc(var(--u)*4) calc(var(--u)*8)}
+.k8chips span{height:calc(var(--u)*32);border-radius:calc(var(--u)*8);border:1px solid #C7C7CC;padding:0 calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:#6E6E73}
+.k8chips span.on{background:#E5E5EA;border-color:#E5E5EA;color:#1C1C1E;padding-left:calc(var(--u)*8)}
+.k8chips span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#1C1C1E}
+.k8field{position:relative;height:calc(var(--u)*56);border-radius:calc(var(--u)*6);border:1px solid #C7C7CC;display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16);color:#6E6E73}
+.k8field.has{color:#1C1C1E}
+.k8field small{position:absolute;left:calc(var(--u)*12);top:calc(var(--u)*-9);background:#fff;padding:0 calc(var(--u)*4);font-size:calc(var(--u)*12);color:#6E6E73}
+.k8choice{border-radius:calc(var(--u)*12);border:1px solid #E5E5EA;padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.k8choice.on{border:calc(var(--u)*2) solid #1C1C1E;padding:calc(var(--u)*11)}
+.k8choice b{font-size:calc(var(--u)*16);font-weight:600}
+.k8choice small{font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+.k8lab{font-size:calc(var(--u)*14);font-weight:500;color:#6E6E73}
+.k8cb{min-height:calc(var(--u)*48);display:flex;align-items:center;gap:calc(var(--u)*12);padding-left:calc(var(--u)*12);font-size:calc(var(--u)*16)}
+.k8cb i{width:calc(var(--u)*18);height:calc(var(--u)*18);border-radius:calc(var(--u)*2);border:calc(var(--u)*2) solid #6E6E73;display:grid;place-items:center;box-sizing:border-box}
+.k8cb i.on{background:#1C1C1E;border-color:#1C1C1E}
+.k8cb i svg{width:calc(var(--u)*14);height:calc(var(--u)*14);fill:#fff}
+.k8foot{padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8);flex:0 0 auto}
+.k8btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:600}
+.k8btn.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.k8btn.sec{background:#fff;color:#1C1C1E;border:1px solid #C7C7CC}
+.k8free{font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+/* KdsConnectParts.kt KdsConnectBody */
+.k8line{font-size:calc(var(--u)*16);line-height:1.4}
+.k8code{border-radius:calc(var(--u)*12);background:#F2F2F7;padding:calc(var(--u)*24) calc(var(--u)*16);text-align:center;font-size:calc(var(--u)*36);font-weight:800;letter-spacing:.5px}
+.k8wait{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);color:#6E6E73}
+.k8wait i{width:calc(var(--u)*14);height:calc(var(--u)*14);border-radius:50%;border:calc(var(--u)*2) solid #1C1C1E;border-right-color:transparent;animation:k8spin 1s linear infinite}
+@keyframes k8spin{to{transform:rotate(360deg)}}
+.k8ok{font-size:calc(var(--u)*18);font-weight:600;color:#1E8E3E}
+/* KdsListScreen.kt KdsScreenCard */
+.k8list{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.k8card{border-radius:calc(var(--u)*12);border:calc(var(--u)*2) solid #E5E5EA;padding:calc(var(--u)*12);display:flex;gap:calc(var(--u)*12);align-items:flex-start}
+.k8av{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#F2F2F7;display:grid;place-items:center;flex:0 0 auto;color:#6E6E73}
+.k8av svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.k8cc{flex:1;min-width:0;display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.k8cc b{font-size:calc(var(--u)*16);font-weight:600}
+.k8tags{display:flex;flex-wrap:wrap;gap:calc(var(--u)*4)}
+.k8tags span{border-radius:calc(var(--u)*50);background:#F2F2F7;padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*12);font-weight:500}
+.k8st{font-size:calc(var(--u)*12);font-weight:500;color:#1E8E3E}
+.k8st.no{color:#6E6E73}
+.k8chev{font-size:calc(var(--u)*22);color:#6E6E73;align-self:center}
+/* ---- kitchen tablet: ConnectDeviceScreen.kt (PaperTheme, POTATO accent: an unpaired tablet has no business) ---- */
+.k8p{flex:1;display:flex;flex-direction:column;background:#FBFAF7;min-height:0;color:#17181B;font-family:Roboto,system-ui,sans-serif}
+.k8p .k8ptb{height:calc(var(--u)*52);display:flex;align-items:center;padding:0 calc(var(--u)*12);flex:0 0 auto}
+.k8p .k8ptb span{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;display:grid;place-items:center}
+.k8p .k8ptb svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+.k8p .k8pb{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*4) calc(var(--u)*20) 0;display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--u)*12)}
+.k8p h1{margin:0;font:600 calc(var(--u)*27)/1.14 Fredoka,system-ui,sans-serif;letter-spacing:-.2px}
+.k8p .k8sub{font-size:calc(var(--u)*15);line-height:1.45;color:#464A52}
+.k8tile{position:relative;width:fit-content;max-width:100%;box-sizing:border-box;background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*18);display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.k8tile.on{border:calc(var(--u)*2) solid #3A2A1F;padding:calc(var(--u)*17)}
+.k8tile .ic{width:calc(var(--u)*52);height:calc(var(--u)*52);border-radius:calc(var(--u)*16);background:#EEF0F1;display:grid;place-items:center}
+.k8tile .ic svg{width:calc(var(--u)*32);height:calc(var(--u)*32)}
+.k8tile b{font:600 calc(var(--u)*19) Fredoka,system-ui,sans-serif;padding-right:calc(var(--u)*40)}
+.k8tile small{font-size:calc(var(--u)*14);color:#737883}
+.k8tile .ck{position:absolute;top:calc(var(--u)*14);right:calc(var(--u)*14);width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:50%;background:#3A2A1F;display:grid;place-items:center}
+.k8tile .ck svg{width:calc(var(--u)*14);height:calc(var(--u)*14)}
+.k8boxes{align-self:stretch;margin-top:calc(var(--u)*10);display:flex;align-items:center;gap:calc(var(--u)*6)}
+.k8boxes .g{flex:1;display:flex;gap:calc(var(--u)*4)}
+.k8boxes .g span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#fff;border:calc(var(--u)*2) solid #D9D4C9;display:grid;place-items:center;font:600 calc(var(--u)*22) Roboto,system-ui,sans-serif}
+.k8boxes .g span.act{border-color:#3A2A1F}
+.k8boxes b{font-weight:700;color:#737883}
+.k8note{align-self:stretch;margin-top:calc(var(--u)*8);background:#FBFAF7;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*12) calc(var(--u)*14);display:flex;align-items:center;gap:calc(var(--u)*12);font-size:calc(var(--u)*14);color:#464A52;line-height:1.4}
+.k8note .ic{flex:0 0 auto;width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:calc(var(--u)*10);background:#EEF0F1;display:grid;place-items:center}
+.k8note .ic svg{width:calc(var(--u)*21);height:calc(var(--u)*21)}
+.k8pf{padding:calc(var(--u)*10) calc(var(--u)*20) calc(var(--u)*8);flex:0 0 auto}
+.k8pbtn{height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#3A2A1F;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*18) Fredoka,system-ui,sans-serif}
+.k8pbtn.off{background:#E6E2D9;color:#737883}
+.k8pbtn i{width:calc(var(--u)*20);height:calc(var(--u)*20);border-radius:50%;border:calc(var(--u)*2) solid #fff;border-right-color:transparent;animation:k8spin 1s linear infinite}
+/* ---- kitchen screen once paired: KitchenDisplayScreen.kt (KdsTheme, always dark) - same values as R7 ---- */
+.k8kds{flex:1;display:flex;flex-direction:column;background:#111111;color:#fff;min-height:0;font-family:Roboto,system-ui,sans-serif}
+.k8kds .k8ktop{display:flex;align-items:center;flex:0 0 auto}
+.k8kds .k8tick{flex:1;height:calc(var(--u)*44)}
+.k8kds .k8hist{flex:0 0 auto;margin-left:calc(var(--u)*8);border-radius:calc(var(--u)*20);background:#2A2A2A;border:1px solid #444444;font-size:calc(var(--u)*14);font-weight:600;padding:calc(var(--u)*8) calc(var(--u)*14);display:grid}
+.k8kds .k8hist span{grid-area:1/1;text-align:center}.k8kds .k8hist span.gh{visibility:hidden}
+.k8kds .k8dot{margin-left:calc(var(--u)*8);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#4CAF50;flex:0 0 auto}
+.k8kds .k8stn{margin-left:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:600;max-width:calc(var(--u)*160);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k8kds .k8out{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:rgba(230,225,229,.55)}
+
+/* Every class here starts with k9 (or is scoped under .k9…) so kit/edif.css and kit/material.css cannot reach it.
+   The counter tablet is landscape and always light (MamaPosScreen.kt, MyApplicationTheme(darkTheme=false)). 1 dp = var(--u). */
+.k9{flex:1;display:flex;flex-direction:column;background:#fff;color:#1C1C1E;min-height:0;font-family:Roboto,system-ui,sans-serif;position:relative}
+/* 1. LOCKED  MamaPosScreen.kt:279-311 */
+.k9lock{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.k9lock svg.lk{width:calc(var(--u)*64);height:calc(var(--u)*64);fill:#C7C7CC}
+.k9lock b{margin-top:calc(var(--u)*16);font-size:calc(var(--u)*30);font-weight:700}
+.k9lock small{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*16);color:#6E6E73}
+.k9lock .gear{position:absolute;right:calc(var(--u)*16);bottom:calc(var(--u)*16);width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k9lock .gear svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#6E6E73}
+/* 2. PROFILE PICKER  :387-488 */
+.k9pick{flex:1;padding:calc(var(--u)*48) calc(var(--u)*40);display:flex;flex-direction:column}
+.k9back{align-self:flex-start;height:calc(var(--u)*40);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500}
+.k9back svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.k9mark{align-self:center;font:600 calc(var(--u)*32)/1 Fredoka,system-ui,sans-serif;color:#3A2A1F}
+.k9biz{margin-top:calc(var(--u)*24);font:600 calc(var(--u)*56)/1.1 Fredoka,system-ui,sans-serif;color:#007AFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k9choose{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*16);color:#6E6E73}
+.k9people{margin-top:calc(var(--u)*28);display:flex;flex-wrap:wrap;gap:calc(var(--u)*12)}
+.k9who{border-radius:calc(var(--u)*16);background:#F2F2F7;padding:calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*16)}
+.k9av{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:0 0 auto}
+.k9who .k9av{width:calc(var(--u)*48);height:calc(var(--u)*48);font-size:calc(var(--u)*16)}
+.k9who b{display:block;font-size:calc(var(--u)*16);font-weight:600}
+.k9who small{display:block;font-size:calc(var(--u)*13);color:#6E6E73}
+/* 3. PIN  :491-760 */
+.k9pin{flex:1;display:flex;align-items:center;justify-content:center;padding:calc(var(--u)*48) calc(var(--u)*64);gap:calc(var(--u)*64);position:relative}
+.k9pin .l{flex:1;display:flex;flex-direction:column;align-items:center}
+.k9pin .l .k9av{width:calc(var(--u)*80);height:calc(var(--u)*80);font-size:calc(var(--u)*26)}
+.k9pin .ask{margin-top:calc(var(--u)*20);font-size:calc(var(--u)*18)}
+.k9dots{margin-top:calc(var(--u)*16);display:flex;gap:calc(var(--u)*12)}
+.k9dots i{width:calc(var(--u)*44);height:calc(var(--u)*44);border-radius:calc(var(--u)*8);border:calc(var(--u)*2) solid #C7C7CC;display:grid;place-items:center;box-sizing:border-box}
+.k9dots i em{width:calc(var(--u)*14);height:calc(var(--u)*14);border-radius:50%}
+.k9pin .nm{margin-top:calc(var(--u)*20);font-size:calc(var(--u)*18);font-weight:700}
+.k9pin .rl{font-size:calc(var(--u)*14);color:#6E6E73}
+.k9keys{display:grid;grid-template-columns:repeat(3,calc(var(--u)*68));gap:calc(var(--u)*12)}
+.k9keys span{height:calc(var(--u)*68);border-radius:calc(var(--u)*12);background:#F2F2F7;display:grid;place-items:center;font-size:calc(var(--u)*22);font-weight:500}
+.k9keys span.g{background:#E5E5EA}.k9keys span.sm{font-size:calc(var(--u)*13)}
+.k9welcome{position:absolute;left:0;right:0;bottom:calc(var(--u)*28);text-align:center;font-size:calc(var(--u)*15);color:#6E6E73}
+/* 4. UNLOCKED  :1020-1460 left pane 60 % | 1 dp #E5E5EA | right pane */
+.k9main{flex:1;display:flex;min-height:0}
+.k9left{width:60%;display:flex;flex-direction:column;min-height:0}
+.k9tabs{display:flex;align-items:center;flex:0 0 auto;border-bottom:1px solid #E5E5EA}
+.k9tabs .t{flex:1;height:calc(var(--u)*48);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*6);font-size:calc(var(--u)*14);font-weight:500;position:relative}
+.k9tabs .t svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.k9tabs .t.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*2);background:#1C1C1E}
+.k9tabs .bell{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k9tabs .bell svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E}
+.k9left .mgrid{grid-template-columns:repeat(4,1fr)}
+.k9div{width:1px;background:#E5E5EA;flex:0 0 auto}
+.k9right{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;position:relative}
+.k9sw{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*10) calc(var(--u)*16);color:#007AFF;font-size:calc(var(--u)*15);flex:0 0 auto}
+.k9sw svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#007AFF}
+.k9sw b{font-weight:600}
+/* CART step: CartSheetContent.kt mamaCartStep = 1 (trash at top right, lines, divider, the Cobrar button) */
+.k9cart{flex:1;min-height:0;display:flex;flex-direction:column}
+.k9cart .tr{display:flex;justify-content:flex-end;padding:calc(var(--u)*8) calc(var(--u)*12) 0 calc(var(--u)*24)}
+.k9cart .tr span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k9cart .tr svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#6E6E73}
+.k9cart .sc{padding:calc(var(--u)*6) calc(var(--u)*24) calc(var(--u)*8);display:flex;flex-direction:column}
+.k9line{display:flex;align-items:center;padding:calc(var(--u)*8) 0}
+.k9line .n{flex:1;min-width:0}
+.k9line .n b{display:block;font-size:calc(var(--u)*16);font-weight:400}
+.k9line .n small{display:block;font-size:calc(var(--u)*14)}
+.k9line .q{display:flex;align-items:center}
+.k9line .q span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;font-size:calc(var(--u)*22)}
+.k9line .q svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E}
+.k9line .q i{font-style:normal;padding:0 calc(var(--u)*8);font-size:calc(var(--u)*14)}
+.k9hr{height:1px;background:#E5E5EA;margin:calc(var(--u)*16) 0 calc(var(--u)*16)}
+.k9charge{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*12);text-align:center}
+.k9empty{padding:calc(var(--u)*48) 0;text-align:center}
+.k9empty b{display:block;font-size:calc(var(--u)*22);font-weight:700}
+.k9empty small{display:block;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73}
+/* DINING step: CheckoutSheetBody.kt:1214-1260 DiningChooserContent table grid (Mesas is the only option switched on) */
+.k9tables{flex:1;padding:calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.k9tables h3{margin:0;font-size:calc(var(--u)*18);font-weight:700}
+.k9tables .g{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*8)}
+.k9tables .g span{aspect-ratio:1;border-radius:calc(var(--u)*12);background:#F2F2F7;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:700}
+/* PAY step: the shared pay block, inline (CheckoutSheetBody, inlineCustomerEditing) - same look as material.css .mpay, packed to the pane */
+.k9right .mpay .hd{height:calc(var(--u)*44)}
+.k9right .mpay .cust{height:calc(var(--u)*52)}
+.k9right .mpay .blk{padding-top:calc(var(--u)*8);padding-bottom:calc(var(--u)*12)}
+.k9right .mpay .links{min-height:calc(var(--u)*60)}
+.k9right .mpay .kp span{height:calc(var(--u)*40)}
+/* RECEIPT step: ReceiptOptionsScreen.kt SaleCompleteContent (pane < 700 dp: potato 88 dp) */
+.k9rec{flex:1;min-height:0;display:flex;flex-direction:column}
+.k9rec .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 calc(var(--u)*20);text-align:center}
+.k9rec .hero svg{width:calc(var(--u)*88);height:calc(var(--u)*88)}
+.k9rec .hero b{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*26);font-weight:700;letter-spacing:-.3px}
+.k9rec .hero small{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73}
+.k9rec .hero em{font-style:normal;margin-top:calc(var(--u)*22);font-size:calc(var(--u)*15);font-weight:700;color:#6E6E73}
+.k9rec .ft{padding:0 calc(var(--u)*16) calc(var(--u)*20);display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.k9rb{height:calc(var(--u)*52);border-radius:calc(var(--u)*26);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600}
+.k9rb.wa{background:#25D366;color:#fff}.k9rb.pr{background:#1C1C1E;color:#fff;font-weight:700}.k9rb.ol{border:1px solid #C7C7CC}
+.k9priv{text-align:center;font-size:calc(var(--u)*11);color:#6E6E73;text-decoration:underline;margin-top:calc(var(--u)*-6)}
+/* the kitchen screen (KitchenDisplayScreen.kt, always dark): same values as R7 */
+.k9kds{flex:1;display:flex;flex-direction:column;background:#111111;color:#fff;min-height:0;font-family:Roboto,system-ui,sans-serif}
+.k9kds .top{display:flex;align-items:center;flex:0 0 auto}
+.k9kds .tick{flex:1;height:calc(var(--u)*44);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*8);overflow:hidden}
+.k9kds .tick span{flex:0 0 auto;border-radius:calc(var(--u)*20);background:#2A2A2A;border:1px solid #444444;font-size:calc(var(--u)*14);padding:calc(var(--u)*8) calc(var(--u)*14);white-space:nowrap}
+.k9kds .hist{margin-left:calc(var(--u)*8);border-radius:calc(var(--u)*20);background:#2A2A2A;border:1px solid #444444;font-size:calc(var(--u)*14);font-weight:600;padding:calc(var(--u)*8) calc(var(--u)*14);display:grid}
+.k9kds .hist span{grid-area:1/1;text-align:center}.k9kds .hist span.gh{visibility:hidden}
+.k9kds .dot{margin-left:calc(var(--u)*8);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#4CAF50}
+.k9kds .stn{margin-left:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:600}
+.k9kds .out{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k9kds .out svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:rgba(230,225,229,.55)}
+.k9kds .grid{padding:calc(var(--u)*8);display:grid;grid-template-columns:repeat(5,1fr);gap:calc(var(--u)*8);align-content:start}
+.k9kds .wrap{padding:calc(var(--u)*4)}
+.k9kc{border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.4);padding:calc(var(--u)*12);background:#fff;color:#000}
+.k9kc .hr{display:flex;gap:calc(var(--u)*6);font-size:calc(var(--u)*14);font-weight:700}.k9kc .hr b{flex:1}
+.k9kc .wn{font-size:calc(var(--u)*12);opacity:.75}
+.k9kc .dv{height:1px;background:currentColor;opacity:.3;margin:calc(var(--u)*6) 0}
+.k9kc .ln{font-size:calc(var(--u)*16);font-weight:600;white-space:pre;margin-bottom:calc(var(--u)*4)}
+.k9kc .bn{margin-top:calc(var(--u)*6);background:#FFEB3B;font-size:calc(var(--u)*12);font-weight:800;letter-spacing:.5px;text-align:center;padding:calc(var(--u)*5) 0;border-radius:0 0 calc(var(--u)*8) calc(var(--u)*8)}
+
+/* ---- owner phone: CounterRegisterNameScreen.kt / CounterRegisterSyncInfoScreen.kt + PairingCodePanel.kt (Material light) ---- */
+.opg{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;padding:calc(var(--u)*16);gap:calc(var(--u)*16)}
+.ofld{position:relative;height:calc(var(--u)*56);border:1px solid #C7C7CC;border-radius:calc(var(--u)*8);display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16);color:#1C1C1E}
+.ofld.ph{color:#6E6E73}
+.ofld.on{border:calc(var(--u)*2) solid #1C1C1E}
+.ofld small{position:absolute;left:calc(var(--u)*12);top:calc(var(--u)*-9);background:#fff;padding:0 calc(var(--u)*4);font-size:calc(var(--u)*12);color:#1C1C1E}
+.ofld .car{display:inline-block;width:2px;height:calc(var(--u)*20);background:#1C1C1E;margin-left:1px;animation:ocar 1s steps(1) infinite}
+@keyframes ocar{50%{opacity:0}}
+.osb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:600;flex:0 0 auto}
+.oins{font-size:calc(var(--u)*16);line-height:1.5;color:#6E6E73}
+.olab{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*12);font-weight:500;color:#6E6E73}
+.ocode{margin-top:calc(var(--u)*-8);border-radius:calc(var(--u)*12);background:#F2F2F7;padding:calc(var(--u)*24) calc(var(--u)*16);text-align:center;font-size:calc(var(--u)*28);font-weight:800;letter-spacing:calc(var(--u)*6);color:#1C1C1E}
+.ostat{margin-top:calc(var(--u)*24);display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);color:#10B981}
+.ostat i{width:calc(var(--u)*12);height:calc(var(--u)*12);border-radius:50%;background:#10B981;flex:0 0 auto}
+.ogrow{flex:1}
+/* the tablet's Scan tab before the camera is on: MamaScanPane.kt:126-138 (a centred SumaButton) */
+.k9scan{flex:1;display:grid;place-items:center;padding:calc(var(--u)*24)}
+.k9scan .osb{padding:0 calc(var(--u)*32)}
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/shop-data.js"></script>
+<script src="../../kit/skit.js"></script>
+<script>
+const STR = {"mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "tx_tab_all": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "fiado_row_name": {"en": "Tab", "es": "Fiado", "pt": "Fiado"}, "fiado_row_count": {"en": ["%1$d client", "%1$d clients"], "es": ["%1$d cliente", "%1$d clientes"], "pt": ["%1$d cliente", "%1$d clientes"]}, "scan_no_barcode_btn": {"en": "No barcode", "es": "Sin código", "pt": "Sem código"}, "scan_row_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "scan_btn_scan_barcodes": {"en": "Add items", "es": "Agregar productos", "pt": "Adicionar produtos"}, "scan_btn_scan_more": {"en": "Scan more", "es": "Escanear más", "pt": "Escanear mais"}, "common_charge": {"en": "Charge %s", "es": "Cobrar %s", "pt": "Cobrar %s"}, "nudge_connect_title": {"en": "Connect your first register", "es": "Conecta tu primera caja", "pt": "Conecte seu primeiro caixa"}, "nudge_connect_cta": {"en": "Connect", "es": "Conectar", "pt": "Conectar"}, "nudge_connect_later": {"en": "Not now", "es": "Ahora no", "pt": "Agora não"}, "offline_strip_text": {"en": "No internet", "es": "Sin internet", "pt": "Sem internet"}, "workspace_register_closed": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "workspace_register_closed_sub": {"en": "Open it to start selling", "es": "Ábrela para empezar a vender", "pt": "Abra para começar a vender"}, "workspace_register_open_action": {"en": "Open", "es": "Abrir", "pt": "Abrir"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_row_on": {"en": "On", "es": "Activo", "pt": "Ligado"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_pill_on": {"en": "ON", "es": "ACTIVO", "pt": "LIGADO"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "workspace_items_title": {"en": "Items", "es": "Artículos", "pt": "Itens"}, "more_my_products_count": {"en": "%1$d items", "es": "%1$d artículos", "pt": "%1$d itens"}, "scan_row_inventory": {"en": "Inventory", "es": "Inventario", "pt": "Estoque"}, "stock_headline_low": {"en": ["%d running low", "%d running low"], "es": ["%d queda poco", "%d quedan pocos"], "pt": ["%d acabando", "%d acabando"]}, "stock_headline_uncounted": {"en": ["%d not counted", "%d not counted"], "es": ["%d sin contar", "%d sin contar"], "pt": ["%d não contado", "%d não contados"]}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "home_clientes_owed": {"en": ["%1$d owes you · %2$s", "%1$d owe you · %2$s"], "es": ["%1$d te debe · %2$s", "%1$d te deben · %2$s"], "pt": ["%1$d te deve · %2$s", "%1$d te devem · %2$s"]}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "invoices_row_this_month": {"en": "%1$d this month", "es": "%1$d este mes", "pt": "%1$d neste mês"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "home_equipo_count_phones": {"en": ["%1$d employee · %2$s", "%1$d employees · %2$s"], "es": ["%1$d empleado · %2$s", "%1$d empleados · %2$s"], "pt": ["%1$d funcionário · %2$s", "%1$d funcionários · %2$s"]}, "home_equipo_on_phones": {"en": ["%1$d on a phone", "%1$d on phones"], "es": ["%1$d en celular", "%1$d en celular"], "pt": ["%1$d no celular", "%1$d no celular"]}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Líquido hoje · %s"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "settings_hub_group_getting_paid": {"en": "Getting paid", "es": "Cobros", "pt": "Cobranças"}, "settings_hub_group_your_business": {"en": "Your business", "es": "Tu negocio", "pt": "Seu negócio"}, "settings_hub_group_this_phone": {"en": "This phone", "es": "Este teléfono", "pt": "Este celular"}, "settings_section_account": {"en": "Account", "es": "Cuenta", "pt": "Conta"}, "settings_hub_payment_methods": {"en": "Payment methods", "es": "Métodos de pago", "pt": "Formas de pagamento"}, "settings_hub_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "settings_hub_discounts": {"en": "Discounts and charges", "es": "Descuentos y cargos", "pt": "Descontos e taxas"}, "settings_hub_receipts": {"en": "Receipts", "es": "Recibos", "pt": "Recibos"}, "settings_hub_receipts_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "receipt_layout_detailed": {"en": "Detailed", "es": "Detallado", "pt": "Detalhado"}, "settings_hub_receipts_num_auto": {"en": "numbered automatically", "es": "numeración automática", "pt": "numeração automática"}, "settings_hub_business_info": {"en": "Business info", "es": "Datos del negocio", "pt": "Dados do negócio"}, "workspace_registers_and_printers": {"en": "Connections", "es": "Conexiones", "pt": "Conexões"}, "settings_security_title": {"en": "Security", "es": "Seguridad", "pt": "Segurança"}, "settings_hub_security_on_delete": {"en": "Asks for your fingerprint before deleting", "es": "Pide huella antes de borrar", "pt": "Pede a digital antes de apagar"}, "settings_hub_backup": {"en": "Backup", "es": "Respaldo", "pt": "Backup"}, "settings_hub_backup_last": {"en": "Last copy: %1$s", "es": "Último respaldo: %1$s", "pt": "Último backup: %1$s"}, "settings_hub_backup_none": {"en": "No backup", "es": "Sin respaldo", "pt": "Sem backup"}, "notif_title": {"en": "Notifications", "es": "Notificaciones", "pt": "Notificações"}, "notif_hub_sub": {"en": "Orders, payments and your register", "es": "Pedidos, pagos y tu caja", "pt": "Pedidos, pagamentos e seu caixa"}, "settings_hub_language_appearance": {"en": "Language & appearance", "es": "Idioma y apariencia", "pt": "Idioma e aparência"}, "settings_hub_language_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "theme_light": {"en": "Light", "es": "Claro", "pt": "Claro"}, "my_account_title": {"en": "My Account", "es": "Mi cuenta", "pt": "Minha conta"}, "rp_my_title": {"en": "My reports", "es": "Mis reportes", "pt": "Meus relatos"}, "rp_my_row_sub": {"en": "What you told us and what we answered", "es": "Lo que nos contaste y lo que respondimos", "pt": "O que você nos contou e o que respondemos"}, "rp_strip_support": {"en": "Support", "es": "Soporte", "pt": "Suporte"}, "rp_strip_support_sub": {"en": "Report a problem here", "es": "Reporta un problema aquí", "pt": "Relatar um problema aqui"}, "rp_sheet_my_reports_none": {"en": "No reports yet", "es": "Aún no hay reportes", "pt": "Ainda não há relatos"}, "counter_reg_name_title": {"en": "Name this tablet", "es": "Nombra esta tablet", "pt": "Dê um nome a este tablet"}, "counter_reg_name_hint": {"en": "Register name (e.g. Front Counter)", "es": "Nombre de la caja (ej. Caja principal)", "pt": "Nome do caixa (ex. Caixa principal)"}, "common_next": {"en": "Next", "es": "Siguiente", "pt": "Próximo"}, "counter_reg_sync_title": {"en": "Connect your tablet", "es": "Conecta tu tablet", "pt": "Conecte seu tablet"}, "counter_reg_sync_instruction": {"en": "Open Platata on the counter tablet and enter this code to connect it to your account.", "es": "Abre Platata en la tablet de la caja e ingresa este código para conectarla a tu cuenta.", "pt": "Abra o Platata no tablet do caixa e insira este código para conectá-lo à sua conta."}, "counter_reg_sync_code_label": {"en": "Connection code", "es": "Código de conexión", "pt": "Código de conexão"}, "counter_reg_sync_status_ready": {"en": "Ready. Type this code on the tablet.", "es": "Lista. Escribe este código en la tablet.", "pt": "Pronto. Digite este código no tablet."}, "common_done": {"en": "Done", "es": "Listo", "pt": "Concluído"}, "conn_choose_title": {"en": "What do you want to connect?", "es": "¿Qué quieres conectar?", "pt": "O que você quer conectar?"}, "conn_opt_register": {"en": "A register", "es": "Tablet de mostrador", "pt": "Um caixa"}, "conn_opt_register_d": {"en": "A tablet that sells at your counter.", "es": "Una tablet que vende en tu mostrador.", "pt": "Um tablet que vende no seu balcão."}, "conn_opt_phone": {"en": "An employee phone", "es": "El teléfono de un empleado", "pt": "O celular de um funcionário"}, "conn_opt_phone_d": {"en": "Your employee sells from their own phone, as a register.", "es": "Tu empleado vende desde su propio teléfono, como una caja.", "pt": "Seu funcionário vende pelo próprio celular, como um caixa."}, "conn_not_now": {"en": "Not now", "es": "Ahora no", "pt": "Agora não"}, "connect_device_continue": {"en": "Continue", "es": "Continuar", "pt": "Continuar"}, "connect_device_kind_title": {"en": "What will you connect?", "es": "¿Qué vas a conectar?", "pt": "O que você vai conectar?"}, "connect_device_kind_sub": {"en": "This device stays fixed to one business.", "es": "Este aparato queda fijo para un solo negocio.", "pt": "Este aparelho fica fixo em um só negócio."}, "connect_device_kind_register": {"en": "Counter tablet", "es": "Tablet de mostrador", "pt": "Tablet do balcão"}, "connect_device_kind_register_desc": {"en": "A tablet to charge at the counter. Your team signs in with their PIN.", "es": "Una tablet para cobrar en el mostrador. Tu equipo entra con su PIN.", "pt": "Um tablet para cobrar no balcão. Sua equipe entra com o PIN."}, "connect_device_kind_kitchen": {"en": "Kitchen display", "es": "Pantalla de cocina", "pt": "Tela da cozinha"}, "connect_device_kind_kitchen_desc": {"en": "Shows the orders in the kitchen so they go out in order.", "es": "Muestra los pedidos en la cocina para que salgan en orden.", "pt": "Mostra os pedidos na cozinha para saírem na ordem."}, "add_cash_register_connect": {"en": "Connect", "es": "Conectar", "pt": "Conectar"}, "connect_device_code_title": {"en": "Type the code", "es": "Escribe el código", "pt": "Digite o código"}, "connect_device_where": {"en": "You'll find it on your main phone, in My business › Settings › Connections.", "es": "Lo ves en tu celular principal, en Mi negocio › Configuración › Conexiones.", "pt": "Você encontra no seu celular principal, em Meu negócio › Configurações › Conexões."}, "connect_device_code_changes": {"en": "Each tablet and each kitchen screen has its own code. If it doesn't work, check it again on your main phone.", "es": "Cada tablet y cada pantalla de cocina tiene su propio código. Si no funciona, revísalo otra vez en tu celular principal.", "pt": "Cada tablet e cada tela da cozinha tem o seu próprio código. Se não funcionar, confira de novo no seu celular principal."}, "mamaship_locked_title": {"en": "POS LOCKED", "es": "Caja bloqueada", "pt": "Caixa bloqueado"}, "mamaship_tap_to_login": {"en": "Tap to login", "es": "Toca para iniciar sesión", "pt": "Toque para entrar"}, "common_back": {"en": "Back", "es": "Atrás", "pt": "Voltar"}, "mamaship_choose_profile": {"en": "Choose your profile", "es": "Elige tu perfil", "pt": "Escolha seu perfil"}, "team_role_owner": {"en": "Owner", "es": "Dueño", "pt": "Dono"}, "team_badge_team": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "pin_enter_pin": {"en": "Enter your PIN", "es": "Ingresa tu PIN", "pt": "Digite seu PIN"}, "mamaship_clear": {"en": "Clear", "es": "Borrar", "pt": "Limpar"}, "mamaship_welcome": {"en": "Welcome, %1$s", "es": "Bienvenido/a, %1$s", "pt": "Bem-vindo(a), %1$s"}, "mama_tab_scan": {"en": "Scan", "es": "Escanear", "pt": "Escanear"}, "home_tab_library": {"en": "Library", "es": "Catálogo", "pt": "Catálogo"}, "items_filter_all": {"en": "All", "es": "Todos", "pt": "Todos"}, "mamaship_switch": {"en": "Switch", "es": "Cambiar", "pt": "Trocar"}, "home_cart_empty": {"en": "Cart is empty", "es": "El carrito está vacío", "pt": "Carrinho vazio"}, "home_cart_empty_sub": {"en": "add items to start", "es": "agrega artículos para empezar", "pt": "adicione itens para começar"}};
+/* ===== shared by TS19..TS24 (copied into each page; kit/ is not edited). App at sim/usa-canada 6736ddfb,
+   paths under app/src/main/java/com/example/. Words come from STR (values / values-es / values-pt-rBR, injected).
+   home()   ui/screens/home/HomeScreen.kt:551-700 + ScanCheckoutTab.kt: a shop has NO tab row; top strips (one warning bar,
+            RegisterClosedBar, ConnectNudgeStrip, OfflineStrip), then OwnerRegisterCard (Fiado row only for the owner while
+            someone owes, "Sin código", "Teclado"), and SmartScanButton pinned at the bottom ("Agregar productos", or
+            "Escanear más" + "Cobrar $X" in the shop green #188448 once the sale has items)
+   nav()    ui/app/PlatataApp.kt:503-722 + navigation/NavLabels.kt (Caja · Ventas · flag "Mi negocio"; fingerprint while the
+            flag would ask, sync/FlagGate)
+   panel()  HomeScreen.kt:1440-1830 (shop: Artículos, Inventario with the two facts on the subtitle line, Clientes amber
+            while someone owes, Facturas, Equipo, Reportes; divider; Configuración)
+   hub()    ui/screens/settings/SettingsHubScreen.kt + sync/SettingsHubRules.kt (a shop has no dining-options row)
+   strip()  ui/screens/reports/SupportStrip.kt on every LEVEL_2_PLUS page */
+const S = SKIT.ctx(), C = S.C, esc = S.esc, L = S.lang, SH = C.lang;
+const FREE = (S.country === "US" || S.country === "CA");          // sync/Entitlement FREE_COUNTRIES
+const P = o => S.pick(o);
+const W = k => { const v = STR[k]; if(!v) throw new Error("no string "+k); return v[L] ?? v.es; };
+const fmt = (s, ...a) => { if(/%\d\$/.test(s)) a.forEach((v,i)=>{ s = s.split(`%${i+1}$s`).join(v).split(`%${i+1}$d`).join(v); }); else a.forEach(v=>{ s = s.replace(/%[ds]/, v); }); return s; };
+const T = (k, ...a) => fmt(W(k), ...a);
+const plOne = n => L==="pt" ? (n===0||n===1) : n===1;              // Android plural "one": pt (CLDR) 0 and 1, es/en 1
+const PL = (k, n, ...a) => fmt(W(k)[plOne(n)?0:1], n, ...a);
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const money = v => S.money(v);
+const svg = (p, cls) => `<svg class="${cls||"mi"}" viewBox="0 0 24 24"><path d="${p}"/></svg>`;
+const IP = {
+  cart:"M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z",
+  receipt:"M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z",
+  finger:"M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z",
+  add:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z",
+  chev:"M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z",
+  down:"M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z",
+  back:"M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z",
+  phone:"M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z",
+  tablet:"M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 1.99-.9 1.99-2L23 6c0-1.1-.9-2-2-2zm-2 14H5V6h14v12z",
+  lock:"M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z",
+  backup:"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z",
+  cloudOff:"M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62l1.45 1.45C23.16 18.16 24 16.68 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.75 2.74C2.56 8.15 0 10.77 0 14c0 3.31 2.69 6 6 6h11.73l2 2L21 20.73 4.27 4 3 5.27zM7.73 10l8 8H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h1.73z",
+  cloudDone:"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17 15.18 9l1.41 1.41L10 17z",
+  history:"M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z",
+  okc:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
+  warn:"M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z",
+  card:"M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z",
+  pct:"M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4 18.6L18.6 4 20 5.4 5.4 20zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z",
+  tag:"M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z",
+  store:"M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z",
+  rest:"M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z",
+  devices:"M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z",
+  bell:"M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z",
+  globe:"M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z",
+  account:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z",
+  feedback:"M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z",
+  edit:"M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z",
+  person:"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+  group:"M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
+  rlong:"M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z",
+  gear:"M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z",
+  place:"M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+  more:"M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z",
+  check:"M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z",
+  box:"M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z",
+  copy:"M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z",
+  share:"M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z",
+  qr:"M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 19h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z",
+  open:"M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z",
+  buoy:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z",
+  trash:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+};
+
+IP.calc = "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5.97 4.06L14.09 6l1.41 1.41L16.91 6l1.06 1.06-1.41 1.41 1.41 1.41-1.06 1.06-1.41-1.4-1.41 1.41-1.06-1.06 1.41-1.41-1.41-1.42zm-6.78.66h5v1.5h-5v-1.5zM11.5 16h-2v2H8v-2H6v-1.5h2v-2h1.5v2h2V16zm6.5 1.25h-5v-1.5h5v1.5zm0-2.5h-5v-1.5h5v1.5z";
+IP.swap = "M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z";
+const I = k => svg(IP[k]);
+const DEV_OWNER = P({es:"Tu teléfono",pt:"Seu celular",en:"Your phone"});
+const FIADO_TOTAL = C.fiado.reduce((a,f)=>a+f.owes,0);
+const ITEMS = S.items;
+const nowTime = (h=12, m=41) => new Intl.DateTimeFormat(L==="en"?"en-US":(L==="pt"?"pt-BR":(SH==="es"?C.loc:"es-CO")),{hour:"numeric",minute:"2-digit"}).format(new Date(2026,9,20,h,m));
+/* BackupDateFormat.dateTime: DateFormat MEDIUM date + SHORT time in the phone language */
+const backupDate = (d) => new Intl.DateTimeFormat(L==="en"?"en-US":(L==="pt"?"pt-BR":(SH==="es"?C.loc:"es-CO")),{dateStyle:"medium",timeStyle:"short"}).format(d||new Date(2026,9,20,12,41));
+/* StockHeadline.ofProducts over the shop's items: low = counted and at or under its level; not counted = never counted */
+const STOCK_LOW = ITEMS.filter(x=>x.stock!=null && x.low!=null && x.stock<=x.low).length;
+const STOCK_UNC = ITEMS.filter(x=>x.stock==null).length;
+/*@STR mamaship_tab_register tx_tab_all home_tab_my_business fiado_row_name fiado_row_count scan_no_barcode_btn scan_row_manual
+  scan_btn_scan_barcodes scan_btn_scan_more common_charge nudge_connect_title nudge_connect_cta nudge_connect_later offline_strip_text
+  workspace_register_closed workspace_register_closed_sub workspace_register_open_action workspace_register_open workspace_register_sales
+  sell_online_title sell_online_row_off sell_online_row_on sell_online_pill_off sell_online_pill_on panel_heading_every_day
+  workspace_items_title more_my_products_count scan_row_inventory stock_headline_low stock_headline_uncounted more_customers_title
+  home_clientes_owed invoices_title invoices_row_this_month more_team_title home_equipo_count_phones home_equipo_on_phones
+  workspace_full_reports scan_row_reports_today scan_row_reports_today_net settings_title panel_settings_row_sub
+  settings_hub_group_getting_paid settings_hub_group_your_business settings_hub_group_this_phone settings_section_account
+  settings_hub_payment_methods settings_hub_taxes settings_hub_discounts settings_hub_receipts settings_hub_receipts_sub
+  receipt_layout_detailed settings_hub_receipts_num_auto settings_hub_business_info workspace_registers_and_printers
+  settings_security_title settings_hub_security_on_delete settings_hub_backup settings_hub_backup_last settings_hub_backup_none
+  notif_title notif_hub_sub settings_hub_language_appearance settings_hub_language_sub theme_light my_account_title rp_my_title
+  rp_my_row_sub rp_strip_support rp_strip_support_sub rp_sheet_my_reports_none*/
+const LANGNAME = {es:"Español",pt:"Português",en:"English"};   /* utils/AppLanguage.kt:40-43 */
+const OWNER_EMAIL = (C.owner.split(" ")[0]).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"") + "@gmail.com";
+
+/* ---------- owner Home (shop): ScanCheckoutTab ---------- */
+function home(o){ o=o||{};
+  let h = `<div class="shome">`;
+  if(o.warnBar) h += o.warnBar;
+  if(o.regClosed) h += `<div class="rcbar"><span>${esc(T("workspace_register_closed"))}</span><b>${esc(T("workspace_register_open_action"))}</b></div>`;
+  else if(o.nudge) h += `<div class="nudge"><b>${esc(T("nudge_connect_title"))}</b><span class="cta" data-t="nudge-connect">${esc(T("nudge_connect_cta"))}</span><span>${esc(T("nudge_connect_later"))}</span></div>`;
+  if(o.offline) h += `<div class="offs">${esc(T("offline_strip_text"))}</div>`;
+  h += `<div class="rc">`;
+  if(o.fiado!==false) h += `<div class="mrow"><span class="em">📒</span><span class="tx">${esc(T("fiado_row_name"))}</span><span class="vl"><b>${money(FIADO_TOTAL)}</b><small>${esc(PL("fiado_row_count", C.fiado.length))}</small></span>${svg(IP.chev,"chv")}</div>`;
+  h += `<div class="mrow"><span class="em">🏷</span><span class="tx">${esc(T("scan_no_barcode_btn"))}</span>${svg(IP.chev,"chv")}</div>`;
+  h += `<div class="mrow">${svg(IP.calc,"ic")}<span class="tx">${esc(T("scan_row_manual"))}</span>${svg(IP.chev,"chv")}</div>`;
+  h += `</div>`;
+  const tot = (o.lines||[]).reduce((a,l)=>a+l.price,0);
+  h += (o.lines&&o.lines.length)
+    ? `<div class="sbar"><span class="om" data-t="scanmore">${esc(T("scan_btn_scan_more"))}</span><span class="ch" data-t="charge">${esc(T("common_charge", money(tot)))}</span></div>`
+    : `<div class="sbar"><span class="q" data-t="scan">${esc(T("scan_btn_scan_barcodes"))}</span></div>`;
+  h += `</div>` + nav(o.nav||{});
+  return h;
+}
+function nav(o){ o=o||{};
+  const flag = o.finger ? svg(IP.finger,"fp") : S.flag();
+  return `<div class="mnav onav"><div class="${o.on==="reg"?"on":""}"><span class="pill">${I("cart")}</span>${esc(T("mamaship_tab_register"))}</div>
+    <div class="${o.on==="sales"?"on":""}"><span class="pill">${I("receipt")}${o.badge?`<em class="nbadge">${o.badge}</em>`:""}</span>${esc(T("tx_tab_all"))}</div>
+    <div data-t="flag"><span class="flagc${o.panel?" lit":""}">${flag}</span>${esc(T("home_tab_my_business"))}</div></div>`;
+}
+/* ---------- the business panel ---------- */
+function wsRow(o){
+  return `<div class="wrow${o.cls?" "+o.cls:""}" ${o.t?`data-t="${o.t}"`:""} style="${o.bg?`background:${o.bg}`:""}">
+    ${o.dot?`<span class="wdot" style="color:${o.fg}">●</span>`:`<span class="wic">${o.emoji?`<span style="font-size:calc(var(--u)*18)">${o.emoji}</span>`:I(o.icon)}</span>`}
+    <span class="wtx"><b style="${o.fg?`color:${o.fg}`:""}">${esc(o.title)}</b>${o.subHtml||(o.sub?`<small style="${o.sfg?`color:${o.sfg}`:""}">${esc(o.sub)}</small>`:"")}</span>
+    ${o.trail||""}${o.dot?"":`<span class="wch">${I("chev")}</span>`}</div>`;
+}
+function panel(o){ o=o||{};
+  const name = o.name || S.place;
+  let h = `<div class="panel"><div class="phd" data-t="pname"><span>${esc(name)}</span>${svg(IP.down,"pdn")}</div><div class="plist">`;
+  if(o.before) h += o.before;
+  const open = o.regOpen!==false;
+  h += wsRow(open ? {dot:true, title:T("workspace_register_open"), sub:T("workspace_register_sales"), bg:"#E8F5E9", fg:"#2E7D32", sfg:"rgba(46,125,50,.7)", trail:`<b class="wtr" style="color:#2E7D32">${money(o.salesToday||0)}</b>`}
+                  : {dot:true, title:T("workspace_register_closed"), sub:T("workspace_register_closed_sub"), bg:"#FFEBEE", fg:"#C62828", sfg:"rgba(198,40,40,.7)", trail:`<b class="wtr sm" style="color:#C62828">${esc(T("workspace_register_open_action"))}</b>`});
+  const on = !!o.storeOn;
+  h += wsRow({icon:"cart", title:T("sell_online_title"), sub:o.storeSub || (on?T("sell_online_row_on"):T("sell_online_row_off")), t:"sellonline",
+     trail:`<span class="spill${on?" on":""}">${esc(on?T("sell_online_pill_on"):T("sell_online_pill_off"))}</span>`});
+  h += `<div class="phead">${esc(T("panel_heading_every_day"))}</div>`;
+  h += wsRow({icon:"cart", title:T("workspace_items_title"), sub:T("more_my_products_count", ITEMS.length), t:"p-items"});
+  const inv = (STOCK_LOW||STOCK_UNC) ? `<small class="inv">${STOCK_LOW?`<span class="lo">${esc(PL("stock_headline_low",STOCK_LOW))}</span>`:""}${STOCK_LOW&&STOCK_UNC?"<span>&nbsp;·&nbsp;</span>":""}${STOCK_UNC?`<span>${esc(PL("stock_headline_uncounted",STOCK_UNC))}</span>`:""}</small>` : "";
+  h += wsRow({emoji:"📦", title:T("scan_row_inventory"), subHtml:inv});
+  h += wsRow({icon:"person", title:T("more_customers_title"), sub:PL("home_clientes_owed", C.fiado.length, money(FIADO_TOTAL)), bg:"#FFF6E5", fg:"#B07500", sfg:"#B07500", t:"p-clients"});
+  h += wsRow({icon:"rlong", title:T("invoices_title"), sub:T("invoices_row_this_month", C.suppliers.length)});
+  const team = o.team ?? 1, ph = o.onPhones||0;
+  h += wsRow({icon:"group", title:T("more_team_title"), sub:fmt(W("home_equipo_count_phones")[plOne(team)?0:1], team, PL("home_equipo_on_phones", ph))});
+  h += wsRow({icon:"rlong", title:T("workspace_full_reports"), sub:T(FREE?"scan_row_reports_today":"scan_row_reports_today_net", money(o.salesToday||0))});
+  h += `<div class="pdiv"></div>`;
+  h += wsRow({icon:"gear", title:T("settings_title"), sub:T("panel_settings_row_sub"), t:"settings"});
+  h += `</div></div>`;
+  return h + nav({panel:true, finger:o.finger});
+}
+/* ---------- the Settings page (hub) ---------- */
+function hub(o){ o=o||{};
+  const rows = [
+    ["settings_hub_group_getting_paid", [["card","settings_hub_payment_methods"],["pct","settings_hub_taxes"],["tag","settings_hub_discounts"],
+       ["receipt","settings_hub_receipts", T("settings_hub_receipts_sub", T("receipt_layout_detailed"), T("settings_hub_receipts_num_auto"))]]],
+    ["settings_hub_group_your_business", [["store","settings_hub_business_info"],["devices","workspace_registers_and_printers",null,"hub-conn"]]],
+    ["settings_hub_group_this_phone", [["lock","settings_security_title",T("settings_hub_security_on_delete"),"hub-sec"],
+       ["backup","settings_hub_backup", o.backupLast ? T("settings_hub_backup_last", o.backupLast) : T("settings_hub_backup_none"),"hub-backup", !o.backupLast],
+       ["bell","notif_title",T("notif_hub_sub")],["globe","settings_hub_language_appearance",T("settings_hub_language_sub", LANGNAME[L], T("theme_light"))]]],
+    ["settings_section_account", [["account","my_account_title",OWNER_EMAIL],["feedback","rp_my_title",T("rp_my_row_sub")]]]
+  ];
+  let h = topbar(T("settings_title")) + `<div class="hub"><div class="cin2" style="transform:translateY(calc(var(--u)*${-(o.sc||0)}))">`;
+  rows.forEach(([g, rs])=>{
+    h += `<div class="hgrp">${esc(T(g))}</div>`;
+    rs.forEach(r=>{ h += `<div class="hrow" ${r[3]?`data-t="${r[3]}"`:""}><span class="wic">${I(r[0])}</span><span class="wtx"><b>${esc(T(r[1]))}</b>${r[2]?`<small class="${r[4]?"red":""}">${esc(r[2])}</small>`:""}</span><span class="wch">${I("chev")}</span></div>`; });
+  });
+  return h + `</div></div>` + strip();
+}
+/* ---------- small shared pieces ---------- */
+function topbar(title, o){ o=o||{};
+  return `<div class="mtb${o.paper?" ptb":""}"><span class="mtbb" data-t="${o.t||"back"}">${I("back")}</span><span class="mtbt">${esc(title)}</span>${o.action||""}</div>`;
+}
+function strip(){
+  return `<div class="sstrip"><div class="sh"><span class="sb">${svg(IP.buoy,"sbi")}</span><span class="st"><b>${esc(T("rp_strip_support"))}</b><small>${esc(T("rp_strip_support_sub"))}</small></span></div>
+    <div class="sh"><span class="st"><b>${esc(T("rp_my_title"))}</b><small>${esc(T("rp_sheet_my_reports_none"))}</small></span>${svg(IP.chev,"sch")}</div></div>`;
+}
+function dlg(o){ o=o||{};
+  return `<div class="dscrim"><div class="dbox${o.paper?" pap":""}">${o.icon||""}<div class="dtt">${esc(o.title)}</div><div class="dbody">${o.body||""}</div>
+    <div class="dbtn">${o.dismiss?`<span class="dno" ${o.tNo?`data-t="${o.tNo}"`:""}>${esc(o.dismiss)}</span>`:""}${o.confirm?`<span class="dyes${o.red?" red":""}" data-t="${o.t||"dlg-yes"}">${esc(o.confirm)}</span>`:""}</div></div></div>`;
+}
+function bio(title, sub){
+  return `<div class="dscrim bios"><div class="bio"><div class="bt">${esc(title)}</div><div class="bs">${esc(sub)}</div>
+    <div class="bf" data-t="sensor">${svg(IP.finger,"bfi")}</div></div></div>`;
+}
+function scrollFor(sel){
+  const el=document.querySelector('#app '+sel), pg=document.querySelector('#app .cpage, #app .spage, #app .wscr, #app .hub'); if(!el||!pg) return 0;
+  const u=document.getElementById('screen').getBoundingClientRect().width/412;
+  const over=el.getBoundingClientRect().bottom - pg.getBoundingClientRect().bottom + 16*u;
+  return over>0 ? Math.ceil(over/u) : 0;
+}
+/* ===== end shared ===== */
+
+
+/*TITLE: Otro celular o tableta*/
+/* TS19 "Otro celular o tableta" (shop / pharmacy): the owner connects a counter tablet from the nudge on his Home, names it,
+   gets the code; on the tablet he types it, the cashier signs in with her PIN and the shop's tablet opens on its own tabs
+   Escanear · Catálogo · Ventas. Every screen follows the app at sim/usa-canada (6736ddfb). Paths under app/src/main/java/com/example/.
+   nudge          ui/screens/home/ConnectNudge.kt ConnectNudgeStrip (primaryContainer, 48 dp, nudge_connect_title bold, "Conectar" bold,
+                  "Ahora no"), shown by sync/TopStrips only while no warning bar and no "Caja cerrada" bar (register open, Drive
+                  connected); sync/ConnectNudgeRule: owner, zero devices. "Conectar" opens ConnectChooserSheet (ConnectionDialogs.kt:144).
+   name           ui/screens/onboarding/CounterRegisterNameScreen.kt: SumaTopBar counter_reg_name_title, SumaTextField label
+                  counter_reg_name_hint, SumaButton common_next right under it; waits for createCounterRegister (TABLES-1), which goes
+                  through ConnectionsGate (the first device of a workspace is included, every country; US/CA pay nothing at all).
+   code           CounterRegisterSyncInfoScreen.kt + ui/components/PairingCodePanel.kt: counter_reg_sync_instruction (bodyLarge),
+                  counter_reg_sync_code_label (labelMedium), the code in a surfaceVariant box (headlineMedium ExtraBold, 6 sp
+                  spacing), green dot + counter_reg_sync_status_ready (SumaSafeGreen #10B981) while the phone's Wi-Fi host runs,
+                  "Listo" at the bottom. The code is generatePairingToken() (10 characters).
+   tablet pairing ui/screens/kds/ConnectDeviceScreen.kt (paper, POTATO accent: an unpaired tablet has no business yet): kind step
+                  (counter tablet preselected) -> code step -> Conectar = viewModel.pairViaCloud(code) (internet, never the Wi-Fi).
+   tablet         ui/screens/mamapos/MamaPosScreen.kt: locked (279-311), profiles (387-488; a person with no job title reads Equipo),
+                  PIN (491-790), then a shop's tabs Escanear · Catálogo · Ventas (811-817, C-25), opening on Catálogo
+                  (RetailRules.defaultHomeTab = 1, no open tickets); right pane MamaSwitchPersonRow + the empty cart.
+                  Escanear (MamaScanPane.kt): a centred "Escanear" button until the camera is on; a USB/Bluetooth reader works too;
+                  only products already in the owner's catalogue are added (TabletScanActions).
+   Demo setup: register open on the owner's phone, the shop's Drive copy connected (no warning bar), no device connected yet,
+   the cashier has a PIN and no job title. */
+/*@STR counter_reg_name_title counter_reg_name_hint common_next counter_reg_sync_title counter_reg_sync_instruction
+  counter_reg_sync_code_label counter_reg_sync_status_ready common_done conn_choose_title conn_opt_register conn_opt_register_d
+  conn_opt_phone conn_opt_phone_d conn_not_now connect_device_continue connect_device_kind_title connect_device_kind_sub
+  connect_device_kind_register connect_device_kind_register_desc connect_device_kind_kitchen connect_device_kind_kitchen_desc
+  add_cash_register_connect connect_device_code_title connect_device_where connect_device_code_changes mamaship_locked_title
+  mamaship_tap_to_login common_back mamaship_choose_profile team_role_owner team_badge_team pin_enter_pin mamaship_clear
+  mamaship_welcome mama_tab_scan home_tab_library items_filter_all mamaship_switch home_cart_empty home_cart_empty_sub*/
+const CODE = "7F3A9C21B4";                                  // PlatataRepository.generatePairingToken(): 10 characters
+const REG_NAME = P({es:"Caja 2", pt:"Caixa 2", en:"Register 2"});    // typed by the owner (not an app word)
+const DEV_TABLET = T("connect_device_kind_register");
+const PAL = ["#E91E8C","#FF9800","#4CAF50","#2196F3","#9C27B0","#009688"];     // AvatarPalette, by employee id
+const ini = n => n.split(" ").filter(Boolean).slice(0,2).map(p=>p[0]).join("").toUpperCase();
+const PEOPLE = [ {id:1, name:C.owner, role:T("team_role_owner")}, {id:2, name:C.people.cashier, role:T("team_badge_team")} ];
+const ME = PEOPLE[1], FIRST = ME.name.split(" ")[0], COLOR = PAL[ME.id % 6];
+const ALL_C = "#607D8B";
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+const BYNAME = S.isPharm ? C.pharmByName : C.itemsByName;
+const CHIPS = [...new Set(ITEMS.map(it=>it.cat))].map(k=>C.catOf(k)).filter(Boolean).sort((a,b)=>a.name.localeCompare(b.name));
+const J = {
+  lock:'<svg class="lk" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>',
+  gear:'<svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>',
+  back:'<svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  pback:'<svg viewBox="0 0 24 24" fill="none" stroke="#17181B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
+  qr:'<svg viewBox="0 0 24 24"><path d="M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 19h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  wcheck:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  trash:'<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+  caja:'<svg viewBox="0 0 32 32" fill="none" stroke="#3A2A1F" stroke-width="1.8" stroke-linejoin="round"><rect x="5" y="6" width="22" height="15" rx="2.5" fill="#fff"/><path d="M9 25h14M16 21v4"/><path d="M9 11h8M9 15h5" stroke-linecap="round"/></svg>',
+  cocina:'<svg viewBox="0 0 32 32" fill="none" stroke="#3A2A1F" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M7 15h18v4a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z" fill="#fff"/><path d="M5 15h22M12 6c-1 2 1 3 0 5M16 5c-1 2 1 3 0 5M20 6c-1 2 1 3 0 5"/></svg>',
+  cel:'<svg viewBox="0 0 24 24" fill="none" stroke="#3A2A1F" stroke-width="1.7" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2" fill="#fff"/><path d="M10.5 18.5h3" stroke-linecap="round"/></svg>'
+};
+
+/* ---- owner phone ---- */
+function chooser(){
+  return `<div class="sheetp"><div class="sheet"><div class="grab"></div><div class="h2">${esc(T("conn_choose_title"))}</div>
+    <div class="opt" data-t="opt-reg"><span class="tl">${I("tablet")}</span><span><b>${esc(T("conn_opt_register"))}</b><small>${esc(T("conn_opt_register_d"))}</small></span></div>
+    <div class="opt"><span class="tl">${I("phone")}</span><span><b>${esc(T("conn_opt_phone"))}</b><small>${esc(T("conn_opt_phone_d"))}</small></span></div>
+    <div class="notnow">${esc(T("conn_not_now"))}</div></div></div>`;
+}
+function namePage(st){
+  const v = st.name||"";
+  const fld = v ? `<div class="ofld on"><small>${esc(T("counter_reg_name_hint"))}</small>${esc(v)}<span class="car"></span></div>`
+                : `<div class="ofld ph on">${esc(T("counter_reg_name_hint"))}</div>`;
+  return topbar(T("counter_reg_name_title")) + `<div class="opg">${fld}<div class="osb" data-t="next">${esc(T("common_next"))}</div></div>`;
+}
+function codePage(){
+  return topbar(T("counter_reg_sync_title")) + `<div class="opg" style="gap:0"><div class="oins">${esc(T("counter_reg_sync_instruction"))}</div>
+    <div style="height:calc(var(--u)*24)"></div><div class="olab">${esc(T("counter_reg_sync_code_label"))}</div><div style="height:calc(var(--u)*16)"></div>
+    <div class="ocode">${CODE}</div><div class="ostat"><i></i>${esc(T("counter_reg_sync_status_ready"))}</div>
+    <div class="ogrow"></div><div class="osb">${esc(T("common_done"))}</div></div>` + strip();
+}
+/* ---- counter tablet: pairing (paper, POTATO) ---- */
+function kind(st){
+  const tile = (k, ic, t, d) => `<div class="k8tile${st.kind===k?" on":""}"><span class="ic">${ic}</span><b>${esc(t)}</b><small>${esc(d)}</small>${st.kind===k?`<span class="ck">${J.wcheck}</span>`:""}</div>`;
+  return `<div class="k8p"><div class="k8ptb"><span>${J.pback}</span></div><div class="k8pb">
+    <h1>${esc(T("connect_device_kind_title"))}</h1><div class="k8sub">${esc(T("connect_device_kind_sub"))}</div>
+    ${tile("reg", J.caja, T("connect_device_kind_register"), T("connect_device_kind_register_desc"))}${tile("kds", J.cocina, T("connect_device_kind_kitchen"), T("connect_device_kind_kitchen_desc"))}</div>
+    <div class="k8pf"><div class="k8pbtn" data-t="cont">${esc(T("connect_device_continue"))}</div></div></div>`;
+}
+function code(st){
+  const v = st.typed || "", act = st.focus ? v.length : -1;
+  const slot = i => `<span class="${i===act?"act":""}">${esc(v[i]||"")}</span>`;
+  const g = s => `<div class="g">${[0,1,2,3,4].map(k=>slot(s+k)).join("")}</div>`;
+  return `<div class="k8p"><div class="k8ptb"><span>${J.pback}</span></div><div class="k8pb">
+    <h1>${esc(T("connect_device_code_title"))}</h1><div class="k8sub">${esc(T("connect_device_where"))}</div>
+    <div class="k8boxes" data-t="boxes">${g(0)}<b>-</b>${g(5)}</div>
+    <div class="k8note"><span class="ic">${J.cel}</span><span>${esc(T("connect_device_code_changes"))}</span></div></div>
+    <div class="k8pf"><div class="k8pbtn${v.length||st.pairing?"":" off"}" data-t="connect">${st.pairing?"<i></i>":esc(T("add_cash_register_connect"))}</div></div></div>`;
+}
+/* ---- counter tablet: MamaPosScreen ---- */
+function locked(){
+  return `<div class="k9"><div class="k9lock" data-t="lock">${J.lock}<b>${esc(T("mamaship_locked_title"))}</b><small>${esc(T("mamaship_tap_to_login"))}</small>
+    <span class="gear">${J.gear}</span></div></div>`;
+}
+function picker(){
+  return `<div class="k9"><div class="k9pick"><span class="k9back">${J.back}${esc(T("common_back"))}</span>
+    <div class="k9mark">Platata</div><div class="k9biz">${esc(S.place)}</div><div class="k9choose">${esc(T("mamaship_choose_profile"))}</div>
+    <div class="k9people">${PEOPLE.map(p=>`<div class="k9who" data-t="who-${p.id}"><span class="k9av" style="background:${PAL[p.id%6]}">${esc(ini(p.name))}</span>
+      <div><b>${esc(p.name)}</b><small>${esc(p.role)}</small></div></div>`).join("")}</div></div></div>`;
+}
+function pin(st){
+  const keys = ["1","2","3","4","5","6","7","8","9"];
+  return `<div class="k9"><div class="k9pin"><div class="l"><span class="k9av" style="background:${COLOR}">${esc(ini(ME.name))}</span>
+      <div class="ask">${esc(T("pin_enter_pin"))}</div>
+      <div class="k9dots">${[0,1,2,3].map(i=>`<i style="${i<st.pin?`border-color:${COLOR}`:""}">${i<st.pin?`<em style="background:${COLOR}"></em>`:""}</i>`).join("")}</div>
+      <div class="nm">${esc(ME.name)}</div><div class="rl">${esc(ME.role)}</div></div>
+    <div class="k9keys">${keys.map(k=>`<span data-t="key-${k}">${k}</span>`).join("")}<span class="g sm">${esc(T("mamaship_clear"))}</span><span>0</span><span class="g">⌫</span></div>
+    <div class="k9welcome">${esc(T("mamaship_welcome", FIRST))}</div></div></div>`;
+}
+function catalog(){
+  const cats = `<div class="mcats">` + [{name:T("items_filter_all"),color:ALL_C,all:true}].concat(CHIPS).map(c=>{
+    const s = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${s}">${c.all?J.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+  const grid = `<div class="mgrid">` + BYNAME.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+  return cats + grid;
+}
+function selling(st){
+  const tabs = [[T("mama_tab_scan"), J.qr], [T("home_tab_library"), ""], [T("tx_tab_all"), ""]];
+  const tabRow = `<div class="k9tabs">${tabs.map((t,i)=>`<span class="t${i===st.tab?" on":""}" ${i===0?'data-t="tab-scan"':""}>${t[1]}${esc(t[0])}</span>`).join("")}<span class="bell">${svg(IP.bell)}</span></div>`;
+  const left = st.tab===0 ? `<div class="k9scan"><div class="osb">${esc(T("mama_tab_scan"))}</div></div>` : catalog();
+  const right = `<div class="k9right"><div class="k9sw">${IP.swap?svg(IP.swap):""}<b>${esc(FIRST)}</b><span>${esc(T("mamaship_switch"))}</span></div>
+    <div class="k9cart"><div class="tr"><span>${J.trash}</span></div><div class="sc"><div class="k9empty"><b>${esc(T("home_cart_empty"))}</b><small>${esc(T("home_cart_empty_sub"))}</small></div></div></div></div>`;
+  return `<div class="k9"><div class="k9main"><div class="k9left">${tabRow}${left}</div><div class="k9div"></div>${right}</div></div>`;
+}
+
+const TABLET_SCREENS = ["kind","code","lock","pick","pin","sell"];
+function render(st){
+  if(st.hop) return SKIT.hop(S, {from:DEV_OWNER, to:DEV_TABLET, line:CODE, note:P({
+    es:"En la tablet escribes este código. Para conectarse, la tablet necesita internet.",
+    pt:"No tablet você digita este código. Para se conectar, o tablet precisa de internet.",
+    en:"You type this code on the tablet. To connect, the tablet needs internet."})});
+  switch(st.screen){
+    case "home": return home({nudge:true}) + (st.sheet ? chooser() : "");
+    case "name": return namePage(st);
+    case "code": return codePage();
+    case "kind": return kind(st);
+    case "tcode": return code(st);
+    case "lock": return locked();
+    case "pick": return picker();
+    case "pin":  return pin(st);
+    default:     return selling(st);
+  }
+}
+const onTablet = st => ["kind","tcode","lock","pick","pin","sell"].includes(st.screen);
+
+SKIT.start(S, {
+  id:"TS19", tallVideo:true, clock:"12:41",
+  endText:P({es:"Así conectas una tablet de mostrador con Platata.", pt:"Assim você conecta um tablet do balcão com o Platata.", en:"That's how you connect a counter tablet with Platata."}),
+  beats:P({
+    es:["Toca Conectar y elige Tablet de mostrador","Ponle un nombre y toca Siguiente: sale un código","En la tablet, elige Tablet de mostrador","Escribe el código y toca Conectar","Cada persona entra con su perfil y su PIN","En Escanear vende lo que ya está en tu catálogo","Así conectas una tablet de mostrador con Platata."],
+    pt:["Toque em Conectar e escolha Um caixa","Dê um nome e toque em Próximo: sai um código","No tablet, escolha Tablet do balcão","Digite o código e toque em Conectar","Cada pessoa entra com seu perfil e seu PIN","Em Escanear, venda o que já está no catálogo","Assim você conecta um tablet do balcão com o Platata."],
+    en:["Tap Connect and pick A register","Name it and tap Next: you get a code","On the tablet, pick Counter tablet","Type the code and tap Connect","Each person signs in with their profile and PIN","On Scan, sell what's already in your catalog","That's how you connect a counter tablet with Platata."]}),
+  state:{screen:"home", sheet:false, hop:false, name:"", kind:"reg", typed:"", focus:false, pairing:false, pin:0, tab:1},
+  render,
+  device: st => st.hop ? "phone" : (onTablet(st) ? "tablet" : "phone"),
+  who: st => st.hop ? "" : (onTablet(st) ? DEV_TABLET : DEV_OWNER),
+  steps:[
+    {beat:0, hint:P({es:"Toca Conectar", pt:"Toque em Conectar", en:"Tap Connect"}), target:'[data-t="nudge-connect"]', tap(st){ st.sheet = true; }},
+    {beat:0, hint:P({es:"Toca ",pt:"Toque em ",en:"Tap "}) + T("conn_opt_register"), target:'[data-t="opt-reg"]', tap(st,E){
+      st.sheet = false; st.screen = "name"; E.after(500, ()=>E.type("name", REG_NAME, null, 120)); }},
+    {beat:1, hint:P({es:"Toca Siguiente", pt:"Toque em Próximo", en:"Tap Next"}), target:'[data-t="next"]', tap(st,E){
+      st.screen = "code";
+      E.after(3800, ()=>{ st.hop = true; });
+      E.after(6200, ()=>{ st.hop = false; st.screen = "kind"; }); }},
+    {beat:2, hint:P({es:"Toca Continuar", pt:"Toque em Continuar", en:"Tap Continue"}), target:'[data-t="cont"]', tap(st){ st.screen = "tcode"; st.focus = true; }},
+    {beat:3, hint:P({es:"Toca las casillas y escribe el código", pt:"Toque nas caixas e digite o código", en:"Tap the boxes and type the code"}), target:'[data-t="boxes"]', tap(st,E){ E.type("typed", CODE, null, 110); }},
+    {beat:3, hint:P({es:"Toca Conectar", pt:"Toque em Conectar", en:"Tap Connect"}), target:'[data-t="connect"]', tap(st,E){
+      st.pairing = true; st.focus = false; E.after(1500, ()=>{ st.pairing = false; st.screen = "lock"; }); }},
+    {beat:4, hint:P({es:"Toca la pantalla", pt:"Toque na tela", en:"Tap the screen"}), target:'[data-t="lock"]', tap(st){ st.screen = "pick"; }},
+    {beat:4, hint:P({es:"Toca ",pt:"Toque em ",en:"Tap "}) + FIRST, target:`[data-t="who-${ME.id}"]`, tap(st){ st.screen = "pin"; }},
+    {beat:4, hint:P({es:"Toca su PIN", pt:"Toque no PIN dela", en:"Tap her PIN"}), target:'[data-t="key-5"]', tap(st,E){
+      st.pin = 1; E.after(220, ()=>{ st.pin = 2; }); E.after(440, ()=>{ st.pin = 3; }); E.after(660, ()=>{ st.pin = 4; });
+      E.after(1100, ()=>{ st.screen = "sell"; }); }},
+    {beat:5, hint:P({es:"Toca Escanear", pt:"Toque em Escanear", en:"Tap Scan"}), target:'[data-t="tab-scan"]', tap(st){ st.tab = 0; }}
+  ]
+});
+</script>
+</body>
+</html>

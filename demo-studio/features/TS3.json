@@ -1,0 +1,77 @@
+{
+  "id": "TS3",
+  "name": "Take cash (shop, owner phone)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-scan",
+      "voice": {
+        "es": "Toca Agregar productos y se abre la cámara.",
+        "pt": "Toque em Adicionar produtos e a câmera abre.",
+        "en": "Tap Add items and the camera opens."
+      }
+    },
+    {
+      "id": "2-tap",
+      "voice": {
+        "es": "Apunta al código y toca la pantalla: el producto entra a la venta.",
+        "pt": "Aponte para o código e toque na tela: o produto entra na venda.",
+        "en": "Point at the barcode and tap the screen: the item goes into the sale."
+      }
+    },
+    {
+      "id": "3-again",
+      "voice": {
+        "es": "El mismo otra vez suma uno más. Ahora toca Cobrar.",
+        "pt": "O mesmo de novo soma mais um. Agora toque em Cobrar.",
+        "en": "The same one again adds one more. Now tap Charge."
+      }
+    },
+    {
+      "id": "4-received",
+      "voice": {
+        "es": "Escribe con cuánto te paga el cliente.",
+        "pt": "Digite quanto o cliente te entrega.",
+        "en": "Type how much the customer hands you."
+      }
+    },
+    {
+      "id": "5-change",
+      "voice": {
+        "es": "Platata te dice el cambio. Toca Efectivo.",
+        "pt": "O Platata mostra o troco. Toque em Dinheiro.",
+        "en": "Platata shows the change. Tap Cash."
+      }
+    },
+    {
+      "id": "6-new",
+      "voice": {
+        "es": "Entrega el cambio y empieza otra venta.",
+        "pt": "Entregue o troco e comece outra venda.",
+        "en": "Hand back the change and start a new sale."
+      }
+    },
+    {
+      "id": "7-end",
+      "voice": {
+        "es": "Así cobras en efectivo con Platata.",
+        "pt": "Assim você cobra em dinheiro com o Platata.",
+        "en": "That's how you take cash with Platata."
+      }
+    }
+  ]
+}
