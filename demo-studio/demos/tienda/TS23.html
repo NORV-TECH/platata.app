@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Platata · Huella para borrar</title>
+<title>Platata · Huella y deudas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&display=swap">
@@ -72,7 +72,7 @@
 .sbi{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
 .st{flex:1;min-width:0;display:flex;flex-direction:column}
 .st b{font-size:calc(var(--u)*15);font-weight:700;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.st small{font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st small{font-size:calc(var(--u)*13);color:#737883}
 .sch{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
 /* dialogs (SumaDialog = M3 AlertDialog) */
 .dscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*40)}
@@ -466,8 +466,8 @@ function settled(steps){
 }
 
 
-/*TITLE: Huella para borrar*/
-/* TS23 "Huella para borrar o quitar cargos" (shop / pharmacy): the owner's phone. App at sim/usa-canada 6736ddfb
+/*TITLE: Huella y deudas*/
+/* TS23 "Huella y deudas" (was "Huella para borrar o quitar cargos"; the video never removes a charge) (shop / pharmacy): the owner's phone. App at sim/usa-canada 6736ddfb
    (paths under app/src/main/java/com/example/).
    Flag           ui/app/PlatataApp.kt + sync/FlagGate: Security on and the 10-minute session over = ASK -> the system prompt
                   settings_gate_title / settings_gate_subtitle (fingerprint, face or the phone's own PIN); the bar shows the
@@ -537,7 +537,7 @@ function page(){
       <div class="dr"><span>${esc(T("crm_metric_last_visit"))}</span><b>${esc(fmtDate(DEBTS[1].at))}</b></div>
     </div>
     <h5 class="cl-ph">${esc(T("customer_page_purchases"))}</h5>
-    ${DEBTS.slice().reverse().map(p=>`<div class="cl-pr"><div><span>${esc(fmtDateTime(p.at))}</span><small>${esc(T("crm_sold_by", C.owner))}</small></div><strong>${money(p.v)}</strong></div>`).join("")}
+    ${DEBTS.slice().reverse().map((p,i)=>`<div class="cl-pr"><div><b>#${[131,96][i]}</b><span>${esc(fmtDateTime(p.at))}</span><small>${esc(T("crm_sold_by", C.owner))}</small></div><strong>${money(p.v)}</strong></div>`).join("")}
   </div></div>` + strip();
 }
 function form(st){

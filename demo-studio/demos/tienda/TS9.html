@@ -480,7 +480,9 @@ function render(st){
   if(st.screen==="home") return home({locked:true}) + (st.bio ? bioSheet(st.bioOk) : "");
   if(st.screen==="panel") return panel({open:true, regTotal:SALES, today:NET_TODAY, invoices:2, team:1});
   if(st.screen==="move") return moveScreen(st);
-  if(st.screen==="reg") return registerScreen({moves:st.moves, snack:st.snack, flash:st.flash});
+  // video: the "Guardado" snackbar stays while line 6 ("Queda anotado…") plays and leaves when line 7 begins (review R2: no silent wait on it)
+  const snackGone = Demo.MODE==="video" && window.__timeline && window.__timeline.starts.length>=7;
+  if(st.screen==="reg") return registerScreen({moves:st.moves, snack:st.snack && !snackGone, flash:st.flash});
   return "";
 }
 const cssTS9 = document.createElement("style"); cssTS9.textContent = `
@@ -510,7 +512,7 @@ SKIT.start(R, {
     {beat:3, hint:pick({es:"Toca Proveedor",pt:"Toque em Fornecedor",en:"Tap Supplier"}), target:'[data-t="reason-supplier"]', tap(st){ st.reason="supplier"; }},
     {beat:4, hint:pick({es:"Toca Guardar",pt:"Toque em Salvar",en:"Tap Save"}), target:'[data-t="save"]', tap(st,E){
         st.moves=[{kind:"out", reason:"supplier", amount:amountOf(st.typed), at:NOW, isNew:true}]; st.screen="reg"; st.snack=true; st.flash=true;
-        E.after(3600,()=>{ st.snack=false; });
+        if(Demo.MODE!=="video") E.after(3600,()=>{ st.snack=false; });
         }}
   ]
 });

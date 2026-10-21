@@ -560,7 +560,7 @@ SKIT.start(R, {
     {beat:2, hint:pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+(KEYS[0]==="z"?ZKEY:KEYS[0]), target:`[data-t="k-${KEYS[0]}"]`, tap(st,E){
         st.typed=press(st.typed,KEYS[0]); KEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed=press(st.typed,k); })); }},
     {beat:3, hint:pick({es:"Toca Cerrar caja",pt:"Toque em Fechar caixa",en:"Tap Close register"}), target:'[data-t="close-confirm"]', tap(st){ st.dlg=true; }},
-    {beat:3, hint:pick({es:"Confirma: Cerrar caja",pt:"Confirme: Fechar caixa",en:"Confirm: Close register"}), target:'[data-t="dlg-close"]', tap(st,E){ st.dlg=false; st.screen="sum"; E.after(4200,()=>{ st.scroll=130; }); }},
+    {beat:3, hint:pick({es:"Confirma: Cerrar caja",pt:"Confirme: Fechar caixa",en:"Confirm: Close register"}), target:'[data-t="dlg-close"]', tap(st,E){ st.dlg=false; st.screen="sum"; E.after(1000,()=>{ st.scroll=130; }); }},   /* review R2: line 5 starts with the summary, not 4 s later */
     {beat:5, hint:pick({es:"Toca Enviar por WhatsApp",pt:"Toque em Enviar por WhatsApp",en:"Tap Send by WhatsApp"}), target:'[data-t="wa"]', tap(st){ st.screen="wa"; }}
   ]
 });
