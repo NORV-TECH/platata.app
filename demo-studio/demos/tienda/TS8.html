@@ -518,7 +518,7 @@ function receiptLines(refunded){
   L.push(t("payment_method_cash"), "", "Thank you for shopping with us!");
   return L.join("\n");
 }
-const badge = st => st==="paid" ? `<span class="bdg ok">${esc(t("tx_status_paid"))}</span>` : `<span class="bdg wn">${esc(t("tx_status_refunded"))}</span>`;
+const badge = st => st==="paid" ? `<span class="bdg ok">${esc(t("tx_status_paid"))}</span>` : `<span class="bdg er">${esc(t("tx_status_refunded"))}</span>`;
 const fiadoBadge = name => `<span class="bdg fi">${esc(t("fiado_badge_open", name))}</span>`;
 function list(){
   const rows = SALES.map(o=>`<div class="srow" data-t="row-${o.id}"><div class="sl"><b>${esc(fmtTime(o.at))}</b>
@@ -964,7 +964,7 @@ SKIT.start(S, {
 .mat .lhd{display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*8) calc(var(--u)*8) 0;flex:0 0 auto}
 .mat .lhd .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
 .mat .lhd b{flex:1;font-size:calc(var(--u)*22);font-weight:400}
-.mat .bdg.fi{background:#FFF6E5;color:#B07500}
+.mat .bdg.fi{background:#FFF6E5;color:#B07500}.mat .bdg.er{background:#FFEBEE;color:#C62828}
 </style>
 </body>
 </html>
