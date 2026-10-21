@@ -646,9 +646,10 @@ steps.push(
   {beat:3, hint:TAP+t("biz_start_cta"), target:'[data-t="name-go"]', tap(st){ st.screen="google"; }},
   {beat:4, hint:TAP+t("auth_google_btn"), target:'[data-t="google"]', tap(st){ st.screen="dict"; st.pct=null; }},
   {beat:4, hint:TAP+t("dict_dl_start"), target:'[data-t="dl"]', tap(st,E){ st.pct=0;
-      [8,19,33,46,58,71,84,93,100].forEach((p,i)=>E.after(320*(i+1),()=>{ st.pct=p; }));
-      E.after(3300,()=>{ st.screen="setup"; st.done=0; }); E.after(4300,()=>{ st.done=1; }); E.after(5300,()=>{ st.done=2; }); E.after(6200,()=>{ st.done=3; }); E.after(6900,()=>{ st.screen="ready"; }); }},
-  {beat:5, hint:TAP+t("ready_cta_scan"), target:'[data-t="ready-go"]', tap(st){ st.screen="landing"; }});
+      [8,19,33,46,58,71,84,93,100].forEach((p,i)=>E.after(180*(i+1),()=>{ st.pct=p; }));
+      E.after(1900,()=>{ st.screen="setup"; st.done=0; }); E.after(2500,()=>{ st.done=1; }); E.after(3100,()=>{ st.done=2; }); E.after(3600,()=>{ st.done=3; }); E.after(4100,()=>{ st.screen="ready"; }); }},
+  /* REVIEW-R1: the tap sits in beat 6 so line 6 ("Lista: dice Droguería") plays over the Ready card it describes */
+  {beat:6, hint:TAP+t("ready_cta_scan"), target:'[data-t="ready-go"]', tap(st){ st.screen="landing"; }});
 SKIT.start(S, {
   id:"T12", tallVideo:true, clock:"9:05",
   endText:PH ? H("Así abres tu "+PW+" con Platata.","Assim você abre sua "+PW+" com o Platata.","That's how you open your "+PW+" with Platata.")
