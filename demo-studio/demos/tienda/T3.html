@@ -645,7 +645,9 @@ function priceSheet(o){   // o: {name, price, unit, weight, focus}
    save       ui/screens/home/ScanCartScreen.kt:21-106 -> findOrCreateScannedProduct (data/repo/OrderSyncStore.kt:772-800)
    again      ScannerScreen.kt:139-152 scan_checkout_added_another "Otra más · %1$s × %2$d"
    The price box keeps what filterDecimalInput keeps: the typed digits with a "." decimal (a Brazilian 18,90 reads "18.90"). */
-const NEW = S.isPharm ? C.item("cepillo") : C.item("cafe");
+/* REVIEW-R1: in Portuguese the real A-Z list puts "Bebidas alcoólicas" right under "Bebidas", so the pt video creates the
+   soap instead (Higiene pessoal: the six rows around it are Farmácia ... Outros). Same list, same app; only the product differs. */
+const NEW = S.isPharm ? C.item("cepillo") : C.item(S.lang === "pt" ? "jabon" : "cafe");
 /* what the owner types in the price box: whole pesos in Colombia / Chile, else the price with a "." (filterDecimalInput) */
 const PRICE_TYPED = C.dec === 0 ? String(NEW.price) : NEW.price.toFixed(2);
 function render(st){

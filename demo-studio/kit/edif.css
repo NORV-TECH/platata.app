@@ -149,10 +149,10 @@ body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hid
 .end .play{background:var(--potato);color:#fff;border-radius:4cqw;padding:4cqw 7cqw;font:600 5.6cqw var(--brand)}
 
 /* ---------- guided taps ---------- */
-.ring{position:absolute;pointer-events:none;border-radius:4cqw;box-shadow:0 0 0 .9cqw var(--hint),0 0 0 3cqw rgba(245,158,11,.25);z-index:20;transition:all .25s ease}
+.tapring{position:absolute;pointer-events:none;border-radius:4cqw;box-shadow:0 0 0 .9cqw var(--hint),0 0 0 3cqw rgba(245,158,11,.25);z-index:20;transition:all .25s ease}
 .touch{position:absolute;pointer-events:none;width:12cqw;height:12cqw;margin:-6cqw 0 0 -6cqw;border-radius:50%;background:rgba(58,42,31,.35);border:.6cqw solid rgba(255,255,255,.9);z-index:21;opacity:0}
 @media (prefers-reduced-motion:no-preference){
-  .demo .ring{animation:pulse 1.3s ease-in-out infinite}
+  .demo .tapring{animation:pulse 1.3s ease-in-out infinite}
   @keyframes pulse{50%{box-shadow:0 0 0 .9cqw var(--hint),0 0 0 5.5cqw rgba(245,158,11,0)}}
   .nudge{animation:nudge .35s} @keyframes nudge{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
   .demo .new{animation:pop .25s ease-out} @keyframes pop{from{opacity:0;transform:translateY(2cqw)}}

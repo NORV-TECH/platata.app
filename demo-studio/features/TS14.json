@@ -44,9 +44,9 @@
     {
       "id": "4-permisos",
       "voice": {
-        "es": "Elige qué puede hacer: por ejemplo, contar el stock.",
-        "pt": "Escolha o que pode fazer: por exemplo, contar o estoque.",
-        "en": "Choose what they can do: for example, count stock."
+        "es": "Elige qué puede hacer: por ejemplo, abrir y cerrar caja.",
+        "pt": "Escolha o que pode fazer: por exemplo, abrir e fechar o caixa.",
+        "en": "Choose what they can do: for example, open and close the register."
       }
     },
     {
@@ -60,9 +60,9 @@
     {
       "id": "6-pin",
       "voice": {
-        "es": "El PIN se muestra una vez. Anótalo.",
-        "pt": "O PIN aparece uma vez. Anote.",
-        "en": "The PIN shows once. Write it down."
+        "es": "Aquí está su PIN. Anótalo y dáselo; luego lo ves en su ficha con Mostrar.",
+        "pt": "Aqui está o PIN. Anote e entregue; depois você o vê na ficha, em Mostrar.",
+        "en": "Here's their PIN. Write it down and hand it over; you can see it later with Show."
       }
     },
     {

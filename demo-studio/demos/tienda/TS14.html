@@ -281,10 +281,10 @@ const SHOP_CSS = `
 .mat .rs-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
 .mat .rs-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
 .mat .rs-strip .h>div{flex:1;min-width:0}
-.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#188448;color:#fff;display:grid;place-items:center;flex:0 0 auto}
 .mat .rs-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
 .mat .rs-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
-.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);color:#737883}
 .mat .rs-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
 .mat .rs-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
 .mat .rs-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF;flex:0 0 auto}
@@ -491,9 +491,9 @@ SKIT.start(R, {
   id:"TS14", tallVideo:true, clock:"09:40",
   endText:pick({es:"Así armas tu equipo, con Platata.",pt:"Assim você monta sua equipe, com o Platata.",en:"That's how you build your team, with Platata."}),
   beats:pick({
-    es:["En Mi negocio, toca Equipo","Tu equipo y el código del negocio. Toca + Nuevo","Nombre, WhatsApp y cargo","Elige qué puede hacer: contar el stock","Su PIN se crea solo. Toca Guardar","El PIN se muestra una vez: anótalo","Así armas tu equipo"],
-    pt:["Em Meu negócio, toque em Equipe","Sua equipe e o código do negócio. Toque em + Novo","Nome, WhatsApp e cargo","O que pode fazer: contar o estoque","O PIN é criado sozinho. Toque em Salvar","O PIN aparece uma vez: anote","Assim você monta sua equipe"],
-    en:["In My business, tap Team","Your team and the business code. Tap + New","Name, WhatsApp and job title","Choose what they can do: count stock","Their PIN is made for you. Tap Save","The PIN shows once: write it down","That's how you build your team"]}),
+    es:["En Mi negocio, toca Equipo","Tu equipo y el código del negocio. Toca + Nuevo","Nombre, WhatsApp y cargo","Elige qué puede hacer: abrir y cerrar caja","Su PIN se crea solo. Toca Guardar","Su PIN: anótalo y dáselo","Así armas tu equipo"],
+    pt:["Em Meu negócio, toque em Equipe","Sua equipe e o código do negócio. Toque em + Novo","Nome, WhatsApp e cargo","O que pode fazer: abrir e fechar o caixa","O PIN é criado sozinho. Toque em Salvar","O PIN: anote e entregue","Assim você monta sua equipe"],
+    en:["In My business, tap Team","Your team and the business code. Tap + New","Name, WhatsApp and job title","Choose what they can do: open and close the register","Their PIN is made for you. Tap Save","Their PIN: write it down and hand it over","That's how you build your team"]}),
   state:{screen:"panel", name:"", wa:"", job:"", focus:"", sheet:false, perm:{}, added:false, pinDlg:false},
   render,
   device: () => "phone",
@@ -505,10 +505,9 @@ SKIT.start(R, {
     {beat:2, hint:H1("team_field_whatsapp").replace(" *",""), target:'[data-t="f-wa"]', tap(st,E){ st.focus="wa"; E.type("wa", natNum(3), null, 70); }},
     {beat:2, hint:H1("counter_reg_field_job_title"), target:'[data-t="f-job"]', tap(st,E){ st.focus="job"; E.type("job", JOB2, null, 90); }},
     {beat:3, hint:H1("perm_label"), target:'[data-t="perms"]', tap(st){ st.focus=""; st.sheet=true; }},
-    {beat:3, hint:H1("perm_can_control_stock"), target:'[data-t="chip-perm_can_control_stock"]', tap(st){ st.perm.perm_can_control_stock=true; }},
+    {beat:3, hint:H1("perm_can_close_shift"), target:'[data-t="chip-perm_can_close_shift"]', tap(st){ st.perm.perm_can_close_shift=true; }},
     {beat:3, hint:pick({es:"Toca afuera para cerrar",pt:"Toque fora para fechar",en:"Tap outside to close"}), target:'[data-t="outside"]', tap(st){ st.sheet=false; }},
     {beat:4, hint:H1("common_save"), target:'[data-t="save"]', tap(st){ st.screen="list"; st.added=true; st.pinDlg=true; }},
-    {beat:5, hint:HINT("OK","OK","OK"), target:'[data-t="ok"]', tap(st){ st.pinDlg=false; }}
   ]
 });
 

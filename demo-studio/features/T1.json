@@ -68,9 +68,9 @@
   {
    "id": "7-unknown",
    "voice": {
-    "es": "Un código que no está en tu catálogo no entra a la venta.",
-    "pt": "Um código que não está no seu catálogo não entra na venda.",
-    "en": "A barcode that isn't in your catalog doesn't go into the sale."
+    "es": "En la tablet, un código que no está en tu catálogo no entra a la venta.",
+    "pt": "No tablet, um código que não está no seu catálogo não entra na venda.",
+    "en": "On the tablet, a barcode that isn't in your catalog doesn't go into the sale."
    }
   },
   {

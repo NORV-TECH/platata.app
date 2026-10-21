@@ -655,9 +655,9 @@ SKIT.start(S, {
   id:"T7", tallVideo:true, clock:"12:41",
   endText:H("Así guardas tus facturas con Platata.","Assim você guarda suas notas com o Platata.","That's how you keep your invoices with Platata."),
   beats:S.pick({
-    es:["En Mi negocio, toca Facturas","Toca Escanear factura","Encuadra la factura y toca el botón blanco","Con internet, lee proveedor, fecha y total","Queda en su mes. Toca Por proveedor","Toca el proveedor: lo que le pagaste este año","La factura no suma al inventario","Así guardas tus facturas con Platata."],
-    pt:["Em Meu negócio, toque em Notas","Toque em Escanear nota","Enquadre a nota e toque no botão branco","Com internet, lê fornecedor, data e total","Fica no mês. Toque em Por fornecedor","Toque no fornecedor: quanto você pagou este ano","A nota não soma ao estoque","Assim você guarda suas notas com o Platata."],
-    en:["In My business, tap Invoices","Tap Scan invoice","Fit the invoice and tap the white button","With internet, it reads supplier, date and total","It's filed by month. Tap By supplier","Tap the supplier: what you paid this year","An invoice doesn't add to your inventory","That's how you keep your invoices with Platata."]}),
+    es:["En Mi negocio, toca Facturas","Toca Escanear factura","Encuadra la factura y toca el botón blanco","Con internet, lee proveedor, fecha y total","Toca Listo: queda en su mes. Luego Por proveedor","Toca el proveedor: lo que le pagaste este año","La factura no suma al inventario","Así guardas tus facturas con Platata."],
+    pt:["Em Meu negócio, toque em Notas","Toque em Escanear nota","Enquadre a nota e toque no botão branco","Com internet, lê fornecedor, data e total","Toque em Concluído: fica no mês","Toque no fornecedor: quanto você pagou este ano","A nota não soma ao estoque","Assim você guarda suas notas com o Platata."],
+    en:["In My business, tap Invoices","Tap Scan invoice","Fit the invoice and tap the white button","With internet, it reads supplier, date and total","Tap Done: filed by month","Tap the supplier: what you paid this year","An invoice doesn't add to your inventory","That's how you keep your invoices with Platata."]}),
   state:{screen:"panel", tab:0, added:false, reading:false, flash:false},
   render,
   device: () => "phone",
@@ -667,7 +667,8 @@ SKIT.start(S, {
     {beat:1, hint:tap(t("invoices_scan_btn")), target:'[data-t="scan"]', tap(st){ st.screen="cam"; }},
     {beat:2, hint:H("Toca el botón blanco","Toque no botão branco","Tap the white button"), target:'[data-t="shutter"]', tap(st,E){ st.flash=true;
         E.after(300,()=>{ st.flash=false; st.screen="done"; st.reading=true; st.added=true; }); E.after(2600,()=>{ st.reading=false; }); }},
-    {beat:3, hint:tap(t("common_done")), target:'[data-t="done"]', tap(st){ st.screen="list"; st.tab=0; }},
+    /* REVIEW-R1: Done sits in beat 4 so line 4 plays over the filled invoice it describes */
+    {beat:4, hint:tap(t("common_done")), target:'[data-t="done"]', tap(st){ st.screen="list"; st.tab=0; }},
     {beat:4, hint:tap(t("invoices_tab_by_supplier")), target:'[data-t="tab-sup"]', tap(st){ st.tab=1; }},
     {beat:5, hint:tap(SUP[0].name), target:'[data-t="sup-0"]', tap(st){ st.screen="sup"; }}
   ]

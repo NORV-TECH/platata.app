@@ -281,10 +281,10 @@ const SHOP_CSS = `
 .mat .rs-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
 .mat .rs-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
 .mat .rs-strip .h>div{flex:1;min-width:0}
-.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#188448;color:#fff;display:grid;place-items:center;flex:0 0 auto}
 .mat .rs-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
 .mat .rs-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
-.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);color:#737883}
 .mat .rs-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
 .mat .rs-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
 .mat .rs-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF;flex:0 0 auto}
@@ -773,7 +773,7 @@ SKIT.start(R, {
         LINE==="taxes"?"Impuestos aparte; el fiado no es cobrado":"Lo fiado no cuenta como cobrado",
         "Cómo te pagaron y qué se vendió","Toca Este mes para ver el mes","Así ves cómo va tu tienda"],
     pt:["Em Meu negócio, toque em Relatórios","O dia hora a hora: toque numa barra","Brutas, menos descontos e devoluções: líquidas","Cada linha abre suas vendas",
-        LINE==="taxes"?"Impostos à parte; o fiado não é recebido":"Os descontos se abrem; o fiado não é recebido",
+        LINE==="taxes"?"Impostos à parte; o fiado não é recebido":"O fiado ainda não é recebido",
         "Como você recebeu e o que vendeu","Toque em Este mês para ver o mês","Assim você vê como vai sua loja"],
     en:["In My business, tap Reports","The day hour by hour: tap a bar","Gross, minus discounts and refunds: net sales","Each line opens its sales",
         LINE==="taxes"?"Taxes apart; tabs aren't collected yet":"Tabs aren't collected yet",
@@ -785,10 +785,10 @@ SKIT.start(R, {
   steps:[
     {beat:0, hint:HINT(S("workspace_full_reports"),S("workspace_full_reports"),S("workspace_full_reports")), target:'[data-t="row-reports"]', tap(st){ st.screen="reports"; }},
     {beat:1, hint:pick({es:"Toca la barra más alta",pt:"Toque na barra mais alta",en:"Tap the tallest bar"}), target:'[data-t="bar"]', tap(st){ st.marker=true; }},
-    {beat:2, hint:HINT(F("refunds_with_count",1), F("refunds_with_count",1), F("refunds_with_count",1)), target:'[data-t="line-refunds"]', tap(st){ st.screen="line"; st.line="refunds"; }},
-    {beat:3, hint:pick({es:"Toca la flecha para volver",pt:"Toque na seta para voltar",en:"Tap the arrow to go back"}), target:'[data-t="line-back"]', tap(st,E){ st.screen="reports"; E.after(500,()=>{ st.scroll=LINE_SCROLL; }); }},
-    {beat:4, hint:HINT(lineWord,lineWord,lineWord), target:`[data-t="${lineTag}"]`, tap(st){ st.screen="line"; st.line=LINE; }},
-    {beat:5, hint:pick({es:"Toca la flecha para volver",pt:"Toque na seta para voltar",en:"Tap the arrow to go back"}), target:'[data-t="line-back"]', tap(st,E){ st.screen="reports"; E.after(500,()=>{ st.scroll=SCROLL_PAY; }); }},
+    {beat:3, hint:HINT(F("refunds_with_count",1), F("refunds_with_count",1), F("refunds_with_count",1)), target:'[data-t="line-refunds"]', tap(st){ st.screen="line"; st.line="refunds"; }},
+    {beat:4, hint:pick({es:"Toca la flecha para volver",pt:"Toque na seta para voltar",en:"Tap the arrow to go back"}), target:'[data-t="line-back"]', tap(st,E){ st.screen="reports"; E.after(500,()=>{ st.scroll=LINE_SCROLL; }); }},
+    /* line 6 "Cómo te pagaron": a scroll, not a tap — the "En fiado (sin cobrar)" row is a plain row (ReportsScreen.kt:333 ReportsPlainRow, no onClick) */
+    {beat:5, hint:pick({es:"Baja a Cómo te pagaron",pt:"Role até Como você recebeu",en:"Scroll to How you got paid"}), target:'[data-t="on-tab"]', tap(st){ st.scroll=SCROLL_PAY; }},
     {beat:6, hint:HINT(S("reports_period_this_month"),S("reports_period_this_month"),S("reports_period_this_month")), target:'[data-t="chip-this_month"]', tap(st,E){ st.range="month"; st.marker=false; E.after(400,()=>{ st.scroll=0; }); }}
   ]
 });

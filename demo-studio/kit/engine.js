@@ -69,7 +69,7 @@ function start(cfg){
         <span style="font-size:3.3cqw">78%</span></span></div>
       <div class="app" id="app"></div>
       <div class="navbar"><i></i></div>
-      <div class="ring" id="ring" hidden></div>
+      <div class="tapring" id="ring" hidden></div>
       <div class="touch" id="touch"></div>
       <div class="subtitle" id="sub"></div>
     </div></div>

@@ -659,9 +659,9 @@ SKIT.start(S, {
   id: "T1", tallVideo: true, clock: "12:41",
   endText: pick({es:"Así escaneas y vendes en segundos, con Platata.", pt:"Assim você escaneia e vende em segundos, com o Platata.", en:"That's how you scan and sell in seconds, with Platata."}),
   beats: pick({
-    es: ["Para vender, toca Agregar productos", "Apunta al código y toca la pantalla", "El mismo otra vez: suma uno más", "Otro producto, otro toque", "Toca Cobrar y luego Exacto", "En la tablet de mostrador, igual: toca", "Un código que no es tuyo no entra", "Así escaneas y vendes en segundos."],
-    pt: ["Para vender, toque em Adicionar produtos", "Aponte para o código e toque na tela", "O mesmo de novo: soma mais um", "Outro produto, outro toque", "Toque em Cobrar e depois em Exato", "No tablet do balcão é igual: toque", "Um código que não é seu não entra", "Assim você escaneia e vende em segundos."],
-    en: ["To sell, tap Add items", "Aim at the barcode and tap the screen", "Same one again: one more", "Another product, another tap", "Tap Charge, then Exact", "On the counter tablet, same thing: tap", "A code you never added stays out", "That's how you scan and sell in seconds."]}),
+    es: ["Para vender, toca Agregar productos", "Apunta al código y toca la pantalla", "El mismo otra vez: suma uno más", "Otro producto, otro toque", "Toca Cobrar y luego Exacto", "En la tablet de mostrador, igual: toca", "En la tablet, un código que no es tuyo no entra", "Así escaneas y vendes en segundos."],
+    pt: ["Para vender, toque em Adicionar produtos", "Aponte para o código e toque na tela", "O mesmo de novo: soma mais um", "Outro produto, outro toque", "Toque em Cobrar e depois em Exato", "No tablet do balcão é igual: toque", "No tablet, um código que não é seu não entra", "Assim você escaneia e vende em segundos."],
+    en: ["To sell, tap Add items", "Aim at the barcode and tap the screen", "Same one again: one more", "Another product, another tap", "Tap Charge, then Exact", "On the counter tablet, same thing: tap", "On the tablet, a code you never added stays out", "That's how you scan and sell in seconds."]}),
   state: {screen: "home", lines: [], scene: null, status: "", spin: false, flash: false, err: false, tLines: [], tUnknown: false},
   render,
   device: st => (st.screen === "tablet") ? "tablet" : "phone",

@@ -44,17 +44,17 @@
     {
       "id": "4-read",
       "voice": {
-        "es": "Con internet, Platata lee el proveedor, la fecha y el total. Toca Listo.",
-        "pt": "Com internet, o Platata lê o fornecedor, a data e o total. Toque em Pronto.",
-        "en": "With internet, Platata reads the supplier, the date and the total. Tap Done."
+        "es": "Con internet, Platata lee el proveedor, la fecha y el total.",
+        "pt": "Com internet, o Platata lê o fornecedor, a data e o total.",
+        "en": "With internet, Platata reads the supplier, the date and the total."
       }
     },
     {
       "id": "5-month",
       "voice": {
-        "es": "La factura queda en su mes. Toca Por proveedor.",
-        "pt": "A nota fica no mês dela. Toque em Por fornecedor.",
-        "en": "The invoice is filed by month. Tap By supplier."
+        "es": "Toca Listo: la factura queda en su mes. Luego toca Por proveedor.",
+        "pt": "Toque em Concluído: a nota fica no mês dela. Depois toque em Por fornecedor.",
+        "en": "Tap Done: the invoice is filed by month. Then tap By supplier."
       }
     },
     {

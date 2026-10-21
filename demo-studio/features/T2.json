@@ -20,9 +20,9 @@
   {
    "id": "1-open",
    "voice": {
-    "es": "Platata trae más de tres mil quinientos productos sin código de barras: pan, frutas, verduras, queso. Toca Sin código.",
-    "pt": "O Platata já vem com mais de três mil e quinhentos produtos sem código de barras: pão, frutas, verduras, queijo. Toque em Sem código.",
-    "en": "Platata comes with over thirty-five hundred products that have no barcode: bread, fruit, vegetables, cheese. Tap No barcode."
+    "es": "Toca Sin código: Platata trae más de tres mil quinientos productos sin código de barras, como pan, frutas, verduras y queso.",
+    "pt": "Toque em Sem código: o Platata já vem com mais de três mil e quinhentos produtos sem código de barras, como pão, frutas, verduras e queijo.",
+    "en": "Tap No barcode: Platata comes with over thirty-five hundred products that have no barcode, like bread, fruit, vegetables and cheese."
    }
   },
   {
