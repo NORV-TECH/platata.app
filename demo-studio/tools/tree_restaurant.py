@@ -26,6 +26,24 @@ for key, page, fid in lines:
     only = [cl for cl in ALL_CL if cl not in HOLD.get(fid, [])]
     v = ",".join(f'"{k}":"{p}"' for k, p in vids.items())
     out.append(f' "{key}":{{ only:{only!r}, page:(c,l)=>`demos/restaurante/{page}.html?embed=1&country=${{c}}&lang=${{l}}`, video:{{{v}}} }},'.replace("'", '"'))
+# ---- retail: tienda pages (T1..T11 own, TS1..TS24 shared) and farmacia (same pages with &type=pharmacy; only T12 has videos) ----
+def vids_of(fid):
+    v = {}
+    for l in ("es", "pt", "en"):
+        if os.path.exists(os.path.join(ROOT, "video", f"{fid}-{l}.mp4")): v[l] = f"video/{fid}-{l}.mp4"
+    if os.path.exists(os.path.join(ROOT, "video", f"{fid}-US-es.mp4")): v["US-es"] = f"video/{fid}-US-es.mp4"
+    return v
+RET_ALL = ALL_CL
+for biz, typ in (("tienda", ""), ("farmacia", "&type=pharmacy")):
+    own = [f"T{n}" for n in range(1, 13 if biz == "farmacia" else 12)]
+    for fid in own + [f"S{n}" for n in range(1, 25)]:
+        page = fid if fid.startswith("T") else "T" + fid
+        if not os.path.exists(os.path.join(ROOT, "demos", "tienda", page + ".html")): continue
+        v = vids_of(page) if (biz == "tienda" or page == "T12") else {}
+        if page == "T12" and os.path.exists(os.path.join(ROOT, "video", "T12-MX-es.mp4")):
+            for c in ("MX", "PE", "CL", "EC", "AR", "PA"): v[f"{c}-es"] = "video/T12-MX-es.mp4"
+        vv = ",".join(f'"{k}":"{p}"' for k, p in v.items())
+        out.append(f' "{biz}:{fid}":{{ only:{RET_ALL!r}, page:(c,l)=>`demos/tienda/{page}.html?embed=1&country=${{c}}&lang=${{l}}{typ}`, video:{{{vv}}} }},'.replace("'", '"'))
 block = "/* RESTAURANT-BEGIN (written by tools/tree_restaurant.py) */\n" + "\n".join(out) + "\n /* RESTAURANT-END */"
 p = os.path.join(ROOT, "index.html"); s = open(p, encoding="utf-8").read()
 if "RESTAURANT-BEGIN" in s:
