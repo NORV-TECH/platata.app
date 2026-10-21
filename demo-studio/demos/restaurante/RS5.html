@@ -282,8 +282,6 @@ const stepsNone = [
   {beat:1, hint:H("Toca ","Toque em ","Tap ")+t("cash_exact", money(cashDue(BASE))), target:'[data-t="exact"]', tap(st){ st.screen="done"; }},
   {beat:2, hint:H("Toca Nueva venta","Toque em Nova venda","Tap New sale"), target:'[data-t="new"]', tap(st,E){ st.screen="reg"; st.lines=[]; E.after(1500,()=>{ st.screen="pm"; }); }}
 ];
-stepsStripe[4].hint = H("Toca ","Toque em ","Tap ") + t("receipt_opt_new_sale_no_receipt").split(" · ")[0];
-stepsWompi[4].hint = H("Toca ","Toque em ","Tap ") + t("receipt_opt_new_sale_no_receipt").split(" · ")[0];
 stepsNone[2].hint = H("Toca ","Toque em ","Tap ") + t("receipt_opt_new_sale_no_receipt").split(" · ")[0];
 RKIT.start(R, {
   id:"RS5", tallVideo:true, clock:"12:41",
