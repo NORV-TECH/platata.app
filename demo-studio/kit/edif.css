@@ -204,3 +204,5 @@ body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hid
 .video.tall .phone.land .screen{border-radius:16px}
 .video:not(.tall) .devwho{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:30}
 .devwho[hidden]{display:none}
+/* video: the recorder steps a virtual clock frame by frame, so real-time CSS motion would freeze half way */
+.video *,.video *::before,.video *::after{transition:none!important;animation:none!important}

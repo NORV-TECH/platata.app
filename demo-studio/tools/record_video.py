@@ -42,10 +42,17 @@ async def record(feature, lang, country):
         await pg.wait_for_timeout(300)
         tl = await pg.evaluate("window.__timeline")
         i = 0
+        last_sig = None
         while True:
             t = i / FPS
-            await pg.evaluate(f"window.__frame({t})")
-            await pg.screenshot(path=os.path.join(tmp, f"{i:05d}.jpg"), type="jpeg", quality=92)
+            # a frame that looks exactly like the one before (same DOM, same inline styles) is not shot again
+            sig = await pg.evaluate(f"(()=>{{window.__frame({t});const h=document.body.innerHTML;let x=0;for(let k=0;k<h.length;k++)x=(x*31+h.charCodeAt(k))|0;return x+':'+h.length}})()")
+            path = os.path.join(tmp, f"{i:05d}.jpg")
+            if i > 0 and sig == last_sig:
+                os.link(os.path.join(tmp, f"{i-1:05d}.jpg"), path)
+            else:
+                await pg.screenshot(path=path, type="jpeg", quality=92)
+            last_sig = sig
             i += 1
             tl = await pg.evaluate("window.__timeline")
             if tl.get("total") and t >= tl["total"]:

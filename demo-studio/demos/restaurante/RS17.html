@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Impuestos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+
+// TITLE: Platata · Impuestos
+const STR={"common_save": {"en": "Save", "es": "Guardar", "pt": "Salvar"}, "invoices_row_this_month": {"en": "%1$d this month", "es": "%1$d este mes", "pt": "%1$d neste mês"}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "more_my_products_count": {"en": "%1$d items", "es": "%1$d artículos", "pt": "%1$d itens"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "receipt_layout_detailed": {"en": "Detailed", "es": "Detallado", "pt": "Detalhado"}, "refunds_with_count": {"en": "Refunds (%1$d)", "es": "Devoluciones (%1$d)", "pt": "Devoluções (%1$d)"}, "reports_after_refunds": {"en": "after refunds", "es": "después de devoluciones", "pt": "após devoluções"}, "reports_avg_ticket": {"en": "Average sale", "es": "Venta promedio", "pt": "Venda média"}, "reports_breakdown_other": {"en": "Other", "es": "Otros", "pt": "Outros"}, "reports_cash_rounding": {"en": "Cash rounding", "es": "Redondeo en efectivo", "pt": "Arredondamento em dinheiro"}, "reports_category_title": {"en": "Item sales by category", "es": "Ventas de artículos por categoría", "pt": "Vendas de itens por categoria"}, "reports_chart_title": {"en": "Sales over time", "es": "Ventas por período", "pt": "Vendas por período"}, "reports_compare_vs_last_month": {"en": "vs last month", "es": "vs mes pasado", "pt": "vs mês passado"}, "reports_compare_vs_previous": {"en": "vs previous period", "es": "vs período anterior", "pt": "vs período anterior"}, "reports_compare_vs_yesterday": {"en": "vs yesterday", "es": "vs ayer", "pt": "vs ontem"}, "reports_dining_charges": {"en": "Dining charges", "es": "Cargos por tipo de pedido", "pt": "Taxas por tipo de pedido"}, "reports_dining_title": {"en": "Sales by dining option", "es": "Ventas por tipo de consumo", "pt": "Vendas por tipo de consumo"}, "reports_discounts": {"en": "Discounts", "es": "Descuentos", "pt": "Descontos"}, "reports_employee_sales": {"en": "Sales by employee", "es": "Ventas por empleado", "pt": "Vendas por funcionário"}, "reports_gross_sales": {"en": "Gross sales", "es": "Ventas brutas", "pt": "Vendas brutas"}, "reports_line_by_name": {"en": "By name", "es": "Por nombre", "pt": "Por nome"}, "reports_line_no_names": {"en": "Names are not saved for this, so only the sales are listed.", "es": "De esto no se guardan nombres, así que solo se listan las ventas.", "pt": "Disto não guardamos nomes, então só as vendas são listadas."}, "reports_line_sales_list": {"en": "These sales", "es": "Estas ventas", "pt": "Estas vendas"}, "reports_line_sales_n": {"en": "Sales: %1$d", "es": "Ventas: %1$d", "pt": "Vendas: %1$d"}, "reports_line_unnamed_service": {"en": "Service charge", "es": "Cargo por servicio", "pt": "Taxa de serviço"}, "reports_line_unnamed_tax": {"en": "Tax", "es": "Impuesto", "pt": "Imposto"}, "reports_net_sales": {"en": "Net sales", "es": "Ventas netas", "pt": "Vendas líquidas"}, "reports_net_sales_note": {"en": "Before tax, tips and charges", "es": "Antes de impuestos, propinas y cargos", "pt": "Antes de impostos, gorjetas e taxas"}, "reports_net_sales_note_no_tips": {"en": "Before tax and charges", "es": "Antes de impuestos y cargos", "pt": "Antes de impostos e taxas"}, "reports_payment_split": {"en": "How you got paid", "es": "Cómo te pagaron", "pt": "Como você recebeu"}, "reports_period_custom": {"en": "Custom", "es": "Personalizado", "pt": "Personalizado"}, "reports_period_label_dated": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "reports_period_last_month": {"en": "Last month", "es": "Mes pasado", "pt": "Mês passado"}, "reports_period_last_year": {"en": "Last year", "es": "Año pasado", "pt": "Ano passado"}, "reports_period_this_month": {"en": "This month", "es": "Este mes", "pt": "Este mês"}, "reports_period_this_week": {"en": "This week", "es": "Esta semana", "pt": "Esta semana"}, "reports_period_this_year": {"en": "This year", "es": "Este año", "pt": "Este ano"}, "reports_period_today": {"en": "Today", "es": "Hoy", "pt": "Hoje"}, "reports_period_yesterday": {"en": "Yesterday", "es": "Ayer", "pt": "Ontem"}, "reports_send_to_accountant": {"en": "Summary for the accountant", "es": "Resumen para el contador", "pt": "Resumo para o contador"}, "reports_service_charges": {"en": "Service charges", "es": "Cargos por servicio", "pt": "Taxas de serviço"}, "reports_sold_count": {"en": "%d sold", "es": "%d vendidos", "pt": "%d vendidos"}, "reports_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "reports_tips": {"en": "Tips", "es": "Propinas", "pt": "Gorjetas"}, "reports_title": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "reports_top_items": {"en": "Top items by revenue", "es": "Artículos con más ingresos", "pt": "Itens com maior receita"}, "reports_total_collected": {"en": "Total collected", "es": "Total cobrado", "pt": "Total recebido"}, "reports_transactions": {"en": "Number of sales", "es": "Número de ventas", "pt": "Número de vendas"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Líquido hoje · %s"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "settings_dining_options_title": {"en": "Dining options", "es": "Opciones de servicio", "pt": "Opções de atendimento"}, "settings_dining_row_sub": {"en": "For here, to go, delivery and tables", "es": "Para aquí, para llevar, domicilio y mesas", "pt": "Para comer aqui, para viagem, entrega e mesas"}, "settings_hub_business_info": {"en": "Business info", "es": "Datos del negocio", "pt": "Dados do negócio"}, "settings_hub_discounts": {"en": "Discounts and charges", "es": "Descuentos y cargos", "pt": "Descontos e taxas"}, "settings_hub_group_getting_paid": {"en": "Getting paid", "es": "Cobros", "pt": "Cobranças"}, "settings_hub_group_your_business": {"en": "Your business", "es": "Tu negocio", "pt": "Seu negócio"}, "settings_hub_payment_methods": {"en": "Payment methods", "es": "Métodos de pago", "pt": "Formas de pagamento"}, "settings_hub_receipts": {"en": "Receipts", "es": "Recibos", "pt": "Recibos"}, "settings_hub_receipts_num_auto": {"en": "numbered automatically", "es": "numeración automática", "pt": "numeração automática"}, "settings_hub_receipts_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "settings_hub_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "tax_active_badge": {"en": "ACTIVE", "es": "ACTIVO", "pt": "ATIVO"}, "tax_add_section": {"en": "New tax", "es": "Nuevo impuesto", "pt": "Novo imposto"}, "tax_edit_note": {"en": "New sales use the new name and percentage. Past sales keep what they charged.", "es": "Las ventas nuevas usan el nombre y el porcentaje nuevos. Las ventas pasadas conservan lo que cobraron.", "pt": "As vendas novas usam o novo nome e a nova porcentagem. As vendas passadas mantêm o que cobraram."}, "tax_edit_section": {"en": "Edit tax", "es": "Editar impuesto", "pt": "Editar imposto"}, "tax_empty_state": {"en": "No taxes yet. Tap + to add one.", "es": "Sin impuestos aún. Toca + para agregar uno.", "pt": "Sem impostos ainda. Toque em + para adicionar."}, "tax_field_name": {"en": "Tax Name", "es": "Nombre del Impuesto", "pt": "Nome do Imposto"}, "tax_field_pct": {"en": "Percentage (%)", "es": "Porcentaje (%)", "pt": "Porcentagem (%)"}, "tax_in_prices_no": {"en": "No, add it on top", "es": "No, se suma al precio", "pt": "Não, soma-se ao preço"}, "tax_in_prices_question": {"en": "Is this tax already in your prices?", "es": "¿Este impuesto ya está en tus precios?", "pt": "Esse imposto já está nos seus preços?"}, "tax_in_prices_yes": {"en": "Yes, it's included", "es": "Sí, ya está incluido", "pt": "Sim, já está incluído"}, "tax_line_added": {"en": "%1$s · added on top", "es": "%1$s · se suma al precio", "pt": "%1$s · somado ao preço"}, "tax_line_included": {"en": "%1$s · included in prices", "es": "%1$s · incluido en los precios", "pt": "%1$s · incluído nos preços"}, "tax_preset_one_or_other": {"en": "In Colombia restaurants charge impoconsumo 8% instead of IVA", "es": "En Colombia los restaurantes cobran impoconsumo 8% en vez de IVA", "pt": "Os restaurantes na Colômbia cobram impoconsumo de 8% em vez de IVA"}, "tax_saved_on": {"en": "Tax on. It applies to items marked to charge tax.", "es": "Impuesto activo. Se aplica a los artículos marcados con impuesto.", "pt": "Imposto ativo. Aplica-se aos itens marcados para cobrar imposto."}, "tax_title": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "tx_sale_number_short": {"en": "#%d", "es": "#%d", "pt": "#%d"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "workspace_menu_title": {"en": "Menu", "es": "Menú", "pt": "Cardápio"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "workspace_registers_and_printers": {"en": "Connections", "es": "Conexiones", "pt": "Conexões"}};
+const PLU={"home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_equipo_count_phones": {"en": {"one": "%1$d employee · %2$s", "other": "%1$d employees · %2$s"}, "es": {"one": "%1$d empleado · %2$s", "other": "%1$d empleados · %2$s"}, "pt": {"one": "%1$d funcionário · %2$s", "other": "%1$d funcionários · %2$s"}}, "home_equipo_on_phones": {"en": {"one": "%1$d on a phone", "other": "%1$d on phones"}, "es": {"one": "%1$d en celular", "other": "%1$d en celular"}, "pt": {"one": "%1$d no celular", "other": "%1$d no celular"}}, "reports_tx_count": {"en": {"one": "%d sale", "other": "%d sales"}, "es": {"one": "%d venta", "other": "%d ventas"}, "pt": {"one": "%d venda", "other": "%d vendas"}}};
+const ASSET={"ic": {}, "pot": {}};
+
+/* ===== RS11-RS17 common (inlined into each page by the builder; not a kit file) =====
+   Owner-phone Material pieces of the restaurant back office, read from the app code at app-head:
+   panel        ui/screens/home/HomeScreen.kt:1392-1830 (header, WorkspaceRow :1927, rows, divider, Settings)
+   bottom bar   ui/app/PlatataApp.kt:520-723 (Caja ShoppingCart, Ventas Receipt, flag "Mi negocio", lit = panel open)
+   top bar      ui/components/SumaTopBar.kt (64 dp, back arrow, titleLarge 22sp Bold)
+   list header  ui/components/ListScreenHeader.kt (arrow, title 22sp bold, "+ Nuevo", search 56 dp r12)
+   support      ui/screens/reports/SupportStrip.kt (LEVEL_2 pages: Soporte | Mis reportes, paper colours, accent #C44B28)
+   colours      ui/theme/Color.kt + Theme.kt LightColorScheme (#1C1C1E, #6E6E73, #F2F2F7, #E5E5EA, #C7C7CC, #FF3B30) */
+const R = RKIT.ctx();
+const esc = RKIT.esc;
+const P = path => `<svg class="mi" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
+const I = {
+  back:P("M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"),
+  chev:P("M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"),
+  down:P("M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"),
+  person:P("M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"),
+  group:P("M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"),
+  rlong:P("M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"),
+  gear:P("M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"),
+  cart:P("M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"),
+  receipt:P("M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"),
+  resto:P("M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"),
+  search:P("M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"),
+  more:P("M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"),
+  edit:P("M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"),
+  trash:P("M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"),
+  copy:P("M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"),
+  add:P("M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"),
+  tag:P("M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"),
+  pct:P("M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.0025 18.5832 18.59 4l1.41 1.41L5.4125 19.9932zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"),
+  card:P("M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"),
+  store:P("M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"),
+  devices:P("M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"),
+  check:P("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"),
+  phone:P("M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"),
+  badge:P("M20 7h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM9 12c.83 0 1.5.67 1.5 1.5S9.83 15 9 15s-1.5-.67-1.5-1.5S8.17 12 9 12zm3 6H6v-.75c0-1 2-1.5 3-1.5s3 .5 3 1.5V18zm1-9h-2V4h2v5zm5 7.5h-4V15h4v1.5zm0-3h-4V12h4v1.5z"),
+  block:P("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"),
+  support:P("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z"),
+  close:P("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"),
+  lock:P("M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"),
+  wa:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>'
+};
+const pick = R.pick, L = R.lang;
+/* app strings injected by the builder from values / values-es / values-pt-rBR (STR, PLU) */
+const S = k => { const o = STR[k]; if(!o) throw new Error("missing string "+k); return o[L]; };
+const fmtA = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : String(v); }); };
+const F = (k, ...a) => fmtA(S(k), a);
+/* Android plural category: pt (CLDR) "one" for 0 and 1; es/en "one" for 1 */
+const PL = (k, n, ...a) => { const p = PLU[k][L]; const cat = L==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other"); return fmtA(p[cat]||p.other, a.length ? a : [n]); };
+const money = v => R.money(v);
+const dec = R.C.dec;
+const r2 = v => Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec);
+/* utils/CurrencyUtils.kt formatTaxRate: decimal mark of the CURRENCY's locale (COP CLP ARS BRL comma; USD MXN PEN CAD dot) */
+const COMMA_CUR = ["COP","CLP","ARS","BRL"].includes(R.C.cur);
+const pctTxt = p => { const s = String(+(+p).toFixed(2)); return (COMMA_CUR ? s.replace(".", ",") : s) + "%"; };
+const BIZ = R.C.place;
+
+/* ---- the restaurant's people, clients and taxes per country (demo data, the owner's own words) ---- */
+const DIAL = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54",PA:"507",BR:"55",US:"1",CA:"1"}[R.country];
+const OWNER_NAME = {CO:"Marta Gómez",MX:"Lupita Hernández",PE:"Rosa Huamán",CL:"Lucho Fuentes",EC:"Rosa Cedeño",AR:"Rosa Benítez",PA:"Rosa Araúz",BR:"Cida Oliveira",US:"Maria Lopez",CA:"Marie Gagnon"}[R.country];
+const TAX = {CO:{name:"Impoconsumo",p:8,add:false},MX:{name:"IVA",p:16,add:false},PE:{name:"IGV",p:18,add:false},CL:{name:"IVA",p:19,add:false},
+  EC:{name:"IVA",p:15,add:false},AR:{name:"IVA",p:21,add:false},PA:{name:"ITBMS",p:7,add:false},BR:null,
+  US:{name:"Sales tax",p:8.25,add:true},CA:{name:"HST",p:13,add:true}}[R.country];
+const CLIENTS = {
+ CO:["Andrés Ospina","Camila Restrepo","Diana Zapata","Felipe Arango","Juan Restrepo","Natalia Mejía","Sebastián Gil","Valentina Rojas"],
+ MX:["Alejandro Ruiz","Ana Torres","Diego Flores","Fernanda López","Juan Martínez","María Sánchez","Ricardo Gómez","Sofía Morales"],
+ PE:["Alonso Vargas","Carmen Quispe","Daniel Flores","Gabriela Ramos","Juan Torres","Lucía Mendoza","Miguel Castro","Valeria Díaz"],
+ CL:["Benjamín Rojas","Camila Silva","Diego Contreras","Francisca Reyes","Juan González","Martina Díaz","Matías Vera","Sofía Muñoz"],
+ EC:["Andrés Zambrano","Daniela Vera","Fernando Loor","Gabriela Andrade","Juan Cedeño","María Mora","Pablo Intriago","Sofía Bravo"],
+ AR:["Agustín Romero","Camila Sosa","Facundo Pérez","Florencia Gómez","Juan López","Lucía Martínez","Martín Ruiz","Valentina Díaz"],
+ PA:["Ana Batista","Carlos Herrera","Daniela Vega","Fernando Ríos","Juan Rodríguez","María Sánchez","Ricardo Pinzón","Sofía Castillo"],
+ BR:["Ana Souza","Bruno Costa","Camila Rocha","Diego Alves","João Silva","Juliana Lima","Lucas Pereira","Mariana Santos"],
+ US:["Amanda Brooks","Brian Carter","Chris Johnson","Emily Davis","John Smith","Megan Wilson","Ryan Taylor","Sarah Miller"],
+ CA:["Amélie Roy","Chloé Bouchard","David Wilson","Emma Lavoie","John Martin","Lucas Côté","Noah Gagnon","Olivia Brown"]}[R.country];
+/* national numbers: CO/MX/US/CA 10 digits, AR 9+10, BR 11, PE 9, CL 9, EC 9, PA 8 */
+const NAT = {CO:"3001234567",MX:"5512345678",PE:"987654321",CL:"987654321",EC:"991234567",AR:"91123456789",PA:"61234567",BR:"31912345678",US:"7135550142",CA:"4165550142"};
+const natNum = i => { const n = NAT[R.country]; return n.slice(0, n.length-2) + String(10+i*7).slice(-2); };
+/* utils/WhatsappUtils.kt formatWhatsappForReading */
+function waRead(canonical){
+  const dial = DIAL, national = canonical.slice(dial.length);
+  let body;
+  if(dial==="1" && national.length===10) body = "("+national.slice(0,3)+") "+national.slice(3,6)+"-"+national.slice(6);
+  else { const sizes = {10:[3,3,4],9:[3,3,3],8:[4,4]}[national.length]; const g=[]; let rest=national;
+    if(sizes){ sizes.forEach(n=>{g.push(rest.slice(0,n)); rest=rest.slice(n);}); } else { while(rest.length>4){g.push(rest.slice(0,3)); rest=rest.slice(3);} if(rest) g.push(rest); }
+    body = g.join(" "); }
+  return "+"+dial+" "+body;
+}
+/* dates in the app language (java DateFormat MEDIUM ~ Intl medium) */
+const LOCALE = {es:"es",pt:"pt-BR",en:"en-US"}[L];   // the app sets the language tag "es" / "pt-BR" / "en" (AppLanguage.kt), so Locale.getDefault() has no country
+const fmtDate = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"medium"}).format(d).replace(/\.$/,"");
+const fmtDateTime = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"medium",timeStyle:"short"}).format(d);
+const TODAY = new Date(2026, 9, 20, 15, 10);
+
+/* ---------- pieces ---------- */
+const topbar = (title, o) => { o=o||{};
+  return `<div class="rs-top">${o.noBack?"":`<span class="ib" data-t="${o.backTag||"back"}">${I.back}</span>`}<b>${esc(title)}</b>${o.action||""}</div>`; };
+const newAction = (tag) => `<span class="rs-new" data-t="${tag||"new"}">${esc(pick({es:"+ Nuevo",pt:"+ Novo",en:"+ New"}))}</span>`;
+const listHeader = (title, ph, addTag) => `<div class="rs-lh"><div class="r1"><span class="ib" data-t="back">${I.back}</span><b>${esc(title)}</b>${newAction(addTag)}</div>
+  <div class="srch">${I.search}<span>${esc(ph)}</span></div></div>`;
+/* bottom NavigationBar of the owner's phone: Caja · Ventas · flag "Mi negocio" (lit while the panel is open) */
+const ownerNav = (lit) => `<div class="mnav">
+  <div class="${lit==="caja"?"on":""}"><span class="pill">${I.cart}</span>${esc(pick({es:"Caja",pt:"Caixa",en:"Register"}))}</div>
+  <div class="${lit==="ventas"?"on":""}"><span class="pill">${I.receipt}</span>${esc(pick({es:"Ventas",pt:"Vendas",en:"Sales"}))}</div>
+  <div class="${lit==="flag"?"on":""}" data-t="flag"><span class="pill"><span class="flagc">${R.flag()}</span></span>${esc(pick({es:"Mi negocio",pt:"Meu negócio",en:"My business"}))}</div></div>`;
+/* SupportStripDock under every LEVEL_2 page (ReportLevels.kt) */
+const strip = () => `<div class="rs-strip"><div class="h"><span class="bd">${I.support}</span><div><b>${esc(pick({es:"Soporte",pt:"Suporte",en:"Support"}))}</b><small>${esc(pick({es:"Reporta un problema aquí",pt:"Relatar um problema aqui",en:"Report a problem here"}))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(pick({es:"Mis reportes",pt:"Meus relatos",en:"My reports"}))}</b><small>${esc(pick({es:"Aún no hay reportes",pt:"Ainda não há relatos",en:"No reports yet"}))}</small></div>${I.chev}</div></div>`;
+const sw = (on, tag) => `<span class="rs-sw${on?" on":""}"${tag?` data-t="${tag}"`:""}><i></i></span>`;
+const snack = (txt, action) => `<div class="msnack rs-snack">${esc(txt)}${action?`<b>${esc(action)}</b>`:""}</div>`;
+const toast = txt => `<div class="rs-toast">${esc(txt)}</div>`;
+/* outlined text field (SumaTextField / OutlinedTextField) */
+const field = (label, value, o) => { o=o||{};
+  const has = value!==undefined && value!==null && value!=="";
+  return `<div class="rs-fld${o.focus?" foc":""}${has||o.focus?" up":""}"${o.tag?` data-t="${o.tag}"`:""}>${o.lead?`<span class="lead">${o.lead}</span>`:""}<label>${esc(label)}</label><span class="v">${has?esc(value):(o.focus&&o.ph?`<em>${esc(o.ph)}</em>`:"")}${o.focus?`<i class="caret"></i>`:""}</span>${o.trail||""}</div>`; };
+
+/* ---------- the business panel (HomeScreen.kt workspace widget) ---------- */
+// KEYS: workspace_register_open,workspace_register_sales,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,workspace_menu_title,more_my_products_count,more_customers_title,invoices_title,invoices_row_this_month,more_team_title,workspace_full_reports,scan_row_reports_today,scan_row_reports_today_net,settings_title,panel_settings_row_sub
+// PLURALS: home_clientes_count,home_equipo_count_phones,home_equipo_on_phones
+/* HomeScreen panel rows, words from PanelRowSpecs.kt keys (restaurant: no tab money -> home_clientes_count;
+   outside US/CA the Reports row says Net sales today: NetSalesWords.panelTodayRes) */
+const PS = {
+  regOpen: S("workspace_register_open"), regSales: S("workspace_register_sales"),
+  sellOnline: S("sell_online_title"), off: S("sell_online_row_off"), offPill: S("sell_online_pill_off"),
+  everyDay: S("panel_heading_every_day"), menu: S("workspace_menu_title"),
+  items: n => F("more_my_products_count", n),
+  clients: S("more_customers_title"), clientsN: n => PL("home_clientes_count", n),
+  invoices: S("invoices_title"), invMonth: n => F("invoices_row_this_month", n),
+  team: S("more_team_title"),
+  teamSub: (n,p) => PL("home_equipo_count_phones", n, n, PL("home_equipo_on_phones", p)),
+  reports: S("workspace_full_reports"), today: v => F((R.country==="US"||R.country==="CA")?"scan_row_reports_today":"scan_row_reports_today_net", v),
+  settings: S("settings_title"), settingsSub: S("panel_settings_row_sub")
+};
+function panelRow(tag, icon, title, sub, o){ o=o||{};
+  return `<div class="rs-wr" data-t="${tag}"><span class="ic">${icon}</span><div class="tx"><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>${o.trail||`<span class="ch">${I.chev}</span>`}</div>`;
+}
+/* p = {regTotal, today, menuCount, clients, invoices, team, phones, payDot} */
+function panel(p){
+  return `<div class="rs-panel"><div class="ph"><b>${esc(BIZ)}</b>${I.down}</div><div class="pl">
+    <div class="rs-wr reg" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(PS.regOpen)}</b><small style="color:rgba(46,125,50,.7)">${esc(PS.regSales)}</small></div><b class="amt">${money(p.regTotal)}</b></div>
+    ${panelRow("row-online", I.cart, PS.sellOnline, PS.off, {trail:`<span class="pill0">${esc(PS.offPill)}</span>`})}
+    <div class="eh">${esc(PS.everyDay)}</div>
+    ${panelRow("row-menu", I.resto, PS.menu, PS.items(p.menuCount))}
+    ${panelRow("row-clients", I.person, PS.clients, PS.clientsN(p.clients))}
+    ${panelRow("row-invoices", I.rlong, PS.invoices, PS.invMonth(p.invoices))}
+    ${panelRow("row-team", `${I.group}${p.payDot?'<i class="pdot"></i>':""}`, PS.team, PS.teamSub(p.team, p.phones))}
+    ${panelRow("row-reports", I.rlong, PS.reports, PS.today(money(p.today)))}
+    <hr>
+    ${panelRow("row-settings", I.gear, PS.settings, PS.settingsSub)}
+  </div></div>` + ownerNav("flag");
+}
+/* ---------- the Settings page (SettingsHubScreen.kt, SettingsHubRules: restaurant shows the dining row) ---------- */
+// KEYS: settings_hub_group_getting_paid,settings_hub_group_your_business,settings_hub_payment_methods,settings_hub_taxes,settings_hub_discounts,settings_hub_receipts,settings_hub_receipts_sub,receipt_layout_detailed,settings_hub_receipts_num_auto,settings_hub_business_info,settings_dining_options_title,settings_dining_row_sub,workspace_registers_and_printers
+/* SettingsHubScreen.kt rowTitle/SettingsHubItem at 6736ddfb; restaurant: no "Where you work", dining row on (TABLES-1) */
+function settingsHub(){
+  const g = (t) => `<div class="rs-hg">${esc(t)}</div>`;
+  const row = (tag, icon, t, s) => `<div class="rs-hr" data-t="${tag}"><span class="ic">${icon}</span><div class="tx"><b>${esc(t)}</b>${s?`<small>${esc(s)}</small>`:""}</div>${I.chev}</div>`;
+  return topbar(PS.settings) + `<div class="rs-scroll"><div class="rs-hub">
+    ${g(S("settings_hub_group_getting_paid"))}
+    ${row("hub-pay", I.card, S("settings_hub_payment_methods"))}
+    ${row("hub-taxes", I.pct, S("settings_hub_taxes"))}
+    ${row("hub-discounts", I.tag, S("settings_hub_discounts"))}
+    ${row("hub-receipts", I.receipt, S("settings_hub_receipts"), F("settings_hub_receipts_sub", S("receipt_layout_detailed"), S("settings_hub_receipts_num_auto")))}
+    ${g(S("settings_hub_group_your_business"))}
+    ${row("hub-info", I.store, S("settings_hub_business_info"))}
+    ${row("hub-dining", I.resto, S("settings_dining_options_title"), S("settings_dining_row_sub"))}
+    ${row("hub-devices", I.devices, S("workspace_registers_and_printers"))}
+  </div></div>` + strip();
+}
+
+const RS_CSS = `
+.mat .rs-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff;gap:calc(var(--u)*4)}
+.mat .rs-top .ib,.mat .rs-lh .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .rs-top>b{flex:1;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:calc(var(--u)*4)}
+.mat .rs-new{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
+.mat .rs-lh{padding:calc(var(--u)*8);flex:0 0 auto}
+.mat .rs-lh .r1{display:flex;align-items:center;height:calc(var(--u)*56)}
+.mat .rs-lh .r1 b{flex:1;font-size:calc(var(--u)*22);font-weight:700;padding-left:calc(var(--u)*4)}
+.mat .rs-lh .srch{margin:calc(var(--u)*4) calc(var(--u)*8) 0;height:calc(var(--u)*56);border:1px solid var(--m-outline);border-radius:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);color:var(--m-onv);font-size:calc(var(--u)*16)}
+.mat .rs-scroll{flex:1;min-height:0;overflow:hidden;position:relative}
+.mat .rs-scroll>.in{transition:transform .5s ease}
+.mat .rs-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .rs-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .rs-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .rs-strip .h>div{flex:1;min-width:0}
+.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .rs-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .rs-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
+.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .rs-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.mat .rs-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF}
+.mat .rs-panel .ph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-panel .ph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.mat .rs-panel .pl{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .rs-panel hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0;flex:0 0 auto}
+.mat .rs-panel .eh{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);letter-spacing:.5px}
+.mat .rs-wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);color:var(--m-on);flex:0 0 auto}
+.mat .rs-wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);position:relative;flex:0 0 auto}
+.mat .rs-wr .ic .pdot{position:absolute;right:calc(var(--u)*-2);top:calc(var(--u)*-2);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#FF6D00}
+.mat .rs-wr .tx{flex:1;min-width:0}
+.mat .rs-wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(var(--u)*16)}
+.mat .rs-wr .ch svg{fill:var(--m-onv)}
+.mat .rs-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
+.mat .rs-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .rs-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.mat .rs-hub{padding:0 calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .rs-hg{font-size:calc(var(--u)*12);font-weight:500;color:var(--m-onv);padding:calc(var(--u)*16) calc(var(--u)*8) 0;letter-spacing:.5px}
+.mat .rs-hr{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .rs-hr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .rs-hr .tx{flex:1;min-width:0}
+.mat .rs-hr .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700;line-height:calc(var(--u)*24)}
+.mat .rs-hr .tx small{display:block;font-size:calc(var(--u)*12);color:var(--m-onv);line-height:calc(var(--u)*16)}
+.mat .rs-hr>svg{fill:var(--m-onv)}
+.mat .rs-sw{display:inline-block;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #79747E;background:#E5E5EA;position:relative;flex:0 0 auto;box-sizing:border-box;transition:background .2s}
+.mat .rs-sw i{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E;transition:all .2s}
+.mat .rs-sw.on{background:var(--m-on);border-color:var(--m-on)}
+.mat .rs-sw.on i{left:calc(var(--u)*22);top:calc(var(--u)*2);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.mat .rs-snack{bottom:calc(var(--u)*12);gap:calc(var(--u)*12);justify-content:space-between;line-height:1.35;padding:calc(var(--u)*12) calc(var(--u)*16)}
+.mat .rs-snack b{color:#D0BCFF;font-weight:500;flex:0 0 auto}
+.mat .rs-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*90);background:#323232;color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:20;white-space:nowrap}
+.mat .rs-fld{position:relative;min-height:calc(var(--u)*56);border:1px solid #79747E;border-radius:calc(var(--u)*4);display:flex;align-items:center;padding:0 calc(var(--u)*16);gap:calc(var(--u)*12);font-size:calc(var(--u)*16);color:var(--m-on);flex:0 0 auto}
+.mat .rs-fld.foc{border:calc(var(--u)*2) solid var(--m-on)}
+.mat .rs-fld label{position:absolute;left:calc(var(--u)*16);top:50%;transform:translateY(-50%);color:var(--m-onv);font-size:calc(var(--u)*16);background:#fff;padding:0 calc(var(--u)*4);margin-left:calc(var(--u)*-4);transition:all .15s;white-space:nowrap}
+.mat .rs-fld .lead{color:var(--m-onv);display:flex}
+.mat .rs-fld .lead+label{left:calc(var(--u)*52)}
+.mat .rs-fld.up label{top:0;font-size:calc(var(--u)*12)}
+.mat .rs-fld.foc label{color:var(--m-on)}
+.mat .rs-fld .v{flex:1;min-width:0;white-space:nowrap;overflow:hidden}
+.mat .rs-fld .v em{font-style:normal;color:var(--m-onv)}
+.mat .caret{display:inline-block;width:2px;height:1.1em;background:var(--m-on);vertical-align:-.15em;margin-left:1px;animation:rsblink 1s steps(1) infinite}
+@keyframes rsblink{50%{opacity:0}}
+.mat .rs-btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:var(--m-on);color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600;flex:0 0 auto;padding:0 calc(var(--u)*16);text-align:center}
+.mat .rs-btn.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .rs-btn.off{background:#E5E5EA;color:#AEAEB2}
+.mat .rs-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:15;display:grid;place-items:center}
+.mat .rs-dlg{width:calc(var(--u)*312);background:#fff;border-radius:calc(var(--u)*28);padding:calc(var(--u)*24)}
+.mat .rs-dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:calc(var(--u)*32)}
+.mat .rs-dlg p{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .rs-dlg .acts{display:flex;justify-content:flex-end;margin-top:calc(var(--u)*24)}
+.mat .rs-dlg .acts span{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .rs-hl{animation:rshl 1.6s ease}
+@keyframes rshl{0%{background:#CBDFF8}100%{background:transparent}}
+.rs-time{position:absolute;inset:0;background:#F4EBDD;display:grid;place-items:center;z-index:16;text-align:center;font-family:Roboto,system-ui,sans-serif;color:#3A2A1F}
+.rs-time b{display:block;font:600 calc(var(--u)*30) Roboto,system-ui,sans-serif}
+.rs-time small{display:block;margin-top:calc(var(--u)*10);font:400 calc(var(--u)*17)/1.35 Roboto,system-ui,sans-serif;color:#6B5848;max-width:calc(var(--u)*320)}
+`;
+const rsStyle_ = document.createElement("style"); rsStyle_.textContent = RS_CSS; document.head.appendChild(rsStyle_);
+
+/* RS17 "Impuestos": the owner adds the restaurant's tax and opens it again to change it.
+   Screens follow the app at app-head (paths under app/src/main/java/com/example/):
+   way in        panel Settings row -> SettingsHubScreen settings_hub_taxes
+   the list      ui/screens/settings/TaxesManagementScreen.kt:116-125, 312-421 (SumaTopBar tax_title + NewTextAction
+                 common_new_short; empty: tax_empty_state centred onSurfaceVariant; a rate = SumaCard tapping opens the edit
+                 form, primaryContainer (#F2F2F7) at 50% when on; name bodyLarge bold + black badge tax_active_badge
+                 labelSmall r6; tax_line_included / tax_line_added with formatTaxRate; Switch, Edit, red Delete)
+   new tax       :134-307 (tax_add_section; sync/TaxPresets chips "IVA 19%" ... (AssistChip; CO: IVA 19, Impoconsumo 8;
+                 PE IGV 18; PA ITBMS 7; MX IVA 16; CL IVA 19; AR IVA 21; EC IVA 15; BR, US, CA none) that only FILL the
+                 fields; in Colombia a picked IVA/Impoconsumo shows tax_preset_one_or_other; tax_field_name, tax_field_pct;
+                 tax_in_prices_question + two radios, default sync/TaxPriceDefault (included everywhere except US/CA);
+                 Save at the bottom -> snackbar tax_saved_on; the tax is saved ON, TaxDiningActions.addTaxRate)
+   edit          openEdit: tax_edit_section, the two fields filled, tax_edit_note, no radios (the kind is carried)
+   Demo data: the preset of the country where there is one; Brazil, the US and Canada type their own (Brazil has no
+   preset on purpose; US/CA a local sales tax added on top). */
+// KEYS: settings_hub_taxes,tax_title,tax_empty_state,tax_add_section,tax_edit_section,tax_field_name,tax_field_pct,tax_in_prices_question,tax_in_prices_yes,tax_in_prices_no,tax_preset_one_or_other,tax_saved_on,tax_line_included,tax_line_added,tax_active_badge,tax_edit_note,common_save
+const C = R.C;
+const PRESETS = ({CO:[["IVA",19],["Impoconsumo",8]],PE:[["IGV",18]],PA:[["ITBMS",7]],MX:[["IVA",16]],CL:[["IVA",19]],AR:[["IVA",21]],EC:[["IVA",15]]})[R.country] || [];
+const PICK = R.country === "CO" ? PRESETS[1] : PRESETS[0];                 // the restaurant's tax: CO impoconsumo
+const TYPED = ({BR:["Imposto","5"],US:["Sales tax","8.25"],CA:["HST","13"]})[R.country];
+const USCA = R.country === "US" || R.country === "CA";
+const DEC = ({COP:",",MXN:".",PEN:".",CLP:",",USD:".",ARS:",",BRL:",",CAD:"."})[C.cur] || ".";
+const rate = v => String(v).replace(".", DEC) + "%";                     // formatTaxRate (decimal mark of the currency)
+const TNAME = PICK ? PICK[0] : TYPED[0], TPCT = PICK ? String(PICK[1]) : TYPED[1];
+const INCLUDED = !USCA;                                                   // TaxPriceDefault
+
+function list(st){
+  const body = !st.saved ? `<p class="tx-empty">${esc(S("tax_empty_state"))}</p>` :
+    `<div class="tx-card${st.hl?" rs-hl":""}" data-t="rate"><div class="l"><div class="n"><b>${esc(TNAME)}</b><span class="bd">${esc(S("tax_active_badge"))}</span></div>
+      <small>${esc(F(INCLUDED?"tax_line_included":"tax_line_added", rate(TPCT)))}</small></div>
+      <span class="sw2">${sw(true)}</span><span class="ic" style="color:var(--m-onv)">${I.edit}</span><span class="ic" style="color:var(--m-err)">${I.trash}</span></div>`;
+  return topbar(S("tax_title"), {action:newAction("new")}) + `<div class="rs-scroll"><div class="in tx-list">${body}</div></div>${st.snack?snack(S("tax_saved_on")):""}` + strip();
+}
+const radio = (on, t) => `<div class="tx-rad"><span class="rb${on?" on":""}"><i></i></span><span>${esc(t)}</span></div>`;
+function form(st){
+  const chips = st.edit ? "" : PRESETS.map(p => `<span class="tx-chip"${p===PICK?' data-t="chip"':""}>${esc(p[0]+" "+rate(p[1]))}</span>`).join("");
+  return topbar(S(st.edit?"tax_edit_section":"tax_add_section")) + `<div class="tx-form">
+    ${chips?`<div class="tx-chips">${chips}</div>`:""}
+    ${st.picked && R.country==="CO" ? `<p class="tx-note">${esc(S("tax_preset_one_or_other"))}</p>` : ""}
+    ${field(S("tax_field_name"), st.name, {focus:st.focus==="name", tag:"f-name"})}
+    ${field(S("tax_field_pct"), st.pct, {focus:st.focus==="pct", tag:"f-pct"})}
+    ${st.edit ? `<p class="tx-edit">${esc(S("tax_edit_note"))}</p>` :
+      `<p class="tx-q">${esc(S("tax_in_prices_question"))}</p>${radio(INCLUDED, S("tax_in_prices_yes"))}${radio(!INCLUDED, S("tax_in_prices_no"))}`}
+    <div class="sp"></div>
+    <div class="rs-btn" data-t="save">${esc(S("common_save"))}</div></div>` + strip();
+}
+const fromMoney = v => ({CO:1,BR:0.0011,US:0.00042,CA:0.00048,MX:0.0048,PE:0.00098,CL:0.27,EC:0.00026,AR:0.32,PA:0.00026}[R.country] * v);
+function render(st){
+  if(st.screen==="panel") return panel({regTotal:fromMoney(862980), today:fromMoney(739125), menuCount:C.items.length, clients:CLIENTS.length, invoices:3, team:2, phones:2});
+  if(st.screen==="hub") return settingsHub();
+  if(st.screen==="form") return form(st);
+  return list(st);
+}
+const HINT = (es,pt,en) => pick({es:"Toca "+es, pt:"Toque em "+pt, en:"Tap "+en});
+const H1 = k => HINT(S(k),S(k),S(k));
+const fill = [];
+if (PICK) fill.push({beat:3, hint:HINT(PICK[0]+" "+rate(PICK[1]),PICK[0]+" "+rate(PICK[1]),PICK[0]+" "+rate(PICK[1])), target:'[data-t="chip"]', tap(st){ st.picked=true; st.name=TNAME; st.pct=TPCT; }});
+else fill.push(
+  {beat:3, hint:H1("tax_field_name"), target:'[data-t="f-name"]', tap(st,E){ st.focus="name"; E.type("name", TNAME, null, 90); }},
+  {beat:3, hint:H1("tax_field_pct"), target:'[data-t="f-pct"]', tap(st,E){ st.focus="pct"; E.type("pct", TPCT, null, 160); }});
+RKIT.start(R, {
+  id:"RS17", tallVideo:true, clock:"10:30",
+  endText:pick({es:"Así pones tus impuestos, con Platata.",pt:"Assim você configura seus impostos, com o Platata.",en:"That's how you set up your taxes, with Platata."}),
+  beats:pick({
+    es:["En Mi negocio, toca Configuración","Toca Impuestos","Aún no hay impuestos. Toca + Nuevo","Toca el impuesto de tu país: se llena solo","¿Ya está en tus precios? Toca Guardar","Listo: activo en tus ventas","Toca el impuesto para cambiarlo","Las ventas pasadas no cambian","Así pones tus impuestos"],
+    pt:["Em Meu negócio, toque em Configurações","Toque em Impostos","Ainda não há impostos. Toque em + Novo","Escreva o nome e a porcentagem","Já está nos seus preços? Toque em Salvar","Pronto: ativo nas suas vendas","Toque no imposto para mudar","As vendas passadas não mudam","Assim você configura seus impostos"],
+    en:["In My business, tap Settings","Tap Taxes","No taxes yet. Tap + New","Type the name and the rate","Already in your prices? Tap Save","Done: it's on for your sales","Tap the tax to change it","Past sales don't change","That's how you set up your taxes"]}),
+  state:{screen:"panel", name:"", pct:"", focus:"", picked:false, saved:false, snack:false, hl:false, edit:false},
+  render,
+  device: () => "phone",
+  who: () => pick({es:"Tu teléfono",pt:"Seu celular",en:"Your phone"}),
+  steps:[
+    {beat:0, hint:HINT(PS.settings,PS.settings,PS.settings), target:'[data-t="row-settings"]', tap(st){ st.screen="hub"; }},
+    {beat:1, hint:H1("settings_hub_taxes"), target:'[data-t="hub-taxes"]', tap(st){ st.screen="list"; }},
+    {beat:2, hint:HINT("+ Nuevo","+ Novo","+ New"), target:'[data-t="new"]', tap(st){ st.screen="form"; }},
+    ...fill,
+    {beat:4, hint:H1("common_save"), target:'[data-t="save"]', tap(st,E){ st.screen="list"; st.saved=true; st.focus=""; st.snack=true; st.hl=true; E.after(3200,()=>{ st.snack=false; }); }},
+    {beat:6, hint:HINT(TNAME,TNAME,TNAME), target:'[data-t="rate"]', tap(st){ st.screen="form"; st.edit=true; st.hl=false; st.snack=false; st.name=TNAME; st.pct=TPCT; }}
+  ]
+});
+</script>
+<style>
+.mat .tx-list{padding:calc(var(--u)*12) calc(var(--u)*16) calc(var(--u)*84)}
+.mat .tx-empty{margin:0;padding:calc(var(--u)*32) 0;text-align:center;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .tx-card{margin:calc(var(--u)*4) 0;border-radius:calc(var(--u)*12);background:rgba(242,242,247,.5);padding:calc(var(--u)*16);display:flex;align-items:center}
+.mat .tx-card .l{flex:1;min-width:0}
+.mat .tx-card .n{display:flex;align-items:center}
+.mat .tx-card .n b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700}
+.mat .tx-card .bd{margin-left:calc(var(--u)*8);background:var(--m-on);color:#fff;border-radius:calc(var(--u)*6);font-size:calc(var(--u)*11);line-height:calc(var(--u)*16);font-weight:500;padding:calc(var(--u)*4)}
+.mat .tx-card small{display:block;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .tx-card .sw2{margin-right:calc(var(--u)*12)}
+.mat .tx-card .ic{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;flex:0 0 auto}
+.mat .tx-card .ic>svg{width:calc(var(--u)*24)!important;height:calc(var(--u)*24)!important;fill:currentColor!important}
+.mat .tx-form{flex:1;display:flex;flex-direction:column;gap:calc(var(--u)*12);padding:calc(var(--u)*16);min-height:0}
+.mat .tx-chips{display:flex;gap:calc(var(--u)*8);overflow:hidden}
+.mat .tx-chip{flex:0 0 auto;height:calc(var(--u)*32);display:flex;align-items:center;padding:0 calc(var(--u)*16);border:1px solid var(--m-outline);border-radius:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500}
+.mat .tx-note,.mat .tx-edit{margin:0;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .tx-edit{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20)}
+.mat .tx-q{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:600}
+.mat .tx-rad{display:flex;align-items:center;min-height:calc(var(--u)*48);font-size:calc(var(--u)*16)}
+.mat .tx-rad .rb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;flex:0 0 auto}
+.mat .tx-rad .rb i{width:calc(var(--u)*20);height:calc(var(--u)*20);border-radius:50%;border:calc(var(--u)*2) solid var(--m-onv);box-sizing:border-box;position:relative}
+.mat .tx-rad .rb.on i{border-color:var(--m-on)}
+.mat .tx-rad .rb.on i::after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--u)*10);height:calc(var(--u)*10);margin:calc(var(--u)*-5) 0 0 calc(var(--u)*-5);border-radius:50%;background:var(--m-on)}
+.mat .tx-rad>span:last-child{margin-left:calc(var(--u)*8)}
+.mat .tx-form .sp{flex:1}
+</style>
+</body>
+</html>
