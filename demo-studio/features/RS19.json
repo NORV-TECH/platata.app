@@ -1,0 +1,85 @@
+{
+  "id": "RS19",
+  "name": "Otro celular o tableta",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-abrir",
+      "voice": {
+        "es": "Abre tu negocio, entra a Configuración y toca Conexiones.",
+        "pt": "Abra seu negócio, entre em Configurações e toque em Conexões.",
+        "en": "Open your business, go to Settings and tap Connections."
+      }
+    },
+    {
+      "id": "2-incluidas",
+      "voice": {
+        "es": "Tienes dos conexiones incluidas: tu teléfono y tu primera caja. Toca Agregar.",
+        "pt": "Você tem duas conexões incluídas: seu celular e seu primeiro caixa. Toque em Adicionar.",
+        "en": "Your phone and your register are both included."
+      }
+    },
+    {
+      "id": "3-agregar",
+      "voice": {
+        "es": "Agregas una conexión y la confirmas en Google Play. Google Play te muestra el precio antes de confirmar.",
+        "pt": "Você adiciona uma conexão e confirma no Google Play. O Google Play mostra o preço antes de você confirmar.",
+        "en": "In the United States and Canada there are no connection charges."
+      }
+    },
+    {
+      "id": "4-conectar",
+      "voice": {
+        "es": "Ahora tienes una conexión libre. Toca Conectar.",
+        "pt": "Agora há uma conexão livre. Toque em Conectar.",
+        "en": "To add another device, tap Connect."
+      }
+    },
+    {
+      "id": "5-telefono",
+      "voice": {
+        "es": "Elige el teléfono de un empleado.",
+        "pt": "Escolha o celular de um funcionário.",
+        "en": "Pick an employee phone."
+      }
+    },
+    {
+      "id": "6-empleado",
+      "voice": {
+        "es": "Elige quién lo va a usar y toca Conectar.",
+        "pt": "Escolha quem vai usar e toque em Conectar.",
+        "en": "Pick who will use it and tap Connect."
+      }
+    },
+    {
+      "id": "7-codigo",
+      "voice": {
+        "es": "Tu empleado entra con el código del negocio y su PIN. Puedes enviarle la invitación por WhatsApp.",
+        "pt": "Seu funcionário entra com o código do negócio e o PIN dele. Você pode mandar o convite pelo WhatsApp.",
+        "en": "Your employee signs in with the business code and their PIN. You can send the invitation by WhatsApp."
+      }
+    },
+    {
+      "id": "8-fin",
+      "voice": {
+        "es": "Así conectas otro celular o tableta con Platata.",
+        "pt": "Assim você conecta outro celular ou tablet com o Platata.",
+        "en": "That's how you connect another phone or tablet with Platata."
+      }
+    }
+  ]
+}

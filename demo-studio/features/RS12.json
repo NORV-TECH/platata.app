@@ -1,0 +1,69 @@
+{
+  "id": "RS12",
+  "name": "Send the month to the accountant",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-lastmonth",
+      "voice": {
+        "es": "En Reportes, elige Mes pasado.",
+        "pt": "Em Relatórios, escolha Mês passado.",
+        "en": "In Reports, pick Last month."
+      }
+    },
+    {
+      "id": "2-summary",
+      "voice": {
+        "es": "Toca Resumen para el contador.",
+        "pt": "Toque em Resumo para o contador.",
+        "en": "Tap Summary for the accountant."
+      }
+    },
+    {
+      "id": "3-numbers",
+      "voice": {
+        "es": "Ahí están los números del mes: ventas netas, impuestos, lo cobrado en efectivo y con tarjeta, proveedores y empleados. Cada uno se copia con un toque.",
+        "pt": "Aí estão os números do mês: vendas líquidas, impostos, o recebido em dinheiro e no cartão, fornecedores e funcionários. Cada um se copia com um toque.",
+        "en": "Here are the month's numbers: net sales, taxes, cash and card, suppliers and employees. Each one copies with a tap."
+      }
+    },
+    {
+      "id": "4-send",
+      "voice": {
+        "es": "Toca Enviar resumen al contador.",
+        "pt": "Toque em Enviar resumo ao contador.",
+        "en": "Tap Send summary to the accountant."
+      }
+    },
+    {
+      "id": "5-whatsapp",
+      "voice": {
+        "es": "Se abre WhatsApp con todo el resumen. Elige a tu contador y envía.",
+        "pt": "O WhatsApp abre com o resumo inteiro. Escolha seu contador e envie.",
+        "en": "WhatsApp opens with the whole summary. Pick your accountant and send."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Así le mandas las cuentas a tu contador, con Platata.",
+        "pt": "Assim você manda as contas para o seu contador, com o Platata.",
+        "en": "That's how you send the numbers to your accountant, with Platata."
+      }
+    }
+  ]
+}

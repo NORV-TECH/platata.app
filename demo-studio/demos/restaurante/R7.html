@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Pantalla de cocina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* ---- the kitchen screen: ui/screens/kds/KitchenDisplayScreen.kt (always dark, KdsTheme), ui/components/KdsTicketCard.kt,
+       KdsTicketDetailDialog.kt, KdsConnectionBar.kt. Colours = ui/theme/Color.kt Kds* tokens. 1 dp = var(--u) of a 1024 dp tablet. ---- */
+.kds{flex:1;display:flex;flex-direction:column;background:#111111;color:#fff;min-height:0;position:relative;font-family:Roboto,system-ui,sans-serif}
+.kds .top{display:flex;align-items:center;flex:0 0 auto}
+.kds .ticker{flex:1;height:calc(var(--u)*44);background:#111111;display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*8);overflow:hidden;min-width:0}
+.kds .chip{flex:0 0 auto;border-radius:calc(var(--u)*20);background:#2A2A2A;border:1px solid #444444;color:#fff;font-size:calc(var(--u)*14);padding:calc(var(--u)*8) calc(var(--u)*14);white-space:nowrap}
+.kds .chip.sel{background:#FFD700;border-color:#FFD700;color:#000;font-weight:800}
+.kds .hist{margin-left:calc(var(--u)*8);flex:0 0 auto;border-radius:calc(var(--u)*20);background:#2A2A2A;border:1px solid #444444;color:#fff;font-size:calc(var(--u)*14);font-weight:600;padding:calc(var(--u)*8) calc(var(--u)*14);display:grid}
+.kds .hist span{grid-area:1/1;text-align:center}.kds .hist span.ghost{visibility:hidden}
+.kds .dot{margin-left:calc(var(--u)*8);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#4CAF50;flex:0 0 auto}
+.kds .stn{margin-left:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:600;max-width:calc(var(--u)*160);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kds .out{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:rgba(230,225,229,.55)}
+.kds .out svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.kds .grid{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*8);display:grid;grid-template-columns:repeat(5,1fr);gap:calc(var(--u)*8);align-content:start}
+.kds .empty{flex:1;display:grid;place-items:center;font-size:calc(var(--u)*36);font-weight:700;color:rgba(230,225,229,.75)}
+.kds .wrap{padding:calc(var(--u)*4);border-radius:calc(var(--u)*16)}
+.kds .wrap.spot{box-shadow:0 0 0 calc(var(--u)*3) #FFD700}
+.kds .wrap.dim{opacity:.2}
+.kds .kcard{border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.4);padding:calc(var(--u)*12)}
+.kds .kcard.w{background:#FFFFFF;color:#000}.kds .kcard.y{background:#FFEE58;color:#000}.kds .kcard.r{background:#EF5350;color:#fff}.kds .kcard.h{background:#BDBDBD;color:#212121}
+.kds .kcard.fresh{animation:kdsin .9s ease-out}
+@keyframes kdsin{0%{transform:scale(.85);opacity:0}60%{transform:scale(1.04);opacity:1}100%{transform:scale(1)}}
+.kds .hrow{display:flex;gap:calc(var(--u)*6);font-size:calc(var(--u)*14);font-weight:700}
+.kds .hrow b{flex:1;min-width:0}
+.kds .who{font-size:calc(var(--u)*12);opacity:.75}
+.kds .div{height:1px;background:currentColor;opacity:.3;margin:calc(var(--u)*6) 0}
+.kds .ln{font-size:calc(var(--u)*16);font-weight:600;white-space:pre}
+.kds .md{font-size:calc(var(--u)*12);opacity:.75;white-space:pre}
+.kds .gap{height:calc(var(--u)*4)}
+.kds .ban{margin-top:calc(var(--u)*6);background:#FFEB3B;color:#000;font-size:calc(var(--u)*12);font-weight:800;letter-spacing:.5px;text-align:center;padding:calc(var(--u)*5) 0;border-radius:0 0 calc(var(--u)*8) calc(var(--u)*8)}
+.kds .kbar{flex:0 0 auto;background:#1B1B1B;display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*6) calc(var(--u)*8)}
+.kds .kbar .all{flex:1;height:calc(var(--u)*44);border-radius:calc(var(--u)*8);background:#2E7D32;display:grid;place-items:center;font-size:calc(var(--u)*15);font-weight:800;white-space:pre}
+.kds .kbar .cancel{flex:.35;height:calc(var(--u)*44);border-radius:calc(var(--u)*8);background:#616161;display:grid;place-items:center;font-size:calc(var(--u)*13);font-weight:700}
+.kds .undo{flex:0 0 auto;background:#323232;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:500}
+.kds .undo i{font-style:normal;color:#FFD740;font-weight:800;padding:calc(var(--u)*10) calc(var(--u)*12)}
+.kds .scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:5}
+.kds .dlg{width:85%;height:85%;border-radius:calc(var(--u)*12);padding:calc(var(--u)*20);display:flex;flex-direction:column}
+.kds .dlg.w{background:#fff;color:#000}.kds .dlg.y{background:#FFEE58;color:#000}.kds .dlg.r{background:#EF5350;color:#fff}
+.kds .dlg .t{display:flex;align-items:baseline}
+.kds .dlg .t b{flex:1;font-size:calc(var(--u)*26);font-weight:700}
+.kds .dlg .t span{font-size:calc(var(--u)*18);font-weight:500}
+.kds .dlg .st{font-size:calc(var(--u)*18);font-weight:700;margin-top:calc(var(--u)*2)}
+.kds .dlg .div{margin:calc(var(--u)*12) 0}
+.kds .dlg .items{flex:1;min-height:0;overflow:hidden}
+.kds .dlg .it{padding:calc(var(--u)*10) 0;border-bottom:1px solid rgba(0,0,0,.15)}
+.kds .dlg.r .it{border-bottom-color:rgba(255,255,255,.15)}
+.kds .dlg .it b{display:block;font-size:calc(var(--u)*20);font-weight:600;white-space:pre}
+.kds .dlg .it small{display:block;font-size:calc(var(--u)*14);opacity:.75;white-space:pre}
+.kds .dlg .btns{display:flex;gap:calc(var(--u)*12);margin-top:calc(var(--u)*16)}
+.kds .dlg .btns span{flex:1;height:calc(var(--u)*56);border-radius:calc(var(--u)*6);display:grid;place-items:center;color:#fff;font-size:calc(var(--u)*16);font-weight:700}
+.kds .dlg .close{background:#424242}.kds .dlg .ok{background:#2E7D32}
+/* waiter phone pay step: the shared look in material.css (.mpay); the snackbar is .msnack */
+
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* R7 "Pantalla de cocina": an order saved on the waiter's phone shows up on the kitchen screen; the cook marks one dish
+   ready for every table ("Todo listo"), opens a ticket, taps LISTO, and finds it in Historial.
+   Every screen follows the app at sim/usa-canada (abb8fddb). Paths under app/src/main/java/com/example/.
+   waiter pay step   ui/screens/home/CheckoutSheetBody.kt:315-332 (a NEW sale's button is "Guardar", checkout_save_ticket;
+                     "Enviar a cocina" only for a reopened ticket with new lines) + material.css .mpay (R4)
+   the trip          VERIFY-ALL §5: waiter phone -> cloud -> owner phone (on, Platata open, online) -> shop Wi-Fi -> kitchen screen
+   kitchen screen    ui/screens/kds/KitchenDisplayScreen.kt:279-357 top row (ticker | Historial chip | green dot when connected,
+                     KdsConnectionBar.kt:65 | station name, KITCHEN-3 | logout icon); grid Adaptive(180dp) = 5 columns at 1024 dp
+   card              ui/components/KdsTicketCard.kt: colour by minutes (new screens: yellow 5, red 10 - KdsScreenSummary.newEntry,
+                     KDS-UX-1); title TicketTitle "Mesa N", waiter first name under it; lines "1x  Name", "  • add-on"; banner "MESA N"
+   ticker + bump-all KitchenDisplayScreen.kt:581-697 chips "Name × n" (most first); spotlight gold border, others 20%;
+                     "Todo listo · X" marks ONLY that dish's lines (DB-2) -> undo bar kds_bumped_undo
+   detail            ui/components/KdsTicketDetailDialog.kt: 85% x 85%, title "#" + local id (round2 #3 flags it), right "Mesa N"
+   LISTO             KitchenDisplayScreen.kt:549-563 -> undo bar kds_ready_one_undo "Listo: Mesa 7"
+   history           chip flips to "Pedidos activos"; grey cards "Enviado a las h:mm a" (KdsTicketCard.kt:73-78)
+   The station is the "Cocina" screen (all dishes) that R8 starts from; R8 adds the bar. */
+const R = RKIT.ctx(), C = R.C, esc = R.esc;
+const L = R.pick({
+  es:{save:"Guardar", cust:"Agrega un cliente a la venta", total:"Total", items:n=>`Artículos (${n}) ›`, table:n=>`Mesa ${n}`,
+      exact:v=>`Exacto · ${v}`, saved:"Guardado: Mesa 4", caja:"Caja", biz:"Mi negocio",
+      hist:"Historial", active:"Pedidos activos", waiting:"¡Esperando pedidos!", stn:"Cocina",
+      st:(m)=> m>=10?`${m}m – CRÍTICO`: m>=5?`${m}m – URGENTE`:`${m}m – NUEVO`, all:x=>`Todo listo  ·  ${x}`, cancel:"CANCELAR",
+      bumped:(x,n)=>`Enviado ${x} × ${n}`, ready:x=>`Listo: ${x}`, undo:"DESHACER", close:"CERRAR", ok:"LISTO",
+      sentAt:"Enviado a las 12:44 p. m.", rare:"Jugoso", med:"Término medio"},
+  pt:{save:"Salvar", cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, table:n=>`Mesa ${n}`,
+      exact:v=>`Exato · ${v}`, saved:"Salvo: Mesa 4", caja:"Caixa", biz:"Meu negócio",
+      hist:"Histórico", active:"Pedidos ativos", waiting:"Aguardando pedidos!", stn:"Cozinha",
+      st:(m)=> m>=10?`${m}m – CRÍTICO`: m>=5?`${m}m – URGENTE`:`${m}m – NOVO`, all:x=>`Tudo pronto  ·  ${x}`, cancel:"CANCELAR",
+      bumped:(x,n)=>`Enviado ${x} × ${n}`, ready:x=>`Pronto: ${x}`, undo:"DESFAZER", close:"FECHAR", ok:"PRONTO",
+      sentAt:"Enviado às 12:44 PM", rare:"Ao ponto para mal", med:"Ao ponto"},
+  en:{save:"Save", cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, table:n=>`Table ${n}`,
+      exact:v=>`Exact · ${v}`, saved:"Saved: Table 4", caja:"Register", biz:"My business",
+      hist:"History", active:"Active Orders", waiting:"Waiting for orders!", stn:"Kitchen",
+      st:(m)=> m>=10?`${m}m – CRITICAL`: m>=5?`${m}m – URGENT`:`${m}m – NEW`, all:x=>`All done  ·  ${x}`, cancel:"CANCEL",
+      bumped:(x,n)=>`Bumped ${x} × ${n}`, ready:x=>`Marked ready: ${x}`, undo:"UNDO", close:"CLOSE", ok:"MARK READY",
+      sentAt:"Bumped 12:44 PM", rare:"Medium Rare", med:"Medium"}
+});
+/* strings: park_ticket_saved_toast, checkout_save_ticket, checkout_add_customer_cta, checkout_items_link, table_label, cash_exact,
+   mamaship_tab_register, home_tab_my_business, kds_*, modifier_template_temperature_option_* (values / values-es / values-pt-rBR) */
+
+const it = id => R.item(id);
+const steak = it(C.steak), side = it(C.order[1]), drink = it(C.order[2]);
+const other = (ref, not) => C.items.find(x => x.cat === ref.cat && !not.includes(x.id)) || ref;
+const main2 = other(steak, [steak.id]), side2 = other(side, [side.id]), drink2 = other(drink, [drink.id]);
+const w1 = C.people.waiter.split(" ")[0], w2 = C.people.waiter2.split(" ")[0];
+/* tickets on the line, newest first (ORDER BY timestamp DESC). ids are the tablet's own local ids. */
+const T = () => [
+  {id:58, table:4, who:w1, min:0, fresh:true, lines:[{p:steak, mod:L.med},{p:side},{p:drink}]},
+  {id:56, table:2, who:w2, min:6, lines:[{p:steak, mod:L.rare},{p:side2}]},
+  {id:53, table:7, who:w1, min:11, lines:[{p:main2},{p:drink2}]}
+];
+const color = m => m>=10 ? "r" : m>=5 ? "y" : "w";
+
+const I = {
+  logout:'<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  trash:'<svg class="mi" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>'
+};
+
+/* ---- waiter phone: the pay step of Mesa 4 (the same screen R4 ends on) ---- */
+function payStep(st){
+  const tot = st.lines0.reduce((s,l)=>s+l.p.price,0);
+  const dec = C.dec ? (new Intl.NumberFormat(C.loc).format(1.5).replace(/[0-9]/g,"")) : "000";
+  const k = ["1","2","3","4","5","6","7","8","9",dec,"0","⌫"];
+  return `<div class="mpay"><div class="hd"><span>‹</span><span class="tr">${I.trash}</span></div>
+    <div class="cust">${I.person}${esc(L.cust)}</div>
+    <div class="blk"><div class="tot"><small>${L.total}</small><b>${R.money(tot)}</b></div>
+    <div class="links"><span>${esc(L.items(3))}</span><span>${esc(L.table(4))}</span></div>
+    <div class="kp">${k.map(x=>`<span class="${x==="⌫"||x.length>1?"s":""}">${x}</span>`).join("")}</div>
+    <div class="exact">${esc(L.exact(R.money(tot)))}</div>
+    <div class="save" data-t="save">${L.save}</div></div></div>
+    <div class="mnav"><div class="on"><span class="pill">${I.cart}</span>${L.caja}</div><div><span class="flagc">${R.flag()}</span>${L.biz}</div></div>`
+    + (st.snack ? `<div class="msnack" style="bottom:calc(var(--u)*92)">${esc(L.saved)}</div>` : "");
+}
+
+/* ---- kitchen screen ---- */
+function card(t, opts){ opts = opts||{};
+  const cls = opts.history ? "h" : color(t.min);
+  const lines = t.lines.filter(l => !l.done);
+  return `<div class="kcard ${cls}${t.fresh&&opts.fresh?" fresh":""}" data-t="card-${t.table}">
+    <div class="hrow"><b>${esc(L.table(t.table))}</b><span>${esc(opts.history ? L.sentAt : L.st(t.min))}</span></div>
+    <div class="who">${esc(t.who)}</div><div class="div"></div>
+    ${lines.map(l=>`<div class="ln">${esc(`1x  ${l.p.name}`)}</div>${l.mod?`<div class="md">${esc(`  • ${l.mod}`)}</div>`:""}<div class="gap"></div>`).join("")}
+    <div class="ban">${esc(L.table(t.table).toUpperCase())}</div></div>`;
+}
+function ticker(st){
+  const counts = []; st.tickets.forEach(t => t.lines.filter(l=>!l.done).forEach(l => {
+    const c = counts.find(x=>x.n===l.p.name); if(c) c.q++; else counts.push({n:l.p.name, q:1}); }));
+  counts.sort((a,b)=>b.q-a.q);
+  return counts.map((c,i)=>`<span class="chip${st.spot===c.n?" sel":""}" data-t="chip-${i}">${esc(`${c.n} × ${c.q}`)}</span>`).join("");
+}
+function kds(st){
+  let h = `<div class="kds"><div class="top"><div class="ticker">${st.history?"":ticker(st)}</div>
+    <div class="hist" data-t="hist"><span class="ghost">${esc(L.active)}</span><span class="ghost">${esc(L.hist)}</span><span>${esc(st.history?L.active:L.hist)}</span></div>
+    <span class="dot"></span><span class="stn">${esc(L.stn)}</span><span class="out">${I.logout}</span></div>`;
+  if(st.history){
+    h += `<div class="grid">${st.done.map(t=>`<div class="wrap">${card(t,{history:true})}</div>`).join("")}</div>`;
+  } else {
+    const live = st.tickets.filter(t => t.lines.some(l=>!l.done) && !t.ready);
+    if(!live.length) h += `<div class="empty">${esc(L.waiting)}</div>`;
+    else h += `<div class="grid">${live.map(t=>{
+      const has = st.spot && t.lines.some(l=>!l.done && l.p.name===st.spot);
+      return `<div class="wrap${st.spot?(has?" spot":" dim"):""}">${card(t,{fresh:st.fresh})}</div>`; }).join("")}</div>`;
+  }
+  if(st.undo) h += `<div class="undo"><span>${esc(st.undo)}</span><i>${L.undo}</i></div>`;
+  else if(st.spot) h += `<div class="kbar"><span class="all" data-t="bumpall">${esc(L.all(st.spot))}</span><span class="cancel">${L.cancel}</span></div>`;
+  if(st.open){
+    const t = st.tickets.find(x=>x.table===st.open);
+    h += `<div class="scrim"><div class="dlg ${color(t.min)}"><div class="t"><b>#${t.id}</b><span>${esc(L.table(t.table))}</span></div>
+      <div class="st">${esc(L.st(t.min))}</div><div class="div"></div>
+      <div class="items">${t.lines.filter(l=>!l.done).map(l=>`<div class="it"><b>${esc(`1x  ${l.p.name}`)}</b>${l.mod?`<small>${esc(`  • ${l.mod}`)}</small>`:""}</div>`).join("")}</div>
+      <div class="btns"><span class="close">${L.close}</span><span class="ok" data-t="listo">${L.ok}</span></div></div></div>`;
+  }
+  return h + `</div>`;
+}
+
+function render(st){
+  if(st.hop) return RKIT.hop(R, {from:who({screen:"pay"}), to:who({screen:"kds"}), line:L.table(4),
+    note:R.pick({es:"Pasa por tu teléfono: déjalo encendido, con Platata abierta y en el Wi-Fi del local.",
+                 pt:"Passa pelo seu celular: deixe-o ligado, com o Platata aberto e no Wi-Fi do restaurante.",
+                 en:"It goes through your phone: keep it on, with Platata open and on the restaurant's Wi-Fi."})});
+  return st.screen==="pay" ? payStep(st) : kds(st);
+}
+function who(st){ return st.screen==="pay" ? R.pick({es:"Celular del mesero", pt:"Celular do garçom", en:"Waiter's phone"})
+                                         : R.pick({es:"Pantalla de cocina", pt:"Tela da cozinha", en:"Kitchen display"}); }
+
+RKIT.start(R, {
+  id:"R7", tallVideo:true, clock:"12:41",
+  endText:R.pick({es:"Así trabaja tu cocina con Platata.", pt:"Assim trabalha a sua cozinha com o Platata.", en:"That's how your kitchen works with Platata."}),
+  beats:R.pick({
+    es:["El mesero guarda el pedido de la mesa","Llega a la pantalla de cocina como tarjeta","Arriba: cuántos hay de cada plato","Todo listo marca ese plato en todas las mesas","Toca una tarjeta para verla grande","LISTO: el pedido salió","En Historial ves lo que ya salió","Así trabaja tu cocina con Platata"],
+    pt:["O garçom salva o pedido da mesa","Chega à tela da cozinha como um cartão","Em cima: quantos há de cada prato","Tudo pronto marca esse prato em todas as mesas","Toque num cartão para vê-lo grande","PRONTO: o pedido saiu","No Histórico você vê o que já saiu","Assim trabalha a sua cozinha com o Platata"],
+    en:["The waiter saves the table's order","It reaches the kitchen display as a card","On top: how many of each dish","All done marks that dish on every table","Tap a card to see it big","MARK READY: the order is out","History shows what already went out","That's how your kitchen works with Platata"]}),
+  state:{screen:"pay", hop:false, snack:false, lines0:[{p:steak},{p:side},{p:drink}], tickets:T().slice(1), spot:null, undo:null, open:null, history:false, done:[], fresh:false},
+  render,
+  device: st => st.hop ? "phone" : (st.screen==="pay" ? "phone" : "kds"),
+  who: st => st.hop ? "" : who(st),
+  steps:[
+    {beat:0, hint:R.pick({es:"Toca Guardar", pt:"Toque em Salvar", en:"Tap Save"}), target:'[data-t="save"]', tap(st,E){
+      st.snack = true;
+      E.after(1300, ()=>{ st.snack=false; st.hop=true; });
+      E.after(3200, ()=>{ st.hop=false; st.screen="kds"; st.tickets = T(); st.fresh = true; });
+      E.after(4400, ()=>{ st.fresh=false; }); }},
+    {beat:2, hint:R.pick({es:`Toca ${steak.name} × 2`, pt:`Toque em ${steak.name} × 2`, en:`Tap ${steak.name} × 2`}), target:'[data-t="chip-0"]', tap(st){ st.spot = steak.name; }},
+    {beat:3, hint:R.pick({es:"Toca Todo listo", pt:"Toque em Tudo pronto", en:"Tap All done"}), target:'[data-t="bumpall"]', tap(st,E){
+      st.tickets.forEach(t=>t.lines.forEach(l=>{ if(l.p.name===st.spot) l.done=true; }));
+      st.undo = L.bumped(st.spot, 2); st.spot = null; E.after(2600, ()=>{ st.undo=null; }); }},
+    {beat:4, hint:R.pick({es:"Toca la mesa 7", pt:"Toque na mesa 7", en:"Tap table 7"}), target:'[data-t="card-7"]', tap(st){ st.open = 7; }},
+    {beat:5, hint:R.pick({es:"Toca LISTO", pt:"Toque em PRONTO", en:"Tap MARK READY"}), target:'[data-t="listo"]', tap(st,E){
+      const t = st.tickets.find(x=>x.table===7); t.ready = true; st.done = [t]; st.open = null;
+      st.undo = L.ready(L.table(7)); E.after(2600, ()=>{ st.undo=null; }); }},
+    {beat:6, hint:R.pick({es:"Toca Historial", pt:"Toque em Histórico", en:"Tap History"}), target:'[data-t="hist"]', tap(st){ st.history = true; st.undo = null; }}
+  ]
+});
+</script>
+</body>
+</html>

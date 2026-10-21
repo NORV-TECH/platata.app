@@ -1,0 +1,85 @@
+{
+  "id": "RS7",
+  "name": "Receipt by WhatsApp or on paper (US/CA: text and email)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-charge",
+      "voice": {
+        "es": "Cobra la venta: toca Cobrar y luego Exacto.",
+        "pt": "Cobre a venda: toque em Cobrar e depois em Exato.",
+        "en": "Ring up the sale: tap Charge, then Exact."
+      }
+    },
+    {
+      "id": "2-print",
+      "voice": {
+        "es": "Con impresora, el recibo ya salió. Si piden otro, toca Imprimir otra vez.",
+        "pt": "Com impressora, o recibo já saiu. Se pedirem outro, toque em Imprimir de novo.",
+        "en": "With a printer, the receipt already printed. Need another? Tap Print again."
+      }
+    },
+    {
+      "id": "3-view",
+      "voice": {
+        "es": "Toca Ver recibo para mirarlo.",
+        "pt": "Toque em Ver recibo para conferir.",
+        "en": "Tap View receipt to check it."
+      }
+    },
+    {
+      "id": "4-send",
+      "voice": {
+        "es": "Para enviarlo, toca WhatsApp y escribe el número del cliente.",
+        "pt": "Para enviar, toque em WhatsApp e digite o número do cliente.",
+        "en": "Tap Text receipt and type the customer's number."
+      }
+    },
+    {
+      "id": "5-open",
+      "voice": {
+        "es": "Toca Enviar. Se abre WhatsApp con el recibo.",
+        "pt": "Toque em Enviar. O WhatsApp abre com o recibo.",
+        "en": "Send it from your messages app."
+      }
+    },
+    {
+      "id": "6-back",
+      "voice": {
+        "es": "Envíalo y vuelve a Platata: la venta sigue ahí.",
+        "pt": "Envie e volte ao Platata: a venda continua ali.",
+        "en": "It can go by email too: tap Email receipt and send it."
+      }
+    },
+    {
+      "id": "7-new",
+      "voice": {
+        "es": "Toca Nueva venta.",
+        "pt": "Toque em Nova venda.",
+        "en": "Back in Platata, tap New sale."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así das el recibo por WhatsApp o impreso, con Platata.",
+        "pt": "Assim você entrega o recibo por WhatsApp ou impresso, com o Platata.",
+        "en": "That's how you give a receipt by text, email or on paper, with Platata."
+      }
+    }
+  ]
+}

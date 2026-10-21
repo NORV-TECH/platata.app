@@ -1,0 +1,85 @@
+{
+  "id": "RS11",
+  "name": "Reports (gross, net, charges, taxes, tips, total collected)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-reports",
+      "voice": {
+        "es": "Abre Mi negocio y toca Reportes.",
+        "pt": "Abra Meu negócio e toque em Relatórios.",
+        "en": "Open My business and tap Reports."
+      }
+    },
+    {
+      "id": "2-chart",
+      "voice": {
+        "es": "Hoy, hora por hora. Toca una barra y ves cuánto vendiste en esa hora.",
+        "pt": "Hoje, hora a hora. Toque numa barra e veja quanto vendeu naquela hora.",
+        "en": "Today, hour by hour. Tap a bar to see what you sold in that hour."
+      }
+    },
+    {
+      "id": "3-net",
+      "voice": {
+        "es": "Ventas brutas, menos descuentos y devoluciones: tus ventas netas, antes de impuestos, propinas y cargos.",
+        "pt": "Vendas brutas, menos descontos e devoluções: suas vendas líquidas, antes de impostos, gorjetas e taxas.",
+        "en": "Gross sales, minus discounts and refunds, gives your net sales, before tax, tips and charges."
+      }
+    },
+    {
+      "id": "4-line",
+      "voice": {
+        "es": "Cada línea se abre y te muestra sus ventas.",
+        "pt": "Cada linha se abre e mostra as vendas dela.",
+        "en": "Each line opens and shows its sales."
+      }
+    },
+    {
+      "id": "5-extra",
+      "voice": {
+        "es": "El cargo por servicio y los impuestos van en su propia línea. Al final, el total cobrado.",
+        "pt": "Os descontos também se abrem, venda por venda. No fim, o total recebido.",
+        "en": "Tips and taxes each have their own line. At the bottom, the total collected."
+      }
+    },
+    {
+      "id": "6-paid",
+      "voice": {
+        "es": "Más abajo: cómo te pagaron y qué platos vendieron más.",
+        "pt": "Mais abaixo: como você recebeu e quais pratos venderam mais.",
+        "en": "Further down: how you got paid and which dishes sold the most."
+      }
+    },
+    {
+      "id": "7-month",
+      "voice": {
+        "es": "Toca Este mes y ves el mes completo, día por día.",
+        "pt": "Toque em Este mês e veja o mês inteiro, dia a dia.",
+        "en": "Tap This month to see the whole month, day by day."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así ves cómo va tu restaurante, con Platata.",
+        "pt": "Assim você vê como vai seu restaurante, com o Platata.",
+        "en": "That's how you see how your restaurant is doing, with Platata."
+      }
+    }
+  ]
+}

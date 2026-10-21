@@ -1,0 +1,36 @@
+{
+  "id": "R5",
+  "name": "For here, to go or delivery (dining options)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": { "stability": 0.5, "similarity_boost": 0.75 },
+    "pt": { "stability": 0.5, "similarity_boost": 0.75 },
+    "en": { "stability": 0.5, "similarity_boost": 0.75 }
+  },
+  "steps": [
+    { "id": "1-tables", "voice": {
+      "es": "En Opciones de servicio, enciende Mesas y escribe cuántas mesas tienes.",
+      "pt": "Em Opções de atendimento, ligue Mesas e escreva quantas mesas você tem.",
+      "en": "In Dining options, turn on Tables and type how many tables you have." } },
+    { "id": "2-togo", "voice": {
+      "es": "Para llevar se enciende con un toque.",
+      "pt": "Para viagem liga com um toque.",
+      "en": "To Go turns on with one tap." } },
+    { "id": "3-delivery", "voice": {
+      "es": "Enciende Domicilio y toca el lápiz para ponerle un cargo por el envío.",
+      "pt": "Ligue Entrega e toque no lápis para colocar um acréscimo pelo envio.",
+      "en": "Turn on Delivery and tap the pencil to add an upcharge." } },
+    { "id": "4-charge", "voice": {
+      "es": "En la caja, agrega un plato y toca Cobrar.",
+      "pt": "No caixa, adicione um prato e toque em Cobrar.",
+      "en": "At the register, add a dish and tap Charge." } },
+    { "id": "5-gate", "voice": {
+      "es": "La caja pregunta cómo sale el pedido. Al elegir Domicilio, el cargo se suma al total.",
+      "pt": "O caixa pergunta como o pedido vai sair. Ao escolher Entrega, o acréscimo entra no total.",
+      "en": "The register asks how the order is going out. Pick Delivery and the upcharge is added to the total." } },
+    { "id": "6-end", "voice": {
+      "es": "Así sabes cómo sale cada pedido, con Platata.",
+      "pt": "Assim você sabe como sai cada pedido, com o Platata.",
+      "en": "That's how you know how every order goes out, with Platata." } }
+  ]
+}

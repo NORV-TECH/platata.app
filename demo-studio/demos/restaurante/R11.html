@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Aviso de pedido listo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* R11 "Aviso de pedido listo": the KITCHEN marks a to-go order ready, the COUNTER TABLET's bell lights up, the cashier
+   taps WhatsApp and the ready message to the customer is already written (the cashier sends it in WhatsApp).
+   Devices: kitchen screen -> counter tablet. Every country (R.C data), es/pt/en.
+   Screens follow the app at the newest sim/usa-canada commit (paths under app/src/main/java/com/example/):
+   kitchen screen   ui/screens/kds/KitchenDisplayScreen.kt (ticker chips, History chip, green dot, station name, leave
+                    icon; adaptive 180 dp grid), ui/components/KdsTicketCard.kt (title kdsTicketTitle: typed name, else
+                    "Mesa N", else the dining option's own name; waiter first name under a table; kds_status_new; items
+                    "1x  name"; yellow banner MESA 4 / PARA LLEVAR), KdsTicketDetailDialog.kt (85 % x 85 % r12, title
+                    26sp = the card's title, dining label 18sp at the right, status 18sp, items 20sp, CERRAR #424242 and
+                    LISTO #2E7D32, 56 dp r6). After LISTO: the undo bar kds_ready_one_undo + kds_action_undo
+                    (KdsUndoBar #323232, KdsUndoAction #FFD740).
+   the trip         kitchen screen -> owner phone (on, Platata open) -> shop Wi-Fi -> counter tablet (SyncHostService
+                    ready feed; the Wi-Fi ready ticket carries the customer, KITCHEN-3).
+   counter tablet   ui/screens/mamapos/MamaPosScreen.kt:1040-1090 (left 60 %: SumaTabRow Teclado (pen) / Catálogo /
+                    Ventas / Abiertas + the Notifications bell with a red Badge count; ProductLibraryView with
+                    GridCells.Fixed(4); right pane: MamaSwitchPersonRow "<name> Cambiar" #007AFF + home_cart_empty).
+                    Bell -> SumaBottomSheet with ui/components/MamashipNotificationPanel.kt (360 dp: header bell 18 dp +
+                    orange dot #FF6D00, mamaship_panel_title 14sp bold; body #F5F5F5; card r8: "Pedido de <cliente>"
+                    mamaship_order_of 16sp bold, green #25D366 button receipt_opt_whatsapp_btn 48 dp + Ignorar).
+   message          ui/pos/OrderFlowActions.kt pingWhatsApp -> utils/ReadyOrderMessage.signed: order_ready_whatsapp with the
+                    customer's name, in the SHOP's language, + whatsapp_signature; number = the customer's WhatsApp
+                    (utils/ReadyWhatsappNumber); KdsDispatchHelper opens WhatsApp's chat with the text written; the
+                    cashier taps Send (WhatsApp's own screen, drawn plainly here).
+   Demo setup: a to-go order was charged at the counter tablet with the customer (saved with WhatsApp) attached;
+   "Pedido listo" (Notificaciones, owner phone) left on, as it starts. */
+const R = RKIT.ctx(), C = R.C, esc = RKIT.esc;
+const SH = C.lang;   // the ready message is written in the shop's language
+const S = {
+  history:{es:"Historial",pt:"Histórico",en:"History"}, station:{es:"Cocina",pt:"Cozinha",en:"Kitchen"},
+  kNew:{es:"%dm – NUEVO",pt:"%dm – NOVO",en:"%dm – NEW"}, table:{es:"Mesa %d",pt:"Mesa %d",en:"Table %d"},
+  toGo:{es:"Para llevar",pt:"Para viagem",en:"To Go"},
+  close:{es:"CERRAR",pt:"FECHAR",en:"CLOSE"}, ready:{es:"LISTO",pt:"PRONTO",en:"MARK READY"},
+  undo1:{es:"Listo: %s",pt:"Pronto: %s",en:"Marked ready: %s"}, undo:{es:"DESHACER",pt:"DESFAZER",en:"UNDO"},
+  tabs:{es:["Teclado","Catálogo","Ventas","Abiertas"],pt:["Teclado","Catálogo","Vendas","Abertas"],en:["Keypad","Library","Sales","Open"]},
+  all:{es:"Todos",pt:"Todos",en:"All"}, sw:{es:"Cambiar",pt:"Trocar",en:"Switch"},
+  empty:{es:"El carrito está vacío",pt:"Carrinho vazio",en:"Cart is empty"}, emptySub:{es:"agrega artículos para empezar",pt:"adicione itens para começar",en:"add items to start"},
+  panel:{es:"Notificaciones y Entrega",pt:"Notificações e Entrega",en:"Notifications & Handoff"},
+  orderOf:{es:"Pedido de %s",pt:"Pedido de %s",en:"%s’s order"},
+  wa:{es:"WhatsApp",pt:"WhatsApp",en:"WhatsApp"}, ignore:{es:"Ignorar",pt:"Ignorar",en:"Ignore"},
+  msg:{es:"¡%s, tu pedido está listo! 🎉",pt:"%s, seu pedido está pronto! 🎉",en:"%s, your order is ready! 🎉"},
+  sign:{es:"Hecho con Platata · platata.app",pt:"Feito com Platata · platata.app",en:"Made with Platata · platata.app"},
+  devKds:{es:"Pantalla de cocina",pt:"Tela da cozinha",en:"Kitchen screen"},
+  devTab:{es:"Tablet de mostrador",pt:"Tablet do balcão",en:"Counter tablet"},
+  hopNote:{es:"Pasa por tu teléfono: déjalo encendido, con Platata abierta y en el Wi-Fi del local.",
+           pt:"Passa pelo seu celular: deixe-o ligado, com o Platata aberto e no Wi-Fi do restaurante.",
+           en:"It goes through your phone: keep it on, with Platata open and on the restaurant's Wi-Fi."}
+};
+const T = (k, ...a) => { let s = R.pick(S[k]); a.forEach(v => { s = s.replace(/%[ds]/, v); }); return s; };
+const TS = (k, ...a) => { let s = S[k][SH]; a.forEach(v => { s = s.replace(/%[ds]/, v); }); return s; };   // shop language
+const CUST = C.people.customer, CASHIER = C.people.waiter2;
+const MSG = TS("msg", CUST) + "\n\n" + TS("sign");
+const DIAL = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54 9",PA:"507",BR:"55",US:"1",CA:"1"}[R.country];
+const PHONE = "+" + DIAL + " " + C.people.phone.replace(/[()]/g,"").replace(/-/g," ").replace(/^0/,"");
+const item = id => C.items.find(x=>x.id===id);
+const TABLE_LINES = [{id:C.order[0]},{id:C.order[2]}];                 // Mesa 4, still cooking
+const TOGO_LINES = [{id:C.order[1], q:2},{id:C.order[2], q:1}];       // the customer's to-go order
+const W1 = C.people.waiter.split(" ")[0];
+const ALL_C = "#607D8B";
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+const I = {
+  logout:'<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>',
+  bell:'<svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>',
+  edit:'<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  swacc:'<svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 2.5c1.93 0 3.5 1.57 3.5 3.5S15.93 11.5 14 11.5 10.5 9.93 10.5 8 12.07 4.5 14 4.5zM20 16H8v-1.5c0-1.99 4-3 6-3s6 1.01 6 3V16z"/></svg>',
+  back:'<svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  dots:'<svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  send:'<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>'
+};
+
+/* ---------- kitchen screen ---------- */
+function kcard(title, sub, mins, lines, banner, t){
+  const body = lines.map(l=>`<div class="ki">${l.q||1}x&nbsp; ${esc(item(l.id).name)}</div>`).join("");
+  return `<div class="kcard"${t?` data-t="${t}"`:""}><div class="kc"><div class="kh"><b>${esc(title)}</b><b>${esc(T("kNew",mins))}</b></div>
+    ${sub?`<div class="kw">${esc(sub)}</div>`:""}<hr>${body}<div class="kb">${esc(banner.toUpperCase())}</div></div></div>`;
+}
+function kds(st){
+  const all = [...TABLE_LINES, ...(st.ready?[]:TOGO_LINES)];
+  const counts = {}; all.forEach(l=>{ counts[l.id]=(counts[l.id]||0)+(l.q||1); });
+  const ticker = Object.keys(counts).map(id=>`<span class="kchip">${esc(item(id).name)} × ${counts[id]}</span>`).join("");
+  let h = `<div class="kds"><div class="ktop"><div class="ktick">${ticker}</div><span class="khist">${esc(T("history"))}</span><i class="kdot"></i><span class="kst">${esc(T("station"))}</span><span class="klog">${I.logout}</span></div>
+    <div class="kgrid">${kcard(T("table",4), W1, 4, TABLE_LINES, T("table",4))}${st.ready?"":kcard(T("toGo"), "", 1, TOGO_LINES, T("toGo"), "togo")}</div>
+    ${st.undo?`<div class="kundo"><span>${esc(T("undo1", T("toGo")))}</span><b>${esc(T("undo"))}</b></div>`:""}</div>`;
+  if(st.dialog){
+    h += `<div class="kscrim"><div class="kdlg"><div class="kdh"><b>${esc(T("toGo"))}</b><span>${esc(T("toGo"))}</span></div>
+      <div class="kds2">${esc(T("kNew",1))}</div><hr>
+      ${TOGO_LINES.map(l=>`<div class="kdi">${l.q||1}x&nbsp; ${esc(item(l.id).name)}</div>`).join("<hr class='th'>")}
+      <div class="kdf"><span class="kclose">${esc(T("close"))}</span><span class="kready" data-t="ready">${esc(T("ready"))}</span></div></div></div>`;
+  }
+  if(st.hop) h += RKIT.hop(R,{from:T("devKds"), to:T("devTab"), line:T("undo1", T("toGo")), note:T("hopNote")});
+  return h;
+}
+
+/* ---------- counter tablet ---------- */
+function tablet(st){
+  const tabs = R.pick(S.tabs).map((t,i)=>`<span class="${i===1?"on":""}">${i===0?I.edit:""}${esc(t)}</span>`).join("");
+  const chips = [{name:T("all"),color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const s = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${s}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("");
+  const grid = C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="ttile" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("");
+  const n = st.cleared ? 0 : 1;
+  let h = `<div class="tab"><div class="tl"><div class="ttabs"><div class="tt">${tabs}</div>
+      <span class="tbell" data-t="bell">${I.bell}${n?`<i>${n}</i>`:""}</span></div>
+      <div class="tchips">${chips}</div><div class="tgrid">${grid}</div></div>
+    <div class="tr"><div class="tsw">${I.swacc}<b>${esc(CASHIER)}</b><span>${esc(T("sw"))}</span></div>
+      <div class="tempty"><b>${esc(T("empty"))}</b><small>${esc(T("emptySub"))}</small></div></div></div>`;
+  if(st.panel){
+    h += `<div class="tscrim"><div class="tsheet"><i class="hdl"></i><div class="npanel">
+      <div class="nph">${I.bell}${n?`<i class="nd"></i>`:""}<b>${esc(T("panel"))}</b></div>
+      <div class="npb"><div class="ncard"><b>${esc(T("orderOf", CUST))}</b><div class="nrow"><span class="nwa" data-t="wa">${esc(T("wa"))}</span><span class="nig">${esc(T("ignore"))}</span></div></div></div>
+    </div></div></div>`;
+  }
+  return h;
+}
+function whatsapp(st){
+  const body = esc(MSG).replace(/\n/g,"<br>");
+  return `<div class="wa"><div class="wahd"><span>${I.back}</span><span class="waav">${esc(CUST[0])}</span><b>${esc(PHONE)}</b><span>${I.dots}</span></div>
+    <div class="wachat">${st.sent?`<div class="wabub">${body}<small>12:41 <i>✓✓</i></small></div>`:""}</div>
+    <div class="wain"><div class="wabox">${st.sent?"":body}</div><span class="wasend" data-t="wa-send">${I.send}</span></div></div>`;
+}
+
+function render(st){
+  if(st.screen==="kds") return kds(st);
+  if(st.screen==="tablet") return tablet(st);
+  if(st.screen==="wa") return whatsapp(st);
+  return "";
+}
+
+RKIT.start(R, {
+  id:"R11", tallVideo:true, clock:"12:41",
+  endText:R.pick({es:"Así le avisas al cliente que su pedido está listo, con Platata.",pt:"Assim você avisa o cliente que o pedido está pronto, com o Platata.",en:"That's how you tell customers their order is ready, with Platata."}),
+  beats:R.pick({
+    es:["La cocina abre el pedido para llevar","Toca LISTO: el aviso va a la tablet","En la tablet, toca la campana","Toca WhatsApp: el mensaje ya está escrito","Así avisas que el pedido está listo"],
+    pt:["A cozinha abre o pedido para viagem","Toque em PRONTO: o aviso vai ao tablet","No tablet, toque no sino","Toque em WhatsApp: a mensagem já está escrita","Assim você avisa que o pedido está pronto"],
+    en:["The kitchen opens the to-go order","Tap Mark ready: the alert goes to the tablet","On the tablet, tap the bell","Tap WhatsApp: the message is already written","That's how you tell them the order is ready"]}),
+  state:{screen:"kds", dialog:false, ready:false, undo:false, hop:false, panel:false, cleared:false, sent:false},
+  render,
+  device: st => st.screen==="kds" ? "kds" : "tablet",
+  who: st => st.screen==="kds" ? T("devKds") : T("devTab"),
+  steps:[
+    {beat:0, hint:R.pick({es:"Toca el pedido Para llevar",pt:"Toque no pedido Para viagem",en:"Tap the To Go order"}), target:'[data-t="togo"]',
+      tap(st){ st.dialog=true; }},
+    {beat:1, hint:R.pick({es:"Toca LISTO",pt:"Toque em PRONTO",en:"Tap Mark ready"}), target:'[data-t="ready"]',
+      tap(st,E){ st.dialog=false; st.ready=true; st.undo=true;
+        E.after(2200,()=>{ st.hop=true; }); E.after(4000,()=>{ st.hop=false; st.undo=false; st.screen="tablet"; }); }},
+    {beat:2, hint:R.pick({es:"Toca la campana",pt:"Toque no sino",en:"Tap the bell"}), target:'[data-t="bell"]',
+      tap(st){ st.panel=true; }},
+    {beat:3, hint:R.pick({es:"Toca WhatsApp",pt:"Toque em WhatsApp",en:"Tap WhatsApp"}), target:'[data-t="wa"]',
+      tap(st){ st.panel=false; st.cleared=true; st.screen="wa"; }},
+    {beat:3, hint:R.pick({es:"Toca enviar en WhatsApp",pt:"Toque em enviar no WhatsApp",en:"Tap send in WhatsApp"}), target:'[data-t="wa-send"]',
+      tap(st,E){ st.sent=true; E.after(2600,()=>{}); }}
+  ]
+});
+</script>
+<style>
+/* the trip card inside a landscape device: same card (kit/rkit.js hop), sized for a 16:10 screen */
+.phone.land .rhop{padding:3% 8%}
+.phone.land .rhop-in{gap:2.4cqh}
+.phone.land .rhop-dev{font-size:clamp(10px,2.4cqw,22px)}
+.phone.land .rhop-line{font-size:clamp(10px,2.1cqw,18px);gap:1.2cqh}
+.phone.land .rhop-line i{height:6cqh}
+.phone.land .rhop-note{font-size:clamp(9px,1.8cqw,16px);max-width:70%}
+/* ---- kitchen screen (landscape, 1 dp = var(--u) of a 1024 dp tablet): KitchenDisplayScreen.kt, KdsTicketCard.kt, KDS tokens ---- */
+.kds{flex:1;display:flex;flex-direction:column;background:#111111;color:#fff;min-height:0;position:relative}
+.ktop{display:flex;align-items:center;height:calc(var(--u)*48);gap:calc(var(--u)*8);padding-right:calc(var(--u)*4)}
+.ktick{flex:1;display:flex;gap:calc(var(--u)*8);padding:0 calc(var(--u)*8);overflow:hidden}
+.kchip{flex:0 0 auto;border:1px solid #444;background:#2A2A2A;border-radius:calc(var(--u)*20);padding:calc(var(--u)*8) calc(var(--u)*14);font-size:calc(var(--u)*14)}
+.khist{border:1px solid #444;background:#2A2A2A;border-radius:calc(var(--u)*20);padding:calc(var(--u)*8) calc(var(--u)*14);font-size:calc(var(--u)*14);font-weight:600}
+.kdot{width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#4CAF50}
+.kst{font-size:calc(var(--u)*14);font-weight:600}
+.klog{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:rgba(255,255,255,.55)}
+.klog svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.kgrid{flex:1;padding:calc(var(--u)*8);display:grid;grid-template-columns:repeat(5,1fr);gap:calc(var(--u)*8);align-content:start}
+.kcard{padding:calc(var(--u)*4)}
+.kc{background:#fff;color:#000;border-radius:calc(var(--u)*12);padding:calc(var(--u)*12);box-shadow:0 calc(var(--u)*2) calc(var(--u)*4) rgba(0,0,0,.4)}
+.kh{display:flex;justify-content:space-between;gap:calc(var(--u)*6);font-size:calc(var(--u)*14)}
+.kw{font-size:calc(var(--u)*12);color:rgba(0,0,0,.75)}
+.kc hr{border:0;border-top:1px solid rgba(0,0,0,.3);margin:calc(var(--u)*6) 0}
+.ki{font-size:calc(var(--u)*16);font-weight:600;margin-bottom:calc(var(--u)*4)}
+.kb{margin-top:calc(var(--u)*6);background:#FFEB3B;color:#000;text-align:center;font-weight:800;font-size:calc(var(--u)*12);letter-spacing:.5px;padding:calc(var(--u)*5) 0;border-radius:0 0 calc(var(--u)*8) calc(var(--u)*8)}
+.kundo{position:absolute;left:0;right:0;bottom:0;background:#323232;display:flex;justify-content:space-between;align-items:center;padding:calc(var(--u)*8) calc(var(--u)*16)}
+.kundo span{font-size:calc(var(--u)*14);font-weight:500}
+.kundo b{font-size:calc(var(--u)*14);font-weight:800;color:#FFD740;padding:calc(var(--u)*10) calc(var(--u)*12)}
+.kscrim{position:absolute;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:12}
+.kdlg{width:85%;height:85%;background:#fff;color:#000;border-radius:calc(var(--u)*12);padding:calc(var(--u)*20);display:flex;flex-direction:column}
+.kdh{display:flex;align-items:baseline}
+.kdh b{flex:1;font-size:calc(var(--u)*26);font-weight:700}
+.kdh span{font-size:calc(var(--u)*18);font-weight:500}
+.kds2{margin-top:calc(var(--u)*2);font-size:calc(var(--u)*18);font-weight:700}
+.kdlg hr{border:0;border-top:1px solid rgba(0,0,0,.3);margin:calc(var(--u)*12) 0;width:100%}
+.kdlg hr.th{border-top-color:rgba(0,0,0,.15);margin:0}
+.kdi{font-size:calc(var(--u)*20);font-weight:600;padding:calc(var(--u)*10) 0}
+.kdf{margin-top:auto;display:flex;gap:calc(var(--u)*12)}
+.kdf span{flex:1;height:calc(var(--u)*56);border-radius:calc(var(--u)*6);display:grid;place-items:center;color:#fff;font-weight:700;font-size:calc(var(--u)*16)}
+.kclose{background:#424242} .kready{background:#2E7D32}
+/* ---- counter tablet (landscape): MamaPosScreen.kt, SumaTabRow, ProductLibraryView Fixed(4), MamaSwitchPersonRow ---- */
+.tab{flex:1;min-height:0;display:flex;background:#fff;position:relative}
+.tl{width:60%;display:flex;flex-direction:column;min-height:0}
+.tr{flex:1;border-left:1px solid var(--m-ovar);display:flex;flex-direction:column}
+.ttabs{display:flex;align-items:center;flex:0 0 auto}
+.tt{flex:1;display:flex;height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar)}
+.tt span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);position:relative}
+.tt span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.tt span.on{color:var(--m-on)}
+.tt span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*2);background:var(--m-on)}
+.tbell{position:relative;width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.tbell svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E}
+.tbell i{position:absolute;right:calc(var(--u)*6);top:calc(var(--u)*6);min-width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:calc(var(--u)*8);background:#FF3B30;color:#fff;font-style:normal;font-size:calc(var(--u)*11);font-weight:500;display:grid;place-items:center;padding:0 calc(var(--u)*4)}
+.tchips{display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*12) calc(var(--u)*16);overflow:hidden;flex:0 0 auto}
+.tchips span{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*6);padding:calc(var(--u)*8) calc(var(--u)*16);border-radius:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-onv);white-space:nowrap}
+.tchips svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:currentColor}
+.tgrid{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*8) calc(var(--u)*16);display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*8);align-content:start}
+.ttile{aspect-ratio:1.1;border-radius:calc(var(--u)*12);border:calc(var(--u)*1.5) solid;overflow:hidden;background:#fff}
+.ttile .in{height:100%;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:space-between}
+.ttile b{font-size:calc(var(--u)*17);line-height:1.3;font-weight:700;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ttile span{font-size:calc(var(--u)*15);font-weight:500;color:var(--m-onv)}
+.tsw{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*10) calc(var(--u)*16);color:#007AFF}
+.tsw svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#007AFF}
+.tsw b{flex:1;font-size:calc(var(--u)*15);font-weight:600}
+.tsw span{font-size:calc(var(--u)*15)}
+.tempty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*4)}
+.tempty b{font-size:calc(var(--u)*16);font-weight:600;color:var(--m-onv)}
+.tempty small{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.tscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:flex;align-items:flex-end;justify-content:center;z-index:15}
+.tsheet{width:calc(var(--u)*640);background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;overflow:hidden}
+.tsheet .hdl{display:block;width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#79747E;opacity:.4;margin:calc(var(--u)*22) auto calc(var(--u)*10)}
+.npanel{height:calc(var(--u)*360);display:flex;flex-direction:column;background:#F5F5F5}
+.nph{display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*6) calc(var(--u)*8);background:#fff;border-bottom:1px solid var(--m-ovar);position:relative}
+.nph svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#1C1C1E}
+.nph .nd{position:absolute;left:calc(var(--u)*17);top:calc(var(--u)*5);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#FF6D00}
+.nph b{font-size:calc(var(--u)*14);font-weight:700}
+.npb{padding:calc(var(--u)*6)}
+.ncard{background:#fff;border-radius:calc(var(--u)*8);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.2);padding:calc(var(--u)*6);display:flex;flex-direction:column;gap:calc(var(--u)*6)}
+.ncard b{font-size:calc(var(--u)*16);font-weight:700}
+.nrow{display:flex;gap:calc(var(--u)*4)}
+.nwa{flex:1;height:calc(var(--u)*48);border-radius:calc(var(--u)*8);background:#25D366;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:500}
+.nig{height:calc(var(--u)*48);padding:0 calc(var(--u)*12);display:grid;place-items:center;font-size:calc(var(--u)*14);color:var(--m-onv)}
+/* ---- WhatsApp on the tablet (another app; drawn plainly) ---- */
+.wa{flex:1;min-height:0;display:flex;flex-direction:column;background:#EFEAE2}
+.wahd{height:calc(var(--u)*56);background:#008069;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);flex:0 0 auto}
+.wahd svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff;display:block}
+.waav{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#DFE5E7;color:#54656F;display:grid;place-items:center;font-weight:600}
+.wahd b{flex:1;font-size:calc(var(--u)*17);font-weight:500}
+.wachat{flex:1;min-height:0;padding:calc(var(--u)*16);display:flex;flex-direction:column;justify-content:flex-end}
+.wabub{align-self:flex-end;max-width:60%;background:#D9FDD3;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font-size:calc(var(--u)*15);line-height:1.35;box-shadow:0 1px 1px rgba(0,0,0,.1)}
+.wabub small{display:block;text-align:right;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*11);color:#667781}
+.wabub small i{font-style:normal;color:#53BDEB}
+.wain{display:flex;align-items:flex-end;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12);flex:0 0 auto}
+.wabox{flex:1;min-height:calc(var(--u)*46);background:#fff;border-radius:calc(var(--u)*23);padding:calc(var(--u)*12) calc(var(--u)*18);font-size:calc(var(--u)*15);line-height:1.35}
+.wasend{flex:0 0 auto;width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#00A884;display:grid;place-items:center}
+.wasend svg{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
+</style>
+</body>
+</html>

@@ -1,0 +1,576 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Otro celular o tableta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* ---- shared by RS19..RS24: owner Home, panel, Settings page, support strip, dialogs (values from ui/theme + the files named in the script) ---- */
+.ti{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor;flex:0 0 auto}
+.otabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.otabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);color:var(--m-onv);position:relative}
+.otabs span.on{color:var(--m-on);font-weight:700}
+.otabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.rcbar{flex:0 0 auto;background:#FEF3C7;color:#856404;display:flex;align-items:center;justify-content:space-between;padding:calc(var(--u)*6) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:700}
+.rcbar b{background:#FF9500;color:#fff;border-radius:calc(var(--u)*50);padding:calc(var(--u)*6) calc(var(--u)*16);font-size:calc(var(--u)*13)}
+.offs{flex:0 0 auto;background:var(--m-sv);color:var(--m-onv);text-align:center;font-size:calc(var(--u)*12);font-weight:700;padding:calc(var(--u)*4) calc(var(--u)*16)}
+.oedit{flex:0 0 auto;display:flex;justify-content:flex-end;padding:0 calc(var(--u)*16)}
+.oedit span{display:flex;align-items:center;gap:calc(var(--u)*4);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mcats .ck{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:currentColor}
+.csale{flex:0 0 auto;min-height:calc(var(--u)*44);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:600}
+.csale i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.fpair{flex:0 0 auto;display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16)}
+.fpair span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600;white-space:nowrap}
+.fpair .pri{background:var(--m-on);color:#fff}
+.fpair .sec{border:1px solid var(--m-outline);color:var(--m-on)}
+.fpair .pri.dis{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.fpair .sec.dis{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.onav .pill{position:relative}
+.nbadge{position:absolute;top:calc(var(--u)*-2);right:calc(var(--u)*12);min-width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:calc(var(--u)*8);background:#B3261E;color:#fff;font-style:normal;font-size:calc(var(--u)*11);font-weight:600;display:grid;place-items:center;padding:0 calc(var(--u)*4)}
+.onav .flagc{font-size:0}
+.onav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.onav .flagc svg.fp{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:var(--m-onv);border-radius:0}
+/* panel */
+.panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff}
+.phd{display:flex;align-items:center;padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);color:#007AFF;flex:0 0 auto}
+.phd span{font-size:calc(var(--u)*28);font-weight:900;line-height:1.15}
+.pdn{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.plist{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--u)*8);padding-bottom:calc(var(--u)*12)}
+.wrow{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.wic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.wdot{width:calc(var(--u)*42);text-align:center;font-size:calc(var(--u)*16);flex:0 0 auto}
+.wtx{flex:1;min-width:0;display:flex;flex-direction:column}
+.wtx b{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);line-height:1.3}
+.wtx small{font-size:calc(var(--u)*12);color:var(--m-onv);line-height:1.35}
+.wtx small.red{color:var(--m-err)}
+.wch{color:var(--m-onv);flex:0 0 auto}
+.wtr{font-size:calc(var(--u)*18);font-weight:700;white-space:nowrap}.wtr.sm{font-size:calc(var(--u)*14)}
+.spill{border-radius:calc(var(--u)*50);background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.spill.on{background:var(--m-sv);color:var(--m-on)}
+.phead{margin:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.pdiv{margin:calc(var(--u)*4) calc(var(--u)*24);border-top:1px solid var(--m-ovar)}
+/* top bar + Settings page */
+.mtb{flex:0 0 auto;height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*4);background:#fff}
+.mtbb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on)}
+.mtbt{font-size:calc(var(--u)*22);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ptb{height:calc(var(--u)*52);background:#FBFAF7}
+.ptb .mtbb{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;margin-left:calc(var(--u)*8)}
+.ptb .mtbt{font:600 calc(var(--u)*20) Fredoka,Roboto,sans-serif;color:#17181B}
+.hub{flex:1;min-height:0;overflow:hidden;padding:0 calc(var(--u)*16) calc(var(--u)*24);background:#fff}
+.hgrp{padding:calc(var(--u)*16) 0 calc(var(--u)*8) calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.hrow{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);margin-bottom:calc(var(--u)*8)}
+/* support strip (SupportStrip.kt) */
+.sstrip{flex:0 0 auto;display:flex;min-height:calc(var(--u)*56);background:#fff;border-top:1px solid #E6E2D9;position:relative}
+.sstrip::after{content:"";position:absolute;left:50%;top:calc(var(--u)*8);bottom:calc(var(--u)*8);width:1px;background:#E6E2D9}
+.sh{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.sb{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;display:grid;place-items:center;flex:0 0 auto}
+.sbi{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
+.st{flex:1;min-width:0;display:flex;flex-direction:column}
+.st b{font-size:calc(var(--u)*15);font-weight:700;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st small{font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sch{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+/* dialogs (SumaDialog = M3 AlertDialog) */
+.dscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*40)}
+.dbox{width:100%;background:#fff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24)}
+.dtt{font-size:calc(var(--u)*24);line-height:1.3;color:var(--m-on);margin-bottom:calc(var(--u)*16)}
+.dbody{font-size:calc(var(--u)*14);line-height:1.45;color:var(--m-onv)}
+.dbody p{margin:0 0 calc(var(--u)*12)}
+.dbtn{display:flex;justify-content:flex-end;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24)}
+.dno{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.dyes{padding:calc(var(--u)*10) calc(var(--u)*24);border-radius:calc(var(--u)*20);background:var(--m-on);color:#fff;font-size:calc(var(--u)*14);font-weight:500}
+.dyes.red{background:var(--m-err)}
+.dbox.pap .dno{color:#3A2A1F}.dbox.pap .dyes{background:#3A2A1F}
+.dbox.pap .dbody{color:#17181B;font-size:calc(var(--u)*15);line-height:1.4}
+/* system prompts */
+.bios{align-items:end;place-items:end center;padding:0}
+.bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*28) calc(var(--u)*24) calc(var(--u)*40);text-align:center}
+.bt{font-size:calc(var(--u)*22);color:#1F1F1F}
+.bs{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*14);color:#444746}
+.bf{margin:calc(var(--u)*28) auto 0;width:calc(var(--u)*72);height:calc(var(--u)*72);border-radius:50%;display:grid;place-items:center;background:#D3E3FD}
+.bfi{width:calc(var(--u)*44);height:calc(var(--u)*44);fill:#0B57D0}
+.otoast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*110);max-width:85%;background:rgba(32,33,36,.92);color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:16;text-align:center}
+
+.cin{display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.cpage{flex:1;min-height:0;overflow:hidden;background:#FBFAF7;padding:calc(var(--u)*8) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.pcard{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.kv{font-size:calc(var(--u)*12.5);color:#737883;letter-spacing:.3px}
+.h1{font:600 calc(var(--u)*27)/1.15 Fredoka,Roboto,sans-serif;color:#17181B}
+.h2{font:600 calc(var(--u)*20)/1.2 Fredoka,Roboto,sans-serif;color:#17181B}
+.pbody{font-size:calc(var(--u)*15);line-height:1.4;color:#464A52}
+.cgrp{display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.cgrp .kv.ok{color:#2C6A35}
+.crow{display:flex;flex-wrap:wrap;gap:calc(var(--u)*8) calc(var(--u)*4)}
+.slot{width:calc(var(--u)*72);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*4);text-align:center}
+.circ{position:relative;width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:50%;display:grid;place-items:center;box-sizing:border-box}
+.circ.f{background:#C44B28;color:#fff}.circ.o{border:calc(var(--u)*2) solid #C44B28;color:#C44B28;font:600 calc(var(--u)*20) Fredoka,sans-serif}
+.circ.a{border:calc(var(--u)*2) dashed #D9D4C9;color:#464A52}
+.circ svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.badge{position:absolute;top:calc(var(--u)*-5);right:calc(var(--u)*-7);min-width:calc(var(--u)*18);height:calc(var(--u)*18);border-radius:calc(var(--u)*9);background:#17181B;color:#FBFAF7;font:500 calc(var(--u)*13)/calc(var(--u)*18) Roboto,sans-serif;text-align:center;padding:0 calc(var(--u)*4);box-sizing:border-box}
+.slot b{font-size:calc(var(--u)*12.5);font-weight:600;color:#17181B;line-height:1.2}
+.slot small{font-size:calc(var(--u)*12.5);color:#737883;line-height:1.2}.slot small.ok{color:#2C6A35}
+.mline{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*8) 0}
+.mline .l{flex:1}.mline .l b{display:block;font-size:calc(var(--u)*15);font-weight:400;color:#17181B}.mline .l small{font-size:calc(var(--u)*12.5);color:#737883}
+.mline .v{font-size:calc(var(--u)*16);font-weight:500;color:#17181B}.mline .v.ok{color:#2C6A35}
+.mline.big .l b{font-size:calc(var(--u)*16);font-weight:500}
+.prow{min-height:calc(var(--u)*56);background:#fff;border:calc(var(--u)*2) solid #E6E2D9;border-radius:calc(var(--u)*14);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.prow span{flex:1}.prow svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#737883}
+.dsec{display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.drow{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.dtile{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);background:#F9EAE3;display:grid;place-items:center;color:#EB5A2E;flex:0 0 auto}
+.dtile svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.drow .nm{flex:1;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.drow .rt{display:flex;flex-direction:column;align-items:flex-end;gap:calc(var(--u)*2)}
+.chip{font-size:calc(var(--u)*13);font-weight:500;border-radius:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*8)}
+.chip.ok{background:#E4F0E2;color:#2C6A35}.chip.pd{background:#E6E2D9;color:#17181B}.chip.wn{background:#F6EED8;color:#8A6712}
+.rmv{font-size:calc(var(--u)*14);font-weight:500;color:#464A52;padding:calc(var(--u)*8) calc(var(--u)*4)}
+.pbtn{height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#C44B28;color:#fff;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font:500 calc(var(--u)*18) Fredoka,Roboto,sans-serif;flex:0 0 auto}
+.pbtn svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff}
+.pbtn.sm{height:calc(var(--u)*44);border-radius:calc(var(--u)*14);font-size:calc(var(--u)*16)}
+.pbtn.dis{background:#E6E2D9;color:#737883}
+.scard{border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12);border:1px solid #E6E2D9}
+.scard .top{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.scard .top .tx{flex:1}.scard .top b{display:block;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.sbox{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center;color:#EB5A2E;flex:0 0 auto}
+.sbox svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.okpill{font-size:calc(var(--u)*13);font-weight:500;background:#E4F0E2;color:#2C6A35;border-radius:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*10)}
+.hint{border-radius:calc(var(--u)*14);background:#F9EAE3;padding:calc(var(--u)*12);font-size:calc(var(--u)*15);line-height:1.4;color:#464A52}
+.stepc{border:1px solid #E6E2D9;border-radius:calc(var(--u)*18);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.step{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.sbt{width:calc(var(--u)*52);height:calc(var(--u)*52);border-radius:50%;border:calc(var(--u)*2) solid #D9D4C9;display:grid;place-items:center;flex:0 0 auto}
+.sbt svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#17181B}.sbt.dim{opacity:.35}
+.step .mid{flex:1;text-align:center}.step .mid small{display:block;font-size:calc(var(--u)*13);color:#737883}
+.sheetp{position:absolute;inset:0;background:rgba(0,0,0,.32);display:flex;align-items:flex-end;z-index:15}
+.sheet{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*12) calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.grab{width:calc(var(--u)*44);height:calc(var(--u)*5);border-radius:calc(var(--u)*3);background:#D9D4C9;margin:0 auto calc(var(--u)*8)}
+.opt{min-height:calc(var(--u)*52);border:calc(var(--u)*2) solid #E6E2D9;border-radius:calc(var(--u)*14);padding:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);background:#fff}
+.opt .tl{width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:calc(var(--u)*14);background:#F4EBDD;display:grid;place-items:center;color:#3A2A1F;flex:0 0 auto}
+.opt .tl svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.opt b{display:block;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}.opt small{font-size:calc(var(--u)*15);color:#737883;line-height:1.35}
+.notnow{text-align:center;font:500 calc(var(--u)*18) Fredoka,sans-serif;color:#464A52;padding:calc(var(--u)*8)}
+.emp{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*14);padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.emp .r{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.av{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#F9EAE3;color:#BE4927;display:grid;place-items:center;font:600 calc(var(--u)*20) Fredoka,sans-serif;flex:0 0 auto}
+.emp .who{flex:1;min-width:0}.emp .who b{display:block;font-size:calc(var(--u)*16);font-weight:600;color:#17181B}.emp .who small{font-size:calc(var(--u)*13);color:#737883}
+.cbtn{width:calc(var(--u)*108);height:calc(var(--u)*44);border-radius:calc(var(--u)*14);background:#C44B28;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*16) Fredoka,sans-serif;flex:0 0 auto}
+.emp .code{font-size:calc(var(--u)*13);color:#464A52}
+.emp .send{font-size:calc(var(--u)*14);font-weight:500;color:#BE4927;padding:calc(var(--u)*4) 0}
+.addemp{font-size:calc(var(--u)*14);font-weight:500;color:#BE4927;padding:calc(var(--u)*8) calc(var(--u)*4)}
+.small{font-size:calc(var(--u)*13);color:#737883}
+.flash{animation:fl 1.2s ease-out}@keyframes fl{0%{box-shadow:0 0 0 calc(var(--u)*3) #C44B28}100%{box-shadow:0 0 0 0 transparent}}
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+const R = RKIT.ctx();
+/* ===== shared by RS19..RS24 (copied into each page; kit/ is not edited) =====
+   Owner phone pieces, drawn from the app at sim/usa-canada (paths under app/src/main/java/com/example/):
+   home()      ui/screens/home/HomeScreen.kt:551-700 (one warning bar, TabRow Teclado|Catálogo, RegisterClosedBar, OfflineStrip),
+               ItemEditModeBar :1989-2070 (right-aligned "Editar"), ProductLibraryView (chips + 3-column grid, A-Z),
+               footer :804-842 (CurrentSaleStrip + FooterButtonPair "Guardar" | "Cobrar $X", HomeFooterButtons.kt)
+   nav()       ui/app/PlatataApp.kt:503-722 (Caja = ShoppingCart, Ventas = Receipt, flag circle 32 dp "Mi negocio";
+               fingerprint instead of the flag while Security is on and the 10-minute session is over :499, :621-633)
+   panel()     HomeScreen.kt:1440-1830 (name 28 sp Black SumaBlue + arrow; register card; Vender en línea; "Día a día";
+               Menú, Clientes, Facturas, Equipo, Reportes; divider; Configuración). WorkspaceRow r16 #F2F2F7, 42 dp white circle.
+   hub()       ui/screens/settings/SettingsHubScreen.kt:170-330 + sync/SettingsHubRules.kt (restaurant: + Opciones de servicio)
+   strip()     ui/screens/reports/SupportStrip.kt (SUPPORT-3) on every LEVEL_2_PLUS page (reports/ReportLevels.kt), hidden
+               while a dialog / sheet / system prompt has the window focus
+   dlg()       ui/components/SumaDialog.kt (Material AlertDialog, shapes.medium)
+   bio()       the Android system BiometricPrompt (ui/BiometricHelper.kt showBiometricPrompt): SYSTEM UI, only title + subtitle
+               are the app's words */
+const C = R.C, esc = RKIT.esc, L = R.lang, SH = C.lang;
+const FREE = (R.country === "US" || R.country === "CA");          // sync/Entitlement FREE_COUNTRIES
+const P = o => R.pick(o);
+const fmt = (s, ...a) => { a.forEach((v,i)=>{ s = s.split(`%${i+1}$s`).join(v).split(`%${i+1}$d`).join(v); }); a.forEach(v=>{ s = s.replace(/%[ds]/, v); }); return s; };
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const item = id => C.items.find(x=>x.id===id);
+const colorOf = it => (C.catOf(it.cat)||{color:"#607D8B"}).color;
+const svg = (p, cls) => `<svg class="${cls||"mi"}" viewBox="0 0 24 24"><path d="${p}"/></svg>`;
+const IP = {
+  cart:"M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z",
+  receipt:"M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z",
+  finger:"M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z",
+  add:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z",
+  chev:"M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z",
+  down:"M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z",
+  back:"M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z",
+  phone:"M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z",
+  tablet:"M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 1.99-.9 1.99-2L23 6c0-1.1-.9-2-2-2zm-2 14H5V6h14v12z",
+  lock:"M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z",
+  backup:"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z",
+  cloudOff:"M19.35 10.04C18.67 6.59 15.64 4 12 4c-1.48 0-2.85.43-4.01 1.17l1.46 1.46C10.21 6.23 11.08 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3 0 1.13-.64 2.11-1.56 2.62l1.45 1.45C23.16 18.16 24 16.68 24 15c0-2.64-2.05-4.78-4.65-4.96zM3 5.27l2.75 2.74C2.56 8.15 0 10.77 0 14c0 3.31 2.69 6 6 6h11.73l2 2L21 20.73 4.27 4 3 5.27zM7.73 10l8 8H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h1.73z",
+  cloudDone:"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM10 17l-3.5-3.5 1.41-1.41L10 14.17 15.18 9l1.41 1.41L10 17z",
+  history:"M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z",
+  okc:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z",
+  warn:"M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z",
+  card:"M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z",
+  pct:"M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4 18.6L18.6 4 20 5.4 5.4 20zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z",
+  tag:"M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z",
+  store:"M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z",
+  rest:"M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z",
+  devices:"M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z",
+  bell:"M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z",
+  globe:"M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z",
+  account:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z",
+  feedback:"M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z",
+  edit:"M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z",
+  person:"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+  group:"M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
+  rlong:"M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z",
+  gear:"M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z",
+  place:"M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+  more:"M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z",
+  check:"M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z",
+  box:"M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z",
+  copy:"M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z",
+  share:"M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z",
+  qr:"M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 19h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z",
+  open:"M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z",
+  buoy:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z",
+  trash:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"
+};
+const I = k => svg(IP[k]);
+
+/* ---------- common words (values / values-es / values-pt-rBR) ---------- */
+const W = {
+  register:{es:"Caja",pt:"Caixa",en:"Register"}, sales:{es:"Ventas",pt:"Vendas",en:"Sales"}, myBiz:{es:"Mi negocio",pt:"Meu negócio",en:"My business"},
+  tabs:{es:["Teclado","Catálogo"],pt:["Teclado","Catálogo"],en:["Keypad","Library"]},
+  all:{es:"Todos",pt:"Todos",en:"All"}, edit:{es:"Editar",pt:"Editar",en:"Edit"},
+  save:{es:"Guardar",pt:"Salvar",en:"Save"}, charge:{es:"Cobrar %s",pt:"Cobrar %s",en:"Charge %s"},
+  sale:{es:["Venta actual · %d artículo","Venta actual · %d artículos"],pt:["Venda atual · %d item","Venda atual · %d itens"],en:["Current sale · %d item","Current sale · %d items"]},
+  regClosedBar:{es:"Caja cerrada",pt:"Caixa fechado",en:"Register closed"}, regOpenBtn:{es:"Abrir",pt:"Abrir",en:"Open"},
+  offline:{es:"Sin internet",pt:"Sem internet",en:"No internet"},
+  regOpen:{es:"Caja abierta",pt:"Caixa aberto",en:"Register open"}, regSales:{es:"Ventas",pt:"Vendas",en:"Sales"},
+  regClosed:{es:"Caja cerrada",pt:"Caixa fechado",en:"Register closed"}, regClosedSub:{es:"Ábrela para empezar a vender",pt:"Abra para começar a vender",en:"Open it to start selling"},
+  sellOnline:{es:"Vender en línea",pt:"Vender online",en:"Sell online"}, rowOff:{es:"Apagado",pt:"Desligado",en:"Off"}, pillOff:{es:"APAGADO",pt:"DESLIGADO",en:"OFF"}, pillOn:{es:"ACTIVO",pt:"LIGADO",en:"ON"},
+  everyDay:{es:"Día a día",pt:"Dia a dia",en:"Every day"}, menu:{es:"Menú",pt:"Cardápio",en:"Menu"}, items:{es:"%1$d artículos",pt:"%1$d itens",en:"%1$d items"},
+  clients:{es:"Clientes",pt:"Clientes",en:"Clients"}, clientsN:{es:["%1$d cliente","%1$d clientes"],pt:["%1$d cliente","%1$d clientes"],en:["%1$d client","%1$d clients"]},
+  invoices:{es:"Facturas",pt:"Notas",en:"Invoices"}, invFirst:{es:"Escanea tu primera factura",pt:"Escaneie sua primeira nota",en:"Scan your first invoice"},
+  team:{es:"Equipo",pt:"Equipe",en:"Team"}, teamN:{es:["%1$d empleado · %2$s","%1$d empleados · %2$s"],pt:["%1$d funcionário · %2$s","%1$d funcionários · %2$s"],en:["%1$d employee · %2$s","%1$d employees · %2$s"]},
+  onPhones:{es:["%1$d en celular","%1$d en celular"],pt:["%1$d no celular","%1$d no celular"],en:["%1$d on a phone","%1$d on phones"]},
+  reports:{es:"Reportes",pt:"Relatórios",en:"Reports"}, today:{es:"Hoy · %s",pt:"Hoje · %s",en:"Today · %s"},
+  todayNet:{es:"Ventas netas hoy · %s",pt:"Líquido hoje · %s",en:"Net sales today · %s"},
+  settings:{es:"Configuración",pt:"Configurações",en:"Settings"}, settingsSub:{es:"Cobros, impuestos, recibos",pt:"Cobranças, impostos, recibos",en:"Payments, taxes, receipts"},
+  support:{es:"Soporte",pt:"Suporte",en:"Support"}, supportSub:{es:"Reporta un problema aquí",pt:"Relatar um problema aqui",en:"Report a problem here"},
+  myReports:{es:"Mis reportes",pt:"Meus relatos",en:"My reports"}, noReports:{es:"Aún no hay reportes",pt:"Ainda não há relatos",en:"No reports yet"},
+  ok:{es:"OK",pt:"OK",en:"OK"}, cancel:{es:"Cancelar",pt:"Cancelar",en:"Cancel"}, notNow:{es:"Ahora no",pt:"Agora não",en:"Not now"},
+  devOwner:{es:"Tu teléfono",pt:"Seu celular",en:"Your phone"}
+};
+const T = (k, ...a) => fmt(P(W[k]), ...a);
+const PL = (k, n, ...a) => fmt(P(W[k])[n===1?0:1], n, ...a);
+const nowTime = (h=12, m=41) => new Intl.DateTimeFormat(L==="en"?"en-US":(L==="pt"?"pt-BR":(C.lang==="es"?C.loc:"es-CO")),{hour:"numeric",minute:"2-digit"}).format(new Date(2026,9,20,h,m));
+
+/* ---------- owner Home (the till) ---------- */
+function home(o){ o=o||{};
+  const lines = o.lines||[];
+  const totalV = lines.reduce((s,l)=>s+l.price,0);
+  let h = "";
+  if(o.warnBar) h += o.warnBar;
+  h += `<div class="otabs">${P(W.tabs).map((t,i)=>`<span class="${i===1?"on":""}">${i===0?svg(IP.edit,"ti"):""}${esc(t)}</span>`).join("")}</div>`;
+  if(o.regClosed) h += `<div class="rcbar"><span>${esc(T("regClosedBar"))}</span><b>${esc(T("regOpenBtn"))}</b></div>`;
+  if(o.offline) h += `<div class="offs">${esc(T("offline"))}</div>`;
+  h += `<div class="oedit"><span>${svg(IP.edit,"ti")}${esc(T("edit"))}</span></div>`;
+  h += `<div class="mcats">` + [{name:T("all"),color:"#607D8B",all:true}].concat(C.catsByName).map(c=>{
+    const st = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${st}">${c.all?svg(IP.check,"ck"):""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+  h += `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+  const n = lines.length;
+  if(n) h += `<div class="csale"><span>${esc(fmt(P(W.sale)[n===1?0:1], n))}</span><i>›</i></div>`;
+  h += `<div class="fpair"><span class="sec${n?"":" dis"}" data-t="save">${esc(T("save"))}</span><span class="pri${n?"":" dis"}" data-t="charge">${esc(fmt(P(W.charge), R.money(totalV)))}</span></div>`;
+  h += nav(o.nav||{});
+  return h;
+}
+function nav(o){ o=o||{};
+  const flag = o.finger ? svg(IP.finger,"fp") : R.flag();
+  return `<div class="mnav onav"><div class="${o.on==="reg"?"on":""}"><span class="pill">${I("cart")}</span>${esc(T("register"))}</div>
+    <div class="${o.on==="sales"?"on":""}"><span class="pill">${I("receipt")}${o.badge?`<em class="nbadge">${o.badge}</em>`:""}</span>${esc(T("sales"))}</div>
+    <div data-t="flag"><span class="flagc${o.panel?" lit":""}">${flag}</span>${esc(T("myBiz"))}</div></div>`;
+}
+/* ---------- the business panel ---------- */
+function wsRow(o){
+  return `<div class="wrow${o.cls?" "+o.cls:""}" ${o.t?`data-t="${o.t}"`:""} style="${o.bg?`background:${o.bg}`:""}">
+    ${o.dot?`<span class="wdot" style="color:${o.fg}">●</span>`:`<span class="wic">${I(o.icon)}</span>`}
+    <span class="wtx"><b style="${o.fg?`color:${o.fg}`:""}">${esc(o.title)}</b>${o.sub?`<small style="${o.fg?`color:${hexA(o.fg,.7)}`:""}">${esc(o.sub)}</small>`:""}</span>
+    ${o.trail||""}${o.dot?"":`<span class="wch">${I("chev")}</span>`}</div>`;
+}
+function panel(o){ o=o||{};
+  const name = o.name || C.place;
+  let h = `<div class="panel"><div class="phd" data-t="pname"><span>${esc(name)}</span>${svg(IP.down,"pdn")}</div><div class="plist">`;
+  if(o.before) h += o.before;
+  const open = o.regOpen!==false;
+  h += wsRow(open ? {dot:true, title:T("regOpen"), sub:T("regSales"), bg:"#E8F5E9", fg:"#2E7D32", trail:`<b class="wtr" style="color:#2E7D32">${R.money(o.salesToday||0)}</b>`}
+                  : {dot:true, title:T("regClosed"), sub:T("regClosedSub"), bg:"#FFEBEE", fg:"#C62828", trail:`<b class="wtr sm" style="color:#C62828">${esc(T("regOpenBtn"))}</b>`});
+  const on = !!o.storeOn;
+  h += wsRow({icon:"cart", title:T("sellOnline"), sub:o.storeSub|| (on?P({es:"Activo",pt:"Ligado",en:"On"}):T("rowOff")), t:"sellonline",
+     trail:`<span class="spill${on?" on":""}">${esc(on?T("pillOn"):T("pillOff"))}</span>`});
+  h += `<div class="phead">${esc(T("everyDay"))}</div>`;
+  h += wsRow({icon:"rest", title:T("menu"), sub:fmt(P(W.items), C.items.length)});
+  h += wsRow({icon:"person", title:T("clients"), sub:PL("clientsN", o.clients||24)});
+  h += wsRow({icon:"rlong", title:T("invoices"), sub:T("invFirst")});
+  const ph = o.onPhones||0;
+  h += wsRow({icon:"group", title:T("team"), sub:fmt(P(W.teamN)[2===1?0:1], 2, fmt(P(W.onPhones)[ph===1?0:1], ph))});
+  h += wsRow({icon:"rlong", title:T("reports"), sub:fmt(P(FREE?W.today:W.todayNet), R.money(o.salesToday||0))   /* MKT2-1 NetSalesWords.outsideUsCa, HomeScreen.kt:1784 */});
+  h += `<div class="pdiv"></div>`;
+  h += wsRow({icon:"gear", title:T("settings"), sub:T("settingsSub"), t:"settings"});
+  h += `</div></div>`;
+  return h + nav({panel:true, finger:o.finger});
+}
+/* ---------- the Settings page (hub) ---------- */
+const HUB = {
+  groups:{es:["Cobros","Tu negocio","Este teléfono","Cuenta"],pt:["Cobranças","Seu negócio","Este celular","Conta"],en:["Getting paid","Your business","This phone","Account"]},
+  rows:[
+    [ ["card",{es:"Métodos de pago",pt:"Formas de pagamento",en:"Payment methods"}],
+      ["pct",{es:"Impuestos",pt:"Impostos",en:"Taxes"}],
+      ["tag",{es:"Descuentos y cargos",pt:"Descontos e taxas",en:"Discounts and charges"}],
+      ["receipt",{es:"Recibos",pt:"Recibos",en:"Receipts"},{es:"Detallado · numeración automática",pt:"Detalhado · numeração automática",en:"Detailed · numbered automatically"}] ],
+    [ ["store",{es:"Datos del negocio",pt:"Dados do negócio",en:"Business info"}],
+      ["rest",{es:"Opciones de servicio",pt:"Opções de atendimento",en:"Dining options"},{es:"Para aquí, para llevar, domicilio y mesas",pt:"Para comer aqui, para viagem, entrega e mesas",en:"For here, to go, delivery and tables"}],
+      ["devices",{es:"Conexiones",pt:"Conexões",en:"Connections"},null,"hub-conn"] ],
+    [ ["lock",{es:"Seguridad",pt:"Segurança",en:"Security"},"SEC","hub-sec"],
+      ["backup",{es:"Respaldo",pt:"Backup",en:"Backup"},"BACKUP","hub-backup"],
+      ["bell",{es:"Notificaciones",pt:"Notificações",en:"Notifications"},{es:"Pedidos, pagos y tu caja",pt:"Pedidos, pagamentos e seu caixa",en:"Orders, payments and your register"}],
+      ["globe",{es:"Idioma y apariencia",pt:"Idioma e aparência",en:"Language & appearance"},"LANG"] ],
+    [ ["account",{es:"Mi cuenta",pt:"Minha conta",en:"My Account"},"EMAIL"],
+      ["feedback",{es:"Mis reportes",pt:"Meus relatos",en:"My reports"},{es:"Lo que nos contaste y lo que respondimos",pt:"O que você nos contou e o que respondemos",en:"What you told us and what we answered"}] ]
+  ]
+};
+/* BackupDateFormat.dateTime: DateFormat MEDIUM date + SHORT time in the phone language */
+const backupDate = (d) => new Intl.DateTimeFormat(L==="en"?"en-US":(L==="pt"?"pt-BR":(C.lang==="es"?C.loc:"es-CO")),{dateStyle:"medium",timeStyle:"short"}).format(d||new Date(2026,9,20,12,41));
+const LANGNAME = {es:"Español",pt:"Português (Brasil)",en:"English"};
+const OWNER_EMAIL = (C.owner.split(" ")[0]).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"") + "@gmail.com";
+function hub(o){ o=o||{};
+  let h = topbar(T("settings")) + `<div class="hub">`;
+  HUB.rows.forEach((rows,gi)=>{
+    h += `<div class="hgrp">${esc(P(HUB.groups)[gi])}</div>`;
+    rows.forEach(r=>{
+      let sub = r[2]; let red=false;
+      if(sub==="BACKUP"){ sub = o.backupLast ? fmt(P({es:"Último respaldo: %1$s",pt:"Último backup: %1$s",en:"Last copy: %1$s"}), o.backupLast) : P({es:"Sin respaldo",pt:"Sem backup",en:"No backup"}); red = !o.backupLast; }
+      else if(sub==="SEC") sub = o.secFees ? P({es:"Pide huella antes de borrar o quitar cargos",pt:"Pede a digital antes de apagar ou remover taxas",en:"Asks for your fingerprint before deleting or removing fees"})
+                                         : P({es:"Pide huella antes de borrar",pt:"Pede a digital antes de apagar",en:"Asks for your fingerprint before deleting"});  /* SettingsHubScreen.kt:262 */
+      else if(sub==="LANG") sub = LANGNAME[L] + " · " + P({es:"Claro",pt:"Claro",en:"Light"});
+      else if(sub==="EMAIL") sub = OWNER_EMAIL;
+      else if(sub) sub = P(sub);
+      h += `<div class="hrow" ${r[3]?`data-t="${r[3]}"`:""}><span class="wic">${I(r[0])}</span><span class="wtx"><b>${esc(P(r[1]))}</b>${sub?`<small class="${red?"red":""}">${esc(sub)}</small>`:""}</span><span class="wch">${I("chev")}</span></div>`;
+    });
+  });
+  return h + `</div>` + strip();
+}
+/* ---------- small shared pieces ---------- */
+function topbar(title, o){ o=o||{};
+  return `<div class="mtb${o.paper?" ptb":""}"><span class="mtbb" data-t="${o.t||"back"}">${I("back")}</span><span class="mtbt">${esc(title)}</span></div>`;
+}
+function strip(){
+  return `<div class="sstrip"><div class="sh"><span class="sb">${svg(IP.buoy,"sbi")}</span><span class="st"><b>${esc(T("support"))}</b><small>${esc(T("supportSub"))}</small></span></div>
+    <div class="sh"><span class="st"><b>${esc(T("myReports"))}</b><small>${esc(T("noReports"))}</small></span>${svg(IP.chev,"sch")}</div></div>`;
+}
+function dlg(o){ o=o||{};
+  return `<div class="dscrim"><div class="dbox${o.paper?" pap":""}">${o.icon||""}<div class="dtt">${esc(o.title)}</div><div class="dbody">${o.body||""}</div>
+    <div class="dbtn">${o.dismiss?`<span class="dno" ${o.tNo?`data-t="${o.tNo}"`:""}>${esc(o.dismiss)}</span>`:""}<span class="dyes${o.red?" red":""}" data-t="${o.t||"dlg-yes"}">${esc(o.confirm)}</span></div></div></div>`;
+}
+function bio(title, sub){
+  return `<div class="dscrim bios"><div class="bio"><div class="bt">${esc(title)}</div><div class="bs">${esc(sub)}</div>
+    <div class="bf" data-t="sensor">${svg(IP.finger,"bfi")}</div></div></div>`;
+}
+function toast(text){ return `<div class="otoast">${esc(text)}</div>`; }
+
+/* how far (in dp) the page must scroll so that `sel` sits above the bottom of .cpage (the real pages scroll; the demo moves
+   the page's inner column with a transform kept in state, so a re-render keeps the place) */
+function scrollFor(sel){
+  const el=document.querySelector('#app '+sel), pg=document.querySelector('#app .cpage'); if(!el||!pg) return 0;
+  const u=document.getElementById('screen').getBoundingClientRect().width/412;
+  const over=el.getBoundingClientRect().bottom - pg.getBoundingClientRect().bottom + 16*u;
+  return over>0 ? Math.ceil(over/u) : 0;
+}
+
+/*TITLE: Otro celular o tableta*/
+/* RS19 "Otro celular o tableta": the Connections page (owner phone). The shop already has its counter tablet connected
+   (the included connection). Outside the US/Canada the next device needs a paid connection: "+ Conectar" -> "Necesitas 1 conexión
+   más" -> Add connections -> Google Play (system, shown as a hop card) -> the chooser comes back -> an employee phone.
+   US/Canada: "Todo está incluido", "+ Conectar" opens the chooser at once. Screens (app/src/main/java/com/example/):
+   Connections page   ui/screens/connections/ConnectionsScreen.kt:84-166 (paper page #FBFAF7, plain SumaTopBar, hero card,
+                      "N de M" h1, ConnectionCircles, line, ConnMoneyBox; free country: "Todo está incluido" + conn_usa_body, no
+                      money box), PrintersRow :170, DeviceSection :215 (tile #F9EAE3, chip "Incluida", Quitar), "+ Conectar" (only
+                      when the shop has a device), StoreCard :282 (locked = accentSoft, "+ Agregar una conexión")
+   circles            ConnectionParts.kt (46 dp circles, 18 dp black number badge, filled = #C44B28, open = 2 dp ring, Add = dashed)
+                      + sync/ConnectionsOverview.kt:104-124 (included row: phone + first device; paid row: paid circles + ONE Add)
+   dialog             ConnectionDialogs.kt NeedConnectionDialog (PaperThemeOnSurface potato; store line shown because paid = 0,
+                      a device is connected and the country pays: round2 #12 already flags its wording)
+   Add connections    AddConnectionsScreen.kt:167-240 (opened with raise = 1: count 1, hint conn_hint_up, store hint, "Confirmar en
+                      Google Play"); NO price is drawn: Play gives none until the products exist (UnavailableConnectionsGateway)
+   after Play         RegisterNavGraph.kt:147-160 onApplied(resume) -> ConnectionsPageActions.resumePendingAdd ASK -> the chooser opens
+   chooser            ConnectionDialogs.kt:144 ConnectChooserSheet (paper sheet, potato tiles)
+   phone picker       ConnectEmployeePhoneScreen.kt (paper; role = job title else "Equipo" (team_badge_team, MKT2-2 #13);
+                      after Conectar the row says "Invitado" + "Código del negocio X · PIN Y" + "Enviar invitación"; the cost
+                      note is not drawn in the US/Canada, Entitlement.countryIsFree)
+   The business code is the register's pairing code (currentRegisterToken, 10 characters, generatePairingToken). */
+
+const S19 = {
+  title:{es:"Conexiones",pt:"Conexões",en:"Connections"},
+  inUse:{es:"CONEXIONES EN USO",pt:"CONEXÕES EM USO",en:"CONNECTIONS IN USE"},
+  nOfM:{es:"%1$d de %2$d",pt:"%1$d de %2$d",en:"%1$d of %2$d"},
+  allIncl:{es:"Todo está incluido",pt:"Tudo está incluído",en:"Everything is included"},
+  gIncl:{es:"INCLUIDAS",pt:"INCLUÍDAS",en:"INCLUDED"}, gPaid:{es:"DE PAGO",pt:"PAGAS",en:"PAID"},
+  yourPhone:{es:"Tu teléfono",pt:"Seu celular",en:"Your phone"}, included:{es:"Incluida",pt:"Incluída",en:"Included"},
+  open:{es:"Libre",pt:"Livre",en:"Open"}, paidSlot:{es:"De pago",pt:"Paga",en:"Paid"}, add:{es:"Agregar",pt:"Adicionar",en:"Add"},
+  allInUse:{es:"Todas tus conexiones están en uso.",pt:"Todas as suas conexões estão em uso.",en:"All your connections are in use."},
+  oneAvail:{es:"1 conexión disponible.",pt:"1 conexão disponível.",en:"1 connection available."},
+  usa:{es:"En EE. UU. y Canadá no hay cargos por conexiones.",pt:"Nos EUA e no Canadá não há cobrança por conexões.",en:"In the United States and Canada there are no connection charges."},
+  ledIncl:{es:"Incluidas",pt:"Incluídas",en:"Included"}, ledInclSub:{es:"Tu teléfono + tu primer equipo",pt:"Seu celular + seu primeiro aparelho",en:"Your phone + your first device"},
+  ledEach:{es:"Cada conexión extra",pt:"Cada conexão extra",en:"Each extra connection"}, ledEachSub:{es:"La tercera y las siguientes",pt:"A terceira e as seguintes",en:"The third one and after"},
+  ledAdded:{es:"Conexiones agregadas",pt:"Conexões adicionadas",en:"Added connections"}, ledPay:{es:"Pagas",pt:"Você paga",en:"You pay"},
+  printers:{es:"Impresoras y otras conexiones",pt:"Impressoras e outras conexões",en:"Printers and other connections"},
+  secReg:{es:"CAJAS",pt:"CAIXAS",en:"REGISTERS"}, secPaid:{es:"CONEXIONES QUE PAGAS",pt:"CONEXÕES QUE VOCÊ PAGA",en:"CONNECTIONS YOU PAY FOR"},
+  availT:{es:"Conexión disponible",pt:"Conexão disponível",en:"Available connection"}, availS:{es:"Pagada, sin usar",pt:"Paga, ainda sem uso",en:"Paid for, not used yet"},
+  remove:{es:"Quitar",pt:"Remover",en:"Remove"}, connect:{es:"Conectar",pt:"Conectar",en:"Connect"},
+  lockT:{es:"Desbloquea tu tienda online",pt:"Desbloqueie sua loja online",en:"Unlock your online store"},
+  lockB:{es:"Tu tienda online se abre cuando una tablet o un teléfono de empleado usa una conexión adicional. Tus clientes piden desde un enlace que compartes.",pt:"Sua loja online abre quando um tablet ou um celular de funcionário usa uma conexão adicional. Seus clientes pedem por um link que você compartilha.",en:"Your online store opens when a tablet or an employee phone uses an extra connection. Customers order from a link you share."},
+  addConn:{es:"Agregar una conexión",pt:"Adicionar uma conexão",en:"Add a connection"},
+  storeT:{es:"Tienda online",pt:"Loja online",en:"Online store"}, storeUsa:{es:"La tienda online está incluida en tu país. Comparte tu enlace y recibe pedidos.",pt:"A loja online está incluída no seu país. Compartilhe seu link e receba pedidos.",en:"The online store is included in your country. Share your link and take orders."},
+  storeOn:{es:"Activa",pt:"Ativa",en:"On"},
+  dlgT:{es:"Necesitas 1 conexión más",pt:"Você precisa de mais 1 conexão",en:"You need 1 more connection"},
+  dlgB:{es:"Todas tus conexiones están en uso. Agrega una y puedes conectar de inmediato.",pt:"Todas as suas conexões estão em uso. Adicione uma e você pode conectar na hora.",en:"All your connections are in use. Add one and you can connect right away."},
+  dlgWhy:{es:"Mantener tus equipos sincronizados usa nuestros servidores. Eso es lo que paga una conexión.",pt:"Manter seus aparelhos sincronizados usa nossos servidores. É isso que uma conexão paga.",en:"Keeping your devices in sync runs on our servers. That is what a connection pays for."},
+  dlgStore:{es:"Tu tienda online se abre cuando una tablet o un teléfono de empleado usa tu tercera conexión.",pt:"Sua loja online abre quando um tablet ou celular de funcionário usa sua terceira conexão.",en:"Your online store opens once a tablet or employee phone uses your third connection."},
+  dlgPlay:{es:"Google Play muestra el precio antes de confirmar.",pt:"O Google Play mostra o preço antes de você confirmar.",en:"Google Play shows the price before you confirm."},
+  addTitle:{es:"Agregar conexiones",pt:"Adicionar conexões",en:"Add connections"}, addedLabel:{es:"Conexiones que pagas",pt:"Conexões que você paga",en:"Connections you pay for"},
+  hintUp:{es:"Se aplica ya. Google Play cobra solo lo que falta de este año.",pt:"Vale a partir de agora. O Google Play cobra só o resto deste ano.",en:"Takes effect now. Google Play charges only the rest of this year."},
+  apply:{es:"Confirmar en Google Play",pt:"Confirmar no Google Play",en:"Confirm in Google Play"},
+  chooseT:{es:"¿Qué quieres conectar?",pt:"O que você quer conectar?",en:"What do you want to connect?"},
+  optReg:{es:"Tablet de mostrador",pt:"Um caixa",en:"A register"}, optRegD:{es:"Una tablet que vende en tu mostrador.",pt:"Um tablet que vende no seu balcão.",en:"A tablet that sells at your counter."},
+  optPh:{es:"El teléfono de un empleado",pt:"O celular de um funcionário",en:"An employee phone"}, optPhD:{es:"Tu empleado vende desde su propio teléfono, como una caja.",pt:"Seu funcionário vende pelo próprio celular, como um caixa.",en:"Your employee sells from their own phone, as a register."},
+  pickT:{es:"Conectar un teléfono de empleado",pt:"Conectar um celular de funcionário",en:"Connect an employee phone"},
+  pickQ:{es:"¿Qué empleado lo va a usar?",pt:"Qual funcionário vai usar?",en:"Which employee will use it?"},
+  cashier:{es:"Equipo",pt:"Equipe",en:"Team"}, invited:{es:"Invitado",pt:"Convidado",en:"Invited"},
+  nextStep:{es:"Código del negocio %1$s · PIN %2$s",pt:"Código do negócio %1$s · PIN %2$s",en:"Business code %1$s · PIN %2$s"},
+  send:{es:"Enviar invitación",pt:"Enviar convite",en:"Send invitation"},
+  addEmp:{es:"¿No está en la lista? Agrega un empleado",pt:"Não está na lista? Adicione um funcionário",en:"Not on the list? Add an employee"},
+  costNote:{es:"Esto usa 1 de tus conexiones.",pt:"Isto usa 1 das suas conexões.",en:"This uses 1 of your connections."},
+  play:{es:"Google Play",pt:"Google Play",en:"Google Play"},
+  playNote:{es:"Google Play te muestra el precio y confirmas ahí. Platata no cobra nada por su cuenta.",pt:"O Google Play mostra o preço e você confirma lá. O Platata não cobra nada por conta própria.",en:"Google Play shows you the price and you confirm there. Platata charges nothing on its own."},
+  oneConn:{es:"+1 conexión",pt:"+1 conexão",en:"+1 connection"}
+};
+const t = (k,...a) => fmt(P(S19[k]),...a);
+const TAB_NAME = {es:"Caja principal",pt:"Caixa principal",en:"Front Counter"}[SH];
+const CODE = "7F3A9C21B4", PIN = "4821";
+const EMPS = [C.people.waiter, C.people.waiter2];
+
+function circle(c){
+  let cls, inner, l1, l2, ok=false;
+  if(c.k==="phone"){ cls="f"; inner=I("phone"); l1=t("yourPhone"); l2=t("included"); ok=true; }
+  else if(c.k==="dev"){ cls="f"; inner=I("tablet"); l1=c.name; l2=t("included"); ok=true; }
+  else if(c.k==="open"){ cls="o"; inner=String(c.n); l1=t("open"); if(c.paid){ l2=t("paidSlot"); } else { l2=t("included"); ok=true; } }
+  else { cls="a"; inner=I("add"); l1=t("add"); l2=""; }
+  return `<div class="slot"${c.k==="add"&&!c.step?' data-t="conn-addc"':""}><div class="circ ${cls}">${inner}<span class="badge">${c.n}</span></div><b>${esc(l1)}</b><small class="${ok?"ok":""}">${esc(l2)}</small></div>`;
+}
+function circles(incl, paid){
+  let h = `<div class="cgrp"><div class="kv ok">${esc(t("gIncl"))}</div><div class="crow">${incl.map(circle).join("")}</div></div>`;
+  if(paid.length) h += `<div class="cgrp"><div class="kv">${esc(t("gPaid"))}</div><div class="crow">${paid.map(circle).join("")}</div></div>`;
+  return h;
+}
+function money(paid){
+  let h = `<div class="mline"><div class="l"><b>${esc(t("ledIncl"))}</b><small>${esc(t("ledInclSub"))}</small></div><span class="v ok">${esc(t("included"))}</span></div>`;
+  if(paid<=0) h += `<div class="mline"><div class="l"><b>${esc(t("ledEach"))}</b><small>${esc(t("ledEachSub"))}</small></div></div>`;
+  else h += `<div class="mline"><div class="l"><b>${esc(t("ledAdded"))}</b></div><span class="v">${paid}</span></div><div class="mline big"><div class="l"><b>${esc(t("ledPay"))}</b></div></div>`;
+  return h;
+}
+function connPage(st){
+  const paid = st.paid;
+  let hero;
+  const incl = [{k:"phone",n:1},{k:"dev",n:2,name:TAB_NAME}];
+  if(FREE){
+    hero = `<div class="pcard"><div class="h2" style="color:#2C6A35">${esc(t("allIncl"))}</div>${circles(incl,[])}<div class="pbody">${esc(t("usa"))}</div></div>`;
+  } else {
+    const paidRow = []; for(let j=0;j<paid;j++) paidRow.push({k:"open",n:3+j,paid:true}); paidRow.push({k:"add",n:3+paid});
+    hero = `<div class="pcard"><div class="kv">${esc(t("inUse"))}</div><div class="h1">${esc(t("nOfM",2,2+paid))}</div>${circles(incl,paidRow)}
+      <div class="pbody">${esc(paid?t("oneAvail"):t("allInUse"))}</div>${money(paid)}</div>`;
+  }
+  let h = topbar(t("title"),{paper:true}) + `<div class="cpage"><div class="cin" style="transform:translateY(calc(var(--u)*${-(st.sc||0)}))">` + hero +
+    `<div class="prow"><span>${esc(t("printers"))}</span>${I("chev")}</div>
+     <div class="dsec"><div class="kv">${esc(t("secReg"))}</div><div class="drow"><span class="dtile">${I("tablet")}</span><span class="nm">${esc(TAB_NAME)}</span>
+       <span class="rt"><span class="chip ok">${esc(t("included"))}</span><span class="rmv">${esc(t("remove"))}</span></span></div></div>`;
+  if(paid>0) h += `<div class="dsec"><div class="kv">${esc(t("secPaid"))}</div><div class="drow"><span class="dtile">${I("add")}</span><span class="nm">${esc(t("availT"))}<br><small class="small">${esc(t("availS"))}</small></span>
+       <span class="rt"><span class="chip pd">${esc(t("paidSlot"))}</span><span class="rmv">${esc(t("remove"))}</span></span></div></div>`;
+  h += `<div class="pbtn" data-t="conn-connect">${I("add")}${esc(t("connect"))}</div>`;
+  if(FREE) h += `<div class="scard" style="background:#fff"><div class="top"><span class="sbox" style="background:#F9EAE3">${I("box")}</span><span class="tx"><b>${esc(t("storeT"))}</b><span class="pbody">${esc(t("storeUsa"))}</span></span><span class="okpill">${esc(t("storeOn"))}</span></div></div>`;
+  else h += `<div class="scard" style="background:#F9EAE3"><div class="top"><span class="sbox" style="background:#fff">${I("box")}</span><span class="tx"><b>${esc(t("lockT"))}</b><span class="pbody">${esc(t("lockB"))}</span></span></div><div class="pbtn sm">${I("add")}${esc(t("addConn"))}</div></div>`;
+  h += `</div></div>` + (st.sheet||st.dlg ? "" : strip());
+  if(st.dlg) h += dlg({paper:true, title:t("dlgT"), body:`<p>${esc(t("dlgB"))}</p><p style="color:#464A52">${esc(t("dlgWhy"))}</p><p style="background:#F9EAE3;color:#3A2A1F;border-radius:calc(var(--u)*14);padding:calc(var(--u)*12)">${esc(t("dlgStore"))}</p><p class="small" style="font-size:calc(var(--u)*12.5);margin:0">${esc(t("dlgPlay"))}</p>`,
+     dismiss:T("notNow"), confirm:t("addConn"), t:"dlg-add"});
+  if(st.sheet) h += `<div class="sheetp"><div class="sheet"><div class="grab"></div><div class="h2">${esc(t("chooseT"))}</div>
+    <div class="opt"><span class="tl">${I("tablet")}</span><span><b>${esc(t("optReg"))}</b><small>${esc(t("optRegD"))}</small></span></div>
+    <div class="opt" data-t="opt-phone"><span class="tl">${I("phone")}</span><span><b>${esc(t("optPh"))}</b><small>${esc(t("optPhD"))}</small></span></div>
+    <div class="notnow">${esc(T("notNow"))}</div></div></div>`;
+  return h;
+}
+function addPage(){
+  const incl=[{k:"phone",n:1},{k:"open",n:2,paid:false}], paidRow=[{k:"open",n:3,paid:true},{k:"add",n:4,step:true}];
+  return topbar(t("addTitle"),{paper:true}) + `<div class="cpage" style="gap:calc(var(--u)*12)">
+    <div class="stepc"><div class="step"><span class="sbt">${svg("M19 13H5v-2h14v2z")}</span><span class="mid"><span class="h1">1</span><small>${esc(t("addedLabel"))}</small></span><span class="sbt">${I("add")}</span></div>
+      ${circles(incl,paidRow)}${money(1)}</div>
+    <div class="hint">${esc(t("hintUp"))}</div><div class="hint">${esc(t("dlgStore"))}</div>
+    <div class="pbtn" data-t="apply">${esc(t("apply"))}</div></div>` + strip();
+}
+function pickPage(st){
+  const rows = EMPS.map((name,i)=>{
+    const inv = i===0 && st.invited;
+    return `<div class="emp${inv&&st.flash?" flash":""}"><div class="r"><span class="av">${esc(name[0])}</span><span class="who"><b>${esc(name)}</b><small>${esc(t("cashier"))}</small></span>
+      ${inv?`<span class="chip wn">${esc(t("invited"))}</span>`:`<span class="cbtn" data-t="emp-${i}">${esc(t("connect"))}</span>`}</div>
+      ${inv?`<div class="code">${esc(t("nextStep",CODE,PIN))}</div><div class="send">${esc(t("send"))}</div>`:""}</div>`;
+  }).join("");
+  return topbar(t("pickT"),{paper:true}) + `<div class="cpage" style="gap:calc(var(--u)*12);padding-top:calc(var(--u)*16)"><div class="h2">${esc(t("pickQ"))}</div>${rows}
+    <div class="addemp">${esc(t("addEmp"))}</div>${FREE?"":`<div class="small">${esc(t("costNote"))}</div>`}</div>` + strip();
+}
+function render(st){
+  if(st.screen==="home") return home({nav:{on:"reg"}});
+  if(st.screen==="panel") return panel({salesToday:C.order.reduce((a,id)=>a+item(id).price,0)*6});
+  if(st.screen==="hub") return hub({backupLast:backupDate()});
+  if(st.screen==="conn") return connPage(st);
+  if(st.screen==="add") return addPage() + (st.hop ? RKIT.hop(R,{from:T("devOwner"), to:t("play"), line:t("oneConn"), note:t("playNote")}) : "");
+  if(st.screen==="pick") return pickPage(st);
+  return "";
+}
+const scrollTo = (st, sel) => { const v = scrollFor(sel); if(v>0) st.sc = (st.sc||0) + v; };
+RKIT.start(R, {
+  id:"RS19", tallVideo:true, clock:"12:41",
+  endText:P({es:"Así conectas otro celular o tableta con Platata.",pt:"Assim você conecta outro celular ou tablet com o Platata.",en:"That's how you connect another phone or tablet with Platata."}),
+  beats: FREE ? P({
+    es:["Abre tu negocio, Configuración y Conexiones","Tu teléfono y tu caja: las dos incluidas","En EE. UU. y Canadá no pagas conexiones","Para otro equipo, toca Conectar","Elige el teléfono de un empleado","Elige quién lo va a usar y toca Conectar","Entra con el código del negocio y su PIN","Así conectas otro celular o tableta con Platata."],
+    en:["Open your business, Settings, then Connections","Your phone and your register: both included","No connection charges in the US and Canada","For another device, tap Connect","Pick an employee phone","Pick who will use it and tap Connect","They sign in with the business code and their PIN","That's how you connect another phone or tablet with Platata."]})
+  : P({
+    es:["Abre tu negocio, Configuración y Conexiones","Dos incluidas: tu teléfono y tu primera caja","Agrega una conexión y confírmala en Google Play","Ya tienes una conexión libre. Toca Conectar","Elige el teléfono de un empleado","Elige quién lo va a usar y toca Conectar","Entra con el código del negocio y su PIN","Así conectas otro celular o tableta con Platata."],
+    pt:["Abra seu negócio, Configurações e Conexões","Duas incluídas: seu celular e seu primeiro caixa","Adicione uma conexão e confirme no Google Play","Agora há uma conexão livre. Toque em Conectar","Escolha o celular de um funcionário","Escolha quem vai usar e toque em Conectar","Ele entra com o código do negócio e o PIN","Assim você conecta outro celular ou tablet com o Platata."],
+    en:["Open your business, Settings, then Connections","Two included: your phone and your first register","Add a connection and confirm it in Google Play","Now one connection is free. Tap Connect","Pick an employee phone","Pick who will use it and tap Connect","They sign in with the business code and their PIN","That's how you connect another phone or tablet with Platata."]}),
+  state:{screen:"home", paid:0, sc:0, sheet:false, hop:false, invited:false, flash:false},
+  render,
+  who: () => T("devOwner"),
+  steps: [
+    {beat:0, hint:P({es:"Toca Mi negocio",pt:"Toque em Meu negócio",en:"Tap My business"}), target:'[data-t="flag"]', tap(st){ st.screen="panel"; }},
+    {beat:0, hint:P({es:"Toca Configuración",pt:"Toque em Configurações",en:"Tap Settings"}), target:'[data-t="settings"]', tap(st){ st.screen="hub"; }},
+    {beat:0, hint:P({es:"Toca Conexiones",pt:"Toque em Conexões",en:"Tap Connections"}), target:'[data-t="hub-conn"]', tap(st,E){ st.screen="conn";
+        if(FREE) E.after(5200,()=>scrollTo(st,'.scard')); }},
+  ].concat(FREE ? [
+    {beat:3, hint:P({es:"Toca Conectar",pt:"Toque em Conectar",en:"Tap Connect"}), target:'[data-t="conn-connect"]', tap(st){ st.sheet=true; }},
+  ] : [
+    {beat:1, hint:P({es:"Toca Agregar",pt:"Toque em Adicionar",en:"Tap Add"}), target:'[data-t="conn-addc"]', tap(st){ st.screen="add"; }},
+    {beat:2, hint:P({es:"Toca Confirmar en Google Play",pt:"Toque em Confirmar no Google Play",en:"Tap Confirm in Google Play"}), target:'[data-t="apply"]', tap(st,E){ st.hop=true;
+        E.after(2600,()=>{ st.hop=false; st.paid=1; st.screen="conn"; });
+        E.after(3800,()=>scrollTo(st,'[data-t="conn-connect"]')); }},
+    {beat:3, hint:P({es:"Toca Conectar",pt:"Toque em Conectar",en:"Tap Connect"}), target:'[data-t="conn-connect"]', tap(st){ st.sheet=true; }},
+  ]).concat([
+    {beat:4, hint:P({es:"Toca El teléfono de un empleado",pt:"Toque em O celular de um funcionário",en:"Tap An employee phone"}), target:'[data-t="opt-phone"]', tap(st){ st.sheet=false; st.screen="pick"; }},
+    {beat:5, hint:P({es:"Toca Conectar",pt:"Toque em Conectar",en:"Tap Connect"}), target:'[data-t="emp-0"]', tap(st,E){ st.invited=true; st.flash=true; E.after(1300,()=>{ st.flash=false; }); }}
+  ])
+});
+
+</script>
+</body>
+</html>

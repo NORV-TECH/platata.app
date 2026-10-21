@@ -1,0 +1,40 @@
+{
+  "id": "R6",
+  "name": "Servers with their own phone",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": { "stability": 0.5, "similarity_boost": 0.75 },
+    "pt": { "stability": 0.5, "similarity_boost": 0.75 },
+    "en": { "stability": 0.5, "similarity_boost": 0.75 }
+  },
+  "steps": [
+    { "id": "1-connect", "voice": {
+      "es": "En tu teléfono, toca Conectar y elige El teléfono de un empleado.",
+      "pt": "No seu celular, toque em Conectar e escolha O celular de um funcionário.",
+      "en": "On your phone, tap Connect and choose An employee phone." } },
+    { "id": "2-pick", "voice": {
+      "es": "Elige al mesero. Recibe el código del negocio y su PIN.",
+      "pt": "Escolha o garçom. Ele recebe o código do negócio e o PIN dele.",
+      "en": "Pick your server. They get the business code and their PIN." } },
+    { "id": "3-invite", "voice": {
+      "es": "Toca Enviar invitación y mándasela por WhatsApp.",
+      "pt": "Toque em Enviar convite e mande pelo WhatsApp.",
+      "en": "Tap Send invitation and send it by WhatsApp." } },
+    { "id": "4-door", "voice": {
+      "es": "En su teléfono, toca Ya uso Platata y Trabajo en un negocio.",
+      "pt": "No celular dele, toque em Já uso o Platata e Trabalho em um negócio.",
+      "en": "On their phone, tap I already use Platata, then I work at a business." } },
+    { "id": "5-google", "voice": {
+      "es": "Entra con cualquier cuenta de Google.",
+      "pt": "Entre com qualquer conta do Google.",
+      "en": "Sign in with any Google account." } },
+    { "id": "6-join", "voice": {
+      "es": "Escribe el código del negocio y su PIN, y toca Unirme. Ya vende desde su teléfono.",
+      "pt": "Digite o código do negócio e o PIN, e toque em Entrar. Pronto, ele já vende pelo celular.",
+      "en": "Type the business code and the PIN, then tap Join. Now they sell from their own phone." } },
+    { "id": "7-end", "voice": {
+      "es": "Así tus meseros venden desde su teléfono, con Platata.",
+      "pt": "Assim seus garçons vendem pelo celular, com o Platata.",
+      "en": "That's how your servers sell from their own phone, with Platata." } }
+  ]
+}

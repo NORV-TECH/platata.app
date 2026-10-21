@@ -1,17 +1,48 @@
 {
   "id": "R4",
-  "name": "Take an order at a table (waiter phone)",
+  "name": "Take an order at the table (waiter phone)",
   "business": "restaurante",
-  "country": "CO",
-  "voice_settings": { "es": { "stability": 0.5, "similarity_boost": 0.75 } },
+  "voice_settings": {
+    "es": { "stability": 0.5, "similarity_boost": 0.75 },
+    "pt": { "stability": 0.5, "similarity_boost": 0.75 },
+    "en": { "stability": 0.5, "similarity_boost": 0.75 }
+  },
   "steps": [
-    { "id": "1-pin", "voice": { "es": "Este es el celular de tu mesero. Cada mesero toma los pedidos en su propio celular, y entra con su PIN." } },
-    { "id": "2-dish", "voice": { "es": "Toca los platos que pide la mesa. Si un plato tiene opciones, como el término de la carne, se abren primero." } },
-    { "id": "3-option", "voice": { "es": "Elige la opción y toca Agregar a la venta." } },
-    { "id": "4-more", "voice": { "es": "Los platos sin opciones entran con un solo toque. Cuando la mesa termine de pedir, toca Cobrar." } },
-    { "id": "5-table", "voice": { "es": "Elige el número de la mesa." } },
-    { "id": "6-save", "voice": { "es": "La mesa paga al final, así que toca Guardar." } },
-    { "id": "7-open", "voice": { "es": "El pedido queda guardado con el número de la mesa. Lo ves en Abiertas, y también llega a tu caja, y a la cocina si tienes una pantalla de cocina." } },
-    { "id": "8-end", "voice": { "es": "Así toman tus meseros los pedidos en la mesa, con Platata." } }
+    { "id": "1-pin", "voice": {
+      "es": "Este es el teléfono de tu mesero. Entra con su PIN.",
+      "pt": "Este é o celular do seu garçom. Ele entra com o PIN.",
+      "en": "This is your server's phone. They sign in with their PIN." } },
+    { "id": "2-dish", "voice": {
+      "es": "Toca los platos que pide la mesa. Si un plato tiene opciones, se abren primero.",
+      "pt": "Toque nos pratos que a mesa pede. Se um prato tem opções, elas abrem primeiro.",
+      "en": "Tap the dishes the table orders. If a dish has options, they open first." } },
+    { "id": "3-option", "voice": {
+      "es": "Elige la opción y toca Agregar a la venta.",
+      "pt": "Escolha a opção e toque em Adicionar à venda.",
+      "en": "Pick the option and tap Add to sale." } },
+    { "id": "4-more", "voice": {
+      "es": "Los demás entran con un toque. Luego toca Cobrar.",
+      "pt": "Os outros entram com um toque. Depois toque em Cobrar.",
+      "en": "The rest go in with one tap. Then tap Charge." } },
+    { "id": "5-table", "voice": {
+      "es": "Elige el número de la mesa.",
+      "pt": "Escolha o número da mesa.",
+      "en": "Pick the table number." } },
+    { "id": "6-save", "voice": {
+      "es": "La mesa paga al final, así que toca Enviar a cocina.",
+      "pt": "A mesa paga no final, então toque em Enviar para a cozinha.",
+      "en": "The table pays at the end, so tap Send to kitchen." } },
+    { "id": "7-open", "voice": {
+      "es": "El pedido queda en Abiertas, con el número de la mesa.",
+      "pt": "O pedido fica em Abertas, com o número da mesa.",
+      "en": "The order stays in Open, with the table number." } },
+    { "id": "8-kitchen", "voice": {
+      "es": "Y llega a la pantalla de cocina, pasando por tu teléfono en el Wi-Fi del local.",
+      "pt": "E chega à tela da cozinha, passando pelo seu celular no Wi-Fi do restaurante.",
+      "en": "And it reaches the kitchen screen, through your phone on the restaurant's Wi-Fi." } },
+    { "id": "9-end", "voice": {
+      "es": "Así toman tus meseros los pedidos en la mesa, con Platata.",
+      "pt": "Assim seus garçons anotam os pedidos na mesa, com o Platata.",
+      "en": "That's how your servers take orders at the table, with Platata." } }
   ]
 }

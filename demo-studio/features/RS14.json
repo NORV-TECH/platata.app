@@ -1,0 +1,77 @@
+{
+  "id": "RS14",
+  "name": "Team and PINs",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-team",
+      "voice": {
+        "es": "En Mi negocio, toca Equipo.",
+        "pt": "Em Meu negócio, toque em Equipe.",
+        "en": "In My business, tap Team."
+      }
+    },
+    {
+      "id": "2-new",
+      "voice": {
+        "es": "Aquí está tu equipo y el código del negocio, el que tus empleados usan para entrar. Para sumar a alguien, toca Nuevo.",
+        "pt": "Aqui está sua equipe e o código do negócio, que seus funcionários usam para entrar. Para adicionar alguém, toque em Novo.",
+        "en": "Here's your team and the business code your employees use to join. To add someone, tap New."
+      }
+    },
+    {
+      "id": "3-fields",
+      "voice": {
+        "es": "Escribe su nombre, su WhatsApp y su cargo.",
+        "pt": "Escreva o nome, o WhatsApp e o cargo.",
+        "en": "Type their name, WhatsApp and job title."
+      }
+    },
+    {
+      "id": "4-perms",
+      "voice": {
+        "es": "En Permisos eliges qué puede hacer, por ejemplo abrir y cerrar caja.",
+        "pt": "Em Permissões você escolhe o que a pessoa pode fazer, como abrir e fechar o caixa.",
+        "en": "In Permissions you choose what they can do, like open and close the register."
+      }
+    },
+    {
+      "id": "5-save",
+      "voice": {
+        "es": "Su PIN se crea solo. Toca Guardar.",
+        "pt": "O PIN é criado sozinho. Toque em Salvar.",
+        "en": "Their PIN is created for you. Tap Save."
+      }
+    },
+    {
+      "id": "6-pin",
+      "voice": {
+        "es": "El PIN aparece una sola vez. Anótalo y dáselo.",
+        "pt": "O PIN aparece uma única vez. Anote e entregue.",
+        "en": "The PIN shows just once. Write it down and hand it over."
+      }
+    },
+    {
+      "id": "7-end",
+      "voice": {
+        "es": "Así armas tu equipo, con Platata.",
+        "pt": "Assim você monta sua equipe, com o Platata.",
+        "en": "That's how you build your team, with Platata."
+      }
+    }
+  ]
+}

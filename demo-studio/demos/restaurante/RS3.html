@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Cobrar en efectivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* RS3 "Cobrar en efectivo" — words below are the app's own strings (values, values-es, values-pt-rBR) at app-head; generated, do not hand-edit them. */
+const STR = {"en":{"card_approved_title":"Payment approved","cash_exact":"Exact · %s","cash_exact_short":"Exact","cash_rounding_line":"Cash rounding %s","cash_shortfall":"Short %s","checkout_add_customer_cta":"Add a client to the sale","checkout_cash_label":"Cash","checkout_change_row_label":"Change","checkout_clear":"Clear","checkout_desglose_delivery_table":"Table %1$d","checkout_dining_gate_table_title":"Which table?","checkout_items_link":"Items (%1$d)","checkout_other_method":"Other payment method (%d)","checkout_other_method_subtitle":"Total %s · you confirm before it is charged","checkout_other_method_title":"Other payment method","checkout_received_label":"Received","checkout_send_kitchen":"Send to kitchen","common_add":"Add","common_cancel":"Cancel","common_charge":"Charge %s","common_new_short":"+ New","common_save":"Save","common_send":"Send","common_total":"Total","conn_slot_phone":"Your phone","home_current_sale_items":{"one":"Current sale · %d item","other":"Current sale · %d items"},"home_tab_library":"Library","home_tab_manual":"Keypad","home_tab_my_business":"My business","items_filter_all":"All","mamaship_tab_register":"Register","pay_card_setup_hint":"Set up","pay_card_short":"Card","pay_methods_comp_note":"Only you and people you allow in Team > Permissions.","pay_methods_dialog_title":"Add Payment Method","pay_methods_example_transfer":"Bank transfer","pay_methods_field_name":"Name (e.g. %1$s)","pay_methods_title":"Payment methods","pay_qr_short":"QR","pay_setup_link_dismiss":"No thanks","pay_setup_link_pix":"Set up Pix","pay_setup_link_qr":"Set up QR","pay_setup_link_qr_card":"Set up QR or card","payment_method_card":"Card","payment_method_cash":"Cash","payment_method_comp":"On the house","payment_method_qr":"QR Payment","qr_no_receipt_needed":"Paid · No photo","qr_options_row":"QR code & cashier note","qr_options_row_pix":"Pix QR code & cashier note","qr_payment_default_message":"Check in your bank app that the payment arrived before you hand over the order.","qr_payment_receipt_btn":"Paid · Photo of transfer","qr_scan_hint":"Have the client scan\nwith their bank app","qr_terms_note_bold":"Platata is not responsible for QR payments.","qr_terms_note_bold_pix":"Platata is not responsible for Pix payments.","qr_terms_note_rest":"Before you hand over each sale, check in your bank that the payment arrived.","qr_total_to_charge":"Total to charge","receipt_action_print":"Print","receipt_dlg_title":"Receipt","receipt_email_receipt":"Email receipt","receipt_label_change_due":"Change Due","receipt_label_date":"Date","receipt_label_each":"ea","receipt_label_order_number":"Sale #","receipt_label_subtotal":"Subtotal","receipt_label_tip":"Tip","receipt_label_total":"TOTAL","receipt_opt_change_label":"CHANGE","receipt_opt_completed":"Sale complete!","receipt_opt_how_receipt":"How do you send the receipt?","receipt_opt_new_sale":"New sale","receipt_opt_new_sale_no_receipt":"New sale · No receipt","receipt_opt_privacy":"Privacy notice","receipt_opt_received":"You received %s","receipt_opt_show_receipt":"View receipt","receipt_opt_tendered":"from %s received","receipt_opt_whatsapp_btn":"WhatsApp","receipt_print_again":"Print again","receipt_text_receipt":"Text receipt","tx_tab_all":"Sales"},"es":{"card_approved_title":"Pago aprobado","cash_exact":"Exacto · %s","cash_exact_short":"Exacto","cash_rounding_line":"Redondeo en efectivo %s","cash_shortfall":"Faltan %s","checkout_add_customer_cta":"Agrega un cliente a la venta","checkout_cash_label":"Efectivo","checkout_change_row_label":"Cambio","checkout_clear":"Borrar","checkout_desglose_delivery_table":"Mesa %1$d","checkout_dining_gate_table_title":"¿Qué mesa?","checkout_items_link":"Artículos (%1$d)","checkout_other_method":"Otro método de pago (%d)","checkout_other_method_subtitle":"Total %s · confirmas antes de cobrar","checkout_other_method_title":"Otro método de pago","checkout_received_label":"Recibido","checkout_send_kitchen":"Enviar a cocina","common_add":"Agregar","common_cancel":"Cancelar","common_charge":"Cobrar %s","common_new_short":"+ Nuevo","common_save":"Guardar","common_send":"Enviar","common_total":"Total","conn_slot_phone":"Tu teléfono","home_current_sale_items":{"one":"Venta actual · %d artículo","other":"Venta actual · %d artículos"},"home_tab_library":"Catálogo","home_tab_manual":"Teclado","home_tab_my_business":"Mi negocio","items_filter_all":"Todos","mamaship_tab_register":"Caja","pay_card_setup_hint":"Configurar","pay_card_short":"Tarjeta","pay_methods_comp_note":"Solo tú y quien autorices en Equipo > Permisos.","pay_methods_dialog_title":"Agregar método de pago","pay_methods_example_transfer":"Transferencia","pay_methods_field_name":"Nombre (ej. %1$s)","pay_methods_title":"Métodos de pago","pay_qr_short":"QR","pay_setup_link_dismiss":"No, gracias","pay_setup_link_pix":"Configurar Pix","pay_setup_link_qr":"Configurar QR","pay_setup_link_qr_card":"Configurar QR o tarjeta","payment_method_card":"Tarjeta","payment_method_cash":"Efectivo","payment_method_comp":"Cortesía","payment_method_qr":"Pago QR","qr_no_receipt_needed":"Pagó · Sin foto","qr_options_row":"Código QR y nota del cajero","qr_options_row_pix":"QR de Pix y nota del cajero","qr_payment_default_message":"Revisa en tu app del banco que el pago llegó antes de entregar.","qr_payment_receipt_btn":"Pagó · Foto del pago","qr_scan_hint":"Que el cliente escanee\ncon su app del banco","qr_terms_note_bold":"Platata no es responsable por los pagos QR.","qr_terms_note_bold_pix":"Platata no es responsable por los pagos con Pix.","qr_terms_note_rest":"Antes de entregar cada compra, revisa en tu banco que el pago haya llegado.","qr_total_to_charge":"Total a cobrar","receipt_action_print":"Imprimir","receipt_dlg_title":"Recibo","receipt_email_receipt":"Recibo por correo","receipt_label_change_due":"Cambio","receipt_label_date":"Fecha","receipt_label_each":"c/u","receipt_label_order_number":"Venta n.º","receipt_label_subtotal":"Subtotal","receipt_label_tip":"Propina","receipt_label_total":"TOTAL","receipt_opt_change_label":"CAMBIO","receipt_opt_completed":"¡Venta completada!","receipt_opt_how_receipt":"¿Cómo envías el recibo?","receipt_opt_new_sale":"Nueva venta","receipt_opt_new_sale_no_receipt":"Nueva venta · Sin recibo","receipt_opt_privacy":"Aviso de privacidad","receipt_opt_received":"Recibiste %s","receipt_opt_show_receipt":"Ver recibo","receipt_opt_tendered":"de %s recibidos","receipt_opt_whatsapp_btn":"WhatsApp","receipt_print_again":"Imprimir otra vez","receipt_text_receipt":"Recibo por mensaje","tx_tab_all":"Ventas"},"pt":{"card_approved_title":"Pagamento aprovado","cash_exact":"Exato · %s","cash_exact_short":"Exato","cash_rounding_line":"Arredondamento em dinheiro %s","cash_shortfall":"Faltam %s","checkout_add_customer_cta":"Adicione um cliente à venda","checkout_cash_label":"Dinheiro","checkout_change_row_label":"Troco","checkout_clear":"Limpar","checkout_desglose_delivery_table":"Mesa %1$d","checkout_dining_gate_table_title":"Qual mesa?","checkout_items_link":"Itens (%1$d)","checkout_other_method":"Outra forma de pagamento (%d)","checkout_other_method_subtitle":"Total %s · você confirma antes de cobrar","checkout_other_method_title":"Outra forma de pagamento","checkout_received_label":"Recebido","checkout_send_kitchen":"Enviar para a cozinha","common_add":"Adicionar","common_cancel":"Cancelar","common_charge":"Cobrar %s","common_new_short":"+ Novo","common_save":"Salvar","common_send":"Enviar","common_total":"Total","conn_slot_phone":"Seu celular","home_current_sale_items":{"one":"Venda atual · %d item","other":"Venda atual · %d itens"},"home_tab_library":"Catálogo","home_tab_manual":"Teclado","home_tab_my_business":"Meu negócio","items_filter_all":"Todos","mamaship_tab_register":"Caixa","pay_card_setup_hint":"Configurar","pay_card_short":"Cartão","pay_methods_comp_note":"Só você e quem você autorizar em Equipe > Permissões.","pay_methods_dialog_title":"Adicionar forma de pagamento","pay_methods_example_transfer":"Transferência","pay_methods_field_name":"Nome (ex. %1$s)","pay_methods_title":"Formas de pagamento","pay_qr_short":"QR","pay_setup_link_dismiss":"Não, obrigado","pay_setup_link_pix":"Configurar Pix","pay_setup_link_qr":"Configurar QR","pay_setup_link_qr_card":"Configurar QR ou cartão","payment_method_card":"Cartão","payment_method_cash":"Dinheiro","payment_method_comp":"Cortesia","payment_method_qr":"Pagamento QR","qr_no_receipt_needed":"Pago · Sem foto","qr_options_row":"Código QR e nota do caixa","qr_options_row_pix":"QR do Pix e nota do caixa","qr_payment_default_message":"Confira no app do banco que o pagamento chegou antes de entregar.","qr_payment_receipt_btn":"Pago · Foto do comprovante","qr_scan_hint":"Peça ao cliente que escaneie\ncom o app do banco","qr_terms_note_bold":"A Platata não é responsável por pagamentos por QR.","qr_terms_note_bold_pix":"A Platata não é responsável por pagamentos por Pix.","qr_terms_note_rest":"Antes de entregar cada compra, confira no seu banco se o pagamento chegou.","qr_total_to_charge":"Total a cobrar","receipt_action_print":"Imprimir","receipt_dlg_title":"Recibo","receipt_email_receipt":"Recibo por e-mail","receipt_label_change_due":"Troco","receipt_label_date":"Data","receipt_label_each":"un","receipt_label_order_number":"Venda nº","receipt_label_subtotal":"Subtotal","receipt_label_tip":"Gorjeta","receipt_label_total":"TOTAL","receipt_opt_change_label":"TROCO","receipt_opt_completed":"Venda concluída!","receipt_opt_how_receipt":"Como você envia o recibo?","receipt_opt_new_sale":"Nova venda","receipt_opt_new_sale_no_receipt":"Nova venda · Sem recibo","receipt_opt_privacy":"Aviso de privacidade","receipt_opt_received":"Você recebeu %s","receipt_opt_show_receipt":"Ver recibo","receipt_opt_tendered":"de %s recebidos","receipt_opt_whatsapp_btn":"WhatsApp","receipt_print_again":"Imprimir de novo","receipt_text_receipt":"Recibo por mensagem","tx_tab_all":"Vendas"}};
+const IMG = {"celebrate": "data:image/webp;base64,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"};
+/* ---- shared by RS3..RS7 (copied into each page; kit/ is not edited) ----
+   Words come from STR (the app's own values / values-es / values-pt-rBR, read at the newest app-head commit).
+   Screens (paths under app/src/main/java/com/example/):
+   register tab   ui/screens/home/HomeScreen.kt (TabRow, ProductLibraryView, CurrentSaleStrip, HomeFooterButtons), PlatataApp.kt bottom bar
+   pay screen     ui/screens/home/CheckoutSheetBody.kt + CheckoutPayBlock.kt (keypad always on, Exact blue, links column, set-up link)
+   pay ways       sync/PayWaysVisibility.kt (QR only with switch + picture; Card only in CO (Wompi) and US/CA (Stripe))
+   sale complete  ui/screens/home/ReceiptOptionsScreen.kt (SaleCompleteContent) + sync/ReceiptSendRoute (US/CA = text + email)
+   receipt text   utils/ReceiptFormatter.kt generatePastPlainTextReceipt */
+const R = RKIT.ctx(), C = R.C, esc = RKIT.esc, L = R.lang, CC = R.country;
+const SS = STR[L];
+function fmt(s, a){ s = s.replace(/%%/g,"\u0001"); let i = 0;
+  s = s.replace(/%(\d+)\$([sd])|%([sd])/g, (m, pos, t1) => { const idx = pos ? parseInt(pos,10)-1 : i++; const v = a[idx]; return v==null ? "" : String(v); });
+  return s.replace(/\u0001/g,"%"); }
+const t = (k, ...a) => { const s = SS[k]; if(s==null) throw new Error("no string "+k); return fmt(s, a); };
+const tp = (k, n, ...a) => { const o = SS[k]; const one = n===1 || (L==="pt" && n===0); return fmt(o[one?"one":"other"]||o.other, a.length?a:[n]); };
+const money = v => R.money(v);
+const STRIPE = CC==="US" || CC==="CA";          // Stripe country: no QR row at all, Card = Tap to Pay (PayWaysVisibility.kt)
+const WOMPI = CC==="CO";                          // Wompi country: the typed card form
+const PIX = C.cur==="BRL";                        // QR is "Pix" and carries the amount (utils/PixLabels.kt, QR-2)
+const TEXT_ROUTE = STRIPE;                        // sync/ReceiptSendRoute: own {US, CA} set
+const DIAL = {CO:"+57",MX:"+52",PE:"+51",CL:"+56",EC:"+593",AR:"+54",PA:"+507",BR:"+55",US:"+1",CA:"+1"}[CC];
+/* utils/CashRounding.kt: CL to $10 (1-5 down, 6-9 up), PE always down to S/ 0.10, CA to the nearest 5 cents. Cash only. */
+function cashDue(v){
+  if(CC==="CL"){ const r = Math.round(v) % 10; return r<=5 ? Math.round(v)-r : Math.round(v)-r+10; }
+  if(CC==="PE") return Math.floor(v*10+1e-6)/10;
+  if(CC==="CA") return Math.round(v*20)/20;
+  return v;
+}
+const DECKEY = C.dec===0 ? "000" : new Intl.NumberFormat(C.loc).formatToParts(1.5).find(p=>p.type==="decimal").value;  // CheckoutPayBlock zeroKey
+/* the amount a customer hands over: the next round note above what is due (whole units, MoneyKeypadEntry) */
+function received(due){ let k = 1; while(k*10 <= due) k *= 10; for(const m of [1,2,5,10]) if(m*k > due+1e-9) return m*k; return 10*k; }
+function keysFor(v){ return (C.dec===0 && v>=1000 && v%1000===0) ? [...String(v/1000), "000"] : [...String(v)]; }
+const typedValue = s => s ? Number(s) : 0;
+const item = id => C.items.find(x=>x.id===id);
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const ALL_C = "#607D8B";
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+const SALE = [C.order[1], C.order[2]];           // two dishes without add-ons (the steak has one)
+const saleTotal = lines => lines.reduce((s,id)=>s+item(id).price, 0);
+const SALE_NO = 27;
+const DATE = "20/10/2026 12:41";                  // ReceiptFormatter.receiptDateText: fixed "dd/MM/yyyy HH:mm"
+const I = {
+  pen:'<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  receipt:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  person:'<svg class="i" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  back:'<svg class="i" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  more:'<svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  card:'<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>',
+  trash:'<svg class="i" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+  camera:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>',
+  image:'<svg class="i" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
+  chev:'<svg class="i" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  down:'<svg class="i" viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>',
+  close:'<svg class="i" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+  print:'<svg class="i" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>',
+  send:'<svg class="i" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
+  camAlt:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>'
+};
+const X = h => `<div class="x">${h}</div>`;
+
+/* ---------- register tab, owner phone ---------- */
+function cats(){ return `<div class="mcats">` + [{name:t("items_filter_all"),color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const st = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${st}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`; }
+function grid(){ return `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${money(it.price)}</span></div></div>`; }).join("") + `</div>`; }
+function bottomNav(){ return `<div class="x-nav"><div class="on"><span class="pill">${I.cart}</span>${esc(t("mamaship_tab_register"))}</div><div><span class="pill">${I.receipt}</span>${esc(t("tx_tab_all"))}</div><div><span class="flagc">${R.flag()}</span>${esc(t("home_tab_my_business"))}</div></div>`; }
+function regScreen(lines, o){ o=o||{};
+  const n = lines.length, on = n>0;
+  let h = `<div class="x-tabs"><span>${I.pen}${esc(t("home_tab_manual"))}</span><span class="on">${esc(t("home_tab_library"))}</span></div>` + cats() + grid();
+  if(on) h += `<div class="x-strip"><span>${esc(tp("home_current_sale_items", n))}</span><b>›</b></div>`;
+  h += `<div class="x-pair"><div class="x-pill out${on?"":" off"}">${esc(t(o.kitchen?"checkout_send_kitchen":"common_save"))}</div><div class="x-pill fill${on?"":" off"}" data-t="charge">${esc(t("common_charge", money(saleTotal(lines))))}</div></div>`;
+  return h + bottomNav();
+}
+
+/* ---------- pay screen ---------- o: {lines, typed, table, others, qr, card:"none"|"ready"|"setup", cashDisabled} */
+function payScreen(o){
+  const total = saleTotal(o.lines), due = cashDue(total), typed = o.typed||"";
+  const qr = !!o.qr, cardOn = o.card && o.card!=="none", cardReady = o.card==="ready";
+  const cardPrimary = STRIPE && cardReady;
+  /* PayWaysVisibility.link: owner, not dismissed, not a Stripe country, something not set up yet; Colombia always asks "QR or card" */
+  const qrNotSetUp = !qr, cardNotSetUp = WOMPI && !cardReady;
+  let link = (STRIPE || !(qrNotSetUp || cardNotSetUp)) ? null : WOMPI ? "pay_setup_link_qr_card" : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");
+  if(o.noLink) link = null;
+  let rc = "";
+  if(typed){ const v = typedValue(typed); const ch = v - due;
+    rc = `<div class="ln"><small>${esc(t("checkout_received_label"))}</small><b>${money(v)}</b></div>` +
+      (ch >= -1e-9 ? `<div class="ln"><small>${esc(t("checkout_change_row_label"))}</small><b class="chg">${money(ch)}</b></div>`
+                   : `<div class="short">${esc(t("cash_shortfall", money(-ch)))}</div>`); }
+  const keys = ["1","2","3","4","5","6","7","8","9",DECKEY,"0","⌫"];
+  const enough = !typed || typedValue(typed) >= due-1e-9;
+  const cashW = cardPrimary ? 1.2 : (cardOn && qr) ? 1.3 : qr ? 2 : 1;
+  const exactLabel = cardOn ? t("cash_exact_short") : t("cash_exact", money(due));
+  let btns = `<div style="flex:${cashW}" class="${!typed?"exact":enough?"cash":"dis"}" data-t="${typed?"cash":"exact"}">${esc(typed?t("checkout_cash_label"):exactLabel)}</div>`;
+  if(qr) btns += `<div style="flex:1" class="ob" data-t="qr"><i class="x-qrg"></i>${esc(PIX?"Pix":t("pay_qr_short"))}</div>`;
+  if(cardOn) btns += cardReady ? `<div style="flex:${cardPrimary?2:1}" class="ob" data-t="card">${I.card}${esc(t("pay_card_short"))}</div>`
+                               : `<div style="flex:1" class="nudge" data-t="card-setup"><span>+ ${esc(t("pay_card_short"))}</span><small>${esc(t("pay_card_setup_hint"))}</small></div>`;
+  const rounding = Math.abs(due-total) > 1e-9 ? `<div class="x-round">${esc(t("cash_rounding_line", (due-total<0?"-":"+")+money(Math.abs(due-total))))}</div>` : "";
+  const links = `<span>${esc(t("checkout_items_link", o.lines.length))} ›</span>` +
+    (o.table ? `<span>${esc(t("checkout_desglose_delivery_table", o.table))}</span>` : "") +
+    (o.others ? `<span class="oth" data-t="other">${I.more}<span>${esc(t("checkout_other_method", o.others))}</span></span>` : "");
+  return `<div class="x-phd"><span class="chev">‹</span><span class="wm">Platata</span><span class="clr">${esc(t("checkout_clear"))}</span></div><div class="grow"></div>
+    <div class="x-pb"><div class="x-tot"><small>${esc(t("common_total"))}</small><b>${money(total)}</b></div>${rounding}
+    <div class="x-amt"><div class="x-links">${links}</div><div class="x-rc">${rc}</div></div>
+    <div class="x-kp">${keys.map(k=>`<span class="${k===DECKEY||k==="⌫"?"s":""}" data-t="key-${k}">${esc(k)}</span>`).join("")}</div>
+    <div class="x-btns">${btns}</div>
+    ${link?`<div class="x-slink"><span>${esc(t(link))}</span><span>${esc(t("pay_setup_link_dismiss"))}</span></div>`:`<div style="height:calc(var(--u)*14)"></div>`}</div>
+    <div class="x-sec"><div class="x-cust">${I.person}${esc(t("checkout_add_customer_cta"))}</div></div>`;
+}
+function tableGate(){ return `<div class="x-scrim"><div class="x-gate"><h3>${esc(t("checkout_dining_gate_table_title"))}</h3><div class="g">${Array.from({length:C.tables},(_,i)=>`<span data-t="table-${i+1}">${i+1}</span>`).join("")}</div></div></div>`; }
+/* "Otro método de pago" sheet: OtherPaymentSheetContent.kt (title + total line pinned, one 48 dp row per method) */
+function otherSheet(total, names){ return `<div class="x-sheet-scrim"><div class="x-sheet"><div class="handle"></div><h3>${esc(t("checkout_other_method_title"))}</h3><div class="st">${esc(t("checkout_other_method_subtitle", money(total)))}</div>
+  <div class="rows">${names.map((n,i)=>`<div class="row" data-t="om-${i}"><span>${esc(n)}</span>${I.chev}</div>`).join("")}</div></div></div>`; }
+
+/* ---------- sale complete ---------- hero: {kind:"change",change,received} | {kind:"exact",received} | {kind:"title"} | {kind:"card",line} */
+function doneScreen(hero, o){ o=o||{};
+  let b = `<img src="${IMG.celebrate}" alt="">`;
+  if(hero.kind==="change") b += `<div class="lbl">${esc(t("receipt_opt_change_label"))}</div><div class="big">${money(hero.change)}</div><div class="sub">${esc(t("receipt_opt_tendered", money(hero.received)))}</div>`;
+  else if(hero.kind==="exact") b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div><div class="sub">${esc(t("receipt_opt_received", money(hero.received)))}</div>`;
+  else if(hero.kind==="card") b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div><div class="ok">${esc(t("card_approved_title"))}</div><div class="sub">${esc(hero.line)}</div>`;
+  else b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div>`;
+  b += `<div class="q">${esc(t("receipt_opt_how_receipt"))}</div>`;
+  let f = TEXT_ROUTE ? `<div class="b pri" data-t="text">${esc(t("receipt_text_receipt"))}</div><div class="b ol" data-t="email">${esc(t("receipt_email_receipt"))}</div>`
+                     : `<div class="b wa" data-t="wa">${esc(t("receipt_opt_whatsapp_btn"))}</div>`;
+  if(o.printer) f += `<div class="b ol" data-t="print">${esc(t("receipt_print_again"))}</div>`;
+  f += `<div class="b ol" data-t="view">${esc(t("receipt_opt_show_receipt"))}</div><div class="b pri" data-t="new">${esc(t(o.printer?"receipt_opt_new_sale":"receipt_opt_new_sale_no_receipt"))}</div><div class="pv">${esc(t("receipt_opt_privacy"))}</div>`;
+  return `<div class="x-sc-body">${b}</div><div class="x-sc-foot">${f}</div>`;
+}
+/* the receipt the customer gets: ReceiptFormatter.generatePastPlainTextReceipt (store name = the business name, footer = the
+   ReceiptConfig default, which the app writes in English for every new shop) */
+function receiptText(lines, o){ o=o||{};
+  const each = t("receipt_label_each"), total = saleTotal(lines);
+  let s = `${C.place}\n${t("receipt_label_order_number")}: ${SALE_NO}\n${t("receipt_label_date")}: ${DATE}\n===============================\n`;
+  lines.forEach(id=>{ const it=item(id); s += `1x ${it.name}\n   @ ${money(it.price)} ${each} ... ${money(it.price)}\n`; });
+  s += `-------------------------------\n${t("receipt_label_subtotal")}: ${money(total)}\n`;
+  if(o.tip) s += `${t("receipt_label_tip")}: ${money(o.tip)}\n`;
+  s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
+  if(o.cardLine) s += o.cardLine + "\n";
+  if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
+  s += `${o.method}\n\nThank you for shopping with us!`;
+  return s;
+}
+function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
+  <span class="ac">${I.print}${esc(t("receipt_action_print"))}</span><span class="ac${TEXT_ROUTE?"":" wa"}">${I.send}${esc(t("common_send"))}</span><span class="xb" data-t="rv-close">${I.close}</span></div></div>
+  <div class="x-paper">${esc(text)}</div></div>`; }
+const toast = msg => `<div class="x-toast">${esc(msg)}</div>`;
+function dialog(title, body, acts){ return `<div class="x-dlgscrim"><div class="x-dlg">${title?`<h3>${esc(title)}</h3>`:""}${body?`<div class="body">${body}</div>`:""}
+  <div class="acts">${acts.map(a=>`<span class="${a.fill?"fb":"tb"}" data-t="${a.t||""}">${esc(a.label)}</span>`).join("")}</div></div></div>`; }
+const field = (label, value, focus) => `<div class="x-field${focus?" focus":""}"><label>${esc(label)}</label><span>${esc(value)}${focus?'<i class="x-caret"></i>':""}</span></div>`;
+
+/* ---------- Payment methods: ui/screens/settings/PaymentMethodsScreen.kt ---------- */
+function pmTop(){ return `<div class="x-top"><span class="nb">${I.back}</span><h1>${esc(t("pay_methods_title"))}</h1><span class="act" data-t="pm-new">${esc(t("common_new_short"))}</span></div>`; }
+function pmSwitch(on, tag){ return `<span class="x-sw${on?" on":""}"${tag?` data-t="${tag}"`:""}></span>`; }
+function pmRow(name, on, opts){ opts=opts||{};
+  return `<div class="x-pmh"><div class="nm"><b>${esc(name)}</b>${opts.note?`<small>${esc(opts.note)}</small>`:""}</div>${pmSwitch(on, opts.tag)}${opts.del?`<span class="del">${I.trash}</span>`:""}</div>`; }
+const qrS = k => PIX && SS[k+"_pix"] ? t(k+"_pix") : t(k);            // utils/PixLabels.kt PIX_TEXT_RES
+function pmScreen(st){
+  const qrName = PIX ? "Pix" : t("payment_method_qr");
+  let h = `<div class="x-pml">`;
+  h += `<div class="x-pmc">${pmRow(t("payment_method_cash"), true)}</div>`;
+  if(!STRIPE) h += `<div class="x-pmc">${pmRow(qrName, !!st.qrOn, {tag:"sw-qr"})}<div class="x-qrnote"><i>!</i><span><b>${esc(qrS("qr_terms_note_bold"))}</b> ${esc(t("qr_terms_note_rest"))}</span></div>${st.qrOn?`<div class="x-acc"><span>${esc(qrS("qr_options_row"))}</span>${I.down}</div>`:""}</div>`;
+  const cu = st.customs||[], mp = cu.filter(n=>n==="Mercado Pago"), rest = cu.filter(n=>n!=="Mercado Pago");   // PosViewModel.paymentMethods sort
+  mp.forEach(n => { h += `<div class="x-pmc">${pmRow(n, true, {del:true})}</div>`; });
+  if(WOMPI || STRIPE) h += `<div class="x-pmc">${pmRow(t("payment_method_card"), !!st.cardOn)}</div>`;
+  h += `<div class="x-pmc">${pmRow(t("payment_method_comp"), true, {note:t("pay_methods_comp_note")})}</div>`;
+  rest.forEach(n => { h += `<div class="x-pmc">${pmRow(n, true, {del:true})}</div>`; });
+  return pmTop() + h + `</div>`;
+}
+/* the "Otro método de pago" sheet lists the active methods that are not cash, QR or card, in the same order (Mercado Pago first) */
+const othersList = customs => customs.filter(n=>n==="Mercado Pago").concat([t("payment_method_comp")], customs.filter(n=>n!=="Mercado Pago"));
+const EXAMPLE = ({CO:"Nequi",PE:"Yape",AR:"Mercado Pago",MX:"Mercado Pago",US:"Zelle",CA:"Interac e-Transfer"})[CC] || null;   // sync/PaymentMethodExample.kt
+function addMethodDialog(typed){ const ex = EXAMPLE || t("pay_methods_example_transfer");
+  return dialog(t("pay_methods_dialog_title"), field(t("pay_methods_field_name", ex), typed, true), [{label:t("common_cancel")},{label:t("common_add"), fill:true, t:"pm-add"}]); }
+/* a placeholder QR picture (not scannable): the shop's own bank QR is a photo the owner uploads */
+function fakeQr(seed, mod){ mod = mod||29; let x = seed>>>0 || 7; const rnd = () => (x = (x*1103515245+12345)>>>0, (x>>>16)&1);
+  let r = ""; const fp = (cx,cy)=>{ r += `<rect x="${cx}" y="${cy}" width="7" height="7" fill="#000"/><rect x="${cx+1}" y="${cy+1}" width="5" height="5" fill="#fff"/><rect x="${cx+2}" y="${cy+2}" width="3" height="3" fill="#000"/>`; };
+  for(let yy=0; yy<mod; yy++) for(let xx=0; xx<mod; xx++){ const inF = (xx<8&&yy<8)||(xx>=mod-8&&yy<8)||(xx<8&&yy>=mod-8); if(!inF && rnd()) r += `<rect x="${xx}" y="${yy}" width="1" height="1" fill="#000"/>`; }
+  fp(0,0); fp(mod-7,0); fp(0,mod-7);
+  return `<svg viewBox="-2 -2 ${mod+4} ${mod+4}" shape-rendering="crispEdges"><rect x="-2" y="-2" width="${mod+4}" height="${mod+4}" fill="#fff"/>${r}</svg>`; }
+/* QrPaymentOverlay.kt */
+function qrOverlay(total){ return `<div class="x-qro"><span class="bk">${I.back}</span><div class="lb">${esc(t("qr_total_to_charge").toUpperCase())}</div><div class="am">${money(total)}</div>
+  <div class="mid"><div class="card">${fakeQr(PIX ? Math.round(total*100)+11 : 4242)}</div><div class="hint">${esc(t("qr_scan_hint"))}</div></div>
+  <div class="note">${esc(t("qr_payment_default_message"))}</div>
+  <div class="bb"><div class="g">${I.camAlt}${esc(t("qr_payment_receipt_btn"))}</div><div class="o" data-t="qr-paid">${esc(t("qr_no_receipt_needed"))}</div></div></div>`; }
+
+/* RS3 "Cobrar en efectivo": a table pays cash on the OWNER's phone. Demo setup the owner did before: register open,
+   menu loaded, the dining option Mesas switched on (12 tables) so the pay screen asks "¿Qué mesa?" first.
+   Factory pay ways otherwise: cash on, QR off, card off, "Cortesía" on (so "Otro método de pago (1)" shows). */
+const TABLE = 4;
+function render(st){
+  if(st.screen==="reg") return X(regScreen(st.lines));
+  if(st.screen==="pay") return X(payScreen({lines:st.lines, typed:st.typed, table:st.table, others:1, qr:false, card:STRIPE?"setup":"none"}) + (st.gate?tableGate():""));
+  if(st.screen==="done") return X(doneScreen({kind:"change", change:st.change, received:st.got}));
+  return "";
+}
+const total0 = saleTotal(SALE), due0 = cashDue(total0), GOT = received(due0), KEYS = keysFor(GOT);
+const H = (es,pt,en) => R.pick({es,pt,en});
+RKIT.start(R, {
+  id:"RS3", tallVideo:true, clock:"12:41",
+  endText:H("Así cobras en efectivo con Platata.","Assim você cobra em dinheiro com o Platata.","That's how you take cash with Platata."),
+  beats:R.pick({
+    es:["La mesa 4 pide la cuenta: toca los platos y Cobrar","Elige la mesa","Escribe con cuánto te paga el cliente","Platata te dice el cambio: toca Efectivo","Entrega el cambio y empieza otra venta","Así cobras en efectivo con Platata."],
+    pt:["A mesa 4 pede a conta: toque nos pratos e em Cobrar","Escolha a mesa","Digite quanto o cliente te entrega","O Platata mostra o troco: toque em Dinheiro","Entregue o troco e comece outra venda","Assim você cobra em dinheiro com o Platata."],
+    en:["Table 4 asks for the check: tap the dishes, then Charge","Pick the table","Type how much the customer hands you","Platata shows the change: tap Cash","Hand back the change and start a new sale","That's how you take cash with Platata."]}),
+  state:{screen:"reg", lines:[], typed:"", table:null, gate:false, change:0, got:0},
+  render,
+  device: () => "phone",
+  who: () => t("conn_slot_phone"),
+  steps:[
+    {beat:0, hint:H("Toca ","Toque em ","Tap ")+item(SALE[0]).name, target:`[data-t="dish-${SALE[0]}"]`, tap(st){ st.lines.push(SALE[0]); }},
+    {beat:0, hint:H("Toca ","Toque em ","Tap ")+item(SALE[1]).name, target:`[data-t="dish-${SALE[1]}"]`, tap(st){ st.lines.push(SALE[1]); }},
+    {beat:0, hint:H("Toca Cobrar","Toque em Cobrar","Tap Charge"), target:'[data-t="charge"]', tap(st){ st.screen="pay"; st.gate=true; }},
+    {beat:1, hint:H("Elige la mesa 4","Escolha a mesa 4","Pick table 4"), target:`[data-t="table-${TABLE}"]`, tap(st){ st.gate=false; st.table=TABLE; }},
+    {beat:2, hint:H("Toca ","Toque em ","Tap ")+KEYS.join(" "), target:`[data-t="key-${KEYS[0]}"]`, tap(st,E){ st.typed=KEYS[0];
+        KEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed += k; })); }},
+    {beat:3, hint:H("Toca Efectivo","Toque em Dinheiro","Tap Cash"), target:'[data-t="cash"]', tap(st){ st.got=typedValue(st.typed); st.change=st.got-due0; st.screen="done"; }},
+    {beat:4, hint:H("Toca Nueva venta","Toque em Nova venda","Tap New sale"), target:'[data-t="new"]', tap(st){ st.screen="reg"; st.lines=[]; st.typed=""; st.table=null; }}
+  ]
+});
+
+</script>
+<style>
+/* RS3..RS7 owner-phone payment screens. Material light (ui/theme/Color.kt LightColorScheme), 1dp = var(--u). */
+.mat .app{font-family:"Roboto",system-ui,sans-serif}
+.x{flex:1;display:flex;flex-direction:column;min-height:0;position:relative;background:#fff;color:#1C1C1E}
+.x svg.i{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor;display:block;flex:0 0 auto}
+.x .grow{flex:1;min-height:0}
+
+/* ---- Register tab: HomeScreen.kt:599-660 TabRow (indicator 3dp primary, labelLarge, selected bold) ---- */
+.x-tabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid #E5E5EA;flex:0 0 auto}
+.x-tabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73;position:relative;letter-spacing:.1px}
+.x-tabs span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.x-tabs span.on{color:#1C1C1E;font-weight:700}
+.x-tabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:#1C1C1E}
+/* footer: CurrentSaleStrip.kt + HomeFooterButtons.kt (SumaButton pill, 52dp min, titleMedium 18 SemiBold) */
+.x-strip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:600;flex:0 0 auto}
+.x-strip b{font-size:calc(var(--u)*18);font-weight:400;color:#6E6E73}
+.x-pair{display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16);flex:0 0 auto}
+.x-pill{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*18);font-weight:600;white-space:nowrap;padding:0 calc(var(--u)*12);letter-spacing:.15px}
+.x-pill.out{border:1px solid #C7C7CC;color:#1C1C1E;background:#fff}
+.x-pill.fill{background:#1C1C1E;color:#fff}
+.x-pill.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.x-pill.out.off{background:#fff;border-color:rgba(28,28,30,.12)}
+.x-nav{height:calc(var(--u)*80);display:flex;flex:0 0 auto;background:#fff}
+.x-nav>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:500;color:#6E6E73}
+.x-nav .pill{width:calc(var(--u)*64);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);display:grid;place-items:center}
+.x-nav .on{color:#1C1C1E}.x-nav .on .pill{background:#E5E5EA}
+.x-nav .flagc{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:#F2F2F7;display:grid;place-items:center}
+.x-nav .flagc svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
+
+/* ---- Pay screen: CheckoutSheetBody.kt CheckoutLayoutContent + CheckoutPayBlock.kt (CheckoutSpacing.Ceiling on a tall phone) ---- */
+.x-phd{height:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*12) calc(var(--u)*6);display:flex;align-items:center;justify-content:space-between;position:relative;flex:0 0 auto}
+.x-phd .chev{width:calc(var(--u)*40);height:calc(var(--u)*40);display:grid;place-items:center;font-size:calc(var(--u)*34);font-weight:300;line-height:1}
+.x-phd .wm{position:absolute;left:0;right:0;text-align:center;font:600 calc(var(--u)*22) "Fredoka",sans-serif;color:#1A120C;pointer-events:none}
+.x-phd .clr{font-size:calc(var(--u)*20);font-weight:700;color:#6E6E73;text-decoration:underline;padding:calc(var(--u)*4)}
+.x-pb{padding:calc(var(--u)*20) calc(var(--u)*12) 0;flex:0 0 auto}
+.x-tot{min-height:calc(var(--u)*42);display:flex;align-items:flex-end;justify-content:space-between}
+.x-tot small{font-size:calc(var(--u)*12);font-weight:600;color:#6E6E73;padding-bottom:calc(var(--u)*5)}
+.x-tot b{font-size:calc(var(--u)*30);font-weight:700;letter-spacing:-.3px;line-height:1.15;white-space:nowrap}
+.x-round{font-size:calc(var(--u)*12);color:#6E6E73;margin-top:calc(var(--u)*2)}
+.x-amt{margin-top:calc(var(--u)*4);min-height:calc(var(--u)*92);display:flex;gap:calc(var(--u)*12);align-items:flex-start}
+.x-links{display:flex;flex-direction:column;gap:calc(var(--u)*9);max-width:40%}
+.x-links span{font-size:calc(var(--u)*16);font-weight:700;text-decoration:underline;color:#1C1C1E;line-height:1.25}
+.x-links .oth{display:flex;gap:calc(var(--u)*6);align-items:flex-start}
+.x-links .oth svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:#1C1C1E;margin-top:calc(var(--u)*3)}
+.x-rc{flex:1;display:flex;flex-direction:column;gap:calc(var(--u)*4);align-items:stretch;min-width:0}
+.x-rc .ln{display:flex;align-items:baseline;justify-content:space-between;gap:calc(var(--u)*8)}
+.x-rc .ln small{font-size:calc(var(--u)*12);font-weight:600;color:#6E6E73}
+.x-rc .ln b{font-size:calc(var(--u)*22);font-weight:700;letter-spacing:-.9px;white-space:nowrap}
+.x-rc .ln b.chg{font-size:calc(var(--u)*30);letter-spacing:-.6px;color:#2E7D32}
+.x-rc .short{text-align:right;font-size:calc(var(--u)*26);font-weight:700;color:#FF3B30;letter-spacing:-.6px;white-space:nowrap}
+.x-kp{margin-top:calc(var(--u)*14);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*7)}
+.x-kp span{height:calc(var(--u)*48);border-radius:calc(var(--u)*12);background:#F2F2F7;display:grid;place-items:center;font-size:calc(var(--u)*22);font-weight:600}
+.x-kp span.s{font-size:calc(var(--u)*14);font-weight:700}
+.x-btns{margin-top:calc(var(--u)*8);display:flex;gap:calc(var(--u)*8)}
+.x-btns>div{height:calc(var(--u)*54);border-radius:calc(var(--u)*27);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*7);font-size:calc(var(--u)*17);font-weight:700;white-space:nowrap;overflow:hidden;padding:0 calc(var(--u)*8)}
+.x-btns .exact{background:#007AFF;color:#fff}
+.x-btns .cash{background:#1C1C1E;color:#fff}
+.x-btns .dis{background:#E5E5EA;color:rgba(110,110,115,.6)}
+.x-btns .ob{border:calc(var(--u)*1.5) solid #1C1C1E;color:#1C1C1E}
+.x-btns .ob svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.x-btns .nudge{border:calc(var(--u)*1.5) solid rgba(110,110,115,.55);color:#6E6E73;flex-direction:column;gap:0;font-size:calc(var(--u)*17)}
+.x-btns .nudge small{font-size:calc(var(--u)*12);font-weight:600}
+.x-qrg{width:calc(var(--u)*18);height:calc(var(--u)*18);border:calc(var(--u)*2) solid currentColor;border-radius:calc(var(--u)*2);position:relative;box-sizing:border-box;flex:0 0 auto}
+.x-qrg::after{content:"";position:absolute;inset:calc(var(--u)*3);background:currentColor;border-radius:1px}
+.x-slink{display:flex;justify-content:center;align-items:center;min-height:calc(var(--u)*44);font-size:calc(var(--u)*12);font-weight:600;color:#6E6E73;gap:calc(var(--u)*8)}
+.x-slink span:first-child{text-decoration:underline}
+.x-sec{margin-top:calc(var(--u)*8);background:#F7F7FA;border-radius:calc(var(--u)*20) calc(var(--u)*20) 0 0;padding:calc(var(--u)*10) calc(var(--u)*12);flex:0 0 auto}
+.x-cust{height:calc(var(--u)*62);border-radius:calc(var(--u)*14);background:#F2F2F7;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);color:#6E6E73;font-size:calc(var(--u)*14);font-weight:500}
+/* dining gate: DiningGate (scrim 60%, card 86% r20 p20), DiningChooserContent table grid */
+.x-scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:12}
+.x-gate{width:86%;background:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*20)}
+.x-gate h3{margin:0 0 calc(var(--u)*12);font-size:calc(var(--u)*18);font-weight:700}
+.x-gate .g{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*8)}
+.x-gate .g span{aspect-ratio:1;border-radius:calc(var(--u)*12);background:#F2F2F7;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:700}
+
+/* ---- Sale complete: ReceiptOptionsScreen.kt SaleCompleteContent ---- */
+.x-sc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 calc(var(--u)*20);text-align:center;min-height:0}
+.x-sc-body img{width:calc(var(--u)*132);height:calc(var(--u)*132);object-fit:contain}
+.x-sc-body .lbl{margin-top:calc(var(--u)*6);font-size:calc(var(--u)*13);font-weight:700;letter-spacing:1.2px;color:#6E6E73}
+.x-sc-body .big{font-size:calc(var(--u)*56);font-weight:700;letter-spacing:-2px;line-height:1.05;white-space:nowrap}
+.x-sc-body .ttl{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*26);font-weight:700;letter-spacing:-.7px}
+.x-sc-body .sub{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73}
+.x-sc-body .ok{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);font-weight:700;color:#2E7D32}
+.x-sc-body .q{margin-top:calc(var(--u)*22);font-size:calc(var(--u)*15);font-weight:700;color:#6E6E73}
+.x-sc-foot{padding:0 calc(var(--u)*16) calc(var(--u)*20);display:flex;flex-direction:column;gap:calc(var(--u)*10);align-items:stretch;flex:0 0 auto}
+.x-sc-foot .b{height:calc(var(--u)*52);border-radius:calc(var(--u)*26);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600}
+.x-sc-foot .wa{background:#25D366;color:#fff;font-weight:700}
+.x-sc-foot .pri{background:#1C1C1E;color:#fff;font-weight:700}
+.x-sc-foot .ol{border:1px solid #C7C7CC;color:#1C1C1E}
+.x-sc-foot .pv{text-align:center;font-size:calc(var(--u)*11);color:#6E6E73;text-decoration:underline;margin-top:calc(var(--u)*4)}
+.x-chip{margin-top:calc(var(--u)*14);display:inline-flex;align-items:center;gap:calc(var(--u)*6);height:calc(var(--u)*32);padding:0 calc(var(--u)*14);border-radius:calc(var(--u)*18);background:#F2F2F7;font-size:calc(var(--u)*13);color:#1C1C1E}
+
+/* ---- toast (Android Toast) ---- */
+.x-toast{position:absolute;left:50%;bottom:calc(var(--u)*96);transform:translateX(-50%);max-width:80%;background:rgba(40,40,40,.92);color:#fff;font-size:calc(var(--u)*14);padding:calc(var(--u)*10) calc(var(--u)*16);border-radius:calc(var(--u)*22);z-index:30;text-align:center;line-height:1.35}
+
+/* ---- Material dialog (SumaDialog = AlertDialog, shapes.medium r12) and bottom sheet ---- */
+.x-dlgscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:20}
+.x-dlg{width:calc(var(--u)*312);max-width:86%;background:#fff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24)}
+.x-dlg h3{margin:0;font-size:calc(var(--u)*24);font-weight:400;line-height:1.3}
+.x-dlg .body{margin-top:calc(var(--u)*16)}
+.x-dlg .acts{margin-top:calc(var(--u)*24);display:flex;justify-content:flex-end;gap:calc(var(--u)*8);align-items:center}
+.x-dlg .acts .tb{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:#1C1C1E}
+.x-dlg .acts .fb{height:calc(var(--u)*40);padding:0 calc(var(--u)*24);border-radius:calc(var(--u)*20);background:#1C1C1E;color:#fff;font-size:calc(var(--u)*14);font-weight:500;display:grid;place-items:center}
+.x-li{display:flex;align-items:center;gap:calc(var(--u)*16);height:calc(var(--u)*56);font-size:calc(var(--u)*16);color:#1C1C1E}
+.x-li svg{fill:#6E6E73}
+.x-field{position:relative;border:1px solid #6E6E73;border-radius:calc(var(--u)*8);height:calc(var(--u)*56);display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16)}
+.x-field.focus{border:2px solid #1C1C1E}
+.x-field label{position:absolute;top:calc(var(--u)*-9);left:calc(var(--u)*12);background:#fff;padding:0 calc(var(--u)*4);font-size:calc(var(--u)*12);color:#6E6E73}
+.x-field.focus label{color:#1C1C1E}
+.x-field .ph{color:#6E6E73}
+.x-caret{display:inline-block;width:1.5px;height:1.1em;background:#1C1C1E;margin-left:1px;vertical-align:-0.15em;animation:xblink 1s steps(1) infinite}
+@keyframes xblink{50%{opacity:0}}
+.x-sheet-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:flex;align-items:flex-end;z-index:18}
+.x-sheet{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*22) calc(var(--u)*16) calc(var(--u)*20)}
+.x-sheet .handle{width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#C7C7CC;margin:calc(var(--u)*-6) auto calc(var(--u)*14)}
+.x-sheet h3{margin:0;font-size:calc(var(--u)*16);font-weight:700}
+.x-sheet .st{margin-top:calc(var(--u)*3);font-size:calc(var(--u)*12);color:#6E6E73}
+.x-sheet .rows{margin-top:calc(var(--u)*10)}
+.x-sheet .row{height:calc(var(--u)*48);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*15);font-weight:600;border-bottom:1px solid #E5E5EA}
+.x-sheet .row:last-child{border-bottom:0}
+.x-sheet .row svg{fill:#C7C7CC}
+
+/* ---- Payment methods: PaymentMethodsScreen.kt (SumaTopBar 64dp, cards surfaceContainerLow r12) ---- */
+.x-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto}
+.x-top .nb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.x-top h1{flex:1;margin:0 0 0 calc(var(--u)*4);font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x-top .act{padding:0 calc(var(--u)*12);height:calc(var(--u)*48);display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:700}
+.x-pml{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.x-pmc{background:#F7F7FA;border-radius:calc(var(--u)*12);overflow:hidden;flex:0 0 auto}
+.x-pmh{display:flex;align-items:center;padding:calc(var(--u)*6) calc(var(--u)*8) calc(var(--u)*6) calc(var(--u)*16);min-height:calc(var(--u)*52)}
+.x-pmh .nm{flex:1;min-width:0}
+.x-pmh .nm b{display:block;font-size:calc(var(--u)*16);font-weight:600}
+.x-pmh .nm small{display:block;font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+.x-pmh .del{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:#FF3B30}
+.x-sw{width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);background:#E5E5EA;border:calc(var(--u)*2) solid #C7C7CC;position:relative;box-sizing:border-box;flex:0 0 auto;margin:0 calc(var(--u)*8)}
+.x-sw::after{content:"";position:absolute;width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#C7C7CC;top:calc(var(--u)*6);left:calc(var(--u)*6);transition:all .2s}
+.x-sw.on{background:#1C1C1E;border-color:#1C1C1E}
+.x-sw.on::after{width:calc(var(--u)*24);height:calc(var(--u)*24);top:calc(var(--u)*2);left:calc(var(--u)*22);background:#fff}
+.x-qrnote{background:#FFE5E3;color:#7A0000;padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;gap:calc(var(--u)*10);font-size:calc(var(--u)*13.5);font-weight:500;line-height:1.4}
+.x-qrnote i{flex:0 0 auto;width:calc(var(--u)*22);height:calc(var(--u)*22);border-radius:50%;background:#FF3B30;color:#fff;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:calc(var(--u)*14)}
+.x-acc{border-top:1px solid rgba(229,229,234,.4);display:flex;justify-content:space-between;align-items:center;padding:calc(var(--u)*12) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:500}
+.x-acc svg{fill:#6E6E73}
+
+/* ---- QR responsibility page: QrResponsibilityScreen.kt (PaperTheme, potato accent) ---- */
+.x.paper{background:#FBFAF7;color:#17181B}
+.x-ptop{min-height:calc(var(--u)*52);display:flex;align-items:center;gap:calc(var(--u)*6);padding:0 calc(var(--u)*16) 0 calc(var(--u)*8);flex:0 0 auto}
+.x-ptop .rb{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;display:grid;place-items:center}
+.x-ptop b{font:600 calc(var(--u)*17)/1.2 "Fredoka",sans-serif}
+.x-pscroll{flex:1;min-height:0;overflow:hidden;position:relative}
+.x-pinner{padding:0 calc(var(--u)*20) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16);transition:transform .7s ease}
+.x-pinner .pot{width:calc(var(--u)*92);height:calc(var(--u)*92);object-fit:contain;margin-left:calc(var(--u)*-8)}
+.x-pinner h1{margin:0;font:600 calc(var(--u)*27)/1.14 "Fredoka",sans-serif;letter-spacing:-.2px}
+.x-pinner .sub{margin-top:calc(var(--u)*6);font-size:calc(var(--u)*15);line-height:1.45;color:#464A52}
+.x-bad{background:#F7E6E2;border:1px solid #E8B4A9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;gap:calc(var(--u)*12);color:#A2382A}
+.x-bad i{flex:0 0 auto;width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:#C0392B;color:#fff;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:calc(var(--u)*18)}
+.x-bad b{display:block;font-size:calc(var(--u)*16);line-height:1.3}
+.x-bad p{margin:calc(var(--u)*4) 0 0;font-size:calc(var(--u)*14);line-height:1.42}
+.x-pinner h2{margin:calc(var(--u)*4) 0 0;font:600 calc(var(--u)*20)/1.2 "Fredoka",sans-serif}
+.x-tip{display:flex;gap:calc(var(--u)*12);font-size:calc(var(--u)*15);line-height:1.4}
+.x-tip .tile{flex:0 0 auto;width:calc(var(--u)*44);height:calc(var(--u)*44);border-radius:calc(var(--u)*14);background:#F4EBDD;display:grid;place-items:center}
+.x-tip .tile svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
+.x-tip b{font-weight:600}
+.x-agree{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*14) calc(var(--u)*16);display:flex;gap:calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;line-height:1.42}
+.x-agree.on{border-color:#E8B4A9}
+.x-agree .bx{flex:0 0 auto;width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:calc(var(--u)*8);border:calc(var(--u)*2) solid #D9D4C9;box-sizing:border-box;display:grid;place-items:center}
+.x-agree.on .bx{background:#C0392B;border-color:#C0392B}
+.x-agree .bx svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:#fff}
+.x-pfoot{padding:calc(var(--u)*12) calc(var(--u)*20) calc(var(--u)*14);display:flex;flex-direction:column;gap:calc(var(--u)*8);box-shadow:0 calc(var(--u)*-6) calc(var(--u)*6) -calc(var(--u)*6) rgba(0,0,0,.06);background:#FBFAF7;flex:0 0 auto}
+.x-pfoot .main{min-height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#E6E2D9;color:#737883;display:grid;place-items:center;font:500 calc(var(--u)*18) "Fredoka",sans-serif;text-align:center;padding:0 calc(var(--u)*16)}
+.x-pfoot .main.on{background:#3A2A1F;color:#fff}
+.x-pfoot .sec{min-height:calc(var(--u)*44);border-radius:calc(var(--u)*14);border:calc(var(--u)*1.5) solid #D9D4C9;display:grid;place-items:center;font:500 calc(var(--u)*16) "Fredoka",sans-serif}
+
+/* ---- Android system file picker (OpenDocument "image/*"): not Platata, the phone's own screen ---- */
+.x-pick{flex:1;background:#fff;display:flex;flex-direction:column}
+.x-pick .hd{height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*16);padding:0 calc(var(--u)*16);font-size:calc(var(--u)*20);color:#1C1C1E}
+.x-pick .cap{padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*14);color:#6E6E73}
+.x-pick .gr{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*6);padding:calc(var(--u)*8) calc(var(--u)*16)}
+.x-pick .gr div{aspect-ratio:1;border-radius:calc(var(--u)*8);overflow:hidden;background:#E9E3D8;display:grid;place-items:center}
+.x-pick .gr .q{background:#fff;border:1px solid #E5E5EA}
+.x-pick .gr .q svg{width:78%;height:78%}
+
+/* ---- QR overlay: QrPaymentOverlay.kt ---- */
+.x-qro{position:absolute;inset:0;background:#fff;z-index:14;display:flex;flex-direction:column;padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*24)}
+.x-qro .bk{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;margin-left:calc(var(--u)*-12)}
+.x-qro .lb{font-size:calc(var(--u)*10.5);font-weight:700;letter-spacing:.9px;color:#6E6E73}
+.x-qro .am{font-size:calc(var(--u)*36);font-weight:800;letter-spacing:-1.1px;line-height:1.2}
+.x-qro .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*12)}
+.x-qro .card{background:#fff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*11);box-shadow:0 0 0 1px #E5E5EA}
+.x-qro .card svg{width:calc(var(--u)*200);height:calc(var(--u)*200);display:block}
+.x-qro .hint{font-size:calc(var(--u)*12.5);color:#6E6E73;text-align:center;line-height:1.5;white-space:pre-line}
+.x-qro .note{margin:calc(var(--u)*16) calc(var(--u)*32) 0;color:#FF3B30;font-size:calc(var(--u)*24);font-weight:600;text-align:center;line-height:1.3}
+.x-qro .bb{margin-top:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.x-qro .bb>div{height:calc(var(--u)*48);border-radius:calc(var(--u)*50);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:800}
+.x-qro .g{background:#34C759;color:#fff}
+.x-qro .g svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#fff}
+.x-qro .o{border:calc(var(--u)*1.5) solid #1C1C1E}
+
+/* ---- Wompi card overlay: WompiPaymentOverlay.kt ---- */
+.x-wo{position:absolute;inset:0;background:#fff;z-index:14;display:flex;flex-direction:column;padding:calc(var(--u)*12) calc(var(--u)*16) calc(var(--u)*24)}
+.x-wo .hdr{display:flex;justify-content:space-between;align-items:flex-start}
+.x-wo .lb{font-size:calc(var(--u)*10.5);font-weight:700;letter-spacing:.9px;color:#6E6E73}
+.x-wo .am{font-size:calc(var(--u)*33);font-weight:800;letter-spacing:-1px;line-height:1.2}
+.x-wo .x{font-size:calc(var(--u)*21);font-weight:300;color:#6E6E73;padding:calc(var(--u)*8)}
+.x-wo h3{margin:calc(var(--u)*24) 0 0;font-size:calc(var(--u)*17.5);font-weight:800}
+.x-wf{padding-top:calc(var(--u)*12)}
+.x-wf small{display:block;font-size:calc(var(--u)*10);font-weight:700;letter-spacing:.3px;color:#6E6E73}
+.x-wf div{margin-top:calc(var(--u)*4);height:calc(var(--u)*42);border-radius:calc(var(--u)*10);background:#F2F2F7;border:1px solid #E5E5EA;display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);letter-spacing:.5px}
+.x-wf div .h{color:rgba(110,110,115,.6)}
+.x-wrow{display:flex;gap:calc(var(--u)*12)}.x-wrow>*{flex:1}
+.x-ck{display:flex;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*10);font-size:calc(var(--u)*10.5);color:#6E6E73}
+.x-ck i{width:calc(var(--u)*19);height:calc(var(--u)*19);border-radius:calc(var(--u)*5);background:#34C759;color:#fff;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:calc(var(--u)*12);flex:0 0 auto}
+.x-ck u{color:#007AFF}
+.x-fb{height:calc(var(--u)*48);border-radius:calc(var(--u)*24);display:grid;place-items:center;font-size:calc(var(--u)*15);font-weight:800;background:#F2F2F7;color:#6E6E73}
+.x-fb.on{background:#007AFF;color:#fff}
+.x-spin{width:calc(var(--u)*50);height:calc(var(--u)*50);border-radius:50%;border:calc(var(--u)*3) solid #E5E5EA;border-top-color:#1C1C1E;animation:xspin 1s linear infinite}
+.x-spin.s48{width:calc(var(--u)*48);height:calc(var(--u)*48);border-width:calc(var(--u)*4);border-top-color:#1C1C1E}
+@keyframes xspin{to{transform:rotate(360deg)}}
+.x-cpill{border:1px solid #E5E5EA;border-radius:calc(var(--u)*20);padding:calc(var(--u)*8) calc(var(--u)*12);font-size:calc(var(--u)*10.5);color:#6E6E73}
+
+/* ---- Stripe sheet + tip screen: StripePaymentSheet.kt ---- */
+.x-st{position:absolute;inset:0;background:#fff;z-index:14;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--u)*24);gap:calc(var(--u)*16);text-align:center}
+.x-st.top{justify-content:flex-start;padding-top:calc(var(--u)*40)}
+.x-st h2{margin:0;font-size:calc(var(--u)*22);font-weight:400}
+.x-st .hm{font-size:calc(var(--u)*28);font-weight:400}
+.x-st .tm{font-size:calc(var(--u)*16);color:#6E6E73}
+.x-st .sb{align-self:stretch;min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);border:1px solid #C7C7CC;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:600}
+.x-st .tb{font-size:calc(var(--u)*14);font-weight:500;padding:calc(var(--u)*10)}
+.x-st .hs{font-size:calc(var(--u)*24);font-weight:400}
+.x-st .bm{font-size:calc(var(--u)*14);color:#6E6E73}
+.x-card3d{position:absolute;left:50%;width:calc(var(--u)*170);height:calc(var(--u)*106);border-radius:calc(var(--u)*12);background:linear-gradient(135deg,#2F4E8C,#1C2E55);box-shadow:0 calc(var(--u)*10) calc(var(--u)*24) rgba(0,0,0,.3);z-index:15;transition:all 1s ease;transform:translateX(-50%)}
+.x-card3d::before{content:"";position:absolute;left:calc(var(--u)*18);top:calc(var(--u)*36);width:calc(var(--u)*30);height:calc(var(--u)*22);border-radius:calc(var(--u)*4);background:#E8C76A}
+.x-card3d::after{content:"";position:absolute;right:calc(var(--u)*16);bottom:calc(var(--u)*14);width:calc(var(--u)*46);height:calc(var(--u)*8);border-radius:4px;background:rgba(255,255,255,.5)}
+
+/* ---- receipt viewer: ShowReceiptDialog.kt ReceiptContent + ReceiptPaperCard ---- */
+.x-rv{position:absolute;inset:0;background:#fff;z-index:16;display:flex;flex-direction:column;padding:calc(var(--u)*16) calc(var(--u)*16) calc(var(--u)*16)}
+.x-rv .hd{display:flex;align-items:center;justify-content:space-between}
+.x-rv .hd b{font-size:calc(var(--u)*22);font-weight:700}
+.x-rv .acts{display:flex;align-items:center}
+.x-rv .ac{display:flex;flex-direction:column;align-items:center;padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*11);font-weight:500}
+.x-rv .ac.wa svg{fill:#25D366}
+.x-rv .xb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.x-paper{margin-top:calc(var(--u)*16);flex:1;min-height:0;overflow:hidden;background:#fff;border-radius:calc(var(--u)*8);box-shadow:0 1px 4px rgba(0,0,0,.18);padding:calc(var(--u)*16);font:calc(var(--u)*14.5)/1.5 "Roboto Mono",ui-monospace,Menlo,Consolas,monospace;white-space:pre;color:#000}
+
+/* ---- the other apps (WhatsApp / Messages / Email): what Android opens, drawn plainly ---- */
+.x-wa{flex:1;display:flex;flex-direction:column;background:#ECE5DD;min-height:0}
+.x-wa .hd{height:calc(var(--u)*56);background:#075E54;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*17);font-weight:500}
+.x-wa .hd i{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C5D1D6;flex:0 0 auto}
+.x-wa .chat{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:flex-end}
+.x-wa .bub{align-self:flex-end;max-width:86%;background:#DCF8C6;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font:calc(var(--u)*12)/1.4 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;box-shadow:0 1px 1px rgba(0,0,0,.12)}
+.x-wa .in{display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*8);align-items:flex-end}
+.x-wa .in .box{flex:1;max-height:calc(var(--u)*220);overflow:hidden;background:#fff;border-radius:calc(var(--u)*22);padding:calc(var(--u)*10) calc(var(--u)*14);font:calc(var(--u)*12)/1.4 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;color:#1C1C1E}
+.x-wa .in .sendb{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#00A884;display:grid;place-items:center;flex:0 0 auto}
+.x-wa .in .sendb svg{fill:#fff}
+.x-sms{flex:1;display:flex;flex-direction:column;background:#fff;min-height:0}
+.x-sms .hd{height:calc(var(--u)*56);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*18);border-bottom:1px solid #E5E5EA}
+.x-sms .to{padding:calc(var(--u)*12) calc(var(--u)*16);font-size:calc(var(--u)*15);border-bottom:1px solid #E5E5EA;color:#1C1C1E}
+.x-sms .to span{color:#6E6E73;margin-right:calc(var(--u)*8)}
+.x-sms .body{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;justify-content:flex-end}
+.x-sms .msg{background:#F2F2F7;border-radius:calc(var(--u)*18);padding:calc(var(--u)*10) calc(var(--u)*14);font:calc(var(--u)*12)/1.4 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;max-height:calc(var(--u)*360);overflow:hidden}
+.x-sms .msg.sent{align-self:flex-end;background:#3D74DB;color:#fff;max-width:86%}
+.x-sms .bar{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12)}
+.x-sms .bar .send{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#3D74DB;display:grid;place-items:center;margin-left:auto}
+.x-sms .bar .send svg{fill:#fff}
+
+</style>
+</body>
+</html>

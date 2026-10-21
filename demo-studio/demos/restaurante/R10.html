@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Imprimir comanda y recibo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800&family=Roboto+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* Every class here starts with p0 so kit/edif.css and kit/material.css cannot reach it. Owner phone, Material light. 1 dp = var(--u). */
+.p0pg{flex:1;display:flex;flex-direction:column;background:#fff;color:#1C1C1E;min-height:0;font-family:Roboto,system-ui,sans-serif;position:relative}
+.p0tb{height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*4);padding:0 calc(var(--u)*4);flex:0 0 auto}
+.p0tb .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.p0tb .ib svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E}
+.p0tb b{flex:1;font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p0tb .nw{padding:0 calc(var(--u)*12);font-size:calc(var(--u)*16);font-weight:700}
+.p0body{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.p0step{font-size:calc(var(--u)*14);font-weight:500;color:#6E6E73}
+.p0prog{height:calc(var(--u)*4);border-radius:calc(var(--u)*2);background:#E5E5EA;overflow:hidden}
+.p0prog i{display:block;height:100%;background:#1C1C1E;border-radius:calc(var(--u)*2)}
+.p0q{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*22);font-weight:700;line-height:1.25}
+.p0txt{font-size:calc(var(--u)*14);line-height:1.45;color:#6E6E73}
+.p0oc{border:1px solid #C7C7CC;border-radius:calc(var(--u)*12);padding:calc(var(--u)*16);display:flex;gap:calc(var(--u)*16);align-items:center}
+.p0oc svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E;flex:0 0 auto}
+.p0oc .c{flex:1;min-width:0}
+.p0oc b{display:block;font-size:calc(var(--u)*18);font-weight:600}
+.p0oc small{display:block;margin-top:calc(var(--u)*2);font-size:calc(var(--u)*14);line-height:1.4;color:#6E6E73}
+.p0cb{width:calc(var(--u)*18);height:calc(var(--u)*18);border-radius:calc(var(--u)*2);border:calc(var(--u)*2) solid #6E6E73;display:grid;place-items:center;flex:0 0 auto;box-sizing:border-box;margin:0 calc(var(--u)*11)}
+.p0cb.on{background:#1C1C1E;border-color:#1C1C1E}
+.p0cb svg{width:calc(var(--u)*14)!important;height:calc(var(--u)*14)!important;fill:#fff!important}
+.p0btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:600;text-align:center}
+.p0btn.sec{background:#fff;color:#1C1C1E;border:1px solid #C7C7CC}
+.p0row{min-height:calc(var(--u)*52);display:flex;align-items:center;gap:calc(var(--u)*12);font-size:calc(var(--u)*16);border-bottom:1px solid #E5E5EA}
+.p0row svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E}
+.p0sub{font-size:calc(var(--u)*14);font-weight:500;margin-top:calc(var(--u)*4)}
+.p0hid{display:flex;align-items:center;gap:calc(var(--u)*8)}
+.p0hid small{flex:1;font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+.p0hid span{font-size:calc(var(--u)*14);font-weight:500;padding:calc(var(--u)*10) calc(var(--u)*12)}
+.p0chips{display:flex;gap:calc(var(--u)*8)}
+.p0chips span{height:calc(var(--u)*32);border-radius:calc(var(--u)*8);border:1px solid #C7C7CC;padding:0 calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:#6E6E73}
+.p0chips span.on{background:#E5E5EA;border-color:#E5E5EA;color:#1C1C1E;padding-left:calc(var(--u)*8)}
+.p0chips svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#1C1C1E}
+.p0field{position:relative;height:calc(var(--u)*56);border-radius:calc(var(--u)*6);border:1px solid #C7C7CC;display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16)}
+.p0field small{position:absolute;left:calc(var(--u)*12);top:calc(var(--u)*-9);background:#fff;padding:0 calc(var(--u)*4);font-size:calc(var(--u)*12);color:#6E6E73}
+.p0foot{padding:calc(var(--u)*16);flex:0 0 auto}
+.p0send{display:flex;align-items:center;gap:calc(var(--u)*12);font-size:calc(var(--u)*16)}
+.p0send i{width:calc(var(--u)*22);height:calc(var(--u)*22);border-radius:50%;border:calc(var(--u)*3) solid #1C1C1E;border-right-color:transparent;animation:p0spin 1s linear infinite;flex:0 0 auto}
+@keyframes p0spin{to{transform:rotate(360deg)}}
+.p0ask{font-size:calc(var(--u)*18);font-weight:500}
+.p0sw{display:flex;align-items:center;gap:calc(var(--u)*12);font-size:calc(var(--u)*16)}
+.p0sw span{flex:1}
+.p0sw i{width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #C7C7CC;background:#F2F2F7;position:relative;flex:0 0 auto;box-sizing:border-box}
+.p0sw i::after{content:"";position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#C7C7CC}
+.p0sw i.on{background:#1C1C1E;border-color:#1C1C1E}.p0sw i.on::after{left:auto;right:calc(var(--u)*4);top:calc(var(--u)*4);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.p0empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--u)*16) calc(var(--u)*24);text-align:center;gap:calc(var(--u)*8)}
+.p0empty b{font-size:calc(var(--u)*22);font-weight:600}
+.p0empty small{font-size:calc(var(--u)*14);line-height:1.45;color:#6E6E73}
+.p0empty .p0btn{align-self:stretch;margin-top:calc(var(--u)*16)}
+.p0card{margin:0 calc(var(--u)*16);border:1px solid #C7C7CC;border-radius:calc(var(--u)*12);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.p0card b{font-size:calc(var(--u)*18);font-weight:600}
+.p0card .k{display:flex;gap:calc(var(--u)*8);font-size:calc(var(--u)*14)}.p0card .k em{font-style:normal;color:#6E6E73}
+.p0card small{font-size:calc(var(--u)*12)}
+.p0wo{padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*12);border-bottom:1px solid #E5E5EA;margin:0 calc(var(--u)*16)}
+.p0wo div{flex:1}.p0wo b{display:block;font-size:calc(var(--u)*16);font-weight:600}.p0wo small{display:block;font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+.p0toast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*72);background:#3C3C3E;color:#fff;font-size:calc(var(--u)*14);padding:calc(var(--u)*10) calc(var(--u)*16);border-radius:calc(var(--u)*20);white-space:nowrap;z-index:5}
+/* owner Home, restaurant: Material TabRow Teclado | Catálogo, chips + grid (material.css), CurrentSaleStrip, FooterButtonPair, NavigationBar */
+.p0tabs{display:flex;flex:0 0 auto;border-bottom:1px solid #E5E5EA}
+.p0tabs span{flex:1;height:calc(var(--u)*48);display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:500;position:relative}
+.p0tabs span.on::after{content:"";position:absolute;left:calc(var(--u)*24);right:calc(var(--u)*24);bottom:-1px;height:calc(var(--u)*3);border-radius:calc(var(--u)*3) calc(var(--u)*3) 0 0;background:#1C1C1E}
+.p0strip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:600;flex:0 0 auto}
+.p0strip i{font-style:normal;font-size:calc(var(--u)*18);color:#6E6E73;font-weight:400}
+.p0pair{display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16);flex:0 0 auto}
+.p0pair span{flex:1;min-height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600;text-align:center;padding:0 calc(var(--u)*12)}
+.p0pair .l{border:1px solid #C7C7CC}.p0pair .l.off{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.p0pair .r{background:#1C1C1E;color:#fff}.p0pair .r.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.p0nav{height:calc(var(--u)*80);display:flex;flex:0 0 auto}
+.p0nav>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:500;color:#6E6E73}
+.p0nav .pill{width:calc(var(--u)*64);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);display:grid;place-items:center}
+.p0nav .on{color:#1C1C1E}.p0nav .on .pill{background:#E5E5EA}
+.p0nav svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.p0nav .fl{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:#F2F2F7;display:grid;place-items:center}
+.p0nav .fl svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
+/* Sale complete: ReceiptOptionsScreen.kt SaleCompleteContent (phone taller than 700 dp: potato 132 dp) */
+.p0rec{flex:1;display:flex;flex-direction:column;background:#fff;min-height:0}
+.p0rec .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 calc(var(--u)*20);text-align:center}
+.p0rec .hero svg{width:calc(var(--u)*132);height:calc(var(--u)*132)}
+.p0rec .hero b{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*26);font-weight:700}
+.p0rec .hero small{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73}
+.p0rec .hero em{font-style:normal;margin-top:calc(var(--u)*22);font-size:calc(var(--u)*15);font-weight:700;color:#6E6E73}
+.p0rec .ft{padding:0 calc(var(--u)*16) calc(var(--u)*20);display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.p0rb{height:calc(var(--u)*52);border-radius:calc(var(--u)*26);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600}
+.p0rb.wa{background:#25D366;color:#fff}.p0rb.pr{background:#1C1C1E;color:#fff;font-weight:700}.p0rb.ol{border:1px solid #C7C7CC}
+.p0priv{text-align:center;font-size:calc(var(--u)*11);color:#6E6E73;text-decoration:underline;margin-top:calc(var(--u)*-6)}
+/* the paper: PrintManager.kt testPageText / buildReceipt / buildOrderTicket at 32 columns (58 mm, the default profile) */
+.p0paper{flex:1;min-height:0;background:#F4EBDD;display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*16) calc(var(--u)*12);overflow:hidden}
+.p0paper .lab{align-self:center;background:#fff;color:#3A2A1F;border:1px solid rgba(58,42,31,.2);border-radius:99px;padding:calc(var(--u)*4) calc(var(--u)*12);font-size:calc(var(--u)*13);font-weight:600}
+.p0slip{background:#fff;box-shadow:0 calc(var(--u)*2) calc(var(--u)*8) rgba(58,42,31,.18);padding:calc(var(--u)*12) calc(var(--u)*12) calc(var(--u)*16);font:400 calc(var(--u)*15.6)/1.3 "Roboto Mono",ui-monospace,monospace;color:#222;white-space:pre;overflow:hidden;
+  -webkit-mask:linear-gradient(#000,#000) top/100% calc(100% - 6px) no-repeat,radial-gradient(circle 4px at 50% 100%,transparent 3.5px,#000 4px) bottom/9px 6px repeat-x}
+.p0slip.feed{animation:p0feed 1.1s ease-out}
+@keyframes p0feed{from{clip-path:inset(0 0 100% 0)}to{clip-path:inset(0 0 0 0)}}
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* R10 "Imprimir comanda y recibo": the owner adds a Bluetooth printer in four steps (it prints a test page), then a cash sale
+   prints the customer's receipt and the kitchen's comanda on it.
+   Every screen follows the app at sim/usa-canada (abb8fddb). Paths under app/src/main/java/com/example/.
+   printers page   ui/screens/onboarding/PrinterListScreen.kt (PRINT-5): empty -> EmptyListLayout (printer_empty_title,
+                   workspace_printers_desc, printer_add_first); with one -> OutlinedCard (name titleMedium SemiBold, "Recibos + Pedidos de
+                   cocina" printer_card_kinds_both + the "Bluetooth" tag, the PRINT-3 status line in primary), the waiter-orders switch
+                   under the first kitchen printer, the big printer_add_first and printer_routing_note; header "+ Nuevo". Reached from
+                   Configuración › Conexiones › Impresoras y otras conexiones › "Conectar una impresora".
+   add flow        PrinterAddScreen.kt + PrinterAddSteps.kt + PrinterFindBluetooth.kt: SumaTopBar printer_add_title, printer_step_of +
+                   LinearProgressIndicator; 1 HowChoice OutlinedCards (printer_how_*); 2 printer_bt_title, printer_bt_steps, "Buscar
+                   impresoras" (PRINT-2), "Ya emparejadas con este teléfono" rows (Print icon, 52 dp), the hidden-count line + "Mostrar todos",
+                   printer_pair_hint + "Abrir Bluetooth", PIN hint; 3 WhatChoice cards with a Checkbox (receipts ticked by default; a
+                   restaurant reads "Comandas para la cocina"), printer_what_both_hint, Papel chips 58/80 mm, the name field (the device's
+                   Bluetooth name), bottom "Siguiente"; 4 "Prueba": the test page goes out by itself (printer_test_sending), then
+                   printer_test_ask / printer_test_sent_to, "Sí, guardar impresora" / "No salió", and for a receipts printer the drawer
+                   question (printer_drawer_ask, switch off by default, "Abrir cajón de dinero"). Save -> toast printer_added -> the list.
+   sale            HomeScreen.kt:808-833 FooterButtonPair: "Enviar a cocina" (an order printer is a kitchen target) + "Cobrar $X";
+                   CurrentSaleStrip home_current_sale_items; the pay sheet asks the table first (Mesas is the only option), then the pay
+                   block (a NEW sale's button says "Guardar", CheckoutSheetBody.kt:315-332); Exacto -> Sale complete with "Imprimir otra
+                   vez" and "Nueva venta" (a printer is set up).
+   paper           CheckoutActions.kt:540-616: the receipt goes to every receipts printer, then the comanda of the unsent lines to every
+                   orders printer (one printer doing both prints both). The strips below are PrintManager.buildReceipt /
+                   buildOrderTicket / testPageText at 32 columns: center(), leftRight(), divider = 32 "-"; receipt date
+                   "MMM d yyyy  HH:mm" in the phone's language; payment = localizedPaymentMethod upper-cased; footer = the Receipts
+                   setting customFooterMessage, whose default is the English "Thank you for shopping with us!" (data/ReceiptConfig.kt:24);
+                   comanda: label, "HH:mm", "MESA 7", "<receipt_label_waiter>: <currentUser>" = the owner's name on the owner phone.
+   Demo setup: no receipt header lines, no taxes (the app has no country tax presets), receipt numbers off (mode not MANUAL /
+   AUTO), cash drawer not connected. */
+const R = RKIT.ctx(), C = R.C, esc = R.esc;
+const W = 32, PNAME = "PT-210";
+const US_CA = R.country==="US" || R.country==="CA";
+const L = R.pick({
+  es:{list:"Impresoras", nw:"+ Nuevo", empty:"Aún no tienes impresoras", emptyLine:"Conecta impresoras de recibos y de cocina para que los pedidos y recibos se impriman automáticamente en la estación correcta.", addFirst:"+ Agregar impresora",
+      addTitle:"Agregar impresora", step:n=>`Paso ${n} de 4`, howQ:"¿Cómo se conecta tu impresora?", bt:"Por Bluetooth", btSub:"Pequeña, con batería. Se conecta a este teléfono sin cables.",
+      wifi:"Wi-Fi o red", wifiSub:"Va conectada al router del negocio, con cable o por Wi-Fi.", howHint:"¿No sabes? Casi todas las impresoras pequeñas de 58 mm son Bluetooth.",
+      works:"Funciona con impresoras de recibos que usan el estándar ESC/POS, que son casi todas las impresoras térmicas de 58 mm y 80 mm.",
+      btTitle:"Impresora Bluetooth", btSteps:"Enciende la impresora, revisa que tenga papel y la tapa cerrada, y toca Buscar.", search:"Buscar impresoras",
+      paired:"Ya emparejadas con este teléfono", hidden:"1 otro dispositivo emparejado oculto (audífonos, celulares)", showAll:"Mostrar todos",
+      pairHint:"¿No ves tu impresora? Empárejala en la configuración de Bluetooth.", openBt:"Abrir Bluetooth", pinHint:"Si pide un PIN, prueba 0000 o 1234.",
+      whatQ:"¿Qué va a imprimir?", rec:"Recibos para el cliente", recSub:"El recibo de cada venta. Puede abrir el cajón de dinero.",
+      kit:"Comandas para la cocina", kitSub:"El pedido para que la cocina lo prepare.", both:"¿Una sola impresora? Marca las dos.",
+      paper:"Papel", p58:"Papel de 58 mm", p80:"Papel de 80 mm", nameHint:"Nombre (para reconocerla)", next:"Siguiente",
+      test:"Prueba", sending:n=>`Enviando la hoja de prueba a ${n}...`, ask:"¿Salió la hoja de prueba?", sentTo:n=>`Acabamos de mandarla a ${n}.`, yes:"Sí, guardar impresora", no:"No salió",
+      drawerAsk:"¿Tienes un cajón de dinero conectado a esta impresora?", drawerSw:"Abrir el cajón después de una venta en efectivo",
+      drawerHint:"Actívalo y el cajón se abre solo después de cada venta. Cada forma de pago puede abrirlo o no.", openDrawer:"Abrir cajón de dinero",
+      added:"Impresora agregada", kinds:"Recibos + Pedidos de cocina", printed:t=>`Imprimió bien a las ${t}`,
+      waiter:"Imprimir aquí los pedidos de los meseros", waiterHint:"Desactívalo si el teléfono del mesero ya imprime en la misma impresora Wi-Fi.",
+      routing:"Cada recibo sale en las impresoras marcadas para recibos; cada comanda, en las marcadas para comandas.",
+      tabs:["Teclado","Catálogo"], all:"Todos", cur:n=>`Venta actual · ${n} ${n===1?"artículo":"artículos"}`, send:"Enviar a cocina", charge:v=>`Cobrar ${v}`,
+      nav:["Caja","Ventas","Mi negocio"], table:"¿Qué mesa?", cust:"Agrega un cliente a la venta", total:"Total", items:n=>`Artículos (${n}) ›`, mesa:n=>`Mesa ${n}`,
+      exact:v=>`Exacto · ${v}`, save:"Guardar", done:"¡Venta completada!", got:v=>`Recibiste ${v}`, how:"¿Cómo envías el recibo?", wa:"WhatsApp",
+      text:"Recibo por mensaje", email:"Recibo por correo", again:"Imprimir otra vez", view:"Ver recibo", newSale:"Nueva venta", priv:"Aviso de privacidad",
+      phone:"Tu teléfono", printer:"Impresora", slipRec:"Recibo", slipKit:"Comanda",
+      tTitle:"Página de prueba", tPrinter:n=>`Impresora: ${n}`, tOk:"Si puedes leer esto, la impresora funciona.",
+      rDate:"oct. 20 2026  12:41", rTotal:"TOTAL", cash:"Efectivo", oTicket:"Comanda", oTable:"Mesa", oWaiter:"Mesero"},
+  pt:{list:"Impressoras", nw:"+ Novo", empty:"Nenhuma impressora ainda", emptyLine:"Conecte impressoras de recibo e de cozinha para que os pedidos e recibos sejam impressos automaticamente na estação certa.", addFirst:"+ Adicionar impressora",
+      addTitle:"Adicionar impressora", step:n=>`Passo ${n} de 4`, howQ:"Como a sua impressora se conecta?", bt:"Por Bluetooth", btSub:"Pequena, com bateria. Conecta a este celular sem cabos.",
+      wifi:"Wi-Fi ou rede", wifiSub:"Ligada ao roteador do negócio, por cabo ou Wi-Fi.", howHint:"Não sabe? Quase todas as impressoras pequenas de 58 mm são Bluetooth.",
+      works:"Funciona com impressoras de recibo que usam o padrão ESC/POS, que é a maioria das impressoras térmicas de 58 mm e 80 mm.",
+      btTitle:"Impressora Bluetooth", btSteps:"Ligue a impressora, veja se tem papel e se a tampa está fechada, e toque em Buscar.", search:"Procurar impressoras",
+      paired:"Já pareadas com este celular", hidden:"1 outro dispositivo emparelhado oculto (fones de ouvido, celulares)", showAll:"Mostrar todos",
+      pairHint:"Não vê sua impressora? Emparelhe-a nas configurações de Bluetooth.", openBt:"Abrir Bluetooth", pinHint:"Se pedir um PIN, tente 0000 ou 1234.",
+      whatQ:"O que ela vai imprimir?", rec:"Recibos para o cliente", recSub:"O recibo de cada venda. Pode abrir a gaveta de dinheiro.",
+      kit:"Comandas para a cozinha", kitSub:"O pedido para a cozinha preparar.", both:"Só uma impressora? Marque as duas.",
+      paper:"Papel", p58:"Papel de 58 mm", p80:"Papel de 80 mm", nameHint:"Nome (para reconhecê-la)", next:"Próximo",
+      test:"Teste", sending:n=>`Enviando a página de teste para ${n}...`, ask:"A página de teste saiu?", sentTo:n=>`Acabamos de enviá-la para ${n}.`, yes:"Sim, salvar impressora", no:"Não saiu",
+      drawerAsk:"Há uma gaveta de dinheiro ligada a esta impressora?", drawerSw:"Abrir a gaveta depois de uma venda em dinheiro",
+      drawerHint:"Ative e a gaveta abre sozinha depois de cada venda. Cada forma de pagamento pode abri-la ou não.", openDrawer:"Abrir gaveta de dinheiro",
+      added:"Impressora adicionada", kinds:"Recibos + Pedidos da cozinha", printed:t=>`Imprimiu bem às ${t}`,
+      waiter:"Imprimir aqui os pedidos dos garçons", waiterHint:"Desative se o telefone do garçom já imprime na mesma impressora Wi-Fi.",
+      routing:"Cada recibo sai nas impressoras marcadas para recibos; cada comanda, nas marcadas para comandas.",
+      tabs:["Teclado","Catálogo"], all:"Todos", cur:n=>`Venda atual · ${n} ${n===1?"item":"itens"}`, send:"Enviar para a cozinha", charge:v=>`Cobrar ${v}`,
+      nav:["Caixa","Vendas","Meu negócio"], table:"Qual mesa?", cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, mesa:n=>`Mesa ${n}`,
+      exact:v=>`Exato · ${v}`, save:"Salvar", done:"Venda concluída!", got:v=>`Você recebeu ${v}`, how:"Como você envia o recibo?", wa:"WhatsApp",
+      text:"Recibo por mensagem", email:"Recibo por e-mail", again:"Imprimir de novo", view:"Ver recibo", newSale:"Nova venda", priv:"Aviso de privacidade",
+      phone:"Seu celular", printer:"Impressora", slipRec:"Recibo", slipKit:"Comanda",
+      tTitle:"Página de teste", tPrinter:n=>`Impressora: ${n}`, tOk:"Se você consegue ler isto, a impressora funciona.",
+      rDate:"out. 20 2026  12:41", rTotal:"TOTAL", cash:"Dinheiro", oTicket:"Comanda", oTable:"Mesa", oWaiter:"Garçom"},
+  en:{list:"Printers", nw:"+ New", empty:"No printers yet", emptyLine:"Connect receipt and kitchen printers so orders and receipts print automatically at the right station.", addFirst:"+ Add printer",
+      addTitle:"Add a printer", step:n=>`Step ${n} of 4`, howQ:"How does your printer connect?", bt:"Bluetooth", btSub:"Small, with a battery. Connects to this phone without cables.",
+      wifi:"Wi-Fi or network", wifiSub:"Plugged into the shop router, by cable or Wi-Fi.", howHint:"Not sure? Almost all small 58 mm printers are Bluetooth.",
+      works:"Works with receipt printers that use the ESC/POS standard, which is most 58 mm and 80 mm thermal printers.",
+      btTitle:"Bluetooth printer", btSteps:"Turn the printer on, check that it has paper and the lid is closed, then tap Search.", search:"Search for printers",
+      paired:"Already paired with this phone", hidden:"1 other paired device hidden (headphones, phones)", showAll:"Show all",
+      pairHint:"Don't see your printer? Pair it in Bluetooth settings.", openBt:"Open Bluetooth", pinHint:"If it asks for a PIN, try 0000 or 1234.",
+      whatQ:"What will it print?", rec:"Receipts for the customer", recSub:"The receipt of each sale. It can open the cash drawer.",
+      kit:"Orders for the kitchen", kitSub:"The order, so the kitchen can prepare it.", both:"Just one printer? Tick both.",
+      paper:"Paper", p58:"58 mm paper", p80:"80 mm paper", nameHint:"Name (to recognise it)", next:"Next",
+      test:"Test", sending:n=>`Sending the test page to ${n}...`, ask:"Did the test page come out?", sentTo:n=>`We just sent it to ${n}.`, yes:"Yes, save the printer", no:"It did not come out",
+      drawerAsk:"Is a cash drawer connected to this printer?", drawerSw:"Open the drawer after a cash sale",
+      drawerHint:"Turn this on and the drawer opens by itself after each sale. Each payment method can open it or not.", openDrawer:"Open cash drawer",
+      added:"Printer added", kinds:"Receipts + Kitchen orders", printed:t=>`Printed fine at ${t}`,
+      waiter:"Print waiters’ orders here", waiterHint:"Turn this off if the waiter’s phone already prints to the same Wi-Fi printer.",
+      routing:"Each receipt prints on the printers marked for receipts; each order, on the ones marked for orders.",
+      tabs:["Keypad","Library"], all:"All", cur:n=>`Current sale · ${n} ${n===1?"item":"items"}`, send:"Send to kitchen", charge:v=>`Charge ${v}`,
+      nav:["Register","Sales","My business"], table:"Which table?", cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, mesa:n=>`Table ${n}`,
+      exact:v=>`Exact · ${v}`, save:"Save", done:"Sale complete!", got:v=>`You received ${v}`, how:"How do you send the receipt?", wa:"WhatsApp",
+      text:"Text receipt", email:"Email receipt", again:"Print again", view:"View receipt", newSale:"New sale", priv:"Privacy notice",
+      phone:"Your phone", printer:"Printer", slipRec:"Receipt", slipKit:"Order ticket",
+      tTitle:"Test page", tPrinter:n=>`Printer: ${n}`, tOk:"If you can read this, the printer works.",
+      rDate:"Oct 20 2026  12:41", rTotal:"TOTAL", cash:"Cash", oTicket:"Order ticket", oTable:"Table", oWaiter:"Waiter"}
+});
+/* strings: printer_* (PRINT-5), workspace_printers_desc, common_new_short, common_next, printer_hidden_count (plural), home_tab_manual/library,
+   items_filter_all, home_current_sale_items (plural), checkout_send_kitchen, common_charge, mamaship_tab_register, tx_tab_all, home_tab_my_business,
+   checkout_dining_gate_table_title, checkout_*, cash_exact, receipt_opt_*, receipt_print_again, receipt_text_receipt, receipt_email_receipt,
+   receipt_label_total / order_ticket / table / waiter / fallback_title, payment_method_cash (values / values-es / values-pt-rBR). */
+const TABLE = 7;
+const D1 = R.item(C.order[1]), D2 = R.item(C.order[2]);
+const TOTAL = D1.price + D2.price;
+const OWNER = C.owner;
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const ALL_C = "#607D8B";
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+const timeText = new Intl.DateTimeFormat(C.loc,{hour:"numeric",minute:"2-digit"}).format(new Date(2026,9,20,12,41));
+
+/* ---- PrintManager.kt:311-323 + 339-430, reproduced: the same arithmetic on the same 32 columns ---- */
+const plain = s => String(s).replace(/[  ]/g," ");
+const money = v => plain(R.money(v));
+const center = t => " ".repeat(Math.max(0, Math.floor((W - t.length)/2))) + t;
+const leftRight = (l, r) => { const gap = W - l.length - r.length; return gap > 0 ? l + " ".repeat(gap) + r : l.slice(0, Math.max(0, W - r.length - 1)) + " " + r; };
+const divider = () => "-".repeat(W);
+const hardWrap = t => { const out=[]; for(let i=0;i<t.length;i+=W) out.push(t.slice(i,i+W)); return out; };   // a line longer than the paper: the printer breaks it
+const wrapWords = t => { const out=[]; let cur=""; t.split(" ").forEach(wd=>{ if(!cur) cur=wd; else if((cur+" "+wd).length<=W) cur+=" "+wd; else { out.push(cur); cur=wd; } }); if(cur) out.push(cur); return out; };   // TicketWrap.wrap
+function testPage(){
+  return [center(C.place.slice(0,W)), divider(), center(L.tTitle.toLocaleUpperCase(R.lang)), L.tPrinter(PNAME).slice(0,W), "2026-10-20 12:41", divider(),
+    ...hardWrap(L.tOk), "áéíóú ÁÉÍÓÚ ñÑ üÜ çÇ ãõ ¿¡".slice(0,W), "1234567890".repeat(4).slice(0,W)].join("\n");
+}
+function receipt(){
+  const lines = [center(C.place.toLocaleUpperCase(R.lang)), center(L.rDate), divider()];
+  [D1, D2].forEach(it => { const qty = "1x", price = money(it.price), nameMax = W - qty.length - price.length - 2;
+    lines.push(leftRight(`${qty} ${it.name.slice(0, Math.max(0, nameMax))}`, price)); });
+  lines.push(divider(), leftRight(L.rTotal, money(TOTAL)), divider(), center(L.cash.toLocaleUpperCase(R.lang)), divider());
+  wrapWords("Thank you for shopping with us!").forEach(l => lines.push(center(l)));
+  return lines.join("\n");
+}
+function comanda(){
+  const lines = [center(L.oTicket.toLocaleUpperCase(R.lang)), center("12:41"), center(`${L.oTable.toLocaleUpperCase(R.lang)} ${TABLE}`),
+    center(`${L.oWaiter}: ${OWNER}`.slice(0,W)), divider()];
+  [D1, D2].forEach(it => { const head = "1x  "; wrapWords(head + it.name).forEach((l,i)=>lines.push(i ? " ".repeat(head.length) + l : l)); });
+  lines.push(divider());
+  return lines.join("\n");
+}
+
+const I = {
+  back:'<svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  bt:'<svg viewBox="0 0 24 24"><path d="M17.71 7.71L12 2h-1v7.59L6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 11 14.41V22h1l5.71-5.71-4.3-4.29 4.3-4.29zM13 5.83l1.88 1.88L13 9.59V5.83zm1.88 10.46L13 18.17v-3.76l1.88 1.88z"/></svg>',
+  wifi:'<svg viewBox="0 0 24 24"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C16.93 2.93 7.08 2.93 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-4-4l2 2c2.76-2.76 7.24-2.76 10 0l2-2C15.14 9.14 8.87 9.14 5 13z"/></svg>',
+  print:'<svg viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  cart:'<svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  rcpt:'<svg viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  trash:'<svg class="mi" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+  potato:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="12.5" rx="8" ry="9" fill="#D9A66A"/><circle cx="9.2" cy="11" r="1.1" fill="#3A2A1F"/><circle cx="14.8" cy="11" r="1.1" fill="#3A2A1F"/><path d="M9.5 14.8q2.5 2 5 0" stroke="#3A2A1F" stroke-width="1.1" fill="none" stroke-linecap="round"/><circle cx="7" cy="16" r=".6" fill="#B07F48"/><circle cx="16.5" cy="7.5" r=".5" fill="#B07F48"/></svg>'
+};
+
+const topbar = (t, extra) => `<div class="p0tb"><span class="ib">${I.back}</span><b>${esc(t)}</b>${extra||""}</div>`;
+function frame(n, body, foot){
+  return `<div class="p0pg">${topbar(L.addTitle)}<div class="p0body"><div class="p0step">${esc(L.step(n))}</div><div class="p0prog"><i style="width:${n*25}%"></i></div>${body}</div>${foot?`<div class="p0foot">${foot}</div>`:""}</div>`;
+}
+function printers(st){
+  if(!st.saved) return `<div class="p0pg">${topbar(L.list)}<div class="p0empty"><b>${esc(L.empty)}</b><small>${esc(L.emptyLine)}</small><div class="p0btn" data-t="addfirst">${esc(L.addFirst)}</div></div></div>`;
+  return `<div class="p0pg">${topbar(L.list, `<span class="nw">${esc(L.nw)}</span>`)}<div style="display:flex;flex-direction:column;gap:calc(var(--u)*8)">
+    <div class="p0card"><b>${esc(PNAME)}</b><div class="k"><span>${esc(L.kinds)}</span><em>Bluetooth</em></div><small>${esc(L.printed(timeText))}</small></div>
+    <div class="p0wo"><div><b>${esc(L.waiter)}</b><small>${esc(L.waiterHint)}</small></div><span class="p0sw"><i class="on"></i></span></div>
+    <div style="padding:calc(var(--u)*8) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)"><div class="p0btn">${esc(L.addFirst)}</div><div class="p0txt">${esc(L.routing)}</div></div></div>
+    ${st.toast?`<div class="p0toast">${esc(L.added)}</div>`:""}</div>`;
+}
+function addFlow(st){
+  if(st.step===1) return frame(1, `<div class="p0q">${esc(L.howQ)}</div>
+      <div class="p0oc" data-t="how-bt">${I.bt}<div class="c"><b>${esc(L.bt)}</b><small>${esc(L.btSub)}</small></div></div>
+      <div class="p0oc">${I.wifi}<div class="c"><b>${esc(L.wifi)}</b><small>${esc(L.wifiSub)}</small></div></div>
+      <div class="p0txt">${esc(L.howHint)}</div><div class="p0txt">${esc(L.works)}</div>`);
+  if(st.step===2) return frame(2, `<div class="p0q">${esc(L.btTitle)}</div><div class="p0txt">${esc(L.btSteps)}</div>
+      <div class="p0btn">${esc(L.search)}</div><div class="p0sub">${esc(L.paired)}</div>
+      <div class="p0row" data-t="dev">${I.print}${esc(PNAME)}</div>
+      <div class="p0hid"><small>${esc(L.hidden)}</small><span>${esc(L.showAll)}</span></div>
+      <div class="p0txt">${esc(L.pairHint)}</div><div class="p0btn sec">${esc(L.openBt)}</div><div class="p0txt">${esc(L.pinHint)}</div>`);
+  if(st.step===3) return frame(3, `<div class="p0q">${esc(L.whatQ)}</div>
+      <div class="p0oc"><div class="c"><b>${esc(L.rec)}</b><small>${esc(L.recSub)}</small></div><span class="p0cb on">${I.check}</span></div>
+      <div class="p0oc" data-t="kit"><div class="c"><b>${esc(L.kit)}</b><small>${esc(L.kitSub)}</small></div><span class="p0cb${st.kit?" on":""}">${st.kit?I.check:""}</span></div>
+      <div class="p0txt">${esc(L.both)}</div><div class="p0sub">${esc(L.paper)}</div>
+      <div class="p0chips"><span class="on">${I.check}${esc(L.p58)}</span><span>${esc(L.p80)}</span></div>
+      <div class="p0field"><small>${esc(L.nameHint)}</small>${esc(PNAME)}</div>`, `<div class="p0btn" data-t="next">${esc(L.next)}</div>`);
+  const top = st.sending ? `<div class="p0send"><i></i>${esc(L.sending(PNAME))}</div>`
+    : `<div class="p0ask">${esc(L.ask)}</div><div class="p0txt">${esc(L.sentTo(PNAME))}</div>
+       <div class="p0btn" data-t="yes">${esc(L.yes)}</div><div class="p0btn sec">${esc(L.no)}</div>`;
+  return frame(4, `<div class="p0q">${esc(L.test)}</div>${top}
+      <div class="p0sub" style="margin-top:calc(var(--u)*12)">${esc(L.drawerAsk)}</div>
+      <div class="p0sw"><span>${esc(L.drawerSw)}</span><i></i></div><div class="p0txt" style="font-size:calc(var(--u)*12)">${esc(L.drawerHint)}</div>
+      <div class="p0btn sec">${esc(L.openDrawer)}</div>`);
+}
+function nav(){
+  return `<div class="p0nav"><div class="on"><span class="pill">${I.cart}</span>${esc(L.nav[0])}</div><div><span class="pill">${I.rcpt}</span>${esc(L.nav[1])}</div><div><span class="fl">${R.flag()}</span>${esc(L.nav[2])}</div></div>`;
+}
+function sell(st){
+  const cats = `<div class="mcats">` + [{name:L.all,color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const s = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${s}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+  const grid = `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+  const n = st.lines.length, tot = st.lines.reduce((s,p)=>s+p.price,0);
+  return `<div class="p0pg"><div class="p0tabs"><span>${esc(L.tabs[0])}</span><span class="on">${esc(L.tabs[1])}</span></div>${cats}${grid}
+    ${n?`<div class="p0strip">${esc(L.cur(n))}<i>›</i></div>`:""}
+    <div class="p0pair"><span class="l${n?"":" off"}">${esc(L.send)}</span><span class="r${n?"":" off"}" data-t="charge">${esc(L.charge(R.money(tot)))}</span></div>${nav()}</div>`;
+}
+function tables(){
+  return `<div class="mtables"><h3>${esc(L.table)}</h3><div class="g">${Array.from({length:C.tables},(_,i)=>`<span data-t="table-${i+1}">${i+1}</span>`).join("")}</div></div>`;
+}
+function pay(){
+  const dec = C.dec ? (new Intl.NumberFormat(C.loc).format(1.5).replace(/[0-9]/g,"")) : "000";
+  const k = ["1","2","3","4","5","6","7","8","9",dec,"0","⌫"];
+  return `<div class="mpay"><div class="hd"><span>‹</span><span class="tr">${I.trash}</span></div>
+    <div class="cust">${I.person}${esc(L.cust)}</div>
+    <div class="blk"><div class="tot"><small>${L.total}</small><b>${R.money(TOTAL)}</b></div>
+    <div class="links"><span>${esc(L.items(2))}</span><span>${esc(L.mesa(TABLE))}</span></div>
+    <div class="kp">${k.map(x=>`<span class="${x==="⌫"||x.length>1?"s":""}">${x}</span>`).join("")}</div>
+    <div class="exact" data-t="exact">${esc(L.exact(R.money(TOTAL)))}</div>
+    <div class="save">${esc(L.save)}</div></div></div>`;
+}
+function complete(){
+  const send = US_CA ? `<div class="p0rb pr">${esc(L.text)}</div><div class="p0rb ol">${esc(L.email)}</div>` : `<div class="p0rb wa">${esc(L.wa)}</div>`;
+  return `<div class="p0rec"><div class="hero">${I.potato}<b>${esc(L.done)}</b><small>${esc(L.got(R.money(TOTAL)))}</small><em>${esc(L.how)}</em></div>
+    <div class="ft">${send}<div class="p0rb ol">${esc(L.again)}</div><div class="p0rb ol">${esc(L.view)}</div><div class="p0rb pr">${esc(L.newSale)}</div><div class="p0priv">${esc(L.priv)}</div></div></div>`;
+}
+function paper(st){
+  if(st.paper==="test") return `<div class="p0paper"><span class="lab">${esc(L.tTitle)}</span><div class="p0slip feed">${esc(testPage())}</div></div>`;
+  return `<div class="p0paper"><span class="lab">${esc(L.slipRec)}</span><div class="p0slip feed">${esc(receipt())}</div>
+    <span class="lab">${esc(L.slipKit)}</span><div class="p0slip feed" style="animation-delay:.6s;animation-fill-mode:backwards">${esc(comanda())}</div></div>`;
+}
+
+function render(st){
+  if(st.paper) return paper(st);
+  switch(st.screen){
+    case "printers": return printers(st);
+    case "add":      return addFlow(st);
+    case "sell":     return sell(st);
+    case "table":    return tables();
+    case "pay":      return pay();
+    default:         return complete();
+  }
+}
+
+RKIT.start(R, {
+  id:"R10", tallVideo:true, clock:"12:41",
+  endText:R.pick({es:"Así imprimes recibos y comandas con Platata.", pt:"Assim você imprime recibos e comandas com o Platata.", en:"That's how you print receipts and kitchen tickets with Platata."}),
+  beats:R.pick({
+    es:["En Impresoras, toca Agregar impresora","Elige Bluetooth y toca tu impresora","Marca recibos y comandas: sale una hoja de prueba","¿Salió? Guarda la impresora","Ahora una venta: toca los platos","Toca Cobrar y elige la mesa","Cobra con Exacto","Sale el recibo y la comanda para la cocina","Así imprimes recibos y comandas con Platata"],
+    pt:["Em Impressoras, toque em Adicionar impressora","Escolha Bluetooth e toque na sua impressora","Marque recibos e comandas: sai uma página de teste","Saiu? Salve a impressora","Agora uma venda: toque nos pratos","Toque em Cobrar e escolha a mesa","Cobre com Exato","Sai o recibo e a comanda para a cozinha","Assim você imprime recibos e comandas com o Platata"],
+    en:["In Printers, tap Add printer","Pick Bluetooth and tap your printer","Tick receipts and kitchen orders: a test page prints","Did it print? Save the printer","Now a sale: tap the dishes","Tap Charge and pick the table","Charge with Exact","Out come the receipt and the kitchen ticket","That's how you print receipts and kitchen tickets with Platata"]}),
+  state:{screen:"printers", paper:null, saved:false, toast:false, step:1, kit:false, sending:false, lines:[]},
+  render,
+  device: () => "phone",
+  who: st => st.paper ? `${L.printer} ${PNAME}` : L.phone,
+  steps:[
+    {beat:0, hint:R.pick({es:"Toca Agregar impresora", pt:"Toque em Adicionar impressora", en:"Tap Add printer"}), target:'[data-t="addfirst"]', tap(st){ st.screen = "add"; st.step = 1; }},
+    {beat:1, hint:R.pick({es:"Toca Por Bluetooth", pt:"Toque em Por Bluetooth", en:"Tap Bluetooth"}), target:'[data-t="how-bt"]', tap(st){ st.step = 2; }},
+    {beat:1, hint:R.pick({es:`Toca ${PNAME}`, pt:`Toque em ${PNAME}`, en:`Tap ${PNAME}`}), target:'[data-t="dev"]', tap(st){ st.step = 3; }},
+    {beat:2, hint:R.pick({es:"Marca Comandas para la cocina", pt:"Marque Comandas para a cozinha", en:"Tick Orders for the kitchen"}), target:'[data-t="kit"]', tap(st){ st.kit = true; }},
+    {beat:2, hint:R.pick({es:"Toca Siguiente", pt:"Toque em Próximo", en:"Tap Next"}), target:'[data-t="next"]', tap(st,E){
+      st.step = 4; st.sending = true;
+      E.after(1100, ()=>{ st.paper = "test"; });
+      E.after(4600, ()=>{ st.paper = null; st.sending = false; }); }},
+    {beat:3, hint:R.pick({es:"Toca Sí, guardar impresora", pt:"Toque em Sim, salvar impressora", en:"Tap Yes, save the printer"}), target:'[data-t="yes"]', tap(st,E){
+      st.screen = "printers"; st.saved = true; st.toast = true;
+      E.after(2000, ()=>{ st.toast = false; });
+      E.after(3200, ()=>{ st.screen = "sell"; }); }},
+    {beat:4, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "}) + D1.name, target:`[data-t="dish-${D1.id}"]`, tap(st){ st.lines.push(D1); }},
+    {beat:4, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "}) + D2.name, target:`[data-t="dish-${D2.id}"]`, tap(st){ st.lines.push(D2); }},
+    {beat:5, hint:R.pick({es:"Toca Cobrar", pt:"Toque em Cobrar", en:"Tap Charge"}), target:'[data-t="charge"]', tap(st){ st.screen = "table"; }},
+    {beat:5, hint:R.pick({es:`Elige la mesa ${TABLE}`, pt:`Escolha a mesa ${TABLE}`, en:`Pick table ${TABLE}`}), target:`[data-t="table-${TABLE}"]`, tap(st){ st.screen = "pay"; }},
+    {beat:6, hint:R.pick({es:"Toca Exacto", pt:"Toque em Exato", en:"Tap Exact"}), target:'[data-t="exact"]', tap(st,E){
+      st.screen = "done";
+      E.after(1800, ()=>{ st.paper = "sale"; }); }}
+  ]
+});
+</script>
+</body>
+</html>

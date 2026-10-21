@@ -1,0 +1,85 @@
+{
+  "id": "RS9",
+  "name": "Meter y sacar efectivo",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-negocio",
+      "voice": {
+        "es": "Para sacar efectivo, abre Mi negocio con tu huella.",
+        "pt": "Para retirar dinheiro, abra Meu negócio com sua digital.",
+        "en": "To take cash out, open My business with your fingerprint."
+      }
+    },
+    {
+      "id": "2-caja",
+      "voice": {
+        "es": "Toca la caja abierta.",
+        "pt": "Toque no caixa aberto.",
+        "en": "Tap the open register."
+      }
+    },
+    {
+      "id": "3-sacar",
+      "voice": {
+        "es": "Toca Sacar efectivo.",
+        "pt": "Toque em Retirar dinheiro.",
+        "en": "Tap Cash out."
+      }
+    },
+    {
+      "id": "4-monto",
+      "voice": {
+        "es": "Escribe cuánto sacas y elige el motivo, por ejemplo Proveedor.",
+        "pt": "Digite quanto retira e escolha o motivo, por exemplo Fornecedor.",
+        "en": "Type how much you take and pick the reason, like Supplier."
+      }
+    },
+    {
+      "id": "5-guardar",
+      "voice": {
+        "es": "Toca Guardar.",
+        "pt": "Toque em Salvar.",
+        "en": "Tap Save."
+      }
+    },
+    {
+      "id": "6-anotado",
+      "voice": {
+        "es": "Queda anotado con la hora, y lo que debe haber en la caja baja.",
+        "pt": "Fica anotado com a hora, e o que deve haver no caixa diminui.",
+        "en": "It's recorded with the time, and what should be in the drawer goes down."
+      }
+    },
+    {
+      "id": "7-meter",
+      "voice": {
+        "es": "Meter efectivo funciona igual, por ejemplo para el sencillo.",
+        "pt": "Colocar dinheiro funciona igual, por exemplo para o troco.",
+        "en": "Cash in works the same way, for example for change."
+      }
+    },
+    {
+      "id": "8-fin",
+      "voice": {
+        "es": "Así anotas el efectivo que entra y sale, con Platata.",
+        "pt": "Assim você anota o dinheiro que entra e sai, com o Platata.",
+        "en": "That's how you track cash in and out, with Platata."
+      }
+    }
+  ]
+}

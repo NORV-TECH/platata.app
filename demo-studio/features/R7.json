@@ -1,0 +1,44 @@
+{
+  "id": "R7",
+  "name": "Kitchen display",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": { "stability": 0.5, "similarity_boost": 0.75 },
+    "pt": { "stability": 0.5, "similarity_boost": 0.75 },
+    "en": { "stability": 0.5, "similarity_boost": 0.75 }
+  },
+  "steps": [
+    { "id": "1-guardar", "voice": {
+      "es": "Tu mesero guarda el pedido de la mesa.",
+      "pt": "O seu garçom salva o pedido da mesa.",
+      "en": "Your server saves the table's order." } },
+    { "id": "2-llega", "voice": {
+      "es": "Pasa por tu teléfono en el Wi-Fi del local y llega a la cocina como una tarjeta.",
+      "pt": "Passa pelo seu celular no Wi-Fi do restaurante e chega à cozinha como um cartão.",
+      "en": "It goes through your phone on the restaurant's Wi-Fi and reaches the kitchen as a card." } },
+    { "id": "3-cuantos", "voice": {
+      "es": "Arriba ves cuántos hay de cada plato.",
+      "pt": "Em cima você vê quantos há de cada prato.",
+      "en": "On top you see how many of each dish." } },
+    { "id": "4-todo-listo", "voice": {
+      "es": "Todo listo marca ese plato en todas las mesas.",
+      "pt": "Tudo pronto marca esse prato em todas as mesas.",
+      "en": "All done marks that dish on every table." } },
+    { "id": "5-tarjeta", "voice": {
+      "es": "Toca una tarjeta para verla grande.",
+      "pt": "Toque num cartão para vê-lo grande.",
+      "en": "Tap a card to see it big." } },
+    { "id": "6-listo", "voice": {
+      "es": "Toca Listo cuando el pedido sale. Puedes deshacerlo.",
+      "pt": "Toque em Pronto quando o pedido sai. Você pode desfazer.",
+      "en": "Tap Mark ready when the order goes out. You can undo it." } },
+    { "id": "7-historial", "voice": {
+      "es": "En Historial ves lo que ya salió.",
+      "pt": "No Histórico você vê o que já saiu.",
+      "en": "History shows what already went out." } },
+    { "id": "8-fin", "voice": {
+      "es": "Así trabaja tu cocina con Platata.",
+      "pt": "Assim trabalha a sua cozinha com o Platata.",
+      "en": "That's how your kitchen works with Platata." } }
+  ]
+}

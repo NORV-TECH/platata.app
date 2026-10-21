@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Comer aquí, llevar o domicilio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* R5 "Comer aquí, llevar o domicilio": the OWNER switches on how orders go out (Mesas with a table count, Para llevar,
+   Domicilio with an upcharge), then rings a dish: the pay screen asks "¿Cómo sale este pedido?" and the upcharge joins
+   the total. One device: the owner's phone. Every country (R.C data), es/pt/en.
+   Screens follow the app at the newest sim/usa-canada commit (paths under app/src/main/java/com/example/):
+   dining page      ui/screens/settings/DiningOptionsScreen.kt:40-300 (SumaTopBar dining_title + "+ Nuevo" common_new_short;
+                    cards SumaCard r12 #F7F7FA, Tables #ECECF1 and forced last; name SemiBold, detail bodySmall #6E6E73
+                    dining_upcharge_label / dining_table_count_label / dining_table_not_configured; dining_exclusive_note
+                    under Mesas and Para aquí; FilterChip dining_default_chip only on a switched-on option that is not
+                    Tables; pencil + Switch; inline edit: field dining_field_table_count or dining_field_upcharge
+                    "(ej. exampleAmount)", Cancelar + Guardar). Factory state: all four OFF, upcharge 0
+                    (data/repo/SeedStore.kt). List order = the DAO's name order of the stored English names
+                    (Delivery, For Here, To Go) with Tables last.
+                    The way in is Configuración › Opciones de servicio (sync/SettingsHubRules.kt DINING_OPTIONS) or
+                    Menú › Otros; the demo starts on the page.
+   owner register   ui/screens/home/HomeScreen.kt:598-842 (TabRow Teclado (pen) | Catálogo, 3 dp primary indicator;
+                    ProductLibraryView chips + grid; CurrentSaleStrip home_current_sale_items; FooterButtonPair
+                    Guardar (outlined pill) + "Cobrar $X" (common_charge), padding 16). Bottom bar: Caja / Ventas /
+                    Mi negocio (ui/navigation/NavLabels.kt). Assumed: register open, connect nudge put off, no
+                    kitchen target (so the left button says Guardar).
+   pay screen       ui/screens/home/CheckoutSheetBody.kt:955-1125 (header ‹, Platata wordmark, Borrar; pay block at the
+                    bottom; tinted #F7F7FA section with the customer field, no Save on the owner restaurant phone),
+                    CheckoutPayBlock.kt (Total, checkout_items_link, the dining link, keypad 000 / decimal key, Exact,
+                    PayWaysVisibility: CO link "Configurar QR o tarjeta", BR "Configurar Pix", other LatAm
+                    "Configurar QR" + "No, gracias"; US/CA "+ Tarjeta · Configurar" beside "Exacto").
+   dining question  CheckoutSheetBody.kt:1201-1350 DiningGate (scrim 60 %, card 86 % r20 pad 20) + DiningChooserContent
+                    (title checkout_dining_gate_title 18sp bold, rows 56 dp r16 surfaceContainer, label 20sp bold, the
+                    upcharge "+$ 3.000" 13sp under an option that has one). Options = switched on, name order.
+   total            PosViewModelTypes.kt grandTotal adds diningOptionUpcharge; the link shows localizedDiningOption. */
+const R = RKIT.ctx(), C = R.C, esc = RKIT.esc;
+const S = {
+  title:{es:"Opciones de servicio",pt:"Opções de atendimento",en:"Dining options"},
+  newShort:{es:"+ Nuevo",pt:"+ Novo",en:"+ New"},
+  forHere:{es:"Para aquí",pt:"Para comer aqui",en:"For Here"},
+  toGo:{es:"Para llevar",pt:"Para viagem",en:"To Go"},
+  delivery:{es:"Domicilio",pt:"Entrega",en:"Delivery"},
+  tables:{es:"Mesas",pt:"Mesas",en:"Tables"},
+  upLabel:{es:"Cargo: %s",pt:"Acréscimo: %s",en:"Upcharge: %s"},
+  tableCount:{es:"%d mesas",pt:"%d mesas",en:"%d tables"},
+  notConf:{es:"Sin configurar",pt:"Não configurado",en:"Not configured"},
+  excl:{es:"No puede estar activa a la vez que %s.",pt:"Não pode ficar ativa ao mesmo tempo que %s.",en:"Cannot be on at the same time as %s."},
+  dflt:{es:"Predeterminada",pt:"Padrão",en:"Default"},
+  howMany:{es:"¿Cuántas mesas?",pt:"Quantas mesas?",en:"How many tables?"},
+  upField:{es:"Monto del cargo",pt:"Valor adicional",en:"Upcharge amount"},
+  example:{es:"(ej. %s)",pt:"(ex. %s)",en:"(e.g. %s)"},
+  cancel:{es:"Cancelar",pt:"Cancelar",en:"Cancel"},
+  save:{es:"Guardar",pt:"Salvar",en:"Save"},
+  keypad:{es:"Teclado",pt:"Teclado",en:"Keypad"},
+  library:{es:"Catálogo",pt:"Catálogo",en:"Library"},
+  all:{es:"Todos",pt:"Todos",en:"All"},
+  sale:{es:["Venta actual · %d artículo","Venta actual · %d artículos"],pt:["Venda atual · %d item","Venda atual · %d itens"],en:["Current sale · %d item","Current sale · %d items"]},
+  charge:{es:"Cobrar %s",pt:"Cobrar %s",en:"Charge %s"},
+  register:{es:"Caja",pt:"Caixa",en:"Register"},
+  sales:{es:"Ventas",pt:"Vendas",en:"Sales"},
+  myBiz:{es:"Mi negocio",pt:"Meu negócio",en:"My business"},
+  clear:{es:"Borrar",pt:"Limpar",en:"Clear"},
+  total:{es:"Total",pt:"Total",en:"Total"},
+  itemsLink:{es:"Artículos (%d)",pt:"Itens (%d)",en:"Items (%d)"},
+  exact:{es:"Exacto · %s",pt:"Exato · %s",en:"Exact · %s"},
+  exactShort:{es:"Exacto",pt:"Exato",en:"Exact"},
+  card:{es:"Tarjeta",pt:"Cartão",en:"Card"},
+  setUp:{es:"Configurar",pt:"Configurar",en:"Set up"},
+  linkQrCard:{es:"Configurar QR o tarjeta",pt:"Configurar QR ou cartão",en:"Set up QR or card"},
+  linkQr:{es:"Configurar QR",pt:"Configurar QR",en:"Set up QR"},
+  linkPix:{es:"Configurar Pix",pt:"Configurar Pix",en:"Set up Pix"},
+  noThanks:{es:"No, gracias",pt:"Não, obrigado",en:"No thanks"},
+  addClient:{es:"Agrega un cliente a la venta",pt:"Adicione um cliente à venda",en:"Add a client to the sale"},
+  gateTitle:{es:"¿Cómo sale este pedido?",pt:"Como este pedido vai sair?",en:"How is this order going out?"},
+  devOwner:{es:"Tu teléfono",pt:"Seu celular",en:"Your phone"}
+};
+const T = (k, ...a) => { let s = R.pick(S[k]); a.forEach(v => { s = s.replace(/%[ds]/, v); }); return s; };
+/* the delivery charge typed in each country: a plain local amount (the field keeps the internal '.' form) */
+const UP = {CO:3000, CL:3000, MX:30, PE:3.5, AR:300, EC:1, PA:1, BR:3, US:3, CA:3}[R.country] ?? 3;
+const typedOf = v => C.dec===0 ? String(Math.round(v)) : String(v);                       // "3000", "3.5", "3"
+const prefill = v => C.dec===0 ? String(Math.round(v)) : v.toFixed(C.dec);                // formatAmountForInput(0) = "0" / "0.00"
+const EXAMPLE = R.money(C.dec===0 ? 5000 : 5.5);                                          // CurrencyUtils.exampleAmount
+const STRIPE = C.pay.card==="stripe", WOMPI = C.pay.card==="wompi", PIX = C.pay.qr==="pix";
+const DISH = C.items.find(x=>x.id===C.order[1]);
+const ALL_C = "#607D8B";
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+const I = {
+  back:'<svg class="mi" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  edit:'<svg class="mi" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  receipt:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>'
+};
+
+/* ---------- the dining options page ---------- */
+const sw = (on, t) => `<span class="msw${on?" on":""}" data-t="${t}"><i></i></span>`;
+function optCard(st, key){
+  const o = st.opts[key], isT = key==="tables";
+  const name = T(key==="deliv"?"delivery":key==="here"?"forHere":key==="togo"?"toGo":"tables");
+  const detail = isT ? (o.count ? T("tableCount", o.count) : T("notConf")) : T("upLabel", R.money(o.up));
+  const excl = key==="tables" ? T("excl", T("forHere")) : key==="here" ? T("excl", T("tables")) : "";
+  const showOn = o.on || o.pending;
+  let h = `<div class="dcard${isT?" t":""}"><div class="drow"><div class="dl"><b>${esc(name)}</b><small>${esc(detail)}</small>
+      ${excl?`<small>${esc(excl)}</small>`:""}
+      ${!isT && o.on ? `<span class="dchip">${esc(T("dflt"))}</span>`:""}</div>
+      <span class="dic" data-t="edit-${key}">${I.edit}</span>${sw(showOn, "sw-"+key)}</div>`;
+  if(o.editing){
+    const label = isT ? T("howMany") : `${T("upField")} ${T("example", EXAMPLE)}`;
+    h += `<div class="dedit"><div class="dfield"><label>${esc(label)}</label><span>${esc(o.field)}<i class="caret"></i></span></div>
+      <div class="dbtns"><span class="tb">${esc(T("cancel"))}</span><span class="fb" data-t="save-${key}">${esc(T("save"))}</span></div></div>`;
+  }
+  return h + `</div>`;
+}
+function dining(st){
+  return `<div class="dtop"><span class="ib" data-t="back">${I.back}</span><b>${esc(T("title"))}</b><span class="new">${esc(T("newShort"))}</span></div>
+    <div class="dlist">${["deliv","here","togo","tables"].map(k=>optCard(st,k)).join("")}</div>`;
+}
+
+/* ---------- the owner's register (Catálogo) ---------- */
+const cats = () => `<div class="mcats">` + [{name:T("all"),color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const s = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${s}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+const grid = () => `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+const nav = () => `<div class="mnav"><div class="on"><span class="pill">${I.cart}</span>${esc(T("register"))}</div><div><span class="pill">${I.receipt}</span>${esc(T("sales"))}</div><div><span class="flagc">${R.flag()}</span>${esc(T("myBiz"))}</div></div>`;
+const sub = st => st.cart.reduce((s,x)=>s+x.price,0);
+function home(st){
+  const n = st.cart.length, tot = sub(st);
+  return `<div class="otabs"><span><svg viewBox="0 0 24 24">${I.edit.replace(/^<svg[^>]*>|<\/svg>$/g,"")}</svg>${esc(T("keypad"))}</span><span class="on">${esc(T("library"))}</span></div>`
+    + cats() + grid()
+    + (n ? `<div class="ostrip"><span>${esc(R.pick(S.sale)[n===1?0:1].replace("%d",n))}</span><i>›</i></div>` : "")
+    + `<div class="opair"><span class="b2${n?"":" off"}">${esc(T("save"))}</span><span class="b1${n?"":" off"}" data-t="charge">${esc(T("charge", R.money(tot)))}</span></div>` + nav();
+}
+
+/* ---------- the pay screen + the dining question ---------- */
+function pay(st){
+  const up = st.pick==="deliv" ? st.opts.deliv.up : 0, tot = sub(st) + up;
+  const zero = C.dec===0 ? "000" : (new Intl.NumberFormat(C.loc).format(1.5).replace(/\d/g,""));
+  const k = ["1","2","3","4","5","6","7","8","9",zero,"0","⌫"];
+  const link = STRIPE ? "" : `<div class="plink"><u>${esc(T(PIX?"linkPix":WOMPI?"linkQrCard":"linkQr"))}</u><span>${esc(T("noThanks"))}</span></div>`;
+  const row = STRIPE
+    ? `<div class="prow"><div class="exact">${esc(T("exactShort"))}</div><div class="pcard"><b>+ ${esc(T("card"))}</b><small>${esc(T("setUp"))}</small></div></div>`
+    : `<div class="prow"><div class="exact">${esc(T("exact", R.money(tot)))}</div></div>`;
+  let h = `<div class="opay"><div class="phd"><span class="chev">‹</span><span class="wm">Platata</span><span class="clr">${esc(T("clear"))}</span></div>
+    <div class="pblk${st.gate?" dim":""}"><div class="tot"><small>${esc(T("total"))}</small><b>${R.money(tot)}</b></div>
+      <div class="plinks"><span>${esc(T("itemsLink", st.cart.length))} ›</span>${st.pick?`<span class="pdin">${esc(T("delivery"))}</span>`:""}</div>
+      <div class="kp">${k.map(x=>`<span class="${x===zero||x==="⌫"?"s":""}">${esc(x)}</span>`).join("")}</div>
+      ${row}${link}</div>
+    <div class="psec"><div class="pcust">${I.person}${esc(T("addClient"))}</div></div></div>`;
+  if(st.gate){
+    const rows = [["deliv","delivery",st.opts.deliv.up],["tables","tables",0],["togo","toGo",0]]   // switched on, name order
+      .map(([key,w,u])=>`<div class="grow" data-t="gate-${key}"><b>${esc(T(w))}</b>${u>0?`<small>+${R.money(u)}</small>`:""}</div>`).join("");
+    h += `<div class="gscrim"><div class="gcard"><h3>${esc(T("gateTitle"))}</h3>${rows}</div></div>`;
+  }
+  return h;
+}
+
+function render(st){
+  if(st.screen==="dining") return dining(st);
+  if(st.screen==="home") return home(st);
+  if(st.screen==="pay") return pay(st);
+  return "";
+}
+/* typing into a field, one character at a time (the app's fields keep the plain typed form) */
+function typeInto(E, o, text, from){
+  let t = 300; o.field = from;
+  if(from){ E.after(t, ()=>{ o.field = ""; }); t += 260; }
+  for(let i=1;i<=text.length;i++){ const v = text.slice(0,i); E.after(t, ()=>{ o.field = v; }); t += 240; }
+}
+
+RKIT.start(R, {
+  id:"R5", tallVideo:true, clock:"12:41",
+  endText:R.pick({es:"Así sabes cómo sale cada pedido, con Platata.",pt:"Assim você sabe como sai cada pedido, com o Platata.",en:"That's how you know how every order goes out, with Platata."}),
+  beats:R.pick({
+    es:["Enciende Mesas y escribe cuántas tienes","Para llevar: un toque","Domicilio, con un cargo por el envío","En la caja, agrega un plato y toca Cobrar","Elige cómo sale: el cargo se suma al total","Así sabes cómo sale cada pedido"],
+    pt:["Ligue Mesas e escreva quantas você tem","Para viagem: um toque","Entrega, com um acréscimo pelo envio","No caixa, adicione um prato e toque em Cobrar","Escolha como sai: o acréscimo entra no total","Assim você sabe como sai cada pedido"],
+    en:["Turn on Tables and type how many you have","To Go: one tap","Delivery, with an upcharge","At the register, add a dish and tap Charge","Pick how it goes out: the upcharge joins the total","That's how you know how every order goes out"]}),
+  state:{screen:"dining", cart:[], gate:false, pick:null,
+    opts:{deliv:{on:false,up:0,editing:false,field:""}, here:{on:false,up:0}, togo:{on:false,up:0},
+          tables:{on:false,count:null,pending:false,editing:false,field:""}}},
+  render,
+  device: () => "phone",
+  who: () => T("devOwner"),
+  steps:[
+    {beat:0, hint:R.pick({es:"Enciende Mesas",pt:"Ligue Mesas",en:"Turn on Tables"}), target:'[data-t="sw-tables"]',
+      tap(st,E){ const o=st.opts.tables; o.pending=true; o.editing=true; typeInto(E, o, String(C.tables), ""); }},
+    {beat:0, hint:R.pick({es:"Toca Guardar",pt:"Toque em Salvar",en:"Tap Save"}), target:'[data-t="save-tables"]',
+      tap(st){ const o=st.opts.tables; o.count=Number(o.field)||C.tables; o.on=true; o.pending=false; o.editing=false; }},
+    {beat:1, hint:R.pick({es:"Enciende Para llevar",pt:"Ligue Para viagem",en:"Turn on To Go"}), target:'[data-t="sw-togo"]',
+      tap(st){ st.opts.togo.on=true; }},
+    {beat:2, hint:R.pick({es:"Enciende Domicilio",pt:"Ligue Entrega",en:"Turn on Delivery"}), target:'[data-t="sw-deliv"]',
+      tap(st){ st.opts.deliv.on=true; }},
+    {beat:2, hint:R.pick({es:"Toca el lápiz de Domicilio",pt:"Toque no lápis de Entrega",en:"Tap the pencil on Delivery"}), target:'[data-t="edit-deliv"]',
+      tap(st,E){ const o=st.opts.deliv; o.editing=true; typeInto(E, o, typedOf(UP), prefill(0)); }},
+    {beat:2, hint:R.pick({es:"Toca Guardar",pt:"Toque em Salvar",en:"Tap Save"}), target:'[data-t="save-deliv"]',
+      tap(st){ const o=st.opts.deliv; o.up=Number(o.field)||UP; o.editing=false; }},
+    {beat:3, hint:R.pick({es:"Vuelve a la caja",pt:"Volte ao caixa",en:"Go back to the register"}), target:'[data-t="back"]',
+      tap(st){ st.screen="home"; }},
+    {beat:3, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+DISH.name, target:`[data-t="dish-${DISH.id}"]`,
+      tap(st){ st.cart.push({id:DISH.id, price:DISH.price}); }},
+    {beat:3, hint:R.pick({es:"Toca Cobrar",pt:"Toque em Cobrar",en:"Tap Charge"}), target:'[data-t="charge"]',
+      tap(st){ st.screen="pay"; st.gate=true; }},
+    {beat:4, hint:R.pick({es:"Elige Domicilio",pt:"Escolha Entrega",en:"Pick Delivery"}), target:'[data-t="gate-deliv"]',
+      tap(st,E){ st.gate=false; st.pick="deliv"; E.after(3200,()=>{}); }}
+  ]
+});
+</script>
+<style>
+/* ---- the dining options page: DiningOptionsScreen.kt, SumaTopBar (M3 TopAppBar 64 dp, titleLarge), SumaCard ---- */
+.dtop{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff}
+.dtop .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.dtop b{flex:1;font-size:calc(var(--u)*22);font-weight:600;padding-left:calc(var(--u)*8);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dtop .new{min-width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:700}
+.dlist{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.dcard{background:#F7F7FA;border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.16);padding:calc(var(--u)*6) calc(var(--u)*8) calc(var(--u)*6) calc(var(--u)*16)}
+.dcard.t{background:#ECECF1}
+.drow{display:flex;align-items:center}
+.dl{flex:1;min-width:0;display:flex;flex-direction:column}
+.dl b{font-size:calc(var(--u)*16);font-weight:600;line-height:calc(var(--u)*24)}
+.dl small{font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:#6E6E73}
+.dchip{align-self:flex-start;margin-top:calc(var(--u)*4);height:calc(var(--u)*32);padding:0 calc(var(--u)*16);border:1px solid #C7C7CC;border-radius:calc(var(--u)*8);display:flex;align-items:center;font-size:calc(var(--u)*14);font-weight:500;color:#6E6E73;margin-bottom:calc(var(--u)*4)}
+.dic{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:#1C1C1E}
+.msw{position:relative;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);background:#ECECF1;border:calc(var(--u)*2) solid #C7C7CC;box-sizing:border-box;flex:0 0 auto;margin:0 calc(var(--u)*4)}
+.msw i{position:absolute;left:calc(var(--u)*6);top:50%;width:calc(var(--u)*16);height:calc(var(--u)*16);margin-top:calc(var(--u)*-8);border-radius:50%;background:#C7C7CC;transition:all .2s}
+.msw.on{background:#1C1C1E;border-color:#1C1C1E}
+.msw.on i{left:calc(var(--u)*22);width:calc(var(--u)*24);height:calc(var(--u)*24);margin-top:calc(var(--u)*-12);background:#fff}
+.dedit{border-top:1px solid rgba(229,229,234,.4);margin:calc(var(--u)*4) 0 0 calc(var(--u)*-16);padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.dfield{position:relative;height:calc(var(--u)*56);border:calc(var(--u)*2) solid #1C1C1E;border-radius:calc(var(--u)*4);display:flex;align-items:center;padding:0 calc(var(--u)*14);background:transparent}
+.dfield label{position:absolute;left:calc(var(--u)*10);top:calc(var(--u)*-9);padding:0 calc(var(--u)*4);background:#F7F7FA;font-size:calc(var(--u)*12);color:#1C1C1E;white-space:nowrap;max-width:94%;overflow:hidden;text-overflow:ellipsis}
+.dcard.t .dfield label{background:#ECECF1}
+.dfield span{font-size:calc(var(--u)*16);display:flex;align-items:center}
+.caret{display:inline-block;width:calc(var(--u)*2);height:calc(var(--u)*20);background:#1C1C1E;margin-left:1px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.dbtns{display:flex;justify-content:flex-end;gap:calc(var(--u)*8)}
+.dbtns .tb{height:calc(var(--u)*40);padding:0 calc(var(--u)*12);display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:500;color:#1C1C1E}
+.dbtns .fb{height:calc(var(--u)*40);padding:0 calc(var(--u)*24);border-radius:calc(var(--u)*20);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:500}
+
+/* ---- owner register: HomeScreen.kt TabRow (padding 16, labelLarge, 3 dp primary indicator), footer ---- */
+.otabs{margin:0 calc(var(--u)*16);height:calc(var(--u)*48);display:flex;border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.otabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);color:var(--m-onv);position:relative}
+.otabs span svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:currentColor}
+.otabs span.on{color:var(--m-on);font-weight:700}
+.otabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.ostrip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;flex:0 0 auto;font-size:calc(var(--u)*14);font-weight:600}
+.ostrip i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.opair{display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16);flex:0 0 auto}
+.opair span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*26);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:700;white-space:nowrap}
+.opair .b2{border:1px solid var(--m-outline);color:var(--m-on)}
+.opair .b1{background:var(--m-on);color:#fff}
+.opair .off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38);border-color:transparent}
+.opair .b2.off{background:none;border:1px solid rgba(28,28,30,.12)}
+
+/* ---- owner pay screen: CheckoutSheetBody.kt header + tinted section, CheckoutPayBlock.kt ---- */
+.opay{flex:1;display:flex;flex-direction:column;background:#fff;min-height:0}
+.phd{position:relative;height:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*12) calc(var(--u)*6);display:flex;align-items:center;justify-content:space-between;flex:0 0 auto}
+.phd .chev{width:calc(var(--u)*40);height:calc(var(--u)*40);display:grid;place-items:center;font-size:calc(var(--u)*34);font-weight:300}
+.phd .wm{position:absolute;left:0;right:0;text-align:center;font:600 calc(var(--u)*22) Fredoka,system-ui,sans-serif;color:#1C1C1E;pointer-events:none}
+.phd .clr{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-onv);text-decoration:underline;padding:calc(var(--u)*4)}
+.pblk{margin-top:auto;padding:calc(var(--u)*12) calc(var(--u)*12) calc(var(--u)*8)}
+.pblk.dim{opacity:.4}
+.pblk .tot{min-height:calc(var(--u)*38);display:flex;justify-content:space-between;align-items:flex-end}
+.pblk .tot small{font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.pblk .tot b{font-size:calc(var(--u)*30);font-weight:700;letter-spacing:-.3px;line-height:1}
+.plinks{margin-top:calc(var(--u)*4);min-height:calc(var(--u)*62);display:flex;flex-direction:column;gap:calc(var(--u)*9)}
+.plinks span{font-size:calc(var(--u)*16);font-weight:700;text-decoration:underline}
+.pblk .kp{margin-top:calc(var(--u)*8);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*6)}
+.pblk .kp span{height:calc(var(--u)*44);border-radius:calc(var(--u)*12);background:var(--m-sv);display:grid;place-items:center;font-size:calc(var(--u)*20);font-weight:600}
+.pblk .kp span.s{font-size:calc(var(--u)*14);font-weight:700}
+.prow{margin-top:calc(var(--u)*10);display:flex;gap:calc(var(--u)*8)}
+.prow .exact{flex:1;height:calc(var(--u)*50);border-radius:calc(var(--u)*27);background:var(--m-blue);color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*17);font-weight:700}
+.prow .pcard{flex:1;height:calc(var(--u)*50);border-radius:calc(var(--u)*27);border:calc(var(--u)*1.5) solid rgba(110,110,115,.55);display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--m-onv)}
+.prow .pcard b{font-size:calc(var(--u)*17);font-weight:700;line-height:1.1}
+.prow .pcard small{font-size:calc(var(--u)*12);line-height:1.1}
+.plink{min-height:calc(var(--u)*48);display:flex;justify-content:center;align-items:center;gap:calc(var(--u)*16);font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.psec{border-radius:calc(var(--u)*20) calc(var(--u)*20) 0 0;background:#F7F7FA;padding:calc(var(--u)*10) calc(var(--u)*12);flex:0 0 auto}
+.pcust{height:calc(var(--u)*62);border-radius:calc(var(--u)*14);background:var(--m-sv);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);color:var(--m-onv);font-size:calc(var(--u)*14);font-weight:500}
+.gscrim{position:absolute;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:15}
+.gcard{width:86%;border-radius:calc(var(--u)*20);background:#fff;padding:calc(var(--u)*20);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.gcard h3{margin:0;font-size:calc(var(--u)*18);font-weight:700;color:var(--m-on)}
+.grow{height:calc(var(--u)*56);border-radius:calc(var(--u)*16);background:var(--m-sv);display:flex;flex-direction:column;align-items:center;justify-content:center}
+.grow b{font-size:calc(var(--u)*20);font-weight:700;line-height:1.15}
+.grow small{font-size:calc(var(--u)*13);color:var(--m-onv);line-height:1.1}
+</style>
+</body>
+</html>

@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Meseros con su celular</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* R6 "Meseros con su celular": the OWNER connects a waiter's phone from his own phone (Conectar -> El teléfono de un
+   empleado -> Conectar -> Invitado + "Código del negocio X · PIN Y" -> Enviar invitación by WhatsApp), then the
+   WAITER's phone joins with the business code and his PIN and lands on the sell screen. Two devices, every country.
+   Screens follow the app at the newest sim/usa-canada commit (paths under app/src/main/java/com/example/):
+   owner Home       ui/screens/home/HomeScreen.kt:598-700 (TabRow Teclado | Catálogo, then ConnectNudgeStrip
+                    ui/screens/home/ConnectNudge.kt:31-55: 48 dp, primaryContainer #F2F2F7, nudge_connect_title
+                    labelLarge bold, text buttons nudge_connect_cta (bold) + nudge_connect_later, labelMedium).
+                    Shown on the owner's phone while no tablet register or employee phone is connected
+                    (sync/ConnectNudgeRule, every country); assumed: register open, empty sale.
+   chooser          ui/screens/connections/ConnectionDialogs.kt:142-195 ConnectChooserSheet (paper sheet: h2
+                    conn_choose_title; rows surface + line border r14, 46 dp accent tile, rowTitle + body muted;
+                    "Ahora no" conn_not_now).
+   pick page        ui/screens/connections/ConnectEmployeePhoneScreen.kt:120-265 (paper page, restaurant accent;
+                    SumaTopBar paper conn_pick_title; h2 conn_pick_question; row: initial on accentSoft, name
+                    rowTitle SemiBold, the job title or team_badge_team "Equipo" muted (PersonName.displayJobTitle), FilledAccent small "Conectar" 108 dp;
+                    after Conectar: pill team_status_invited (#F6EED8 / #8A6712), line conn_pick_next_step
+                    "Código del negocio X · PIN Y" ink2, TextButton conn_pick_send_invite; conn_pick_add_employee;
+                    conn_pick_note only where connections are paid, i.e. not US/CA).
+   invite           utils/StaffInviteShare.kt send(): WhatsApp opened on the employee's saved number with
+                    phone_reg_share_message (shop, Play link, business code, PIN) signed with whatsapp_signature
+                    (WASIG-1); the owner taps Send in WhatsApp (WhatsApp's own screen, drawn plainly here).
+   waiter phone     ui/screens/onboarding/BusinessStartScreen.kt:210-400 (welcome: brandMark, Tata on the cream
+                    disc, welcome_hero_title / welcome_hero_subtitle, Brand button welcome_start_cta, link
+                    welcome_already_link; sheet welcome_sheet_title + 3 door cards), ui/screens/auth/
+                    GoogleAuthScreen.kt:480-560 (EmployeeGoogleStep: Tata thumbs-up on #E3EEF0, h1
+                    auth_employee_welcome_title, sub, Google button auth_google_btn, footnote with **Equipo**, terms
+                    line), Google's account chooser (not drawn), no workplace yet -> ui/screens/onboarding/
+                    EmployeeJoinScreen.kt:150-230 (h1 join_biz_title, sub, CÓDIGO DEL NEGOCIO boxes 5-5, TU PIN 4
+                    boxes with dots, join_biz_pin_hint, Brand/Off button join_biz_button) -> OnboardingNavGraph
+                    onJoined: markSkipMiniPosPinOnce -> MiniPosHome = the sell screen (MiniPosSellScreen.kt).
+   Demo setup: the waiter is on the Team list with his WhatsApp number; the register is open. */
+const R = RKIT.ctx(), C = R.C, esc = RKIT.esc;
+const S = {
+  keypad:{es:"Teclado",pt:"Teclado",en:"Keypad"}, library:{es:"Catálogo",pt:"Catálogo",en:"Library"},
+  all:{es:"Todos",pt:"Todos",en:"All"}, save:{es:"Guardar",pt:"Salvar",en:"Save"}, charge:{es:"Cobrar %s",pt:"Cobrar %s",en:"Charge %s"},
+  register:{es:"Caja",pt:"Caixa",en:"Register"}, sales:{es:"Ventas",pt:"Vendas",en:"Sales"}, myBiz:{es:"Mi negocio",pt:"Meu negócio",en:"My business"},
+  nudge:{es:"Conecta tu primera caja",pt:"Conecte seu primeiro caixa",en:"Connect your first register"},
+  connect:{es:"Conectar",pt:"Conectar",en:"Connect"}, later:{es:"Ahora no",pt:"Agora não",en:"Not now"},
+  chooseTitle:{es:"¿Qué quieres conectar?",pt:"O que você quer conectar?",en:"What do you want to connect?"},
+  optReg:{es:"Tablet de mostrador",pt:"Um caixa",en:"A register"},
+  optRegD:{es:"Una tablet que vende en tu mostrador.",pt:"Um tablet que vende no seu balcão.",en:"A tablet that sells at your counter."},
+  optPhone:{es:"El teléfono de un empleado",pt:"O celular de um funcionário",en:"An employee phone"},
+  optPhoneD:{es:"Tu empleado vende desde su propio teléfono, como una caja.",pt:"Seu funcionário vende pelo próprio celular, como um caixa.",en:"Your employee sells from their own phone, as a register."},
+  pickTitle:{es:"Conectar un teléfono de empleado",pt:"Conectar um celular de funcionário",en:"Connect an employee phone"},
+  pickQ:{es:"¿Qué empleado lo va a usar?",pt:"Qual funcionário vai usar?",en:"Which employee will use it?"},
+  cashier:{es:"Equipo",pt:"Equipe",en:"Team"}, invited:{es:"Invitado",pt:"Convidado",en:"Invited"},
+  nextStep:{es:"Código del negocio %s · PIN %s",pt:"Código do negócio %s · PIN %s",en:"Business code %s · PIN %s"},
+  sendInvite:{es:"Enviar invitación",pt:"Enviar convite",en:"Send invitation"},
+  addEmp:{es:"¿No está en la lista? Agrega un empleado",pt:"Não está na lista? Adicione um funcionário",en:"Not on the list? Add an employee"},
+  costNote:{es:"Esto usa 1 de tus conexiones.",pt:"Isto usa 1 das suas conexões.",en:"This uses 1 of your connections."},
+  invite:{es:"Ya tienes acceso en %s en Platata.\n\nDescarga la app: %s\n\nCódigo del negocio: %s\nTu PIN: %s",
+          pt:"Você já está configurado em %s no Platata.\n\nBaixe o app: %s\n\nCódigo do negócio: %s\nSeu PIN: %s",
+          en:"You're set up at %s on Platata.\n\nGet the app: %s\n\nBusiness code: %s\nYour PIN: %s"},
+  sign:{es:"Hecho con Platata · platata.app",pt:"Feito com Platata · platata.app",en:"Made with Platata · platata.app"},
+  heroTitle:{es:"Tu negocio, en tu bolsillo",pt:"Seu negócio, no seu bolso",en:"Your business, in your pocket"},
+  heroSub:{es:"Vende, cobra y lleva tus cuentas desde el celular. Empezar es gratis.",pt:"Venda, cobre e mantenha suas contas pelo celular. Começar é grátis.",en:"Sell, charge and keep your books from your phone. Starting is free."},
+  start:{es:"Empezar mi negocio",pt:"Começar meu negócio",en:"Start my business"},
+  already:{es:"Ya uso Platata",pt:"Já uso o Platata",en:"I already use Platata"},
+  sheetTitle:{es:"¿Cómo entras hoy?",pt:"Como você entra hoje?",en:"How are you getting in today?"},
+  work:{es:"Trabajo en un negocio",pt:"Trabalho em um negócio",en:"I work at a business"},
+  workSub:{es:"Con el código del negocio y tu PIN. Sirve cualquier cuenta de Google",pt:"Com o código do negócio e seu PIN. Qualquer conta do Google serve",en:"Use the business code and your PIN. Any Google account works"},
+  restore:{es:"Recuperar mi negocio",pt:"Recuperar meu negócio",en:"Restore my business"},
+  restoreSub:{es:"En un celular nuevo, desde tu respaldo",pt:"Em um celular novo, a partir do seu backup",en:"On a new phone, from your backup"},
+  conn:{es:"Conectar una tablet o pantalla de cocina",pt:"Conectar um tablet ou tela de cozinha",en:"Connect a tablet or kitchen screen"},
+  connSub:{es:"Tablet de mostrador o pantalla de cocina",pt:"Tablet de balcão ou tela de cozinha",en:"Counter tablet or kitchen display"},
+  welcomeTeam:{es:"¡Bienvenido al equipo!",pt:"Bem-vindo à equipe!",en:"Welcome to the team!"},
+  welcomeSub:{es:"Entra con cualquier cuenta de Google. La primera vez necesitas el código del negocio y tu PIN.",pt:"Entre com qualquer conta do Google. Na primeira vez você precisa do código do negócio e do seu PIN.",en:"Sign in with any Google account. The first time you need the business code and your PIN."},
+  google:{es:"Continuar con Google",pt:"Continuar com o Google",en:"Continue with Google"},
+  notInvited:{es:"¿Primera vez? Pídele al dueño el código del negocio y tu PIN. Los encuentra en %s.",pt:"Primeira vez? Peça ao dono o código do negócio e o seu PIN. Ele encontra em %s.",en:"First time? Ask the owner for the business code and your PIN. The owner finds them in %s."},
+  team:{es:"Equipo",pt:"Equipe",en:"Team"},
+  terms:{es:"Al continuar aceptas los %s y la %s.",pt:"Ao continuar, você aceita os %s e a %s.",en:"By continuing you accept the %s and the %s."},
+  termsT:{es:"Términos",pt:"Termos de serviço",en:"Terms"}, termsP:{es:"Política de privacidad",pt:"Política de privacidade",en:"Privacy Policy"},
+  joinTitle:{es:"Únete a tu negocio",pt:"Entre no seu negócio",en:"Join your business"},
+  joinSub:{es:"Pídele al dueño el código del negocio. Lo ve en Mi negocio › Equipo.",pt:"Peça ao dono o código do negócio. Ele vê em Meu negócio › Equipe.",en:"Ask the owner for the business code. They can see it in My business › Team."},
+  codeLbl:{es:"Código del negocio",pt:"Código do negócio",en:"Business code"},
+  pinLbl:{es:"Tu PIN",pt:"Seu PIN",en:"Your PIN"},
+  pinHint:{es:"Los 4 números que te dio el dueño.",pt:"Os 4 números que o dono passou para você.",en:"The 4 numbers the owner gave you."},
+  join:{es:"Unirme",pt:"Entrar",en:"Join"},
+  tabs:{es:["Catálogo","Ventas","Abiertas"],pt:["Catálogo","Vendas","Abertas"],en:["Library","Sales","Open"]},
+  devOwner:{es:"Tu teléfono",pt:"Seu celular",en:"Your phone"},
+  devEmp:{es:"Teléfono de empleado",pt:"Celular de funcionário",en:"Employee phone"},
+  hopLine:{es:"Invitación por WhatsApp",pt:"Convite pelo WhatsApp",en:"Invitation by WhatsApp"},
+  hopNote:{es:"Lleva el código del negocio y su PIN.",pt:"Leva o código do negócio e o PIN dele.",en:"It carries the business code and their PIN."}
+};
+const T = (k, ...a) => { let s = R.pick(S[k]); a.forEach(v => { s = s.replace(/%[ds]/, v); }); return s; };
+const CODE = "7Q2KM4XW9D", PIN = "2580";
+const W = C.people.waiter, W2 = C.people.waiter2, WFIRST = W.split(" ")[0];
+const FREE = R.country==="US" || R.country==="CA";                         // sync/Entitlement.countryIsFree
+const PLAY = "https://play.google.com/store/apps/details?id=tata.fijando.su.plata";
+const INVITE = T("invite", C.place, PLAY, CODE, PIN) + "\n\n" + T("sign");
+const ALL_C = "#607D8B";
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+const I = {
+  back:'<svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  edit:'<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  receipt:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  tablet:'<svg viewBox="0 0 24 24"><path d="M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 1.99-.9 1.99-2L23 6c0-1.1-.9-2-2-2zm-2 14H5V6h14v12z"/></svg>',
+  phone:'<svg viewBox="0 0 24 24"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg>',
+  send:'<svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
+  dots:'<svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  gente:'<svg viewBox="0 0 24 24" fill="none" stroke="#1F2933" stroke-width="1.7" stroke-linecap="round"><circle cx="9" cy="8.5" r="3"/><circle cx="16.5" cy="9.5" r="2.4"/><path d="M3.5 19c.8-3.2 3-5 5.5-5s4.7 1.8 5.5 5M14 15.2c.8-.5 1.6-.7 2.5-.7 2 0 3.6 1.4 4.2 4.5"/></svg>',
+  nube:'<svg viewBox="0 0 24 24" fill="none" stroke="#1F2933" stroke-width="1.7" stroke-linejoin="round"><path d="M7 18h10.5a4 4 0 0 0 .4-8A6 6 0 0 0 6.4 9.3 4.4 4.4 0 0 0 7 18z"/></svg>',
+  caja:'<svg viewBox="0 0 24 24" fill="none" stroke="#1F2933" stroke-width="1.7" stroke-linejoin="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M8 20h8M12 16v4"/></svg>',
+  g:'<svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.3H12v4.3h5.9a5 5 0 0 1-2.2 3.3v2.8h3.5c2.1-1.9 3.3-4.7 3.3-8.1z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.5-2.8c-1 .7-2.3 1.1-3.8 1.1-2.9 0-5.4-2-6.3-4.7H2.1v2.9A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.7 13.9a6.6 6.6 0 0 1 0-4.2V6.8H2.1a11 11 0 0 0 0 9.9z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.1-3.1A11 11 0 0 0 2.1 6.8l3.6 2.9C6.6 7.2 9.1 5.4 12 5.4z"/></svg>'
+};
+/* the four business-type stickers around Tata (BusinessStartScreen.kt WelcomeHero: ic_drawn_hamburguesa, _carrito, _tijeras, _edificio), drawn plainly */
+const HERO = {
+  burger:'<svg viewBox="0 0 24 24" fill="none" stroke="#1F2933" stroke-width="1.6" stroke-linejoin="round"><path d="M4 10a8 5 0 0 1 16 0z" fill="#F2C46D"/><path d="M3.5 13h17" stroke="#6B8E23" stroke-width="2.2"/><path d="M4.5 15.5h15v1.5a2.5 2.5 0 0 1-2.5 2.5H7a2.5 2.5 0 0 1-2.5-2.5z" fill="#F2C46D"/></svg>',
+  cart:'<svg viewBox="0 0 24 24" fill="none" stroke="#1F2933" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.5l2.2 10.5h10.3L20 7.5H6.4"/><circle cx="9" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/></svg>',
+  scissors:'<svg viewBox="0 0 24 24" fill="none" stroke="#1F2933" stroke-width="1.6" stroke-linecap="round"><circle cx="6.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/><path d="M8.3 15.8 18 4M15.7 15.8 6 4"/></svg>',
+  building:'<svg viewBox="0 0 24 24" fill="none" stroke="#1F2933" stroke-width="1.6" stroke-linejoin="round"><path d="M5 21V4h10v17M15 9h4v12M3 21h18M8 8h1M11 8h1M8 12h1M11 12h1M8 16h1M11 16h1"/></svg>'
+};
+/* Tata, drawn plainly (the app's PaperPotato art is a drawable; this is a stand-in of the same character) */
+const potato = (thumb) => `<svg viewBox="0 0 120 120"><ellipse cx="60" cy="64" rx="38" ry="44" fill="#D9A66A"/><circle cx="47" cy="56" r="4.6" fill="#3A2A1F"/><circle cx="73" cy="56" r="4.6" fill="#3A2A1F"/>
+  <path d="M48 74q12 9 24 0" stroke="#3A2A1F" stroke-width="4" fill="none" stroke-linecap="round"/><circle cx="36" cy="80" r="2.5" fill="#B07F48"/><circle cx="82" cy="40" r="2.2" fill="#B07F48"/>
+  ${thumb?'<path d="M96 70c6-2 9 3 6 8l-2 4c3 1 3 6-1 7h-9c-3 0-4-3-4-6v-7c0-3 2-5 4-6l3-6c2-3 6-2 6 1z" fill="#D9A66A" stroke="#3A2A1F" stroke-width="2.4" stroke-linejoin="round"/>':'<path d="M20 58c-6-4-9-12-5-15 3-2 7 2 9 8" fill="#D9A66A" stroke="#3A2A1F" stroke-width="2.4" stroke-linecap="round"/>'}</svg>`;
+
+/* ---------- owner phone ---------- */
+const cats = () => `<div class="mcats">` + [{name:T("all"),color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const s = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${s}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+const grid = () => `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+function ownerHome(st){
+  let h = `<div class="otabs"><span>${I.edit}${esc(T("keypad"))}</span><span class="on">${esc(T("library"))}</span></div>
+    <div class="nudge"><b>${esc(T("nudge"))}</b><span class="cta" data-t="nudge-connect">${esc(T("connect"))}</span><span>${esc(T("later"))}</span></div>`
+    + cats() + grid()
+    + `<div class="opair"><span class="b2 off">${esc(T("save"))}</span><span class="b1 off">${esc(T("charge", R.money(0)))}</span></div>`
+    + `<div class="mnav"><div class="on"><span class="pill">${I.cart}</span>${esc(T("register"))}</div><div><span class="pill">${I.receipt}</span>${esc(T("sales"))}</div><div><span class="flagc">${R.flag()}</span>${esc(T("myBiz"))}</div></div>`;
+  if(st.sheet) h += `<div class="mscrim"><div class="psheet"><i class="hdl"></i><h2>${esc(T("chooseTitle"))}</h2>
+      <div class="copt"><span class="ctile">${I.tablet}</span><div><b>${esc(T("optReg"))}</b><small>${esc(T("optRegD"))}</small></div></div>
+      <div class="copt" data-t="opt-phone"><span class="ctile">${I.phone}</span><div><b>${esc(T("optPhone"))}</b><small>${esc(T("optPhoneD"))}</small></div></div>
+      <div class="cnot">${esc(T("later"))}</div></div></div>`;
+  return h;
+}
+function pickRow(name, id, st){
+  const inv = st.invited && id===1;
+  return `<div class="prow2"><div class="ptop"><span class="pav">${esc(name.trim()[0].toUpperCase())}</span><div class="pn"><b>${esc(name)}</b><small>${esc(T("cashier"))}</small></div>
+      ${inv ? `<span class="ppill">${esc(T("invited"))}</span>` : `<span class="pbtn"${id===1?' data-t="pick-connect"':""}>${esc(T("connect"))}</span>`}</div>
+    ${inv ? `<div class="pnext">${esc(T("nextStep", CODE, PIN))}</div><span class="plink2" data-t="send-invite">${esc(T("sendInvite"))}</span>` : ""}</div>`;
+}
+function pick(st){
+  return `<div class="paper"><div class="ptb"><span class="pib">${I.back}</span><b>${esc(T("pickTitle"))}</b></div>
+    <div class="pbody"><h2>${esc(T("pickQ"))}</h2>${pickRow(W,1,st)}${pickRow(W2,2,st)}
+      <span class="plink2">${esc(T("addEmp"))}</span>${FREE?"":`<small class="pnote">${esc(T("costNote"))}</small>`}</div></div>`;
+}
+function whatsapp(st){
+  const body = esc(INVITE).replace(/\n/g,"<br>");
+  return `<div class="wa"><div class="wahd"><span class="wab">${I.back}</span><span class="waav">${esc(WFIRST[0])}</span><b>${esc(W)}</b><span class="wam">${I.dots}</span></div>
+    <div class="wachat">${st.sent?`<div class="wabub">${body}<small>12:41 <i>✓✓</i></small></div>`:""}</div>
+    <div class="wain"><div class="wabox">${st.sent?"":body}</div><span class="wasend" data-t="wa-send">${I.send}</span></div></div>`;
+}
+
+/* ---------- waiter phone ---------- */
+function welcome(st){
+  let h = `<div class="paper"><div class="wbody"><div class="wmark">Platata</div>
+    <div class="whero"><i class="wdisc"></i><span class="wtata">${potato(false)}</span>
+      <span class="wt t1">${HERO.burger}</span><span class="wt t2">${HERO.cart}</span><span class="wt t3">${HERO.scissors}</span><span class="wt t4">${HERO.building}</span></div>
+    <div class="wtitle">${esc(T("heroTitle"))}</div><div class="wsub">${esc(T("heroSub"))}</div></div>
+    <div class="wfoot"><span class="bbrand">${esc(T("start"))}</span><span class="wlink" data-t="already">${esc(T("already"))}</span></div></div>`;
+  if(st.sheet2) h += `<div class="mscrim"><div class="psheet"><i class="hdl"></i><h2>${esc(T("sheetTitle"))}</h2>
+      <div class="door" data-t="door-work"><span class="dtile" style="background:#E6F0F2">${I.gente}</span><div><b>${esc(T("work"))}</b><small>${esc(T("workSub"))}</small></div></div>
+      <div class="door"><span class="dtile" style="background:#E8F1FA">${I.nube}</span><div><b>${esc(T("restore"))}</b><small>${esc(T("restoreSub"))}</small></div></div>
+      <div class="door"><span class="dtile" style="background:#EEF0F1">${I.caja}</span><div><b>${esc(T("conn"))}</b><small>${esc(T("connSub"))}</small></div></div>
+      <div style="height:calc(var(--u)*16)"></div></div></div>`;
+  return h;
+}
+function gstep(st){
+  const fn = esc(T("notInvited", "§")).replace("§", `<b>${esc(T("team"))}</b>`);
+  const tl = esc(T("terms","§1","§2")).replace("§1",`<u>${esc(T("termsT"))}</u>`).replace("§2",`<u>${esc(T("termsP"))}</u>`);
+  return `<div class="paper"><div class="ptb"><span class="pib">${I.back}</span></div>
+    <div class="gbody"><div class="gdiscw"><i class="gdisc"></i><span class="gtata">${potato(true)}</span></div>
+      <h1 class="ph1 c">${esc(T("welcomeTeam"))}</h1><p class="psub c">${esc(T("welcomeSub"))}</p></div>
+    <div class="pfoot"><span class="bgoogle" data-t="google">${I.g}${esc(T("google"))}</span><p class="psmall">${fn}</p><p class="psmall">${tl}</p></div></div>`;
+}
+function joinStep(st){
+  const code = st.code, act = code.length;
+  const slot = i => `<span class="cs${i===act && st.typing==="code"?" act":""}">${esc(code[i]||"")}</span>`;
+  const grp = from => `<div class="cg">${[0,1,2,3,4].map(k=>slot(from+k)).join("")}</div>`;
+  const pins = [0,1,2,3].map(i=>`<span class="ps${i===st.pin && st.typing==="pin"?" act":""}">${i<st.pin?"<i></i>":""}</span>`).join("");
+  const ready = code.length===CODE.length && st.pin===4;
+  return `<div class="paper"><div class="ptb"><span class="pib">${I.back}</span></div>
+    <div class="jbody"><h1 class="ph1">${esc(T("joinTitle"))}</h1><p class="psub">${esc(T("joinSub"))}</p>
+      <div class="plbl">${esc(T("codeLbl").toUpperCase())}</div><div class="crow" data-t="code">${grp(0)}<b>-</b>${grp(5)}</div>
+      <div class="plbl">${esc(T("pinLbl").toUpperCase())}</div><div class="prow3">${pins}</div>
+      <p class="psmall l">${esc(T("pinHint"))}</p></div>
+    <div class="pfoot"><span class="bbrand${ready?"":" off"}" data-t="join">${esc(T("join"))}</span></div></div>`;
+}
+function sell(){
+  return `<div class="mtabs">${R.pick(S.tabs).map((t,i)=>`<span class="${i===0?"on":""}">${esc(t)}</span>`).join("")}</div>` + cats() + grid()
+    + `<div class="mlink"><span>${esc(T("keypad"))}</span></div>`
+    + `<div class="mnav"><div class="on"><span class="pill">${I.cart}</span>${esc(T("register"))}</div><div><span class="flagc">${R.flag()}</span>${esc(T("myBiz"))}</div></div>`;
+}
+
+function render(st){
+  let h = "";
+  if(st.screen==="ohome") h = ownerHome(st);
+  else if(st.screen==="pick") h = pick(st);
+  else if(st.screen==="wa") h = whatsapp(st);
+  else if(st.screen==="welcome") h = welcome(st);
+  else if(st.screen==="gstep") h = gstep(st);
+  else if(st.screen==="join") h = joinStep(st);
+  else if(st.screen==="sell") h = sell(st);
+  if(st.hop) h += RKIT.hop(R,{from:T("devOwner"), to:T("devEmp"), line:T("hopLine"), note:T("hopNote")});
+  return h;
+}
+const OWNER_SCREENS = ["ohome","pick","wa"];
+
+RKIT.start(R, {
+  id:"R6", tallVideo:true, clock:"12:41",
+  endText:R.pick({es:"Así tus meseros venden desde su teléfono, con Platata.",pt:"Assim seus garçons vendem pelo celular, com o Platata.",en:"That's how your servers sell from their own phone, with Platata."}),
+  beats:R.pick({
+    es:["Conecta el teléfono de un empleado","Elige al mesero: recibe un código y un PIN","Envíale la invitación por WhatsApp","En su teléfono: Ya uso Platata","Entra con cualquier cuenta de Google","Código del negocio, su PIN y Unirme","Así tus meseros venden desde su teléfono"],
+    pt:["Conecte o celular de um funcionário","Escolha o garçom: ele recebe um código e um PIN","Mande o convite pelo WhatsApp","No celular dele: Já uso o Platata","Entre com qualquer conta do Google","Código do negócio, o PIN e Entrar","Assim seus garçons vendem pelo celular"],
+    en:["Connect an employee phone","Pick your server: they get a code and a PIN","Send the invitation by WhatsApp","On their phone: I already use Platata","Sign in with any Google account","Business code, their PIN, and Join","That's how your servers sell from their own phone"]}),
+  state:{screen:"ohome", sheet:false, invited:false, sent:false, hop:false, sheet2:false, code:"", pin:0, typing:null},
+  render,
+  device: () => "phone",
+  who: st => OWNER_SCREENS.includes(st.screen) ? T("devOwner") : T("devEmp"),
+  steps:[
+    {beat:0, hint:R.pick({es:"Toca Conectar",pt:"Toque em Conectar",en:"Tap Connect"}), target:'[data-t="nudge-connect"]',
+      tap(st){ st.sheet=true; }},
+    {beat:0, hint:R.pick({es:"Toca El teléfono de un empleado",pt:"Toque em O celular de um funcionário",en:"Tap An employee phone"}), target:'[data-t="opt-phone"]',
+      tap(st){ st.sheet=false; st.screen="pick"; }},
+    {beat:1, hint:R.pick({es:"Toca Conectar junto a ",pt:"Toque em Conectar ao lado de ",en:"Tap Connect next to "})+WFIRST, target:'[data-t="pick-connect"]',
+      tap(st){ st.invited=true; }},
+    {beat:2, hint:R.pick({es:"Toca Enviar invitación",pt:"Toque em Enviar convite",en:"Tap Send invitation"}), target:'[data-t="send-invite"]',
+      tap(st){ st.screen="wa"; }},
+    {beat:2, hint:R.pick({es:"Toca enviar en WhatsApp",pt:"Toque em enviar no WhatsApp",en:"Tap send in WhatsApp"}), target:'[data-t="wa-send"]',
+      tap(st,E){ st.sent=true; E.after(1400,()=>{ st.hop=true; }); E.after(3200,()=>{ st.hop=false; st.screen="welcome"; }); }},
+    {beat:3, hint:R.pick({es:"Toca Ya uso Platata",pt:"Toque em Já uso o Platata",en:"Tap I already use Platata"}), target:'[data-t="already"]',
+      tap(st){ st.sheet2=true; }},
+    {beat:3, hint:R.pick({es:"Toca Trabajo en un negocio",pt:"Toque em Trabalho em um negócio",en:"Tap I work at a business"}), target:'[data-t="door-work"]',
+      tap(st){ st.sheet2=false; st.screen="gstep"; }},
+    {beat:4, hint:R.pick({es:"Toca Continuar con Google",pt:"Toque em Continuar com o Google",en:"Tap Continue with Google"}), target:'[data-t="google"]',
+      tap(st,E){ E.after(900,()=>{ st.screen="join"; st.typing="code"; }); }},
+    {beat:5, hint:R.pick({es:"Escribe el código del negocio",pt:"Digite o código do negócio",en:"Type the business code"}), target:'[data-t="code"]',
+      tap(st,E){ let t=150; for(let i=1;i<=CODE.length;i++){ const v=CODE.slice(0,i); E.after(t,()=>{ st.code=v; }); t+=160; }
+        E.after(t+200,()=>{ st.typing="pin"; }); t+=400;
+        for(let i=1;i<=4;i++){ const v=i; E.after(t,()=>{ st.pin=v; if(v===4) st.typing=null; }); t+=260; } }},
+    {beat:5, hint:R.pick({es:"Toca Unirme",pt:"Toque em Entrar",en:"Tap Join"}), target:'[data-t="join"]',
+      tap(st,E){ E.after(700,()=>{ st.screen="sell"; }); E.after(3600,()=>{}); }}
+  ]
+});
+</script>
+<style>
+/* ---- owner Home pieces (HomeScreen.kt TabRow, ConnectNudge.kt strip, FooterButtonPair) ---- */
+.otabs{margin:0 calc(var(--u)*16);height:calc(var(--u)*48);display:flex;border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.otabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);color:var(--m-onv);position:relative}
+.otabs span svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:currentColor}
+.otabs span.on{color:var(--m-on);font-weight:700}
+.otabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.nudge{min-height:calc(var(--u)*48);background:#F2F2F7;display:flex;align-items:center;padding:0 calc(var(--u)*4) 0 calc(var(--u)*12);flex:0 0 auto}
+.nudge b{flex:1;font-size:calc(var(--u)*14);font-weight:700;color:#1C1C1E}
+.nudge span{height:calc(var(--u)*40);display:grid;place-items:center;padding:0 calc(var(--u)*8);font-size:calc(var(--u)*12);font-weight:500;color:#1C1C1E}
+.nudge span.cta{font-weight:700}
+.opair{display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16);flex:0 0 auto}
+.opair span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*26);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:700;white-space:nowrap}
+.opair .b1.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.opair .b2.off{border:1px solid rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+/* ---- paper look (ui/theme/PaperColor.kt, PaperType.kt; restaurant accent on the owner's pick page) ---- */
+.paper{flex:1;min-height:0;display:flex;flex-direction:column;background:#FBFAF7;color:#17181B;position:relative}
+.psheet{width:100%;background:#FFFFFF;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:0 calc(var(--u)*16) calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.psheet .hdl{display:block;width:calc(var(--u)*44);height:calc(var(--u)*5);border-radius:3px;background:#D9D4C9;margin:calc(var(--u)*12) auto calc(var(--u)*4)}
+.psheet h2{margin:0;font:600 calc(var(--u)*20)/1.2 Fredoka,system-ui,sans-serif;color:#17181B}
+.copt{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*12);min-height:calc(var(--u)*52);border:calc(var(--u)*2) solid #E6E2D9;border-radius:calc(var(--u)*14);background:#fff}
+.ctile{flex:0 0 auto;width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:calc(var(--u)*14);background:#F9EAE3;display:grid;place-items:center}
+.ctile svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#BE4927}
+.copt b{display:block;font-size:calc(var(--u)*16);font-weight:500;color:#17181B}
+.copt small{display:block;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*15);line-height:1.4;color:#737883}
+.cnot{height:calc(var(--u)*48);display:grid;place-items:center;font:500 calc(var(--u)*18) Fredoka,system-ui,sans-serif;color:#464A52}
+.ptb{height:calc(var(--u)*52);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*16);flex:0 0 auto}
+.pib{flex:0 0 auto;width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;display:grid;place-items:center}
+.pib svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#17181B}
+.ptb b{flex:1;min-width:0;font:600 calc(var(--u)*20)/1.2 Fredoka,system-ui,sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pbody{flex:1;min-height:0;padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.pbody h2{margin:0;font:600 calc(var(--u)*20)/1.2 Fredoka,system-ui,sans-serif}
+.prow2{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*14);padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.ptop{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.pav{flex:0 0 auto;width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#F9EAE3;color:#BE4927;display:grid;place-items:center;font:600 calc(var(--u)*20) Fredoka,system-ui,sans-serif}
+.pn{flex:1;min-width:0}
+.pn b{display:block;font-size:calc(var(--u)*16);font-weight:600}
+.pn small{display:block;font-size:calc(var(--u)*13);color:#737883}
+.pbtn{flex:0 0 auto;width:calc(var(--u)*108);height:calc(var(--u)*44);border-radius:calc(var(--u)*14);background:#C44B28;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*16) Fredoka,system-ui,sans-serif}
+.ppill{flex:0 0 auto;border-radius:99px;background:#F6EED8;color:#8A6712;font-size:calc(var(--u)*13);font-weight:500;padding:calc(var(--u)*4) calc(var(--u)*8)}
+.pnext{font-size:calc(var(--u)*13);color:#464A52}
+.plink2{align-self:flex-start;min-height:calc(var(--u)*40);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:#BE4927}
+.pnote{font-size:calc(var(--u)*13);color:#737883}
+/* ---- WhatsApp (another app; drawn plainly) ---- */
+.wa{flex:1;min-height:0;display:flex;flex-direction:column;background:#EFEAE2}
+.wahd{height:calc(var(--u)*56);background:#008069;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*10);padding:0 calc(var(--u)*8);flex:0 0 auto}
+.wahd svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff}
+.waav{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#DFE5E7;color:#54656F;display:grid;place-items:center;font-weight:600}
+.wahd b{flex:1;font-size:calc(var(--u)*17);font-weight:500}
+.wachat{flex:1;min-height:0;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:flex-end}
+.wabub{align-self:flex-end;max-width:86%;background:#D9FDD3;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font-size:calc(var(--u)*14);line-height:1.35;word-break:break-word;box-shadow:0 1px 1px rgba(0,0,0,.1)}
+.wabub small{display:block;text-align:right;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*11);color:#667781}
+.wabub small i{font-style:normal;color:#53BDEB}
+.wain{display:flex;align-items:flex-end;gap:calc(var(--u)*6);padding:calc(var(--u)*6) calc(var(--u)*6) calc(var(--u)*8);flex:0 0 auto}
+.wabox{flex:1;min-height:calc(var(--u)*46);max-height:calc(var(--u)*240);overflow:hidden;background:#fff;border-radius:calc(var(--u)*23);padding:calc(var(--u)*12) calc(var(--u)*16);font-size:calc(var(--u)*15);line-height:1.35;word-break:break-word}
+.wasend{flex:0 0 auto;width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#00A884;display:grid;place-items:center}
+.wasend svg{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
+/* ---- waiter phone: welcome, door sheet, Google step, join ---- */
+.wbody{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16) calc(var(--u)*20) 0}
+.wmark{font:600 calc(var(--u)*24)/1 Fredoka,system-ui,sans-serif;letter-spacing:-.3px;color:#17181B}
+.whero{position:relative;height:calc(var(--u)*330);display:grid;place-items:center}
+.wdisc{position:absolute;width:calc(var(--u)*250);height:calc(var(--u)*250);border-radius:50%;background:#F6E4C3;left:50%;top:50%;transform:translate(-50%,-50%)}
+.wtata{position:relative;width:calc(var(--u)*230);height:calc(var(--u)*230)}
+.wtata svg,.gtata svg{width:100%;height:100%}
+.wt{position:absolute;width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:calc(var(--u)*14);background:#fff;display:grid;place-items:center;box-shadow:0 calc(var(--u)*3) calc(var(--u)*8) rgba(0,0,0,.12)}
+.wt svg{width:calc(var(--u)*26);height:calc(var(--u)*26);fill:#1F2933}
+.wt.t1{left:calc(var(--u)*6);top:calc(var(--u)*40);transform:rotate(-8deg)} .wt.t2{right:calc(var(--u)*10);top:calc(var(--u)*26);transform:rotate(7deg)}
+.wt.t3{left:calc(var(--u)*18);bottom:calc(var(--u)*44);transform:rotate(6deg)} .wt.t4{right:calc(var(--u)*4);bottom:calc(var(--u)*62);transform:rotate(-6deg)}
+.wtitle{font:600 calc(var(--u)*31)/1.14 Fredoka,system-ui,sans-serif;letter-spacing:-.2px}
+.wsub{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*15);line-height:1.45;color:#464A52}
+.wfoot{padding:calc(var(--u)*8) calc(var(--u)*20);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*8);flex:0 0 auto}
+.bbrand{width:100%;height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#3A2A1F;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*18) Fredoka,system-ui,sans-serif}
+.bbrand.off{background:#E6E2D9;color:#737883}
+.wlink{min-height:calc(var(--u)*44);display:flex;align-items:center;font-size:calc(var(--u)*15);font-weight:500;text-decoration:underline;color:#17181B}
+.door{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*12) calc(var(--u)*14);border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);background:#fff}
+.dtile{flex:0 0 auto;width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:calc(var(--u)*14);display:grid;place-items:center}
+.dtile svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
+.door b{display:block;font-size:calc(var(--u)*16);font-weight:500;line-height:1.4}
+.door small{display:block;font-size:calc(var(--u)*13);line-height:1.35;color:#737883}
+.gbody{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*8) calc(var(--u)*20) 0;display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.gdiscw{position:relative;height:calc(var(--u)*210);display:grid;place-items:center}
+.gdisc{position:absolute;width:calc(var(--u)*190);height:calc(var(--u)*190);border-radius:50%;background:#E3EEF0;left:50%;top:50%;transform:translate(-50%,-50%)}
+.gtata{position:relative;width:calc(var(--u)*210);height:calc(var(--u)*210)}
+.ph1{margin:0;font:600 calc(var(--u)*27)/1.14 Fredoka,system-ui,sans-serif;letter-spacing:-.2px}
+.ph1.c,.psub.c{text-align:center}
+.psub{margin:0;font-size:calc(var(--u)*15);line-height:1.45;color:#464A52}
+.pfoot{padding:calc(var(--u)*10) calc(var(--u)*20) calc(var(--u)*8);display:flex;flex-direction:column;gap:calc(var(--u)*12);flex:0 0 auto}
+.bgoogle{height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#fff;border:1px solid #D9D4C9;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*10);font-size:calc(var(--u)*17);font-weight:500}
+.bgoogle svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+.psmall{margin:0;text-align:center;font-size:calc(var(--u)*13);line-height:1.4;color:#737883}
+.psmall.l{text-align:left}
+.psmall b{color:#737883}
+.jbody{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*4) calc(var(--u)*20) 0;display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.plbl{margin-top:calc(var(--u)*14);font-size:calc(var(--u)*12);font-weight:600;letter-spacing:.72px;color:#737883}
+.crow{display:flex;align-items:center;gap:calc(var(--u)*6)}
+.crow b{color:#737883}
+.cg{flex:1;display:flex;gap:calc(var(--u)*4)}
+.cs{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#fff;border:calc(var(--u)*2) solid #D9D4C9;display:grid;place-items:center;font:600 calc(var(--u)*21) Fredoka,system-ui,sans-serif}
+.cs.act{border-color:#3A2A1F}
+.prow3{display:flex;gap:calc(var(--u)*10)}
+.ps{width:calc(var(--u)*60);height:calc(var(--u)*60);border-radius:calc(var(--u)*12);background:#fff;border:calc(var(--u)*2) solid #D9D4C9;display:grid;place-items:center}
+.ps.act{border-color:#3A2A1F}
+.ps i{width:calc(var(--u)*14);height:calc(var(--u)*14);border-radius:50%;background:#3A2A1F}
+</style>
+</body>
+</html>

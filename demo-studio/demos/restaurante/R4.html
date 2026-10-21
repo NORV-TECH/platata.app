@@ -13,20 +13,84 @@
 <body class="mat">
 <div id="root"></div>
 <script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
 <script>
-/* R4 "Pedido en la mesa": the WAITER takes the order on their own phone (Mini POS). Colombia, Spanish.
-   Every screen follows the app code at d1b7698d (sim/usa-canada):
-   PIN gate            MiniPosHomeScreen.kt:262-393 (one bound employee, no picker)
-   sell screen         MiniPosSellScreen.kt:512-691, ProductLibraryView.kt, ProductCard.kt, PlatataApp.kt (bottom bar)
-   tap a dish          CartActions.handleProductClick: a dish with add-ons opens ModifierSelectionSheet; one without goes in
-   add-ons             ModifierSheetContent.kt, the app's own idea "Término de cocción" (ModifierTemplates.kt: not required, pick one)
-   "Cobrar · N"        the waiter phone's only way into checkout (MiniPosSellScreen.kt:665) -> openPayDirect
-   "¿Qué mesa?"        DiningChooserContent table grid; opens directly because Mesas is the only option the owner switched on
-   pay step            CheckoutSheetBody inline + CheckoutPayBlock (cash only, the factory state; staff never sees QR/Card setup)
-   Guardar             saveCurrentOrderAsPending -> clearCart -> back to Catálogo
-   "Guardado: Mesa 4"  NOT IN THE APP YET: Monti asked for it (19 Oct); coder prompt sent. Same snackbar text as the owner phone.
-   Abiertas            TransactionsScreen open list + CartSheetContent open-ticket card (title "Cliente (N.° 27)", line "Mesa 4")
-   Demo state the owner set up beforehand: Mesas switched on with 12 tables; the add-on on Churrasco. */
+/* R4 "Pedido en la mesa": the WAITER takes a table's order on their own phone (Mini POS), saves it, it shows in
+   Abiertas and arrives on the kitchen screen. Every country (R.C data), es/pt/en.
+   Screens follow the app at the newest sim/usa-canada commit (paths under app/src/main/java/com/example/):
+   PIN gate          ui/screens/onboarding/MiniPosHomeScreen.kt:271-394 (business name 22sp #007AFF, 72dp avatar, pin_enter_pin)
+   sell screen       MiniPosSellScreen.kt:576-618 (tabs home_tab_library / tx_tab_all / tx_tab_open), ProductLibraryView.kt
+                     (chip items_filter_all, products A-Z), footer link scan_row_manual (:705-722), cart bar common_charge_items (:757-786)
+   bottom bar        ui/app/PlatataApp.kt:304-312 (Mini POS = Caja + Mi negocio), PanelBarTap.miniPosItemCurrent (Caja lit on every tab)
+   tap a dish        CartActions.handleProductClick -> ModifierSelectionSheet.kt:189-288 / ModifierSheetContent.kt
+                     (the app's idea "Término de cocción": pick one, optional -> hint modifiers_hint_choose_one; names saved in the SHOP
+                     language, data/ModifierTemplates.kt:54-65; button home_add_to_sale + " · " + line total)
+   Cobrar            openPayDirect (MiniPosSellScreen.kt:400-410) -> DINING step: DiningChooserContent table grid
+                     (CheckoutSheetBody.kt:1205-1260, startOnTableGrid because Mesas is the only option switched on)
+   pay step          CheckoutSheetBody inline (inlineCustomerEditing = true): ‹ + trash, checkout_customer_hint, CheckoutPayBlock
+                     (Total, checkout_items_link, the "Mesa 4" link, keypad, cash_exact, and the Save button inside the inline pay
+                     block, CheckoutSheetBody.kt:1061: with a kitchen screen known (rememberKitchenScreenKnown) a NEW sale says
+                     checkout_send_kitchen "Enviar a cocina", CheckoutSheetBody.kt:315-333)
+   Guardar           saveTicket -> saveCurrentOrderAsPending + clearCart; snackbar park_ticket_sent_toast "Enviado a cocina: Mesa 4"
+                     (SavedTicketNotice.kt:40, ParkTicketRules.toastRes(sentToKitchen), MiniPosSellScreen.kt:226-233)
+   Abiertas          TransactionsScreen.kt:604-662 (search tx_search_placeholder) + CartSheetContent.kt:1296-1460
+                     (TicketTitle: "Mesa 4", waiter first name, home_saved_at, home_tap_to_load; just-saved card pulses blue)
+   kitchen screen    ui/screens/kds/KitchenDisplayScreen.kt:279-470 + ui/components/KdsTicketCard.kt (title "Mesa 4", waiter
+                     first name, kds_status_new, items + add-on bullet, yellow MESA 4 banner #FFEB3B), always dark (#111111)
+   the trip          waiter phone -> cloud -> owner phone (on, Platata open, online) -> shop Wi-Fi -> kitchen screen (VERIFY-ALL §5)
+   Demo setup the owner did before: Mesas ON with 12 tables, the cooking-point add-on on the steak dish, a kitchen screen paired. */
+const R = RKIT.ctx(), C = R.C, esc = RKIT.esc;
+const SH = C.lang;   // the shop's own language: add-on names are saved in it (choke 12, S10-B04)
+const S = {
+  enterPin:{es:"Ingresa tu PIN",pt:"Digite seu PIN",en:"Enter your PIN"},
+  tabs:{es:["Catálogo","Ventas","Abiertas"],pt:["Catálogo","Vendas","Abertas"],en:["Library","Sales","Open"]},
+  all:{es:"Todos",pt:"Todos",en:"All"},
+  keypad:{es:"Teclado",pt:"Teclado",en:"Keypad"},
+  register:{es:"Caja",pt:"Caixa",en:"Register"},
+  myBiz:{es:"Mi negocio",pt:"Meu negócio",en:"My business"},
+  charge:{es:"Cobrar",pt:"Cobrar",en:"Charge"},
+  items:{es:["artículo","artículos"],pt:["item","itens"],en:["item","items"]},
+  chooseOne:{es:"elige 1",pt:"escolha 1",en:"choose 1"},
+  extra:{es:"1 extra",pt:"1 extra",en:"1 extra"},
+  addToSale:{es:"Agregar a la venta",pt:"Adicionar à venda",en:"Add to sale"},
+  whichTable:{es:"¿Qué mesa?",pt:"Qual mesa?",en:"Which table?"},
+  addClient:{es:"Agrega un cliente a la venta",pt:"Adicione um cliente à venda",en:"Add a client to the sale"},
+  total:{es:"Total",pt:"Total",en:"Total"},
+  itemsLink:{es:"Artículos (%d)",pt:"Itens (%d)",en:"Items (%d)"},
+  table:{es:"Mesa %d",pt:"Mesa %d",en:"Table %d"},
+  exact:{es:"Exacto · %s",pt:"Exato · %s",en:"Exact · %s"},
+  save:{es:"Enviar a cocina",pt:"Enviar para a cozinha",en:"Send to kitchen"},
+  saved:{es:"Enviado a cocina: %s",pt:"Enviado para a cozinha: %s",en:"Sent to kitchen: %s"},
+  search:{es:"Por artículos, clientes, empleados…",pt:"Por itens, clientes, funcionários…",en:"By items, clients, employees…"},
+  savedAt:{es:"Guardado a las %s",pt:"Salvo às %s",en:"Saved at %s"},
+  tapLoad:{es:"Toca para cargar",pt:"Toque para carregar",en:"Tap to load"},
+  history:{es:"Historial",pt:"Histórico",en:"History"},
+  station:{es:"Cocina",pt:"Cozinha",en:"Kitchen"},
+  kNew:{es:"%dm – NUEVO",pt:"%dm – NOVO",en:"%dm – NEW"},
+  devPhone:{es:"Teléfono de empleado",pt:"Celular de funcionário",en:"Employee phone"},
+  devKds:{es:"Pantalla de cocina",pt:"Tela da cozinha",en:"Kitchen screen"},
+  hopNote:{es:"Pasa por tu teléfono: déjalo encendido, con Platata abierta y en el Wi-Fi del local.",
+           pt:"Passa pelo seu celular: deixe-o ligado, com o Platata aberto e no Wi-Fi do restaurante.",
+           en:"It goes through your phone: keep it on, with Platata open and on the restaurant's Wi-Fi."}
+};
+const T = (k, ...a) => { let s = R.pick(S[k]); a.forEach(v => { s = s.replace(/%[ds]/, v); }); return s; };
+/* the add-on idea "Término de cocción", saved in the shop's language (ModifierTemplates.kt:54-65 + values strings) */
+const TERM = {
+  es:{name:"Término de cocción", opts:["Poco asado","Jugoso","Término medio","Tres cuartos","Bien asado"]},
+  pt:{name:"Ponto da carne", opts:["Mal passado","Ao ponto para mal","Ao ponto","Ao ponto para bem","Bem passado"]},
+  en:{name:"Temperature", opts:["Rare","Medium Rare","Medium","Medium Well","Well Done"]}
+}[SH];
+const PICK = TERM.opts[2];
+const TABLE = 4, TIME = "12:41";
+const timeText = new Intl.DateTimeFormat(C.loc,{hour:"numeric",minute:"2-digit"}).format(new Date(2026,9,20,12,41));
+const W = C.people.waiter, WFIRST = W.split(" ")[0];
+const INITIALS = W.split(" ").slice(0,2).map(p=>p[0]).join("").toUpperCase();
+const [ID1, ID2, ID3] = C.order;
+const item = id => C.items.find(x=>x.id===id);
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const ALL_C = "#607D8B";   // CategoryChipNeutral
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
 const I = {
   back:'<svg class="mi" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
   cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
@@ -34,121 +98,138 @@ const I = {
   person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
   trash:'<svg class="mi" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
   search:'<svg class="mi" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
-  co:'<svg viewBox="0 0 6 4"><rect width="6" height="2" fill="#FCD116"/><rect y="2" width="6" height="1" fill="#003893"/><rect y="3" width="6" height="1" fill="#CE1126"/></svg>'
+  logout:'<svg class="mi" viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>'
 };
-const money = n => "$ " + Math.round(n).toLocaleString("es-CO").replace(/,/g,".");   // CurrencyUtils.kt:204 (U+00A0)
-const esc = Demo.K.esc;
-const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
 
-/* categories: ORDER BY sortOrder, name (PosDao.kt:169); colour = CategoryChipPalette[id % 10] (HomeScreen.kt:1946) */
-const CATS = [ {id:3,name:"Bebidas",c:"#FFD54F"}, {id:1,name:"Platos fuertes",c:"#4FC3F7"}, {id:2,name:"Sopas",c:"#81C784"} ];
-const ALL_C = "#607D8B";   // CategoryChipNeutral
-/* products: ORDER BY name ASC (PosDao.kt:324) */
-const ITEMS = [
-  {id:"ajiaco", name:"Ajiaco", cat:2, price:28000},
-  {id:"bandeja", name:"Bandeja paisa", cat:1, price:38000},
-  {id:"churrasco", name:"Churrasco", cat:1, price:42000, mods:true},
-  {id:"gaseosa", name:"Gaseosa", cat:3, price:5000},
-  {id:"jugo", name:"Jugo natural", cat:3, price:8000},
-  {id:"limonada", name:"Limonada de coco", cat:3, price:12000},
-  {id:"pechuga", name:"Pechuga a la plancha", cat:1, price:32000},
-  {id:"sancocho", name:"Sancocho", cat:2, price:26000}
-];
-const COLOR = id => (CATS.find(c=>c.id===id)||{c:ALL_C}).c;
-const TERMINO = ["Poco hecho","Medio crudo","Término medio","Casi bien cocido","Bien cocido"];   // ModifierTemplates.kt temperature
-const ORDER_ID = 27, TIME = "12:41";
-
-const tabs = on => `<div class="mtabs">${["Catálogo","Ventas","Abiertas"].map((t,i)=>`<span class="${i===on?"on":""}" data-t="tab-${i}">${t}</span>`).join("")}</div>`;
-const nav = lit => `<div class="mnav"><div class="${lit?"on":""}"><span class="pill">${I.cart}</span>Caja</div><div><span class="flagc">${I.co}</span>Mi negocio</div></div>`;
-const cats = () => `<div class="mcats">` + [{id:null,name:"Todos",c:ALL_C}].concat(CATS).map(c=>{
-    const on = c.id===null;
-    const style = on ? `background:${hexA(c.c,.22)};border:calc(var(--u)*1.5) solid ${c.c};color:${c.c}` : `background:${hexA(c.c,.05)};border:1px solid ${hexA(c.c,.3)}`;
-    return `<span style="${style}">${on?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
-const grid = () => `<div class="mgrid">` + ITEMS.map(it=>{ const c=COLOR(it.cat);
-    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+const tabs = on => `<div class="mtabs">${R.pick(S.tabs).map((t,i)=>`<span class="${i===on?"on":""}" data-t="tab-${i}">${esc(t)}</span>`).join("")}</div>`;
+const nav = () => `<div class="mnav"><div class="on"><span class="pill">${I.cart}</span>${esc(T("register"))}</div><div><span class="flagc">${R.flag()}</span>${esc(T("myBiz"))}</div></div>`;
+const cats = () => `<div class="mcats">` + [{name:T("all"),color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const st = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${st}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+const grid = () => `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("") + `</div>`;
 const total = st => st.lines.reduce((s,l)=>s+l.price,0);
+const tableText = () => T("table", TABLE);
 
 function render(st){
   if(st.screen==="pin"){
     const k = ["1","2","3","4","5","6","7","8","9","","0","⌫"];
     return `<div class="pin"><div class="top"><span class="ib">${I.back}</span></div><div class="mid">
-      <div class="biz">La Fonda de Marta</div>
-      <div class="av" style="background:#4CAF50">CP</div>
-      <div class="nm">Carlos Pérez</div><div class="ask">Ingresa tu PIN</div>
+      <div class="biz">${esc(C.place)}</div>
+      <div class="av" style="background:#4CAF50">${esc(INITIALS)}</div>
+      <div class="nm">${esc(W)}</div><div class="ask">${esc(T("enterPin"))}</div>
       <div class="dots">${[0,1,2,3].map(i=>`<i class="${i<st.pin?"f":""}" style="${i<st.pin?"background:#4CAF50":""}"></i>`).join("")}</div>
       <div class="keys">${k.map(x=>x?`<span data-t="key-${x==="⌫"?"del":x}">${x}</span>`:`<span class="blank"></span>`).join("")}</div>
       </div></div>`;
   }
   if(st.screen==="sell"){
     const n = st.lines.length;
-    let h = tabs(0) + cats() + grid() + `<div class="mlink"><span>Teclado</span></div>`;
-    if(n) h += `<div class="mcart" data-t="cart"><span>Cobrar</span><span>${money(total(st))}</span><span>· ${n} ${n===1?"artículo":"artículos"}</span></div>`;
-    h += nav(true);
-    if(st.snack) h += `<div class="msnack" style="bottom:calc(var(--u)*${80+40+12})">Guardado: Mesa 4</div>`;
+    let h = tabs(0) + cats() + grid() + `<div class="mlink"><span>${esc(T("keypad"))}</span></div>`;
+    if(n) h += `<div class="mcart" data-t="cart"><span>${esc(T("charge"))}</span><span>${R.money(total(st))}</span><span>· ${n} ${esc(R.pick(S.items)[n===1?0:1])}</span></div>`;
+    h += nav();
+    if(st.snack) h += `<div class="msnack" style="bottom:calc(var(--u)*${80+40+12})">${esc(T("saved", tableText()))}</div>`;
     if(st.sheet){
-      const pick = st.termino;
-      h += `<div class="mscrim"><div class="msheet"><h2>Churrasco</h2>
-        <div class="gh"><b>Término de cocción</b><small>elige 1</small></div>
-        <div class="chips">${TERMINO.map(t=>`<span class="chip${t===pick?" on":""}" data-t="mod-${t.replace(/\s/g,"")}">${t===pick?I.check:""}${t}</span>`).join("")}</div>
-        <hr><div class="qty"><div class="st"><span class="sb">−</span><span class="n">1</span><span class="sb">+</span></div>${pick?"<small>1 extra</small>":""}</div>
-        <div class="add" data-t="mod-add">Agregar a la venta · ${money(42000)}</div></div></div>`;
+      const steak = item(ID1);
+      h += `<div class="mscrim"><div class="msheet"><h2>${esc(steak.name)}</h2>
+        <div class="gh"><b>${esc(TERM.name)}</b><small>${esc(T("chooseOne"))}</small></div>
+        <div class="chips">${TERM.opts.map((t,i)=>`<span class="chip${st.pick===i?" on":""}" data-t="mod-${i}">${st.pick===i?I.check:""}${esc(t)}</span>`).join("")}</div>
+        <hr><div class="qty"><div class="st"><span class="sb">−</span><span class="n">1</span><span class="sb">+</span></div>${st.pick!=null?`<small>${esc(T("extra"))}</small>`:""}</div>
+        <div class="add" data-t="mod-add">${esc(T("addToSale"))} · ${R.money(steak.price)}</div></div></div>`;
     }
     return h;
   }
   if(st.screen==="table"){
-    return `<div class="mtables"><h3>¿Qué mesa?</h3><div class="g">${Array.from({length:12},(_,i)=>`<span data-t="table-${i+1}">${i+1}</span>`).join("")}</div></div>` + nav(true);
+    return `<div class="mtables"><h3>${esc(T("whichTable"))}</h3><div class="g">${Array.from({length:C.tables},(_,i)=>`<span data-t="table-${i+1}">${i+1}</span>`).join("")}</div></div>` + nav();
   }
   if(st.screen==="pay"){
-    const k = ["1","2","3","4","5","6","7","8","9","000","0","⌫"];
+    const zero = C.dec===0 ? "000" : (new Intl.NumberFormat(C.loc).format(1.5).replace(/\d/g,""));   // CheckoutPayBlock.kt:330 zeroKey
+    const k = ["1","2","3","4","5","6","7","8","9",zero,"0","⌫"];
     return `<div class="mpay"><div class="hd"><span>‹</span><span class="tr">${I.trash}</span></div>
-      <div class="cust">${I.person}Agrega un cliente a la venta</div>
-      <div class="blk"><div class="tot"><small>Total</small><b>${money(total(st))}</b></div>
-      <div class="links"><span>Artículos (${st.lines.length}) ›</span><span>Mesa 4</span></div>
-      <div class="kp">${k.map(x=>`<span class="${x==="000"||x==="⌫"?"s":""}">${x}</span>`).join("")}</div>
-      <div class="exact">Exacto · ${money(total(st))}</div>
-      <div class="save" data-t="save">Guardar</div></div></div>` + nav(true);
+      <div class="cust">${I.person}${esc(T("addClient"))}</div>
+      <div class="blk"><div class="tot"><small>${esc(T("total"))}</small><b>${R.money(total(st))}</b></div>
+      <div class="links"><span>${esc(T("itemsLink", st.lines.length))} ›</span><span>${esc(tableText())}</span></div>
+      <div class="kp">${k.map(x=>`<span class="${x===zero||x==="⌫"?"s":""}">${esc(x)}</span>`).join("")}</div>
+      <div class="exact">${esc(T("exact", R.money(total(st))))}</div>
+      <div class="save" data-t="save">${esc(T("save"))}</div></div></div>` + nav();
   }
   if(st.screen==="open"){
-    return tabs(2) + `<div class="msearch">${I.search}Por artículos, clientes, empleados…</div>
-      <div class="mlist"><div class="mtick${st.flash?" flash":""}"><div class="l"><b>Cliente (N.° ${ORDER_ID})</b><strong>Mesa 4</strong><small>Guardado a las ${TIME} p.&nbsp;m.</small></div>
-      <div class="r"><b>${money(st.saved)}</b><small>Toca para cargar</small></div></div></div>
-      <div class="mlink"><span>Teclado</span></div>` + nav(false);
+    let h = tabs(2) + `<div class="msearch">${I.search}${esc(T("search"))}</div>
+      <div class="mlist"><div class="mtick${st.flash?" flash":""}"><div class="l"><b class="t">${esc(tableText())}</b><small class="w">${esc(WFIRST)}</small><small>${esc(T("savedAt", timeText))}</small></div>
+      <div class="r"><b>${R.money(st.saved)}</b><small>${esc(T("tapLoad"))}</small></div></div></div>
+      <div class="mlink"><span>${esc(T("keypad"))}</span></div>` + nav();
+    if(st.hop) h += RKIT.hop(R,{from:T("devPhone"), to:T("devKds"), line:tableText(), note:T("hopNote")});
+    return h;
   }
+  if(st.screen==="kds") return kds(st);
   return "";
 }
-const add = id => st => { const it = ITEMS.find(x=>x.id===id); st.lines.push({id, price:it.price}); };
+/* the kitchen screen: KitchenDisplayScreen.kt (ticker + History chip + green dot + station name + leave icon, adaptive 180 dp grid) */
+function kds(st){
+  const lines = [{id:ID1,mod:PICK},{id:ID2},{id:ID3}];
+  const ticker = lines.map(l=>`<span class="kchip">${esc(item(l.id).name)} × 1</span>`).join("");
+  const body = lines.map(l=>`<div class="ki">1x&nbsp; ${esc(item(l.id).name)}</div>${l.mod?`<div class="km">&nbsp; • ${esc(l.mod)}</div>`:""}`).join("");
+  return `<div class="kds"><div class="ktop"><div class="ktick">${ticker}</div><span class="khist">${esc(T("history"))}</span><i class="kdot"></i><span class="kst">${esc(T("station"))}</span><span class="klog">${I.logout}</span></div>
+    <div class="kgrid"><div class="kcard"><div class="kc">
+      <div class="kh"><b>${esc(tableText())}</b><b>${esc(T("kNew",0))}</b></div>
+      <div class="kw">${esc(WFIRST)}</div><hr>${body}
+      <div class="kb">${esc(tableText().toUpperCase())}</div></div></div></div></div>`;
+}
+const add = id => st => { st.lines.push({id, price:item(id).price}); };
 
-Demo.start({
-  id:"R4", campaign:"R4-CO-es", tallVideo:true, label:"Restaurante · Colombia", clock:"12:41",
-  endText:"Así toman tus meseros los pedidos en la mesa, con Platata.",
-  beats:[
-    "El celular de tu mesero: entra con su PIN",
-    "Toca los platos; si tienen opciones, se abren primero",
-    "Elige la opción y toca Agregar a la venta",
-    "Los demás entran con un toque. Luego, Cobrar",
-    "Elige la mesa",
-    "La mesa paga al final: toca Guardar",
-    "Queda en Abiertas, en tu caja y en la cocina",
-    "Así toman tus meseros los pedidos en la mesa"
-  ],
-  state:{screen:"pin", pin:0, lines:[], sheet:false, termino:null, snack:false, saved:0, flash:false},
+RKIT.start(R, {
+  id:"R4", tallVideo:true, clock:TIME,
+  endText:R.pick({es:"Así toman tus meseros los pedidos en la mesa, con Platata.",pt:"Assim seus garçons anotam os pedidos na mesa, com o Platata.",en:"That's how your servers take orders at the table, with Platata."}),
+  beats:R.pick({
+    es:["El teléfono de tu mesero: entra con su PIN","Toca los platos; si tienen opciones, se abren","Elige la opción y toca Agregar a la venta","Los demás entran con un toque. Luego, Cobrar","Elige la mesa","La mesa paga al final: toca Enviar a cocina","El pedido queda en Abiertas","Y llega a la pantalla de cocina","Así toman tus meseros los pedidos en la mesa"],
+    pt:["O celular do seu garçom: ele entra com o PIN","Toque nos pratos; se têm opções, elas abrem","Escolha a opção e toque em Adicionar à venda","Os outros entram com um toque. Depois, Cobrar","Escolha a mesa","A mesa paga no final: toque em Enviar para a cozinha","O pedido fica em Abertas","E chega à tela da cozinha","Assim seus garçons anotam os pedidos na mesa"],
+    en:["Your server's phone: they sign in with a PIN","Tap the dishes; if they have options, they open","Pick the option and tap Add to sale","The rest go in with one tap. Then, Charge","Pick the table","The table pays at the end: tap Send to kitchen","The order stays in Open","And it reaches the kitchen screen","That's how your servers take orders at the table"]}),
+  state:{screen:"pin", pin:0, lines:[], sheet:false, pick:null, snack:false, saved:0, flash:false, hop:false, kflash:false},
   render,
+  device: st => st.screen==="kds" ? "kds" : "phone",
+  who: st => st.screen==="kds" ? T("devKds") : T("devPhone"),
   steps:[
-    {beat:0, hint:"Toca el PIN del mesero", target:'[data-t="key-4"]', tap(st,E){ st.pin=1;
+    {beat:0, hint:R.pick({es:"Toca el PIN del mesero",pt:"Toque no PIN do garçom",en:"Tap the server's PIN"}), target:'[data-t="key-4"]', tap(st,E){ st.pin=1;
         E.after(260,()=>{st.pin=2}); E.after(520,()=>{st.pin=3}); E.after(780,()=>{st.pin=4});
         E.after(1100,()=>{ st.screen="sell"; st.pin=0; }); }},
-    {beat:1, hint:"Toca Churrasco", target:'[data-t="dish-churrasco"]', tap(st){ st.sheet=true; }},
-    {beat:2, hint:"Elige Término medio", target:'[data-t="mod-Términomedio"]', tap(st){ st.termino="Término medio"; }},
-    {beat:2, hint:"Toca Agregar a la venta", target:'[data-t="mod-add"]', tap(st){ st.sheet=false; st.lines.push({id:"churrasco", price:42000}); }},
-    {beat:3, hint:"Toca Ajiaco", target:'[data-t="dish-ajiaco"]', tap:add("ajiaco")},
-    {beat:3, hint:"Toca Limonada de coco", target:'[data-t="dish-limonada"]', tap:add("limonada")},
-    {beat:3, hint:"Toca Cobrar", target:'[data-t="cart"]', tap(st){ st.screen="table"; }},
-    {beat:4, hint:"Elige la mesa 4", target:'[data-t="table-4"]', tap(st){ st.screen="pay"; }},
-    {beat:5, hint:"Toca Guardar", target:'[data-t="save"]', tap(st,E){ st.saved=total(st); st.lines=[]; st.screen="sell"; st.snack=true; }},
-    {beat:6, hint:"Toca Abiertas", target:'[data-t="tab-2"]', tap(st,E){ st.snack=false; st.screen="open"; st.flash=true; E.after(1800,()=>{ st.flash=false; }); }}
+    {beat:1, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+item(ID1).name, target:`[data-t="dish-${ID1}"]`, tap(st){ st.sheet=true; }},
+    {beat:2, hint:R.pick({es:"Elige ",pt:"Escolha ",en:"Pick "})+PICK, target:'[data-t="mod-2"]', tap(st){ st.pick=2; }},
+    {beat:2, hint:R.pick({es:"Toca Agregar a la venta",pt:"Toque em Adicionar à venda",en:"Tap Add to sale"}), target:'[data-t="mod-add"]', tap(st){ st.sheet=false; st.lines.push({id:ID1, price:item(ID1).price}); }},
+    {beat:3, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+item(ID2).name, target:`[data-t="dish-${ID2}"]`, tap:add(ID2)},
+    {beat:3, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+item(ID3).name, target:`[data-t="dish-${ID3}"]`, tap:add(ID3)},
+    {beat:3, hint:R.pick({es:"Toca Cobrar",pt:"Toque em Cobrar",en:"Tap Charge"}), target:'[data-t="cart"]', tap(st){ st.screen="table"; }},
+    {beat:4, hint:R.pick({es:"Elige la mesa 4",pt:"Escolha a mesa 4",en:"Pick table 4"}), target:`[data-t="table-${TABLE}"]`, tap(st){ st.screen="pay"; }},
+    {beat:5, hint:R.pick({es:"Toca Enviar a cocina",pt:"Toque em Enviar para a cozinha",en:"Tap Send to kitchen"}), target:'[data-t="save"]', tap(st,E){ st.saved=total(st); st.lines=[]; st.screen="sell"; st.snack=true; }},
+    {beat:6, hint:R.pick({es:"Toca Abiertas",pt:"Toque em Abertas",en:"Tap Open"}), target:'[data-t="tab-2"]', tap(st,E){ st.snack=false; st.screen="open"; st.flash=true;
+        E.after(2600,()=>{ st.flash=false; st.hop=true; });
+        E.after(4300,()=>{ st.hop=false; st.screen="kds"; });
+        E.after(7500,()=>{}); }}
   ]
 });
 </script>
-<style>.mat .mtick.flash{background:#CBDFF8}</style>
+<style>
+.mat .mtick.flash{background:#E1EDFB}   /* lerp(#F2F2F7, #007AFF, .16): the just-saved pulse, CartSheetContent.kt:1352-1360 */
+.mat .mtick .l b.t{color:var(--m-on)}
+.mat .mtick .l small.w{display:block;margin-top:calc(var(--u)*2);font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .mtick .r b{color:var(--m-on)}
+/* kitchen screen (landscape, 1 dp = var(--u) of a 1024 dp tablet), KitchenDisplayScreen.kt / KdsTicketCard.kt / Color.kt KDS tokens */
+.kds{flex:1;display:flex;flex-direction:column;background:#111111;color:#fff;min-height:0}
+.ktop{display:flex;align-items:center;height:calc(var(--u)*48);gap:calc(var(--u)*8);padding-right:calc(var(--u)*4)}
+.ktick{flex:1;display:flex;gap:calc(var(--u)*8);padding:0 calc(var(--u)*8);overflow:hidden}
+.kchip{flex:0 0 auto;border:1px solid #444;background:#2A2A2A;border-radius:calc(var(--u)*20);padding:calc(var(--u)*8) calc(var(--u)*14);font-size:calc(var(--u)*14)}
+.khist{border:1px solid #444;background:#2A2A2A;border-radius:calc(var(--u)*20);padding:calc(var(--u)*8) calc(var(--u)*14);font-size:calc(var(--u)*14);font-weight:600}
+.kdot{width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#4CAF50}
+.kst{font-size:calc(var(--u)*14);font-weight:600}
+.klog{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:rgba(255,255,255,.55)}
+.klog svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.kgrid{flex:1;padding:calc(var(--u)*8);display:grid;grid-template-columns:repeat(5,1fr);gap:calc(var(--u)*8);align-content:start}
+.kcard{padding:calc(var(--u)*4)}
+.kc{background:#fff;color:#000;border-radius:calc(var(--u)*12);padding:calc(var(--u)*12);box-shadow:0 calc(var(--u)*2) calc(var(--u)*4) rgba(0,0,0,.4)}
+.kh{display:flex;justify-content:space-between;font-size:calc(var(--u)*14)}
+.kw{font-size:calc(var(--u)*12);color:rgba(0,0,0,.75)}
+.kc hr{border:0;border-top:1px solid rgba(0,0,0,.3);margin:calc(var(--u)*6) 0}
+.ki{font-size:calc(var(--u)*16);font-weight:600;margin-bottom:calc(var(--u)*4)}
+.km{font-size:calc(var(--u)*12);color:rgba(0,0,0,.75);margin:calc(var(--u)*-2) 0 calc(var(--u)*4)}
+.kb{margin-top:calc(var(--u)*6);background:#FFEB3B;color:#000;text-align:center;font-weight:800;font-size:calc(var(--u)*12);letter-spacing:.5px;padding:calc(var(--u)*5) 0;border-radius:0 0 calc(var(--u)*8) calc(var(--u)*8)}
+</style>
 </body>
 </html>

@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Ajustes de la pantalla de cocina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* Every class here starts with k8 so nothing in kit/edif.css or kit/material.css can reach it. 1 dp = var(--u). */
+/* ---- owner phone, plain Material light (Theme.kt LightColorScheme): SumaTopBar.kt (TopAppBar 64 dp, titleLarge Bold) ---- */
+.k8pg{flex:1;display:flex;flex-direction:column;background:#fff;min-height:0;color:#1C1C1E;font-family:Roboto,system-ui,sans-serif}
+.k8tb{height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*4);padding:0 calc(var(--u)*4);flex:0 0 auto}
+.k8tb span.ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k8tb b{font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k8bars{display:flex;gap:calc(var(--u)*5);padding:0 calc(var(--u)*16);flex:0 0 auto}
+.k8bars i{width:calc(var(--u)*22);height:calc(var(--u)*4);border-radius:calc(var(--u)*2);background:#E5E5EA}
+.k8bars i.on{background:#1C1C1E}
+.k8body{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.k8q{font-size:calc(var(--u)*22);font-weight:700;line-height:1.25}
+.k8chips{display:flex;flex-wrap:wrap;gap:calc(var(--u)*4) calc(var(--u)*8)}
+.k8chips span{height:calc(var(--u)*32);border-radius:calc(var(--u)*8);border:1px solid #C7C7CC;padding:0 calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:#6E6E73}
+.k8chips span.on{background:#E5E5EA;border-color:#E5E5EA;color:#1C1C1E;padding-left:calc(var(--u)*8)}
+.k8chips span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#1C1C1E}
+.k8field{position:relative;height:calc(var(--u)*56);border-radius:calc(var(--u)*6);border:1px solid #C7C7CC;display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16);color:#6E6E73}
+.k8field.has{color:#1C1C1E}
+.k8field small{position:absolute;left:calc(var(--u)*12);top:calc(var(--u)*-9);background:#fff;padding:0 calc(var(--u)*4);font-size:calc(var(--u)*12);color:#6E6E73}
+.k8choice{border-radius:calc(var(--u)*12);border:1px solid #E5E5EA;padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.k8choice.on{border:calc(var(--u)*2) solid #1C1C1E;padding:calc(var(--u)*11)}
+.k8choice b{font-size:calc(var(--u)*16);font-weight:600}
+.k8choice small{font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+.k8lab{font-size:calc(var(--u)*14);font-weight:500;color:#6E6E73}
+.k8cb{min-height:calc(var(--u)*48);display:flex;align-items:center;gap:calc(var(--u)*12);padding-left:calc(var(--u)*12);font-size:calc(var(--u)*16)}
+.k8cb i{width:calc(var(--u)*18);height:calc(var(--u)*18);border-radius:calc(var(--u)*2);border:calc(var(--u)*2) solid #6E6E73;display:grid;place-items:center;box-sizing:border-box}
+.k8cb i.on{background:#1C1C1E;border-color:#1C1C1E}
+.k8cb i svg{width:calc(var(--u)*14);height:calc(var(--u)*14);fill:#fff}
+.k8foot{padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8);flex:0 0 auto}
+.k8btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:600}
+.k8btn.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.k8btn.sec{background:#fff;color:#1C1C1E;border:1px solid #C7C7CC}
+.k8free{font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+/* KdsConnectParts.kt KdsConnectBody */
+.k8line{font-size:calc(var(--u)*16);line-height:1.4}
+.k8code{border-radius:calc(var(--u)*12);background:#F2F2F7;padding:calc(var(--u)*24) calc(var(--u)*16);text-align:center;font-size:calc(var(--u)*36);font-weight:800;letter-spacing:.5px}
+.k8wait{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);color:#6E6E73}
+.k8wait i{width:calc(var(--u)*14);height:calc(var(--u)*14);border-radius:50%;border:calc(var(--u)*2) solid #1C1C1E;border-right-color:transparent;animation:k8spin 1s linear infinite}
+@keyframes k8spin{to{transform:rotate(360deg)}}
+.k8ok{font-size:calc(var(--u)*18);font-weight:600;color:#1E8E3E}
+/* KdsListScreen.kt KdsScreenCard */
+.k8list{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.k8card{border-radius:calc(var(--u)*12);border:calc(var(--u)*2) solid #E5E5EA;padding:calc(var(--u)*12);display:flex;gap:calc(var(--u)*12);align-items:flex-start}
+.k8av{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#F2F2F7;display:grid;place-items:center;flex:0 0 auto;color:#6E6E73}
+.k8av svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.k8cc{flex:1;min-width:0;display:flex;flex-direction:column;gap:calc(var(--u)*4)}
+.k8cc b{font-size:calc(var(--u)*16);font-weight:600}
+.k8tags{display:flex;flex-wrap:wrap;gap:calc(var(--u)*4)}
+.k8tags span{border-radius:calc(var(--u)*50);background:#F2F2F7;padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*12);font-weight:500}
+.k8st{font-size:calc(var(--u)*12);font-weight:500;color:#1E8E3E}
+.k8st.no{color:#6E6E73}
+.k8chev{font-size:calc(var(--u)*22);color:#6E6E73;align-self:center}
+/* ---- kitchen tablet: ConnectDeviceScreen.kt (PaperTheme, POTATO accent: an unpaired tablet has no business) ---- */
+.k8p{flex:1;display:flex;flex-direction:column;background:#FBFAF7;min-height:0;color:#17181B;font-family:Roboto,system-ui,sans-serif}
+.k8p .k8ptb{height:calc(var(--u)*52);display:flex;align-items:center;padding:0 calc(var(--u)*12);flex:0 0 auto}
+.k8p .k8ptb span{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;display:grid;place-items:center}
+.k8p .k8ptb svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+.k8p .k8pb{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*4) calc(var(--u)*20) 0;display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--u)*12)}
+.k8p h1{margin:0;font:600 calc(var(--u)*27)/1.14 Fredoka,system-ui,sans-serif;letter-spacing:-.2px}
+.k8p .k8sub{font-size:calc(var(--u)*15);line-height:1.45;color:#464A52}
+.k8tile{position:relative;width:fit-content;max-width:100%;box-sizing:border-box;background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*18);display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.k8tile.on{border:calc(var(--u)*2) solid #3A2A1F;padding:calc(var(--u)*17)}
+.k8tile .ic{width:calc(var(--u)*52);height:calc(var(--u)*52);border-radius:calc(var(--u)*16);background:#EEF0F1;display:grid;place-items:center}
+.k8tile .ic svg{width:calc(var(--u)*32);height:calc(var(--u)*32)}
+.k8tile b{font:600 calc(var(--u)*19) Fredoka,system-ui,sans-serif;padding-right:calc(var(--u)*40)}
+.k8tile small{font-size:calc(var(--u)*14);color:#737883}
+.k8tile .ck{position:absolute;top:calc(var(--u)*14);right:calc(var(--u)*14);width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:50%;background:#3A2A1F;display:grid;place-items:center}
+.k8tile .ck svg{width:calc(var(--u)*14);height:calc(var(--u)*14)}
+.k8boxes{align-self:stretch;margin-top:calc(var(--u)*10);display:flex;align-items:center;gap:calc(var(--u)*6)}
+.k8boxes .g{flex:1;display:flex;gap:calc(var(--u)*4)}
+.k8boxes .g span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#fff;border:calc(var(--u)*2) solid #D9D4C9;display:grid;place-items:center;font:600 calc(var(--u)*22) Roboto,system-ui,sans-serif}
+.k8boxes .g span.act{border-color:#3A2A1F}
+.k8boxes b{font-weight:700;color:#737883}
+.k8note{align-self:stretch;margin-top:calc(var(--u)*8);background:#FBFAF7;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*12) calc(var(--u)*14);display:flex;align-items:center;gap:calc(var(--u)*12);font-size:calc(var(--u)*14);color:#464A52;line-height:1.4}
+.k8note .ic{flex:0 0 auto;width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:calc(var(--u)*10);background:#EEF0F1;display:grid;place-items:center}
+.k8note .ic svg{width:calc(var(--u)*21);height:calc(var(--u)*21)}
+.k8pf{padding:calc(var(--u)*10) calc(var(--u)*20) calc(var(--u)*8);flex:0 0 auto}
+.k8pbtn{height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#3A2A1F;color:#fff;display:grid;place-items:center;font:500 calc(var(--u)*18) Fredoka,system-ui,sans-serif}
+.k8pbtn.off{background:#E6E2D9;color:#737883}
+.k8pbtn i{width:calc(var(--u)*20);height:calc(var(--u)*20);border-radius:50%;border:calc(var(--u)*2) solid #fff;border-right-color:transparent;animation:k8spin 1s linear infinite}
+/* ---- kitchen screen once paired: KitchenDisplayScreen.kt (KdsTheme, always dark) - same values as R7 ---- */
+.k8kds{flex:1;display:flex;flex-direction:column;background:#111111;color:#fff;min-height:0;font-family:Roboto,system-ui,sans-serif}
+.k8kds .k8ktop{display:flex;align-items:center;flex:0 0 auto}
+.k8kds .k8tick{flex:1;height:calc(var(--u)*44)}
+.k8kds .k8hist{flex:0 0 auto;margin-left:calc(var(--u)*8);border-radius:calc(var(--u)*20);background:#2A2A2A;border:1px solid #444444;font-size:calc(var(--u)*14);font-weight:600;padding:calc(var(--u)*8) calc(var(--u)*14);display:grid}
+.k8kds .k8hist span{grid-area:1/1;text-align:center}.k8kds .k8hist span.gh{visibility:hidden}
+.k8kds .k8dot{margin-left:calc(var(--u)*8);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#4CAF50;flex:0 0 auto}
+.k8kds .k8stn{margin-left:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:600;max-width:calc(var(--u)*160);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k8kds .k8out{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:rgba(230,225,229,.55)}
+.k8kds .k8out svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.k8kds .k8empty{flex:1;display:grid;place-items:center;font-size:calc(var(--u)*36);font-weight:700;color:rgba(230,225,229,.75)}
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* R8 "Ajustes de la pantalla de cocina": the owner adds a second kitchen screen (the bar) on his phone in three steps,
+   picks what it shows, gets the code; the kitchen tablet types it and is connected.
+   Every screen follows the app at sim/usa-canada (abb8fddb). Paths under app/src/main/java/com/example/.
+   list          ui/screens/onboarding/KdsListScreen.kt: title kds_walkthrough_list_title, one card per screen (Tv icon in a 48 dp
+                 circle, name, tags "Todos los platos" or the category names, "● Conectada" #1E8E3E / "○ Sin conectar · código X"),
+                 the big SumaButton kds_add_first and kds_ux_free_line_kitchen pinned at the bottom (KDS-UX-1). Reached from
+                 Configuración › Conexiones › Impresoras y otras conexiones › "Conectar una pantalla de cocina" (PrintersAndOtherScreen.kt).
+   add flow      ui/screens/onboarding/KdsAddFlowScreen.kt:186-390 (Material light): top bar kds_ux_add_title, then the typed name,
+                 then kds_ux_connect_title; KdsStepBars 22x4 dp; step 1 FilterChips kds_ux_sugg_1..5 + OutlinedTextField "Nombre";
+                 step 2 ChoiceCards (2 dp onSurface border when chosen), "Elige las categorías" checkbox rows 48 dp, and "Tipos de
+                 pedido" FilterChips for EVERY dining option while any is switched on (diningOptions, all four seeded ones);
+                 "Siguiente" (common_next) disabled until a name / a category. Leaving step 2 saves the screen and mints the code.
+   connect body  KdsConnectParts.kt KdsConnectBody: lines 1-3 (line 2 names connect_device_kind_kitchen), code in a #F2F2F7 box
+                 (displaySmall ExtraBold), "Esperando la tablet…" -> "Conectada ✓" (SumaRegisterActive #1E8E3E), held 1.5 s
+                 (KDS_CONNECTED_HOLD_MS) then the list (RegisterNavGraph.kt:63-66). Secondary "Listo, la conecto después".
+   tablet        ui/screens/kds/ConnectDeviceScreen.kt (paper, POTATO): welcome › "Ya uso Platata" › connect row (not shown) ->
+                 kind step: h1 connect_device_kind_title, sub, PaperChoiceTile x2 (counter tablet preselected; tiles are as wide as
+                 their text: no fillMaxWidth), Brand "Continuar" -> code step: connect_device_code_title, connect_device_where,
+                 PaperCodeBoxes (2 groups of 5 split by "-"), the "code" card, "Conectar" (Off until typed). Kitchen pairing is over
+                 the shop Wi-Fi to the owner phone (startKitchenLanPairing).
+   kitchen       KitchenDisplayScreen.kt: no tickets -> kds_no_active_orders; green dot when connected; station name top right.
+   Demo setup the owner did before: the "Cocina" screen (all dishes) is already connected; Mesas is the only dining option on. */
+const R = RKIT.ctx(), C = R.C, esc = R.esc;
+const CODE = "7K2QF9XA4M";                               // PlatataRepository.generatePairingToken(): 10 characters
+const DRINKS = R.item(C.order[2]).cat;                  // the drinks category of this country's menu
+const CATS = C.catsByName.map(c=>c.name);               // viewModel.categories, A-Z
+const L = R.pick({
+  es:{list:"Pantallas de cocina", add:"+ Agregar pantalla de cocina", free:"Gratis y sin límite. Cada pantalla muestra solo los platos que tú elijas.",
+      all:"Todos los platos", con:"● Conectada", kitchen:"Cocina",
+      addTitle:"Agregar pantalla", q1:"¿Dónde va esta pantalla?", sugg:["Cocina","Parrilla","Bar","Postres","Empaque"], name:"Nombre", next:"Siguiente",
+      q2:"¿Qué platos muestra?", allSub:"Lo más común si tienes una sola pantalla.", some:"Solo algunas categorías", someSub:"Por ejemplo, el bar solo ve Bebidas.",
+      pick:"Elige las categorías", types:"Tipos de pedido", dining:["Domicilio","Para aquí","Mesas","Para llevar"],
+      conTitle:"Conecta la tablet", l1:"Conecta la tablet al mismo Wi-Fi del negocio.", l2:"Abre Platata en la tablet y elige Pantalla de cocina.", l3:"Escribe este código:",
+      waiting:"Esperando la tablet…", ok:"Conectada ✓", later:"Listo, la conecto después",
+      kindT:"¿Qué vas a conectar?", kindS:"Este aparato queda fijo para un solo negocio.",
+      reg:"Tablet de mostrador", regD:"Una tablet para cobrar en el mostrador. Tu equipo entra con su PIN.",
+      kds:"Pantalla de cocina", kdsD:"Muestra los pedidos en la cocina para que salgan en orden.", cont:"Continuar",
+      codeT:"Escribe el código", where:"Lo ves en tu celular principal, en Mi negocio › Configuración › Conexiones.",
+      note:"Cada tablet y cada pantalla de cocina tiene su propio código. Si no funciona, revísalo otra vez en tu celular principal.", connect:"Conectar",
+      waitingOrders:"¡Esperando pedidos!", hist:"Historial", active:"Pedidos activos", phone:"Tu teléfono"},
+  pt:{list:"Telas da cozinha", add:"+ Adicionar tela da cozinha", free:"Grátis e sem limite. Cada tela mostra só os pratos que você escolher.",
+      all:"Todos os pratos", con:"● Conectada", kitchen:"Cozinha",
+      addTitle:"Adicionar tela", q1:"Onde fica esta tela?", sugg:["Cozinha","Churrasqueira","Bar","Sobremesas","Embalagem"], name:"Nome", next:"Próximo",
+      q2:"Quais pratos ela mostra?", allSub:"O mais comum se você tem só uma tela.", some:"Só algumas categorias", someSub:"Por exemplo, o bar só vê Bebidas.",
+      pick:"Escolha as categorias", types:"Tipos de pedido", dining:["Entrega","Para comer aqui","Mesas","Para viagem"],
+      conTitle:"Conecte o tablet", l1:"Conecte o tablet ao mesmo Wi-Fi do negócio.", l2:"Abra o Platata no tablet e escolha Tela da cozinha.", l3:"Digite este código:",
+      waiting:"Esperando o tablet…", ok:"Conectada ✓", later:"Pronto, conecto depois",
+      kindT:"O que você vai conectar?", kindS:"Este aparelho fica fixo em um só negócio.",
+      reg:"Tablet do balcão", regD:"Um tablet para cobrar no balcão. Sua equipe entra com o PIN.",
+      kds:"Tela da cozinha", kdsD:"Mostra os pedidos na cozinha para saírem na ordem.", cont:"Continuar",
+      codeT:"Digite o código", where:"Você encontra no seu celular principal, em Meu negócio › Configurações › Conexões.",
+      note:"Cada tablet e cada tela da cozinha tem o seu próprio código. Se não funcionar, confira de novo no seu celular principal.", connect:"Conectar",
+      waitingOrders:"Aguardando pedidos!", hist:"Histórico", active:"Pedidos ativos", phone:"Seu celular"},
+  en:{list:"Kitchen screens", add:"+ Add kitchen screen", free:"Free and unlimited. Each screen shows only the dishes you choose.",
+      all:"All dishes", con:"● Connected", kitchen:"Kitchen",
+      addTitle:"Add screen", q1:"Where does this screen go?", sugg:["Kitchen","Grill","Bar","Desserts","Packing"], name:"Name", next:"Next",
+      q2:"Which dishes does it show?", allSub:"The most common choice if you have just one screen.", some:"Only some categories", someSub:"For example, the bar only sees Drinks.",
+      pick:"Pick the categories", types:"Order types", dining:["Delivery","For Here","Tables","To Go"],
+      conTitle:"Connect the tablet", l1:"Connect the tablet to the same Wi-Fi as your business.", l2:"Open Platata on the tablet and choose Kitchen display.", l3:"Type this code:",
+      waiting:"Waiting for the tablet…", ok:"Connected ✓", later:"Done, I'll connect it later",
+      kindT:"What will you connect?", kindS:"This device stays fixed to one business.",
+      reg:"Counter tablet", regD:"A tablet to charge at the counter. Your team signs in with their PIN.",
+      kds:"Kitchen display", kdsD:"Shows the orders in the kitchen so they go out in order.", cont:"Continue",
+      codeT:"Type the code", where:"You'll find it on your main phone, in My business › Settings › Connections.",
+      note:"Each tablet and each kitchen screen has its own code. If it doesn't work, check it again on your main phone.", connect:"Connect",
+      waitingOrders:"Waiting for orders!", hist:"History", active:"Active Orders", phone:"Your phone"}
+});
+/* strings: kds_walkthrough_list_title, kds_add_first, kds_ux_*, common_name, common_next, dining_system_* (all four seeded options,
+   shown in the order the DAO returns: ORDER BY name = the English machine names, PosDao.kt:1691), connect_device_*,
+   add_cash_register_connect, kds_no_active_orders, kds_history / kds_active_orders (values / values-es / values-pt-rBR) */
+const BAR = L.sugg[2];
+
+const I = {
+  back:'<svg class="mi" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  pback:'<svg viewBox="0 0 24 24" fill="none" stroke="#17181B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>',
+  tv:'<svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  wcheck:'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+  logout:'<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>',
+  /* the app's drawn icons ic_drawn_caja_reg / ic_drawn_cocina / ic_drawn_celular, redrawn in the same plain style */
+  caja:'<svg viewBox="0 0 32 32" fill="none" stroke="#3A2A1F" stroke-width="1.8" stroke-linejoin="round"><rect x="5" y="6" width="22" height="15" rx="2.5" fill="#fff"/><path d="M9 25h14M16 21v4"/><path d="M9 11h8M9 15h5" stroke-linecap="round"/></svg>',
+  cocina:'<svg viewBox="0 0 32 32" fill="none" stroke="#3A2A1F" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"><path d="M7 15h18v4a7 7 0 0 1-7 7h-4a7 7 0 0 1-7-7z" fill="#fff"/><path d="M5 15h22M12 6c-1 2 1 3 0 5M16 5c-1 2 1 3 0 5M20 6c-1 2 1 3 0 5"/></svg>',
+  cel:'<svg viewBox="0 0 24 24" fill="none" stroke="#3A2A1F" stroke-width="1.7" stroke-linejoin="round"><rect x="7" y="2.5" width="10" height="19" rx="2" fill="#fff"/><path d="M10.5 18.5h3" stroke-linecap="round"/></svg>'
+};
+
+/* ---- owner phone ---- */
+const topbar = t => `<div class="k8tb"><span class="ib">${I.back}</span><b>${esc(t)}</b></div>`;
+const bars = n => `<div class="k8bars">${[0,1,2].map(i=>`<i class="${i<=n?"on":""}"></i>`).join("")}</div>`;
+function screenCard(s){
+  return `<div class="k8card" data-t="scr-${s.key}"><span class="k8av">${I.tv}</span><div class="k8cc"><b>${esc(s.name)}</b>
+    <div class="k8tags">${s.tags.map(t=>`<span>${esc(t)}</span>`).join("")}</div><span class="k8st">${esc(L.con)}</span></div><span class="k8chev">›</span></div>`;
+}
+function list(st){
+  const screens = [{key:"cocina", name:L.kitchen, tags:[L.all]}];
+  if(st.barSaved) screens.push({key:"bar", name:BAR, tags:[DRINKS] });
+  return `<div class="k8pg">${topbar(L.list)}<div class="k8list">${screens.map(screenCard).join("")}</div>
+    <div class="k8foot"><div class="k8btn" data-t="add">${esc(L.add)}</div><div class="k8free">${esc(L.free)}</div></div></div>`;
+}
+function addFlow(st){
+  let body = "", title = L.addTitle;
+  if(st.step===0){
+    body = `<div class="k8q">${esc(L.q1)}</div>
+      <div class="k8chips">${L.sugg.map((s,i)=>`<span class="${st.name===s?"on":""}" data-t="sugg-${i}">${st.name===s?I.check:""}${esc(s)}</span>`).join("")}</div>
+      <div class="k8field${st.name?" has":""}">${st.name?`<small>${esc(L.name)}</small>${esc(st.name)}`:esc(L.name)}</div>`;
+  } else if(st.step===1){
+    title = st.name;
+    body = `<div class="k8q">${esc(L.q2)}</div>
+      <div class="k8choice${st.some?"":" on"}"><b>${esc(L.all)}</b><small>${esc(L.allSub)}</small></div>
+      <div class="k8choice${st.some?" on":""}" data-t="some"><b>${esc(L.some)}</b><small>${esc(L.someSub)}</small></div>`;
+    if(st.some) body += `<div class="k8lab">${esc(L.pick)}</div>` + CATS.map(c=>{ const on = st.picked.includes(c);
+      return `<div class="k8cb" data-t="cat-${c===DRINKS?"drinks":CATS.indexOf(c)}"><i class="${on?"on":""}">${on?I.check:""}</i>${esc(c)}</div>`; }).join("");
+    body += `<div class="k8lab" style="margin-top:calc(var(--u)*8)">${esc(L.types)}</div>
+      <div class="k8chips">${L.dining.map(d=>`<span class="on">${I.check}${esc(d)}</span>`).join("")}</div>`;
+  } else {
+    title = L.conTitle;
+    body = `<div class="k8line">1. ${esc(L.l1)}</div><div class="k8line">2. ${esc(L.l2)}</div><div class="k8line">3. ${esc(L.l3)}</div>
+      <div class="k8code">${CODE}</div>
+      ${st.joined ? `<div class="k8ok">${esc(L.ok)}</div>` : `<div class="k8wait"><i></i>${esc(L.waiting)}</div>`}`;
+  }
+  const can = st.step===0 ? !!st.name : (!st.some || st.picked.length>0);
+  const foot = st.step<2 ? `<div class="k8btn${can?"":" off"}" data-t="next">${esc(L.next)}</div>` : `<div class="k8btn sec">${esc(L.later)}</div>`;
+  return `<div class="k8pg">${topbar(title)}${bars(st.step)}<div class="k8body">${body}</div><div class="k8foot">${foot}</div></div>`;
+}
+
+/* ---- kitchen tablet ---- */
+function kind(st){
+  const tile = (k, ic, t, d) => `<div class="k8tile${st.kind===k?" on":""}" data-t="kind-${k}"><span class="ic">${ic}</span><b>${esc(t)}</b><small>${esc(d)}</small>${st.kind===k?`<span class="ck">${I.wcheck}</span>`:""}</div>`;
+  return `<div class="k8p"><div class="k8ptb"><span>${I.pback}</span></div><div class="k8pb">
+    <h1>${esc(L.kindT)}</h1><div class="k8sub">${esc(L.kindS)}</div>
+    ${tile("reg", I.caja, L.reg, L.regD)}${tile("kds", I.cocina, L.kds, L.kdsD)}</div>
+    <div class="k8pf"><div class="k8pbtn" data-t="cont">${esc(L.cont)}</div></div></div>`;
+}
+function code(st){
+  const v = st.typed || "", act = st.focus ? v.length : -1;
+  const slot = i => `<span class="${i===act?"act":""}">${esc(v[i]||"")}</span>`;
+  const g = s => `<div class="g">${[0,1,2,3,4].map(k=>slot(s+k)).join("")}</div>`;
+  const on = v.length > 0;
+  return `<div class="k8p"><div class="k8ptb"><span>${I.pback}</span></div><div class="k8pb">
+    <h1>${esc(L.codeT)}</h1><div class="k8sub">${esc(L.where)}</div>
+    <div class="k8boxes" data-t="boxes">${g(0)}<b>-</b>${g(5)}</div>
+    <div class="k8note"><span class="ic">${I.cel}</span><span>${esc(L.note)}</span></div></div>
+    <div class="k8pf"><div class="k8pbtn${on||st.pairing?"":" off"}" data-t="connect">${st.pairing?"<i></i>":esc(L.connect)}</div></div></div>`;
+}
+function kdsEmpty(st){
+  return `<div class="k8kds"><div class="k8ktop"><div class="k8tick"></div>
+    <div class="k8hist"><span class="gh">${esc(L.active)}</span><span class="gh">${esc(L.hist)}</span><span>${esc(L.hist)}</span></div>
+    <span class="k8dot"></span><span class="k8stn">${esc(BAR)}</span><span class="k8out">${I.logout}</span></div>
+    <div class="k8empty">${esc(L.waitingOrders)}</div></div>`;
+}
+
+function render(st){
+  if(st.hop) return RKIT.hop(R, {from:L.phone, to:L.kds, line:CODE, note:R.pick({
+    es:"Pasa por tu teléfono: déjalo encendido, con Platata abierta y en el Wi-Fi del local.",
+    pt:"Passa pelo seu celular: deixe-o ligado, com o Platata aberto e no Wi-Fi do restaurante.",
+    en:"It goes through your phone: keep it on, with Platata open and on the restaurant's Wi-Fi."})});
+  switch(st.screen){
+    case "list": return list(st);
+    case "add":  return addFlow(st);
+    case "kind": return kind(st);
+    case "code": return code(st);
+    default:     return kdsEmpty(st);
+  }
+}
+const onTablet = st => ["kind","code","kds"].includes(st.screen);
+
+RKIT.start(R, {
+  id:"R8", tallVideo:true, clock:"12:41",
+  endText:R.pick({es:"Así conectas tu pantalla de cocina con Platata.", pt:"Assim você conecta a tela da cozinha com o Platata.", en:"That's how you connect a kitchen screen with Platata."}),
+  beats:R.pick({
+    es:["Agrega otra pantalla de cocina desde tu teléfono","Ponle nombre: dónde va la pantalla",`Elige qué platos muestra: el bar solo ve ${DRINKS}`,"Siguiente te da un código para la tablet","En la tablet, elige Pantalla de cocina","Escribe el código y toca Conectar","En tu teléfono, la pantalla sale Conectada","Así conectas tu pantalla de cocina con Platata"],
+    pt:["Adicione outra tela da cozinha pelo seu celular","Dê um nome: onde fica a tela",`Escolha os pratos: o bar só vê ${DRINKS}`,"Próximo dá um código para o tablet","No tablet, escolha Tela da cozinha","Digite o código e toque em Conectar","No seu celular, a tela aparece Conectada","Assim você conecta a tela da cozinha com o Platata"],
+    en:["Add another kitchen screen from your phone","Name it: where the screen goes",`Pick the dishes: the bar only sees ${DRINKS}`,"Next gives you a code for the tablet","On the tablet, choose Kitchen display","Type the code and tap Connect","On your phone, the screen shows Connected","That's how you connect a kitchen screen with Platata"]}),
+  state:{screen:"list", hop:false, step:0, name:"", some:false, picked:[], joined:false, barSaved:false, kind:"reg", typed:"", focus:false, pairing:false},
+  render,
+  device: st => st.hop ? "phone" : (st.screen==="kds" ? "kds" : onTablet(st) ? "tablet" : "phone"),
+  who: st => st.hop ? "" : (onTablet(st) ? L.kds : L.phone),
+  steps:[
+    {beat:0, hint:R.pick({es:"Toca Agregar pantalla de cocina", pt:"Toque em Adicionar tela da cozinha", en:"Tap Add kitchen screen"}), target:'[data-t="add"]', tap(st){ st.screen="add"; st.step=0; }},
+    {beat:1, hint:R.pick({es:`Toca ${BAR}`, pt:`Toque em ${BAR}`, en:`Tap ${BAR}`}), target:'[data-t="sugg-2"]', tap(st){ st.name = BAR; }},
+    {beat:1, hint:R.pick({es:"Toca Siguiente", pt:"Toque em Próximo", en:"Tap Next"}), target:'[data-t="next"]', tap(st){ st.step = 1; }},
+    {beat:2, hint:R.pick({es:"Toca Solo algunas categorías", pt:"Toque em Só algumas categorias", en:"Tap Only some categories"}), target:'[data-t="some"]', tap(st){ st.some = true; }},
+    {beat:2, hint:R.pick({es:`Marca ${DRINKS}`, pt:`Marque ${DRINKS}`, en:`Tick ${DRINKS}`}), target:'[data-t="cat-drinks"]', tap(st){ st.picked = [DRINKS]; }},
+    {beat:3, hint:R.pick({es:"Toca Siguiente", pt:"Toque em Próximo", en:"Tap Next"}), target:'[data-t="next"]', tap(st,E){
+      st.step = 2;
+      E.after(3200, ()=>{ st.hop = true; });
+      E.after(4900, ()=>{ st.hop = false; st.screen = "kind"; }); }},
+    {beat:4, hint:R.pick({es:"Toca Pantalla de cocina", pt:"Toque em Tela da cozinha", en:"Tap Kitchen display"}), target:'[data-t="kind-kds"]', tap(st){ st.kind = "kds"; }},
+    {beat:4, hint:R.pick({es:"Toca Continuar", pt:"Toque em Continuar", en:"Tap Continue"}), target:'[data-t="cont"]', tap(st){ st.screen = "code"; st.focus = true; }},
+    {beat:5, hint:R.pick({es:"Toca las casillas y escribe el código", pt:"Toque nas caixas e digite o código", en:"Tap the boxes and type the code"}), target:'[data-t="boxes"]', tap(st,E){ E.type("typed", CODE, null, 110); }},
+    {beat:5, hint:R.pick({es:"Toca Conectar", pt:"Toque em Conectar", en:"Tap Connect"}), target:'[data-t="connect"]', tap(st,E){
+      st.pairing = true; st.focus = false;
+      E.after(1300, ()=>{ st.pairing = false; st.screen = "kds"; });
+      E.after(3600, ()=>{ st.screen = "add"; st.step = 2; st.joined = true; });
+      E.after(5100, ()=>{ st.screen = "list"; st.barSaved = true; }); }}
+  ]
+});
+</script>
+</body>
+</html>

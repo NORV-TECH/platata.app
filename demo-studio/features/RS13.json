@@ -1,0 +1,85 @@
+{
+  "id": "RS13",
+  "name": "Clients",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-clients",
+      "voice": {
+        "es": "En Mi negocio, toca Clientes.",
+        "pt": "Em Meu negócio, toque em Clientes.",
+        "en": "In My business, tap Clients."
+      }
+    },
+    {
+      "id": "2-new",
+      "voice": {
+        "es": "Tus clientes, en orden de la A a la Z. Para uno nuevo, toca Nuevo.",
+        "pt": "Seus clientes, em ordem de A a Z. Para um novo, toque em Novo.",
+        "en": "Your clients, sorted A to Z. For a new one, tap New."
+      }
+    },
+    {
+      "id": "3-name",
+      "voice": {
+        "es": "Escribe su nombre.",
+        "pt": "Escreva o nome.",
+        "en": "Type their name."
+      }
+    },
+    {
+      "id": "4-whatsapp",
+      "voice": {
+        "es": "Y su WhatsApp. El código del país ya está puesto.",
+        "pt": "E o WhatsApp. O código do país já vem preenchido.",
+        "en": "And their WhatsApp. The country code is already there."
+      }
+    },
+    {
+      "id": "5-save",
+      "voice": {
+        "es": "Toca Guardar, y ya está en la lista.",
+        "pt": "Toque em Salvar, e ele já está na lista.",
+        "en": "Tap Save, and they're on the list."
+      }
+    },
+    {
+      "id": "6-open",
+      "voice": {
+        "es": "Toca un cliente para ver su ficha.",
+        "pt": "Toque num cliente para ver a ficha.",
+        "en": "Tap a client to see their page."
+      }
+    },
+    {
+      "id": "7-page",
+      "voice": {
+        "es": "Su WhatsApp, sus visitas, la última vez que vino, y todo lo que ha comprado.",
+        "pt": "O WhatsApp, as visitas, a última vez que veio, e tudo o que já comprou.",
+        "en": "Their WhatsApp, their visits, their last visit, and everything they've bought."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así guardas a tus clientes, con Platata.",
+        "pt": "Assim você guarda seus clientes, com o Platata.",
+        "en": "That's how you keep your clients, with Platata."
+      }
+    }
+  ]
+}

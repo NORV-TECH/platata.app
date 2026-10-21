@@ -1,0 +1,69 @@
+{
+  "id": "RS3",
+  "name": "Take cash (owner phone)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-dishes",
+      "voice": {
+        "es": "La mesa 4 pide la cuenta. Toca los platos y luego Cobrar.",
+        "pt": "A mesa 4 pede a conta. Toque nos pratos e depois em Cobrar.",
+        "en": "Table four asks for the check. Tap the dishes, then Charge."
+      }
+    },
+    {
+      "id": "2-table",
+      "voice": {
+        "es": "Elige la mesa.",
+        "pt": "Escolha a mesa.",
+        "en": "Pick the table."
+      }
+    },
+    {
+      "id": "3-received",
+      "voice": {
+        "es": "Escribe con cuánto te paga el cliente.",
+        "pt": "Digite quanto o cliente te entrega.",
+        "en": "Type how much the customer hands you."
+      }
+    },
+    {
+      "id": "4-change",
+      "voice": {
+        "es": "Platata te dice el cambio. Toca Efectivo.",
+        "pt": "O Platata mostra o troco. Toque em Dinheiro.",
+        "en": "Platata shows the change. Tap Cash."
+      }
+    },
+    {
+      "id": "5-new",
+      "voice": {
+        "es": "Entrega el cambio y empieza otra venta.",
+        "pt": "Entregue o troco e comece outra venda.",
+        "en": "Hand back the change and start a new sale."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Así cobras en efectivo con Platata.",
+        "pt": "Assim você cobra em dinheiro com o Platata.",
+        "en": "That's how you take cash with Platata."
+      }
+    }
+  ]
+}

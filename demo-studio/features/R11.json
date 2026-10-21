@@ -1,0 +1,32 @@
+{
+  "id": "R11",
+  "name": "Order-ready WhatsApp message",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": { "stability": 0.5, "similarity_boost": 0.75 },
+    "pt": { "stability": 0.5, "similarity_boost": 0.75 },
+    "en": { "stability": 0.5, "similarity_boost": 0.75 }
+  },
+  "steps": [
+    { "id": "1-open", "voice": {
+      "es": "Cuando un pedido para llevar está listo, la cocina lo abre en su pantalla.",
+      "pt": "Quando um pedido para viagem fica pronto, a cozinha abre na tela dela.",
+      "en": "When a to-go order is ready, the kitchen opens it on its screen." } },
+    { "id": "2-ready", "voice": {
+      "es": "Toca Listo. El aviso llega a la tablet de mostrador, pasando por tu teléfono en el Wi-Fi del local.",
+      "pt": "Toque em Pronto. O aviso chega ao tablet do balcão, passando pelo seu celular no Wi-Fi do restaurante.",
+      "en": "Tap Mark ready. The alert reaches the counter tablet, through your phone on the restaurant's Wi-Fi." } },
+    { "id": "3-bell", "voice": {
+      "es": "En la tablet, toca la campana: ahí está el pedido de Juan.",
+      "pt": "No tablet, toque no sino: lá está o pedido do João.",
+      "en": "On the tablet, tap the bell: there is John's order." } },
+    { "id": "4-whatsapp", "voice": {
+      "es": "Toca WhatsApp. El mensaje para Juan ya está escrito: solo envíalo.",
+      "pt": "Toque em WhatsApp. A mensagem para o João já está escrita: é só enviar.",
+      "en": "Tap WhatsApp. The message to John is already written: just send it." } },
+    { "id": "5-end", "voice": {
+      "es": "Así le avisas al cliente que su pedido está listo, con Platata.",
+      "pt": "Assim você avisa o cliente que o pedido está pronto, com o Platata.",
+      "en": "That's how you tell customers their order is ready, with Platata." } }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "id": "RS1",
+  "name": "Crear el negocio",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-empezar",
+      "voice": {
+        "es": "Abre Platata y toca Empezar mi negocio.",
+        "pt": "Abra o Platata e toque em Começar meu negócio.",
+        "en": "Open Platata and tap Start my business."
+      }
+    },
+    {
+      "id": "2-pais",
+      "voice": {
+        "es": "Tu país viene de tu celular, con su moneda. Toca Continuar.",
+        "pt": "Seu país vem do celular, com a moeda. Toque em Continuar.",
+        "en": "Your country comes from your phone, with its currency. Tap Continue."
+      }
+    },
+    {
+      "id": "3-tipo",
+      "voice": {
+        "es": "Elige Restaurante y toca Continuar con Restaurante.",
+        "pt": "Escolha Restaurante e toque em Continuar com Restaurante.",
+        "en": "Pick Restaurant and tap Continue with Restaurant."
+      }
+    },
+    {
+      "id": "4-nombre",
+      "voice": {
+        "es": "Escribe el nombre de tu restaurante. Así sale en tus recibos.",
+        "pt": "Digite o nome do seu restaurante. É assim que ele sai nos recibos.",
+        "en": "Type your restaurant's name. That's how it shows on your receipts."
+      }
+    },
+    {
+      "id": "5-google",
+      "voice": {
+        "es": "Entra con tu cuenta de Google: tu negocio queda ligado a ella.",
+        "pt": "Entre com sua conta Google: seu negócio fica ligado a ela.",
+        "en": "Sign in with your Google account: your business is tied to it."
+      }
+    },
+    {
+      "id": "6-prepara",
+      "voice": {
+        "es": "Platata pone tu moneda y prepara tu carta y tu caja.",
+        "pt": "O Platata coloca sua moeda e prepara o cardápio e o caixa.",
+        "en": "Platata sets your currency and gets your menu and register ready."
+      }
+    },
+    {
+      "id": "7-listo",
+      "voice": {
+        "es": "Tu negocio está listo. Toca Armar mi carta y súbela con una foto.",
+        "pt": "Seu negócio está pronto. Toque em Montar meu cardápio e envie uma foto dele.",
+        "en": "Your business is ready. Tap Build my menu and add it with a photo."
+      }
+    },
+    {
+      "id": "8-fin",
+      "voice": {
+        "es": "Así creas tu restaurante con Platata.",
+        "pt": "Assim você cria seu restaurante com o Platata.",
+        "en": "That's how you set up your restaurant with Platata."
+      }
+    }
+  ]
+}

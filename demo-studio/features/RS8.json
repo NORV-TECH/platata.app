@@ -1,0 +1,85 @@
+{
+  "id": "RS8",
+  "name": "Devolver una venta",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-ventas",
+      "voice": {
+        "es": "Para devolver una venta, toca Ventas.",
+        "pt": "Para devolver uma venda, toque em Vendas.",
+        "en": "To refund a sale, tap Sales."
+      }
+    },
+    {
+      "id": "2-venta",
+      "voice": {
+        "es": "Toca la venta.",
+        "pt": "Toque na venda.",
+        "en": "Tap the sale."
+      }
+    },
+    {
+      "id": "3-devolver",
+      "voice": {
+        "es": "Toca Devolver.",
+        "pt": "Toque em Devolver.",
+        "en": "Tap Refund."
+      }
+    },
+    {
+      "id": "4-plato",
+      "voice": {
+        "es": "Marca el plato que devuelves. Platata te dice cuánto entregar en efectivo.",
+        "pt": "Marque o prato que você devolve. O Platata diz quanto entregar em dinheiro.",
+        "en": "Check the dish you're giving back. Platata tells you how much cash to hand back."
+      }
+    },
+    {
+      "id": "5-confirmar",
+      "voice": {
+        "es": "Toca Devolver y luego Sí, devolver.",
+        "pt": "Toque em Devolver e depois em Sim, devolver.",
+        "en": "Tap Refund, then Yes, refund."
+      }
+    },
+    {
+      "id": "6-pin",
+      "voice": {
+        "es": "Apruébalo con tu PIN.",
+        "pt": "Aprove com o seu PIN.",
+        "en": "Approve it with your PIN."
+      }
+    },
+    {
+      "id": "7-anotada",
+      "voice": {
+        "es": "La venta queda con la devolución y el recibo lo dice.",
+        "pt": "A venda fica com a devolução e o recibo mostra.",
+        "en": "The sale shows the refund, and so does the receipt."
+      }
+    },
+    {
+      "id": "8-fin",
+      "voice": {
+        "es": "Así devuelves una venta con Platata.",
+        "pt": "Assim você faz uma devolução com o Platata.",
+        "en": "That's how you refund a sale with Platata."
+      }
+    }
+  ]
+}

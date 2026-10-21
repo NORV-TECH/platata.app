@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Tablet en el mostrador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* Every class here starts with k9 (or is scoped under .k9…) so kit/edif.css and kit/material.css cannot reach it.
+   The counter tablet is landscape and always light (MamaPosScreen.kt, MyApplicationTheme(darkTheme=false)). 1 dp = var(--u). */
+.k9{flex:1;display:flex;flex-direction:column;background:#fff;color:#1C1C1E;min-height:0;font-family:Roboto,system-ui,sans-serif;position:relative}
+/* 1. LOCKED  MamaPosScreen.kt:279-311 */
+.k9lock{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+.k9lock svg.lk{width:calc(var(--u)*64);height:calc(var(--u)*64);fill:#C7C7CC}
+.k9lock b{margin-top:calc(var(--u)*16);font-size:calc(var(--u)*30);font-weight:700}
+.k9lock small{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*16);color:#6E6E73}
+.k9lock .gear{position:absolute;right:calc(var(--u)*16);bottom:calc(var(--u)*16);width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k9lock .gear svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#6E6E73}
+/* 2. PROFILE PICKER  :387-488 */
+.k9pick{flex:1;padding:calc(var(--u)*48) calc(var(--u)*40);display:flex;flex-direction:column}
+.k9back{align-self:flex-start;height:calc(var(--u)*40);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500}
+.k9back svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+.k9mark{align-self:center;font:600 calc(var(--u)*32)/1 Fredoka,system-ui,sans-serif;color:#3A2A1F}
+.k9biz{margin-top:calc(var(--u)*24);font:600 calc(var(--u)*56)/1.1 Fredoka,system-ui,sans-serif;color:#007AFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.k9choose{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*16);color:#6E6E73}
+.k9people{margin-top:calc(var(--u)*28);display:flex;flex-wrap:wrap;gap:calc(var(--u)*12)}
+.k9who{border-radius:calc(var(--u)*16);background:#F2F2F7;padding:calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*16)}
+.k9av{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;flex:0 0 auto}
+.k9who .k9av{width:calc(var(--u)*48);height:calc(var(--u)*48);font-size:calc(var(--u)*16)}
+.k9who b{display:block;font-size:calc(var(--u)*16);font-weight:600}
+.k9who small{display:block;font-size:calc(var(--u)*13);color:#6E6E73}
+/* 3. PIN  :491-760 */
+.k9pin{flex:1;display:flex;align-items:center;justify-content:center;padding:calc(var(--u)*48) calc(var(--u)*64);gap:calc(var(--u)*64);position:relative}
+.k9pin .l{flex:1;display:flex;flex-direction:column;align-items:center}
+.k9pin .l .k9av{width:calc(var(--u)*80);height:calc(var(--u)*80);font-size:calc(var(--u)*26)}
+.k9pin .ask{margin-top:calc(var(--u)*20);font-size:calc(var(--u)*18)}
+.k9dots{margin-top:calc(var(--u)*16);display:flex;gap:calc(var(--u)*12)}
+.k9dots i{width:calc(var(--u)*44);height:calc(var(--u)*44);border-radius:calc(var(--u)*8);border:calc(var(--u)*2) solid #C7C7CC;display:grid;place-items:center;box-sizing:border-box}
+.k9dots i em{width:calc(var(--u)*14);height:calc(var(--u)*14);border-radius:50%}
+.k9pin .nm{margin-top:calc(var(--u)*20);font-size:calc(var(--u)*18);font-weight:700}
+.k9pin .rl{font-size:calc(var(--u)*14);color:#6E6E73}
+.k9keys{display:grid;grid-template-columns:repeat(3,calc(var(--u)*68));gap:calc(var(--u)*12)}
+.k9keys span{height:calc(var(--u)*68);border-radius:calc(var(--u)*12);background:#F2F2F7;display:grid;place-items:center;font-size:calc(var(--u)*22);font-weight:500}
+.k9keys span.g{background:#E5E5EA}.k9keys span.sm{font-size:calc(var(--u)*13)}
+.k9welcome{position:absolute;left:0;right:0;bottom:calc(var(--u)*28);text-align:center;font-size:calc(var(--u)*15);color:#6E6E73}
+/* 4. UNLOCKED  :1020-1460 left pane 60 % | 1 dp #E5E5EA | right pane */
+.k9main{flex:1;display:flex;min-height:0}
+.k9left{width:60%;display:flex;flex-direction:column;min-height:0}
+.k9tabs{display:flex;align-items:center;flex:0 0 auto;border-bottom:1px solid #E5E5EA}
+.k9tabs .t{flex:1;height:calc(var(--u)*48);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*6);font-size:calc(var(--u)*14);font-weight:500;position:relative}
+.k9tabs .t svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.k9tabs .t.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*2);background:#1C1C1E}
+.k9tabs .bell{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k9tabs .bell svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E}
+.k9left .mgrid{grid-template-columns:repeat(4,1fr)}
+.k9div{width:1px;background:#E5E5EA;flex:0 0 auto}
+.k9right{flex:1;min-width:0;display:flex;flex-direction:column;min-height:0;position:relative}
+.k9sw{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*10) calc(var(--u)*16);color:#007AFF;font-size:calc(var(--u)*15);flex:0 0 auto}
+.k9sw svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#007AFF}
+.k9sw b{font-weight:600}
+/* CART step: CartSheetContent.kt mamaCartStep = 1 (trash at top right, lines, divider, the Cobrar button) */
+.k9cart{flex:1;min-height:0;display:flex;flex-direction:column}
+.k9cart .tr{display:flex;justify-content:flex-end;padding:calc(var(--u)*8) calc(var(--u)*12) 0 calc(var(--u)*24)}
+.k9cart .tr span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k9cart .tr svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#6E6E73}
+.k9cart .sc{padding:calc(var(--u)*6) calc(var(--u)*24) calc(var(--u)*8);display:flex;flex-direction:column}
+.k9line{display:flex;align-items:center;padding:calc(var(--u)*8) 0}
+.k9line .n{flex:1;min-width:0}
+.k9line .n b{display:block;font-size:calc(var(--u)*16);font-weight:400}
+.k9line .n small{display:block;font-size:calc(var(--u)*14)}
+.k9line .q{display:flex;align-items:center}
+.k9line .q span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;font-size:calc(var(--u)*22)}
+.k9line .q svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E}
+.k9line .q i{font-style:normal;padding:0 calc(var(--u)*8);font-size:calc(var(--u)*14)}
+.k9hr{height:1px;background:#E5E5EA;margin:calc(var(--u)*16) 0 calc(var(--u)*16)}
+.k9charge{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:#1C1C1E;color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*12);text-align:center}
+.k9empty{padding:calc(var(--u)*48) 0;text-align:center}
+.k9empty b{display:block;font-size:calc(var(--u)*22);font-weight:700}
+.k9empty small{display:block;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73}
+/* DINING step: CheckoutSheetBody.kt:1214-1260 DiningChooserContent table grid (Mesas is the only option switched on) */
+.k9tables{flex:1;padding:calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.k9tables h3{margin:0;font-size:calc(var(--u)*18);font-weight:700}
+.k9tables .g{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*8)}
+.k9tables .g span{aspect-ratio:1;border-radius:calc(var(--u)*12);background:#F2F2F7;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:700}
+/* PAY step: the shared pay block, inline (CheckoutSheetBody, inlineCustomerEditing) - same look as material.css .mpay, packed to the pane */
+.k9right .mpay .hd{height:calc(var(--u)*44)}
+.k9right .mpay .cust{height:calc(var(--u)*52)}
+.k9right .mpay .blk{padding-top:calc(var(--u)*8);padding-bottom:calc(var(--u)*12)}
+.k9right .mpay .links{min-height:calc(var(--u)*60)}
+.k9right .mpay .kp span{height:calc(var(--u)*40)}
+/* RECEIPT step: ReceiptOptionsScreen.kt SaleCompleteContent (pane < 700 dp: potato 88 dp) */
+.k9rec{flex:1;min-height:0;display:flex;flex-direction:column}
+.k9rec .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 calc(var(--u)*20);text-align:center}
+.k9rec .hero svg{width:calc(var(--u)*88);height:calc(var(--u)*88)}
+.k9rec .hero b{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*26);font-weight:700;letter-spacing:-.3px}
+.k9rec .hero small{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73}
+.k9rec .hero em{font-style:normal;margin-top:calc(var(--u)*22);font-size:calc(var(--u)*15);font-weight:700;color:#6E6E73}
+.k9rec .ft{padding:0 calc(var(--u)*16) calc(var(--u)*20);display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.k9rb{height:calc(var(--u)*52);border-radius:calc(var(--u)*26);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600}
+.k9rb.wa{background:#25D366;color:#fff}.k9rb.pr{background:#1C1C1E;color:#fff;font-weight:700}.k9rb.ol{border:1px solid #C7C7CC}
+.k9priv{text-align:center;font-size:calc(var(--u)*11);color:#6E6E73;text-decoration:underline;margin-top:calc(var(--u)*-6)}
+/* the kitchen screen (KitchenDisplayScreen.kt, always dark): same values as R7 */
+.k9kds{flex:1;display:flex;flex-direction:column;background:#111111;color:#fff;min-height:0;font-family:Roboto,system-ui,sans-serif}
+.k9kds .top{display:flex;align-items:center;flex:0 0 auto}
+.k9kds .tick{flex:1;height:calc(var(--u)*44);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*8);overflow:hidden}
+.k9kds .tick span{flex:0 0 auto;border-radius:calc(var(--u)*20);background:#2A2A2A;border:1px solid #444444;font-size:calc(var(--u)*14);padding:calc(var(--u)*8) calc(var(--u)*14);white-space:nowrap}
+.k9kds .hist{margin-left:calc(var(--u)*8);border-radius:calc(var(--u)*20);background:#2A2A2A;border:1px solid #444444;font-size:calc(var(--u)*14);font-weight:600;padding:calc(var(--u)*8) calc(var(--u)*14);display:grid}
+.k9kds .hist span{grid-area:1/1;text-align:center}.k9kds .hist span.gh{visibility:hidden}
+.k9kds .dot{margin-left:calc(var(--u)*8);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#4CAF50}
+.k9kds .stn{margin-left:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:600}
+.k9kds .out{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.k9kds .out svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:rgba(230,225,229,.55)}
+.k9kds .grid{padding:calc(var(--u)*8);display:grid;grid-template-columns:repeat(5,1fr);gap:calc(var(--u)*8);align-content:start}
+.k9kds .wrap{padding:calc(var(--u)*4)}
+.k9kc{border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.4);padding:calc(var(--u)*12);background:#fff;color:#000}
+.k9kc .hr{display:flex;gap:calc(var(--u)*6);font-size:calc(var(--u)*14);font-weight:700}.k9kc .hr b{flex:1}
+.k9kc .wn{font-size:calc(var(--u)*12);opacity:.75}
+.k9kc .dv{height:1px;background:currentColor;opacity:.3;margin:calc(var(--u)*6) 0}
+.k9kc .ln{font-size:calc(var(--u)*16);font-weight:600;white-space:pre;margin-bottom:calc(var(--u)*4)}
+.k9kc .bn{margin-top:calc(var(--u)*6);background:#FFEB3B;font-size:calc(var(--u)*12);font-weight:800;letter-spacing:.5px;text-align:center;padding:calc(var(--u)*5) 0;border-radius:0 0 calc(var(--u)*8) calc(var(--u)*8)}
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+/* R9 "Tablet en el mostrador": the counter tablet (MamaPos) wakes from "Caja bloqueada", a cashier picks her face and types
+   her PIN, rings two dishes, picks the table, charges cash and the order lands on the kitchen screen.
+   Every screen follows the app at sim/usa-canada (abb8fddb). Paths under app/src/main/java/com/example/.
+   locked        ui/screens/mamapos/MamaPosScreen.kt:279-311: Color.White, Lock 64 dp outline, mamaship_locked_title 30 sp Bold,
+                 mamaship_tap_to_login 16 sp, the whole screen is the tap target; gear 48 dp bottom-right (owner PIN, F-03).
+   profiles      :387-488: padding 40/48, "← Atrás" (TABLES-1), PlatataWordmark 32 sp, business name in that font 56 sp SumaBlue,
+                 mamaship_choose_profile 16 sp secondary, FlowRow of SumaCards (r16, surfaceVariant, 48 dp avatar AvatarPalette[id % 6],
+                 initials = PersonName.initials, name 16 SemiBold, employeeRoleLine = job title, else Dueño / Equipo).
+   PIN           :491-790: 80 dp avatar, pin_enter_pin 18 sp, 4 boxes 44 dp r8 border 2 dp (filled = avatar colour + 14 dp dot), name 18 Bold,
+                 role 14; keypad 68 dp r12 surfaceVariant 22 sp, bottom row mamaship_clear · 0 · ⌫ (outlineVariant); mamaship_welcome
+                 bottom 28 dp; auto-check 150 ms after the 4th digit.
+   selling       :1020-1460: left 60 % SumaTabRow Teclado (Edit icon) / Catálogo / Ventas / Abiertas + bell; ProductLibraryView with
+                 GridCells.Fixed(4); opens on Catálogo (defaultHomeTab) because there are no open tickets. VerticalDivider #E5E5EA.
+                 Right: MamaSwitchPersonRow (SwitchAccount icon, name 15 SemiBold, mamaship_switch, SumaBlue), then the step machine:
+                 CART (CartSheetContent mamaCartStep 1: trash, lines name / price / − n +, divider, SumaButton common_charge_items),
+                 DINING (DiningChooserContent table grid, startOnTableGrid because Mesas is the only option on), PAY (CheckoutSheetBody
+                 inline: customer row, Total, Artículos / Mesa links, keypad, cash_exact, checkout_save_ticket - a NEW sale says
+                 "Guardar", CheckoutSheetBody.kt:315-332), RECEIPT (ReceiptOptionsScreen inline: potato 88 dp, receipt_opt_completed,
+                 receipt_opt_received, receipt_opt_how_receipt; WhatsApp, or Text / Email in US/CA (ReceiptSendRoute); Ver recibo;
+                 Nueva venta · Sin recibo with no printer; Aviso de privacidad). A staff session gets no "set up" pay link.
+   the trip      a tablet sale -> cloud -> owner phone (on, Platata open, online) -> shop Wi-Fi -> kitchen screen. A paid order with no
+                 ready time is on the kitchen line (PosDao.kt:1087). Card: TicketTitle "Mesa 7", the cashier's first name under it.
+   Demo setup: register open on the owner's phone, Mesas the only dining option, staff with PINs; the cashier's job title is
+   "Cajera" (typed by the owner), the waiter has none (shows "Equipo"). No receipt printer. */
+const R = RKIT.ctx(), C = R.C, esc = R.esc;
+const L = R.pick({
+  es:{locked:"Caja bloqueada", tap:"Toca para iniciar sesión", back:"Atrás", choose:"Elige tu perfil", owner:"Dueño", team:"Equipo", cashier:"Cajera",
+      pin:"Ingresa tu PIN", clear:"Borrar", welcome:n=>`Bienvenido/a, ${n}`, tabs:["Teclado","Catálogo","Ventas","Abiertas"], all:"Todos",
+      sw:"Cambiar", charge:(v,n)=>`Cobrar ${v} · ${n} ${n===1?"artículo":"artículos"}`, table:"¿Qué mesa?",
+      cust:"Agrega un cliente a la venta", total:"Total", items:n=>`Artículos (${n}) ›`, mesa:n=>`Mesa ${n}`, exact:v=>`Exacto · ${v}`, save:"Guardar",
+      done:"¡Venta completada!", got:v=>`Recibiste ${v}`, how:"¿Cómo envías el recibo?", wa:"WhatsApp", text:"Recibo por mensaje", email:"Recibo por correo",
+      view:"Ver recibo", newSale:"Nueva venta · Sin recibo", priv:"Aviso de privacidad", stn:"Cocina", hist:"Historial", active:"Pedidos activos", new0:"0m – NUEVO",
+      tablet:"Tablet de mostrador", kds:"Pantalla de cocina"},
+  pt:{locked:"PDV BLOQUEADO", tap:"Toque para entrar", back:"Voltar", choose:"Escolha seu perfil", owner:"Dono", team:"Equipe", cashier:"Caixa",
+      pin:"Digite seu PIN", clear:"Limpar", welcome:n=>`Bem-vindo(a), ${n}`, tabs:["Teclado","Catálogo","Vendas","Abertas"], all:"Todos",
+      sw:"Trocar", charge:(v,n)=>`Cobrar ${v} · ${n} ${n===1?"item":"itens"}`, table:"Qual mesa?",
+      cust:"Adicione um cliente à venda", total:"Total", items:n=>`Itens (${n}) ›`, mesa:n=>`Mesa ${n}`, exact:v=>`Exato · ${v}`, save:"Salvar",
+      done:"Venda concluída!", got:v=>`Você recebeu ${v}`, how:"Como você envia o recibo?", wa:"WhatsApp", text:"Recibo por mensagem", email:"Recibo por e-mail",
+      view:"Ver recibo", newSale:"Nova venda · Sem recibo", priv:"Aviso de privacidade", stn:"Cozinha", hist:"Histórico", active:"Pedidos ativos", new0:"0m – NOVO",
+      tablet:"Tablet do balcão", kds:"Tela da cozinha"},
+  en:{locked:"POS LOCKED", tap:"Tap to login", back:"Back", choose:"Choose your profile", owner:"Owner", team:"Team", cashier:"Cashier",
+      pin:"Enter your PIN", clear:"Clear", welcome:n=>`Welcome, ${n}`, tabs:["Keypad","Library","Sales","Open"], all:"All",
+      sw:"Switch", charge:(v,n)=>`Charge ${v} · ${n} ${n===1?"item":"items"}`, table:"Which table?",
+      cust:"Add a client to the sale", total:"Total", items:n=>`Items (${n}) ›`, mesa:n=>`Table ${n}`, exact:v=>`Exact · ${v}`, save:"Save",
+      done:"Sale complete!", got:v=>`You received ${v}`, how:"How do you send the receipt?", wa:"WhatsApp", text:"Text receipt", email:"Email receipt",
+      view:"View receipt", newSale:"New sale · No receipt", priv:"Privacy notice", stn:"Kitchen", hist:"History", active:"Active Orders", new0:"0m – NEW",
+      tablet:"Counter tablet", kds:"Kitchen display"}
+});
+/* strings: mamaship_locked_title, mamaship_tap_to_login, common_back, mamaship_choose_profile, team_role_owner, team_badge_team, pin_enter_pin,
+   mamaship_clear, mamaship_welcome, home_tab_manual/library, tx_tab_all/open, items_filter_all, mamaship_switch, common_charge_items (plural),
+   checkout_dining_gate_table_title, checkout_add_customer_cta, checkout_items_link, park_ticket_table_chip, cash_exact, checkout_save_ticket,
+   receipt_opt_*, receipt_text_receipt, receipt_email_receipt, kds_history, kds_active_orders, kds_status_new (values / values-es / values-pt-rBR).
+   "Cajera" / "Caixa" / "Cashier" is the job title the owner typed for her, not an app word. */
+const TABLE = 7;
+const US_CA = R.country==="US" || R.country==="CA";      // ReceiptSendRoute.forCountry: text + email instead of WhatsApp
+const PAL = ["#E91E8C","#FF9800","#4CAF50","#2196F3","#9C27B0","#009688"];     // AvatarPalette, by employee id
+const ini = n => n.split(" ").filter(Boolean).slice(0,2).map(p=>p[0]).join("").toUpperCase();
+const PEOPLE = [
+  {id:1, name:C.owner, role:L.owner},
+  {id:2, name:C.people.waiter, role:L.team},
+  {id:3, name:C.people.waiter2, role:L.cashier}
+];
+const ME = PEOPLE[2], FIRST = ME.name.split(" ")[0], COLOR = PAL[ME.id % 6];
+const D1 = R.item(C.order[1]), D2 = R.item(C.order[2]);
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const ALL_C = "#607D8B";
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+
+const I = {
+  lock:'<svg class="lk" viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>',
+  gear:'<svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 00.12-.61l-1.92-3.32a.488.488 0 00-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 00-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 00-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>',
+  back:'<svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  edit:'<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 000-1.41l-2.34-2.34a.996.996 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  bell:'<svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>',
+  swap:'<svg viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 4c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm6 12H6v-1.4c0-2 4-3.1 6-3.1s6 1.1 6 3.1V19z"/></svg>',
+  trash:'<svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+  plus:'<svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  mtrash:'<svg class="mi" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+  logout:'<svg viewBox="0 0 24 24"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>',
+  /* drawable platata_celebrating, drawn as the kit's potato */
+  potato:'<svg viewBox="0 0 24 24"><ellipse cx="12" cy="12.5" rx="8" ry="9" fill="#D9A66A"/><circle cx="9.2" cy="11" r="1.1" fill="#3A2A1F"/><circle cx="14.8" cy="11" r="1.1" fill="#3A2A1F"/><path d="M9.5 14.8q2.5 2 5 0" stroke="#3A2A1F" stroke-width="1.1" fill="none" stroke-linecap="round"/><circle cx="7" cy="16" r=".6" fill="#B07F48"/><circle cx="16.5" cy="7.5" r=".5" fill="#B07F48"/></svg>'
+};
+
+const total = st => st.lines.reduce((s,p)=>s+p.price,0);
+
+function locked(){
+  return `<div class="k9"><div class="k9lock" data-t="lock">${I.lock}<b>${esc(L.locked)}</b><small>${esc(L.tap)}</small>
+    <span class="gear">${I.gear}</span></div></div>`;
+}
+function picker(){
+  return `<div class="k9"><div class="k9pick"><span class="k9back">${I.back}${esc(L.back)}</span>
+    <div class="k9mark">Platata</div><div class="k9biz">${esc(C.place)}</div><div class="k9choose">${esc(L.choose)}</div>
+    <div class="k9people">${PEOPLE.map(p=>`<div class="k9who" data-t="who-${p.id}"><span class="k9av" style="background:${PAL[p.id%6]}">${esc(ini(p.name))}</span>
+      <div><b>${esc(p.name)}</b><small>${esc(p.role)}</small></div></div>`).join("")}</div></div></div>`;
+}
+function pin(st){
+  const keys = ["1","2","3","4","5","6","7","8","9"];
+  return `<div class="k9"><div class="k9pin"><div class="l"><span class="k9av" style="background:${COLOR}">${esc(ini(ME.name))}</span>
+      <div class="ask">${esc(L.pin)}</div>
+      <div class="k9dots">${[0,1,2,3].map(i=>`<i style="${i<st.pin?`border-color:${COLOR}`:""}">${i<st.pin?`<em style="background:${COLOR}"></em>`:""}</i>`).join("")}</div>
+      <div class="nm">${esc(ME.name)}</div><div class="rl">${esc(ME.role)}</div></div>
+    <div class="k9keys">${keys.map(k=>`<span data-t="key-${k}">${k}</span>`).join("")}<span class="g sm">${esc(L.clear)}</span><span>0</span><span class="g">⌫</span></div>
+    <div class="k9welcome">${esc(L.welcome(FIRST))}</div></div></div>`;
+}
+function catalog(){
+  const cats = `<div class="mcats">` + [{name:L.all,color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const s = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${s}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+  const grid = `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+  return cats + grid;
+}
+function right(st){
+  let body = "";
+  if(st.step==="cart"){
+    const n = st.lines.length;
+    body = `<div class="k9cart"><div class="tr"><span>${I.trash}</span></div><div class="sc">` +
+      (n ? st.lines.map(p=>`<div class="k9line"><div class="n"><b>${esc(p.name)}</b><small>${R.money(p.price)}</small></div>
+          <div class="q"><span>-</span><i>1</i><span>${I.plus}</span></div></div>`).join("") +
+          `<div class="k9hr"></div><div class="k9charge" data-t="charge">${esc(L.charge(R.money(total(st)), n))}</div>`
+         : `<div class="k9empty"><b>${esc(R.pick({es:"El carrito está vacío",pt:"Carrinho vazio",en:"Cart is empty"}))}</b><small>${esc(R.pick({es:"agrega artículos para empezar",pt:"adicione itens para começar",en:"add items to start"}))}</small></div>`) +
+      `</div></div>`;
+  } else if(st.step==="table"){
+    body = `<div class="k9tables"><h3>${esc(L.table)}</h3><div class="g">${Array.from({length:C.tables},(_,i)=>`<span data-t="table-${i+1}">${i+1}</span>`).join("")}</div></div>`;
+  } else if(st.step==="pay"){
+    const dec = C.dec ? (new Intl.NumberFormat(C.loc).format(1.5).replace(/[0-9]/g,"")) : "000";
+    const k = ["1","2","3","4","5","6","7","8","9",dec,"0","⌫"];
+    body = `<div class="mpay"><div class="hd"><span>‹</span><span class="tr">${I.mtrash}</span></div>
+      <div class="cust">${I.person}${esc(L.cust)}</div>
+      <div class="blk"><div class="tot"><small>${L.total}</small><b>${R.money(total(st))}</b></div>
+      <div class="links"><span>${esc(L.items(st.lines.length))}</span><span>${esc(L.mesa(TABLE))}</span></div>
+      <div class="kp">${k.map(x=>`<span class="${x==="⌫"||x.length>1?"s":""}">${x}</span>`).join("")}</div>
+      <div class="exact" data-t="exact">${esc(L.exact(R.money(total(st))))}</div>
+      <div class="save">${esc(L.save)}</div></div></div>`;
+  } else {
+    const btns = US_CA ? `<div class="k9rb pr">${esc(L.text)}</div><div class="k9rb ol">${esc(L.email)}</div>` : `<div class="k9rb wa">${esc(L.wa)}</div>`;
+    body = `<div class="k9rec"><div class="hero">${I.potato}<b>${esc(L.done)}</b><small>${esc(L.got(R.money(st.paid)))}</small><em>${esc(L.how)}</em></div>
+      <div class="ft">${btns}<div class="k9rb ol">${esc(L.view)}</div><div class="k9rb pr" data-t="newsale">${esc(L.newSale)}</div><div class="k9priv">${esc(L.priv)}</div></div></div>`;
+  }
+  return `<div class="k9right"><div class="k9sw">${I.swap}<b>${esc(FIRST)}</b><span>${esc(L.sw)}</span></div>${body}</div>`;
+}
+function selling(st){
+  const tabs = `<div class="k9tabs">${L.tabs.map((t,i)=>`<span class="t${i===1?" on":""}">${i===0?I.edit:""}${esc(t)}</span>`).join("")}<span class="bell">${I.bell}</span></div>`;
+  return `<div class="k9"><div class="k9main"><div class="k9left">${tabs}${catalog()}</div><div class="k9div"></div>${right(st)}</div></div>`;
+}
+function kds(){
+  return `<div class="k9kds"><div class="top"><div class="tick"><span>${esc(`${D2.name} × 1`)}</span><span>${esc(`${D1.name} × 1`)}</span></div>
+    <div class="hist"><span class="gh">${esc(L.active)}</span><span class="gh">${esc(L.hist)}</span><span>${esc(L.hist)}</span></div>
+    <span class="dot"></span><span class="stn">${esc(L.stn)}</span><span class="out">${I.logout}</span></div>
+    <div class="grid"><div class="wrap"><div class="k9kc"><div class="hr"><b>${esc(L.mesa(TABLE))}</b><span>${esc(L.new0)}</span></div>
+      <div class="wn">${esc(FIRST)}</div><div class="dv"></div><div class="ln">${esc(`1x  ${D1.name}`)}</div><div class="ln">${esc(`1x  ${D2.name}`)}</div>
+      <div class="bn">${esc(L.mesa(TABLE).toUpperCase())}</div></div></div></div></div>`;
+}
+
+function render(st){
+  if(st.hop) return RKIT.hop(R, {from:L.tablet, to:L.kds, line:L.mesa(TABLE), note:R.pick({
+    es:"Pasa por tu teléfono: déjalo encendido, con Platata abierta y en el Wi-Fi del local.",
+    pt:"Passa pelo seu celular: deixe-o ligado, com o Platata aberto e no Wi-Fi do restaurante.",
+    en:"It goes through your phone: keep it on, with Platata open and on the restaurant's Wi-Fi."})});
+  switch(st.screen){
+    case "lock": return locked();
+    case "pick": return picker();
+    case "pin":  return pin(st);
+    case "sell": return selling(st);
+    default:     return kds();
+  }
+}
+
+RKIT.start(R, {
+  id:"R9", tallVideo:true, clock:"12:41",
+  endText:R.pick({es:"Así cobras en el mostrador con Platata.", pt:"Assim você cobra no balcão com o Platata.", en:"That's how you charge at the counter with Platata."}),
+  beats:R.pick({
+    es:["La tablet de mostrador se abre con un toque","Cada persona elige su perfil","Y entra con su PIN","Toca los platos del pedido","Toca Cobrar y elige la mesa","Cobra en efectivo: Exacto","Venta completada: toca Nueva venta","El pedido llega a la cocina con su mesa","Así cobras en el mostrador con Platata"],
+    pt:["O tablet do balcão abre com um toque","Cada pessoa escolhe o seu perfil","E entra com o seu PIN","Toque nos pratos do pedido","Toque em Cobrar e escolha a mesa","Cobre em dinheiro: Exato","Venda concluída: toque em Nova venda","O pedido chega à cozinha com a mesa","Assim você cobra no balcão com o Platata"],
+    en:["The counter tablet opens with one tap","Each person picks their profile","And signs in with their PIN","Tap the dishes in the order","Tap Charge and pick the table","Take cash: Exact","Sale complete: tap New sale","The order reaches the kitchen with its table","That's how you charge at the counter with Platata"]}),
+  state:{screen:"lock", hop:false, pin:0, step:"cart", lines:[], paid:0},
+  render,
+  device: st => st.hop ? "phone" : (st.screen==="kds" ? "kds" : "tablet"),
+  who: st => st.hop ? "" : (st.screen==="kds" ? L.kds : L.tablet),
+  steps:[
+    {beat:0, hint:R.pick({es:"Toca la pantalla", pt:"Toque na tela", en:"Tap the screen"}), target:'[data-t="lock"]', tap(st){ st.screen = "pick"; }},
+    {beat:1, hint:R.pick({es:`Toca ${FIRST}`, pt:`Toque em ${FIRST}`, en:`Tap ${FIRST}`}), target:`[data-t="who-${ME.id}"]`, tap(st){ st.screen = "pin"; }},
+    {beat:2, hint:R.pick({es:"Toca su PIN", pt:"Toque no PIN dela", en:"Tap her PIN"}), target:'[data-t="key-2"]', tap(st,E){
+      st.pin = 1;
+      E.after(220, ()=>{ st.pin = 2; }); E.after(440, ()=>{ st.pin = 3; }); E.after(660, ()=>{ st.pin = 4; });
+      E.after(1100, ()=>{ st.screen = "sell"; }); }},
+    {beat:3, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "}) + D1.name, target:`[data-t="dish-${D1.id}"]`, tap(st){ st.lines.push(D1); }},
+    {beat:3, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "}) + D2.name, target:`[data-t="dish-${D2.id}"]`, tap(st){ st.lines.push(D2); }},
+    {beat:4, hint:R.pick({es:"Toca Cobrar", pt:"Toque em Cobrar", en:"Tap Charge"}), target:'[data-t="charge"]', tap(st){ st.step = "table"; }},
+    {beat:4, hint:R.pick({es:`Elige la mesa ${TABLE}`, pt:`Escolha a mesa ${TABLE}`, en:`Pick table ${TABLE}`}), target:`[data-t="table-${TABLE}"]`, tap(st){ st.step = "pay"; }},
+    {beat:5, hint:R.pick({es:"Toca Exacto", pt:"Toque em Exato", en:"Tap Exact"}), target:'[data-t="exact"]', tap(st){ st.paid = total(st); st.step = "receipt"; }},
+    {beat:6, hint:R.pick({es:"Toca Nueva venta", pt:"Toque em Nova venda", en:"Tap New sale"}), target:'[data-t="newsale"]', tap(st,E){
+      st.lines = []; st.step = "cart";
+      E.after(1200, ()=>{ st.hop = true; });
+      E.after(2900, ()=>{ st.hop = false; st.screen = "kds"; }); }}
+  ]
+});
+</script>
+</body>
+</html>

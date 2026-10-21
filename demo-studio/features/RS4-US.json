@@ -1,0 +1,49 @@
+{
+  "id": "RS4-US",
+  "name": "Take QR payments: US in Spanish (no QR; own method)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-new",
+      "voice": {
+        "es": "En Estados Unidos y Canadá, Platata no tiene pago con QR. Agrega tu propio método: toca Nuevo y escribe su nombre."
+      }
+    },
+    {
+      "id": "2-add",
+      "voice": {
+        "es": "Toca Agregar. Queda encendido."
+      }
+    },
+    {
+      "id": "3-charge",
+      "voice": {
+        "es": "En la caja, toca Cobrar y luego Otro método de pago."
+      }
+    },
+    {
+      "id": "4-method",
+      "voice": {
+        "es": "Toca tu método."
+      }
+    },
+    {
+      "id": "5-confirm",
+      "voice": {
+        "es": "Platata te pide confirmar que recibiste el pago. Revisa tu app y toca Sí, cobrar."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Así cobras con tu propio método de pago, con Platata."
+      }
+    }
+  ]
+}

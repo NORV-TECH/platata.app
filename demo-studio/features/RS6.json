@@ -1,0 +1,77 @@
+{
+  "id": "RS6",
+  "name": "Other ways to pay: own methods and On the house (owner phone)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-new",
+      "voice": {
+        "es": "En Métodos de pago, toca Nuevo y escribe el nombre de tu forma de pago.",
+        "pt": "Em Formas de pagamento, toque em Novo e digite o nome da sua forma de pagamento.",
+        "en": "In Payment methods, tap New and type the name of your way to pay."
+      }
+    },
+    {
+      "id": "2-add",
+      "voice": {
+        "es": "Toca Agregar. Queda encendida.",
+        "pt": "Toque em Adicionar. Ela já fica ligada.",
+        "en": "Tap Add. It's on right away."
+      }
+    },
+    {
+      "id": "3-other",
+      "voice": {
+        "es": "En la caja, toca Cobrar y luego Otro método de pago.",
+        "pt": "No caixa, toque em Cobrar e depois em Outra forma de pagamento.",
+        "en": "At the register, tap Charge, then Other payment method."
+      }
+    },
+    {
+      "id": "4-confirm",
+      "voice": {
+        "es": "Toca tu forma de pago. Platata te pide confirmar que recibiste el pago. Revisa tu app y toca Sí, cobrar.",
+        "pt": "Toque na sua forma de pagamento. O Platata pede para confirmar que você recebeu o pagamento. Confira o app e toque em Sim, cobrar.",
+        "en": "Tap your method. Platata asks you to confirm you received the payment. Check your app, then tap Yes, charge."
+      }
+    },
+    {
+      "id": "5-comp",
+      "voice": {
+        "es": "Para regalar algo, en otra venta toca Otro método de pago y Cortesía.",
+        "pt": "Para dar algo de graça, em outra venda toque em Outra forma de pagamento e Cortesia.",
+        "en": "To give something for free, on another sale tap Other payment method, then On the house."
+      }
+    },
+    {
+      "id": "6-reason",
+      "voice": {
+        "es": "Escribe el motivo si quieres y toca Regalar.",
+        "pt": "Digite o motivo, se quiser, e toque em Dar de graça.",
+        "en": "Add a reason if you like, and tap Give for free."
+      }
+    },
+    {
+      "id": "7-end",
+      "voice": {
+        "es": "Así cobras con otras formas de pago, con Platata.",
+        "pt": "Assim você cobra com outras formas de pagamento, com o Platata.",
+        "en": "That's how you take other ways to pay with Platata."
+      }
+    }
+  ]
+}

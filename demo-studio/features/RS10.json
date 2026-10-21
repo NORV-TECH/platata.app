@@ -1,0 +1,77 @@
+{
+  "id": "RS10",
+  "name": "Cerrar la caja",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-caja",
+      "voice": {
+        "es": "Al final del día, abre Mi negocio y toca la caja abierta.",
+        "pt": "No fim do dia, abra Meu negócio e toque no caixa aberto.",
+        "en": "At the end of the day, open My business and tap the open register."
+      }
+    },
+    {
+      "id": "2-cerrar",
+      "voice": {
+        "es": "Baja y toca Cerrar caja.",
+        "pt": "Desça e toque em Fechar caixa.",
+        "en": "Scroll down and tap Close register."
+      }
+    },
+    {
+      "id": "3-contar",
+      "voice": {
+        "es": "Cuenta el efectivo del cajón y escribe cuánto hay. Platata te dice la diferencia.",
+        "pt": "Conte o dinheiro da gaveta e digite quanto tem. O Platata mostra a diferença.",
+        "en": "Count the cash in the drawer and type it in. Platata shows the difference."
+      }
+    },
+    {
+      "id": "4-confirmar",
+      "voice": {
+        "es": "Toca Cerrar caja y confírmalo.",
+        "pt": "Toque em Fechar caixa e confirme.",
+        "en": "Tap Close register and confirm."
+      }
+    },
+    {
+      "id": "5-resumen",
+      "voice": {
+        "es": "Ves el resumen del día: ventas, efectivo, lo que debía haber y lo que contaste.",
+        "pt": "Você vê o resumo do dia: vendas, dinheiro, o que devia haver e o que contou.",
+        "en": "You get the day's summary: sales, cash, what should be there and what you counted."
+      }
+    },
+    {
+      "id": "6-whatsapp",
+      "voice": {
+        "es": "Toca Enviar por WhatsApp y mándalo a quien quieras.",
+        "pt": "Toque em Enviar por WhatsApp e mande para quem quiser.",
+        "en": "Tap Send by WhatsApp and send it to anyone you want."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así cierras la caja con Platata.",
+        "pt": "Assim você fecha o caixa com o Platata.",
+        "en": "That's how you close the register with Platata."
+      }
+    }
+  ]
+}

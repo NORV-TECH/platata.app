@@ -1,0 +1,61 @@
+{
+  "id": "RS11-MX",
+  "name": "Reports (MX)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-reports",
+      "voice": {
+        "es": "Abre Mi negocio y toca Reportes."
+      }
+    },
+    {
+      "id": "2-chart",
+      "voice": {
+        "es": "Hoy, hora por hora. Toca una barra y ves cuánto vendiste en esa hora."
+      }
+    },
+    {
+      "id": "3-net",
+      "voice": {
+        "es": "Ventas brutas, menos descuentos y devoluciones: tus ventas netas, antes de impuestos, propinas y cargos."
+      }
+    },
+    {
+      "id": "4-line",
+      "voice": {
+        "es": "Cada línea se abre y te muestra sus ventas."
+      }
+    },
+    {
+      "id": "5-extra",
+      "voice": {
+        "es": "Los impuestos van en su propia línea. Al final, el total cobrado."
+      }
+    },
+    {
+      "id": "6-paid",
+      "voice": {
+        "es": "Más abajo: cómo te pagaron y qué platos vendieron más."
+      }
+    },
+    {
+      "id": "7-month",
+      "voice": {
+        "es": "Toca Este mes y ves el mes completo, día por día."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así ves cómo va tu restaurante, con Platata."
+      }
+    }
+  ]
+}

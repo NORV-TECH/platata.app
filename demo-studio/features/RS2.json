@@ -1,0 +1,61 @@
+{
+  "id": "RS2",
+  "name": "Abrir la caja",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-cerrada",
+      "voice": {
+        "es": "Empieza el día: la caja está cerrada. Toca Abrir.",
+        "pt": "Comece o dia: o caixa está fechado. Toque em Abrir.",
+        "en": "Start the day: the register is closed. Tap Open."
+      }
+    },
+    {
+      "id": "2-efectivo",
+      "voice": {
+        "es": "Escribe con cuánto efectivo empiezas en el cajón.",
+        "pt": "Digite com quanto dinheiro você começa na gaveta.",
+        "en": "Type how much cash you start with in the drawer."
+      }
+    },
+    {
+      "id": "3-abrir",
+      "voice": {
+        "es": "Toca Abrir caja.",
+        "pt": "Toque em Abrir caixa.",
+        "en": "Tap Open register."
+      }
+    },
+    {
+      "id": "4-vender",
+      "voice": {
+        "es": "La caja quedó abierta y ya puedes vender: toca un plato y se suma a la venta.",
+        "pt": "O caixa está aberto e você já pode vender: toque em um prato e ele entra na venda.",
+        "en": "The register is open and you can sell: tap a dish and it goes on the sale."
+      }
+    },
+    {
+      "id": "5-fin",
+      "voice": {
+        "es": "Así abres la caja con Platata.",
+        "pt": "Assim você abre o caixa com o Platata.",
+        "en": "That's how you open the register with Platata."
+      }
+    }
+  ]
+}

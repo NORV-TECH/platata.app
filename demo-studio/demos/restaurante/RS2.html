@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Abrir la caja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+
+/* RS2 "Abrir la caja": the owner opens the register with the starting cash, on the owner phone. Every country (R.C), es/pt/en.
+   Screens at the newest sim/usa-canada commit (paths under app/src/main/java/com/example/):
+   Home, Catálogo tab   ui/screens/home/HomeScreen.kt:610-690 (TabRow Teclado | Catálogo, pen icon, 3 dp indicator)
+   "Caja cerrada" bar   ui/screens/home/RegisterClosedBar.kt (#FEF3C7, titleSmall bold #856404, orange pill "Abrir"); shown by
+                        sync/TopStrips.decide only when NO warning bar shows (demo: the owner already connected the backup)
+   Open register        ui/screens/cash/OpenRegisterScreen.kt:110-188 (register_open_amount_hint, displaySmall bold amount,
+                        CashKeypad 4 rows 48..72 dp, SumaButton register_open_confirm at the bottom)
+   typing rule          ui/screens/cash/MoneyKeypadEntry.kt (whole units; bottom-left key "000" in COP/CLP, the decimal mark elsewhere)
+   after Abrir          ui/navigation/RegisterNavGraph.kt onOpened: popBackStack -> Home, the bar is gone (register open)
+   a dish tap           CartActions.addItemToCart -> CurrentSaleStrip.kt (home_current_sale_items) + FooterButtonPair (Guardar | Cobrar $X)
+   bottom bar           ui/app/PlatataApp.kt:505-700 (Caja, Ventas, Mi negocio = 32 dp flag circle) */
+// TITLE: Platata · Abrir la caja
+// KEYS: common_save
+const STR={"cash_movement_in": {"en": "Cash in", "es": "Meter efectivo", "pt": "Colocar dinheiro"}, "cash_movement_out": {"en": "Cash out", "es": "Sacar efectivo", "pt": "Retirar dinheiro"}, "cash_movement_reason_change": {"en": "Change", "es": "Sencillo", "pt": "Troco"}, "cash_movement_reason_other": {"en": "Other", "es": "Otro", "pt": "Outro"}, "cash_movement_reason_owner_took": {"en": "Owner took it", "es": "Retiro del dueño", "pt": "Retirada do dono"}, "cash_movement_reason_supplier": {"en": "Supplier", "es": "Proveedor", "pt": "Fornecedor"}, "cash_movement_saved": {"en": "Saved", "es": "Guardado", "pt": "Salvo"}, "cash_movement_void": {"en": "Void", "es": "Anular", "pt": "Anular"}, "common_charge": {"en": "Charge %s", "es": "Cobrar %s", "pt": "Cobrar %s"}, "common_edit": {"en": "Edit", "es": "Editar", "pt": "Editar"}, "common_save": {"en": "Save", "es": "Guardar", "pt": "Salvar"}, "home_tab_library": {"en": "Library", "es": "Catálogo", "pt": "Catálogo"}, "home_tab_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "items_filter_all": {"en": "All", "es": "Todos", "pt": "Todos"}, "mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "more_my_products_count": {"en": "%1$d items", "es": "%1$d artículos", "pt": "%1$d itens"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "payment_method_cash": {"en": "Cash", "es": "Efectivo", "pt": "Dinheiro"}, "register_list_title": {"en": "Register history", "es": "Historial de caja", "pt": "Histórico de caixa"}, "register_nav_today": {"en": "Today · %1$s", "es": "Hoy · %1$s", "pt": "Hoje · %1$s"}, "register_open_amount_hint": {"en": "Starting cash", "es": "Efectivo inicial", "pt": "Troco inicial"}, "register_open_confirm": {"en": "Open register", "es": "Abrir caja", "pt": "Abrir caixa"}, "register_open_title": {"en": "Open register", "es": "Abrir caja", "pt": "Abrir caixa"}, "register_status_cash_all": {"en": "All cash since it opened", "es": "Todo el efectivo desde que abrió", "pt": "Todo o dinheiro desde a abertura"}, "register_status_cash_sales_here": {"en": "Cash sales (this register)", "es": "Ventas en efectivo (esta caja)", "pt": "Vendas em dinheiro (neste caixa)"}, "register_status_close_btn": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_status_expected": {"en": "Should be in the drawer", "es": "Debe haber en la caja", "pt": "Deve haver no caixa"}, "register_status_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "register_status_opened_at": {"en": "Opened", "es": "Abierta", "pt": "Aberto em"}, "register_status_opened_by": {"en": "Opened by", "es": "Abierta por", "pt": "Aberto por"}, "register_status_pill_open": {"en": "● OPEN", "es": "● ABIERTA", "pt": "● ABERTO"}, "register_status_starting_cash": {"en": "Starting cash", "es": "Efectivo inicial", "pt": "Troco inicial"}, "reports_total_collected": {"en": "Total collected", "es": "Total cobrado", "pt": "Total recebido"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Líquido hoje · %s"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "settings_gate_subtitle": {"en": "Confirm your identity to open your business", "es": "Confirma tu identidad para abrir tu negocio", "pt": "Confirme sua identidade para abrir o seu negócio"}, "settings_gate_title": {"en": "Open your business?", "es": "¿Abrir tu negocio?", "pt": "Abrir o seu negócio?"}, "tx_tab_all": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "workspace_menu_title": {"en": "Menu", "es": "Menú", "pt": "Cardápio"}, "workspace_register_closed": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "workspace_register_closed_sub": {"en": "Open it to start selling", "es": "Ábrela para empezar a vender", "pt": "Abra para começar a vender"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_open_action": {"en": "Open", "es": "Abrir", "pt": "Abrir"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}};
+const PLU={"home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_current_sale_items": {"en": {"one": "Current sale · %d item", "other": "Current sale · %d items"}, "es": {"one": "Venta actual · %d artículo", "other": "Venta actual · %d artículos"}, "pt": {"one": "Venda atual · %d item", "other": "Venda atual · %d itens"}}};
+const ASSET={"ic": {}, "pot": {}};
+
+const R = RKIT.ctx();
+/* ---- shared by RS1/RS2/RS8/RS9/RS10 (copied into each page at build time; strings come from the values files) ---- */
+// KEYS: scan_row_reports_today_net,register_open_title,register_open_confirm,register_open_amount_hint,workspace_register_closed,workspace_register_open,workspace_register_open_action,workspace_register_sales,workspace_register_closed_sub,common_charge,common_save,home_tab_manual,home_tab_library,items_filter_all,common_edit,mamaship_tab_register,tx_tab_all,home_tab_my_business,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,workspace_menu_title,more_customers_title,more_my_products_count,workspace_full_reports,scan_row_reports_today,register_nav_today,register_status_full_reports,register_status_pill_open,register_status_opened_at,register_status_opened_by,register_status_starting_cash,register_status_cash_sales_here,register_status_expected,cash_movement_out,cash_movement_in,register_status_cash_all,reports_total_collected,register_list_title,register_status_close_btn,cash_movement_void,payment_method_cash,cash_movement_reason_supplier,cash_movement_reason_owner_took,cash_movement_reason_other,cash_movement_reason_change,cash_movement_saved,settings_gate_title,settings_gate_subtitle
+// PLURALS: home_current_sale_items,home_clientes_count
+const C = R.C, esc = RKIT.esc, LG = R.lang;
+const AL = {es:"es", pt:"pt-BR", en:"en"}[LG];          // the app's language tag (choke 12); Java Locale.getDefault()
+const fmtS = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : v; }); };
+const t = (k, ...a) => { const o = STR[k]; if(!o) return "??"+k; return fmtS(o[LG], a); };
+const plCat = n => LG==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other");
+const tp = (k, n, ...a) => { const p = PLU[k][LG]; return fmtS(p[plCat(n)] || p.other, a.length ? a : [n]); };
+const money = v => R.money(v);
+/* dates: the demo day is Tue 20 Oct 2026 */
+const D = (h, m) => new Date(2026, 9, 20, h, m);
+const fmtDT = d => new Intl.DateTimeFormat(AL, {dateStyle:"medium", timeStyle:"short"}).format(d);     // DateFormat MEDIUM, SHORT
+const fmtTime = d => new Intl.DateTimeFormat(AL, {timeStyle:"short"}).format(d);                       // DateFormat SHORT time
+const shortDay = d => new Intl.DateTimeFormat(AL, {day:"numeric", month:"short"}).format(d).replace(/ de /, " ");   // utils/ShortDay.kt drops "de"
+/* the money keypad rule (ui/screens/cash/MoneyKeypadEntry.kt): whole units typed, the bottom-left key is the
+   decimal mark where the currency has cents, "000" where it has none */
+const DECMARK = new Intl.NumberFormat(C.loc).formatToParts(1.5).find(p=>p.type==="decimal").value;
+const ZKEY = C.dec===0 ? "000" : DECMARK;
+const press = (cur, key) => {
+  if(key==="del") return cur.slice(0,-1);
+  if(key==="z"){ if(C.dec===0) return cur ? cur+"000" : cur; if(cur.includes(".")) return cur; return (cur||"0")+"."; }
+  if(cur.includes(".") && cur.split(".")[1].length>=C.dec) return cur;
+  if(cur==="0") return key;
+  return cur+key;
+};
+const amountOf = s => parseFloat(s||"0")||0;
+/* keys a demo types: "5,0,z" -> ["5","0","z"]; z = the bottom-left key */
+const keysFor = amount => {      // the taps that type `amount` with the rule above
+  if(C.dec===0 && amount%1000===0 && amount>=1000) return String(amount/1000).split("").concat(["z"]);
+  const w = Math.floor(amount), c = Math.round((amount-w)*100);
+  const k = String(w).split("");
+  if(c) { k.push("z"); k.push(...String(c).padStart(2,"0").replace(/0$/,"").split("")); }
+  return k;
+};
+const I = {
+  back:'<svg class="mi" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  receipt:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  edit:'<svg class="mi" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  check:'<svg class="mi" viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  bksp:'<svg class="mi" viewBox="0 0 24 24"><path d="M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"/></svg>',
+  chevL:'<svg class="mi" viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg>',
+  chevR:'<svg class="mi" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  down:'<svg class="mi" viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>',
+  clock:'<svg class="mi" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
+  close:'<svg class="mi" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+  person:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  rest:'<svg class="mi" viewBox="0 0 24 24"><path d="M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"/></svg>',
+  rlong:'<svg class="mi" viewBox="0 0 24 24"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14z"/><path d="M9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"/></svg>',
+  share:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>',
+  search:'<svg class="mi" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
+  wa:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>',
+  fp:'<svg class="mi" viewBox="0 0 24 24"><path d="M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z"/></svg>'
+};
+const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+const ALL_C = "#607D8B";
+const colorOf = it => (C.catOf(it.cat)||{color:ALL_C}).color;
+const item = id => C.items.find(x=>x.id===id);
+const OWNER = C.owner, OWNER_FIRST = OWNER.split(" ")[0];
+
+/* SumaTopBar: TopAppBar 64 dp, back arrow, titleLarge bold (ui/components/SumaTopBar.kt) */
+const topbar = (title, o={}) => `<div class="tb">${o.noBack?"":`<span class="ib" data-t="${o.backT||"back"}">${o.close?I.close:I.back}</span>`}<div class="tt">${o.html||esc(title)}</div>${o.action||""}</div>`;
+/* SumaButton: 52 dp, radius 12 (pill = 50), titleMedium SemiBold */
+const btn = (text, kind, dt, o={}) => `<div class="sb ${kind||"pri"}${o.pill?" pill":""}${o.off?" off":""}" ${dt?`data-t="${dt}"`:""}>${o.icon||""}<span>${esc(text)}</span></div>`;
+/* CashKeypad (OpenRegisterScreen.kt:191): 4 rows sharing the height, 48..72 dp, 4 dp gaps, grey keys r12, headlineLarge bold */
+const keypad = (pre, rowH) => { const rows=[["1","2","3"],["4","5","6"],["7","8","9"],["z","0","del"]];
+  return `<div class="ck" style="--kh:${rowH||64}">${rows.map(r=>`<div class="kr">${r.map(k=>`<span data-t="${pre}-${k}">${k==="del"?I.bksp:k==="z"?esc(ZKEY):k}</span>`).join("")}</div>`).join("")}</div>`; };
+/* owner bottom NavigationBar (PlatataApp.kt:505-700): Caja (ShoppingCart), Ventas (Receipt), Mi negocio (32 dp flag circle;
+   a fingerprint while Security is locked, isSecurityLocked) */
+const nav = (on, o={}) => `<div class="mnav">
+  <div class="${on==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${I.cart}</span>${esc(t("mamaship_tab_register"))}</div>
+  <div class="${on==="ventas"?"on":""}" data-t="nav-ventas"><span class="pill">${I.receipt}</span>${esc(t("tx_tab_all"))}</div>
+  <div class="${on==="biz"?"on":""}" data-t="nav-biz"><span class="flagc${on==="biz"?" lit":""}">${o.locked?`<i class="fp">${I.fp}</i>`:R.flag()}</span>${esc(t("home_tab_my_business"))}</div></div>`;
+/* product grid: ProductLibraryView.kt chips (first "All") + 3-column cards */
+const cats = () => `<div class="mcats">` + [{name:t("items_filter_all"),color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
+    const st = c.all ? `background:${hexA(c.color,.22)};border:calc(var(--u)*1.5) solid ${c.color};color:${c.color}` : `background:${hexA(c.color,.05)};border:1px solid ${hexA(c.color,.3)}`;
+    return `<span style="${st}">${c.all?I.check:""}${esc(c.name)}</span>`; }).join("") + `</div>`;
+const grid = () => `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
+    return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${money(it.price)}</span></div></div>`; }).join("") + `</div>`;
+/* owner Home, Catálogo tab (HomeScreen.kt:610-690 top, FooterButtonPair bottom). o.top = html of the one top strip */
+function home(o){
+  o = o||{};
+  const tabs = `<div class="htabs"><span class="${o.tab===0?"on":""}">${I.edit}${esc(t("home_tab_manual"))}</span><span class="${o.tab!==0?"on":""}">${esc(t("home_tab_library"))}</span></div>`;
+  const n = o.count||0, tot = o.total||0;
+  let h = (o.warn||"") + tabs + (o.top||"") + (o.body!=null ? o.body : `<div class="hedit"><span>${I.edit}${esc(t("common_edit"))}</span></div>` + cats() + grid());
+  h += `<div class="hfoot">${n?`<div class="cstrip"><span>${esc(tp("home_current_sale_items", n, n))}</span><i>›</i></div>`:""}
+    <div class="fpair">${btn(t("common_save"),"sec","save",{pill:true,off:!n})}${btn(t("common_charge", money(tot)),"pri","charge",{pill:true,off:!n})}</div></div>`;
+  return h + nav("caja", {locked:o.locked});
+}
+/* RegisterClosedBar.kt: #FEF3C7 row, titleSmall bold #856404, orange pill "Abrir" */
+const closedBar = () => `<div class="cbar"><b>${esc(t("workspace_register_closed"))}</b><span data-t="bar-open">${esc(t("workspace_register_open_action"))}</span></div>`;
+
+/* Open register (cash/OpenRegisterScreen.kt): top bar, "Efectivo inicial", the amount (displaySmall bold), keypad, button at the bottom */
+const openRegister = (typed, rowH) => `<div class="pg">${topbar(t("register_open_title"))}
+  <div class="pb"><div class="lbl" style="text-align:center">${esc(t("register_open_amount_hint"))}</div><div class="amt">${money(amountOf(typed))}</div>
+  <div class="grow"></div>${keypad("k", rowH)}</div>
+  <div class="pf">${btn(t("register_open_confirm"),"pri","open-confirm")}</div></div>`;
+
+/* the business panel (HomeScreen.kt ~1400-1760): name header, register card, Sell online, "Día a día", Menú, Clientes, Reportes */
+function panel(o){
+  const open = o.open, tot = o.sales||0;
+  const card = open
+    ? `<div class="wr reg on" data-t="reg-card"><i class="dot">●</i><div class="tx"><b>${esc(t("workspace_register_open"))}</b><small>${esc(t("workspace_register_sales"))}</small></div><b class="amt">${money(tot)}</b></div>`
+    : `<div class="wr reg off" data-t="reg-card"><i class="dot">●</i><div class="tx"><b>${esc(t("workspace_register_closed"))}</b><small>${esc(t("workspace_register_closed_sub"))}</small></div><b class="act">${esc(t("workspace_register_open_action"))}</b></div>`;
+  const row = (ic, ti, sub, tr) => `<div class="wr"><span class="ic">${ic}</span><div class="tx"><b>${esc(ti)}</b><small>${esc(sub)}</small></div>${tr||""}</div>`;
+  return `<div class="wp"><div class="wph"><b>${esc(C.place)}</b>${I.down}</div>
+    <div class="wpl">${card}
+    ${row(I.cart, t("sell_online_title"), t("sell_online_row_off"), `<span class="opill">${esc(t("sell_online_pill_off"))}</span>`)}
+    <div class="wps">${esc(t("panel_heading_every_day"))}</div>
+    ${row(I.rest, t("workspace_menu_title"), t("more_my_products_count", C.items.length))}
+    ${row(I.person, t("more_customers_title"), tp("home_clientes_count", o.clients||0, o.clients||0))}
+    ${row(I.rlong, t("workspace_full_reports"), t((R.country==="US"||R.country==="CA") ? "scan_row_reports_today" : "scan_row_reports_today_net", money(o.today||tot)))}
+    </div></div>` + nav("biz");
+}
+/* the system biometric sheet that the flag tap opens (PlatataApp.kt flag gate -> showBiometricPrompt, settings_gate_*) */
+const bioSheet = (ok) => `<div class="mscrim"><div class="bio"><b>${esc(t("settings_gate_title"))}</b><small>${esc(t("settings_gate_subtitle"))}</small>
+  <span class="fpb${ok?" ok":""}" data-t="fingerprint">${ok?I.check:I.fp}</span></div></div>`;
+
+/* Register screen (cash/RegisterStatusScreen.kt:130-520), 0/1 register: no tab row. o = {start, cashSales, moves:[{kind,reason,amount,at}], scroll} */
+function registerScreen(o){
+  const out = (o.moves||[]).filter(m=>m.kind==="out").reduce((s,m)=>s+m.amount,0), inn = (o.moves||[]).filter(m=>m.kind==="in").reduce((s,m)=>s+m.amount,0);
+  const exp = o.start + o.cashSales + inn - out;
+  const reason = r => t({supplier:"cash_movement_reason_supplier",owner:"cash_movement_reason_owner_took",other:"cash_movement_reason_other",change:"cash_movement_reason_change"}[r]);
+  const moves = (o.moves||[]).map(m=>`<div class="mv${m.isNew?" new":""}"><span>${esc(t(m.kind==="out"?"cash_movement_out":"cash_movement_in"))} · ${esc(reason(m.reason))} · ${esc(fmtTime(m.at))}</span><b class="${m.kind}">${m.kind==="out"?"-":"+"}${money(m.amount)}</b><i>${esc(t("cash_movement_void"))}</i></div>`).join("");
+  const tbar = topbar("", {html:`<div class="navd"><span class="dim">${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(o.openedAt)))}</b><span class="dim">${I.chevR}</span></div>`,
+                 action:`<span class="tba">${esc(t("register_status_full_reports"))}</span>`});
+  const body = `<div class="rs" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+    <div class="pillrow"><span class="spill">${esc(t("register_status_pill_open"))}</span></div>
+    <div class="scard"><div class="lr"><span>${esc(t("register_status_opened_at"))}</span><span>${esc(fmtDT(o.openedAt))}</span></div>
+      <div class="lr"><span>${esc(t("register_status_opened_by"))}</span><span>${esc(OWNER)}</span></div></div>
+    <div class="scard"><div class="lr"><span>${esc(t("register_status_starting_cash"))}</span><span>${money(o.start)}</span></div>
+      <div class="lr"><span>${esc(t("register_status_cash_sales_here"))}</span><span>${money(o.cashSales)}</span></div>
+      ${moves}<hr><div class="lr em${o.expFlash?" flash":""}"><span>${esc(t("register_status_expected"))}</span><span class="pri">${money(exp)}</span></div></div>
+    ${btn(t("cash_movement_out"),"sec","cash-out")}${btn(t("cash_movement_in"),"sec","cash-in")}
+    <div class="scard"><div class="lr ms"><span>${esc(t("register_status_cash_all"))}</span><span>${money(o.cashSales)}</span></div>
+      ${o.cashSales?`<div class="lr ind"><span>${esc(OWNER)}</span><span>${money(o.cashSales)}</span></div>`:""}
+      <hr><div class="lr em"><span>${esc(t("reports_total_collected"))}</span><span>${money(o.cashSales)}</span></div></div>
+    <div class="hist">${I.clock}<span>${esc(t("register_list_title"))}</span></div>
+    ${btn(t("register_status_close_btn"),"sec","close-reg")}<div style="height:calc(var(--u)*16)"></div></div>`;
+  return `<div class="pg">${tbar}<div class="pscroll">${body}</div>${o.snack?`<div class="msnack" style="bottom:calc(var(--u)*16)">${esc(o.snack)}</div>`:""}</div>`;
+}
+const COMMON_CSS = `
+.mat .tb{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff}
+.mat .tb .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on)}
+.mat .tb .tt{flex:1;min-width:0;padding-left:calc(var(--u)*4);font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .tb .tba{padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);color:var(--m-on)}
+.mat .navd{display:flex;align-items:center}.mat .navd b{flex:1;text-align:center;font-size:calc(var(--u)*18);font-weight:700}
+.mat .navd span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}.mat .navd .dim{color:rgba(28,28,30,.25)}
+.mat .pg{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;position:relative}
+.mat .pb{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 calc(var(--u)*16)}
+.mat .pf{padding:calc(var(--u)*16);flex:0 0 auto}
+.mat .lbl{margin-top:calc(var(--u)*24);font-size:calc(var(--u)*16);color:var(--m-onv)}
+.mat .amt{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*57);line-height:1.12;font-weight:700;white-space:nowrap;overflow:hidden}
+.mat .grow{flex:1}
+.mat .ck{display:flex;flex-direction:column;gap:calc(var(--u)*4);margin-bottom:calc(var(--u)*16)}
+.mat .ck .kr{display:flex;gap:calc(var(--u)*4);height:calc(var(--u)*var(--kh))}
+.mat .ck span{flex:1;border-radius:calc(var(--u)*12);background:var(--m-sv);display:grid;place-items:center;font-size:calc(var(--u)*32);font-weight:700}
+.mat .sb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center}
+.mat .sb.pill{border-radius:calc(var(--u)*50)}
+.mat .sb.pri{background:var(--m-on);color:#fff}
+.mat .sb.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .sb.dst{background:var(--m-err);color:#fff}
+.mat .sb.off.pri{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .sb.off.sec{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.mat .sb svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:currentColor}
+.mat .htabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.mat .htabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);font-weight:400;color:var(--m-onv);position:relative}
+.mat .htabs span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.mat .htabs span.on{color:var(--m-on);font-weight:700}
+.mat .htabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.mat .hedit{display:flex;justify-content:flex-end;padding:calc(var(--u)*4) calc(var(--u)*16) 0;flex:0 0 auto}
+.mat .hedit span{display:flex;align-items:center;gap:calc(var(--u)*6);height:calc(var(--u)*36);padding:0 calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .hedit svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.mat .hfoot{flex:0 0 auto;background:#fff}
+.mat .cstrip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:600}
+.mat .cstrip i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.mat .fpair{display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16)}
+.mat .fpair .sb{flex:1}.mat .fpair .sb.pri{flex:1.4}
+.mat .cbar{display:flex;align-items:center;justify-content:space-between;background:#FEF3C7;padding:calc(var(--u)*8) calc(var(--u)*16);flex:0 0 auto}
+.mat .cbar b{font-size:calc(var(--u)*14);color:#856404}
+.mat .cbar span{min-height:calc(var(--u)*44);display:grid;place-items:center;padding:0 calc(var(--u)*24);border-radius:calc(var(--u)*50);background:#FF9500;color:#fff;font-size:calc(var(--u)*14);font-weight:700}
+.mat .mnav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.mat .mnav .flagc .fp{display:grid;place-items:center;color:var(--m-onv)}
+.mat .mnav .flagc .fp svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+.mat .wp{flex:1;min-height:0;overflow:hidden;background:#fff}
+.mat .wph{display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*20) calc(var(--u)*24)}
+.mat .wph b{font-size:calc(var(--u)*28);font-weight:900;color:var(--m-blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .wph svg{width:calc(var(--u)*28);height:calc(var(--u)*28);fill:var(--m-blue);flex:0 0 auto}
+.mat .wpl{display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .wr .tx{flex:1;min-width:0}.mat .wr .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700}
+.mat .wr .tx small{display:block;margin-top:calc(var(--u)*2);font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .wr.reg.on{background:#E8F5E9;color:#2E7D32}.mat .wr.reg.off{background:#FFEBEE;color:#C62828}
+.mat .wr.reg .tx small{color:inherit;opacity:.7}.mat .wr.reg .dot{font-style:normal;font-size:calc(var(--u)*16)}
+.mat .wr.reg .amt{font-size:calc(var(--u)*18)}.mat .wr.reg .act{font-size:calc(var(--u)*14)}
+.mat .opill{font-size:calc(var(--u)*11);font-weight:700;color:var(--m-onv);background:#fff;border-radius:99px;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.mat .wps{padding:calc(var(--u)*16) calc(var(--u)*28) calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.mat .bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*32) calc(var(--u)*24) calc(var(--u)*40);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*8);text-align:center}
+.mat .bio b{font-size:calc(var(--u)*22);font-weight:500}.mat .bio small{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .bio .fpb{margin-top:calc(var(--u)*28);width:calc(var(--u)*64);height:calc(var(--u)*64);border-radius:50%;display:grid;place-items:center;color:#1A73E8;border:calc(var(--u)*2) solid #1A73E8}
+.mat .bio .fpb svg{width:calc(var(--u)*40);height:calc(var(--u)*40)}.mat .bio .fpb.ok{background:#1A73E8;color:#fff}
+.mat .pscroll{flex:1;min-height:0;overflow:hidden}
+.mat .rs{padding:0 calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16);transition:transform .5s ease}
+.mat .pillrow{display:flex;justify-content:center;padding-top:calc(var(--u)*8)}
+.mat .spill{border-radius:calc(var(--u)*50);background:#E8F5E9;color:#2E7D32;font-size:calc(var(--u)*12);font-weight:700;padding:calc(var(--u)*8) calc(var(--u)*16)}
+.mat .scard{background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.2),0 calc(var(--u)*1) calc(var(--u)*1) rgba(0,0,0,.08);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .lr{display:flex;justify-content:space-between;gap:calc(var(--u)*12);font-size:calc(var(--u)*14)}
+.mat .lr span:first-child{color:var(--m-onv)}.mat .lr span:last-child{text-align:right;white-space:nowrap}
+.mat .lr.em span{font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}.mat .lr.em span:last-child{font-size:calc(var(--u)*18)}
+.mat .lr .pri{color:var(--m-on)}.mat .lr.ms span{font-weight:600;color:var(--m-on)}
+.mat .lr.ind{padding-left:calc(var(--u)*16)}.mat .lr.ind span{color:var(--m-onv)!important}
+.mat .lr.flash span:last-child{animation:fl 1.2s ease}
+@keyframes fl{0%{background:#FFF3C4}100%{background:transparent}}
+.mat .scard hr{border:0;border-top:1px solid var(--m-ovar);margin:0}
+.mat .mv{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14)}
+.mat .mv span{flex:1;color:var(--m-on)}.mat .mv b{font-weight:600}.mat .mv b.out{color:var(--m-err)}.mat .mv b.in{color:var(--m-on)}
+.mat .mv i{font-style:normal;font-size:calc(var(--u)*12);color:var(--m-err);padding:0 calc(var(--u)*4)}
+.mat .mv.new{animation:fl 1.4s ease}
+.mat .hist{height:calc(var(--u)*40);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500}
+.mat .hist svg{width:calc(var(--u)*24);height:calc(var(--u)*24)}
+.mat .dlg-s{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*24)}
+.mat .dlg{background:#ECECF1;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24);width:100%}
+.mat .dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:1.3}
+.mat .dlg p{margin:0;font-size:calc(var(--u)*14);color:var(--m-onv);line-height:1.45}
+.mat .dlg .bt{display:flex;justify-content:flex-end;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:500}
+.mat .dlg .bt span{padding:calc(var(--u)*10) calc(var(--u)*12)}
+`;
+(function(){ const s=document.createElement("style"); s.textContent=COMMON_CSS; document.head.appendChild(s); })();
+
+const START = {CO:50000,CL:50000,AR:50000,MX:1000,PE:200,BR:200,EC:100,PA:100,US:100,CA:100}[R.country];
+const KEYS = keysFor(START);
+const DISH = item(C.order[1]);
+function render(st){
+  if(st.screen==="open") return openRegister(st.typed, 72);
+  return home({tab:1, top: st.isOpen ? "" : closedBar(), count:st.count, total:st.count*DISH.price});
+}
+RKIT.start(R, {
+  id:"RS2", tallVideo:true, clock:"8:58",
+  endText:R.pick({es:"Así abres la caja con Platata.",pt:"Assim você abre o caixa com o Platata.",en:"That's how you open the register with Platata."}),
+  beats:R.pick({
+    es:["Empieza el día: la caja está cerrada. Toca Abrir","Escribe con cuánto efectivo empiezas","Toca Abrir caja","La caja quedó abierta: ya puedes vender","Así abres la caja con Platata."],
+    pt:["Comece o dia: o caixa está fechado. Toque em Abrir","Digite com quanto dinheiro você começa","Toque em Abrir caixa","O caixa está aberto: já pode vender","Assim você abre o caixa com o Platata."],
+    en:["Start the day: the register is closed. Tap Open","Type the cash you start with","Tap Open register","The register is open: now you can sell","That's how you open the register with Platata."]}),
+  state:{screen:"home", isOpen:false, typed:"", count:0},
+  render,
+  steps:[
+    {beat:0, hint:R.pick({es:"Toca Abrir",pt:"Toque em Abrir",en:"Tap Open"}), target:'[data-t="bar-open"]', tap(st){ st.screen="open"; }},
+    {beat:1, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+(KEYS[0]==="z"?ZKEY:KEYS[0]), target:`[data-t="k-${KEYS[0]}"]`, tap(st,E){
+        st.typed=press(st.typed,KEYS[0]); KEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed=press(st.typed,k); })); }},
+    {beat:2, hint:R.pick({es:"Toca Abrir caja",pt:"Toque em Abrir caixa",en:"Tap Open register"}), target:'[data-t="open-confirm"]', tap(st){ st.screen="home"; st.isOpen=true; }},
+    {beat:3, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+DISH.name, target:`[data-t="dish-${DISH.id}"]`, tap(st){ st.count=1; }}
+  ]
+});
+</script>
+</body>
+</html>

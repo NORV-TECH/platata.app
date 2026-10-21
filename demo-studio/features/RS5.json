@@ -1,0 +1,61 @@
+{
+  "id": "RS5",
+  "name": "Take cards (Colombia Wompi; US/CA Tap to Pay; Brazil: no card)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-card",
+      "voice": {
+        "es": "Con la venta lista, toca Cobrar y luego Tarjeta.",
+        "pt": "No Brasil, o Platata não cobra com cartão. Toque em Cobrar.",
+        "en": "With the sale ready, tap Charge, then Card."
+      }
+    },
+    {
+      "id": "2-details",
+      "voice": {
+        "es": "Escribe los datos de la tarjeta del cliente.",
+        "pt": "Cobre em dinheiro: toque em Exato.",
+        "en": "Hand over the phone: the customer picks a tip, and the charge starts."
+      }
+    },
+    {
+      "id": "3-charge",
+      "voice": {
+        "es": "Las casillas de Wompi ya vienen marcadas. Toca Cobrar.",
+        "pt": "Venda concluída. Toque em Nova venda.",
+        "en": "They tap their credit or debit card, or their phone, on yours."
+      }
+    },
+    {
+      "id": "4-approved",
+      "voice": {
+        "es": "El banco aprueba y la venta queda guardada sola. Toca Nueva venta.",
+        "pt": "Em Formas de pagamento não aparece Cartão no Brasil.",
+        "en": "Payment approved, tip included. Tap New sale."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así cobras con tarjeta, con Platata.",
+        "pt": "Assim você cobra sem cartão, com o Platata.",
+        "en": "That's how you take cards with Platata."
+      }
+    }
+  ]
+}

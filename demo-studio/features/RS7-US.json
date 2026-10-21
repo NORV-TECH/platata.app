@@ -1,0 +1,61 @@
+{
+  "id": "RS7-US",
+  "name": "Receipt: US in Spanish (text and email)",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-charge",
+      "voice": {
+        "es": "Cobra la venta: toca Cobrar y luego Exacto."
+      }
+    },
+    {
+      "id": "2-print",
+      "voice": {
+        "es": "Con impresora, el recibo ya salió. Si piden otro, toca Imprimir otra vez."
+      }
+    },
+    {
+      "id": "3-view",
+      "voice": {
+        "es": "Toca Ver recibo para mirarlo."
+      }
+    },
+    {
+      "id": "4-text",
+      "voice": {
+        "es": "Toca Recibo por mensaje y escribe el número del cliente."
+      }
+    },
+    {
+      "id": "5-send",
+      "voice": {
+        "es": "Envíalo desde tus mensajes."
+      }
+    },
+    {
+      "id": "6-email",
+      "voice": {
+        "es": "También va por correo: toca Recibo por correo y envíalo."
+      }
+    },
+    {
+      "id": "7-new",
+      "voice": {
+        "es": "De vuelta en Platata, toca Nueva venta."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así das el recibo por mensaje, correo o impreso, con Platata."
+      }
+    }
+  ]
+}

@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Enviar al contador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/restaurant-data.js"></script>
+<script src="../../kit/rkit.js"></script>
+<script>
+
+// TITLE: Platata · Enviar al contador
+const STR={"accountant_card_fees_none_note": {"en": "Card fees are not known yet. Card sales are shown before fees.", "es": "Aún no conocemos las comisiones de tarjeta. Las ventas con tarjeta se muestran antes de comisiones.", "pt": "Ainda não temos as taxas do cartão. As vendas no cartão aparecem antes das taxas."}, "accountant_card_sales": {"en": "Card and electronic sales", "es": "Ventas con tarjeta y electrónicas", "pt": "Vendas no cartão e eletrônicas"}, "accountant_cash_sales": {"en": "Cash sales", "es": "Ventas en efectivo", "pt": "Vendas em dinheiro"}, "accountant_copied": {"en": "Copied", "es": "Copiado", "pt": "Copiado"}, "accountant_disclaimer": {"en": "Taken from the sales recorded in the app.\nPlatata does not calculate taxes.", "es": "Tomado de las ventas registradas en la app.\nPlatata no calcula impuestos.", "pt": "Extraído das vendas registradas no app.\nO Platata não calcula impostos."}, "accountant_footer": {"en": "These are all the numbers we have. We do not calculate taxes.", "es": "Estos son todos los números que tenemos. No calculamos impuestos.", "pt": "Estes são todos os números que temos. Não calculamos impostos."}, "accountant_intro": {"en": "These numbers are for your accountant. Send them and they will take care of the rest.", "es": "Estos números son para tu contador o contadora. Envíaselos y se encarga del resto.", "pt": "Estes números são para quem cuida da sua contabilidade. Envie e essa pessoa cuida do resto."}, "accountant_paid_employees": {"en": "Total paid to employees", "es": "Pagado a empleados", "pt": "Pago a funcionários"}, "accountant_paid_suppliers": {"en": "Total paid to suppliers", "es": "Pagado a proveedores", "pt": "Pago a fornecedores"}, "accountant_row_copy": {"en": "Copy", "es": "Copiar", "pt": "Copiar"}, "accountant_save_pdf": {"en": "Share as PDF", "es": "Compartir PDF", "pt": "Compartilhar PDF"}, "accountant_send": {"en": "Send summary to the accountant", "es": "Enviar resumen al contador", "pt": "Enviar resumo ao contador"}, "accountant_supplier_invoices": {"en": "Supplier invoices", "es": "Facturas de proveedores", "pt": "Notas de fornecedores"}, "accountant_title": {"en": "Summary for the accountant", "es": "Resumen para el contador", "pt": "Resumo para o contador"}, "accountant_total_sales": {"en": "Net sales", "es": "Ventas netas", "pt": "Vendas líquidas"}, "accountant_total_taxes": {"en": "Total taxes collected", "es": "Impuestos cobrados", "pt": "Impostos recolhidos"}, "refunds_with_count": {"en": "Refunds (%1$d)", "es": "Devoluciones (%1$d)", "pt": "Devoluções (%1$d)"}, "reports_after_refunds": {"en": "after refunds", "es": "después de devoluciones", "pt": "após devoluções"}, "reports_avg_ticket": {"en": "Average sale", "es": "Venta promedio", "pt": "Venda média"}, "reports_breakdown_other": {"en": "Other", "es": "Otros", "pt": "Outros"}, "reports_cash_rounding": {"en": "Cash rounding", "es": "Redondeo en efectivo", "pt": "Arredondamento em dinheiro"}, "reports_category_title": {"en": "Item sales by category", "es": "Ventas de artículos por categoría", "pt": "Vendas de itens por categoria"}, "reports_chart_title": {"en": "Sales over time", "es": "Ventas por período", "pt": "Vendas por período"}, "reports_compare_vs_last_month": {"en": "vs last month", "es": "vs mes pasado", "pt": "vs mês passado"}, "reports_compare_vs_previous": {"en": "vs previous period", "es": "vs período anterior", "pt": "vs período anterior"}, "reports_compare_vs_yesterday": {"en": "vs yesterday", "es": "vs ayer", "pt": "vs ontem"}, "reports_dining_charges": {"en": "Dining charges", "es": "Cargos por tipo de pedido", "pt": "Taxas por tipo de pedido"}, "reports_dining_title": {"en": "Sales by dining option", "es": "Ventas por tipo de consumo", "pt": "Vendas por tipo de consumo"}, "reports_discounts": {"en": "Discounts", "es": "Descuentos", "pt": "Descontos"}, "reports_employee_sales": {"en": "Sales by employee", "es": "Ventas por empleado", "pt": "Vendas por funcionário"}, "reports_gross_sales": {"en": "Gross sales", "es": "Ventas brutas", "pt": "Vendas brutas"}, "reports_line_by_name": {"en": "By name", "es": "Por nombre", "pt": "Por nome"}, "reports_line_no_names": {"en": "Names are not saved for this, so only the sales are listed.", "es": "De esto no se guardan nombres, así que solo se listan las ventas.", "pt": "Disto não guardamos nomes, então só as vendas são listadas."}, "reports_line_sales_list": {"en": "These sales", "es": "Estas ventas", "pt": "Estas vendas"}, "reports_line_sales_n": {"en": "Sales: %1$d", "es": "Ventas: %1$d", "pt": "Vendas: %1$d"}, "reports_line_unnamed_service": {"en": "Service charge", "es": "Cargo por servicio", "pt": "Taxa de serviço"}, "reports_line_unnamed_tax": {"en": "Tax", "es": "Impuesto", "pt": "Imposto"}, "reports_net_sales": {"en": "Net sales", "es": "Ventas netas", "pt": "Vendas líquidas"}, "reports_net_sales_note": {"en": "Before tax, tips and charges", "es": "Antes de impuestos, propinas y cargos", "pt": "Antes de impostos, gorjetas e taxas"}, "reports_payment_split": {"en": "How you got paid", "es": "Cómo te pagaron", "pt": "Como você recebeu"}, "reports_period_custom": {"en": "Custom", "es": "Personalizado", "pt": "Personalizado"}, "reports_period_label_dated": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "reports_period_last_month": {"en": "Last month", "es": "Mes pasado", "pt": "Mês passado"}, "reports_period_last_year": {"en": "Last year", "es": "Año pasado", "pt": "Ano passado"}, "reports_period_this_month": {"en": "This month", "es": "Este mes", "pt": "Este mês"}, "reports_period_this_week": {"en": "This week", "es": "Esta semana", "pt": "Esta semana"}, "reports_period_this_year": {"en": "This year", "es": "Este año", "pt": "Este ano"}, "reports_period_today": {"en": "Today", "es": "Hoy", "pt": "Hoje"}, "reports_period_yesterday": {"en": "Yesterday", "es": "Ayer", "pt": "Ontem"}, "reports_send_to_accountant": {"en": "Summary for the accountant", "es": "Resumen para el contador", "pt": "Resumo para o contador"}, "reports_service_charges": {"en": "Service charges", "es": "Cargos por servicio", "pt": "Taxas de serviço"}, "reports_sold_count": {"en": "%d sold", "es": "%d vendidos", "pt": "%d vendidos"}, "reports_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "reports_tips": {"en": "Tips", "es": "Propinas", "pt": "Gorjetas"}, "reports_title": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "reports_top_items": {"en": "Top items by revenue", "es": "Artículos con más ingresos", "pt": "Itens com maior receita"}, "reports_total_collected": {"en": "Total collected", "es": "Total cobrado", "pt": "Total recebido"}, "reports_transactions": {"en": "Number of sales", "es": "Número de ventas", "pt": "Número de vendas"}, "tx_sale_number_short": {"en": "#%d", "es": "#%d", "pt": "#%d"}, "whatsapp_signature": {"en": "Made with Platata · platata.app", "es": "Hecho con Platata · platata.app", "pt": "Feito com Platata · platata.app"}};
+const PLU={"accountant_gap_unread": {"en": {"one": "%1$d invoice with no amount read", "other": "%1$d invoices with no amount read"}, "es": {"one": "%1$d factura sin monto leído", "other": "%1$d facturas sin monto leído"}, "pt": {"one": "%1$d nota sem valor lido", "other": "%1$d notas sem valor lido"}}, "accountant_msg_suppliers": {"en": {"one": "(%1$d invoice; %2$d with no amount read)", "other": "(%1$d invoices; %2$d with no amount read)"}, "es": {"one": "(%1$d factura; %2$d sin monto leído)", "other": "(%1$d facturas; %2$d sin monto leído)"}, "pt": {"one": "(%1$d nota; %2$d sem valor lido)", "other": "(%1$d notas; %2$d sem valor lido)"}}, "reports_tx_count": {"en": {"one": "%d sale", "other": "%d sales"}, "es": {"one": "%d venta", "other": "%d ventas"}, "pt": {"one": "%d venda", "other": "%d vendas"}}};
+const ASSET={"ic": {}, "pot": {}};
+
+/* ===== RS11-RS17 common (inlined into each page by the builder; not a kit file) =====
+   Owner-phone Material pieces of the restaurant back office, read from the app code at app-head:
+   panel        ui/screens/home/HomeScreen.kt:1392-1830 (header, WorkspaceRow :1927, rows, divider, Settings)
+   bottom bar   ui/app/PlatataApp.kt:520-723 (Caja ShoppingCart, Ventas Receipt, flag "Mi negocio", lit = panel open)
+   top bar      ui/components/SumaTopBar.kt (64 dp, back arrow, titleLarge 22sp Bold)
+   list header  ui/components/ListScreenHeader.kt (arrow, title 22sp bold, "+ Nuevo", search 56 dp r12)
+   support      ui/screens/reports/SupportStrip.kt (LEVEL_2 pages: Soporte | Mis reportes, paper colours, accent #C44B28)
+   colours      ui/theme/Color.kt + Theme.kt LightColorScheme (#1C1C1E, #6E6E73, #F2F2F7, #E5E5EA, #C7C7CC, #FF3B30) */
+const R = RKIT.ctx();
+const esc = RKIT.esc;
+const P = path => `<svg class="mi" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
+const I = {
+  back:P("M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"),
+  chev:P("M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"),
+  down:P("M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"),
+  person:P("M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"),
+  group:P("M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"),
+  rlong:P("M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"),
+  gear:P("M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"),
+  cart:P("M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"),
+  receipt:P("M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"),
+  resto:P("M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"),
+  search:P("M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"),
+  more:P("M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"),
+  edit:P("M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"),
+  trash:P("M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"),
+  copy:P("M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"),
+  add:P("M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"),
+  tag:P("M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"),
+  pct:P("M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.0025 18.5832 18.59 4l1.41 1.41L5.4125 19.9932zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"),
+  card:P("M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"),
+  store:P("M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"),
+  devices:P("M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"),
+  check:P("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"),
+  phone:P("M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"),
+  badge:P("M20 7h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM9 12c.83 0 1.5.67 1.5 1.5S9.83 15 9 15s-1.5-.67-1.5-1.5S8.17 12 9 12zm3 6H6v-.75c0-1 2-1.5 3-1.5s3 .5 3 1.5V18zm1-9h-2V4h2v5zm5 7.5h-4V15h4v1.5zm0-3h-4V12h4v1.5z"),
+  block:P("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"),
+  support:P("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z"),
+  close:P("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"),
+  lock:P("M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"),
+  wa:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>'
+};
+const pick = R.pick, L = R.lang;
+/* app strings injected by the builder from values / values-es / values-pt-rBR (STR, PLU) */
+const S = k => { const o = STR[k]; if(!o) throw new Error("missing string "+k); return o[L]; };
+const fmtA = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : String(v); }); };
+const F = (k, ...a) => fmtA(S(k), a);
+/* Android plural category: pt (CLDR) "one" for 0 and 1; es/en "one" for 1 */
+const PL = (k, n, ...a) => { const p = PLU[k][L]; const cat = L==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other"); return fmtA(p[cat]||p.other, a.length ? a : [n]); };
+const money = v => R.money(v);
+const dec = R.C.dec;
+const r2 = v => Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec);
+/* utils/CurrencyUtils.kt formatTaxRate: decimal mark of the CURRENCY's locale (COP CLP ARS BRL comma; USD MXN PEN CAD dot) */
+const COMMA_CUR = ["COP","CLP","ARS","BRL"].includes(R.C.cur);
+const pctTxt = p => { const s = String(+(+p).toFixed(2)); return (COMMA_CUR ? s.replace(".", ",") : s) + "%"; };
+const BIZ = R.C.place;
+
+/* ---- the restaurant's people, clients and taxes per country (demo data, the owner's own words) ---- */
+const DIAL = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54",PA:"507",BR:"55",US:"1",CA:"1"}[R.country];
+const OWNER_NAME = {CO:"Marta Gómez",MX:"Lupita Hernández",PE:"Rosa Huamán",CL:"Lucho Fuentes",EC:"Rosa Cedeño",AR:"Rosa Benítez",PA:"Rosa Araúz",BR:"Cida Oliveira",US:"Maria Lopez",CA:"Marie Gagnon"}[R.country];
+const TAX = {CO:{name:"Impoconsumo",p:8,add:false},MX:{name:"IVA",p:16,add:false},PE:{name:"IGV",p:18,add:false},CL:{name:"IVA",p:19,add:false},
+  EC:{name:"IVA",p:15,add:false},AR:{name:"IVA",p:21,add:false},PA:{name:"ITBMS",p:7,add:false},BR:null,
+  US:{name:"Sales tax",p:8.25,add:true},CA:{name:"HST",p:13,add:true}}[R.country];
+const CLIENTS = {
+ CO:["Andrés Ospina","Camila Restrepo","Diana Zapata","Felipe Arango","Juan Restrepo","Natalia Mejía","Sebastián Gil","Valentina Rojas"],
+ MX:["Alejandro Ruiz","Ana Torres","Diego Flores","Fernanda López","Juan Martínez","María Sánchez","Ricardo Gómez","Sofía Morales"],
+ PE:["Alonso Vargas","Carmen Quispe","Daniel Flores","Gabriela Ramos","Juan Torres","Lucía Mendoza","Miguel Castro","Valeria Díaz"],
+ CL:["Benjamín Rojas","Camila Silva","Diego Contreras","Francisca Reyes","Juan González","Martina Díaz","Matías Vera","Sofía Muñoz"],
+ EC:["Andrés Zambrano","Daniela Vera","Fernando Loor","Gabriela Andrade","Juan Cedeño","María Mora","Pablo Intriago","Sofía Bravo"],
+ AR:["Agustín Romero","Camila Sosa","Facundo Pérez","Florencia Gómez","Juan López","Lucía Martínez","Martín Ruiz","Valentina Díaz"],
+ PA:["Ana Batista","Carlos Herrera","Daniela Vega","Fernando Ríos","Juan Rodríguez","María Sánchez","Ricardo Pinzón","Sofía Castillo"],
+ BR:["Ana Souza","Bruno Costa","Camila Rocha","Diego Alves","João Silva","Juliana Lima","Lucas Pereira","Mariana Santos"],
+ US:["Amanda Brooks","Brian Carter","Chris Johnson","Emily Davis","John Smith","Megan Wilson","Ryan Taylor","Sarah Miller"],
+ CA:["Amélie Roy","Chloé Bouchard","David Wilson","Emma Lavoie","John Martin","Lucas Côté","Noah Gagnon","Olivia Brown"]}[R.country];
+/* national numbers: CO/MX/US/CA 10 digits, AR 9+10, BR 11, PE 9, CL 9, EC 9, PA 8 */
+const NAT = {CO:"3001234567",MX:"5512345678",PE:"987654321",CL:"987654321",EC:"991234567",AR:"91123456789",PA:"61234567",BR:"31912345678",US:"7135550142",CA:"4165550142"};
+const natNum = i => { const n = NAT[R.country]; return n.slice(0, n.length-2) + String(10+i*7).slice(-2); };
+/* utils/WhatsappUtils.kt formatWhatsappForReading */
+function waRead(canonical){
+  const dial = DIAL, national = canonical.slice(dial.length);
+  let body;
+  if(dial==="1" && national.length===10) body = "("+national.slice(0,3)+") "+national.slice(3,6)+"-"+national.slice(6);
+  else { const sizes = {10:[3,3,4],9:[3,3,3],8:[4,4]}[national.length]; const g=[]; let rest=national;
+    if(sizes){ sizes.forEach(n=>{g.push(rest.slice(0,n)); rest=rest.slice(n);}); } else { while(rest.length>4){g.push(rest.slice(0,3)); rest=rest.slice(3);} if(rest) g.push(rest); }
+    body = g.join(" "); }
+  return "+"+dial+" "+body;
+}
+/* dates in the app language (java DateFormat MEDIUM ~ Intl medium) */
+const LOCALE = {es:"es",pt:"pt-BR",en:"en-US"}[L];   // the app sets the language tag "es" / "pt-BR" / "en" (AppLanguage.kt), so Locale.getDefault() has no country
+const fmtDate = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"medium"}).format(d).replace(/\.$/,"");
+const fmtDateTime = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"medium",timeStyle:"short"}).format(d);
+const TODAY = new Date(2026, 9, 20, 15, 10);
+
+/* ---------- pieces ---------- */
+const topbar = (title, o) => { o=o||{};
+  return `<div class="rs-top">${o.noBack?"":`<span class="ib" data-t="${o.backTag||"back"}">${I.back}</span>`}<b>${esc(title)}</b>${o.action||""}</div>`; };
+const newAction = (tag) => `<span class="rs-new" data-t="${tag||"new"}">${esc(pick({es:"+ Nuevo",pt:"+ Novo",en:"+ New"}))}</span>`;
+const listHeader = (title, ph, addTag) => `<div class="rs-lh"><div class="r1"><span class="ib" data-t="back">${I.back}</span><b>${esc(title)}</b>${newAction(addTag)}</div>
+  <div class="srch">${I.search}<span>${esc(ph)}</span></div></div>`;
+/* bottom NavigationBar of the owner's phone: Caja · Ventas · flag "Mi negocio" (lit while the panel is open) */
+const ownerNav = (lit) => `<div class="mnav">
+  <div class="${lit==="caja"?"on":""}"><span class="pill">${I.cart}</span>${esc(pick({es:"Caja",pt:"Caixa",en:"Register"}))}</div>
+  <div class="${lit==="ventas"?"on":""}"><span class="pill">${I.receipt}</span>${esc(pick({es:"Ventas",pt:"Vendas",en:"Sales"}))}</div>
+  <div class="${lit==="flag"?"on":""}" data-t="flag"><span class="pill"><span class="flagc">${R.flag()}</span></span>${esc(pick({es:"Mi negocio",pt:"Meu negócio",en:"My business"}))}</div></div>`;
+/* SupportStripDock under every LEVEL_2 page (ReportLevels.kt) */
+const strip = () => `<div class="rs-strip"><div class="h"><span class="bd">${I.support}</span><div><b>${esc(pick({es:"Soporte",pt:"Suporte",en:"Support"}))}</b><small>${esc(pick({es:"Reporta un problema aquí",pt:"Relatar um problema aqui",en:"Report a problem here"}))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(pick({es:"Mis reportes",pt:"Meus relatos",en:"My reports"}))}</b><small>${esc(pick({es:"Aún no hay reportes",pt:"Ainda não há relatos",en:"No reports yet"}))}</small></div>${I.chev}</div></div>`;
+const sw = (on, tag) => `<span class="rs-sw${on?" on":""}"${tag?` data-t="${tag}"`:""}><i></i></span>`;
+const snack = (txt, action) => `<div class="msnack rs-snack">${esc(txt)}${action?`<b>${esc(action)}</b>`:""}</div>`;
+const toast = txt => `<div class="rs-toast">${esc(txt)}</div>`;
+/* outlined text field (SumaTextField / OutlinedTextField) */
+const field = (label, value, o) => { o=o||{};
+  const has = value!==undefined && value!==null && value!=="";
+  return `<div class="rs-fld${o.focus?" foc":""}${has||o.focus?" up":""}"${o.tag?` data-t="${o.tag}"`:""}>${o.lead?`<span class="lead">${o.lead}</span>`:""}<label>${esc(label)}</label><span class="v">${has?esc(value):(o.focus&&o.ph?`<em>${esc(o.ph)}</em>`:"")}${o.focus?`<i class="caret"></i>`:""}</span>${o.trail||""}</div>`; };
+
+/* ---------- the business panel (HomeScreen.kt workspace widget) ---------- */
+const PS = {
+  regOpen: pick({es:"Caja abierta",pt:"Caixa aberto",en:"Register open"}), regSales: pick({es:"Ventas",pt:"Vendas",en:"Sales"}),
+  sellOnline: pick({es:"Vender en línea",pt:"Vender online",en:"Sell online"}), off: pick({es:"Apagado",pt:"Desligado",en:"Off"}), offPill: pick({es:"APAGADO",pt:"DESLIGADO",en:"OFF"}),
+  everyDay: pick({es:"Día a día",pt:"Dia a dia",en:"Every day"}), menu: pick({es:"Menú",pt:"Cardápio",en:"Menu"}),
+  items: n => pick({es:`${n} artículos`,pt:`${n} itens`,en:`${n} items`}),
+  clients: pick({es:"Clientes",pt:"Clientes",en:"Clients"}), clientsN: n => pick({es:n===1?"1 cliente":`${n} clientes`,pt:n===1?"1 cliente":`${n} clientes`,en:n===1?"1 client":`${n} clients`}),
+  invoices: pick({es:"Facturas",pt:"Notas",en:"Invoices"}), invMonth: n => pick({es:`${n} este mes`,pt:`${n} neste mês`,en:`${n} this month`}),
+  team: pick({es:"Equipo",pt:"Equipe",en:"Team"}),
+  teamSub: (n,p) => pick({es:`${n} ${n===1?"empleado":"empleados"} · ${p} en celular`,pt:`${n} ${n===1?"funcionário":"funcionários"} · ${p} no celular`,en:`${n} ${n===1?"employee":"employees"} · ${p} ${p===1?"on a phone":"on phones"}`}),
+  reports: pick({es:"Reportes",pt:"Relatórios",en:"Reports"}), today: v => pick({es:`Hoy · ${v}`,pt:`Hoje · ${v}`,en:`Today · ${v}`}),
+  settings: pick({es:"Configuración",pt:"Configurações",en:"Settings"}), settingsSub: pick({es:"Cobros, impuestos, recibos",pt:"Cobranças, impostos, recibos",en:"Payments, taxes, receipts"})
+};
+function panelRow(tag, icon, title, sub, o){ o=o||{};
+  return `<div class="rs-wr" data-t="${tag}"><span class="ic">${icon}</span><div class="tx"><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>${o.trail||`<span class="ch">${I.chev}</span>`}</div>`;
+}
+/* p = {regTotal, today, menuCount, clients, invoices, team, phones, payDot} */
+function panel(p){
+  return `<div class="rs-panel"><div class="ph"><b>${esc(BIZ)}</b>${I.down}</div><div class="pl">
+    <div class="rs-wr reg" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(PS.regOpen)}</b><small style="color:rgba(46,125,50,.7)">${esc(PS.regSales)}</small></div><b class="amt">${money(p.regTotal)}</b></div>
+    ${panelRow("row-online", I.cart, PS.sellOnline, PS.off, {trail:`<span class="pill0">${esc(PS.offPill)}</span>`})}
+    <div class="eh">${esc(PS.everyDay)}</div>
+    ${panelRow("row-menu", I.resto, PS.menu, PS.items(p.menuCount))}
+    ${panelRow("row-clients", I.person, PS.clients, PS.clientsN(p.clients))}
+    ${panelRow("row-invoices", I.rlong, PS.invoices, PS.invMonth(p.invoices))}
+    ${panelRow("row-team", `${I.group}${p.payDot?'<i class="pdot"></i>':""}`, PS.team, PS.teamSub(p.team, p.phones))}
+    ${panelRow("row-reports", I.rlong, PS.reports, PS.today(money(p.today)))}
+    <hr>
+    ${panelRow("row-settings", I.gear, PS.settings, PS.settingsSub)}
+  </div></div>` + ownerNav("flag");
+}
+/* ---------- the Settings page (SettingsHubScreen.kt, SettingsHubRules: restaurant shows the dining row) ---------- */
+function settingsHub(){
+  const g = (t) => `<div class="rs-hg">${esc(t)}</div>`;
+  const row = (tag, icon, t, s) => `<div class="rs-hr" data-t="${tag}"><span class="ic">${icon}</span><div class="tx"><b>${esc(t)}</b>${s?`<small>${esc(s)}</small>`:""}</div>${I.chev}</div>`;
+  return topbar(PS.settings) + `<div class="rs-scroll"><div class="rs-hub">
+    ${g(pick({es:"Cobros",pt:"Cobranças",en:"Getting paid"}))}
+    ${row("hub-pay", I.card, pick({es:"Métodos de pago",pt:"Formas de pagamento",en:"Payment methods"}))}
+    ${row("hub-taxes", I.pct, pick({es:"Impuestos",pt:"Impostos",en:"Taxes"}))}
+    ${row("hub-discounts", I.tag, pick({es:"Descuentos y cargos",pt:"Descontos e taxas",en:"Discounts and charges"}))}
+    ${row("hub-receipts", I.receipt, pick({es:"Recibos",pt:"Recibos",en:"Receipts"}), pick({es:"Detallado · numeración automática",pt:"Detalhado · numeração automática",en:"Detailed · numbered automatically"}))}
+    ${g(pick({es:"Tu negocio",pt:"Seu negócio",en:"Your business"}))}
+    ${row("hub-info", I.store, pick({es:"Datos del negocio",pt:"Dados do negócio",en:"Business info"}))}
+    ${row("hub-dining", I.resto, pick({es:"Opciones de servicio",pt:"Opções de atendimento",en:"Dining options"}), pick({es:"Para aquí, para llevar, domicilio y mesas",pt:"Para comer aqui, para viagem, entrega e mesas",en:"For here, to go, delivery and tables"}))}
+    ${row("hub-devices", I.devices, pick({es:"Conexiones",pt:"Conexões",en:"Connections"}))}
+  </div></div>` + strip();
+}
+
+const RS_CSS = `
+.mat .rs-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff;gap:calc(var(--u)*4)}
+.mat .rs-top .ib,.mat .rs-lh .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .rs-top>b{flex:1;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:calc(var(--u)*4)}
+.mat .rs-new{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
+.mat .rs-lh{padding:calc(var(--u)*8);flex:0 0 auto}
+.mat .rs-lh .r1{display:flex;align-items:center;height:calc(var(--u)*56)}
+.mat .rs-lh .r1 b{flex:1;font-size:calc(var(--u)*22);font-weight:700;padding-left:calc(var(--u)*4)}
+.mat .rs-lh .srch{margin:calc(var(--u)*4) calc(var(--u)*8) 0;height:calc(var(--u)*56);border:1px solid var(--m-outline);border-radius:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);color:var(--m-onv);font-size:calc(var(--u)*16)}
+.mat .rs-scroll{flex:1;min-height:0;overflow:hidden;position:relative}
+.mat .rs-scroll>.in{transition:transform .5s ease}
+.mat .rs-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .rs-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .rs-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .rs-strip .h>div{flex:1;min-width:0}
+.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .rs-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .rs-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
+.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .rs-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.mat .rs-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF}
+.mat .rs-panel .ph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-panel .ph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.mat .rs-panel .pl{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .rs-panel hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0;flex:0 0 auto}
+.mat .rs-panel .eh{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);letter-spacing:.5px}
+.mat .rs-wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);color:var(--m-on);flex:0 0 auto}
+.mat .rs-wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);position:relative;flex:0 0 auto}
+.mat .rs-wr .ic .pdot{position:absolute;right:calc(var(--u)*-2);top:calc(var(--u)*-2);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#FF6D00}
+.mat .rs-wr .tx{flex:1;min-width:0}
+.mat .rs-wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(var(--u)*16)}
+.mat .rs-wr .ch svg{fill:var(--m-onv)}
+.mat .rs-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
+.mat .rs-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .rs-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.mat .rs-hub{padding:0 calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .rs-hg{font-size:calc(var(--u)*12);font-weight:500;color:var(--m-onv);padding:calc(var(--u)*16) calc(var(--u)*8) 0;letter-spacing:.5px}
+.mat .rs-hr{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .rs-hr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .rs-hr .tx{flex:1;min-width:0}
+.mat .rs-hr .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700;line-height:calc(var(--u)*24)}
+.mat .rs-hr .tx small{display:block;font-size:calc(var(--u)*12);color:var(--m-onv);line-height:calc(var(--u)*16)}
+.mat .rs-hr>svg{fill:var(--m-onv)}
+.mat .rs-sw{display:inline-block;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #79747E;background:#E5E5EA;position:relative;flex:0 0 auto;box-sizing:border-box;transition:background .2s}
+.mat .rs-sw i{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E;transition:all .2s}
+.mat .rs-sw.on{background:var(--m-on);border-color:var(--m-on)}
+.mat .rs-sw.on i{left:calc(var(--u)*22);top:calc(var(--u)*2);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.mat .rs-snack{bottom:calc(var(--u)*12);gap:calc(var(--u)*12);justify-content:space-between;line-height:1.35;padding:calc(var(--u)*12) calc(var(--u)*16)}
+.mat .rs-snack b{color:#D0BCFF;font-weight:500;flex:0 0 auto}
+.mat .rs-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*90);background:#323232;color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:20;white-space:nowrap}
+.mat .rs-fld{position:relative;min-height:calc(var(--u)*56);border:1px solid #79747E;border-radius:calc(var(--u)*4);display:flex;align-items:center;padding:0 calc(var(--u)*16);gap:calc(var(--u)*12);font-size:calc(var(--u)*16);color:var(--m-on);flex:0 0 auto}
+.mat .rs-fld.foc{border:calc(var(--u)*2) solid var(--m-on)}
+.mat .rs-fld label{position:absolute;left:calc(var(--u)*16);top:50%;transform:translateY(-50%);color:var(--m-onv);font-size:calc(var(--u)*16);background:#fff;padding:0 calc(var(--u)*4);margin-left:calc(var(--u)*-4);transition:all .15s;white-space:nowrap}
+.mat .rs-fld .lead{color:var(--m-onv);display:flex}
+.mat .rs-fld .lead+label{left:calc(var(--u)*52)}
+.mat .rs-fld.up label{top:0;font-size:calc(var(--u)*12)}
+.mat .rs-fld.foc label{color:var(--m-on)}
+.mat .rs-fld .v{flex:1;min-width:0;white-space:nowrap;overflow:hidden}
+.mat .rs-fld .v em{font-style:normal;color:var(--m-onv)}
+.mat .caret{display:inline-block;width:2px;height:1.1em;background:var(--m-on);vertical-align:-.15em;margin-left:1px;animation:rsblink 1s steps(1) infinite}
+@keyframes rsblink{50%{opacity:0}}
+.mat .rs-btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:var(--m-on);color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600;flex:0 0 auto;padding:0 calc(var(--u)*16);text-align:center}
+.mat .rs-btn.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .rs-btn.off{background:#E5E5EA;color:#AEAEB2}
+.mat .rs-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:15;display:grid;place-items:center}
+.mat .rs-dlg{width:calc(var(--u)*312);background:#fff;border-radius:calc(var(--u)*28);padding:calc(var(--u)*24)}
+.mat .rs-dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:calc(var(--u)*32)}
+.mat .rs-dlg p{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .rs-dlg .acts{display:flex;justify-content:flex-end;margin-top:calc(var(--u)*24)}
+.mat .rs-dlg .acts span{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .rs-hl{animation:rshl 1.6s ease}
+@keyframes rshl{0%{background:#CBDFF8}100%{background:transparent}}
+.rs-time{position:absolute;inset:0;background:#F4EBDD;display:grid;place-items:center;z-index:16;text-align:center;font-family:Roboto,system-ui,sans-serif;color:#3A2A1F}
+.rs-time b{display:block;font:600 calc(var(--u)*30) Roboto,system-ui,sans-serif}
+.rs-time small{display:block;margin-top:calc(var(--u)*10);font:400 calc(var(--u)*17)/1.35 Roboto,system-ui,sans-serif;color:#6B5848;max-width:calc(var(--u)*320)}
+`;
+const rsStyle_ = document.createElement("style"); rsStyle_.textContent = RS_CSS; document.head.appendChild(rsStyle_);
+
+/* ===== RS sales data: one day of the restaurant, split exactly like data/SalesBreakdown.kt (REPORTS-11 + REVFIX-5) =====
+   Per sale: E = totalAmount - cashRounding = net + service + dining + tax + tip; Net is the RESIDUAL.
+   A refund keeps the tip out of the pool (pool = E - tip); Gross is the menu price WITHOUT an included tax.
+   Total collected = SUM(totalAmount - refundedAmount) = the "How you got paid" rows.
+   Demo data only: the menu of restaurant-data.js, the tax a shop of that country usually sets up (sync/TaxPresets.kt;
+   BR has no preset, so no tax; US/CA a typed sales tax added on top, TaxPriceDefault), the CO service charge of 10%
+   (ServiceFeeSeed: Colombia 10%), card only where the country has one (CO Wompi, US/CA Stripe), Stripe tips US/CA. */
+const MF = Math.pow(10, R.C.dec);                 // minor units
+const toM = v => Math.round(v * MF), fromM = m => m / MF;
+const catOf = it => R.C.cats.indexOf(it.cat);
+const DRINK_CAT = R.C.cats.find(c => /Bebidas|Drinks/.test(c));
+const mains = R.C.items.filter(i => catOf(i) === 0);
+const sides = R.C.items.filter(i => catOf(i) === 1);
+const drinks = R.C.items.filter(i => i.cat === DRINK_CAT);
+const xM = k => mains[k % mains.length], xS = k => sides[k % sides.length], xD = k => drinks[k % drinks.length];
+const HAS_CARD = !!R.C.pay.card, TIPS = !!R.C.pay.tips, HAS_QR = !(R.country==="US"||R.country==="CA");
+const SVC = R.country === "CO" ? 0.10 : 0;       // the seeded "Cargo por servicio", switched on, answered "Sí"
+const WAITER = R.C.people.waiter, WAITER2 = R.C.people.waiter2;
+const DIN_T = pick({es:"Mesas",pt:"Mesas",en:"Tables"}), DIN_G = pick({es:"Para llevar",pt:"Para viagem",en:"To Go"});
+const PM_NAME = {cash:pick({es:"Efectivo",pt:"Dinheiro",en:"Cash"}), qr:(R.country==="BR"?"Pix":pick({es:"Pago QR",pt:"Pagamento QR",en:"QR Payment"})), card:pick({es:"Tarjeta",pt:"Cartão",en:"Card"})};
+/* [hour, minute, items, method, dining, employee, {svc, disc, refundIdx}] */
+const TPL = [
+ [11,20,[xM(0),xD(0)],"cash",DIN_T,OWNER_NAME,{svc:1}],
+ [11,45,[xM(1),xS(0),xD(1)],"qr",DIN_T,WAITER,{svc:1}],
+ [12,10,[xM(2),xM(0),xD(0),xD(1)],"card",DIN_T,WAITER,{svc:1}],
+ [12,30,[xM(3),xD(2)],"cash",DIN_G,OWNER_NAME,{}],
+ [12,50,[xM(0),xM(1),xS(1),xD(0)],"cash",DIN_T,WAITER2,{svc:1,refund:3}],
+ [13,5,[xM(2),xD(1)],"qr",DIN_T,WAITER,{svc:1,disc:0}],
+ [13,20,[xM(1),xS(0)],"cash",DIN_G,OWNER_NAME,{}],
+ [13,40,[xM(3),xM(2),xD(2),xD(0)],"card",DIN_T,WAITER2,{svc:1}],
+ [14,10,[xS(1),xD(0)],"cash",DIN_G,OWNER_NAME,{}],
+ [14,35,[xM(0),xD(2)],"qr",DIN_T,WAITER,{svc:1}],
+ [14,50,[xM(1),xM(1),xD(1),xD(1)],"cash",DIN_T,WAITER2,{svc:1}],
+ [15,0,[xM(2),xS(1),xD(0)],"card",DIN_T,WAITER,{svc:1}]
+];
+function buildOrder(t, i){
+  const [h, mi, items, meth0, dining, emp, o] = t;
+  let meth = meth0;
+  if (meth === "card" && !HAS_CARD) meth = HAS_QR ? "qr" : "cash";
+  if (meth === "qr" && !HAS_QR) meth = HAS_CARD ? "card" : "cash";
+  const Sm = items.reduce((s, it) => s + toM(it.price), 0);
+  const Dm = o.disc !== undefined ? Math.round(toM(items[o.disc].price) * 0.10) : 0;
+  const base = Sm - Dm;
+  let tax = 0, incl = 0;
+  if (TAX) { if (TAX.add) tax = Math.round(base * TAX.p / 100); else { tax = Math.round(base * TAX.p / (100 + TAX.p)); incl = tax; } }
+  const svc = o.svc && SVC ? Math.round(base * SVC) : 0;
+  const pre = base + svc + (TAX && TAX.add ? tax : 0);
+  const tip = (meth === "card" && TIPS) ? Math.round(pre * 0.18) : 0;
+  let total = pre + tip, rounding = 0;
+  if (R.country === "CA" && meth === "cash") { const r5 = Math.round(total / 5) * 5; rounding = r5 - total; total = r5; }
+  const refunded = o.refund !== undefined ? toM(items[o.refund].price) : 0;
+  return { id: 41 + i, h, mi, items, meth, dining, emp, Sm, Dm, base, tax, incl, svc, tip, total, rounding, refunded,
+           status: refunded ? "PARTIALLY_REFUNDED" : "PAID" };
+}
+const ORDERS = TPL.map(buildOrder);
+/* SalesBreakdown.moneyOf, line by line (amounts in minor units, floats where the app's are) */
+function moneyOf(o){
+  const exact = o.total - o.rounding, service = o.svc, tax = o.tax, tip = o.tip;
+  const pool = exact - tip, netPre = pool - service - tax, refunded = o.refunded;
+  const tipBack = tip <= 0 ? 0 : pool > 0.005 ? Math.min(Math.max(refunded - pool, 0), tip) : Math.min(Math.max(refunded, 0), tip);
+  const q = pool > 0.005 ? Math.min(Math.max((refunded - tipBack) / pool, 0), 1) : 0, keep = 1 - q;
+  const rounding = o.rounding - Math.max(refunded - exact, 0);
+  const inclusiveBase = netPre + o.incl;
+  const taxShare = (o.incl > 0 && inclusiveBase > 0.005) ? Math.min(Math.max(o.incl / inclusiveBase, 0), 1) : 0;
+  const discount = o.Dm * (1 - taxShare);
+  return { gross: netPre + discount, discounts: discount, refunds: netPre * q, net: netPre * keep,
+           service: service * keep, tax: tax * keep, tips: tip - tipBack, rounding, refunded: refunded > 0 };
+}
+function breakdown(orders, scale){
+  scale = scale || 1;
+  const s = { gross:0, discounts:0, refunds:0, net:0, service:0, tax:0, tips:0, rounding:0, refundCount:0, count:0 };
+  orders.forEach(o => { const m = moneyOf(o); ["gross","discounts","refunds","net","service","tax","tips","rounding"].forEach(k => s[k] += m[k]);
+    if (m.refunded) s.refundCount++; s.count++; });
+  Object.keys(s).forEach(k => { if (!/count|Count/.test(k)) s[k] *= scale; });
+  const exactTotal = orders.reduce((a, o) => a + o.total - o.refunded, 0) * scale;
+  /* what the screen prints: each line rounded, Net = Gross - Discounts - Refunds, Total = exact sum of payments,
+     taxes take the last minor unit so the printed column adds up (same figures as the app to the unit) */
+  const R_ = v => Math.round(v);
+  const d = { gross: R_(s.gross), discounts: R_(s.discounts), refunds: R_(s.refunds), service: R_(s.service), tips: R_(s.tips), rounding: R_(s.rounding), total: R_(exactTotal) };
+  d.net = d.gross - d.discounts - d.refunds;
+  d.tax = d.total - d.net - d.service - d.tips - d.rounding;
+  d.refundCount = s.refundCount; d.count = s.count;
+  return d;
+}
+/* "Cómo te pagaron": SUM(totalAmount - refundedAmount) per method, after refunds */
+function byMethod(orders, scale){
+  scale = scale || 1; const m = {};
+  orders.forEach(o => { m[o.meth] = (m[o.meth] || 0) + (o.total - o.refunded) * scale; });
+  return Object.keys(m).map(k => ({ key: k, label: PM_NAME[k], v: Math.round(m[k]) })).sort((a, b) => b.v - a.v);
+}
+/* top items / categories: SUM(quantity * price) of paid orders (PosDao.kt:1285-1300) */
+function itemsSold(orders){
+  const m = {};
+  orders.forEach(o => o.items.forEach(it => { m[it.id] = m[it.id] || { name: it.name, cat: it.cat, n: 0, v: 0 }; m[it.id].n++; m[it.id].v += toM(it.price); }));
+  return Object.values(m).sort((a, b) => b.v - a.v);
+}
+function byCat(orders){ const m = {}; itemsSold(orders).forEach(i => { m[i.cat] = (m[i.cat] || 0) + i.v; });
+  return Object.keys(m).map(k => ({ label: k, v: m[k] })).sort((a, b) => b.v - a.v); }
+/* "Ventas por tipo de consumo" (PosDao getDiningOptionSalesBetween): SUM(totalAmount - cashRounding - refundedAmount) */
+function byDining(orders){ const m = {}; orders.forEach(o => { m[o.dining] = (m[o.dining] || 0) + o.total - o.rounding - o.refunded; });
+  return Object.keys(m).map(k => ({ label: k, v: m[k] })).sort((a, b) => b.v - a.v); }
+/* "Ventas por empleado" (PosDao.kt:1155 at abb8fddb): SUM(totalAmount - cashRounding - refundedAmount), COUNT */
+function byEmployee(orders){ const m = {}; orders.forEach(o => { m[o.emp] = m[o.emp] || { label: o.emp, v: 0, n: 0 }; m[o.emp].v += o.total - o.rounding - o.refunded; m[o.emp].n++; });
+  return Object.values(m).sort((a, b) => b.v - a.v); }
+const mm = m => money(fromM(m));                 // print minor units
+const TODAY_B = breakdown(ORDERS);
+const HOURS = [11,12,13,14,15];   // ReportChartData.kt:44-48: empty hour buckets before the first / after the last sale are trimmed
+/* the chart column = that hour's Net sales (REVFIX-3 F14) */
+function hourNets(){ const m = {}; ORDERS.forEach(o => { m[o.h] = (m[o.h] || 0) + moneyOf(o).net; }); return HOURS.map(h => ({ h, v: Math.round(m[h] || 0) })); }
+
+/* RS12 "Enviar al contador": in Reports the owner picks "Mes pasado", taps "Resumen para el contador", copies one
+   number, and sends the whole summary by WhatsApp.
+   Screens follow the app at app-head (paths under app/src/main/java/com/example/):
+   Reports          ui/screens/reports/ReportsScreen.kt (chips :551, LAST_MONTH label = month name :613, the owner-only
+                    bottom button reports_send_to_accountant :131-145 -> Screen.ShareWithAccountant, ReportsNavGraph)
+   the summary      ui/screens/reports/ShareAccountantScreen.kt:280-360 (SumaTopBar accountant_title; accountant_intro
+                    bodyMedium; range label bodySmall; one Row per figure: label bodyMedium grey, value titleSmall bold,
+                    amber gap labelSmall #E65100, Copy IconButton (accountant_row_copy) -> toast accountant_copied;
+                    divider outlineVariant 40%; accountant_footer; SumaButton accountant_send; outlined accountant_save_pdf)
+   the rows         ui/pos/EmployeePayActions.kt:300-430 (Net sales; service / dining charges when > 0; taxes; tips, cash
+                    rounding when not 0; Total collected; cash; card and electronic (= total collected - cash) with
+                    accountant_card_fees_none_note when card sales have no known fee (Wompi; Stripe until redeployed);
+                    suppliers + unread gap; invoice count; paid to employees only when a WHOLE month is inside the range)
+   the date         sync/AccountantDate.kt (the language's LONG date: "1 de septiembre de 2026")
+   the message      buildAccountantMessage (ShareAccountantScreen.kt:232) + WhatsappSignatureText.sign (blank line + signature);
+                    shareText sends ACTION_SEND to com.whatsapp: WhatsApp opens with the text, the owner picks the chat.
+   The WhatsApp screen is WhatsApp's, not Platata's: drawn plain, no logo.
+   Demo data: September recorded (pay tracking on, both employees paid), 14 supplier invoices, 2 with no amount read. */
+// KEYS: accountant_title,accountant_intro,accountant_total_sales,accountant_total_taxes,accountant_cash_sales,accountant_card_sales,accountant_card_fees_none_note,accountant_paid_suppliers,accountant_supplier_invoices,accountant_paid_employees,accountant_footer,accountant_send,accountant_save_pdf,accountant_copied,accountant_row_copy,accountant_disclaimer,whatsapp_signature
+// PLURALS: accountant_gap_unread,accountant_msg_suppliers
+/* ===== RS11 / RS12 Reports screen pieces (see the header comment of RS11 for the app file:line of each) ===== */
+// KEYS: reports_title,reports_send_to_accountant,reports_period_today,reports_period_yesterday,reports_period_this_week,reports_period_this_month,reports_period_last_month,reports_period_this_year,reports_period_last_year,reports_period_custom,reports_period_label_dated
+// KEYS: reports_chart_title,reports_gross_sales,reports_discounts,refunds_with_count,reports_net_sales,reports_net_sales_note,reports_compare_vs_yesterday,reports_compare_vs_last_month,reports_service_charges,reports_dining_charges,reports_taxes,reports_tips,reports_cash_rounding,reports_total_collected,reports_transactions,reports_avg_ticket
+// KEYS: reports_payment_split,reports_after_refunds,reports_category_title,reports_dining_title,reports_top_items,reports_sold_count,reports_employee_sales,reports_line_by_name,reports_line_no_names,reports_line_sales_list,reports_line_sales_n,reports_line_unnamed_service,reports_line_unnamed_tax,reports_breakdown_other,tx_sale_number_short
+// PLURALS: reports_tx_count
+// KEYS: reports_compare_vs_previous
+const C = R.C;
+/* ---- the periods: one day (sales.js), this month Oct 1-20 and last month Sep 1-30 (the same day's mix, scaled by weekday) ---- */
+const WDF = [1.2,0.7,0.9,0.8,0.85,1.15,1.35];          // Sun..Sat: weekends sell more (demo data)
+const dayF = dt => (dt.getMonth()===9 && dt.getDate()===20) ? 1 : WDF[dt.getDay()];
+function scaled(f, refunds){
+  /* f days of the same mix, with `refunds` refunds the size of today's one (demo data) */
+  const d = TODAY_B, k = x => Math.round(x*f);
+  const b = { gross:k(d.gross), discounts:k(d.discounts), refunds:d.refunds*refunds, service:k(d.service), tips:k(d.tips), rounding:k(d.rounding), tax:k(d.tax) };
+  b.net = b.gross - b.discounts - b.refunds;
+  b.total = b.net + b.service + b.tax + b.tips + b.rounding;
+  b.count = Math.round(12*f); b.refundCount = refunds; return b;
+}
+const DAY = TODAY_B;
+const days = (m, n) => Array.from({length:n},(_,i)=>new Date(2026,m,i+1));
+const OCT = days(9,20), SEP = days(8,30);
+const fsum = ds => ds.reduce((s,dt)=>s+dayF(dt),0);
+const pct = (a,b) => Math.round((a-b)/b*100);
+/* ---- dates as the app prints them (SimpleDateFormat "d MMM" / "MMMM", Java DateFormat MEDIUM+SHORT) ---- */
+const monShort = d => new Intl.DateTimeFormat(LOCALE,{month:"short"}).format(d);
+const dMMM = d => d.getDate()+" "+monShort(d);
+const monthName = d => { const s = new Intl.DateTimeFormat(LOCALE,{month:"long"}).format(d); return s[0].toUpperCase()+s.slice(1); };
+function mkRange(ds, refunds, prevF, cmpKey, label, chip){
+  const f = fsum(ds), b = scaled(f, refunds);
+  return { f, b, prev:{net:b.net/prevF, count:Math.round(b.count/(1+(prevF-1)*0.6))}, cmpKey, label, chip,
+           data: ds.map(dt=>({d:dt.getDate(), v:Math.round(DAY.net*dayF(dt))})) };
+}
+const RANGES = {
+  today:{ f:1, b:DAY, prev:{net:DAY.net/1.12, count:11}, cmpKey:"reports_compare_vs_yesterday", chip:"today",
+          label:F("reports_period_label_dated", S("reports_period_today"), dMMM(TODAY)) },
+  month: mkRange(OCT, 3, 1.08, "reports_compare_vs_last_month", "1–"+dMMM(TODAY), "this_month"),
+  lastmonth: mkRange(SEP, 4, 1.04, "reports_compare_vs_previous", monthName(new Date(2026,8,1)), "last_month")
+};
+const at = (h,mi) => new Date(2026,9,20,h,mi);
+const fmtSaleTime = (h,mi) => fmtDateTime(at(h,mi));
+/* ---- chart data ---- */
+const HOURS_D = hourNets();                               // [{h,v}] in minor units
+const TALL = HOURS_D.reduce((m,x,i,a)=>x.v>a[m].v?i:m,0);
+function abbr(v){ const a=Math.abs(v); const dm = ["COP","CLP","ARS","BRL"].includes(C.cur)?",":".";
+  if(a>=1e6){ const m=Math.round(v/1e5)/10; return (m%1===0?String(m):String(m).replace(".",dm))+"M"; }
+  if(a>=1e3) return Math.round(v/1e3)+"k"; return String(Math.trunc(v)); }
+function chart(st){
+  const month = st.range!=="today";
+  const data = month ? RANGES[st.range].data : HOURS_D;
+  const max = Math.max(...data.map(x=>x.v));
+  const n = data.length, label = i => month ? String(data[i].d) : data[i].h+"h";
+  /* x labels: chartLabelIndices - the smallest step leaving >= 8 dp between labels; first and last always */
+  const step = month ? 3 : 1;
+  const bars = data.map((x,i)=>{
+    const h = (fromM(x.v)/fromM(max))*100;
+    const lab = (i===0||i===n-1||i%step===0) && !(month && i!==n-1 && n-1-i<step) ? `<em>${label(i)}</em>` : "";
+    const sel = !month && st.marker && i===TALL;
+    return `<div class="slot" ${!month&&i===TALL?'data-t="bar"':""}><i style="height:${h}%"></i>${lab}${sel?`<s></s><u>${String(x.h).padStart(2,"0")}:00<br>${mm(x.v)}</u>`:""}</div>`; }).join("");
+  return `<div class="rp-cht"><div class="ax"><span>${abbr(fromM(max))}</span><span>0</span></div><div class="plot"><hr class="t"><hr class="b">${bars}</div></div>`;
+}
+/* ---- the table (one SumaCard) ---- */
+const sum = (lab, val, o) => { o=o||{}; return `<div class="sl${o.tap?" tap":""}${o.red?" red":""}"${o.tag?` data-t="${o.tag}"`:""}><span>${esc(lab)}</span><b>${esc(val)}</b>${o.tap?I.chev:""}</div>`; };
+const head = (lab, val, inner) => `<div class="hm"><div><span>${esc(lab)}</span><b>${esc(val)}</b></div>${inner||""}</div>`;
+const cmp = (cur, prev, key) => { const p = pct(cur, prev); return `<div class="cmp${p<0?" dn":p===0?" eq":""}">${p>0?"▲":p<0?"▼":"—"}${p===0?"":` ${Math.abs(p)}%`}  ${esc(S(key))}</div>`; };
+function table(st){
+  const RG = RANGES[st.range], b = RG.b, pv = RG.prev, month = RG.cmpKey;
+  const avg = b.net / b.count, pavg = pv.net / pv.count;
+  return `<div class="rp-card">
+    ${sum(S("reports_gross_sales"), mm(b.gross))}
+    ${sum(S("reports_discounts"), b.discounts>0 ? "-"+mm(b.discounts) : money(0), {tap:b.discounts>0, tag:"line-discounts"})}
+    ${sum(F("refunds_with_count", b.refundCount), b.refunds>0 ? "-"+mm(b.refunds) : money(0), {tap:b.refunds>0, red:b.refunds>0, tag:"line-refunds"})}
+    <hr>
+    ${head(S("reports_net_sales"), mm(b.net), `<small>${esc(S("reports_net_sales_note"))}</small>${cmp(b.net, pv.net, month)}`)}
+    ${b.service>0 ? sum(S("reports_service_charges"), "+"+mm(b.service), {tap:true, tag:"line-service"}) : ""}
+    ${b.tax>0 ? sum(S("reports_taxes"), "+"+mm(b.tax), {tap:true, tag:"line-taxes"}) : ""}
+    ${b.tips>0 ? sum(S("reports_tips"), "+"+mm(b.tips), {tap:true, tag:"line-tips"}) : ""}
+    ${b.rounding ? `<div class="pr"><span>${esc(S("reports_cash_rounding"))}</span><b>${b.rounding<0?"− ":"+ "}${mm(Math.abs(b.rounding))}</b></div>` : ""}
+    <hr>
+    ${head(S("reports_total_collected"), mm(b.total))}
+    <hr>
+    ${head(S("reports_transactions"), String(b.count), cmp(b.count, pv.count, month))}
+    <hr>
+    ${head(S("reports_avg_ticket"), money(r2(fromM(avg))), cmp(avg, pavg, month))}
+  </div>`;
+}
+function blist(title, rows, note){
+  const max = Math.max(...rows.map(r=>r.v));
+  return `<div class="rp-card bl"><h4>${esc(title)}</h4>${note?`<small class="nt">${esc(note)}</small>`:""}<div class="sp8"></div>
+    ${rows.slice(0,8).map(r=>`<div class="br"><div class="l"><span>${esc(r.label)}</span>${r.sec?`<small>${esc(r.sec)}</small>`:""}</div><b>${esc(mm(r.v))}</b></div><div class="trk"><i style="width:${r.v/max*100}%"></i></div>`).join("")}
+  </div>`;
+}
+function lists(st){
+  const f = RANGES[st.range].f;
+  const sc = rows => rows.map(r=>Object.assign({}, r, {v:Math.round(r.v*f)}));
+  const pay = sc(byMethod(ORDERS));
+  const cats = sc(byCat(ORDERS));
+  const din = sc(byDining(ORDERS));
+  const top = itemsSold(ORDERS).map(i=>({label:i.name, v:Math.round(i.v*f), sec:F("reports_sold_count", Math.round(i.n*f))}));
+  const emp = byEmployee(ORDERS).map(e=>({label:e.label, v:Math.round(e.v*f), sec:PL("reports_tx_count", Math.round(e.n*f))}));
+  return blist(S("reports_payment_split"), pay, S("reports_after_refunds")) + `<div class="sp24"></div>` +
+    blist(S("reports_category_title"), cats) + `<div class="sp24"></div>` +
+    blist(S("reports_dining_title"), din) + `<div class="sp24"></div>` +
+    blist(S("reports_top_items"), top) + `<div class="sp24"></div>` +
+    blist(S("reports_employee_sales"), emp);
+}
+/* ---- the line page (ReportLineDetailContent), for the refunds line and the country's line ---- */
+function linePage(kind){
+  const per = ORDERS.map(o=>({o, m:moneyOf(o)}));
+  let title, total, names = null, rows;
+  const amountOf = x => kind==="refunds" ? x.m.refunds : kind==="service" ? x.m.service : kind==="taxes" ? x.m.tax : kind==="tips" ? x.m.tips : x.m.discounts;
+  rows = per.filter(x=>amountOf(x) > 0.5).map(x=>({id:x.o.id, h:x.o.h, mi:x.o.mi, v:Math.round(amountOf(x))})).reverse();
+  total = rows.reduce((s,r)=>s+r.v,0);
+  if(kind==="refunds"){ title = F("refunds_with_count", rows.length); total = DAY.refunds; }
+  if(kind==="service"){ title = S("reports_service_charges"); names = [{label:pick({es:"Cargo por servicio",pt:"Taxa de serviço",en:"Service charge"}), v:total, sec:F("reports_line_sales_n", rows.length)}]; }
+  if(kind==="taxes"){ title = S("reports_taxes"); names = [{label:TAX.name, v:total, sec:F("reports_line_sales_n", rows.length)}]; }
+  if(kind==="tips") title = S("reports_tips");
+  if(kind==="discounts") title = S("reports_discounts");
+  return topbar(title, {backTag:"line-back"}) + `<div class="rs-scroll"><div class="in rp-in">
+    <div class="rp-card lt"><b>${mm(total)}</b><span>${esc(F("reports_line_sales_n", rows.length))}</span></div>
+    ${names ? blist(S("reports_line_by_name"), names) : kind!=="refunds" ? `<p class="nn">${esc(S("reports_line_no_names"))}</p>` : ""}
+    <h5>${esc(S("reports_line_sales_list"))}</h5>
+    ${rows.map(r=>`<div class="ls"><span>${esc(F("tx_sale_number_short", r.id))} · ${esc(fmtSaleTime(r.h, r.mi))}</span><b>${mm(r.v)}</b></div>`).join("")}
+  </div></div>` + strip();
+}
+const PRESETS = ["today","yesterday","this_week","this_month","last_month","this_year","last_year","custom"];
+function reports(st){
+  const chips = `<div class="rp-chips"><div style="transform:translateX(calc(var(--u)*${-st.chipX}))">${PRESETS.map(p=>{
+    const on = RANGES[st.range].chip===p;
+    return `<span class="${on?"on":""}" data-t="chip-${p}">${esc(S("reports_period_"+p))}</span>`; }).join("")}</div></div>`;
+  return topbar(S("reports_title")) + chips + `<div class="rp-per">${esc(RANGES[st.range].label)}</div>
+    <div class="rs-scroll"><div class="in rp-in" style="transform:translateY(calc(var(--u)*${-st.scroll}))">
+      <div class="rp-ct">${esc(S("reports_chart_title"))}</div>${chart(st)}
+      ${table(st)}<div class="sp12"></div>${lists(st)}<div class="sp24"></div>
+    </div></div>
+    <div class="rp-bot"><div class="rs-btn" data-t="accountant">${esc(S("reports_send_to_accountant"))}</div></div>` + strip();
+}
+
+const rpStyle_ = document.createElement('style'); rpStyle_.textContent = `
+.mat .rp-chips{flex:0 0 auto;overflow:hidden;padding:calc(var(--u)*8) 0}
+.mat .rp-chips>div{display:flex;gap:calc(var(--u)*8);padding:0 calc(var(--u)*16);transition:transform .5s ease;width:max-content}
+.mat .rp-chips span{height:calc(var(--u)*32);border-radius:calc(var(--u)*8);border:1px solid var(--m-outline);padding:0 calc(var(--u)*16);display:flex;align-items:center;font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);white-space:nowrap}
+.mat .rp-chips span.on{background:var(--m-ovar);border-color:transparent;color:var(--m-on)}
+.mat .rp-per{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .rp-in{padding-bottom:calc(var(--u)*16)}
+.mat .rp-ct{padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*4);font-size:calc(var(--u)*14);font-weight:700;color:var(--m-onv)}
+.mat .rp-cht{height:calc(var(--u)*190);padding:0 calc(var(--u)*16);display:flex;gap:calc(var(--u)*8);margin-bottom:calc(var(--u)*12)}
+.mat .rp-cht .ax{display:flex;flex-direction:column;justify-content:space-between;font-size:calc(var(--u)*11);color:var(--m-onv);padding:0 0 calc(var(--u)*14);text-align:right}
+.mat .rp-cht .ax span{line-height:calc(var(--u)*16);transform:translateY(calc(var(--u)*-4))}
+.mat .rp-cht .ax span+span{transform:translateY(calc(var(--u)*6))}
+.mat .rp-cht .plot{flex:1;position:relative;display:flex;padding:calc(var(--u)*8) 0 calc(var(--u)*20)}
+.mat .rp-cht .plot hr{position:absolute;left:0;right:0;border:0;border-top:1px solid rgba(199,199,204,.35);margin:0}
+.mat .rp-cht .plot hr.t{top:calc(var(--u)*8)} .mat .rp-cht .plot hr.b{bottom:calc(var(--u)*20)}
+.mat .rp-cht .slot{flex:1;position:relative;display:flex;justify-content:center;align-items:flex-end}
+.mat .rp-cht .slot i{width:min(calc(var(--u)*12),calc(100% - var(--u)*4));background:#007AFF;border-radius:calc(var(--u)*3.6) calc(var(--u)*3.6) 0 0;display:block}
+.mat .rp-cht .slot em{position:absolute;bottom:calc(var(--u)*-18);font-style:normal;font-size:calc(var(--u)*11);color:var(--m-onv);white-space:nowrap}
+.mat .rp-cht .slot s{position:absolute;top:0;bottom:0;left:50%;border-left:1px solid #C7C7CC}
+.mat .rp-cht .slot u{position:absolute;top:calc(var(--u)*-6);left:50%;transform:translateX(-50%);text-decoration:none;background:#fff;border:1px solid #C7C7CC;border-radius:calc(var(--u)*8);padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);white-space:nowrap;color:var(--m-on);z-index:2}
+.mat .rp-card{margin:0 calc(var(--u)*16);background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 1px 2px rgba(0,0,0,.18),0 1px 3px 1px rgba(0,0,0,.08);padding:calc(var(--u)*16)}
+.mat .rp-card hr{border:0;border-top:1px solid var(--m-ovar);margin:0}
+.mat .rp-card .sl{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*4) 0;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24)}
+.mat .rp-card .sl.tap{min-height:calc(var(--u)*48)}
+.mat .rp-card .sl span{flex:1;color:var(--m-onv)} .mat .rp-card .sl b{font-weight:600;white-space:nowrap}
+.mat .rp-card .sl svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-onv);margin-left:calc(var(--u)*-8)}
+.mat .rp-card .sl.red span,.mat .rp-card .sl.red b{color:#FF3B30}
+.mat .rp-card .hm{padding:calc(var(--u)*12) 0}
+.mat .rp-card .hm>div{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .rp-card .hm>div span{flex:1;font-size:calc(var(--u)*16);color:var(--m-onv)}
+.mat .rp-card .hm>div b{font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;white-space:nowrap}
+.mat .rp-card .hm small{display:block;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .rp-card .cmp{font-size:calc(var(--u)*12);font-weight:600;color:#10B981;margin-top:calc(var(--u)*2);white-space:pre}
+.mat .rp-card .cmp.dn{color:#FF3B30} .mat .rp-card .cmp.eq{color:var(--m-onv)}
+.mat .rp-card .pr{display:flex;padding:calc(var(--u)*8) 0;font-size:calc(var(--u)*16)} .mat .rp-card .pr span{flex:1;color:var(--m-onv)}
+.mat .rp-card h4{margin:0;font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:700}
+.mat .rp-card .nt{display:block;font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .sp8{height:calc(var(--u)*8)} .mat .sp12{height:calc(var(--u)*12)} .mat .sp24{height:calc(var(--u)*24)}
+.mat .rp-card .br{display:flex;gap:calc(var(--u)*8);font-size:calc(var(--u)*16);line-height:calc(var(--u)*24)}
+.mat .rp-card .br .l{flex:1;min-width:0} .mat .rp-card .br .l small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .rp-card .br b{font-weight:600;white-space:nowrap}
+.mat .rp-card .trk{height:calc(var(--u)*6);border-radius:calc(var(--u)*6);background:#F2F2F7;margin:calc(var(--u)*4) 0 calc(var(--u)*12);overflow:hidden}
+.mat .rp-card .trk i{display:block;height:100%;background:#007AFF;border-radius:calc(var(--u)*6)}
+.mat .rp-card.lt b{display:block;font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:700}
+.mat .rp-card.lt span{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .rp-in>.rp-card.lt{margin-bottom:calc(var(--u)*12)}
+.mat .rp-in .nn{margin:0 calc(var(--u)*16) calc(var(--u)*12);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .rp-in h5{margin:calc(var(--u)*12) calc(var(--u)*16) calc(var(--u)*4);font-size:calc(var(--u)*18);font-weight:700}
+.mat .rp-in .ls{margin:0 calc(var(--u)*16);min-height:calc(var(--u)*48);display:flex;align-items:center;gap:calc(var(--u)*8);border-bottom:1px solid var(--m-ovar);font-size:calc(var(--u)*16)}
+.mat .rp-in .ls span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rp-in .ls b{font-weight:500;white-space:nowrap}
+.mat .rp-bot{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);background:#fff;box-shadow:0 -1px 2px rgba(0,0,0,.06)}
+`; document.head.appendChild(rpStyle_);
+
+const SUP = {CO:4850000,MX:38500,PE:9800,CL:2900000,EC:2450,AR:3900000,PA:3200,BR:9800,US:7850,CA:8900}[R.country];
+const PAY = {CO:2900000,MX:17500,PE:2500,CL:1150000,EC:970,AR:1750000,PA:1350,BR:3500,US:5400,CA:5800}[R.country];
+const INV = 14, UNREAD = 2, SEND_SCROLL = 240;
+const RG = RANGES.lastmonth, B = RG.b;
+const CASH = Math.round(((byMethod(ORDERS).find(x=>x.key==="cash")||{v:0}).v) * RG.f);
+const HAS_CARD_SALES = !!R.C.pay.card;
+const longDate = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"long"}).format(d);
+const RANGE_LABEL = longDate(new Date(2026,8,1)) + " – " + longDate(new Date(2026,8,30));
+/* the rows, in the app's order */
+const ROWS = [
+  {k:"accountant_total_sales", v:mm(B.net)},
+  B.service>0 ? {l:S("reports_service_charges"), v:mm(B.service)} : null,
+  {k:"accountant_total_taxes", v:mm(B.tax)},
+  B.tips>0 ? {l:S("reports_tips"), v:mm(B.tips)} : null,
+  B.rounding ? {l:S("reports_cash_rounding"), v:mm(B.rounding)} : null,
+  {l:S("reports_total_collected"), v:mm(B.total)},
+  {k:"accountant_cash_sales", v:mm(CASH)},
+  {k:"accountant_card_sales", v:mm(B.total-CASH), gap:HAS_CARD_SALES ? S("accountant_card_fees_none_note") : null},
+  {k:"accountant_paid_suppliers", v:money(SUP), gap:PL("accountant_gap_unread", UNREAD)},
+  {k:"accountant_supplier_invoices", v:String(INV)},
+  {k:"accountant_paid_employees", v:money(PAY)}
+].filter(Boolean).map(r=>Object.assign({label:r.l||S(r.k)}, r));
+/* buildAccountantMessage (pure) */
+function message(){
+  const out = ["Platata — "+BIZ, RANGE_LABEL, ""];
+  const put = (l, v, extra) => { out.push(l, v); if(extra) out.push(extra); out.push(""); };
+  ROWS.forEach(r=>{
+    if(r.k==="accountant_supplier_invoices") return;          // folded into the supplier line
+    if(r.k==="accountant_paid_suppliers") return put(r.label, r.v, PL("accountant_msg_suppliers", INV, INV, UNREAD));
+    if(r.k==="accountant_card_sales") return put(r.label, r.v, r.gap);
+    put(r.label, r.v);
+  });
+  out.push("—"); out.push(S("accountant_disclaimer"));
+  return out.join("\n").trim() + "\n\n" + S("whatsapp_signature");
+}
+const MSG = message();
+function accountant(st){
+  const rows = ROWS.map((r,i)=>`<div class="ac-row"><span>${esc(r.label)}</span><div class="v"><b>${esc(r.v)}</b>${r.gap?`<small>${esc(r.gap)}</small>`:""}</div><span class="ib" ${i===0?'data-t="copy-0"':""}>${I.copy}</span></div>`).join("");
+  return topbar(S("accountant_title")) + `<div class="rs-scroll"><div class="in ac" style="transform:translateY(calc(var(--u)*${-st.scroll}))">
+    <p class="intro">${esc(S("accountant_intro"))}</p><p class="rng">${esc(RANGE_LABEL)}</p>
+    ${rows}
+    <p class="ft">${esc(S("accountant_footer"))}</p>
+    <div class="rs-btn" data-t="send">${esc(S("accountant_send"))}</div>
+    <div class="rs-btn sec">${esc(S("accountant_save_pdf"))}</div>
+  </div></div>${st.toast?toast(S("accountant_copied")):""}` + strip();
+}
+const CONTACT = pick({es:"Contadora Ana", pt:"Contadora Ana", en:"Ana, accountant"});
+function whatsapp(st){
+  const html = esc(MSG).replace(/\n/g,"<br>");
+  const now = new Intl.DateTimeFormat(LOCALE,{timeStyle:"short"}).format(new Date(2026,9,1,9,5));
+  return `<div class="wa"><div class="wtop">${I.back}<span class="av">${I.person}</span><b>${esc(CONTACT)}</b></div>
+    <div class="wbody">${st.sent?`<div class="bub">${html}<em>${now} ✓✓</em></div>`:""}</div>
+    <div class="wbar"><div class="box">${st.sent?"":`<div class="txt">${html}</div>`}</div><span class="snd" data-t="wa-send">${I.send||""}</span></div></div>`;
+}
+I.send = P("M2.01 21L23 12 2.01 3 2 10l15 2-15 2z");
+function render(st){
+  if(st.screen==="accountant") return accountant(st);
+  if(st.screen==="wa") return whatsapp(st);
+  return reports(st);
+}
+const HINT = (es,pt,en) => pick({es:"Toca "+es, pt:"Toque em "+pt, en:"Tap "+en});
+RKIT.start(R, {
+  id:"RS12", tallVideo:true, clock:"09:05",
+  endText:pick({es:"Así le mandas las cuentas a tu contador, con Platata.",pt:"Assim você manda as contas para o seu contador, com o Platata.",en:"That's how you send the numbers to your accountant, with Platata."}),
+  beats:pick({
+    es:["En Reportes, toca Mes pasado","Toca Resumen para el contador","Los números del mes; cada uno se copia","Toca Enviar resumen al contador","Va por WhatsApp, con todo el texto","Así le mandas las cuentas a tu contador"],
+    pt:["Em Relatórios, toque em Mês passado","Toque em Resumo para o contador","Os números do mês; cada um se copia","Toque em Enviar resumo ao contador","Vai pelo WhatsApp, com o texto todo","Assim você manda as contas ao seu contador"],
+    en:["In Reports, tap Last month","Tap Summary for the accountant","The month's numbers; each one copies","Tap Send summary to the accountant","It goes by WhatsApp, the whole text","That's how you send the numbers to your accountant"]}),
+  state:{screen:"reports", range:"today", marker:false, scroll:0, chipX:(L==="en"?190:150), toast:false, sent:false, line:null},
+  render,
+  device: () => "phone",
+  who: () => pick({es:"Tu teléfono",pt:"Seu celular",en:"Your phone"}),
+  steps:[
+    {beat:0, hint:HINT(S("reports_period_last_month"),S("reports_period_last_month"),S("reports_period_last_month")), target:'[data-t="chip-last_month"]', tap(st){ st.range="lastmonth"; }},
+    {beat:1, hint:HINT(S("reports_send_to_accountant"),S("reports_send_to_accountant"),S("reports_send_to_accountant")), target:'[data-t="accountant"]', tap(st){ st.screen="accountant"; st.scroll=0; }},
+    {beat:2, hint:HINT(S("accountant_row_copy"),S("accountant_row_copy"),S("accountant_row_copy")), target:'[data-t="copy-0"]', tap(st,E){ st.toast=true; E.after(2000,()=>{ st.toast=false; }); E.after(2400,()=>{ st.scroll=SEND_SCROLL; }); }},
+    {beat:3, hint:HINT(S("accountant_send"),S("accountant_send"),S("accountant_send")), target:'[data-t="send"]', tap(st){ st.screen="wa"; }},
+    {beat:4, hint:pick({es:"Toca enviar",pt:"Toque em enviar",en:"Tap send"}), target:'[data-t="wa-send"]', tap(st){ st.sent=true; }}
+  ]
+});
+</script>
+<style>
+.mat .ac{padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*16)}
+.mat .ac .intro{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .ac .rng{margin:calc(var(--u)*16) 0 calc(var(--u)*8);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .ac-row{display:flex;align-items:center;padding:calc(var(--u)*0) 0;min-height:calc(var(--u)*48);border-bottom:1px solid rgba(229,229,234,.4);gap:calc(var(--u)*0)}
+.mat .ac-row>span:first-child{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv);padding:calc(var(--u)*12) 0}
+.mat .ac-row .v{display:flex;flex-direction:column;align-items:flex-end;padding-left:calc(var(--u)*8);max-width:62%}
+.mat .ac-row .v b{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:700;white-space:nowrap}
+.mat .ac-row .v small{font-size:calc(var(--u)*11);line-height:calc(var(--u)*16);color:#E65100;font-weight:500;text-align:right}
+.mat .ac-row .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .ac .ft{margin:calc(var(--u)*20) 0 calc(var(--u)*8);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .ac .rs-btn{margin-top:calc(var(--u)*8)}
+.mat .wa{flex:1;display:flex;flex-direction:column;background:#EFE7DE;min-height:0}
+.mat .wa .wtop{height:calc(var(--u)*56);background:#008069;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*10);padding:0 calc(var(--u)*12);flex:0 0 auto}
+.mat .wa .wtop .av{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#DFE5E7;color:#8696A0;display:grid;place-items:center}
+.mat .wa .wtop b{font-size:calc(var(--u)*17);font-weight:500}
+.mat .wa .wbody{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:calc(var(--u)*8) calc(var(--u)*10)}
+.mat .wa .bub{align-self:flex-end;max-width:88%;background:#D9FDD3;border-radius:calc(var(--u)*8);padding:calc(var(--u)*6) calc(var(--u)*8);font-size:calc(var(--u)*13);line-height:calc(var(--u)*17);color:#111B21}
+.mat .wa .bub em{display:block;text-align:right;font-style:normal;font-size:calc(var(--u)*11);color:#667781}
+.mat .wa .wbar{flex:0 0 auto;display:flex;align-items:flex-end;gap:calc(var(--u)*6);padding:calc(var(--u)*6) calc(var(--u)*6) calc(var(--u)*8)}
+.mat .wa .box{flex:1;background:#fff;border-radius:calc(var(--u)*22);min-height:calc(var(--u)*44);padding:calc(var(--u)*10) calc(var(--u)*14);font-size:calc(var(--u)*14);line-height:calc(var(--u)*19);color:#111B21}
+.mat .wa .box .txt{max-height:calc(var(--u)*190);overflow:hidden}
+.mat .wa .snd{width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:50%;background:#00A884;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+</style>
+</body>
+</html>

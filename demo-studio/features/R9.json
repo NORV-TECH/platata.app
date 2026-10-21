@@ -1,0 +1,48 @@
+{
+  "id": "R9",
+  "name": "Counter tablet",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": { "stability": 0.5, "similarity_boost": 0.75 },
+    "pt": { "stability": 0.5, "similarity_boost": 0.75 },
+    "en": { "stability": 0.5, "similarity_boost": 0.75 }
+  },
+  "steps": [
+    { "id": "1-abrir", "voice": {
+      "es": "La tablet de mostrador se abre con un toque.",
+      "pt": "O tablet do balcão abre com um toque.",
+      "en": "The counter tablet opens with one tap." } },
+    { "id": "2-perfil", "voice": {
+      "es": "Cada persona de tu equipo elige su perfil.",
+      "pt": "Cada pessoa da sua equipe escolhe o seu perfil.",
+      "en": "Each person on your team picks their profile." } },
+    { "id": "3-pin", "voice": {
+      "es": "Y entra con su PIN.",
+      "pt": "E entra com o seu PIN.",
+      "en": "And signs in with their PIN." } },
+    { "id": "4-platos", "voice": {
+      "es": "Toca los platos del pedido.",
+      "pt": "Toque nos pratos do pedido.",
+      "en": "Tap the dishes in the order." } },
+    { "id": "5-mesa", "voice": {
+      "es": "Toca Cobrar y elige la mesa.",
+      "pt": "Toque em Cobrar e escolha a mesa.",
+      "en": "Tap Charge and pick the table." } },
+    { "id": "6-exacto", "voice": {
+      "es": "Si te pagan justo en efectivo, toca Exacto.",
+      "pt": "Se pagam o valor certo em dinheiro, toque em Exato.",
+      "en": "If they pay the exact amount in cash, tap Exact." } },
+    { "id": "7-nueva", "voice": {
+      "es": "Venta completada. Toca Nueva venta para el siguiente cliente.",
+      "pt": "Venda concluída. Toque em Nova venda para o próximo cliente.",
+      "en": "Sale complete. Tap New sale for the next customer." } },
+    { "id": "8-cocina", "voice": {
+      "es": "El pedido llega a la pantalla de cocina, con su mesa, pasando por tu teléfono.",
+      "pt": "O pedido chega à tela da cozinha, com a mesa, passando pelo seu celular.",
+      "en": "The order reaches the kitchen display, with its table, through your phone." } },
+    { "id": "9-fin", "voice": {
+      "es": "Así cobras en el mostrador con Platata.",
+      "pt": "Assim você cobra no balcão com o Platata.",
+      "en": "That's how you charge at the counter with Platata." } }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "id": "R8",
+  "name": "Kitchen screen settings",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": { "stability": 0.5, "similarity_boost": 0.75 },
+    "pt": { "stability": 0.5, "similarity_boost": 0.75 },
+    "en": { "stability": 0.5, "similarity_boost": 0.75 }
+  },
+  "steps": [
+    { "id": "1-agregar", "voice": {
+      "es": "En tu teléfono, toca Agregar pantalla de cocina.",
+      "pt": "No seu celular, toque em Adicionar tela da cozinha.",
+      "en": "On your phone, tap Add kitchen screen." } },
+    { "id": "2-nombre", "voice": {
+      "es": "Ponle nombre: dónde va la pantalla.",
+      "pt": "Dê um nome: onde fica a tela.",
+      "en": "Name it: where the screen goes." } },
+    { "id": "3-platos", "voice": {
+      "es": "Elige qué platos muestra. El bar solo ve las bebidas.",
+      "pt": "Escolha quais pratos ela mostra. O bar só vê as bebidas.",
+      "en": "Choose which dishes it shows. The bar only sees the drinks." } },
+    { "id": "4-codigo", "voice": {
+      "es": "Toca Siguiente y te da un código para la tablet.",
+      "pt": "Toque em Próximo e você recebe um código para o tablet.",
+      "en": "Tap Next and you get a code for the tablet." } },
+    { "id": "5-tablet", "voice": {
+      "es": "En la tablet de la cocina, elige Pantalla de cocina.",
+      "pt": "No tablet da cozinha, escolha Tela da cozinha.",
+      "en": "On the kitchen tablet, choose Kitchen display." } },
+    { "id": "6-conectar", "voice": {
+      "es": "Escribe el código y toca Conectar. Los dos van en el mismo Wi-Fi.",
+      "pt": "Digite o código e toque em Conectar. Os dois ficam no mesmo Wi-Fi.",
+      "en": "Type the code and tap Connect. Both stay on the same Wi-Fi." } },
+    { "id": "7-conectada", "voice": {
+      "es": "En tu teléfono, la pantalla del bar sale Conectada.",
+      "pt": "No seu celular, a tela do bar aparece Conectada.",
+      "en": "On your phone, the bar screen shows Connected." } },
+    { "id": "8-fin", "voice": {
+      "es": "Así conectas tu pantalla de cocina con Platata.",
+      "pt": "Assim você conecta a tela da cozinha com o Platata.",
+      "en": "That's how you connect a kitchen screen with Platata." } }
+  ]
+}
