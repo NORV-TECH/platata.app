@@ -230,7 +230,7 @@ function receipt(){
   [D1, D2].forEach(it => { const qty = "1x", price = money(it.price), nameMax = W - qty.length - price.length - 2;
     lines.push(leftRight(`${qty} ${it.name.slice(0, Math.max(0, nameMax))}`, price)); });
   lines.push(divider(), leftRight(L.rTotal, money(TOTAL)), divider(), center(L.cash.toLocaleUpperCase(R.lang)), divider());
-  wrapWords("Thank you for shopping with us!").forEach(l => lines.push(center(l)));
+  wrapWords(R.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})).forEach(l => lines.push(center(l)));
   return lines.join("\n");
 }
 function comanda(){

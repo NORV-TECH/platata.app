@@ -1,0 +1,77 @@
+{
+  "id": "RS21",
+  "name": "Funciona sin internet",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-sin-internet",
+      "voice": {
+        "es": "Se fue el internet. La línea de arriba dice Sin internet, pero tu caja sigue funcionando.",
+        "pt": "A internet caiu. A linha de cima diz Sem internet, mas seu caixa continua funcionando.",
+        "en": "The internet is down. The line at the top says No internet, but your register keeps working."
+      }
+    },
+    {
+      "id": "2-cobrar",
+      "voice": {
+        "es": "Agregas los platos y tocas Cobrar.",
+        "pt": "Você adiciona os pratos e toca em Cobrar.",
+        "en": "Add the dishes and tap Charge."
+      }
+    },
+    {
+      "id": "3-exacto",
+      "voice": {
+        "es": "Tocas Exacto. La venta queda guardada en tu teléfono.",
+        "pt": "Você toca em Exato. A venda fica salva no seu celular.",
+        "en": "Tap Exact. The sale is saved on your phone."
+      }
+    },
+    {
+      "id": "4-nueva-venta",
+      "voice": {
+        "es": "Tocas Nueva venta y sigues vendiendo.",
+        "pt": "Você toca em Nova venda e continua vendendo.",
+        "en": "Tap New sale and keep selling."
+      }
+    },
+    {
+      "id": "5-mesero",
+      "voice": {
+        "es": "En el teléfono del mesero, la mesa se guarda igual y espera arriba: pendiente de enviar.",
+        "pt": "No celular do garçom, a mesa é salva do mesmo jeito e espera em cima: pendente de envio.",
+        "en": "On the server's phone, the table is saved too and waits at the top: waiting to send."
+      }
+    },
+    {
+      "id": "6-vuelve",
+      "voice": {
+        "es": "Cuando vuelve el internet, se envía sola y la línea desaparece.",
+        "pt": "Quando a internet volta, ela é enviada sozinha e a linha some.",
+        "en": "When the internet comes back, it sends itself and the line goes away."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así sigues vendiendo sin internet con Platata.",
+        "pt": "Assim você continua vendendo sem internet com o Platata.",
+        "en": "That's how you keep selling with no internet with Platata."
+      }
+    }
+  ]
+}

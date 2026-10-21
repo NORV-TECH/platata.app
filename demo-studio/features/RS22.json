@@ -1,0 +1,69 @@
+{
+  "id": "RS22",
+  "name": "Copia en Google Drive",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-barra",
+      "voice": {
+        "es": "Si tu negocio no tiene respaldo, la barra amarilla te avisa. Toca Conectar.",
+        "pt": "Se o seu negócio não tem backup, a barra amarela avisa. Toque em Conectar.",
+        "en": "If your business has no backup, the yellow bar tells you. Tap Connect."
+      }
+    },
+    {
+      "id": "2-drive",
+      "voice": {
+        "es": "Conecta tu Google Drive con tu cuenta de Google. Se hace un respaldo cada 6 horas si algo cambió.",
+        "pt": "Conecte seu Google Drive com sua conta Google. Um backup é feito a cada 6 horas se algo mudou.",
+        "en": "Connect your Google Drive with your Google account. A backup is made every 6 hours when something changed."
+      }
+    },
+    {
+      "id": "3-respaldar",
+      "voice": {
+        "es": "Toca Respaldar ahora para hacer una copia en este momento.",
+        "pt": "Toque em Fazer backup agora para fazer uma cópia neste momento.",
+        "en": "Tap Back up now to make a copy right away."
+      }
+    },
+    {
+      "id": "4-treinta-dias",
+      "voice": {
+        "es": "Las copias de los últimos 30 días quedan en tu Drive. La más reciente siempre se queda.",
+        "pt": "As cópias dos últimos 30 dias ficam no seu Drive. A mais recente sempre fica.",
+        "en": "Copies from the last 30 days stay in your Drive. The newest one always stays."
+      }
+    },
+    {
+      "id": "5-restaurar",
+      "voice": {
+        "es": "Si algo sale mal, tocas Restaurar y vuelves a esa copia.",
+        "pt": "Se algo der errado, toque em Restaurar e volte para essa cópia.",
+        "en": "If something goes wrong, tap Restore and go back to that copy."
+      }
+    },
+    {
+      "id": "6-fin",
+      "voice": {
+        "es": "Así respaldas tu negocio en Google Drive con Platata.",
+        "pt": "Assim você faz backup do seu negócio no Google Drive com o Platata.",
+        "en": "That's how you back up your business to Google Drive with Platata."
+      }
+    }
+  ]
+}
