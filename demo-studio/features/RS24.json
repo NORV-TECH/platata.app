@@ -1,0 +1,77 @@
+{
+  "id": "RS24",
+  "name": "Varios negocios y sucursales",
+  "business": "restaurante",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-negocios",
+      "voice": {
+        "es": "Toca el nombre de tu negocio y ves todos tus negocios y sucursales.",
+        "pt": "Toque no nome do seu negócio e veja todos os seus negócios e filiais.",
+        "en": "Tap your business name to see all your businesses and branches."
+      }
+    },
+    {
+      "id": "2-sucursal",
+      "voice": {
+        "es": "Una sucursal nueva copia tu menú y tus precios.",
+        "pt": "Uma filial nova copia o seu cardápio e os seus preços.",
+        "en": "A new branch copies your menu and your prices."
+      }
+    },
+    {
+      "id": "3-nombre",
+      "voice": {
+        "es": "Ponle un nombre, por ejemplo Centro.",
+        "pt": "Dê um nome, por exemplo Centro.",
+        "en": "Give it a name, like Downtown."
+      }
+    },
+    {
+      "id": "4-llevar",
+      "voice": {
+        "es": "Elige qué más llevar: tu equipo, tus clientes o tus ajustes. Las ventas no se llevan.",
+        "pt": "Escolha o que mais levar: sua equipe, seus clientes ou suas configurações. As vendas não vão.",
+        "en": "Choose what else to bring: your team, your clients, or your settings. Sales stay behind."
+      }
+    },
+    {
+      "id": "5-crear",
+      "voice": {
+        "es": "Toca Crear sucursal. Empieza con su propia caja, cerrada.",
+        "pt": "Toque em Criar filial. Ela começa com o próprio caixa, fechado.",
+        "en": "Tap Create Branch. It starts with its own register, closed."
+      }
+    },
+    {
+      "id": "6-cambiar",
+      "voice": {
+        "es": "Para volver, toca tu negocio en la lista. Cada local lleva sus propias ventas.",
+        "pt": "Para voltar, toque no seu negócio na lista. Cada loja tem as próprias vendas.",
+        "en": "To go back, tap your business in the list. Each location keeps its own sales."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así manejas varios negocios y sucursales con Platata.",
+        "pt": "Assim você cuida de vários negócios e filiais com o Platata.",
+        "en": "That's how you run several businesses and branches with Platata."
+      }
+    }
+  ]
+}

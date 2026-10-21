@@ -89,8 +89,8 @@
 /* system prompts */
 .bios{align-items:end;place-items:end center;padding:0}
 .bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*28) calc(var(--u)*24) calc(var(--u)*40);text-align:center}
-.bt{font-size:calc(var(--u)*22);color:#1F1F1F}
-.bs{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*14);color:#444746}
+.bio .bt{font-size:calc(var(--u)*22);color:#1F1F1F}
+.bio .bs{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*14);color:#444746}
 .bf{margin:calc(var(--u)*28) auto 0;width:calc(var(--u)*72);height:calc(var(--u)*72);border-radius:50%;display:grid;place-items:center;background:#D3E3FD}
 .bfi{width:calc(var(--u)*44);height:calc(var(--u)*44);fill:#0B57D0}
 .otoast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*110);max-width:85%;background:rgba(32,33,36,.92);color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:16;text-align:center}
@@ -315,7 +315,7 @@ function home(o){ o=o||{};
     return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("") + `</div>`;
   const n = lines.length;
   if(n) h += `<div class="csale"><span>${esc(fmt(P(W.sale)[n===1?0:1], n))}</span><i>›</i></div>`;
-  h += `<div class="fpair"><span class="sec${n?"":" dis"}" data-t="save">${esc(T("save"))}</span><span class="pri${n?"":" dis"}" data-t="charge">${esc(fmt(P(W.charge), R.money(totalV)))}</span></div>`;
+  h += `<div class="fpair"><span class="sec${n?"":" dis"}" data-t="save">${esc(o.saveLabel||T("save"))}</span><span class="pri${n?"":" dis"}" data-t="charge">${esc(fmt(P(W.charge), R.money(totalV)))}</span></div>`;
   h += nav(o.nav||{});
   return h;
 }
@@ -347,7 +347,7 @@ function panel(o){ o=o||{};
   h += wsRow({icon:"person", title:T("clients"), sub:PL("clientsN", o.clients||24)});
   h += wsRow({icon:"rlong", title:T("invoices"), sub:T("invFirst")});
   const ph = o.onPhones||0;
-  h += wsRow({icon:"group", title:T("team"), sub:fmt(P(W.teamN)[2===1?0:1], 2, fmt(P(W.onPhones)[ph===1?0:1], ph))});
+  h += wsRow({icon:"group", title:T("team"), sub:fmt(P(W.teamN)[(o.team??2)===1?0:1], o.team??2, fmt(P(W.onPhones)[ph===1?0:1], ph))});
   h += wsRow({icon:"rlong", title:T("reports"), sub:fmt(P(FREE?W.today:W.todayNet), R.money(o.salesToday||0))   /* MKT2-1 NetSalesWords.outsideUsCa, HomeScreen.kt:1784 */});
   h += `<div class="pdiv"></div>`;
   h += wsRow({icon:"gear", title:T("settings"), sub:T("settingsSub"), t:"settings"});

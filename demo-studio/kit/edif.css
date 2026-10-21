@@ -200,7 +200,8 @@ body{background:var(--page);color:var(--ink);font-family:var(--app);overflow:hid
 .phone.dark .app{background:#121212}
 .video .devwho{position:relative;z-index:2;margin:0 auto 14px;font-size:24px;padding:8px 20px}
 .video.tall .stage{padding-top:22px}
-.video.tall .phone.land{height:auto;width:510px;aspect-ratio:16/10;border-radius:16px;margin-top:150px}
+.video.tall .phone.land{height:auto;width:536px;aspect-ratio:16/10;border-radius:14px;margin-top:150px}
+.video.tall .phone.land .screen{--u:calc(100cqw/820)}
 .video.tall .phone.land .screen{border-radius:16px}
 .video:not(.tall) .devwho{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:30}
 .devwho[hidden]{display:none}

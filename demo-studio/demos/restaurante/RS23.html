@@ -273,7 +273,7 @@ function panel(o){ o=o||{};
   h += wsRow({icon:"person", title:T("clients"), sub:PL("clientsN", o.clients||24)});
   h += wsRow({icon:"rlong", title:T("invoices"), sub:T("invFirst")});
   const ph = o.onPhones||0;
-  h += wsRow({icon:"group", title:T("team"), sub:fmt(P(W.teamN)[2===1?0:1], 2, fmt(P(W.onPhones)[ph===1?0:1], ph))});
+  h += wsRow({icon:"group", title:T("team"), sub:fmt(P(W.teamN)[(o.team??2)===1?0:1], o.team??2, fmt(P(W.onPhones)[ph===1?0:1], ph))});
   h += wsRow({icon:"rlong", title:T("reports"), sub:fmt(P(FREE?W.today:W.todayNet), R.money(o.salesToday||0))   /* MKT2-1 NetSalesWords.outsideUsCa, HomeScreen.kt:1784 */});
   h += `<div class="pdiv"></div>`;
   h += wsRow({icon:"gear", title:T("settings"), sub:T("settingsSub"), t:"settings"});
