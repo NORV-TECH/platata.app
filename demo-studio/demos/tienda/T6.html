@@ -393,7 +393,7 @@ function receiptText(lines, o){ o=o||{};
   s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
   if(o.cardLine) s += o.cardLine + "\n";
   if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
-  s += `${o.method}\n\nThank you for shopping with us!`;
+  s += `${o.method}\n\n${({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})[document.documentElement.lang]||"¡Gracias por tu visita!"}`; /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return s;
 }
 function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
