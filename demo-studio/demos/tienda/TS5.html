@@ -387,7 +387,7 @@ function receiptText(lines, o){ o=o||{};
   s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
   if(o.cardLine) s += o.cardLine + "\n";
   if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
-  s += `${o.method}\n\nThank you for shopping with us!`;
+  s += `${o.method}\n\n${S.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})}`; /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return s;
 }
 function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
@@ -554,7 +554,7 @@ const stepsStripe = [
   {beat:0, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
   {beat:1, hint:TAP+t("pay_card_short"), target:'[data-t="card"]', tap(st,E){ st.sstage="idle"; E.after(1300,()=>{ st.sstage="collect"; }); }},
   {beat:2, hint:H("El cliente acerca su tarjeta","O cliente aproxima o cartão","The customer taps their card"), target:'[data-t="tapcard"]', tap(st,E){ st.sstage="proc";
-      E.after(2000,()=>{ st.sstage=null; st.screen="done"; }); }}
+      E.after(3500,()=>{ st.sstage=null; st.screen="done"; }); }}
 ];
 const stepsNone = [
   {beat:0, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},

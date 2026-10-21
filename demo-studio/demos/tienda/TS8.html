@@ -388,7 +388,7 @@ function receiptText(lines, o){ o=o||{};
   s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
   if(o.cardLine) s += o.cardLine + "\n";
   if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
-  s += `${o.method}\n\nThank you for shopping with us!`;
+  s += `${o.method}\n\n${S.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})}`; /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return s;
 }
 function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
@@ -515,7 +515,7 @@ function receiptLines(refunded){
   SALE.items.forEach(x=>{ L.push(`1x ${x.name}`); L.push(`   @ ${money(x.price)} ${t("receipt_label_each")} ... ${money(x.price)}`); });
   L.push(DLINE, `${t("receipt_label_subtotal")}: ${money(SALE.total)}`, RLINE, `${t("receipt_label_total")}: ${money(SALE.total)}`);
   if(refunded){ L.push(`${t("tx_refunded_label")}: -${money(refunded)}`, `${t("tx_net_after_refund")}: ${money(SALE.total-refunded)}`); }
-  L.push(t("payment_method_cash"), "", "Thank you for shopping with us!");
+  L.push(t("payment_method_cash"), "", S.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})); /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return L.join("\n");
 }
 const badge = st => st==="paid" ? `<span class="bdg ok">${esc(t("tx_status_paid"))}</span>` : `<span class="bdg er">${esc(t("tx_status_refunded"))}</span>`;
@@ -587,7 +587,7 @@ SKIT.start(S, {
     {beat:5, hint:H("Escribe tu PIN","Digite seu PIN","Enter your PIN"), target:'[data-t="pin-1"]', tap(st,E){ st.pin=1;
         E.after(260,()=>{st.pin=2}); E.after(520,()=>{st.pin=3}); E.after(780,()=>{st.pin=4});
         E.after(1150,()=>{ st.pin=null; st.screen="detail"; st.refunded=SALE.total; st.flash=true; });
-        E.after(4300,()=>{ st.scroll=200; }); }}
+        E.after(1700,()=>{ st.scroll=200; }); }}
   ]
 });
 </script>

@@ -396,7 +396,7 @@ function receiptText(lines, o){ o=o||{};
   s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
   if(o.cardLine) s += o.cardLine + "\n";
   if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
-  s += `${o.method}\n\nThank you for shopping with us!`;
+  s += `${o.method}\n\n${S.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})}`; /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return s;
 }
 function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
@@ -607,7 +607,7 @@ function settingUp(st){
   const lines = [t("setup_line_currency", CURNAME), t("setup_line_catalog"), t("setup_line_register")];
   return `<div class="ppage"><div class="pbody c" style="padding-top:calc(var(--u)*60)">${POT("thumbsup",190)}
     <div class="ph1" style="margin-top:calc(var(--u)*10);text-align:center">${esc(t("biz_setup_creating"))}</div>
-    <div class="scard2">${lines.map((l,i)=>`<div class="sline${i<st.done?" d":""}">${i<st.done?chk(true,AC.main):i===st.done?`<span class="ring"></span>`:chk(false)}<span>${esc(l)}</span></div>`).join("")}</div></div></div>`;
+    <div class="scard2">${lines.map((l,i)=>`<div class="sline${i<st.done?" d":""}">${i<st.done?chk(true,AC.main):i===st.done?`<span class="spin"></span>`:chk(false)}<span>${esc(l)}</span></div>`).join("")}</div></div></div>`;
 }
 function ready(){
   const conf = [[30,60,"#7C55E0",20],[84,120,"#EAB04C",-30],[150,48,"#D9468A",60],[230,96,"#7C55E0",-10],[300,58,"#EAB04C",35],[270,180,"#D9468A",-50],[40,210,"#EAB04C",15],[120,250,"#7C55E0",70],[318,260,"#7C55E0",-25]]
@@ -638,11 +638,11 @@ if(PH) steps.push({beat:2, hint:TAP+PHWORD, target:'[data-t="seg-1"]', tap(st){ 
 steps.push(
   {beat:2, hint:TAP+t("biz_pick_continue_with", TYPEWORD), target:'[data-t="type-go"]', tap(st){ st.screen="name"; }},
   {beat:3, hint:H("Toca el campo del nombre","Toque no campo do nome","Tap the name field"), target:'[data-t="name-field"]', tap(st,E){ E.type("name", NAME, null, 70); }},
-  {beat:3, hint:TAP+t("biz_start_cta"), target:'[data-t="name-go"]', tap(st){ st.screen="google"; }},
+  {beat:4, hint:TAP+t("biz_start_cta"), target:'[data-t="name-go"]', tap(st){ st.screen="google"; }},
   {beat:4, hint:TAP+t("auth_google_btn"), target:'[data-t="google"]', tap(st){ st.screen="dict"; st.pct=null; }},
   {beat:5, hint:TAP+t("dict_dl_start"), target:'[data-t="dl"]', tap(st,E){ st.pct=0;
-      [8,19,33,46,58,71,84,93,100].forEach((p,i)=>E.after(320*(i+1),()=>{ st.pct=p; }));
-      E.after(3300,()=>{ st.screen="setup"; st.done=0; }); E.after(4300,()=>{ st.done=1; }); E.after(5300,()=>{ st.done=2; }); E.after(6200,()=>{ st.done=3; }); E.after(6900,()=>{ st.screen="ready"; }); }},
+      [8,19,33,46,58,71,84,93,100].forEach((p,i)=>E.after(280*(i+1),()=>{ st.pct=p; }));
+      E.after(2600,()=>{ st.screen="setup"; st.done=0; }); E.after(3300,()=>{ st.done=1; }); E.after(3900,()=>{ st.done=2; }); E.after(4400,()=>{ st.done=3; }); E.after(4900,()=>{ st.screen="ready"; }); }},
   {beat:6, hint:TAP+t("ready_cta_scan"), target:'[data-t="ready-go"]', tap(st){ st.screen="landing"; }});
 SKIT.start(S, {
   id:"TS1", tallVideo:true, clock:"9:05",
@@ -1040,7 +1040,7 @@ SKIT.start(S, {
 .mat .terms{text-align:center;font-size:calc(var(--u)*13);line-height:1.4;color:#737883}
 .mat .scard2{margin-top:calc(var(--u)*18);align-self:stretch;border-radius:calc(var(--u)*20);background:#fff;border:1px solid #E6E2D9;padding:calc(var(--u)*16) calc(var(--u)*18);display:flex;flex-direction:column;gap:calc(var(--u)*14)}
 .mat .sline{display:flex;align-items:center;gap:calc(var(--u)*12);font-size:calc(var(--u)*15);color:#737883}.mat .sline.d{color:#17181B}
-.mat .ring{width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:50%;border:calc(var(--u)*2) solid #EB5A2E;border-right-color:transparent;animation:spin 1s linear infinite;flex:0 0 auto}
+.mat .spin{width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:50%;border:calc(var(--u)*2) solid #EB5A2E;border-right-color:transparent;animation:spin 1s linear infinite;flex:0 0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 .mat .cf{position:absolute;width:calc(var(--u)*8);height:calc(var(--u)*14);border-radius:calc(var(--u)*2);opacity:.9}
 .mat .shop{margin-top:calc(var(--u)*12);align-self:stretch;display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*12) calc(var(--u)*14);border-radius:calc(var(--u)*20);background:#fff;border:1px solid #E6E2D9}
@@ -1062,7 +1062,7 @@ SKIT.start(S, {
 .mat .pbtn.acc{background:#188448}
 .mat .pfield{border-color:#1E9E55}.mat .pfield .caret{background:#1E9E55}
 .mat .rcard .rib{background:#E5F1E7}
-.mat .ring{border-color:#1E9E55;border-right-color:transparent}
+.mat .spin{border-color:#1E9E55;border-right-color:transparent}
 .mat .pitch .tseg{display:flex;gap:calc(var(--u)*4);padding:calc(var(--u)*4);border-radius:calc(var(--u)*14);background:#E0F1E7}
 .mat .pitch .tseg span{flex:1;height:calc(var(--u)*40);border-radius:calc(var(--u)*11);display:grid;place-items:center;font:500 calc(var(--u)*14) Roboto,sans-serif;color:#464A52}
 .mat .pitch .tseg span.on{background:#fff;color:#17181B;box-shadow:0 1px 2px rgba(0,0,0,.15)}

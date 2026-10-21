@@ -386,7 +386,7 @@ function receiptText(lines, o){ o=o||{};
   s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
   if(o.cardLine) s += o.cardLine + "\n";
   if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
-  s += `${o.method}\n\nThank you for shopping with us!`;
+  s += `${o.method}\n\n${S.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})}`; /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return s;
 }
 function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
@@ -517,7 +517,7 @@ function smsApp(st){ return `<div class="x"><div class="x-sms"><div class="hd">$
 function mailApp(st){ return `<div class="x"><div class="x-sms"><div class="hd">${J.back}<span>${esc(APP.mail)}</span></div>
   <div class="to"><span>${esc(H("Para","Para","To"))}</span>${esc(st.to)}${!st.mailSent?'<i class="x-caret"></i>':""}</div>
   <div class="to"><span>${esc(H("Asunto","Assunto","Subject"))}</span>${esc(t("receipt_dlg_title"))}</div>
-  <div class="body" style="justify-content:flex-start"><div class="msg" style="background:none;padding:0">${esc(RECEIPT)}</div></div>
+  <div class="body" style="justify-content:flex-start"><div class="msg" style="background:none;padding:0;border-radius:0">${esc(RECEIPT)}</div></div>
   <div class="bar"><div class="send" data-t="mail-send">${J.send}</div></div></div></div>`; }
 function render(st){
   if(st.screen==="reg") return X(shopReg({lines:st.lines, fiado:true}));

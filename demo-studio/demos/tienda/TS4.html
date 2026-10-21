@@ -389,7 +389,7 @@ function receiptText(lines, o){ o=o||{};
   s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
   if(o.cardLine) s += o.cardLine + "\n";
   if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
-  s += `${o.method}\n\nThank you for shopping with us!`;
+  s += `${o.method}\n\n${S.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})}`; /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return s;
 }
 function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
@@ -554,7 +554,7 @@ function renderUS(st){
 const stepsQR = [
   {beat:0, hint:H("Enciende ","Ligue ","Turn on ")+(PIX?"Pix":t("payment_method_qr")), target:'[data-t="sw-qr"]', tap(st,E){ st.screen="terms"; E.after(1800,()=>{ st.scrolled=true; }); }},
   {beat:1, hint:H("Marca la casilla","Marque a caixa","Tick the box"), target:'[data-t="tick"]', tap(st){ st.ticked=true; }},
-  {beat:1, hint:TAP+qrS("qr_terms_cta"), target:'[data-t="accept"]', tap(st){ st.screen="pm"; st.chooser=true; }},
+  {beat:2, hint:TAP+qrS("qr_terms_cta"), target:'[data-t="accept"]', tap(st){ st.screen="pm"; st.chooser=true; }},
   {beat:2, hint:TAP+qrS("qr_upload_image"), target:'[data-t="upload"]', tap(st){ st.chooser=false; st.screen="pick"; }},
   {beat:2, hint:H("Elige la foto de tu QR","Escolha a foto do seu QR","Pick the photo of your QR"), target:'[data-t="pick-qr"]', tap(st,E){ st.screen="pm"; st.qrOn=true; st.toast=true;
       E.after(2400,()=>{ st.toast=false; st.screen="reg"; }); }},

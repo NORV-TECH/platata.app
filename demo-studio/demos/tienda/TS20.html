@@ -636,7 +636,10 @@ function sellPage(st){
     if(HIDDEN.length) b += `<div class="hd" data-t="hidden-h">${esc(T("sell_online_hidden_heading"))}</div><div class="scard" data-t="hidden"><span class="bs">${esc(T("sell_online_hidden_intro"))}</span>
        ${HIDDEN.map(it=>`<div class="hid"><span>${esc(it.name)}</span><small>${esc(T("sell_online_why_weighed"))}</small></div>`).join("")}</div>`;
   }
-  let h = topbar(t("title")) + `<div class="spage"><div class="cin" style="transform:translateY(calc(var(--u)*${-(st.sc||0)}))">${b}</div></div>`;
+  // video: the "left out" card stays in view until line 5 ("Comparte tu enlace") begins, then the page is back at the top for Share
+  // (review R2: no silent pause on the empty categories). Demo mode keeps its own timer.
+  const scY = (Demo.MODE==="video" && window.__timeline && window.__timeline.starts.length>=5) ? 0 : (st.sc||0);
+  let h = topbar(t("title")) + `<div class="spage"><div class="cin" style="transform:translateY(calc(var(--u)*${-scY}))">${b}</div></div>`;
   if(st.dlg) h += dlg({paper:true, title:T("conn_store_dlg_title"), body:`<p>${esc(T("conn_store_dlg_body_add"))}</p>`, dismiss:T("conn_not_now"), confirm:T("conn_add"), t:"dlg-add"});
   if(st.skip) h += SKIT.hop(S,{from:DEV_OWNER, to:t("title"), line:t("skipLine"), note:T("conn_dlg_store")});
   return h + (st.dlg||st.skip ? "" : strip());
@@ -745,7 +748,7 @@ SKIT.start(S, {
         E.after(1600,()=>{ const v=scrollFor('[data-t="so-on"]'); if(v>0) st.sc=v; }); }},
     {beat:3, hint:P({es:"Toca Encender la tienda",pt:"Toque em Ligar a loja",en:"Tap Turn on the store"}), target:'[data-t="so-on"]', tap(st,E){ st.screen="sell"; st.on=true; st.checked=false; st.sc=0;
         E.after(1500,()=>{ st.checked=true; });
-        if(!HB){ E.after(3000,()=>{ const v=scrollFor('[data-t="hidden"]'); if(v>0) st.sc=v; }); E.after(7600,()=>{ st.sc=0; }); } }},
+        if(!HB){ E.after(3000,()=>{ const v=scrollFor('[data-t="hidden"]'); if(v>0) st.sc=v; }); if(Demo.MODE!=="video") E.after(7600,()=>{ st.sc=0; }); } }},
     {beat:4, hint:P({es:"Toca Compartir",pt:"Toque em Compartilhar",en:"Tap Share"}), target:'[data-t="so-share"]', tap(st,E){ st.hop=true;
         E.after(2200,()=>{ st.hop=false; st.screen="wmenu"; });
         E.after(3000,()=>{ const v=scrollFor('[data-t="w-dish"]'); if(v>0) st.wsc=v; }); }},

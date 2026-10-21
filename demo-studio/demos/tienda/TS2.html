@@ -384,7 +384,7 @@ function receiptText(lines, o){ o=o||{};
   s += `===============================\n${t("receipt_label_total")}: ${money(total + (o.tip||0))}\n`;
   if(o.cardLine) s += o.cardLine + "\n";
   if(o.change) s += `${t("receipt_label_change_due")}: ${money(o.change)}\n`;
-  s += `${o.method}\n\nThank you for shopping with us!`;
+  s += `${o.method}\n\n${S.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})}`; /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return s;
 }
 function viewer(text){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
@@ -511,9 +511,9 @@ SKIT.start(S, {
   id:"TS2", tallVideo:true, clock:"7:58",
   endText:H("Así abres la caja con Platata.","Assim você abre o caixa com o Platata.","That's how you open the register with Platata."),
   beats:R.pick({
-    es:["Empieza el día: la caja está cerrada. Toca Abrir","Escribe con cuánto efectivo empiezas","Toca Abrir caja","La caja quedó abierta: toca Agregar productos","Escanea y el producto entra a la venta","Así abres la caja con Platata."],
-    pt:["Comece o dia: o caixa está fechado. Toque em Abrir","Digite com quanto dinheiro você começa","Toque em Abrir caixa","O caixa está aberto: toque em Adicionar produtos","Escaneie e o produto entra na venda","Assim você abre o caixa com o Platata."],
-    en:["Start the day: the register is closed. Tap Open","Type the cash you start with","Tap Open register","The register is open: tap Add items","Scan and the item goes into the sale","That's how you open the register with Platata."]}),
+    es:["Empieza el día: la caja está cerrada. Toca Abrir","Escribe con cuánto efectivo empiezas","Toca Abrir caja","La caja quedó abierta: toca Agregar productos","Toca la pantalla y el producto entra a la venta","Así abres la caja con Platata."],
+    pt:["Comece o dia: o caixa está fechado. Toque em Abrir","Digite com quanto dinheiro você começa","Toque em Abrir caixa","O caixa está aberto: toque em Adicionar produtos","Toque na tela e o produto entra na venda","Assim você abre o caixa com o Platata."],
+    en:["Start the day: the register is closed. Tap Open","Type the cash you start with","Tap Open register","The register is open: tap Add items","Tap the screen and the item goes into the sale","That's how you open the register with Platata."]}),
   state:{screen:"reg", isOpen:false, typed:"", lines:[], product:null, status:"", capturing:false},
   render,
   device: () => "phone",
