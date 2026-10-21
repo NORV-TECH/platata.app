@@ -73,8 +73,9 @@ async def record(feature, lang, country):
     filt = ";".join(parts) + ";" + "".join(labels) + f"amix=inputs={len(labels)}:normalize=0[a]"
     cmd += ["-filter_complex", filt, "-map", "0:v", "-map", "[a]", "-c:v", "libx264", "-pix_fmt", "yuv420p",
             "-crf", "20", "-preset", "medium", "-c:a", "aac", "-b:a", "160k", "-t", f"{tl['total']:.2f}",
-            "-movflags", "+faststart", out]
+            "-movflags", "+faststart", out + ".part.mp4"]
     subprocess.check_call(cmd)
+    os.replace(out + ".part.mp4", out)   # never leave a half-written video under the real name
     shutil.rmtree(tmp)
     print(out, f"{tl['total']:.1f}s")
 

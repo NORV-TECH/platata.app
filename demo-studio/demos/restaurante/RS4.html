@@ -227,7 +227,7 @@ const DRAWN = {
 function termsPage(st){
   const tip = (ic, b, r) => `<div class="x-tip"><span class="tile">${ic}</span><span><b>${esc(b)}</b> ${esc(r)}</span></div>`;
   return `<div class="x paper"><div class="x-ptop"><span class="rb">${I.back}</span><b>${esc(qrS("qr_terms_bar_title"))}</b></div>
-    <div class="x-pscroll"><div class="x-pinner" style="transform:translateY(${st.scrolled?"calc(var(--u)*-150)":"0"})">
+    <div class="x-pscroll"><div class="x-pinner" style="transform:translateY(${st.scrolled?"calc(var(--u)*-100)":"0"})">
       <img class="pot" src="${IMG.pointing}" alt="">
       <div><h1>${esc(t("qr_terms_title"))}</h1><div class="sub">${esc(qrS("qr_terms_subtitle"))}</div></div>
       <div class="x-bad"><i>!</i><div><b>${esc(t("qr_terms_alert_title"))}</b><p>${esc(t("qr_terms_alert_body"))}</p></div></div>
@@ -265,7 +265,7 @@ function renderUS(st){
   return "";
 }
 const stepsQR = [
-  {beat:0, hint:H("Enciende ","Ligue ","Turn on ")+(PIX?"Pix":t("payment_method_qr")), target:'[data-t="sw-qr"]', tap(st,E){ st.screen="terms"; E.after(900,()=>{ st.scrolled=true; }); }},
+  {beat:0, hint:H("Enciende ","Ligue ","Turn on ")+(PIX?"Pix":t("payment_method_qr")), target:'[data-t="sw-qr"]', tap(st,E){ st.screen="terms"; E.after(1800,()=>{ st.scrolled=true; }); }},
   {beat:1, hint:H("Marca la casilla","Marque a caixa","Tick the box"), target:'[data-t="tick"]', tap(st){ st.ticked=true; }},
   {beat:1, hint:H("Toca Entendido","Toque em Entendi","Tap Got it"), target:'[data-t="accept"]', tap(st){ st.screen="pm"; st.chooser=true; }},
   {beat:2, hint:H("Toca ","Toque em ","Tap ")+qrS("qr_upload_image"), target:'[data-t="upload"]', tap(st){ st.chooser=false; st.screen="pick"; }},

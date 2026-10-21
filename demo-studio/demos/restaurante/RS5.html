@@ -268,16 +268,14 @@ const stepsWompi = [
   {beat:1, hint:H("Toca el número de la tarjeta","Toque no número do cartão","Tap the card number"), target:'[data-t="card-num"]', tap(st,E){
       E.type("num", "4242424242424242", ()=>E.type("exp", "1228", ()=>E.type("cvc", "123", ()=>E.type("name", C.people.customer, null, 60), 90), 90), 55); }},
   {beat:2, hint:H("Toca ","Toque em ","Tap ")+t("card_charge_button", money(BASE)), target:'[data-t="wcharge"]', tap(st,E){ st.wstage="send";
-      E.after(2600,()=>{ st.wstage=null; st.screen="done"; }); }},
-  {beat:3, hint:H("Toca Nueva venta","Toque em Nova venda","Tap New sale"), target:'[data-t="new"]', tap(st){ st.screen="reg"; st.lines=[]; }}
-];
+      E.after(2600,()=>{ st.wstage=null; st.screen="done"; }); }}
+];   /* review 1: no "Nueva venta" tap, so the approved screen stays on while the voice says it */
 const stepsStripe = [
   {beat:0, hint:H("Toca Cobrar","Toque em Cobrar","Tap Charge"), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
   {beat:0, hint:H("Toca ","Toque em ","Tap ")+t("pay_card_short"), target:'[data-t="card"]', tap(st){ st.sstage="tip"; }},
   {beat:1, hint:H("Toca ","Toque em ","Tap ")+t("stripe_tip_preset", 18, money(TIP)), target:'[data-t="tip-18"]', tap(st,E){ st.sstage="idle"; E.after(1300,()=>{ st.sstage="collect"; }); }},
   {beat:2, hint:H("El cliente acerca su tarjeta","O cliente aproxima o cartão","The customer taps their card"), target:'[data-t="tapcard"]', tap(st,E){ st.sstage="proc";
-      E.after(2000,()=>{ st.sstage=null; st.screen="done"; }); }},
-  {beat:3, hint:H("Toca New sale","Toque em New sale","Tap New sale"), target:'[data-t="new"]', tap(st){ st.screen="reg"; st.lines=[]; }}
+      E.after(2000,()=>{ st.sstage=null; st.screen="done"; }); }}
 ];
 const stepsNone = [
   {beat:0, hint:H("Toca Cobrar","Toque em Cobrar","Tap Charge"), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},

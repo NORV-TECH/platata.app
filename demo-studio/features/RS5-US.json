@@ -1,43 +1,43 @@
 {
-  "id": "RS5-US",
-  "name": "Take cards: US in Spanish (Tap to Pay)",
-  "business": "restaurante",
-  "voice_settings": {
-    "es": {
-      "stability": 0.5,
-      "similarity_boost": 0.75
-    }
+ "id": "RS5-US",
+ "name": "Take cards: US in Spanish (Tap to Pay)",
+ "business": "restaurante",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-card",
+   "voice": {
+    "es": "Con la venta lista, toca Cobrar y luego Tarjeta."
+   }
   },
-  "steps": [
-    {
-      "id": "1-card",
-      "voice": {
-        "es": "Con la venta lista, toca Cobrar y luego Tarjeta."
-      }
-    },
-    {
-      "id": "2-tip",
-      "voice": {
-        "es": "Pásale el teléfono: el cliente elige la propina y el cobro empieza."
-      }
-    },
-    {
-      "id": "3-tap",
-      "voice": {
-        "es": "Acerca su tarjeta de crédito o débito, o su teléfono, al tuyo."
-      }
-    },
-    {
-      "id": "4-approved",
-      "voice": {
-        "es": "Pago aprobado, con la propina incluida. Toca Nueva venta."
-      }
-    },
-    {
-      "id": "5-end",
-      "voice": {
-        "es": "Así cobras con tarjeta, con Platata."
-      }
-    }
-  ]
+  {
+   "id": "2-tip",
+   "voice": {
+    "es": "Pásale el teléfono: el cliente elige la propina y el cobro empieza."
+   }
+  },
+  {
+   "id": "3-tap",
+   "voice": {
+    "es": "Acerca su tarjeta de crédito o débito, o su teléfono, al tuyo."
+   }
+  },
+  {
+   "id": "4-approved",
+   "voice": {
+    "es": "Pago aprobado, con la propina incluida."
+   }
+  },
+  {
+   "id": "5-end",
+   "voice": {
+    "es": "Así cobras con tarjeta, con Platata."
+   }
+  }
+ ]
 }
