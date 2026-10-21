@@ -76,3 +76,11 @@ TS8
 # voice run 2026-10-21T07:16:13Z
 # voice run 2026-10-21T08:09:47Z
 # voice run 2026-10-21T08:57:20Z
+# MERGE-12 update: built pages checked against 2fd8f9a3
+T4
+T5
+T8
+TS6
+TS6-US
+TS16
+TS17
