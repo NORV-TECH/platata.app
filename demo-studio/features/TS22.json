@@ -1,0 +1,69 @@
+{
+  "id": "TS22",
+  "name": "Copia en Google Drive",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-barra",
+      "voice": {
+        "es": "Si tu tienda no tiene respaldo, la barra amarilla te avisa. Toca Conectar.",
+        "pt": "Se a sua loja não tem backup, a barra amarela avisa. Toque em Conectar.",
+        "en": "If your shop isn't backed up, the yellow bar tells you. Tap Connect."
+      }
+    },
+    {
+      "id": "2-drive",
+      "voice": {
+        "es": "Conecta tu Google Drive: eliges tu cuenta y le das permiso.",
+        "pt": "Conecte seu Google Drive: escolha sua conta e dê permissão.",
+        "en": "Connect your Google Drive: pick your account and allow it."
+      }
+    },
+    {
+      "id": "3-respaldar",
+      "voice": {
+        "es": "Toca Respaldar ahora. Se guardan tus ventas, tus productos y tu cuaderno de fiados.",
+        "pt": "Toque em Fazer backup agora. Ficam salvos suas vendas, seus produtos e seu caderno de fiado.",
+        "en": "Tap Back up now. Your sales, your products and your tab book are saved."
+      }
+    },
+    {
+      "id": "4-30-dias",
+      "voice": {
+        "es": "Después se respalda solo cada seis horas si algo cambió, y guarda los últimos treinta días.",
+        "pt": "Depois o backup é feito sozinho a cada seis horas se algo mudou, e guarda os últimos trinta dias.",
+        "en": "After that it backs up on its own every six hours when something changed, and keeps the last thirty days."
+      }
+    },
+    {
+      "id": "5-restaurar",
+      "voice": {
+        "es": "Para volver a una copia, toca Restaurar.",
+        "pt": "Para voltar a uma cópia, toque em Restaurar.",
+        "en": "To go back to a copy, tap Restore."
+      }
+    },
+    {
+      "id": "6-fin",
+      "voice": {
+        "es": "Así respaldas tu negocio en Google Drive con Platata.",
+        "pt": "Assim você faz backup do seu negócio no Google Drive com o Platata.",
+        "en": "That's how you back up your business to Google Drive with Platata."
+      }
+    }
+  ]
+}

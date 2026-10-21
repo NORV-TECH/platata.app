@@ -1,0 +1,93 @@
+{
+  "id": "TS13",
+  "name": "Clientes",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-clientes",
+      "voice": {
+        "es": "En Mi negocio, toca Clientes.",
+        "pt": "Em Meu negócio, toque em Clientes.",
+        "en": "In My business, tap Clients."
+      }
+    },
+    {
+      "id": "2-quien-debe",
+      "voice": {
+        "es": "Ves quién te debe, y desde hace cuánto. Toca uno.",
+        "pt": "Você vê quem te deve, e desde quando. Toque num.",
+        "en": "You see who owes you, and since when. Tap one."
+      }
+    },
+    {
+      "id": "3-recordarle",
+      "voice": {
+        "es": "Toca Recordarle.",
+        "pt": "Toque em Lembrar.",
+        "en": "Tap Remind."
+      }
+    },
+    {
+      "id": "4-whatsapp",
+      "voice": {
+        "es": "Le llega por WhatsApp, con tu nombre de tienda.",
+        "pt": "Chega pelo WhatsApp, com o nome da sua loja.",
+        "en": "It reaches them on WhatsApp, with your shop's name."
+      }
+    },
+    {
+      "id": "5-saldar",
+      "voice": {
+        "es": "Cuando te paga, toca Saldar.",
+        "pt": "Quando pagar, toque em Quitar.",
+        "en": "When they pay, tap Settle."
+      }
+    },
+    {
+      "id": "6-todo",
+      "voice": {
+        "es": "Toca Todo, y elige cómo te paga.",
+        "pt": "Toque em Tudo, e escolha como paga.",
+        "en": "Tap All, and pick how they pay."
+      }
+    },
+    {
+      "id": "7-recibir",
+      "voice": {
+        "es": "Toca Recibir.",
+        "pt": "Toque em Receber.",
+        "en": "Tap Receive."
+      }
+    },
+    {
+      "id": "8-al-dia",
+      "voice": {
+        "es": "Quedó al día, y el efectivo entra a la caja.",
+        "pt": "Ficou em dia, e o dinheiro entra no caixa.",
+        "en": "All paid up, and the cash goes in the drawer."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así llevas el cuaderno del fiado, con Platata.",
+        "pt": "Assim você leva o caderninho do fiado, com o Platata.",
+        "en": "That's how you keep your tab book, with Platata."
+      }
+    }
+  ]
+}

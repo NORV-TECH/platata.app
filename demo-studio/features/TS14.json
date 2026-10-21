@@ -1,0 +1,77 @@
+{
+  "id": "TS14",
+  "name": "Equipo y claves",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-equipo",
+      "voice": {
+        "es": "En Mi negocio, toca Equipo.",
+        "pt": "Em Meu negócio, toque em Equipe.",
+        "en": "In My business, tap Team."
+      }
+    },
+    {
+      "id": "2-nuevo",
+      "voice": {
+        "es": "Tu equipo y el código del negocio. Toca Nuevo.",
+        "pt": "Sua equipe e o código do negócio. Toque em Novo.",
+        "en": "Your team and the business code. Tap New."
+      }
+    },
+    {
+      "id": "3-datos",
+      "voice": {
+        "es": "Nombre, WhatsApp y cargo.",
+        "pt": "Nome, WhatsApp e cargo.",
+        "en": "Name, WhatsApp and job title."
+      }
+    },
+    {
+      "id": "4-permisos",
+      "voice": {
+        "es": "Elige qué puede hacer: por ejemplo, contar el stock.",
+        "pt": "Escolha o que pode fazer: por exemplo, contar o estoque.",
+        "en": "Choose what they can do: for example, count stock."
+      }
+    },
+    {
+      "id": "5-guardar",
+      "voice": {
+        "es": "Su PIN se crea solo. Toca Guardar.",
+        "pt": "O PIN é criado sozinho. Toque em Salvar.",
+        "en": "Their PIN is made for you. Tap Save."
+      }
+    },
+    {
+      "id": "6-pin",
+      "voice": {
+        "es": "El PIN se muestra una vez. Anótalo.",
+        "pt": "O PIN aparece uma vez. Anote.",
+        "en": "The PIN shows once. Write it down."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así armas tu equipo, con Platata.",
+        "pt": "Assim você monta sua equipe, com o Platata.",
+        "en": "That's how you build your team, with Platata."
+      }
+    }
+  ]
+}

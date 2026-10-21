@@ -1,0 +1,61 @@
+{
+  "id": "TS5",
+  "name": "Take cards (shop, owner phone)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-charge",
+      "voice": {
+        "es": "Con los productos escaneados, toca Cobrar y luego Tarjeta.",
+        "pt": "No Brasil, o Platata não cobra com cartão. Com os produtos escaneados, toque em Cobrar.",
+        "en": "With the items scanned, tap Charge."
+      }
+    },
+    {
+      "id": "2-card",
+      "voice": {
+        "es": "Escribe los datos de la tarjeta del cliente.",
+        "pt": "Cobre em dinheiro: toque em Exato.",
+        "en": "Tap Card. A shop doesn't ask for a tip, so the charge starts right away."
+      }
+    },
+    {
+      "id": "3-send",
+      "voice": {
+        "es": "Las casillas ya vienen marcadas. Toca Cobrar.",
+        "pt": "Venda concluída. Toque em Nova venda.",
+        "en": "The customer taps their credit or debit card, or their phone, on yours."
+      }
+    },
+    {
+      "id": "4-approved",
+      "voice": {
+        "es": "El banco aprueba y la venta queda guardada sola.",
+        "pt": "Em Formas de pagamento não aparece Cartão: aqui você recebe em dinheiro, Pix ou outra forma sua.",
+        "en": "Payment approved, and the sale is saved by itself."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así cobras con tarjeta, con Platata.",
+        "pt": "Assim você cobra sem cartão, com o Platata.",
+        "en": "That's how you take cards with Platata."
+      }
+    }
+  ]
+}

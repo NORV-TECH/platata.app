@@ -1,0 +1,77 @@
+{
+  "id": "TS15",
+  "name": "Pago a empleados",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-equipo",
+      "voice": {
+        "es": "En Mi negocio, toca Equipo.",
+        "pt": "Em Meu negócio, toque em Equipe.",
+        "en": "In My business, tap Team."
+      }
+    },
+    {
+      "id": "2-prender",
+      "voice": {
+        "es": "Prende Llevar la cuenta de los pagos.",
+        "pt": "Ligue Acompanhar os pagamentos.",
+        "en": "Turn on Track employee payments."
+      }
+    },
+    {
+      "id": "3-trato",
+      "voice": {
+        "es": "El cinco de cada mes te pregunta.",
+        "pt": "No dia cinco de cada mês, ele pergunta.",
+        "en": "On the fifth of each month, it asks."
+      }
+    },
+    {
+      "id": "4-monto",
+      "voice": {
+        "es": "Escribe lo que le pagas al mes.",
+        "pt": "Escreva quanto paga por mês.",
+        "en": "Type what you pay each month."
+      }
+    },
+    {
+      "id": "5-activar",
+      "voice": {
+        "es": "Toca Activar.",
+        "pt": "Toque em Ativar.",
+        "en": "Tap Turn on."
+      }
+    },
+    {
+      "id": "6-pregunta",
+      "voice": {
+        "es": "El cinco del mes siguiente, te pregunta. Toca Todo pagado.",
+        "pt": "No dia cinco do mês seguinte, ele pergunta. Toque em Tudo pago.",
+        "en": "On the fifth of the next month, it asks. Tap All paid."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así llevas la cuenta de lo que pagas, con Platata.",
+        "pt": "Assim você anota o que paga, com o Platata.",
+        "en": "That's how you keep track of what you pay, with Platata."
+      }
+    }
+  ]
+}

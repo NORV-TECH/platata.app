@@ -1,0 +1,77 @@
+{
+  "id": "TS10",
+  "name": "Cerrar la caja",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-caja",
+      "voice": {
+        "es": "Al cerrar la tienda, toca la caja abierta.",
+        "pt": "Ao fechar a loja, toque no caixa aberto.",
+        "en": "At closing time, tap the open register."
+      }
+    },
+    {
+      "id": "2-cerrar",
+      "voice": {
+        "es": "Baja y toca Cerrar caja.",
+        "pt": "Desça e toque em Fechar caixa.",
+        "en": "Scroll down and tap Close register."
+      }
+    },
+    {
+      "id": "3-contar",
+      "voice": {
+        "es": "Cuenta el efectivo y escribe cuánto hay.",
+        "pt": "Conte o dinheiro e digite quanto tem.",
+        "en": "Count the cash and type how much is there."
+      }
+    },
+    {
+      "id": "4-confirmar",
+      "voice": {
+        "es": "Toca Cerrar caja y confírmalo.",
+        "pt": "Toque em Fechar caixa e confirme.",
+        "en": "Tap Close register and confirm."
+      }
+    },
+    {
+      "id": "5-resumen",
+      "voice": {
+        "es": "El resumen: lo que vendiste, lo que quedó fiado y el efectivo.",
+        "pt": "O resumo: o que você vendeu, o que ficou fiado e o dinheiro.",
+        "en": "The summary: what you sold, what went on tabs, and the cash."
+      }
+    },
+    {
+      "id": "6-whatsapp",
+      "voice": {
+        "es": "Envíalo por WhatsApp.",
+        "pt": "Envie pelo WhatsApp.",
+        "en": "Send it by WhatsApp."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así cierras la caja, con Platata.",
+        "pt": "Assim você fecha o caixa, com o Platata.",
+        "en": "That's how you close the register, with Platata."
+      }
+    }
+  ]
+}

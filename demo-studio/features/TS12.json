@@ -1,0 +1,77 @@
+{
+  "id": "TS12",
+  "name": "Enviar al contador",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-mes-pasado",
+      "voice": {
+        "es": "En Reportes, toca Mes pasado.",
+        "pt": "Em Relatórios, toque em Mês passado.",
+        "en": "In Reports, tap Last month."
+      }
+    },
+    {
+      "id": "2-resumen",
+      "voice": {
+        "es": "Toca Resumen para el contador.",
+        "pt": "Toque em Resumo para o contador.",
+        "en": "Tap Summary for the accountant."
+      }
+    },
+    {
+      "id": "3-numeros",
+      "voice": {
+        "es": "Los números del mes. Cada uno se copia.",
+        "pt": "Os números do mês. Cada um se copia.",
+        "en": "The month's numbers. Each one copies."
+      }
+    },
+    {
+      "id": "4-fiado",
+      "voice": {
+        "es": "Va también lo que vendiste fiado.",
+        "pt": "Vai também o que você vendeu fiado.",
+        "en": "Your tab sales go too."
+      }
+    },
+    {
+      "id": "5-enviar",
+      "voice": {
+        "es": "Toca Enviar resumen al contador.",
+        "pt": "Toque em Enviar resumo ao contador.",
+        "en": "Tap Send summary to the accountant."
+      }
+    },
+    {
+      "id": "6-whatsapp",
+      "voice": {
+        "es": "Va por WhatsApp, con todo el texto.",
+        "pt": "Vai pelo WhatsApp, com o texto todo.",
+        "en": "It goes by WhatsApp, with the whole text."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así le mandas las cuentas a tu contador, con Platata.",
+        "pt": "Assim você manda as contas para o seu contador, com o Platata.",
+        "en": "That's how you send the numbers to your accountant, with Platata."
+      }
+    }
+  ]
+}

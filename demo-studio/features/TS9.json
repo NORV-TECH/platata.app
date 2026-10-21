@@ -1,0 +1,85 @@
+{
+  "id": "TS9",
+  "name": "Meter y sacar efectivo",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-mi-negocio",
+      "voice": {
+        "es": "Para pagarle al proveedor, abre Mi negocio.",
+        "pt": "Para pagar o fornecedor, abra Meu negócio.",
+        "en": "To pay a supplier, open My business."
+      }
+    },
+    {
+      "id": "2-caja",
+      "voice": {
+        "es": "Toca la caja abierta.",
+        "pt": "Toque no caixa aberto.",
+        "en": "Tap the open register."
+      }
+    },
+    {
+      "id": "3-sacar",
+      "voice": {
+        "es": "Toca Sacar efectivo.",
+        "pt": "Toque em Retirar dinheiro.",
+        "en": "Tap Cash out."
+      }
+    },
+    {
+      "id": "4-monto",
+      "voice": {
+        "es": "Escribe cuánto y elige Proveedor.",
+        "pt": "Digite quanto e escolha Fornecedor.",
+        "en": "Type how much and pick Supplier."
+      }
+    },
+    {
+      "id": "5-guardar",
+      "voice": {
+        "es": "Toca Guardar.",
+        "pt": "Toque em Salvar.",
+        "en": "Tap Save."
+      }
+    },
+    {
+      "id": "6-anotado",
+      "voice": {
+        "es": "Queda anotado, y la caja lo descuenta de lo que debe haber.",
+        "pt": "Fica anotado, e o caixa desconta do que deve ter.",
+        "en": "It's on record, and the drawer takes it off what should be there."
+      }
+    },
+    {
+      "id": "7-abonos",
+      "voice": {
+        "es": "Lo que te abonan del fiado en efectivo también entra a la caja.",
+        "pt": "O que pagam do fiado em dinheiro também entra no caixa.",
+        "en": "Cash paid on a tab goes into the drawer too."
+      }
+    },
+    {
+      "id": "8-fin",
+      "voice": {
+        "es": "Así anotas el efectivo que entra y sale, con Platata.",
+        "pt": "Assim você anota o dinheiro que entra e sai, com o Platata.",
+        "en": "That's how you track cash in and out, with Platata."
+      }
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "id": "TS5-US",
+  "name": "Take cards: US in Spanish (shop, Tap to Pay)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-charge",
+      "voice": {
+        "es": "Con los productos escaneados, toca Cobrar."
+      }
+    },
+    {
+      "id": "2-card",
+      "voice": {
+        "es": "Toca Tarjeta. Una tienda no pide propina, así que el cobro empieza de una vez."
+      }
+    },
+    {
+      "id": "3-tap",
+      "voice": {
+        "es": "El cliente acerca su tarjeta de crédito o débito, o su teléfono, al tuyo."
+      }
+    },
+    {
+      "id": "4-approved",
+      "voice": {
+        "es": "Pago aprobado, y la venta queda guardada sola."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así cobras con tarjeta, con Platata."
+      }
+    }
+  ]
+}

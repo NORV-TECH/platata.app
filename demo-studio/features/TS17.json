@@ -1,0 +1,93 @@
+{
+  "id": "TS17",
+  "name": "Impuestos",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-configuracion",
+      "voice": {
+        "es": "En Mi negocio, toca Configuración.",
+        "pt": "Em Meu negócio, toque em Configurações.",
+        "en": "In My business, tap Settings."
+      }
+    },
+    {
+      "id": "2-impuestos",
+      "voice": {
+        "es": "Toca Impuestos.",
+        "pt": "Toque em Impostos.",
+        "en": "Tap Taxes."
+      }
+    },
+    {
+      "id": "3-nuevo",
+      "voice": {
+        "es": "Aún no hay impuestos. Toca Nuevo.",
+        "pt": "Ainda não há impostos. Toque em Novo.",
+        "en": "No taxes yet. Tap New."
+      }
+    },
+    {
+      "id": "4-elegir",
+      "voice": {
+        "es": "Toca el impuesto de tu país: se llena solo.",
+        "pt": "Escreva o nome e a porcentagem.",
+        "en": "Type the name and the rate."
+      }
+    },
+    {
+      "id": "5-guardar",
+      "voice": {
+        "es": "¿Ya está en tus precios? Toca Guardar.",
+        "pt": "Já está nos seus preços? Toque em Salvar.",
+        "en": "It's added on top. Tap Save."
+      }
+    },
+    {
+      "id": "6-activo",
+      "voice": {
+        "es": "Listo: activo en tus ventas.",
+        "pt": "Pronto: ativo nas suas vendas.",
+        "en": "Done: it's on for your sales."
+      }
+    },
+    {
+      "id": "7-cambiar",
+      "voice": {
+        "es": "Toca el impuesto para cambiarlo.",
+        "pt": "Toque no imposto para mudar.",
+        "en": "Tap the tax to change it."
+      }
+    },
+    {
+      "id": "8-pasadas",
+      "voice": {
+        "es": "Las ventas pasadas no cambian.",
+        "pt": "As vendas passadas não mudam.",
+        "en": "Past sales don't change."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así pones tus impuestos, con Platata.",
+        "pt": "Assim você configura seus impostos, com o Platata.",
+        "en": "That's how you set up your taxes, with Platata."
+      }
+    }
+  ]
+}

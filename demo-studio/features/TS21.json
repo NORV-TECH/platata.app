@@ -52,9 +52,9 @@
     {
       "id": "5-nueva",
       "voice": {
-        "es": "Venta completada. Se guarda en tu teléfono y se envía sola cuando vuelve internet.",
-        "pt": "Venda concluída. Fica salva no seu celular e é enviada sozinha quando a internet volta.",
-        "en": "Sale complete. It's saved on your phone and goes up on its own when the internet is back."
+        "es": "Venta completada: queda guardada en tu teléfono. Toca Nueva venta.",
+        "pt": "Venda concluída: fica salva no seu celular. Toque em Nova venda.",
+        "en": "Sale complete: it's saved on your phone. Tap New sale."
       }
     },
     {
