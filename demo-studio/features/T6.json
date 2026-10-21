@@ -1,0 +1,85 @@
+{
+  "id": "T6",
+  "name": "Inventario",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-inventory",
+      "voice": {
+        "es": "En Mi negocio, toca Inventario.",
+        "pt": "Em Meu negócio, toque em Estoque.",
+        "en": "In My business, tap Inventory."
+      }
+    },
+    {
+      "id": "2-low",
+      "voice": {
+        "es": "Lo que se está acabando sale en rojo. Toca el número.",
+        "pt": "O que está acabando fica em vermelho. Toque no número.",
+        "en": "What's running low shows in red. Tap the number."
+      }
+    },
+    {
+      "id": "3-bought",
+      "voice": {
+        "es": "Llegó mercancía: con Compré marcado, toca más doce y Guardar.",
+        "pt": "Chegou mercadoria: com Comprei marcado, toque em mais doze e Salvar.",
+        "en": "Stock came in: with Bought selected, tap plus twelve and Save."
+      }
+    },
+    {
+      "id": "4-uncounted",
+      "voice": {
+        "es": "Lo que nunca contaste dice Sin contar. Toca el signo de pregunta.",
+        "pt": "O que você nunca contou diz Não contado. Toque no ponto de interrogação.",
+        "en": "What you never counted says Not counted. Tap the question mark."
+      }
+    },
+    {
+      "id": "5-count",
+      "voice": {
+        "es": "Escribe cuántos hay y toca Guardar.",
+        "pt": "Digite quantos há e toque em Salvar.",
+        "en": "Type how many there are and tap Save."
+      }
+    },
+    {
+      "id": "6-red",
+      "voice": {
+        "es": "Elige cuándo se pone en rojo y guarda.",
+        "pt": "Escolha quando ele fica vermelho e salve.",
+        "en": "Pick when it turns red and save."
+      }
+    },
+    {
+      "id": "7-sales",
+      "voice": {
+        "es": "Cada venta en este teléfono lo descuenta sola.",
+        "pt": "Cada venda neste celular desconta do estoque sozinha.",
+        "en": "Every sale on this phone takes it off the count."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así llevas tu inventario con Platata.",
+        "pt": "Assim você controla seu estoque com o Platata.",
+        "en": "That's how you keep your inventory with Platata."
+      }
+    }
+  ]
+}

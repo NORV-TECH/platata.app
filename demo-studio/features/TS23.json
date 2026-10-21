@@ -1,0 +1,32 @@
+{
+  "id": "TS23",
+  "name": "Huella para borrar o quitar cargos",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {"stability": 0.5, "similarity_boost": 0.75},
+    "pt": {"stability": 0.5, "similarity_boost": 0.75},
+    "en": {"stability": 0.5, "similarity_boost": 0.75}
+  },
+  "steps": [
+    {"id": "1-huella", "voice": {
+      "es": "Tu negocio se abre con tu huella, tu cara o el PIN de tu teléfono.",
+      "pt": "Seu negócio abre com a sua digital, o seu rosto ou o PIN do seu celular.",
+      "en": "Your business opens with your fingerprint, your face or your phone's PIN."}},
+    {"id": "2-clientes", "voice": {
+      "es": "Abre Clientes y elige a alguien que te debe.",
+      "pt": "Abra Clientes e escolha alguém que te deve.",
+      "en": "Open Clients and pick someone who owes you."}},
+    {"id": "3-eliminar", "voice": {
+      "es": "Toca Editar, los tres puntos y Eliminar cliente.",
+      "pt": "Toque em Editar, nos três pontos e em Excluir cliente.",
+      "en": "Tap Edit, the three dots, and Delete Client."}},
+    {"id": "4-deuda", "voice": {
+      "es": "Si te debe, no se puede eliminar: primero salda o perdona la deuda. Sin deuda, eliminar pide tu huella.",
+      "pt": "Se te deve, não dá para excluir: primeiro quite ou perdoe a dívida. Sem dívida, excluir pede a sua digital.",
+      "en": "If they owe you, they can't be deleted: settle or forgive the debt first. With no debt, deleting asks for your fingerprint."}},
+    {"id": "5-fin", "voice": {
+      "es": "Así proteges tu negocio y tu fiado con Platata.",
+      "pt": "Assim você protege seu negócio e seu fiado com o Platata.",
+      "en": "That's how you protect your business and your tabs with Platata."}}
+  ]
+}

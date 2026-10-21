@@ -1,0 +1,61 @@
+{
+  "id": "T12-MX",
+  "name": "Palabras de farmacia (Farmacia: every Spanish country but Colombia)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-country",
+      "voice": {
+        "es": "Tu país viene de tu celular. Toca Continuar."
+      }
+    },
+    {
+      "id": "2-pick",
+      "voice": {
+        "es": "Elige Tienda y marca Farmacia."
+      }
+    },
+    {
+      "id": "3-button",
+      "voice": {
+        "es": "El botón ya dice Continuar con Farmacia. Tócalo."
+      }
+    },
+    {
+      "id": "4-name",
+      "voice": {
+        "es": "Escribe el nombre de tu farmacia."
+      }
+    },
+    {
+      "id": "5-google",
+      "voice": {
+        "es": "Entra con tu cuenta de Google y baja la lista de códigos de barras."
+      }
+    },
+    {
+      "id": "6-ready",
+      "voice": {
+        "es": "Lista: tu negocio dice Farmacia. Toca Escanear mi primer producto."
+      }
+    },
+    {
+      "id": "7-same",
+      "voice": {
+        "es": "Todo lo demás funciona igual que en una tienda: inventario, fiado y facturas."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así abres tu farmacia con Platata."
+      }
+    }
+  ]
+}

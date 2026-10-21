@@ -1,0 +1,85 @@
+{
+  "id": "T8",
+  "name": "Fiado",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-charge",
+      "voice": {
+        "es": "Con la venta lista, toca Cobrar.",
+        "pt": "Com a venda pronta, toque em Cobrar.",
+        "en": "With the sale ready, tap Charge."
+      }
+    },
+    {
+      "id": "2-client",
+      "voice": {
+        "es": "Para fiar, primero agrega al cliente.",
+        "pt": "Para vender fiado, primeiro adicione o cliente.",
+        "en": "To put it on a tab, add the client first."
+      }
+    },
+    {
+      "id": "3-pick",
+      "voice": {
+        "es": "Elige al cliente de tu lista.",
+        "pt": "Escolha o cliente na sua lista.",
+        "en": "Pick the client from your list."
+      }
+    },
+    {
+      "id": "4-fiar",
+      "voice": {
+        "es": "El botón ahora dice Fiar y su nombre. Tócalo.",
+        "pt": "O botão agora diz Fiar e o nome dele. Toque nele.",
+        "en": "The button now says Put on tab, with the client's name. Tap it."
+      }
+    },
+    {
+      "id": "5-row",
+      "voice": {
+        "es": "La fila Fiado suma todo lo que te deben. Tócala.",
+        "pt": "A linha Fiado soma tudo o que te devem. Toque nela.",
+        "en": "The Tab row adds up everything you're owed. Tap it."
+      }
+    },
+    {
+      "id": "6-clients",
+      "voice": {
+        "es": "En Clientes ves quién te debe. Toca su nombre.",
+        "pt": "Em Clientes você vê quem te deve. Toque no nome.",
+        "en": "Clients shows who owes you. Tap the name."
+      }
+    },
+    {
+      "id": "7-page",
+      "voice": {
+        "es": "En su página ves cuánto te debe y desde cuándo.",
+        "pt": "Na página dele você vê quanto deve e desde quando.",
+        "en": "Their page shows how much they owe and since when."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así fías a tus clientes con Platata.",
+        "pt": "Assim você vende fiado com o Platata.",
+        "en": "That's how you put sales on a tab with Platata."
+      }
+    }
+  ]
+}

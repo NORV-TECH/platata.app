@@ -1,0 +1,69 @@
+{
+  "id": "T10",
+  "name": "Recordatorio de fiado por WhatsApp",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-clients",
+      "voice": {
+        "es": "En Mi negocio, toca Clientes.",
+        "pt": "Em Meu negócio, toque em Clientes.",
+        "en": "In My business, tap Clients."
+      }
+    },
+    {
+      "id": "2-client",
+      "voice": {
+        "es": "Toca al cliente que te debe.",
+        "pt": "Toque no cliente que te deve.",
+        "en": "Tap the client who owes you."
+      }
+    },
+    {
+      "id": "3-remind",
+      "voice": {
+        "es": "En su página, toca Recordarle.",
+        "pt": "Na página dele, toque em Lembrar.",
+        "en": "On their page, tap Remind."
+      }
+    },
+    {
+      "id": "4-whatsapp",
+      "voice": {
+        "es": "WhatsApp abre su chat con el mensaje listo: cuánto debe y en qué negocio. Envíalo.",
+        "pt": "O WhatsApp abre a conversa com a mensagem pronta: quanto deve e em qual negócio. Envie.",
+        "en": "WhatsApp opens their chat with the message ready: how much and where. Send it."
+      }
+    },
+    {
+      "id": "5-you",
+      "voice": {
+        "es": "Tú lo envías. Platata nunca lo manda solo.",
+        "pt": "Você envia. O Platata nunca manda sozinho.",
+        "en": "You send it. Platata never sends it on its own."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Así le recuerdas el fiado a tu cliente con Platata.",
+        "pt": "Assim você lembra seu cliente do fiado com o Platata.",
+        "en": "That's how you remind a client about a tab with Platata."
+      }
+    }
+  ]
+}

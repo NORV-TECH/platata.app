@@ -1,0 +1,77 @@
+{
+  "id": "TS6",
+  "name": "Other ways to pay (shop, owner phone)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-new",
+      "voice": {
+        "es": "En Métodos de pago, toca Nuevo y escribe Nequi.",
+        "pt": "Em Formas de pagamento, toque em Novo e digite Transferência.",
+        "en": "In Payment methods, tap New and type Zelle."
+      }
+    },
+    {
+      "id": "2-add",
+      "voice": {
+        "es": "Toca Agregar. Queda encendido de una vez.",
+        "pt": "Toque em Adicionar. Ela já fica ligada.",
+        "en": "Tap Add. It's switched on right away."
+      }
+    },
+    {
+      "id": "3-client",
+      "voice": {
+        "es": "En la caja, toca Cobrar y agrega un cliente a la venta.",
+        "pt": "No caixa, toque em Cobrar e adicione um cliente à venda.",
+        "en": "At the register, tap Charge and add a client to the sale."
+      }
+    },
+    {
+      "id": "4-fiar",
+      "voice": {
+        "es": "Elige a Ana. El botón ahora dice Fiar a Ana: así le fías, solo desde tu teléfono.",
+        "pt": "Escolha a Ana. O botão agora diz Fiar para Ana: é assim que você vende fiado, só pelo seu celular.",
+        "en": "Pick Ana. The button now says Put Ana on tab: that's how you sell on tab, from your phone only."
+      }
+    },
+    {
+      "id": "5-other",
+      "voice": {
+        "es": "Hoy paga con Nequi: toca Otro método de pago y luego Nequi.",
+        "pt": "Hoje ela paga por transferência: toque em Outra forma de pagamento e depois em Transferência.",
+        "en": "Today she pays with Zelle: tap Other payment method, then Zelle."
+      }
+    },
+    {
+      "id": "6-confirm",
+      "voice": {
+        "es": "Platata te pide confirmar que viste el pago. Revisa tu app y toca Sí, cobrar.",
+        "pt": "O Platata pede para você confirmar que viu o pagamento. Confira seu app e toque em Sim, cobrar.",
+        "en": "Platata asks you to confirm you saw the payment. Check your app, then tap Yes, charge."
+      }
+    },
+    {
+      "id": "7-end",
+      "voice": {
+        "es": "Así cobras con otras formas de pago, con Platata.",
+        "pt": "Assim você cobra com outras formas de pagamento, com o Platata.",
+        "en": "That's how you take other ways to pay, with Platata."
+      }
+    }
+  ]
+}

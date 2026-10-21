@@ -1,0 +1,85 @@
+{
+  "id": "T12",
+  "name": "Palabras de farmacia",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-country",
+      "voice": {
+        "es": "Tu país viene de tu celular. Toca Continuar.",
+        "pt": "Seu país vem do celular. Toque em Continuar.",
+        "en": "Your country comes from your phone. Tap Continue."
+      }
+    },
+    {
+      "id": "2-pick",
+      "voice": {
+        "es": "Elige Tienda y marca Droguería.",
+        "pt": "Escolha Loja e marque Farmácia.",
+        "en": "Pick Shop, then Pharmacy."
+      }
+    },
+    {
+      "id": "3-button",
+      "voice": {
+        "es": "El botón ya dice Continuar con Droguería. Tócalo.",
+        "pt": "O botão já diz Continuar com Farmácia. Toque nele.",
+        "en": "The button now says Continue with Pharmacy. Tap it."
+      }
+    },
+    {
+      "id": "4-name",
+      "voice": {
+        "es": "Escribe el nombre de tu droguería.",
+        "pt": "Digite o nome da sua farmácia.",
+        "en": "Type your pharmacy's name."
+      }
+    },
+    {
+      "id": "5-google",
+      "voice": {
+        "es": "Entra con tu cuenta de Google y baja la lista de códigos de barras.",
+        "pt": "Entre com sua conta Google e baixe a lista de códigos de barras.",
+        "en": "Sign in with your Google account and get the barcode list."
+      }
+    },
+    {
+      "id": "6-ready",
+      "voice": {
+        "es": "Lista: tu negocio dice Droguería. Toca Escanear mi primer producto.",
+        "pt": "Pronta: seu negócio diz Farmácia. Toque em Escanear meu primeiro produto.",
+        "en": "Ready: your business says Pharmacy. Tap Scan my first product."
+      }
+    },
+    {
+      "id": "7-same",
+      "voice": {
+        "es": "Todo lo demás funciona igual que en una tienda: inventario, fiado y facturas.",
+        "pt": "Todo o resto funciona igual a uma loja: estoque, fiado e notas.",
+        "en": "Everything else works just like a store: inventory, tabs and invoices."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así abres tu droguería con Platata.",
+        "pt": "Assim você abre sua farmácia com o Platata.",
+        "en": "That's how you open your pharmacy with Platata."
+      }
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "id": "T9",
+  "name": "Abonos al fiado",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-clients",
+      "voice": {
+        "es": "En Mi negocio, toca Clientes.",
+        "pt": "Em Meu negócio, toque em Clientes.",
+        "en": "In My business, tap Clients."
+      }
+    },
+    {
+      "id": "2-client",
+      "voice": {
+        "es": "Toca al cliente que viene a pagar.",
+        "pt": "Toque no cliente que veio pagar.",
+        "en": "Tap the client who came to pay."
+      }
+    },
+    {
+      "id": "3-settle",
+      "voice": {
+        "es": "En su página, toca Saldar.",
+        "pt": "Na página dele, toque em Quitar.",
+        "en": "On their page, tap Settle."
+      }
+    },
+    {
+      "id": "4-amount",
+      "voice": {
+        "es": "Escribe cuánto paga. Sus fiados más viejos se tachan primero.",
+        "pt": "Digite quanto ele paga. Os fiados mais antigos são riscados primeiro.",
+        "en": "Type what they pay. Their oldest tabs get crossed off first."
+      }
+    },
+    {
+      "id": "5-receive",
+      "voice": {
+        "es": "Toca Recibir.",
+        "pt": "Toque em Receber.",
+        "en": "Tap Receive."
+      }
+    },
+    {
+      "id": "6-left",
+      "voice": {
+        "es": "Listo: ves lo que recibiste y lo que le queda debiendo.",
+        "pt": "Pronto: você vê o que recebeu e quanto ainda falta.",
+        "en": "Done: you see what you got and what they still owe."
+      }
+    },
+    {
+      "id": "7-end",
+      "voice": {
+        "es": "Así recibes abonos al fiado con Platata.",
+        "pt": "Assim você recebe pagamentos do fiado com o Platata.",
+        "en": "That's how you take tab payments with Platata."
+      }
+    }
+  ]
+}

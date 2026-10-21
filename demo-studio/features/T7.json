@@ -1,0 +1,85 @@
+{
+  "id": "T7",
+  "name": "Proveedores y facturas",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-invoices",
+      "voice": {
+        "es": "En Mi negocio, toca Facturas.",
+        "pt": "Em Meu negócio, toque em Notas.",
+        "en": "In My business, tap Invoices."
+      }
+    },
+    {
+      "id": "2-scan",
+      "voice": {
+        "es": "Toca Escanear factura.",
+        "pt": "Toque em Escanear nota.",
+        "en": "Tap Scan invoice."
+      }
+    },
+    {
+      "id": "3-photo",
+      "voice": {
+        "es": "Encuadra la factura y toca el botón blanco.",
+        "pt": "Enquadre a nota e toque no botão branco.",
+        "en": "Fit the invoice in the frame and tap the white button."
+      }
+    },
+    {
+      "id": "4-read",
+      "voice": {
+        "es": "Con internet, Platata lee el proveedor, la fecha y el total. Toca Listo.",
+        "pt": "Com internet, o Platata lê o fornecedor, a data e o total. Toque em Pronto.",
+        "en": "With internet, Platata reads the supplier, the date and the total. Tap Done."
+      }
+    },
+    {
+      "id": "5-month",
+      "voice": {
+        "es": "La factura queda en su mes. Toca Por proveedor.",
+        "pt": "A nota fica no mês dela. Toque em Por fornecedor.",
+        "en": "The invoice is filed by month. Tap By supplier."
+      }
+    },
+    {
+      "id": "6-supplier",
+      "voice": {
+        "es": "Toca el proveedor: ves lo que le pagaste este año.",
+        "pt": "Toque no fornecedor: você vê quanto pagou a ele este ano.",
+        "en": "Tap the supplier: you see what you paid them this year."
+      }
+    },
+    {
+      "id": "7-stock",
+      "voice": {
+        "es": "Ojo: la factura no suma al inventario. Eso lo cuentas en Inventario.",
+        "pt": "Atenção: a nota não soma ao estoque. Isso você conta em Estoque.",
+        "en": "Note: an invoice doesn't add to your inventory. You count that in Inventory."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así guardas tus facturas con Platata.",
+        "pt": "Assim você guarda suas notas com o Platata.",
+        "en": "That's how you keep your invoices with Platata."
+      }
+    }
+  ]
+}
