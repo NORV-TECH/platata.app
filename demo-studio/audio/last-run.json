@@ -1,7 +1,8 @@
 {
- "made": 15,
+ "made": 190,
  "skipped": 62,
- "chars": 1127,
+ "chars": 10483,
  "errors": [],
- "finished_utc": "2026-10-19 16:16:00"
+ "skipped_not_ready": 22,
+ "finished_utc": "2026-10-21 04:02:40"
 }
