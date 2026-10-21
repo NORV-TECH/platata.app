@@ -4540,14 +4540,14 @@
   "chars": 60
  },
  "TS11/pt/5-impuestos": {
-  "hash": "4a3b178a649a0d8f7f5b34f11abb1ec9b0e87e71",
+  "hash": "6484b4350dba988c55153d0561b4851565436932",
   "file": "demo-studio/audio/TS11/pt/5-impuestos.mp3",
-  "chars": 38
+  "chars": 32
  },
  "TS11/en/5-impuestos": {
-  "hash": "4b4df410f1e966484ca7b923028731e68036d741",
+  "hash": "1a5aee4bcd47d118f7f5f3e5bb30b48ae686fa62",
   "file": "demo-studio/audio/TS11/en/5-impuestos.mp3",
-  "chars": 66
+  "chars": 62
  },
  "TS11/es/6-pagos": {
   "hash": "be8196183b66c08385a100061e37769a4d46448c",
