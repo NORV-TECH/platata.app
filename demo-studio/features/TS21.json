@@ -1,0 +1,69 @@
+{
+  "id": "TS21",
+  "name": "Funciona sin internet",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-sin-internet",
+      "voice": {
+        "es": "Sin internet, tu tienda sigue vendiendo. Toca Agregar productos.",
+        "pt": "Sem internet, sua loja continua vendendo. Toque em Adicionar produtos.",
+        "en": "No internet, and your shop keeps selling. Tap Add items."
+      }
+    },
+    {
+      "id": "2-escanear",
+      "voice": {
+        "es": "Toca la pantalla: el producto entra igual, porque tu catálogo está en tu teléfono.",
+        "pt": "Toque na tela: o produto entra igual, porque seu catálogo está no seu celular.",
+        "en": "Tap the screen: the item still goes in, because your catalog lives on your phone."
+      }
+    },
+    {
+      "id": "3-cobrar",
+      "voice": {
+        "es": "Toca Cobrar.",
+        "pt": "Toque em Cobrar.",
+        "en": "Tap Charge."
+      }
+    },
+    {
+      "id": "4-exacto",
+      "voice": {
+        "es": "Cobra en efectivo: toca Exacto. El efectivo no necesita internet; la tarjeta, sí.",
+        "pt": "Cobre em dinheiro: toque em Exato. O dinheiro não precisa de internet; o cartão, sim.",
+        "en": "Take cash: tap Exact. Cash doesn't need internet; cards do."
+      }
+    },
+    {
+      "id": "5-nueva",
+      "voice": {
+        "es": "Venta completada. Se guarda en tu teléfono y se envía sola cuando vuelve internet.",
+        "pt": "Venda concluída. Fica salva no seu celular e é enviada sozinha quando a internet volta.",
+        "en": "Sale complete. It's saved on your phone and goes up on its own when the internet is back."
+      }
+    },
+    {
+      "id": "6-fin",
+      "voice": {
+        "es": "Así vendes sin internet con Platata.",
+        "pt": "Assim você vende sem internet com o Platata.",
+        "en": "That's how you sell without internet with Platata."
+      }
+    }
+  ]
+}

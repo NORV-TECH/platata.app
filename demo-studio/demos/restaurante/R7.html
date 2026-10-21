@@ -23,7 +23,8 @@
 .kds .stn{margin-left:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:600;max-width:calc(var(--u)*160);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .kds .out{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:rgba(230,225,229,.55)}
 .kds .out svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
-.kds .grid{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*8);display:grid;grid-template-columns:repeat(5,1fr);gap:calc(var(--u)*8);align-content:start}
+/* KitchenDisplayScreen.kt:399 LazyVerticalGrid(GridCells.Adaptive(minSize = 180.dp), padding 8, spacing 8) */
+.kds .grid{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*8);display:grid;grid-template-columns:repeat(auto-fill,minmax(calc(var(--u)*180),1fr));gap:calc(var(--u)*8);align-content:start}
 .kds .empty{flex:1;display:grid;place-items:center;font-size:calc(var(--u)*36);font-weight:700;color:rgba(230,225,229,.75)}
 .kds .wrap{padding:calc(var(--u)*4);border-radius:calc(var(--u)*16)}
 .kds .wrap.spot{box-shadow:0 0 0 calc(var(--u)*3) #FFD700}
@@ -33,8 +34,9 @@
 .kds .kcard.fresh{animation:kdsin .9s ease-out}
 @keyframes kdsin{0%{transform:scale(.85);opacity:0}60%{transform:scale(1.04);opacity:1}100%{transform:scale(1)}}
 .kds .hrow{display:flex;gap:calc(var(--u)*6);font-size:calc(var(--u)*14);font-weight:700}
-.kds .hrow b{flex:1 1 auto;min-width:min-content}
-.kds .hrow span{min-width:0;text-align:right}
+/* KdsTicketCard.kt:135-148: title weight(1f), status at its own width; never drawn over each other (REVIEW-2) */
+.kds .hrow b{flex:1 1 0;min-width:0;overflow-wrap:anywhere}
+.kds .hrow span{flex:0 1 auto;text-align:right}
 .kds .who{font-size:calc(var(--u)*12);opacity:.75}
 .kds .div{height:1px;background:currentColor;opacity:.3;margin:calc(var(--u)*6) 0}
 .kds .ln{font-size:calc(var(--u)*16);font-weight:600;white-space:pre}
