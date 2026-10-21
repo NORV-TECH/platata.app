@@ -68,9 +68,9 @@
     {
       "id": "7-order",
       "voice": {
-        "es": "Con Ordenar mueves los platos con las flechas, y la caja los muestra en ese orden.",
-        "pt": "Com Ordenar você move os pratos com as setas, e o caixa mostra nessa ordem.",
-        "en": "Reorder moves the dishes with the arrows, and the register shows them in that order."
+        "es": "Con Ordenar mueves los platos con las flechas, y la caja los muestra en ese orden dentro de la categoría.",
+        "pt": "Com Ordenar você move os pratos com as setas, e o caixa mostra nessa ordem dentro da categoria.",
+        "en": "Reorder moves the dishes with the arrows, and the register shows them in that order inside the category."
       }
     },
     {

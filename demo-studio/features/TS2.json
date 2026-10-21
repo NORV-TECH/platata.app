@@ -1,0 +1,69 @@
+{
+  "id": "TS2",
+  "name": "Open the register (shop, owner phone)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-closed",
+      "voice": {
+        "es": "Empieza el día: la caja está cerrada. Toca Abrir.",
+        "pt": "Comece o dia: o caixa está fechado. Toque em Abrir.",
+        "en": "Start the day: the register is closed. Tap Open."
+      }
+    },
+    {
+      "id": "2-cash",
+      "voice": {
+        "es": "Escribe con cuánto efectivo empiezas.",
+        "pt": "Digite com quanto dinheiro você começa.",
+        "en": "Type the cash you start with."
+      }
+    },
+    {
+      "id": "3-open",
+      "voice": {
+        "es": "Toca Abrir caja.",
+        "pt": "Toque em Abrir caixa.",
+        "en": "Tap Open register."
+      }
+    },
+    {
+      "id": "4-add",
+      "voice": {
+        "es": "La caja quedó abierta. Toca Agregar productos.",
+        "pt": "O caixa está aberto. Toque em Adicionar produtos.",
+        "en": "The register is open. Tap Add items."
+      }
+    },
+    {
+      "id": "5-scan",
+      "voice": {
+        "es": "Toca la pantalla y el producto entra a la venta.",
+        "pt": "Toque na tela e o produto entra na venda.",
+        "en": "Tap the screen and the item goes into the sale."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Así abres la caja con Platata.",
+        "pt": "Assim você abre o caixa com o Platata.",
+        "en": "That's how you open the register with Platata."
+      }
+    }
+  ]
+}

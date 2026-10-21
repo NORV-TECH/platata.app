@@ -295,7 +295,7 @@ RKIT.start(R, {
   who: () => P(W.owner),
   steps:[
     {beat:0, hint:P({es:"Toca ",pt:"Toque em ",en:"Tap "})+T("doorPhoto"), target:'[data-t="photo"]', tap(st){ st.screen="cam"; }},
-    {beat:1, hint:P({es:"Toca OK",pt:"Toque em OK",en:"Tap OK"}), target:'[data-t="tips-ok"]', tap(st){ st.tips=false; }},
+    {beat:1, hint:P({es:"Toca OK",pt:"Toque em OK",en:"Tap OK"}), target:'[data-t="tips-ok"]', tap(st,E){ E.after(2500,()=>{ st.tips=false; }); }},   // REVIEW-2: the tips stay up while line 2 speaks
     {beat:2, hint:P({es:"Toca el botón de la cámara",pt:"Toque no botão da câmera",en:"Tap the camera button"}), target:'[data-t="shutter"]', tap(st,E){ st.flash=true; E.after(250,()=>{ st.flash=false; st.shots=1; }); }},
     {beat:2, hint:P({es:"Toma la segunda página",pt:"Tire a segunda página",en:"Take the second page"}), target:'[data-t="shutter"]', tap(st,E){ st.flash=true; E.after(250,()=>{ st.flash=false; st.shots=2; }); }},
     {beat:3, hint:P({es:"Toca ",pt:"Toque em ",en:"Tap "})+T("camOk",2), target:'[data-t="cam-ok"]', tap(st,E){ st.screen="wait"; st.phase=0;

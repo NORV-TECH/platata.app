@@ -1,0 +1,85 @@
+{
+  "id": "TS1",
+  "name": "Create the business (shop, owner phone)",
+  "business": "tienda",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "en": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-start",
+      "voice": {
+        "es": "Abre Platata y toca Empezar mi negocio.",
+        "pt": "Abra o Platata e toque em Começar meu negócio.",
+        "en": "Open Platata and tap Start my business."
+      }
+    },
+    {
+      "id": "2-country",
+      "voice": {
+        "es": "Tu país ya viene de tu celular. Toca Continuar.",
+        "pt": "Seu país já vem do celular. Toque em Continuar.",
+        "en": "Your country comes from your phone. Tap Continue."
+      }
+    },
+    {
+      "id": "3-type",
+      "voice": {
+        "es": "Elige Tienda y toca Continuar con Tienda.",
+        "pt": "Escolha Loja e toque em Continuar com Loja.",
+        "en": "Pick Shop, then tap Continue with Store."
+      }
+    },
+    {
+      "id": "4-name",
+      "voice": {
+        "es": "Escribe el nombre de tu tienda. Así sale en tus recibos.",
+        "pt": "Digite o nome da sua loja. É assim que ele sai nos recibos.",
+        "en": "Type your shop's name. That's how it shows on your receipts."
+      }
+    },
+    {
+      "id": "5-google",
+      "voice": {
+        "es": "Entra con tu cuenta de Google.",
+        "pt": "Entre com sua conta Google.",
+        "en": "Sign in with your Google account."
+      }
+    },
+    {
+      "id": "6-download",
+      "voice": {
+        "es": "Descarga la lista de códigos de barras, una sola vez. Platata prepara tu tienda.",
+        "pt": "Baixe a lista de códigos de barras, uma vez só. O Platata prepara sua loja.",
+        "en": "Download the barcode list, just once. Platata sets up your shop."
+      }
+    },
+    {
+      "id": "7-ready",
+      "voice": {
+        "es": "Listo. Toca Escanear mi primer producto y llegas a tu caja.",
+        "pt": "Pronto. Toque em Escanear meu primeiro produto e você chega ao seu caixa.",
+        "en": "Done. Tap Scan my first product and you land on your register."
+      }
+    },
+    {
+      "id": "8-end",
+      "voice": {
+        "es": "Así creas tu tienda con Platata.",
+        "pt": "Assim você cria sua loja com o Platata.",
+        "en": "That's how you set up your shop with Platata."
+      }
+    }
+  ]
+}

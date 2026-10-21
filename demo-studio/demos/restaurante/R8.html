@@ -235,9 +235,12 @@ function addFlow(st){
 /* ---- kitchen tablet ---- */
 function kind(st){
   const tile = (k, ic, t, d) => `<div class="k8tile${st.kind===k?" on":""}" data-t="kind-${k}"><span class="ic">${ic}</span><b>${esc(t)}</b><small>${esc(d)}</small>${st.kind===k?`<span class="ck">${I.wcheck}</span>`:""}</div>`;
+  /* REVIEW-2: the tablet's body scrolls (ConnectDeviceScreen); on the video frame the second tile sat half under Continuar,
+     so the list is scrolled up a little before the tap */
   return `<div class="k8p"><div class="k8ptb"><span>${I.pback}</span></div><div class="k8pb">
+    <div style="display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--u)*12);transform:translateY(calc(var(--u)*${st.kscroll?-64:0}))">
     <h1>${esc(L.kindT)}</h1><div class="k8sub">${esc(L.kindS)}</div>
-    ${tile("reg", I.caja, L.reg, L.regD)}${tile("kds", I.cocina, L.kds, L.kdsD)}</div>
+    ${tile("reg", I.caja, L.reg, L.regD)}${tile("kds", I.cocina, L.kds, L.kdsD)}</div></div>
     <div class="k8pf"><div class="k8pbtn" data-t="cont">${esc(L.cont)}</div></div></div>`;
 }
 function code(st){
@@ -280,7 +283,7 @@ RKIT.start(R, {
     es:["Agrega otra pantalla de cocina desde tu teléfono","Ponle nombre: dónde va la pantalla",`Elige qué platos muestra: el bar solo ve ${DRINKS}`,"Siguiente te da un código para la tablet","En la tablet, elige Pantalla de cocina","Escribe el código y toca Conectar","En tu teléfono, la pantalla sale Conectada","Así conectas tu pantalla de cocina con Platata"],
     pt:["Adicione outra tela da cozinha pelo seu celular","Dê um nome: onde fica a tela",`Escolha os pratos: o bar só vê ${DRINKS}`,"Próximo dá um código para o tablet","No tablet, escolha Tela da cozinha","Digite o código e toque em Conectar","No seu celular, a tela aparece Conectada","Assim você conecta a tela da cozinha com o Platata"],
     en:["Add another kitchen screen from your phone","Name it: where the screen goes",`Pick the dishes: the bar only sees ${DRINKS}`,"Next gives you a code for the tablet","On the tablet, choose Kitchen display","Type the code and tap Connect","On your phone, the screen shows Connected","That's how you connect a kitchen screen with Platata"]}),
-  state:{screen:"list", hop:false, step:0, name:"", some:false, picked:[], joined:false, barSaved:false, kind:"reg", typed:"", focus:false, pairing:false},
+  state:{screen:"list", hop:false, step:0, name:"", some:false, picked:[], joined:false, barSaved:false, kind:"reg", kscroll:false, typed:"", focus:false, pairing:false},
   render,
   device: st => st.hop ? "phone" : (st.screen==="kds" ? "kds" : onTablet(st) ? "tablet" : "phone"),
   who: st => st.hop ? "" : (onTablet(st) ? L.kds : L.phone),
@@ -293,7 +296,7 @@ RKIT.start(R, {
     {beat:3, hint:R.pick({es:"Toca Siguiente", pt:"Toque em Próximo", en:"Tap Next"}), target:'[data-t="next"]', tap(st,E){
       st.step = 2;
       E.after(3200, ()=>{ st.hop = true; });
-      E.after(4900, ()=>{ st.hop = false; st.screen = "kind"; }); }},
+      E.after(4900, ()=>{ st.hop = false; st.screen = "kind"; }); E.after(5700, ()=>{ st.kscroll = true; }); }},
     {beat:4, hint:R.pick({es:"Toca Pantalla de cocina", pt:"Toque em Tela da cozinha", en:"Tap Kitchen display"}), target:'[data-t="kind-kds"]', tap(st){ st.kind = "kds"; }},
     {beat:4, hint:R.pick({es:"Toca Continuar", pt:"Toque em Continuar", en:"Tap Continue"}), target:'[data-t="cont"]', tap(st){ st.screen = "code"; st.focus = true; }},
     {beat:5, hint:R.pick({es:"Toca las casillas y escribe el código", pt:"Toque nas caixas e digite o código", en:"Tap the boxes and type the code"}), target:'[data-t="boxes"]', tap(st,E){ E.type("typed", CODE, null, 110); }},
