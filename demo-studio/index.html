@@ -183,7 +183,7 @@ const F = {
  S20:["Vender en línea","Vender online","Sell online","Vendre en ligne"],
  S21:["Funciona sin internet","Funciona sem internet","Works without internet","Fonctionne sans internet"],
  S22:["Copia en Google Drive","Backup no Google Drive","Backup to Google Drive","Sauvegarde Google Drive"],
- S23:["Huella para borrar o descontar","Digital para apagar ou descontar","Fingerprint for deletes and discounts","Empreinte pour supprimer ou réduire"],
+ S23:["Huella para borrar o quitar cargos","Digital para apagar ou tirar taxas","Fingerprint to delete or remove charges","Empreinte pour supprimer ou retirer des frais"],
  S24:["Varios negocios y sucursales","Vários negócios e filiais","Several businesses and branches","Plusieurs commerces et succursales"],
  R1:["El menú con IA desde una foto","O cardápio com IA por foto","AI menu from a photo","Menu par IA à partir d'une photo"],
  R2:["Editar el menú","Editar o cardápio","Edit the menu","Modifier le menu"],
@@ -234,10 +234,46 @@ const BIZ = [
  {id:"edificios", color:"#177E73", n:{es:"Edificios",pt:"Condomínios",en:"Buildings",fr:"Immeubles"}, sub:{es:"Solo Colombia",pt:"Só Colômbia",en:"Colombia only",fr:"Colombie seulement"}, own:range("B",10), countries:["CO"], langs:["es"], noShared:true}
 ];
 // where a feature exists at all
-const ONLY = { S5:["CO","US","CA"], T2:["CO"] };
+const ONLY = { S4:["CO","MX","PE","CL","EC","AR","PA","BR"], S5:["CO","US","CA"], T2:["CO"] };   // no QR in the US and Canada (code: no QR method there)
 // what is built: demo page per feature, and the languages that have a video
 const BUILT = {
- R4:{ only:["CO-es"], page:()=>`demos/restaurante/R4.html?embed=1`, video:{} },   // rebuilt from the code 19 Oct (waiter phone); other countries come after Monti's OK
+/* RESTAURANT-BEGIN (written by tools/tree_restaurant.py) */
+ "R1":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/restaurante/R1.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "R2":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R2.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "R3":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R3.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "R4":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R4.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/R4-es.mp4","pt":"video/R4-pt.mp4","en":"video/R4-en.mp4"} },
+ "R5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R5.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/R5-es.mp4","pt":"video/R5-pt.mp4","en":"video/R5-en.mp4"} },
+ "R6":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R6.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/R6-es.mp4","pt":"video/R6-pt.mp4","en":"video/R6-en.mp4"} },
+ "R7":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R7.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "R8":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R8.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "R9":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R9.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "R10":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R10.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "R11":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/R11.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/R11-es.mp4","pt":"video/R11-pt.mp4","en":"video/R11-en.mp4"} },
+ "restaurante:S1":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS1.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S2":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS2.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S3":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS3.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS3-es.mp4","pt":"video/RS3-pt.mp4","en":"video/RS3-en.mp4"} },
+ "restaurante:S4":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS4.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS4-es.mp4","pt":"video/RS4-pt.mp4"} },
+ "restaurante:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS5.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS5-es.mp4","en":"video/RS5-en.mp4","US-es":"video/RS5-US-es.mp4"} },
+ "restaurante:S6":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS6.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS6-es.mp4","pt":"video/RS6-pt.mp4","en":"video/RS6-en.mp4"} },
+ "restaurante:S7":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS7.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS7-es.mp4","pt":"video/RS7-pt.mp4","en":"video/RS7-en.mp4","US-es":"video/RS7-US-es.mp4"} },
+ "restaurante:S8":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS8.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S9":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS9.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S10":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS10.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S11":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS11.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S12":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS12.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S13":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS13.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S14":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS14.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S15":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS15.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S16":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS16.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S17":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS17.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S18":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS18.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S19":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS19.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S20":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS20.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S21":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS21.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S22":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS22.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S23":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS23.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ "restaurante:S24":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS24.html?embed=1&country=${c}&lang=${l}`, video:{} },
+ /* RESTAURANT-END */
  S10:{ page:(c,l)=>`pilot/S10.html?embed=1&country=${c}&lang=${l}`, video:{es:"video/S10-es.mp4",pt:"video/S10-pt.mp4",en:"video/S10-en.mp4"} },
  B1:{ page:()=>`demos/edificios/B1.html?embed=1`, video:{es:"video/B1-es.mp4"} },
  B2:{ page:()=>`demos/edificios/B2.html?embed=1`, video:{es:"video/B2-es.mp4"} },
