@@ -764,9 +764,10 @@ const LINE_SCROLL = 200, SCROLL_PAY = 600;
 const lineTag = {taxes:"line-taxes", discounts:"line-discounts"}[LINE];
 const lineWord = {taxes:S("reports_taxes"), discounts:S("reports_discounts")}[LINE];
 const HINT = (es,pt,en) => pick({es:"Toca "+es, pt:"Toque em "+pt, en:"Tap "+en});
+const PH = s => R.isPharm ? s.replace("tu tienda","tu negocio").replace("sua loja","seu negócio").replace("your shop","your business").replace("cerrar la tienda","cerrar").replace("fechar a loja","fechar") : s;   // ?type=pharmacy: no "tienda" words
 SKIT.start(R, {
   id:"TS11", tallVideo:true, clock:"18:10",
-  endText:pick({es:"Así ves cómo va tu tienda, con Platata.",pt:"Assim você vê como vai sua loja, com o Platata.",en:"That's how you see how your shop is doing, with Platata."}),
+  endText:PH(pick({es:"Así ves cómo va tu tienda, con Platata.",pt:"Assim você vê como vai sua loja, com o Platata.",en:"That's how you see how your shop is doing, with Platata."})),
   beats:pick({
     es:["En Mi negocio, toca Reportes","El día hora por hora: toca una barra","Brutas, menos descuentos y devoluciones: netas","Cada línea abre sus ventas",
         LINE==="taxes"?"Impuestos aparte; el fiado no es cobrado":"Lo fiado no cuenta como cobrado",
@@ -776,7 +777,7 @@ SKIT.start(R, {
         "Como você recebeu e o que vendeu","Toque em Este mês para ver o mês","Assim você vê como vai sua loja"],
     en:["In My business, tap Reports","The day hour by hour: tap a bar","Gross, minus discounts and refunds: net sales","Each line opens its sales",
         LINE==="taxes"?"Taxes apart; tabs aren't collected yet":"Tabs aren't collected yet",
-        "How you got paid and what sold","Tap This month to see the month","That's how you see how your shop is doing"]}),
+        "How you got paid and what sold","Tap This month to see the month","That's how you see how your shop is doing"]}).map(PH),
   state:{screen:"panel", range:"today", marker:false, scroll:0, chipX:0, line:null},
   render,
   device: () => "phone",

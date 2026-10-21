@@ -696,7 +696,7 @@ const TICKS = '<svg viewBox="0 0 18 12"><path d="M1 6.5l3 3 6-7M7 9.5l1 1 7-8" f
 function whatsapp(st){
   return `<div class="wa"><div class="hd"><span class="bk">${I.back}</span><i class="av">${esc(initialOf(ANA.name))}</i><b>${esc(ANA.name)}</b></div>
     <div class="chat">${st.sent ? `<div class="bub">${esc(MSG)}<span class="tm">12:41 ${TICKS}</span></div>` : ""}</div>
-    <div class="in"><div class="box${st.sent?" ph":""}">${st.sent ? "Mensaje" : esc(MSG)}</div><span class="sendb" data-t="wa-send">${SEND}</span></div></div>`;
+    <div class="in"><div class="box${st.sent?" ph":""}">${st.sent ? esc(S.pick({es:"Mensaje",pt:"Mensagem",en:"Message"})) : esc(MSG)}</div><span class="sendb" data-t="wa-send">${SEND}</span></div></div>`;
 }
 function render(st){
   if(st.screen==="panel"){ const lowN = SHOP_ITEMS.filter(x=>x.stock!=null && x.stock<=x.low).length, unc = SHOP_ITEMS.filter(x=>x.stock==null).length;

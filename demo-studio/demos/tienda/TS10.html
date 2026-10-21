@@ -542,13 +542,14 @@ const cssTS10 = document.createElement("style"); cssTS10.textContent = `
 .mat .wam{align-self:flex-end;max-width:94%;background:#D9FDD3;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font:calc(var(--u)*12)/1.35 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;color:#111B21;box-shadow:0 1px 1px rgba(0,0,0,.1)}
 .mat .wam i{display:block;text-align:right;font-style:normal;font-family:Roboto,system-ui,sans-serif;font-size:calc(var(--u)*11);color:#667781;margin-top:calc(var(--u)*2)}`; document.head.appendChild(cssTS10);
 
+const PH = s => R.isPharm ? s.replace("tu tienda","tu negocio").replace("sua loja","seu negócio").replace("your shop","your business").replace("cerrar la tienda","cerrar").replace("fechar a loja","fechar") : s;   // ?type=pharmacy: no "tienda" words
 SKIT.start(R, {
   id:"TS10", tallVideo:true, clock:"21:05",
-  endText:pick({es:"Así cierras la caja con Platata.",pt:"Assim você fecha o caixa com o Platata.",en:"That's how you close the register with Platata."}),
+  endText:PH(pick({es:"Así cierras la caja con Platata.",pt:"Assim você fecha o caixa com o Platata.",en:"That's how you close the register with Platata."})),
   beats:pick({
     es:["Al cerrar la tienda, toca la caja abierta","Baja y toca Cerrar caja","Cuenta el efectivo y escribe cuánto hay","Toca Cerrar caja y confírmalo","El resumen: ventas, fiado y efectivo","Envíalo por WhatsApp","Así cierras la caja con Platata."],
     pt:["Ao fechar a loja, toque no caixa aberto","Desça e toque em Fechar caixa","Conte o dinheiro e digite quanto tem","Toque em Fechar caixa e confirme","O resumo: vendas, fiado e dinheiro","Envie pelo WhatsApp","Assim você fecha o caixa com o Platata."],
-    en:["At closing time, tap the open register","Scroll down and tap Close register","Count the cash and type how much is there","Tap Close register and confirm","The summary: sales, tabs and cash","Send it by WhatsApp","That's how you close the register with Platata."]}),
+    en:["At closing time, tap the open register","Scroll down and tap Close register","Count the cash and type how much is there","Tap Close register and confirm","The summary: sales, tabs and cash","Send it by WhatsApp","That's how you close the register with Platata."]}).map(PH),
   state:{screen:"panel", scroll:0, typed:"", dlg:false},
   render,
   device: () => "phone",
