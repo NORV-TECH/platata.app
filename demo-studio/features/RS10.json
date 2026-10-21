@@ -20,9 +20,9 @@
     {
       "id": "1-caja",
       "voice": {
-        "es": "Al final del día, abre Mi negocio y toca la caja abierta.",
-        "pt": "No fim do dia, abra Meu negócio e toque no caixa aberto.",
-        "en": "At the end of the day, open My business and tap the open register."
+        "es": "Al final del día, en Mi negocio, toca la caja abierta.",
+        "pt": "No fim do dia, em Meu negócio, toque no caixa aberto.",
+        "en": "At the end of the day, in My business, tap the open register."
       }
     },
     {

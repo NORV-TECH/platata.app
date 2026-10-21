@@ -355,7 +355,7 @@ function settingUp(st){
   const lines = [t("setup_line_currency", CURNAME), t("setup_line_menu"), t("setup_line_register")];
   return `<div class="ppage"><div class="pbody c" style="padding-top:calc(var(--u)*60)">${POT("thumbsup",190)}
     <div class="ph1" style="margin-top:calc(var(--u)*10);text-align:center">${esc(t("biz_setup_creating"))}</div>
-    <div class="scard2">${lines.map((l,i)=>`<div class="sline${i<st.done?" d":""}">${i<st.done?chk(true,"#EB5A2E"):i===st.done?`<span class="ring"></span>`:chk(false)}<span>${esc(l)}</span></div>`).join("")}</div></div></div>`;
+    <div class="scard2">${lines.map((l,i)=>`<div class="sline${i<st.done?" d":""}">${i<st.done?chk(true,"#EB5A2E"):i===st.done?`<span class="wring"></span>`:chk(false)}<span>${esc(l)}</span></div>`).join("")}</div></div></div>`;
 }
 function ready(){
   const conf = [[30,60,"#7C55E0",20],[84,120,"#EAB04C",-30],[150,48,"#D9468A",60],[230,96,"#7C55E0",-10],[300,58,"#EAB04C",35],[270,180,"#D9468A",-50],[40,210,"#EAB04C",15],[120,250,"#7C55E0",70],[318,260,"#7C55E0",-25]]
@@ -383,9 +383,9 @@ RKIT.start(R, {
   id:"RS1", tallVideo:true, clock:"9:05",
   endText:R.pick({es:"Así creas tu restaurante con Platata.",pt:"Assim você cria seu restaurante com o Platata.",en:"That's how you set up your restaurant with Platata."}),
   beats:R.pick({
-    es:["Abre Platata y toca Empezar mi negocio","Tu país ya viene de tu celular: Continuar","Elige Restaurante","Escribe el nombre de tu restaurante","Entra con tu cuenta de Google","Platata prepara tu negocio","Listo. Ahora arma tu carta","Así creas tu restaurante con Platata."],
-    pt:["Abra o Platata e toque em Começar meu negócio","Seu país já vem do celular: Continuar","Escolha Restaurante","Digite o nome do seu restaurante","Entre com sua conta Google","O Platata prepara seu negócio","Pronto. Agora monte seu cardápio","Assim você cria seu restaurante com o Platata."],
-    en:["Open Platata and tap Start my business","Your country comes from your phone: Continue","Pick Restaurant","Type your restaurant's name","Sign in with your Google account","Platata sets up your business","Done. Now build your menu","That's how you set up your restaurant with Platata."]}),
+    es:["Abre Platata y toca Empezar mi negocio","Tu país ya viene de tu celular: Continuar","Elige Restaurante","Escribe el nombre de tu restaurante","Entra con Google: Platata prepara tu negocio","Listo. Ahora arma tu carta","Así creas tu restaurante con Platata."],
+    pt:["Abra o Platata e toque em Começar meu negócio","Seu país já vem do celular: Continuar","Escolha Restaurante","Digite o nome do seu restaurante","Entre com o Google: o Platata prepara seu negócio","Pronto. Agora monte seu cardápio","Assim você cria seu restaurante com o Platata."],
+    en:["Open Platata and tap Start my business","Your country comes from your phone: Continue","Pick Restaurant","Type your restaurant's name","Sign in with Google: Platata sets up your business","Done. Now build your menu","That's how you set up your restaurant with Platata."]}),
   state:{screen:"welcome", type:null, name:"", done:0},
   render,
   steps:[
@@ -397,7 +397,7 @@ RKIT.start(R, {
     {beat:3, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+t("biz_start_cta"), target:'[data-t="name-go"]', tap(st){ st.screen="google"; }},
     {beat:4, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+t("auth_google_btn"), target:'[data-t="google"]', tap(st,E){ st.screen="setup"; st.done=0;
         E.after(1200,()=>{ st.done=1; }); E.after(2400,()=>{ st.done=2; }); E.after(3500,()=>{ st.done=3; }); E.after(4300,()=>{ st.screen="ready"; }); }},
-    {beat:6, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+t("ready_cta_menu"), target:'[data-t="ready-go"]', tap(st){ st.screen="landing"; }}
+    {beat:5, hint:R.pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+t("ready_cta_menu"), target:'[data-t="ready-go"]', tap(st){ st.screen="landing"; }}
   ]
 });
 </script>
@@ -466,7 +466,7 @@ RKIT.start(R, {
 .mat .terms{text-align:center;font-size:calc(var(--u)*13);line-height:1.4;color:#737883}
 .mat .scard2{margin-top:calc(var(--u)*18);align-self:stretch;border-radius:calc(var(--u)*20);background:#fff;border:1px solid #E6E2D9;padding:calc(var(--u)*16) calc(var(--u)*18);display:flex;flex-direction:column;gap:calc(var(--u)*14)}
 .mat .sline{display:flex;align-items:center;gap:calc(var(--u)*12);font-size:calc(var(--u)*15);color:#737883}.mat .sline.d{color:#17181B}
-.mat .ring{width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:50%;border:calc(var(--u)*2) solid #EB5A2E;border-right-color:transparent;animation:spin 1s linear infinite;flex:0 0 auto}
+.mat .wring{width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:50%;border:calc(var(--u)*2) solid #EB5A2E;border-right-color:transparent;animation:spin 1s linear infinite;flex:0 0 auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 .mat .cf{position:absolute;width:calc(var(--u)*8);height:calc(var(--u)*14);border-radius:calc(var(--u)*2);opacity:.9}
 .mat .shop{margin-top:calc(var(--u)*12);align-self:stretch;display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*12) calc(var(--u)*14);border-radius:calc(var(--u)*20);background:#fff;border:1px solid #E6E2D9}

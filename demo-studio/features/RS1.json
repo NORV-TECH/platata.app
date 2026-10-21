@@ -52,21 +52,13 @@
     {
       "id": "5-google",
       "voice": {
-        "es": "Entra con tu cuenta de Google: tu negocio queda ligado a ella.",
-        "pt": "Entre com sua conta Google: seu negócio fica ligado a ela.",
-        "en": "Sign in with your Google account: your business is tied to it."
+        "es": "Entra con tu cuenta de Google. Platata pone tu moneda y prepara tu carta y tu caja.",
+        "pt": "Entre com sua conta Google. O Platata coloca sua moeda e prepara o cardápio e o caixa.",
+        "en": "Sign in with your Google account. Platata sets your currency and gets your menu and register ready."
       }
     },
     {
-      "id": "6-prepara",
-      "voice": {
-        "es": "Platata pone tu moneda y prepara tu carta y tu caja.",
-        "pt": "O Platata coloca sua moeda e prepara o cardápio e o caixa.",
-        "en": "Platata sets your currency and gets your menu and register ready."
-      }
-    },
-    {
-      "id": "7-listo",
+      "id": "6-listo",
       "voice": {
         "es": "Tu negocio está listo. Toca Armar mi carta y súbela con una foto.",
         "pt": "Seu negócio está pronto. Toque em Montar meu cardápio e envie uma foto dele.",
@@ -74,7 +66,7 @@
       }
     },
     {
-      "id": "8-fin",
+      "id": "7-fin",
       "voice": {
         "es": "Así creas tu restaurante con Platata.",
         "pt": "Assim você cria seu restaurante com o Platata.",

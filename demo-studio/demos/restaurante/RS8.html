@@ -31,8 +31,8 @@
                         (Security is ON from creation, SeedStore.kt:135 -> isRefundLockEnabled; refund_pin_where under the subtitle, RefundPinDialog.kt:105)
    after                RefundResultBanner (green refund_done_banner, MoneyDiscountText #1A7F3C), badge tx_status_part_refund, receipt
                         lines tx_refunded_label / tx_net_after_refund (ReceiptFormatter E3)
-   Receipt footer: ReceiptConfig.customFooterMessage defaults to the English "Thank you for shopping with us!" (data/ReceiptConfig.kt:24) and
-   no seed localizes it, so a new shop's receipt prints it in every language. Shown as the app does. */
+   Receipt footer: demo setup, the owner wrote her own closing message in Recibos (ReceiptConfig.customFooterMessage; the default is
+   still English, flagged to the coder: ReceiptConfig.kt:24). */
 // TITLE: Platata · Devolver una venta
 // KEYS: refund_pin_where,tx_tab_open,tx_search_placeholder,reports_period_today,tx_first_item_more,tx_sale_number_short,tx_status_paid,tx_status_part_refund,tx_sale_title,receipt_opt_whatsapp_btn,receipt_btn_text,receipt_action_share,tx_employee,tx_issue_refund,tx_void_link,refund_paid_left,tx_items_tab,tx_amount_tab,tx_select_all_items,refund_goes_cash,refund_btn_amount,tx_confirm_refund_title,tx_confirm_refund_body,tx_yes_refund,common_cancel,refund_pin_title,refund_pin_subtitle,refund_done_banner,tx_refunded_label,tx_net_after_refund,receipt_label_order_number,receipt_label_date,receipt_label_each,receipt_label_subtotal,receipt_label_total
 // PLURALS: tx_day_sales_count
@@ -286,7 +286,7 @@ function receiptText(refunded){
   SALE.items.forEach(x=>{ L.push(`1x ${x.name}`); L.push(`   @ ${money(x.price)} ${t("receipt_label_each")} ... ${money(x.price)}`); });
   L.push(DLINE, `${t("receipt_label_subtotal")}: ${money(SALE.total)}`, RLINE, `${t("receipt_label_total")}: ${money(SALE.total)}`);
   if(refunded){ L.push(`${t("tx_refunded_label")}: -${money(refunded)}`, `${t("tx_net_after_refund")}: ${money(SALE.total-refunded)}`); }
-  L.push(t("payment_method_cash"), "", "Thank you for shopping with us!");
+  L.push(t("payment_method_cash"), "", R.pick({es:"¡Gracias por tu visita!",pt:"Obrigado pela visita!",en:"Thanks for coming in!"})); /* demo setup: the owner wrote her own closing message in Recibos (the default is still English, flagged to the coder: ReceiptConfig.kt:24) */
   return L.join("\n");
 }
 const badge = st => st==="paid" ? `<span class="bdg ok">${esc(t("tx_status_paid"))}</span>` : `<span class="bdg wn">${esc(t("tx_status_part_refund"))}</span>`;
@@ -298,7 +298,7 @@ function list(){
   return `<div class="stab"><span class="ib">${I.back}</span><div class="tbs"><span class="on">${esc(t("tx_tab_all"))}</span><span>${esc(t("tx_tab_open"))}</span></div></div>
     <div class="msearch">${I.search}${esc(t("tx_search_placeholder"))}</div>
     <div class="dayh"><b>${esc(t("reports_period_today"))}</b><b>${money(DAYNET)}</b><small>${esc(tp("tx_day_sales_count", SALES.length, SALES.length))}</small></div>
-    <div class="slist">${rows}</div>` + nav("ventas");
+    <div class="slist">${rows}</div>` + nav("ventas",{locked:true});   /* the lock does not lift by changing tab: PlatataApp.kt:499 isSecurityLocked */
 }
 function detail(st){
   const done = st.refunded>0;
@@ -353,8 +353,7 @@ RKIT.start(R, {
     {beat:4, hint:R.pick({es:"Toca Sí, devolver",pt:"Toque em Sim, devolver",en:"Tap Yes, refund"}), target:'[data-t="yes"]', tap(st){ st.confirm=false; st.pin=0; }},
     {beat:5, hint:R.pick({es:"Escribe tu PIN",pt:"Digite seu PIN",en:"Enter your PIN"}), target:'[data-t="pin-1"]', tap(st,E){ st.pin=1;
         E.after(260,()=>{st.pin=2}); E.after(520,()=>{st.pin=3}); E.after(780,()=>{st.pin=4});
-        E.after(1150,()=>{ st.pin=null; st.screen="detail"; st.refunded=BACK.price; st.flash=true; });
-        E.after(4300,()=>{ st.scroll=200; }); }}
+        E.after(1150,()=>{ st.pin=null; st.screen="detail"; st.refunded=BACK.price; st.flash=true; }); }}
   ]
 });
 </script>

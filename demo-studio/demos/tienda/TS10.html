@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Cerrar la caja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/shop-data.js"></script>
+<script src="../../kit/skit.js"></script>
+<script>
+const STR={"cash_movement_in": {"en": "Cash in", "es": "Meter efectivo", "pt": "Colocar dinheiro"}, "cash_movement_out": {"en": "Cash out", "es": "Sacar efectivo", "pt": "Retirar dinheiro"}, "cash_movement_reason_supplier": {"en": "Supplier", "es": "Proveedor", "pt": "Fornecedor"}, "cash_movement_void": {"en": "Void", "es": "Anular", "pt": "Anular"}, "common_done": {"en": "Done", "es": "Listo", "pt": "Concluído"}, "fiado_row_name": {"en": "Tab", "es": "Fiado", "pt": "Fiado"}, "invoices_row_this_month": {"en": "%1$d this month", "es": "%1$d este mes", "pt": "%1$d neste mês"}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "more_my_products_count": {"en": "%1$d items", "es": "%1$d artículos", "pt": "%1$d itens"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "payment_method_cash": {"en": "Cash", "es": "Efectivo", "pt": "Dinheiro"}, "receipt_layout_detailed": {"en": "Detailed", "es": "Detallado", "pt": "Detalhado"}, "register_close_balanced": {"en": "Balanced", "es": "Cuadrado", "pt": "Fechado exato"}, "register_close_by_method": {"en": "Money by payment method", "es": "Dinero por forma de pago", "pt": "Por forma de pagamento"}, "register_close_confirm": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_close_confirm_title": {"en": "Close the register with %1$s counted?", "es": "¿Cerrar la caja con %1$s contados?", "pt": "Fechar o caixa com %1$s contados?"}, "register_close_counted_label": {"en": "Counted", "es": "Contado", "pt": "Contado"}, "register_close_diff_label": {"en": "Difference", "es": "Diferencia", "pt": "Diferença"}, "register_close_expected_label": {"en": "Should be in the drawer", "es": "Debe haber en la caja", "pt": "Deve haver no caixa"}, "register_close_fiado_settled": {"en": "Tab payments (fiado)", "es": "Abonos de fiado", "pt": "Pagamentos de fiado"}, "register_close_keep_counting": {"en": "Keep counting", "es": "Seguir contando", "pt": "Continuar contando"}, "register_close_over": {"en": "Over %s", "es": "Sobrante %s", "pt": "Sobra %s"}, "register_close_see_breakdown": {"en": "See money by payment method ›", "es": "Ver dinero por forma de pago ›", "pt": "Ver dinheiro por forma de pagamento ›"}, "register_close_short": {"en": "Short %s", "es": "Faltante %s", "pt": "Falta %s"}, "register_close_title": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_closed_title": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "register_closed_whatsapp": {"en": "Send by WhatsApp", "es": "Enviar por WhatsApp", "pt": "Enviar por WhatsApp"}, "register_list_title": {"en": "Register history", "es": "Historial de caja", "pt": "Histórico de caixa"}, "register_nav_today": {"en": "Today · %1$s", "es": "Hoy · %1$s", "pt": "Hoje · %1$s"}, "register_status_cash_all": {"en": "All cash since it opened", "es": "Todo el efectivo desde que abrió", "pt": "Todo o dinheiro desde a abertura"}, "register_status_cash_sales": {"en": "Cash sales", "es": "Ventas en efectivo", "pt": "Vendas em dinheiro"}, "register_status_cash_sales_here": {"en": "Cash sales (this register)", "es": "Ventas en efectivo (esta caja)", "pt": "Vendas em dinheiro (neste caixa)"}, "register_status_close_btn": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_status_closed_at": {"en": "Closed", "es": "Cerrada", "pt": "Fechado"}, "register_status_closed_by": {"en": "Closed by", "es": "Cerrada por", "pt": "Fechado por"}, "register_status_counted": {"en": "Counted", "es": "Contado", "pt": "Contado"}, "register_status_expected": {"en": "Should be in the drawer", "es": "Debe haber en la caja", "pt": "Deve haver no caixa"}, "register_status_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "register_status_net_sales": {"en": "Net sales", "es": "Ventas netas", "pt": "Vendas líquidas"}, "register_status_opened_at": {"en": "Opened", "es": "Abierta", "pt": "Aberto em"}, "register_status_opened_by": {"en": "Opened by", "es": "Abierta por", "pt": "Aberto por"}, "register_status_pill_open": {"en": "● OPEN", "es": "● ABIERTA", "pt": "● ABERTO"}, "register_status_starting_cash": {"en": "Starting cash", "es": "Efectivo inicial", "pt": "Troco inicial"}, "reports_on_tab": {"en": "On tab (not collected yet)", "es": "En fiado (sin cobrar)", "pt": "No fiado (sem receber)"}, "reports_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "reports_total_collected": {"en": "Total collected", "es": "Total cobrado", "pt": "Total recebido"}, "scan_btn_scan_barcodes": {"en": "Add items", "es": "Agregar productos", "pt": "Adicionar produtos"}, "scan_no_barcode_btn": {"en": "No barcode", "es": "Sin código", "pt": "Sem código"}, "scan_row_inventory": {"en": "Inventory", "es": "Inventario", "pt": "Estoque"}, "scan_row_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Líquido hoje · %s"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "settings_gate_subtitle": {"en": "Confirm your identity to open your business", "es": "Confirma tu identidad para abrir tu negocio", "pt": "Confirme sua identidade para abrir o seu negócio"}, "settings_gate_title": {"en": "Open your business?", "es": "¿Abrir tu negocio?", "pt": "Abrir o seu negócio?"}, "settings_hub_business_info": {"en": "Business info", "es": "Datos del negocio", "pt": "Dados do negócio"}, "settings_hub_discounts": {"en": "Discounts and charges", "es": "Descuentos y cargos", "pt": "Descontos e taxas"}, "settings_hub_group_getting_paid": {"en": "Getting paid", "es": "Cobros", "pt": "Cobranças"}, "settings_hub_group_your_business": {"en": "Your business", "es": "Tu negocio", "pt": "Seu negócio"}, "settings_hub_payment_methods": {"en": "Payment methods", "es": "Métodos de pago", "pt": "Formas de pagamento"}, "settings_hub_receipts": {"en": "Receipts", "es": "Recibos", "pt": "Recibos"}, "settings_hub_receipts_num_auto": {"en": "numbered automatically", "es": "numeración automática", "pt": "numeração automática"}, "settings_hub_receipts_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "settings_hub_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "whatsapp_signature": {"en": "Made with Platata · platata.app", "es": "Hecho con Platata · platata.app", "pt": "Feito com Platata · platata.app"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "workspace_items_title": {"en": "Items", "es": "Artículos", "pt": "Itens"}, "workspace_register_closed": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "workspace_register_closed_sub": {"en": "Open it to start selling", "es": "Ábrela para empezar a vender", "pt": "Abra para começar a vender"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_open_action": {"en": "Open", "es": "Abrir", "pt": "Abrir"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "workspace_registers_and_printers": {"en": "Connections", "es": "Conexiones", "pt": "Conexões"}};
+const PLU={"fiado_row_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_clientes_none_owe": {"en": {"one": "%1$d client · no debts", "other": "%1$d clients · no debts"}, "es": {"one": "%1$d cliente · nadie debe", "other": "%1$d clientes · nadie debe"}, "pt": {"one": "%1$d cliente · ninguém deve", "other": "%1$d clientes · ninguém deve"}}, "home_clientes_owed": {"en": {"one": "%1$d owes you · %2$s", "other": "%1$d owe you · %2$s"}, "es": {"one": "%1$d te debe · %2$s", "other": "%1$d te deben · %2$s"}, "pt": {"one": "%1$d te deve · %2$s", "other": "%1$d te devem · %2$s"}}, "home_equipo_count_phones": {"en": {"one": "%1$d employee · %2$s", "other": "%1$d employees · %2$s"}, "es": {"one": "%1$d empleado · %2$s", "other": "%1$d empleados · %2$s"}, "pt": {"one": "%1$d funcionário · %2$s", "other": "%1$d funcionários · %2$s"}}, "home_equipo_on_phones": {"en": {"one": "%1$d on a phone", "other": "%1$d on phones"}, "es": {"one": "%1$d en celular", "other": "%1$d en celular"}, "pt": {"one": "%1$d no celular", "other": "%1$d no celular"}}, "stock_headline_low": {"en": {"one": "%d running low", "other": "%d running low"}, "es": {"one": "%d queda poco", "other": "%d quedan pocos"}, "pt": {"one": "%d acabando", "other": "%d acabando"}}, "stock_headline_uncounted": {"en": {"one": "%d not counted", "other": "%d not counted"}, "es": {"one": "%d sin contar", "other": "%d sin contar"}, "pt": {"one": "%d não contado", "other": "%d não contados"}}};
+
+/* ===== TS9-TS17 common (inlined into each page by the builder; not a kit file) =====
+   The shop owner's phone, plain Material light (ui/theme Theme.kt LightColorScheme #1C1C1E #6E6E73 #F2F2F7 #E5E5EA #C7C7CC #FF3B30),
+   read from the app code at app-head (sim/usa-canada):
+   Register tab  ui/screens/home/ScanCheckoutTab.kt (a shop has no tab row: HomeScreen.kt:609 !isRetail; OwnerRegisterCard :226; SmartScanButton :430)
+   panel         ui/screens/home/HomeScreen.kt:1503-1830 (register card, Sell online, Every day, Items, Inventory (InventoryPanelRow.kt),
+                 Clients (amber SumaFiadoAmberTint #FFF6E5 / SumaFiadoAmber #B07500 while someone owes), Invoices, Team, Reports, Settings)
+   bottom bar    ui/app/PlatataApp.kt (Caja ShoppingCart, Ventas Receipt, flag "Mi negocio", lit = panel open)
+   top bar       ui/components/SumaTopBar.kt (64 dp, back arrow, titleLarge 22sp Bold); list header ui/components/ListScreenHeader.kt
+   support       ui/screens/reports/SupportStrip.kt (LEVEL_2 pages: Soporte | Mis reportes)
+   data          kit/shop-data.js (the shop, its owner, products, the two clients on the tab, the suppliers) */
+const R = SKIT.ctx();
+const esc = SKIT.esc;
+const P = path => `<svg class="mi" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
+const I = {
+  back:P("M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"),
+  chev:P("M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"),
+  down:P("M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"),
+  person:P("M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"),
+  group:P("M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"),
+  rlong:P("M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"),
+  gear:P("M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"),
+  cart:P("M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"),
+  receipt:P("M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"),
+  resto:P("M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z"),
+  search:P("M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"),
+  more:P("M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"),
+  edit:P("M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"),
+  trash:P("M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"),
+  copy:P("M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"),
+  add:P("M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"),
+  tag:P("M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"),
+  pct:P("M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.0025 18.5832 18.59 4l1.41 1.41L5.4125 19.9932zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"),
+  card:P("M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"),
+  store:P("M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"),
+  devices:P("M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"),
+  check:P("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"),
+  phone:P("M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"),
+  badge:P("M20 7h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM9 12c.83 0 1.5.67 1.5 1.5S9.83 15 9 15s-1.5-.67-1.5-1.5S8.17 12 9 12zm3 6H6v-.75c0-1 2-1.5 3-1.5s3 .5 3 1.5V18zm1-9h-2V4h2v5zm5 7.5h-4V15h4v1.5zm0-3h-4V12h4v1.5z"),
+  block:P("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z"),
+  support:P("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z"),
+  close:P("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"),
+  lock:P("M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"),
+  chevL:P("M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"),
+  chevR:P("M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"),
+  clock:P("M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"),
+  bksp:P("M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"),
+  calc:P("M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5.97 4.06L14.09 6l1.41 1.41L16.91 6l1.06 1.06-1.41 1.41 1.41 1.41-1.06 1.06-1.41-1.4-1.41 1.41-1.06-1.06 1.41-1.41-1.41-1.42zm-6.78.66h5v1.5h-5v-1.5zM11.5 16h-2v2H8v-2H6v-1.5h2v-2h1.5v2h2V16zm6.5 1.25h-5v-1.5h5v1.5zm0-2.5h-5v-1.5h5v1.5z"),
+  share:P("M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"),
+  fp:P("M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z"),
+  wa:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>'
+};
+const pick = R.pick, L = R.lang;
+/* app strings injected by the builder from values / values-es / values-pt-rBR (STR, PLU) */
+const S = k => { const o = STR[k]; if(!o) throw new Error("missing string "+k); return o[L]; };
+const fmtA = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : String(v); }); };
+const F = (k, ...a) => fmtA(S(k), a);
+const t = F;
+/* Android plural category: pt (CLDR) "one" for 0 and 1; es/en "one" for 1 */
+const PL = (k, n, ...a) => { const p = PLU[k][L]; const cat = L==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other"); return fmtA(p[cat]||p.other, a.length ? a : [n]); };
+const tp = PL;
+const C = R.C;
+const money = v => R.money(v);
+const dec = C.dec;
+const r2 = v => Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec);
+/* utils/CurrencyUtils.kt formatTaxRate: decimal mark of the CURRENCY's locale (COP CLP ARS BRL comma; USD MXN PEN CAD dot) */
+const COMMA_CUR = ["COP","CLP","ARS","BRL"].includes(C.cur);
+const pctTxt = p => { const s = String(+(+p).toFixed(2)); return (COMMA_CUR ? s.replace(".", ",") : s) + "%"; };
+const BIZ = R.place;                                   // the shop (or, with ?type=pharmacy, the pharmacy) of shop-data.js
+const ITEMS = R.items;                                 // its products (groceries, or the 8 pharmacy items)
+const ITEM = id => C.item(id);
+
+/* ---- the shop's people and taxes (shop-data.js: owner, cashier, the two clients on the tab, the suppliers) ---- */
+const DIAL = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54",PA:"507",BR:"55",US:"1",CA:"1"}[R.country];
+const OWNER_NAME = C.owner, OWNER = C.owner, OWNER_FIRST = OWNER.split(" ")[0];
+const CASHIER = C.people.cashier;
+/* the tax a shop of that country sets up from the "+ Nuevo" chips (sync/TaxPresets.kt: CO IVA 19 / Impoconsumo 8, PE IGV 18,
+   PA ITBMS 7, MX IVA 16, CL IVA 19, AR IVA 21, EC IVA 15; BR none); US/CA a typed sales tax added on top (TaxPriceDefault) */
+const TAX = {CO:{name:"IVA",p:19,add:false},MX:{name:"IVA",p:16,add:false},PE:{name:"IGV",p:18,add:false},CL:{name:"IVA",p:19,add:false},
+  EC:{name:"IVA",p:15,add:false},AR:{name:"IVA",p:21,add:false},PA:{name:"ITBMS",p:7,add:false},BR:null,
+  US:{name:"Sales tax",p:8.25,add:true},CA:{name:"HST",p:13,add:true}}[R.country];
+/* the two clients of shop-data.js, both on the tab (C.fiado: Ana 22 days, Juan 6 days) */
+const FIADO = C.fiado;
+const CLIENTS = FIADO.map(f => f.customer);
+const OWED_TOTAL = FIADO.reduce((s,f)=>s+f.owes, 0);
+/* national numbers: CO/MX/US/CA 10 digits, AR 9+10, BR 11, PE 9, CL 9, EC 9, PA 8 */
+const NAT = {CO:"3001234567",MX:"5512345678",PE:"987654321",CL:"987654321",EC:"991234567",AR:"91123456789",PA:"61234567",BR:"31912345678",US:"7135550142",CA:"4165550142"};
+const natNum = i => { const n = NAT[R.country]; return n.slice(0, n.length-2) + String(10+i*7).slice(-2); };
+/* utils/WhatsappUtils.kt formatWhatsappForReading */
+function waRead(canonical){
+  const dial = DIAL, national = canonical.slice(dial.length);
+  let body;
+  if(dial==="1" && national.length===10) body = "("+national.slice(0,3)+") "+national.slice(3,6)+"-"+national.slice(6);
+  else { const sizes = {10:[3,3,4],9:[3,3,3],8:[4,4]}[national.length]; const g=[]; let rest=national;
+    if(sizes){ sizes.forEach(n=>{g.push(rest.slice(0,n)); rest=rest.slice(n);}); } else { while(rest.length>4){g.push(rest.slice(0,3)); rest=rest.slice(3);} if(rest) g.push(rest); }
+    body = g.join(" "); }
+  return "+"+dial+" "+body;
+}
+/* dates in the app language (java DateFormat MEDIUM ~ Intl medium) */
+const LOCALE = {es:"es",pt:"pt-BR",en:"en-US"}[L];   // the app sets the language tag "es" / "pt-BR" / "en" (AppLanguage.kt), so Locale.getDefault() has no country
+const AL = LOCALE;
+const fmtDate = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"medium"}).format(d).replace(/\.$/,"");
+const fmtDateTime = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"medium",timeStyle:"short"}).format(d);
+const fmtDT = fmtDateTime;
+const fmtTime = d => new Intl.DateTimeFormat(LOCALE, {timeStyle:"short"}).format(d);
+const shortDay = d => new Intl.DateTimeFormat(LOCALE, {day:"numeric", month:"short"}).format(d).replace(/ de /, " ");   // utils/ShortDay.kt drops "de"
+const D = (h, m) => new Date(2026, 9, 20, h, m);
+const TODAY = new Date(2026, 9, 20, 15, 10);
+
+/* the money keypad rule (ui/screens/cash/MoneyKeypadEntry.kt): whole units typed, the bottom-left key is the
+   decimal mark where the currency has cents, "000" where it has none */
+const DECMARK = new Intl.NumberFormat(C.loc).formatToParts(1.5).find(p=>p.type==="decimal").value;
+const ZKEY = C.dec===0 ? "000" : DECMARK;
+const press = (cur, key) => {
+  if(key==="del") return cur.slice(0,-1);
+  if(key==="z"){ if(C.dec===0) return cur ? cur+"000" : cur; if(cur.includes(".")) return cur; return (cur||"0")+"."; }
+  if(cur.includes(".") && cur.split(".")[1].length>=C.dec) return cur;
+  if(cur==="0") return key;
+  return cur+key;
+};
+const amountOf = s => parseFloat(s||"0")||0;
+const keysFor = amount => {      // the taps that type `amount` with the rule above
+  if(C.dec===0 && amount%1000===0 && amount>=1000) return String(amount/1000).split("").concat(["z"]);
+  const w = Math.floor(amount), c = Math.round((amount-w)*100);
+  const k = String(w).split("");
+  if(c) { k.push("z"); k.push(...String(c).padStart(2,"0").replace(/0$/,"").split("")); }
+  return k;
+};
+
+/* ---------- pieces ---------- */
+/* SumaTopBar (ui/components/SumaTopBar.kt): 64 dp, back arrow 48 dp, titleLarge 22sp bold; o.close = the X (checkout steps only) */
+const topbar = (title, o) => { o=o||{};
+  return `<div class="rs-top">${o.noBack?"":`<span class="ib" data-t="${o.backTag||o.backT||"back"}">${o.close?I.close:I.back}</span>`}${o.html?`<div class="tth">${o.html}</div>`:`<b>${esc(title)}</b>`}${o.action||""}</div>`; };
+const newAction = (tag) => `<span class="rs-new" data-t="${tag||"new"}">${esc(pick({es:"+ Nuevo",pt:"+ Novo",en:"+ New"}))}</span>`;
+const listHeader = (title, ph, addTag) => `<div class="rs-lh"><div class="r1"><span class="ib" data-t="back">${I.back}</span><b>${esc(title)}</b>${newAction(addTag)}</div>
+  <div class="srch">${I.search}<span>${esc(ph)}</span></div></div>`;
+/* SumaButton: 52 dp, radius 12 (pill = 50), titleMedium SemiBold */
+const btn = (text, kind, dt, o={}) => `<div class="sb ${kind||"pri"}${o.pill?" pill":""}${o.off?" off":""}" ${dt?`data-t="${dt}"`:""}>${o.icon||""}<span>${esc(text)}</span></div>`;
+/* CashKeypad (OpenRegisterScreen.kt): 4 rows sharing the height, 48..72 dp, 4 dp gaps, grey keys r12, headlineLarge bold */
+const keypad = (pre, rowH) => { const rows=[["1","2","3"],["4","5","6"],["7","8","9"],["z","0","del"]];
+  return `<div class="ck" style="--kh:${rowH||64}">${rows.map(r=>`<div class="kr">${r.map(k=>`<span data-t="${pre}-${k}">${k==="del"?I.bksp:k==="z"?esc(ZKEY):k}</span>`).join("")}</div>`).join("")}</div>`; };
+/* bottom NavigationBar of the owner's phone (PlatataApp.kt): Caja · Ventas · flag "Mi negocio" (lit while the panel is open;
+   a fingerprint in the 32 dp circle while Security is locked) */
+const nav = (on, o) => { o=o||{};
+  return `<div class="mnav">
+  <div class="${on==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${I.cart}</span>${esc(pick({es:"Caja",pt:"Caixa",en:"Register"}))}</div>
+  <div class="${on==="ventas"?"on":""}" data-t="nav-ventas"><span class="pill">${I.receipt}</span>${esc(pick({es:"Ventas",pt:"Vendas",en:"Sales"}))}</div>
+  <div class="${on==="biz"||on==="flag"?"on":""}" data-t="${o.flagTag||"nav-biz"}"><span class="pill"><span class="flagc${o.locked?" lk":""}">${o.locked?`<i class="fp">${I.fp}</i>`:R.flag()}</span></span>${esc(pick({es:"Mi negocio",pt:"Meu negócio",en:"My business"}))}</div></div>`; };
+const ownerNav = (lit) => nav(lit, {flagTag:"flag"});
+/* SupportStripDock under every LEVEL_2 page (ui/screens/reports/SupportStrip.kt, ReportLevels.kt) */
+const strip = () => `<div class="rs-strip"><div class="h"><span class="bd">${I.support}</span><div><b>${esc(pick({es:"Soporte",pt:"Suporte",en:"Support"}))}</b><small>${esc(pick({es:"Reporta un problema aquí",pt:"Relatar um problema aqui",en:"Report a problem here"}))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(pick({es:"Mis reportes",pt:"Meus relatos",en:"My reports"}))}</b><small>${esc(pick({es:"Aún no hay reportes",pt:"Ainda não há relatos",en:"No reports yet"}))}</small></div>${I.chev}</div></div>`;
+const sw = (on, tag) => `<span class="rs-sw${on?" on":""}"${tag?` data-t="${tag}"`:""}><i></i></span>`;
+const snack = (txt, action) => `<div class="msnack rs-snack">${esc(txt)}${action?`<b>${esc(action)}</b>`:""}</div>`;
+const toast = txt => `<div class="rs-toast">${esc(txt)}</div>`;
+/* outlined text field (SumaTextField / OutlinedTextField) */
+const field = (label, value, o) => { o=o||{};
+  const has = value!==undefined && value!==null && value!=="";
+  return `<div class="rs-fld${o.focus?" foc":""}${has||o.focus?" up":""}"${o.tag?` data-t="${o.tag}"`:""}>${o.lead?`<span class="lead">${o.lead}</span>`:""}<label>${esc(label)}</label><span class="v">${has?esc(value):(o.focus&&o.ph?`<em>${esc(o.ph)}</em>`:"")}${o.focus?`<i class="caret"></i>`:""}</span>${o.trail||""}</div>`; };
+
+/* ---------- the shop owner's Register tab (ui/screens/home/ScanCheckoutTab.kt): no tab row for a shop (HomeScreen.kt:609 !isRetail),
+   OwnerRegisterCard (:226-283: the 📒 Fiado row only while someone owes, 🏷 Sin código, Teclado) and the one big
+   "Agregar productos" button while the sale is empty (SmartScanButton -> ScanQrButton :430-455) ---------- */
+// KEYS: fiado_row_name,scan_no_barcode_btn,scan_row_manual,scan_btn_scan_barcodes
+// PLURALS: fiado_row_count
+const fiadoOwedNow = () => OWED_TOTAL;
+function home(o){ o=o||{};
+  const owes = o.owed!=null ? o.owed : fiadoOwedNow(), debtors = o.debtors!=null ? o.debtors : FIADO.length;
+  const row = (lead, txt, val, sub) => `<div class="mrow">${lead}<span class="tx">${esc(txt)}</span>${val?`<span class="vv"><b>${esc(val)}</b>${sub?`<small>${esc(sub)}</small>`:""}</span>`:""}${I.chev}</div>`;
+  return `${o.warn||""}<div class="scantab"><div class="orc">
+      ${owes>0 ? row(`<span class="emo">📒</span>`, S("fiado_row_name"), money(owes), PL("fiado_row_count", debtors)) : ""}
+      ${row(`<span class="emo">🏷</span>`, S("scan_no_barcode_btn"))}
+      ${row(`<span class="ico">${I.calc}</span>`, S("scan_row_manual"))}
+    </div><div class="grow"></div>
+    <div class="scanbtn">${esc(S("scan_btn_scan_barcodes"))}</div></div>` + nav("caja", {locked:o.locked});
+}
+/* the system biometric sheet that the flag tap opens (PlatataApp.kt flag gate -> showBiometricPrompt, settings_gate_*) */
+// KEYS: settings_gate_title,settings_gate_subtitle
+const bioSheet = (ok) => `<div class="mscrim"><div class="bio"><b>${esc(S("settings_gate_title"))}</b><small>${esc(S("settings_gate_subtitle"))}</small>
+  <span class="fpb${ok?" ok":""}" data-t="fingerprint">${ok?I.check:I.fp}</span></div></div>`;
+
+/* ---------- the business panel of a SHOP (HomeScreen.kt:1392-1830): register card, Vender en línea, "Día a día", Artículos,
+   Inventario (InventoryPanelRow.kt, 📦, StockHeadlineSubtitle under the title), Clientes (amber #FFF6E5 / #B07500 while someone owes:
+   home_clientes_owed), Facturas, Equipo, Reportes, divider, Configuración ---------- */
+// KEYS: workspace_register_open,workspace_register_sales,workspace_register_closed,workspace_register_closed_sub,workspace_register_open_action,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,workspace_items_title,more_my_products_count,scan_row_inventory,more_customers_title,invoices_title,invoices_row_this_month,more_team_title,workspace_full_reports,scan_row_reports_today,scan_row_reports_today_net,settings_title,panel_settings_row_sub
+// PLURALS: home_clientes_count,home_clientes_owed,home_clientes_none_owe,home_equipo_count_phones,home_equipo_on_phones,stock_headline_low,stock_headline_uncounted
+const PS = {
+  regOpen: S("workspace_register_open"), regSales: S("workspace_register_sales"),
+  sellOnline: S("sell_online_title"), off: S("sell_online_row_off"), offPill: S("sell_online_pill_off"),
+  everyDay: S("panel_heading_every_day"), items: S("workspace_items_title"),
+  itemsN: n => F("more_my_products_count", n), inventory: S("scan_row_inventory"),
+  clients: S("more_customers_title"),
+  invoices: S("invoices_title"), invMonth: n => F("invoices_row_this_month", n),
+  team: S("more_team_title"),
+  teamSub: (n,p) => PL("home_equipo_count_phones", n, n, PL("home_equipo_on_phones", p)),
+  reports: S("workspace_full_reports"), today: v => F((R.country==="US"||R.country==="CA")?"scan_row_reports_today":"scan_row_reports_today_net", v),
+  settings: S("settings_title"), settingsSub: S("panel_settings_row_sub")
+};
+/* StockHeadline.ofProducts over the shop's items: low = counted and at or under its level; not counted = never counted */
+const STOCK_LOW = ITEMS.filter(i => i.stock!=null && i.low!=null && i.stock <= i.low).length;
+const STOCK_UNCOUNTED = ITEMS.filter(i => i.stock==null).length;
+function panelRow(tag, icon, title, sub, o){ o=o||{};
+  return `<div class="rs-wr${o.cls?" "+o.cls:""}" data-t="${tag}"${o.style?` style="${o.style}"`:""}><span class="ic"${o.icStyle?` style="${o.icStyle}"`:""}>${icon}</span><div class="tx"><b>${esc(title)}</b>${o.subHtml!=null?`<small>${o.subHtml}</small>`:`<small${o.subStyle?` style="${o.subStyle}"`:""}>${esc(sub||"")}</small>`}</div>${o.trail||`<span class="ch">${I.chev}</span>`}</div>`;
+}
+/* p = {open, regTotal, today, owed, debtors, clients, invoices, team, phones, payDot, scroll} */
+function panel(p){ p=p||{};
+  const open = p.open!==false;
+  const owed = p.owed!=null ? p.owed : OWED_TOTAL, debtors = p.debtors!=null ? p.debtors : FIADO.length, clients = p.clients!=null ? p.clients : CLIENTS.length;
+  const reg = open
+    ? `<div class="rs-wr reg" data-t="reg-card" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(PS.regOpen)}</b><small style="color:rgba(46,125,50,.7)">${esc(PS.regSales)}</small></div><b class="amt">${money(p.regTotal||0)}</b></div>`
+    : `<div class="rs-wr reg" data-t="reg-card" style="background:#FFEBEE;color:#C62828"><span class="dot">●</span><div class="tx"><b>${esc(S("workspace_register_closed"))}</b><small style="color:rgba(198,40,40,.7)">${esc(S("workspace_register_closed_sub"))}</small></div><b class="act">${esc(S("workspace_register_open_action"))}</b></div>`;
+  const stockSub = (STOCK_LOW?`<span style="color:#FF3B30;font-weight:600">${esc(PL("stock_headline_low", STOCK_LOW))}</span>`:"")
+    + (STOCK_LOW&&STOCK_UNCOUNTED?" · ":"") + (STOCK_UNCOUNTED?esc(PL("stock_headline_uncounted", STOCK_UNCOUNTED)):"");
+  const cliRow = owed>0
+    ? panelRow("row-clients", I.person, PS.clients, PL("home_clientes_owed", debtors, debtors, money(owed)), {style:"background:#FFF6E5;color:#B07500", subStyle:"color:#B07500", icStyle:"color:#B07500"})
+    : panelRow("row-clients", I.person, PS.clients, PL("home_clientes_none_owe", clients, clients));
+  return `<div class="rs-panel"><div class="ph"><b>${esc(BIZ)}</b>${I.down}</div><div class="pl"><div class="pin" style="transform:translateY(calc(var(--u)*${-(p.scroll||0)}))">
+    ${reg}
+    ${panelRow("row-online", I.cart, PS.sellOnline, PS.off, {trail:`<span class="pill0">${esc(PS.offPill)}</span>`})}
+    <div class="eh">${esc(PS.everyDay)}</div>
+    ${panelRow("row-items", I.cart, PS.items, PS.itemsN(ITEMS.length))}
+    ${panelRow("row-inventory", `<span class="emo">📦</span>`, PS.inventory, "", {subHtml:stockSub})}
+    ${cliRow}
+    ${panelRow("row-invoices", I.rlong, PS.invoices, PS.invMonth(p.invoices!=null?p.invoices:C.suppliers.length))}
+    ${panelRow("row-team", `${I.group}${p.payDot?'<i class="pdot"></i>':""}`, PS.team, PS.teamSub(p.team!=null?p.team:1, p.phones||0))}
+    ${panelRow("row-reports", I.rlong, PS.reports, PS.today(money(p.today||0)))}
+    <hr>
+    ${panelRow("row-settings", I.gear, PS.settings, PS.settingsSub)}
+  </div></div></div>` + nav("biz", {flagTag:"flag"});
+}
+/* ---------- the Settings page (SettingsHubScreen.kt, SettingsHubRules: a shop has no dining row and no "Where you work") ---------- */
+// KEYS: settings_hub_group_getting_paid,settings_hub_group_your_business,settings_hub_payment_methods,settings_hub_taxes,settings_hub_discounts,settings_hub_receipts,settings_hub_receipts_sub,receipt_layout_detailed,settings_hub_receipts_num_auto,settings_hub_business_info,workspace_registers_and_printers
+function settingsHub(){
+  const g = (t) => `<div class="rs-hg">${esc(t)}</div>`;
+  const row = (tag, icon, t, s) => `<div class="rs-hr" data-t="${tag}"><span class="ic">${icon}</span><div class="tx"><b>${esc(t)}</b>${s?`<small>${esc(s)}</small>`:""}</div>${I.chev}</div>`;
+  return topbar(PS.settings) + `<div class="rs-scroll"><div class="rs-hub">
+    ${g(S("settings_hub_group_getting_paid"))}
+    ${row("hub-pay", I.card, S("settings_hub_payment_methods"))}
+    ${row("hub-taxes", I.pct, S("settings_hub_taxes"))}
+    ${row("hub-discounts", I.tag, S("settings_hub_discounts"))}
+    ${row("hub-receipts", I.receipt, S("settings_hub_receipts"), F("settings_hub_receipts_sub", S("receipt_layout_detailed"), S("settings_hub_receipts_num_auto")))}
+    ${g(S("settings_hub_group_your_business"))}
+    ${row("hub-info", I.store, S("settings_hub_business_info"))}
+    ${row("hub-devices", I.devices, S("workspace_registers_and_printers"))}
+  </div></div>` + strip();
+}
+
+const SHOP_CSS = `
+.mat .rs-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff;gap:calc(var(--u)*4)}
+.mat .rs-top .ib,.mat .rs-lh .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .rs-top>b{flex:1;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:calc(var(--u)*4)}
+.mat .rs-top>.tth{flex:1;min-width:0}
+.mat .rs-new{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
+.mat .rs-lh{padding:calc(var(--u)*8);flex:0 0 auto}
+.mat .rs-lh .r1{display:flex;align-items:center;height:calc(var(--u)*56)}
+.mat .rs-lh .r1 b{flex:1;font-size:calc(var(--u)*22);font-weight:700;padding-left:calc(var(--u)*4)}
+.mat .rs-lh .srch{margin:calc(var(--u)*4) calc(var(--u)*8) 0;height:calc(var(--u)*56);border:1px solid var(--m-outline);border-radius:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);color:var(--m-onv);font-size:calc(var(--u)*16)}
+.mat .rs-scroll{flex:1;min-height:0;overflow:hidden;position:relative}
+.mat .rs-scroll>.in{transition:transform .5s ease}
+.mat .rs-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .rs-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .rs-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .rs-strip .h>div{flex:1;min-width:0}
+.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .rs-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .rs-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
+.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .rs-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.mat .rs-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF;flex:0 0 auto}
+.mat .rs-panel .ph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-panel .ph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.mat .rs-panel .pl{flex:1;min-height:0;overflow:hidden}
+.mat .rs-panel .pin{display:flex;flex-direction:column;gap:calc(var(--u)*8);transition:transform .5s ease;padding-bottom:calc(var(--u)*16)}
+.mat .rs-panel hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0;flex:0 0 auto}
+.mat .rs-panel .eh{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);letter-spacing:.5px}
+.mat .rs-wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);color:var(--m-on);flex:0 0 auto}
+.mat .rs-wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);position:relative;flex:0 0 auto}
+.mat .rs-wr .ic .emo{font-size:calc(var(--u)*18);line-height:1}
+.mat .rs-wr .ic .pdot{position:absolute;right:calc(var(--u)*-2);top:calc(var(--u)*-2);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#FF6D00}
+.mat .rs-wr .tx{flex:1;min-width:0}
+.mat .rs-wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(var(--u)*16)}
+.mat .rs-wr .ch svg{fill:var(--m-onv)}
+.mat .rs-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
+.mat .rs-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .rs-wr .act{font-size:calc(var(--u)*14);font-weight:700}
+.mat .rs-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.mat .rs-hub{padding:0 calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .rs-hg{font-size:calc(var(--u)*12);font-weight:500;color:var(--m-onv);padding:calc(var(--u)*16) calc(var(--u)*8) 0;letter-spacing:.5px}
+.mat .rs-hr{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .rs-hr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .rs-hr .tx{flex:1;min-width:0}
+.mat .rs-hr .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700;line-height:calc(var(--u)*24)}
+.mat .rs-hr .tx small{display:block;font-size:calc(var(--u)*12);color:var(--m-onv);line-height:calc(var(--u)*16)}
+.mat .rs-hr>svg{fill:var(--m-onv)}
+.mat .rs-sw{display:inline-block;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #79747E;background:#E5E5EA;position:relative;flex:0 0 auto;box-sizing:border-box;transition:background .2s}
+.mat .rs-sw i{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E;transition:all .2s}
+.mat .rs-sw.on{background:var(--m-on);border-color:var(--m-on)}
+.mat .rs-sw.on i{left:calc(var(--u)*22);top:calc(var(--u)*2);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.mat .rs-snack{bottom:calc(var(--u)*12);gap:calc(var(--u)*12);justify-content:space-between;line-height:1.35;padding:calc(var(--u)*12) calc(var(--u)*16)}
+.mat .rs-snack b{color:#D0BCFF;font-weight:500;flex:0 0 auto}
+.mat .rs-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*90);background:#323232;color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:20;white-space:nowrap}
+.mat .rs-fld{position:relative;min-height:calc(var(--u)*56);border:1px solid #79747E;border-radius:calc(var(--u)*4);display:flex;align-items:center;padding:0 calc(var(--u)*16);gap:calc(var(--u)*12);font-size:calc(var(--u)*16);color:var(--m-on);flex:0 0 auto}
+.mat .rs-fld.foc{border:calc(var(--u)*2) solid var(--m-on)}
+.mat .rs-fld label{position:absolute;left:calc(var(--u)*16);top:50%;transform:translateY(-50%);color:var(--m-onv);font-size:calc(var(--u)*16);background:#fff;padding:0 calc(var(--u)*4);margin-left:calc(var(--u)*-4);transition:all .15s;white-space:nowrap}
+.mat .rs-fld .lead{color:var(--m-onv);display:flex}
+.mat .rs-fld .lead+label{left:calc(var(--u)*52)}
+.mat .rs-fld.up label{top:0;font-size:calc(var(--u)*12)}
+.mat .rs-fld.foc label{color:var(--m-on)}
+.mat .rs-fld .v{flex:1;min-width:0;white-space:nowrap;overflow:hidden}
+.mat .rs-fld .v em{font-style:normal;color:var(--m-onv)}
+.mat .caret{display:inline-block;width:2px;height:1.1em;background:var(--m-on);vertical-align:-.15em;margin-left:1px;animation:rsblink 1s steps(1) infinite}
+@keyframes rsblink{50%{opacity:0}}
+.mat .rs-btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);background:var(--m-on);color:#fff;display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600;flex:0 0 auto;padding:0 calc(var(--u)*16);text-align:center}
+.mat .rs-btn.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .rs-btn.off{background:#E5E5EA;color:#AEAEB2}
+.mat .rs-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:15;display:grid;place-items:center}
+.mat .rs-dlg{width:calc(var(--u)*312);background:#fff;border-radius:calc(var(--u)*28);padding:calc(var(--u)*24)}
+.mat .rs-dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:calc(var(--u)*32)}
+.mat .rs-dlg p{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .rs-dlg .acts{display:flex;justify-content:flex-end;margin-top:calc(var(--u)*24)}
+.mat .rs-dlg .acts span{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .rs-hl{animation:rshl 1.6s ease}
+@keyframes rshl{0%{background:#CBDFF8}100%{background:transparent}}
+.rs-time{position:absolute;inset:0;background:#F4EBDD;display:grid;place-items:center;z-index:16;text-align:center;font-family:Roboto,system-ui,sans-serif;color:#3A2A1F}
+.rs-time b{display:block;font:600 calc(var(--u)*30) Roboto,system-ui,sans-serif}
+.rs-time small{display:block;margin-top:calc(var(--u)*10);font:400 calc(var(--u)*17)/1.35 Roboto,system-ui,sans-serif;color:#6B5848;max-width:calc(var(--u)*320)}
+/* RS9-style cash pieces: page, keypad, SumaButton, the drawer cards */
+.mat .navd{display:flex;align-items:center}.mat .navd b{flex:1;text-align:center;font-size:calc(var(--u)*18);font-weight:700}
+.mat .navd span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}.mat .navd .dim{color:rgba(28,28,30,.25)}
+.mat .tba{padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);color:var(--m-on);white-space:nowrap}
+.mat .pg{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;position:relative}
+.mat .pb{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 calc(var(--u)*16)}
+.mat .pf{padding:calc(var(--u)*16);flex:0 0 auto}
+.mat .lbl{flex:0 0 auto;margin-top:calc(var(--u)*24);font-size:calc(var(--u)*16);color:var(--m-onv)}
+.mat .amt{flex:0 0 auto;margin-top:calc(var(--u)*8);font-size:calc(var(--u)*57);line-height:1.12;font-weight:700;white-space:nowrap;overflow:hidden}
+.mat .grow{flex:1}
+.mat .ck{display:flex;flex-direction:column;gap:calc(var(--u)*4);margin-bottom:calc(var(--u)*16)}
+.mat .ck .kr{display:flex;gap:calc(var(--u)*4);height:calc(var(--u)*var(--kh))}
+.mat .ck span{flex:1;border-radius:calc(var(--u)*12);background:var(--m-sv);display:grid;place-items:center;font-size:calc(var(--u)*32);font-weight:700}
+.mat .sb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center}
+.mat .sb.pill{border-radius:calc(var(--u)*50)}
+.mat .sb.pri{background:var(--m-on);color:#fff}
+.mat .sb.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .sb.dst{background:var(--m-err);color:#fff}
+.mat .sb.off.pri{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .sb.off.sec{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.mat .sb svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:currentColor}
+.mat .mnav .flagc .fp{display:grid;place-items:center;color:var(--m-onv)}
+.mat .mnav .flagc .fp svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+.mat .bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*32) calc(var(--u)*24) calc(var(--u)*40);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*8);text-align:center}
+.mat .bio b{font-size:calc(var(--u)*22);font-weight:500}.mat .bio small{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .bio .fpb{margin-top:calc(var(--u)*28);width:calc(var(--u)*64);height:calc(var(--u)*64);border-radius:50%;display:grid;place-items:center;color:#1A73E8;border:calc(var(--u)*2) solid #1A73E8}
+.mat .bio .fpb svg{width:calc(var(--u)*40);height:calc(var(--u)*40)}.mat .bio .fpb.ok{background:#1A73E8;color:#fff}
+.mat .pscroll{flex:1;min-height:0;overflow:hidden}
+.mat .rs{padding:0 calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16);transition:transform .5s ease}
+.mat .pillrow{display:flex;justify-content:center;padding-top:calc(var(--u)*8)}
+.mat .spill{border-radius:calc(var(--u)*50);background:#E8F5E9;color:#2E7D32;font-size:calc(var(--u)*12);font-weight:700;padding:calc(var(--u)*8) calc(var(--u)*16)}
+.mat .scard{background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.2),0 calc(var(--u)*1) calc(var(--u)*1) rgba(0,0,0,.08);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .lr{display:flex;justify-content:space-between;gap:calc(var(--u)*12);font-size:calc(var(--u)*14)}
+.mat .lr span:first-child{color:var(--m-onv)}.mat .lr span:last-child{text-align:right;white-space:nowrap}
+.mat .lr.em span{font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}.mat .lr.em span:last-child{font-size:calc(var(--u)*18)}
+.mat .lr .pri{color:var(--m-on)}.mat .lr.ms span{font-weight:600;color:var(--m-on)}
+.mat .lr.ind{padding-left:calc(var(--u)*16)}.mat .lr.ind span{color:var(--m-onv)!important}
+.mat .lr.flash span:last-child{animation:fl 1.2s ease}
+@keyframes fl{0%{background:#FFF3C4}100%{background:transparent}}
+.mat .scard hr{border:0;border-top:1px solid var(--m-ovar);margin:0}
+.mat .mv{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14)}
+.mat .mv span{flex:1;color:var(--m-on)}.mat .mv b{font-weight:600}.mat .mv b.out{color:var(--m-err)}.mat .mv b.in{color:var(--m-on)}
+.mat .mv i{font-style:normal;font-size:calc(var(--u)*12);color:var(--m-err);padding:0 calc(var(--u)*4)}
+.mat .mv.new{animation:fl 1.4s ease}
+.mat .hist{height:calc(var(--u)*40);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500}
+.mat .hist svg{width:calc(var(--u)*24);height:calc(var(--u)*24)}
+.mat .dlg-s{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*24)}
+.mat .dlg{background:#ECECF1;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24);width:100%}
+.mat .dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:1.3}
+.mat .dlg p{margin:0;font-size:calc(var(--u)*14);color:var(--m-onv);line-height:1.45}
+.mat .dlg .bt{display:flex;justify-content:flex-end;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:500}
+.mat .dlg .bt span{padding:calc(var(--u)*10) calc(var(--u)*12)}
+/* the shop Register tab: OwnerRegisterCard (surface r16, padding 24, rows r8 #F7F7FA 56 dp) + ScanQrButton (pill, primary, 16 dp) */
+.mat .scantab{flex:1;min-height:0;display:flex;flex-direction:column;padding:calc(var(--u)*16)}
+.mat .orc{background:#fff;border-radius:calc(var(--u)*16);padding:calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .mrow{min-height:calc(var(--u)*56);border-radius:calc(var(--u)*8);background:#F7F7FA;display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12)}
+.mat .mrow .emo{font-size:calc(var(--u)*16);width:calc(var(--u)*24);text-align:center}
+.mat .mrow .ico{color:var(--m-on)}
+.mat .mrow .tx{flex:1;min-width:0;font-size:calc(var(--u)*16);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .mrow .vv{display:flex;flex-direction:column;align-items:flex-end;max-width:calc(var(--u)*150)}
+.mat .mrow .vv b{font-size:calc(var(--u)*14);font-weight:600}.mat .mrow .vv small{font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .mrow>svg{fill:var(--m-onv)}
+.mat .scanbtn{border-radius:calc(var(--u)*50);background:var(--m-on);color:#fff;padding:calc(var(--u)*16);text-align:center;font-size:calc(var(--u)*16);font-weight:800}
+`;
+const shopStyle_ = document.createElement("style"); shopStyle_.textContent = SHOP_CSS; document.head.appendChild(shopStyle_);
+/* a scrolled list slides (transform .5s); once it stops, ask the engine to put the tap ring on the target again (it listens to resize) */
+document.addEventListener("transitionend", e => { if(e.propertyName==="transform") window.dispatchEvent(new Event("resize")); });
+
+/* ===== TS10 ===== */
+// TITLE: Platata · Cerrar la caja
+/* TS10 "Cerrar la caja" as a SHOP: the owner counts the drawer, confirms, gets the "Caja cerrada" summary with the two fiado lines
+   ("Abonos de fiado" and "En fiado (sin cobrar)") and sends it by WhatsApp. Every country, es/pt/en, ?type=pharmacy works.
+   Screens at the newest sim/usa-canada commit (paths under app/src/main/java/com/example/):
+   business panel       ui/screens/home/HomeScreen.kt:1522-1570 (register card -> Screen.RegisterStatus)
+   Register screen      ui/screens/cash/RegisterStatusScreen.kt:343-510 (drawer card with Abonos de fiado :361-366; the money card's
+                        "En fiado (sin cobrar)" under Total cobrado, :730-735; Cerrar caja = Secondary button at the bottom)
+   Close register       ui/screens/cash/CloseRegisterScreen.kt:375-556 (Expected card + one compact cash-out line + "Ver dinero por forma
+                        de pago", Contado, the Diferencia line, CashKeypad, Cerrar caja); typing rule MoneyKeypadEntry.kt. A shop never
+                        parks a ticket, so the open-tables warning (FIX-1 item 6) does not show.
+   confirm              CloseRegisterScreen.kt CloseRegisterConfirmDialog (register_close_confirm_title, Faltante/Sobrante/Cuadrado,
+                        TextButtons Seguir contando | Cerrar caja)
+   summary              ui/screens/cash/RegisterClosedScreen.kt:181-322 (variance headline; times card; REPORTS-11 lines: Ventas netas,
+                        Impuestos, En fiado (sin cobrar) "-$", Total cobrado, Por forma de pago without the Fiado row (ShiftSummary.kt :40);
+                        drawer card with Abonos de fiado; Enviar por WhatsApp; Listo pinned). No Print button without a receipt printer.
+   WhatsApp text        utils/ShiftSummaryText.kt build() (business name, CAJA CERRADA, 32 columns, thermalSafe) + WhatsappSignature.
+   The day: cash sales, one sale on Juan's tab, Ana paid part of her tab in cash, one cash-out to a supplier (TS9). */
+// KEYS: register_close_short,register_close_over,register_close_balanced
+
+const START = {CO:50000,CL:50000,AR:50000,MX:1000,PE:200,BR:200,EC:100,PA:100,US:100,CA:100}[R.country];
+const SALES = {CO:186000,CL:98000,AR:186000,MX:2450,PE:486,BR:486,EC:214.5,PA:214,US:214.5,CA:214.5}[R.country];   // cash sales
+const FIA = {CO:18500,MX:185,PE:55,CL:9500,EC:15,AR:9500,PA:15,BR:45,US:22.5,CA:26.5}[R.country];                    // one sale on the tab
+const ABONO = {CO:10000,MX:100,PE:30,CL:5000,EC:10,AR:5000,PA:10,BR:20,US:10,CA:12}[R.country];                      // tab paid in cash
+const OUT = {CO:20000,CL:20000,AR:5000,MX:500,PE:100,BR:80,EC:40,PA:40,US:40,CA:40}[R.country];
+const EXP = r2(START + SALES + ABONO - OUT);
+const COUNTED = EXP;                                   // he counts exactly what should be there: "Cuadrado"
+const DIFF = r2(COUNTED - EXP);
+const KEYS = keysFor(COUNTED);
+const OPENED = D(6,58), MOVED = D(15,10), CLOSED = D(21,5);
+/* SalesBreakdown of the shift: Net is the total without the tax inside the price (US/CA: the tax added on top) */
+const GROSS_SOLD = r2(SALES + FIA);
+const NET = TAX ? r2(GROSS_SOLD/(1+TAX.p/100)) : GROSS_SOLD;
+const TAXES = r2(GROSS_SOLD - NET);
+const varText = d => d<0 ? F("register_close_short", money(-d)) : d>0 ? F("register_close_over", money(d)) : S("register_close_balanced");
+const varCls = d => d<0 ? "neg" : d>0 ? "pos" : "bal";
+
+function registerScreen(o){
+  const tbar = topbar("", {html:`<div class="navd"><span class="dim">${I.chevL}</span><b>${esc(F("register_nav_today", shortDay(OPENED)))}</b><span class="dim">${I.chevR}</span></div>`,
+                 action:`<span class="tba">${esc(S("register_status_full_reports"))}</span>`});
+  const body = `<div class="rs" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+    <div class="pillrow"><span class="spill">${esc(S("register_status_pill_open"))}</span></div>
+    <div class="scard"><div class="lr"><span>${esc(S("register_status_opened_at"))}</span><span>${esc(fmtDT(OPENED))}</span></div>
+      <div class="lr"><span>${esc(S("register_status_opened_by"))}</span><span>${esc(OWNER)}</span></div></div>
+    <div class="scard"><div class="lr"><span>${esc(S("register_status_starting_cash"))}</span><span>${money(START)}</span></div>
+      <div class="lr"><span>${esc(S("register_status_cash_sales_here"))}</span><span>${money(SALES)}</span></div>
+      <div class="lr"><span>${esc(S("register_close_fiado_settled"))}</span><span>${money(ABONO)}</span></div>
+      <div class="mv"><span>${esc(S("cash_movement_out"))} · ${esc(S("cash_movement_reason_supplier"))} · ${esc(fmtTime(MOVED))}</span><b class="out">-${money(OUT)}</b><i>${esc(S("cash_movement_void"))}</i></div>
+      <hr><div class="lr em"><span>${esc(S("register_status_expected"))}</span><span class="pri">${money(EXP)}</span></div></div>
+    ${btn(S("cash_movement_out"),"sec")}${btn(S("cash_movement_in"),"sec")}
+    <div class="scard"><div class="lr ms"><span>${esc(S("register_status_cash_all"))}</span><span>${money(SALES)}</span></div>
+      <div class="lr ind"><span>${esc(OWNER)}</span><span>${money(SALES)}</span></div>
+      <hr><div class="lr em"><span>${esc(S("reports_total_collected"))}</span><span>${money(SALES)}</span></div>
+      <div class="lr"><span>${esc(S("reports_on_tab"))}</span><span>${money(FIA)}</span></div></div>
+    <div class="hist">${I.clock}<span>${esc(S("register_list_title"))}</span></div>
+    ${btn(S("register_status_close_btn"),"sec","close-reg")}<div style="height:calc(var(--u)*16)"></div></div>`;
+  return `<div class="pg">${tbar}<div class="pscroll">${body}</div></div>`;
+}
+function closeScreen(st){
+  const has = st.typed!=="", c = amountOf(st.typed), d = r2(c-EXP);
+  return `<div class="pg">${topbar(S("register_close_title"))}
+    <div class="pb"><div class="scard tight" style="margin-top:calc(var(--u)*8)"><div class="lr"><span>${esc(S("register_close_expected_label"))}</span><span>${money(EXP)}</span></div>
+      <div class="lr sm neg"><span>${esc(S("cash_movement_out"))}</span><span>-${money(OUT)}</span></div>
+      <div class="seeb">${esc(S("register_close_see_breakdown"))}</div></div>
+    <div class="lbl" style="margin-top:calc(var(--u)*16)">${esc(S("register_close_counted_label"))}</div>
+    <div class="amt" style="margin-top:0">${money(c)}</div>
+    <div class="diff">${has?`<span>${esc(S("register_close_diff_label"))}</span><b class="${varCls(d)}">${esc(varText(d))}</b>`:""}</div>
+    <div class="grow"></div>${keypad("k", 66)}</div>
+    <div class="pf">${btn(S("register_close_confirm"),"pri","close-confirm",{off:!has})}</div>
+    ${st.dlg?`<div class="dlg-s"><div class="dlg"><h3>${esc(F("register_close_confirm_title", money(c)))}</h3><p class="vt ${varCls(d)}">${esc(varText(d))}</p>
+      <div class="bt"><span>${esc(S("register_close_keep_counting"))}</span><span data-t="dlg-close">${esc(S("register_close_confirm"))}</span></div></div></div>`:""}</div>`;
+}
+function summary(st){
+  const lr = (l,v,c,tag) => `<div class="lr${c?" "+c:""}"${tag?` data-t="${tag}"`:""}><span>${esc(l)}</span><span>${esc(v)}</span></div>`;
+  return `<div class="pg">${topbar(S("register_closed_title"))}<div class="pscroll"><div class="rs" style="transform:translateY(calc(var(--u)*${-(st.scroll||0)}))">
+    <div class="vhead ${varCls(DIFF)}">${esc(varText(DIFF))}</div>
+    <div class="scard">${lr(S("register_status_opened_at"), fmtDT(OPENED))}${lr(S("register_status_closed_at"), fmtDT(CLOSED))}${lr(S("register_status_closed_by"), OWNER)}</div>
+    <div class="scard">${lr(S("register_status_net_sales"), money(NET),"k")}${TAXES>0?lr(S("reports_taxes"), "+"+money(TAXES),"k"):""}
+      ${lr(S("reports_on_tab"), "-"+money(FIA),"k hl","on-tab")}${lr(S("reports_total_collected"), money(SALES),"em k")}
+      <div class="sub">${esc(S("register_close_by_method"))}</div>${lr(S("payment_method_cash"), money(SALES),"k ind2")}</div>
+    <div class="scard">${lr(S("register_status_starting_cash"), money(START),"k")}${lr(S("register_status_cash_sales"), money(SALES),"k")}
+      ${lr(S("register_close_fiado_settled"), money(ABONO),"k hl","abonos")}${lr(S("cash_movement_out"), "-"+money(OUT),"k")}<hr>
+      ${lr(S("register_status_expected"), money(EXP),"em k")}${lr(S("register_status_counted"), money(COUNTED),"em k")}</div>
+    ${btn(S("register_closed_whatsapp"),"sec","wa")}<div style="height:calc(var(--u)*16)"></div></div></div>
+    <div class="pf">${btn(S("common_done"),"pri","done")}</div></div>`;
+}
+/* the text ShiftSummaryText.build() makes for this shift, signed (WhatsappSignature) */
+function shiftText(){
+  const W = 32, rule = "-".repeat(W), out = [];
+  const row = (l, r) => { const g = W - l.length - r.length; out.push(g>0 ? l+" ".repeat(g)+r : l+" "+r); };
+  out.push(BIZ); out.push(S("register_closed_title").toUpperCase()); out.push(rule);
+  row(S("register_status_opened_at"), fmtDT(OPENED)); row(S("register_status_closed_at"), fmtDT(CLOSED)); row(S("register_status_closed_by"), OWNER); out.push(rule);
+  row(S("register_status_net_sales"), money(NET)); if(TAXES>0) row(S("reports_taxes"), "+"+money(TAXES));
+  row(S("reports_on_tab"), "-"+money(FIA)); row(S("reports_total_collected"), money(SALES));
+  out.push(S("register_close_by_method")); row("  "+S("payment_method_cash"), money(SALES)); out.push(rule);
+  row(S("register_status_starting_cash"), money(START)); row(S("register_status_cash_sales"), money(SALES)); row(S("register_close_fiado_settled"), money(ABONO));
+  row(S("cash_movement_out"), "-"+money(OUT));
+  row(S("register_status_expected"), money(EXP)); row(S("register_status_counted"), money(COUNTED)); out.push(rule); out.push(varText(DIFF));
+  return out.join("\n").replace(/[   ]/g," ") + "\n\n" + S("whatsapp_signature");
+}
+const waScreen = () => `<div class="wa"><div class="wah">${I.back}<b>WhatsApp</b></div><div class="wab"><div class="wam">${esc(shiftText())}<i>${esc(fmtTime(D(21,6)))} ✓✓</i></div></div></div>`;
+function render(st){
+  if(st.screen==="panel") return panel({open:true, regTotal:SALES, today:NET, invoices:2, team:1, owed:OWED_TOTAL+FIA-ABONO});
+  if(st.screen==="reg") return registerScreen({scroll:st.scroll||0});
+  if(st.screen==="close") return closeScreen(st);
+  if(st.screen==="sum") return summary(st);
+  if(st.screen==="wa") return waScreen();
+  return "";
+}
+const cssTS10 = document.createElement("style"); cssTS10.textContent = `
+.mat .scard.tight{padding:calc(var(--u)*12);gap:calc(var(--u)*8)}
+.mat .lr.sm span{font-size:calc(var(--u)*12);font-weight:600}.mat .lr.neg span{color:var(--m-err)!important}
+.mat .seeb{font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .diff{flex:0 0 auto;height:calc(var(--u)*24);display:flex;justify-content:space-between;align-items:center;font-size:calc(var(--u)*14)}
+.mat .diff span{color:var(--m-onv)}.mat .diff b{font-weight:700}
+.mat .neg{color:var(--m-err)}.mat .pos{color:var(--m-on)}.mat .bal{color:#2E7D32}
+.mat .dlg{border-radius:calc(var(--u)*28)}.mat .dlg p.vt{font-size:calc(var(--u)*18);font-weight:700}.mat .dlg p.vt.neg{color:var(--m-err)}.mat .dlg p.vt.bal{color:#2E7D32}
+.mat .vhead{text-align:center;font-size:calc(var(--u)*28);font-weight:700;padding-top:calc(var(--u)*8)}
+.mat .lr.k span{color:var(--m-on)}.mat .lr.ind2{padding-left:calc(var(--u)*16)}
+.mat .lr.hl{animation:fl 2.4s ease}
+.mat .sub{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .wa{flex:1;display:flex;flex-direction:column;background:#EFEAE2;min-height:0}
+.mat .wah{height:calc(var(--u)*56);background:#008069;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*16);padding:0 calc(var(--u)*16);font-size:calc(var(--u)*19)}
+.mat .wah svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff}
+.mat .wab{flex:1;padding:calc(var(--u)*16);display:flex;flex-direction:column;justify-content:flex-end;min-height:0;overflow:hidden}
+.mat .wam{align-self:flex-end;max-width:94%;background:#D9FDD3;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font:calc(var(--u)*12)/1.35 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;color:#111B21;box-shadow:0 1px 1px rgba(0,0,0,.1)}
+.mat .wam i{display:block;text-align:right;font-style:normal;font-family:Roboto,system-ui,sans-serif;font-size:calc(var(--u)*11);color:#667781;margin-top:calc(var(--u)*2)}`; document.head.appendChild(cssTS10);
+
+SKIT.start(R, {
+  id:"TS10", tallVideo:true, clock:"21:05",
+  endText:pick({es:"Así cierras la caja con Platata.",pt:"Assim você fecha o caixa com o Platata.",en:"That's how you close the register with Platata."}),
+  beats:pick({
+    es:["Al cerrar la tienda, toca la caja abierta","Baja y toca Cerrar caja","Cuenta el efectivo y escribe cuánto hay","Toca Cerrar caja y confírmalo","El resumen: ventas, fiado y efectivo","Envíalo por WhatsApp","Así cierras la caja con Platata."],
+    pt:["Ao fechar a loja, toque no caixa aberto","Desça e toque em Fechar caixa","Conte o dinheiro e digite quanto tem","Toque em Fechar caixa e confirme","O resumo: vendas, fiado e dinheiro","Envie pelo WhatsApp","Assim você fecha o caixa com o Platata."],
+    en:["At closing time, tap the open register","Scroll down and tap Close register","Count the cash and type how much is there","Tap Close register and confirm","The summary: sales, tabs and cash","Send it by WhatsApp","That's how you close the register with Platata."]}),
+  state:{screen:"panel", scroll:0, typed:"", dlg:false},
+  render,
+  device: () => "phone",
+  who: st => st.screen==="wa" ? "WhatsApp" : pick({es:"Tu teléfono",pt:"Seu celular",en:"Your phone"}),
+  steps:[
+    {beat:0, hint:pick({es:"Toca Caja abierta",pt:"Toque em Caixa aberto",en:"Tap Register open"}), target:'[data-t="reg-card"]', tap(st,E){ st.screen="reg"; E.after(900,()=>{ st.scroll=330; }); }},
+    {beat:1, hint:pick({es:"Toca Cerrar caja",pt:"Toque em Fechar caixa",en:"Tap Close register"}), target:'[data-t="close-reg"]', tap(st){ st.screen="close"; st.scroll=0; }},
+    {beat:2, hint:pick({es:"Toca ",pt:"Toque em ",en:"Tap "})+(KEYS[0]==="z"?ZKEY:KEYS[0]), target:`[data-t="k-${KEYS[0]}"]`, tap(st,E){
+        st.typed=press(st.typed,KEYS[0]); KEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed=press(st.typed,k); })); }},
+    {beat:3, hint:pick({es:"Toca Cerrar caja",pt:"Toque em Fechar caixa",en:"Tap Close register"}), target:'[data-t="close-confirm"]', tap(st){ st.dlg=true; }},
+    {beat:3, hint:pick({es:"Confirma: Cerrar caja",pt:"Confirme: Fechar caixa",en:"Confirm: Close register"}), target:'[data-t="dlg-close"]', tap(st,E){ st.dlg=false; st.screen="sum"; E.after(4200,()=>{ st.scroll=130; }); }},
+    {beat:5, hint:pick({es:"Toca Enviar por WhatsApp",pt:"Toque em Enviar por WhatsApp",en:"Tap Send by WhatsApp"}), target:'[data-t="wa"]', tap(st){ st.screen="wa"; }}
+  ]
+});
+
+</script>
+</body>
+</html>

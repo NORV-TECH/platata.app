@@ -411,6 +411,8 @@ const SHOP_CSS = `
 .mat .scanbtn{border-radius:calc(var(--u)*50);background:var(--m-on);color:#fff;padding:calc(var(--u)*16);text-align:center;font-size:calc(var(--u)*16);font-weight:800}
 `;
 const shopStyle_ = document.createElement("style"); shopStyle_.textContent = SHOP_CSS; document.head.appendChild(shopStyle_);
+/* a scrolled list slides (transform .5s); once it stops, ask the engine to put the tap ring on the target again (it listens to resize) */
+document.addEventListener("transitionend", e => { if(e.propertyName==="transform") window.dispatchEvent(new Event("resize")); });
 
 /* ===== TS9 ===== */
 // TITLE: Platata · Meter y sacar efectivo
