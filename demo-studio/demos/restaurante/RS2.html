@@ -271,7 +271,7 @@ const KEYS = keysFor(START);
 const DISH = item(C.order[1]);
 function render(st){
   if(st.screen==="open") return openRegister(st.typed, 72);
-  return home({tab:1, top: st.isOpen ? "" : closedBar(), count:st.count, total:st.count*DISH.price});
+  return home({tab:1, top: st.isOpen ? "" : closedBar(), count:st.count, total:st.count*DISH.price, locked:true});
 }
 RKIT.start(R, {
   id:"RS2", tallVideo:true, clock:"8:58",

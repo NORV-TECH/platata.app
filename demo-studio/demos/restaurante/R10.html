@@ -67,22 +67,13 @@
 .p0wo div{flex:1}.p0wo b{display:block;font-size:calc(var(--u)*16);font-weight:600}.p0wo small{display:block;font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
 .p0toast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*72);background:#3C3C3E;color:#fff;font-size:calc(var(--u)*14);padding:calc(var(--u)*10) calc(var(--u)*16);border-radius:calc(var(--u)*20);white-space:nowrap;z-index:5}
 /* owner Home, restaurant: Material TabRow Teclado | Catálogo, chips + grid (material.css), CurrentSaleStrip, FooterButtonPair, NavigationBar */
-.p0tabs{display:flex;flex:0 0 auto;border-bottom:1px solid #E5E5EA}
-.p0tabs span{flex:1;height:calc(var(--u)*48);display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:500;position:relative}
-.p0tabs span.on::after{content:"";position:absolute;left:calc(var(--u)*24);right:calc(var(--u)*24);bottom:-1px;height:calc(var(--u)*3);border-radius:calc(var(--u)*3) calc(var(--u)*3) 0 0;background:#1C1C1E}
+.p0pg .mnav .pill svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
 .p0strip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:600;flex:0 0 auto}
 .p0strip i{font-style:normal;font-size:calc(var(--u)*18);color:#6E6E73;font-weight:400}
 .p0pair{display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16);flex:0 0 auto}
 .p0pair span{flex:1;min-height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600;text-align:center;padding:0 calc(var(--u)*12)}
 .p0pair .l{border:1px solid #C7C7CC}.p0pair .l.off{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
 .p0pair .r{background:#1C1C1E;color:#fff}.p0pair .r.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
-.p0nav{height:calc(var(--u)*80);display:flex;flex:0 0 auto}
-.p0nav>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:500;color:#6E6E73}
-.p0nav .pill{width:calc(var(--u)*64);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);display:grid;place-items:center}
-.p0nav .on{color:#1C1C1E}.p0nav .on .pill{background:#E5E5EA}
-.p0nav svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
-.p0nav .fl{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:#F2F2F7;display:grid;place-items:center}
-.p0nav .fl svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
 /* Sale complete: ReceiptOptionsScreen.kt SaleCompleteContent (phone taller than 700 dp: potato 132 dp) */
 .p0rec{flex:1;display:flex;flex-direction:column;background:#fff;min-height:0}
 .p0rec .hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 calc(var(--u)*20);text-align:center}
@@ -302,7 +293,7 @@ function addFlow(st){
       <div class="p0btn sec">${esc(L.openDrawer)}</div>`);
 }
 function nav(){
-  return `<div class="p0nav"><div class="on"><span class="pill">${I.cart}</span>${esc(L.nav[0])}</div><div><span class="pill">${I.rcpt}</span>${esc(L.nav[1])}</div><div><span class="fl">${R.flag()}</span>${esc(L.nav[2])}</div></div>`;
+  return `<div class="mnav"><div class="on"><span class="pill">${I.cart}</span>${esc(L.nav[0])}</div><div><span class="pill">${I.rcpt}</span>${esc(L.nav[1])}</div><div><span class="flagc">${R.flag()}</span>${esc(L.nav[2])}</div></div>`;
 }
 function sell(st){
   const cats = `<div class="mcats">` + [{name:L.all,color:ALL_C,all:true}].concat(C.catsByName).map(c=>{
@@ -311,7 +302,7 @@ function sell(st){
   const grid = `<div class="mgrid">` + C.itemsByName.map(it=>{ const c=colorOf(it);
     return `<div class="mtile" data-t="dish-${it.id}" style="border-color:${hexA(c,.35)}"><div class="in" style="background:${hexA(c,.12)}"><b>${esc(it.name)}</b><span>${R.money(it.price)}</span></div></div>`; }).join("") + `</div>`;
   const n = st.lines.length, tot = st.lines.reduce((s,p)=>s+p.price,0);
-  return `<div class="p0pg"><div class="p0tabs"><span>${esc(L.tabs[0])}</span><span class="on">${esc(L.tabs[1])}</span></div>${cats}${grid}
+  return `<div class="p0pg"><div class="mtabs"><span>${esc(L.tabs[0])}</span><span class="on">${esc(L.tabs[1])}</span></div>${cats}${grid}
     ${n?`<div class="p0strip">${esc(L.cur(n))}<i>›</i></div>`:""}
     <div class="p0pair"><span class="l${n?"":" off"}">${esc(L.send)}</span><span class="r${n?"":" off"}" data-t="charge">${esc(L.charge(R.money(tot)))}</span></div>${nav()}</div>`;
 }
@@ -354,11 +345,11 @@ function render(st){
 
 RKIT.start(R, {
   id:"R10", tallVideo:true, clock:"12:41",
-  endText:R.pick({es:"Así imprimes recibos y comandas con Platata.", pt:"Assim você imprime recibos e comandas com o Platata.", en:"That's how you print receipts and kitchen tickets with Platata."}),
+  endText:R.pick({es:"Así imprimes recibos y comandas con Platata.", pt:"Assim você imprime recibos e comandas com o Platata.", en:"That's how you print tickets and receipts with Platata."}),
   beats:R.pick({
     es:["En Impresoras, toca Agregar impresora","Elige Bluetooth y toca tu impresora","Marca recibos y comandas: sale una hoja de prueba","¿Salió? Guarda la impresora","Ahora una venta: toca los platos","Toca Cobrar y elige la mesa","Cobra con Exacto","Sale el recibo y la comanda para la cocina","Así imprimes recibos y comandas con Platata"],
     pt:["Em Impressoras, toque em Adicionar impressora","Escolha Bluetooth e toque na sua impressora","Marque recibos e comandas: sai uma página de teste","Saiu? Salve a impressora","Agora uma venda: toque nos pratos","Toque em Cobrar e escolha a mesa","Cobre com Exato","Sai o recibo e a comanda para a cozinha","Assim você imprime recibos e comandas com o Platata"],
-    en:["In Printers, tap Add printer","Pick Bluetooth and tap your printer","Tick receipts and kitchen orders: a test page prints","Did it print? Save the printer","Now a sale: tap the dishes","Tap Charge and pick the table","Charge with Exact","Out come the receipt and the kitchen ticket","That's how you print receipts and kitchen tickets with Platata"]}),
+    en:["In Printers, tap Add printer","Pick Bluetooth and tap your printer","Tick receipts and kitchen orders: a test page prints","Did it print? Save the printer","Now a sale: tap the dishes","Tap Charge and pick the table","Charge with Exact","Out come the receipt and the kitchen ticket","That's how you print tickets and receipts with Platata"]}),
   state:{screen:"printers", paper:null, saved:false, toast:false, step:1, kit:false, sending:false, lines:[]},
   render,
   device: () => "phone",

@@ -329,7 +329,7 @@ function refundScreen(st){
   return h + `</div>`;
 }
 function render(st){
-  if(st.screen==="home") return home({tab:1});
+  if(st.screen==="home") return home({tab:1, locked:true});
   if(st.screen==="list") return list();
   if(st.screen==="detail") return detail(st);
   if(st.screen==="refund") return refundScreen(st);

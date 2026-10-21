@@ -374,7 +374,7 @@ function landing(){
   const gate = `<div class="hedit"><span>${I.edit}${esc(t("common_edit"))}</span></div><div class="mcats"><span style="background:${hexA(ALL_C,.22)};border:calc(var(--u)*1.5) solid ${ALL_C};color:${ALL_C}">${I.check}${esc(t("items_filter_all"))}</span></div>
     <div class="gate">${I.rest}<b>${esc(t("menu_onboarding_title"))}</b><p>${esc(t("menu_onboarding_body"))}</p>
     ${btn(t("menu_add_chooser_photo_title"),"pri","photo")}${btn(t("menu_add_chooser_files_title"),"sec","")}</div>`;
-  return home({tab:1, warn, body:gate});
+  return home({tab:1, warn, body:gate, locked:true});
 }
 function render(st){
   return ({welcome, country, type:typePage, name:namePage, google, setup:settingUp, ready, landing})[st.screen](st);
