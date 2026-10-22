@@ -47,7 +47,7 @@
 .mat .stile .ibx svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
 .mat .stile b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:500;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;letter-spacing:.15px}
 .mat .stile .pr{display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--u)*8);margin-top:calc(var(--u)*0)}
-.mat .stile .pr span{font-weight:700;white-space:nowrap;overflow:hidden;line-height:1.3}
+.mat .stile .pr span{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.3;min-width:0}
 .mat .stile .pr i{font-style:normal;font-size:calc(var(--u)*12);color:#6E6E73;white-space:nowrap;line-height:1.3}
 .mat .hfoot{flex:0 0 auto;background:#fff;padding:calc(var(--u)*12) calc(var(--u)*16)}
 .mat .klink{display:flex}.mat .klink span{height:calc(var(--u)*40);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:#1C1C1E}
@@ -372,13 +372,17 @@ function scrolled(html, sel, o={}){
    AGENDAR "Agendar" / CREAR_ORDEN "Crear orden") | filled pill "Cobrar $X"; both dim while the sale is $0. */
 const CAT_COLOR = "#81C784";   /* getCategoryBaseColor (HomeScreen.kt:2005-2009) = CategoryChipPalette[id % 10]; the trade category's id is assumed 2 */
 const actionWord = () => t(V.isOrder ? "services_action_crear_orden" : "services_action_agendar");
-function fitPx(text, availDp, base, min){ let s = base; while(s > min && text.length * s * 0.56 > availDp) s -= 0.5; return s; }
+/* ShrinkToFitText (ui/components/ShrinkToFitText.kt:23-45): 16 sp, one step down per overflow, never under 12 sp, then an
+   ellipsis. The price shares the tile's inner width (121 dp tile − 1.5 dp borders − 2×12 dp padding ≈ 94 dp) with 8 dp and the minutes. */
+const MEASURE = document.createElement("canvas").getContext("2d");
+const textW = (txt, px, w) => { MEASURE.font = `${w} ${px}px Roboto, system-ui, sans-serif`; return MEASURE.measureText(txt).width; };
 function tile(s){
   const price = s.mode==="from" ? t("items_price_from", money(s.price)) : s.mode==="ask" ? t("bridge_mode_ask") : money(s.price);
   const mins = durOf(s) ? `${durOf(s)} ${t("opt_min")}` : "";
-  const fs = fitPx(price, 98 - (mins ? 38 : 0), 16, 11);
+  const avail = 94 - (mins ? 8 + textW(mins, 12, 400) : 0);
+  let fs = 16; while(fs > 12 && textW(price, fs, 700) > avail) fs -= 1;
   return `<div class="stile" data-t="svc-${s.id}"><span class="ibx" style="background:${TRADE_TILE.bg}">${TRADE_TILE.ic}</span>
-    <b>${esc(s.name)}</b><div class="pr"><span style="font-size:calc(var(--u)*${fs})">${esc(price)}</span>${mins?`<i>${esc(mins)}</i>`:""}</div></div>`;
+    <b>${esc(s.name)}</b><div class="pr"><span style="font-size:calc(var(--u)*${fs});max-width:calc(var(--u)*${avail.toFixed(1)})">${esc(price)}</span>${mins?`<i>${esc(mins)}</i>`:""}</div></div>`;
 }
 function till(o){
   o = o||{};

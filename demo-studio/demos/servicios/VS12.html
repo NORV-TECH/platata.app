@@ -683,11 +683,11 @@ const pxToDp = px => px * 412 / document.getElementById("screen").clientWidth;
 const offsetDp = tag => { const el = document.querySelector(`[data-t="${tag}"]`); return el ? pxToDp(el.closest(".ac-row") ? el.closest(".ac-row").offsetTop : el.offsetTop) : 0; };
 VKIT.start(V, {
   id:"VS12", tallVideo:true, clock:"12:41",
-  endText:pick({es:"Así le mandas el mes a tu contador con Platata.", pt:"Assim você manda o mês para o seu contador com o Platata.", en:"That's how you send the month to your accountant with Platata."}),
+  endText:pick({es:"Así le mandas el mes a tu contador con Platata.", pt:"Assim você manda o mês para o seu contador com o Platata.", en:"That's how your accountant gets the month, with Platata."}),
   beats:pick({
     es:["¿Tu contador pide los números? Toca Mes pasado","Toca Resumen para el contador","Las ventas del mes: en efectivo y con tarjeta","Y lo pagado a proveedores y empleados; todo se copia","Toca Enviar resumen al contador","Se abre WhatsApp con todo el texto: envíalo","Así le mandas el mes a tu contador con Platata."],
     pt:["O contador pediu os números? Toque em Mês passado","Toque em Resumo para o contador","As vendas do mês: em dinheiro e eletrônicas","E o pago a fornecedores e funcionários; tudo se copia","Toque em Enviar resumo ao contador","O WhatsApp abre com o texto todo: envie","Assim você manda o mês para o seu contador com o Platata."],
-    en:["Your accountant wants the numbers? Tap Last month","Tap Summary for the accountant","The month's sales: in cash and by card","And what you paid suppliers and staff; it all copies","Tap Send summary to the accountant","WhatsApp opens with the whole text: send it","That's how you send the month to your accountant with Platata."]}),
+    en:["Your accountant wants the numbers? Tap Last month","Tap Summary for the accountant","The month's sales: in cash and by card","And what you paid suppliers and staff; it all copies","Tap Send summary to the accountant","WhatsApp opens with the whole text: send it","That's how your accountant gets the month, with Platata."]}),
   state:{screen:"reports", range:"today", sel:null, scroll:0, chipX:(L==="en"?175:145), toast:false, sent:false, hl:false},
   render,
   device: () => "phone",
