@@ -1,0 +1,30 @@
+# Brief for every SERVICES research helper (read this first)
+
+You research ONE group of Platata features against the REAL app code, for marketing demos + narrated videos (later). Same job as the restaurant and retail research. Examples of the finished result: /home/claude/research/restaurant/R4.md, /home/claude/research/restaurant/S3.md, /home/claude/research/retail/T8.md, /home/claude/research/retail/S1.md (read one or two to see the depth wanted). Where a shared feature (S-number) was already researched for restaurant/retail, READ that file first (/home/claude/research/restaurant/<ID>.md and /home/claude/research/retail/<ID>.md) and write only what is DIFFERENT for services, plus anything that changed in the code since.
+
+App source (READ ONLY — never edit, create or delete anything there; no git commands that change it): /home/claude/app-head (branch sim/usa-canada). Put the commit you read at the top of every file (`git -C /home/claude/app-head log -1 --format=%h`).
+Read /home/claude/app-head/CLAUDE.md first (map of invariants; long — read the parts relevant to your features; search for "services", "SERVICES", "CU-", "booking", "appointment", "trade", "where", "E-26", "E-27", "S9", "ServicesRules").
+Code: app/src/main/java/com/example/... (package tata.fijando.su.plata). Business rules per type: data/business/BusinessRules.kt + ServicesRules (never assume: ask the rules). Strings: app/src/main/res/values (en), values-es, values-pt-rBR.
+Key folders: ui/screens/tradepicker (41 trades), ui/screens/guide (setup walk: pick services, prices, bridge, done), ui/screens/services (BookingScreen, WhenPicker, ServiceEditScreen), ui/screens/transactions (ServicesTransactionsScreen, AppointmentDetailScreen, AppointmentReschedule), ui/screens/where (at the shop / at their place / pickup), ui/screens/items (ServicesMenuScreen "Mis servicios"), assets/catalogo_investigado/<trade>.json (the researched services per trade).
+Screenshots (some stale): app/src/test/screenshots/ — open PNGs with the Read tool; say how current one is vs the code.
+
+Business: SERVICES ("Servicios" / "Serviços" / "Services"): 41 trades in five groups (beauty, pets, vehicles, repairs, home). Countries: CO MX PE CL EC AR PA (Spanish), BR (Portuguese), US (English, also Spanish), CA (English). French is dropped.
+Known per-country facts to VERIFY, not assume: money format (utils/CurrencyUtils.kt), card only CO (Wompi) and US/CA (Stripe) — Mexico Stripe is being added right now (treat MX as "card coming", note what the code shows today), Pix QR with amount only BR, tips only US/CA (Stripe; check tipDefaultOn for services), cash rounding in some countries, US/CA pay nothing for connections, sales tax words in US/CA. Services has NO fiado (check). Research prices ship only for Colombia? (check price_co vs other countries in the catalogue and what the setup does abroad — CLAUDE.md CU-R08: outside Colombia the price step starts as a list).
+Devices (app's own words): owner's phone; counter tablet (MamaPos, landscape, light); employee phone (Mini POS). Check which of these a services business really uses and what each shows for services.
+
+THE FOUR DEMO EXAMPLE BUSINESSES (use them in your demo paths, pick the best fit per feature): Peluquería (hair salon, trade "peluqueria"), Veterinaria (vet, "veterinaria"), Taller de motos (motorbike workshop, "taller-motos"), Uñas (nail salon, one-person, "unas"). For each feature say which of the four shows it best, and what in that trade's catalogue the demo would use (real service names and options from assets/catalogo_investigado/<trade>.json). No real brands on screen.
+
+Already decided by Monti (don't flag): points/loyalty not in the app (no demo); combo name on the stored receipt after launch; PIN in the WhatsApp invite by design; cash in/out on the owner phone only; per-register offline sign after launch; prettier accountant PDF after launch; printers live on the owner phone. Bill payments: dropped. Never drop a feature because you think it's missing: write "I don't see this in the code" and what you searched.
+Already flagged to the coder (don't repeat, but DO say if it also hits services and still is not fixed): /home/claude/research/restaurant/_FLAGS-ALREADY-SENT.md, /home/claude/research/restaurant/ROUND3-doc.md, /home/claude/research/retail/CODER-PROMPTS-RETAIL-20oct.md, /home/claude/research/retail/PENDING-CODER-ITEMS.md.
+Being fixed right now (assume fixed, don't flag): shops and salons with a back-room screen keep the send button (only the word changes); tablet toast "Enviado a cocina: Pedido"; staff without the fiado permission see a dim "Fiar".
+
+OUTPUT: for EACH feature in your group write /home/claude/research/services/<ID>.md (only write inside /home/claude/research/services/), with:
+1. What it does (1-2 plain lines) and WHO uses it on WHICH device(s). Differences between trades (beauty vs pets vs vehicles vs repairs) where the code has any.
+2. Setup needed before the demo (what the owner must have switched on / created; factory defaults from seeds).
+3. Country differences (per country or "same everywhere"), incl. money format examples.
+4. The screens in order, each with: file:line, layout top-to-bottom, exact strings es / pt / en, colors (hex from tokens), key sizes, theme (Material light vs paper). Enough detail to redraw it in HTML faithfully.
+5. A demo path of at most ~10 taps that shows the feature end to end (what is tapped, what appears), using one of the four example businesses. If the feature spans devices, show the hand-off.
+6. UX/UI problems found (confusing words, missing feedback, dead ends, broken layout, wrong behaviour, wrong money), each with file:line and one-line suggested fix. Only real ones, verified in code. Say "possible" when unsure.
+7. Open questions for Monti (only if the code truly can't answer).
+Plain short English. Exact strings quoted. No guessing: write "not found in code" when the code doesn't say.
+Finally reply with ONLY: the list of files you wrote + the UX problems (one line each, marked "BLOCKS A DEMO" or "small"). Under 400 words.

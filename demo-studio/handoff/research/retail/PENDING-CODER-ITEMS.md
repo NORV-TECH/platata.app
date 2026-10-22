@@ -1,0 +1,21 @@
+# Retail items found while building the demos (to add to the coder doc after MERGE-12 is checked)
+- Settle with "Todo": "Salda 2 fiados completos. Le quedan debiendo $ 0." — say the client is fully paid when nothing is left (FiadoMoneyScreens.kt:293).
+- A staff PIN session on the owner's phone sees every balance and can Settle/Forgive: CustomerCrmScreen.kt:119 checks the device role, not ReportsAudience.isOwnerView; CustomerFiadoActions.kt:87-95 has no check.
+- Clientes total and each client's amount use the global CurrencyConfig (CustomerCrmScreen.kt:303, 658) — same bug class PHONEFIX-1 fixed on the register card.
+- Brazil and Argentina WhatsApp numbers grouped wrongly on the client page: "+55 119 123 456 78" (WhatsappUtils.kt:132-153).
+- A cash payment on a tab taken while the register is closed lands in no drawer, with no warning (CustomerFiadoActions.kt:87-89).
+- The client's purchase list doesn't mark which sales went on the tab (CustomerPage.kt:212).
+- The WhatsApp reminder greets with the full name; other fiado screens use the first name (CustomerPage.kt:92).
+- (Product) Nothing records when a reminder was last sent.
+- Camera "Cobrar" badge counts lines while the pay screen counts units (2 vs 3): ScannerScreen.kt:65 uses cart.size; use sumOf { it.quantity }.
+- Scan form and "Sin código" price fields show a raw "7.90" with a dot in comma countries (ScannerScreen.kt:443, BarlessShelfScreen.kt:521): MoneyVisualTransformation.
+- Tablet "Catálogo" chips list all 24 seeded categories, most empty (ProductLibraryView.kt:206, fed by MamaPosScreen.kt:1095): pass only categories with a product.
+- Counter tablet code page says "Conecta este celular y la tablet al mismo WiFi", but a counter tablet pairs over the internet (CounterRegisterSyncInfoScreen.kt:85-88).
+- Sell online page lists all 24 shop categories, ~20 of them "0 de 0 en línea", pushing "Fuera de tu tienda online" far down (OnlineStoreSellable.kt:100-111): list only categories with products.
+- Deleting a customer the shop OWES money to: confirm + fingerprint, the form closes, but the delete is silently refused (CustomerCrmScreen.kt:1035, CustomerFiadoActions.kt:227-233, FiadoStore.kt:182-185). Say why.
+- English blocked-delete message says "in fiado" and "this customer" (values/strings.xml:1005).
+- A shop's Businesses list says "Copia este menú" / "su propio menú y equipo" (ContextSwitcher.kt:355, 387): "productos" for shops.
+- The no-barcode catalogue's pt-BR file has Spanish names ("tomate riñón", "tomate chonto"), and the English file has Colombian varieties (catalog_pt-br.db, catalog_en.db). Brazil and the US see them in Sin código search.
+- The icon backfill fails on plural names ("Tomatoes" gets no drawing).
+- MONEY DISPLAY: Reports "Cómo te pagaron" lists Fiado as a way you got paid; its rows add up to $184.650 while "Total cobrado" is $145.850 (fiado is not money collected). Leave Fiado out of "How you got paid" (it has its own "En fiado (sin cobrar)" line), so the rows add up to Total collected.
+- English and Portuguese owner chooser says "A register" / "Um caixa", but the tablet calls itself "Counter tablet" / "Tablet do balcão". One name.
