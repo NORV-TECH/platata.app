@@ -7,7 +7,8 @@
   servicios") → landing on the trade picker (same picker as V1). 8 beats, one VS1.json (no MX word difference). App 73c65f0.
 
 ## 2. Left out
-- The real Google account sheet (shown as a plain sign-in step, no person). US/CA videos (on hold).
+- Android's Google account chooser (GoogleAuthScreen → straight to setting up). No barcode list step: services skip it
+  (OnboardingNavGraph.kt:233-272). US/CA videos (on hold).
 
 ## 3. New UX/UI problems (73c65f08)
 - None new on these screens.
