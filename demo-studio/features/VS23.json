@@ -3,30 +3,64 @@
   "name": "Huella antes de borrar",
   "business": "servicios",
   "voice_settings": {
-    "es": {"stability": 0.5, "similarity_boost": 0.75},
-    "pt": {"stability": 0.5, "similarity_boost": 0.75}
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
   },
   "steps": [
-    {"id": "1-editar", "voice": {
-      "es": "Nadie borra nada sin tu huella. Para borrar un servicio, toca Editar y elígelo.",
-      "pt": "Ninguém apaga nada sem a sua digital. Para excluir um serviço, toque em Editar e escolha o serviço."}},
-    {"id": "2-eliminar", "voice": {
-      "es": "Abajo, toca Eliminar servicio y confirma.",
-      "pt": "Embaixo, toque em Excluir serviço e confirme."}},
-    {"id": "3-huella", "voice": {
-      "es": "Platata pide tu huella o el bloqueo del teléfono antes de borrarlo.",
-      "pt": "O Platata pede a sua digital ou o bloqueio do celular antes de excluir."}},
-    {"id": "4-negocio", "voice": {
-      "es": "Tu negocio también se abre con tu huella.",
-      "pt": "Seu negócio também abre com a sua digital."}},
-    {"id": "5-seguridad", "voice": {
-      "es": "En Configuración, toca Seguridad.",
-      "pt": "Em Configurações, toque em Segurança."}},
-    {"id": "6-acciones", "voice": {
-      "es": "Borrar datos, clientes o empleados pide tu huella. Quitar un cargo al cobrar, si lo activas.",
-      "pt": "Excluir dados, clientes ou funcionários pede a sua digital. Remover uma taxa ao cobrar, se você ativar."}},
-    {"id": "7-fin", "voice": {
-      "es": "Así proteges tu negocio con Platata.",
-      "pt": "Assim você protege seu negócio com o Platata."}}
+    {
+      "id": "1-editar",
+      "voice": {
+        "es": "Borrar un servicio pide tu huella. Toca Editar y elígelo.",
+        "pt": "Excluir um serviço pede a sua digital. Toque em Editar e escolha o serviço."
+      }
+    },
+    {
+      "id": "2-eliminar",
+      "voice": {
+        "es": "Abajo, toca Eliminar servicio y confirma.",
+        "pt": "Embaixo, toque em Excluir serviço e confirme."
+      }
+    },
+    {
+      "id": "3-huella",
+      "voice": {
+        "es": "Platata pide tu huella o el bloqueo del teléfono antes de borrarlo.",
+        "pt": "O Platata pede a sua digital ou o bloqueio do celular antes de excluir."
+      }
+    },
+    {
+      "id": "4-negocio",
+      "voice": {
+        "es": "Tu negocio también se abre con tu huella.",
+        "pt": "Seu negócio também abre com a sua digital."
+      }
+    },
+    {
+      "id": "5-seguridad",
+      "voice": {
+        "es": "En Configuración, toca Seguridad.",
+        "pt": "Em Configurações, toque em Segurança."
+      }
+    },
+    {
+      "id": "6-acciones",
+      "voice": {
+        "es": "Aquí eliges qué pide tu huella: eliminar datos, empleados o clientes, y quitar cargos al cobrar.",
+        "pt": "Aqui você escolhe o que pede a sua digital: excluir dados, funcionários ou clientes, e remover taxas ao cobrar."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así proteges tu negocio con Platata.",
+        "pt": "Assim você protege seu negócio com o Platata."
+      }
+    }
   ]
 }

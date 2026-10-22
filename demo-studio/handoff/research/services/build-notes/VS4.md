@@ -26,3 +26,6 @@
 ## 4. The 52 items checked here
 - 42 (English QR note "hand over the order"): fixed — en now "before you complete the sale".
 - FiadoScope: no Fiado row for services — confirmed (data/FiadoScope.kt:12).
+
+## 5. After REVIEW-VS4-7
+- "Pagó · Sin foto" now waits 4.5 s into beat 5, so the line is heard over the QR screen.

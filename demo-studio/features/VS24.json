@@ -3,33 +3,71 @@
   "name": "Varios negocios y sucursales",
   "business": "servicios",
   "voice_settings": {
-    "es": {"stability": 0.5, "similarity_boost": 0.75},
-    "pt": {"stability": 0.5, "similarity_boost": 0.75}
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
   },
   "steps": [
-    {"id": "1-negocios", "voice": {
-      "es": "¿Tienes más de un negocio? Toca el nombre y ves todos tus negocios y sucursales.",
-      "pt": "Tem mais de um negócio? Toque no nome e veja todos os seus negócios e filiais."}},
-    {"id": "2-sucursal", "voice": {
-      "es": "Toca Nueva sucursal: copia tus servicios y sus precios.",
-      "pt": "Toque em Nova filial: ela copia seus serviços e preços."}},
-    {"id": "3-nombre", "voice": {
-      "es": "Ponle nombre a la sucursal.",
-      "pt": "Dê um nome à filial."}},
-    {"id": "4-clientes", "voice": {
-      "es": "Si quieres, llevas tus clientes. Las ventas y las citas no se pasan: cada sucursal empieza las suyas.",
-      "pt": "Se quiser, leve seus clientes. Vendas e agendamentos não são levados: cada filial começa os seus."}},
-    {"id": "5-crear", "voice": {
-      "es": "Toca Crear sucursal. Llega con tus servicios y con la caja cerrada.",
-      "pt": "Toque em Criar filial. Ela chega com seus serviços e com o caixa fechado."}},
-    {"id": "6-otro", "voice": {
-      "es": "Para ir a tu otro negocio, toca el nombre y elígelo.",
-      "pt": "Para ir ao seu outro negócio, toque no nome e escolha."}},
-    {"id": "7-cada-uno", "voice": {
-      "es": "Cada negocio tiene sus servicios, su caja y su agenda.",
-      "pt": "Cada negócio tem seus serviços, seu caixa e sua agenda."}},
-    {"id": "8-fin", "voice": {
-      "es": "Así manejas varios negocios y sucursales con Platata.",
-      "pt": "Assim você cuida de vários negócios e filiais com o Platata."}}
+    {
+      "id": "1-negocios",
+      "voice": {
+        "es": "¿Tienes más de un negocio? Toca el nombre y ves todos tus negocios y sucursales.",
+        "pt": "Tem mais de um negócio? Toque no nome e veja todos os seus negócios e filiais."
+      }
+    },
+    {
+      "id": "2-sucursal",
+      "voice": {
+        "es": "Toca Nueva sucursal: copia tus servicios y sus precios.",
+        "pt": "Toque em Nova filial: ela copia seus serviços e preços."
+      }
+    },
+    {
+      "id": "3-nombre",
+      "voice": {
+        "es": "Ponle nombre a la sucursal.",
+        "pt": "Dê um nome à filial."
+      }
+    },
+    {
+      "id": "4-clientes",
+      "voice": {
+        "es": "Si quieres, llevas tus clientes. Las ventas y las citas no se pasan: cada sucursal empieza las suyas.",
+        "pt": "Se quiser, leve seus clientes. Vendas e agendamentos não são levados: cada filial começa os seus."
+      }
+    },
+    {
+      "id": "5-crear",
+      "voice": {
+        "es": "Toca Crear sucursal. Llega con tus servicios y con la caja cerrada.",
+        "pt": "Toque em Criar filial. Ela chega com seus serviços e com o caixa fechado."
+      }
+    },
+    {
+      "id": "6-otro",
+      "voice": {
+        "es": "Para ir a tu otro negocio, toca Mi negocio, el nombre, y elígelo.",
+        "pt": "Para ir ao seu outro negócio, toque em Meu negócio, no nome e escolha."
+      }
+    },
+    {
+      "id": "7-cada-uno",
+      "voice": {
+        "es": "Cada negocio tiene sus servicios, su caja y su agenda.",
+        "pt": "Cada negócio tem seus serviços, seu caixa e sua agenda."
+      }
+    },
+    {
+      "id": "8-fin",
+      "voice": {
+        "es": "Así manejas varios negocios y sucursales con Platata.",
+        "pt": "Assim você cuida de vários negócios e filiais com o Platata."
+      }
+    }
   ]
 }

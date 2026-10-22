@@ -18,3 +18,7 @@
 
 ## 4. The 52 items checked here
 - 42 (comp dialog "¿Regalar este pedido?"): fixed — "¿Regalar esta venta?" (values-es:3904, pt "Dar esta venda de graça?").
+
+## 5. After REVIEW-VS4-7
+- The method tap waits 4.0 s into beat 4 (the sheet stays up while Cortesía is named).
+- pt line 3 now also says the Pix (its button is on screen) already carries the sale total (helper brief, Brazil rule).

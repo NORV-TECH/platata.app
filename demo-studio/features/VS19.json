@@ -8,8 +8,8 @@
   },
   "steps": [
     {"id": "1-conexiones", "voice": {
-      "es": "En Mi negocio, abre Configuración y toca Conexiones.",
-      "pt": "Em Meu negócio, abra Configurações e toque em Conexões."}},
+      "es": "Abre Configuración y toca Conexiones.",
+      "pt": "Abra Configurações e toque em Conexões."}},
     {"id": "2-incluidas", "voice": {
       "es": "Tu teléfono y un equipo más van incluidos. Toca Conectar.",
       "pt": "Seu celular e mais um aparelho estão incluídos. Toque em Conectar."}},
@@ -17,20 +17,20 @@
       "es": "Elige El teléfono de un empleado.",
       "pt": "Escolha O celular de um funcionário."}},
     {"id": "4-carla", "voice": {
-      "es": "Toca Conectar junto a Carla: aparecen el código del negocio y su PIN.",
-      "pt": "Toque em Conectar ao lado da Carla: aparecem o código do negócio e o PIN dela."}},
+      "es": "Toca Conectar junto a Carla.",
+      "pt": "Toque em Conectar ao lado da Carla."}},
     {"id": "5-invitacion", "voice": {
-      "es": "Toca Enviar invitación. Le llega un mensaje para instalar Platata, con el código y su PIN.",
-      "pt": "Toque em Enviar convite. Chega uma mensagem para instalar o Platata, com o código e o PIN."}},
+      "es": "Toca Enviar invitación: le llega el enlace para instalar Platata, el código y su PIN.",
+      "pt": "Toque em Enviar convite: chegam o link para instalar o Platata, o código e o PIN."}},
     {"id": "6-unirme", "voice": {
       "es": "En su teléfono, Carla escribe el código y su PIN, y toca Unirme.",
-      "pt": "No celular dela, a Carla digita o código e o PIN, e toca em Entrar."}},
+      "pt": "No celular dela, a Carla digita o código e o PIN e toca em Entrar."}},
     {"id": "7-vende", "voice": {
       "es": "Ya vende desde su teléfono, como una caja, y tú sigues vendiendo desde el tuyo.",
       "pt": "Ela já vende pelo próprio celular, como um caixa, e você continua vendendo pelo seu."}},
     {"id": "8-de-pago", "voice": {
-      "es": "Ahora usas 2 de 2. Desde la tercera conexión, como la tablet del mostrador, cada una se paga en Google Play.",
-      "pt": "Agora você usa 2 de 2. A partir da terceira conexão, como o tablet do balcão, cada uma é paga no Google Play."}},
+      "es": "Usas 2 de 2. La tercera conexión, como la tablet del mostrador, se paga en Google Play.",
+      "pt": "Você usa 2 de 2. A terceira conexão, como o tablet do balcão, é paga no Google Play."}},
     {"id": "9-fin", "voice": {
       "es": "Así conectas otro teléfono con Platata.",
       "pt": "Assim você conecta outro celular com o Platata."}}

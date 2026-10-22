@@ -6,46 +6,37 @@
     "es": {
       "stability": 0.5,
       "similarity_boost": 0.75
-    },
-    "pt": {
-      "stability": 0.5,
-      "similarity_boost": 0.75
     }
   },
   "steps": [
     {
       "id": "1-charge",
       "voice": {
-        "es": "Con la vacuna en la venta, toca Cobrar y luego Tarjeta.",
-        "pt": "No Brasil, o Platata não cobra com cartão. Com a vacina na venda, toque em Cobrar."
+        "es": "Con la vacuna en la venta, toca Cobrar y luego Tarjeta."
       }
     },
     {
       "id": "2-card",
       "voice": {
-        "es": "Escribe los datos de la tarjeta del cliente.",
-        "pt": "Receba em dinheiro: toque em Exato."
+        "es": "Escribe los datos de la tarjeta del cliente."
       }
     },
     {
       "id": "3-send",
       "voice": {
-        "es": "Las casillas ya vienen marcadas. Toca Cobrar.",
-        "pt": "Venda concluída. Toque em Nova venda."
+        "es": "Las casillas ya vienen marcadas. Toca Cobrar."
       }
     },
     {
       "id": "4-approved",
       "voice": {
-        "es": "El banco aprueba y la venta queda guardada sola.",
-        "pt": "Em Formas de pagamento não aparece Cartão. Você recebe em dinheiro ou por Pix, e o QR do Pix já leva o valor da venda."
+        "es": "El banco aprueba y la venta queda guardada sola."
       }
     },
     {
       "id": "5-end",
       "voice": {
-        "es": "Así cobras con tarjeta, con Platata.",
-        "pt": "Assim você cobra sem cartão, com o Platata."
+        "es": "Así cobras con tarjeta, con Platata."
       }
     }
   ]

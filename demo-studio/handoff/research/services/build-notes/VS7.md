@@ -25,3 +25,17 @@
 - 45 fixed (ReceiptFormatter.kt:398-400 "(Incluido)"; PrintManager.kt:367-375 wraps; footer "¡Gracias por tu visita!").
 - 21 fixed for receipts and the appointment page (ReceiptBuilder.kt:84-85, CheckoutActions.kt:615-616).
 - 2 fixed (SavedTicketActions.kt:700 register gate on Agenda > Cobrar). 33 fixed (:830-900). 35, 23, 24 fixed. 51 partly.
+
+## 5. After REVIEW-VS4-7 (both MUSTs done)
+- The receipt now has the where line "En el local" / "No local" under the Subtotal: a services sale stores its single where mode
+  (CartActions.kt:726-737, gateSelection) and the past receipt prints it at no cost (ReceiptFormatter.kt:90-102, whereModeLine).
+- Timing: WhatsApp/SMS send waits 5.8 s (the receipt stays on screen while the line describes it); "Imprimir otra vez" waits 2.8 s.
+- `?biz=taller-motos`: subtitles say "la orden de" (a work order).
+- Not done: moving the 11:30 booking into kit/services-data.js (kit owner's call); a Pix sentence in the pt receipt script (the
+  scene is about receipts).
+- App bugs the reviewer found, checked real at 73c65f08:
+  - small: receipts say "Filtro de aceite incluido (Incluido)": 30 included options in catalogo_investigado/taller-motos.json
+    already end in "incluido/a" and ReceiptFormatter.kt:289,400 adds " (Incluido)". Fix: drop the word from those names, or skip
+    the suffix when the name already ends with it.
+  - small: every in-shop services receipt prints a bare "En el local" line (whereModeLine returns a label for LOCAL too; item 43 was
+    meant for an unpaid home visit). Fix if Monti agrees: null for WhereMode.LOCAL (then remove the line from this page).

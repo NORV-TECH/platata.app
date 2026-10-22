@@ -24,3 +24,16 @@
 ## 4. The 52 items checked here
 - No item targets the card flow. FIX-1 item 7 (the "can't take cards" bar only in Stripe countries) confirmed
   (CardDeviceCopy.checkoutBarShown(stripeTenderAvailable)).
+
+## 5. After REVIEW-VS4-7 (all six MUST/nice items done)
+- Expiry now shows "1228" as typed (the app's field is a plain numeric EditText; "MM / AA" is only its empty hint).
+- "Enviando al banco…": "COBRANDO" + amount top-left, spinner block centred between weighted spacers (WompiPaymentOverlay.kt:426-452).
+- Timing: Cobrar waits 2.6 s, approval after 1.8 s; MX tip tap waits 2.6 s, card tap 3.0 s; the no-card jump to Payment methods
+  after 2.6 s. MX line 3 now "El total ya lleva la propina. El cliente acerca su tarjeta…" (VS5-MX.json + subtitle).
+- `?biz=` other than the vet says "Con el servicio en la venta".
+- App bugs the reviewer found, checked real at 73c65f08:
+  - small: Colombia (Wompi) shows the Stripe location warning when the phone never granted location: PaymentMethodsScreen.kt:436
+    `CardLocationWarning(cardOn = method.isActive && isCard)` is not gated on the Stripe country. Fix: `&& stripeTenderAvailable`.
+  - small: the Wompi expiry shows bare "1228" once typing starts (WompiPaymentOverlay.kt:380-385, HardenedCardField :682-765, no
+    formatter); PAY-1 item 3 only added the hint. Fix: draw "12 / 28" while storing MMYY.
+- For the planner: TS5/RS5 also draw "12 / 28" (the app shows "1228").
