@@ -336,7 +336,9 @@ function rangeOf(key){
   throw new Error("range "+key);
 }
 /* SimpleDateFormat "MMM" in the app's language (Java short month: "oct", "out", "Oct") */
-const shortMon = d => { const s = new Intl.DateTimeFormat(L==="pt"?"pt-BR":L==="es"?"es":"en", {month:"short"}).format(d).replace(/\.$/,""); return s; };
+const shortMon = d => new Intl.DateTimeFormat(L==="pt"?"pt-BR":L==="es"?"es":"en", {month:"short"}).format(d);
+/* utils/ShortDay.kt shortDayFormatOf: the best "MMMd" pattern without "de" ("22 oct", "22 out.", "Oct 22") */
+const shortDay = d => L==="en" ? `${shortMon(d)} ${d.getDate()}` : `${d.getDate()} ${shortMon(d)}`;
 /* data/ReportChartData.kt buildChartBuckets: a column is that bucket's Net sales; empty HOURS before the first and after the last
    sale are trimmed; empty days are kept */
 function buckets(rg, sales){

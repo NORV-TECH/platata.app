@@ -336,7 +336,9 @@ function rangeOf(key){
   throw new Error("range "+key);
 }
 /* SimpleDateFormat "MMM" in the app's language (Java short month: "oct", "out", "Oct") */
-const shortMon = d => { const s = new Intl.DateTimeFormat(L==="pt"?"pt-BR":L==="es"?"es":"en", {month:"short"}).format(d).replace(/\.$/,""); return s; };
+const shortMon = d => new Intl.DateTimeFormat(L==="pt"?"pt-BR":L==="es"?"es":"en", {month:"short"}).format(d);
+/* utils/ShortDay.kt shortDayFormatOf: the best "MMMd" pattern without "de" ("22 oct", "22 out.", "Oct 22") */
+const shortDay = d => L==="en" ? `${shortMon(d)} ${d.getDate()}` : `${d.getDate()} ${shortMon(d)}`;
 /* data/ReportChartData.kt buildChartBuckets: a column is that bucket's Net sales; empty HOURS before the first and after the last
    sale are trimmed; empty days are kept */
 function buckets(rg, sales){
@@ -674,7 +676,7 @@ function registerScreen(st){
   const mrows = order.filter(k => methods[k] != null).map(k => `<div class="lr ms"><span>${esc(k==="cash" ? S("register_status_cash_all") : PAYNAME(k))}</span><span>${money(methods[k])}</span></div>
     <div class="lr ind"><span>${esc(OWNER)}</span><span>${money(methods[k])}</span></div>`).join("");
   const net = Object.values(methods).reduce((a,v) => a+v, 0);
-  const nav_ = `<div class="navd"><span>${I.chevL}</span><b>${esc(F("register_nav_today", `${NOW.getDate()} ${shortMon(NOW)}`))}</b><span class="dim">${I.chevR}</span></div>`;
+  const nav_ = `<div class="navd"><span>${I.chevL}</span><b>${esc(F("register_nav_today", shortDay(NOW)))}</b><span class="dim">${I.chevR}</span></div>`;
   return `<div class="vs-pg"><div class="vs-top"><span class="ib" data-t="reg-back">${I.back}</span><div class="tt">${nav_}</div><span class="tba">${esc(S("register_status_full_reports"))}</span></div>
     <div class="vs-scroll"><div class="in rg" style="transform:translateY(calc(var(--u)*${-(st.regScroll||0)}))">
     <div class="pillrow"><span class="spill">${esc(S("register_status_pill_open"))}</span></div>
