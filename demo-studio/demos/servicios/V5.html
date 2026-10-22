@@ -378,15 +378,18 @@ const CAT_COLOR = "#81C784";   /* getCategoryBaseColor (HomeScreen.kt:2005-2009)
 const actionWord = () => t(V.isOrder ? "services_action_crear_orden" : "services_action_agendar");
 /* ShrinkToFitText (ui/components/ShrinkToFitText.kt:23-45): 16 sp, one step down per overflow, never under 12 sp, then an
    ellipsis. The price shares the tile's inner width (121 dp tile − 1.5 dp borders − 2×12 dp padding ≈ 94 dp) with 8 dp and the minutes. */
-const MEASURE = document.createElement("canvas").getContext("2d");
-const textW = (txt, px, w) => { MEASURE.font = `${w} ${px}px Roboto, system-ui, sans-serif`; return MEASURE.measureText(txt).width; };
+/* Roboto advance widths (em) — a fixed table, so the result does not depend on when the web font arrives */
+const RW = {" ":.248,".":.26,",":.2,"$":.56,"R":.63,"S":.6,"/":.42,"(":.34,")":.34,"…":.8,m:.87,w:.76,i:.24,l:.24,j:.24,f:.35,t:.33,r:.34,s:.52,n:.55,u:.55};
+const textW = (txt, px, w) => [...txt].reduce((a,ch) => a + (RW[ch] ?? (/[0-9]/.test(ch) ? .5615 : /[A-ZÁÉÍÓÚ]/.test(ch) ? .65 : .53)), 0) * px * (w>=700 ? 1.02 : 1);
 function tile(s){
   const price = s.mode==="from" ? t("items_price_from", money(s.price)) : s.mode==="ask" ? t("bridge_mode_ask") : money(s.price);
   const mins = durOf(s) ? `${durOf(s)} ${t("opt_min")}` : "";
   const avail = 94 - (mins ? 8 + textW(mins, 12, 400) : 0);
   let fs = 16; while(fs > 12 && textW(price, fs, 700) > avail) fs -= 1;
+  let shown = price;                                   /* still too wide at 12 sp: Compose's TextOverflow.Ellipsis */
+  if(textW(shown, fs, 700) > avail){ while(shown.length > 1 && textW(shown.trimEnd()+"…", fs, 700) > avail) shown = shown.slice(0,-1); shown = shown.trimEnd()+"…"; }
   return `<div class="stile" data-t="svc-${s.id}"><span class="ibx" style="background:${TRADE_TILE.bg}">${TRADE_TILE.ic}</span>
-    <b>${esc(s.name)}</b><div class="pr"><span style="font-size:calc(var(--u)*${fs});max-width:calc(var(--u)*${avail.toFixed(1)})">${esc(price)}</span>${mins?`<i>${esc(mins)}</i>`:""}</div></div>`;
+    <b>${esc(s.name)}</b><div class="pr"><span style="font-size:calc(var(--u)*${fs})">${esc(shown)}</span>${mins?`<i>${esc(mins)}</i>`:""}</div></div>`;
 }
 function till(o){
   o = o||{};

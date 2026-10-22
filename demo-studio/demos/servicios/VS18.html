@@ -372,7 +372,7 @@ const SV_CSS = `
 .mat .sv-sheet h3{margin:0 0 calc(var(--u)*12);font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on)}
 .mat .sv-sheet .os-h{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:500;color:var(--m-onv);margin-bottom:calc(var(--u)*6)}
 .mat .sv-sheet .os-r{display:flex;align-items:center;gap:calc(var(--u)*8);min-height:calc(var(--u)*48)}
-.mat .sv-sheet .os-r span{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
+.mat .sv-sheet .os-r>span:first-child{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
 .mat .sv-sheet hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*10) 0}
 .mat .sv-btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center;margin-top:calc(var(--u)*8)}
 .mat .sv-btn.pri{background:var(--m-on);color:#fff}
@@ -616,7 +616,7 @@ const cssVS18 = document.createElement("style"); cssVS18.textContent = `
 .mat .bb{flex:0 0 auto;background:#fff;padding:calc(var(--u)*16);box-shadow:0 calc(var(--u)*-1) calc(var(--u)*3) rgba(0,0,0,.06)}
 .mat .bb .sv-btn{margin:0}
 .mat .pk{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
-.mat .li{background:#fff;padding:calc(var(--u)*8) calc(var(--u)*16);min-height:calc(var(--u)*72);display:flex;flex-direction:column;justify-content:center}
+.mat .li{background:#fff;padding:calc(var(--u)*8) calc(var(--u)*16);min-height:calc(var(--u)*72);display:flex;flex-direction:column;justify-content:center;align-items:flex-start;text-align:left}
 .mat .li b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:600;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mat .li small{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
 .mat .sm{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16)}
