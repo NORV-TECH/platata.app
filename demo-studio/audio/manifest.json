@@ -8363,5 +8363,275 @@
   "hash": "2d6e262a482b3fc5fadc73ae8df656f655d6e52e",
   "file": "demo-studio/audio/TS6/en/7-end.mp3",
   "chars": 52
+ },
+ "VS4/es/1-switch": {
+  "hash": "5f92b076f7f8db7066fccbcdd6b1a75fec128e2e",
+  "file": "demo-studio/audio/VS4/es/1-switch.mp3",
+  "chars": 37
+ },
+ "VS4/pt/1-switch": {
+  "hash": "503f2d5813fda28fd199d3add5f700d3cade197d",
+  "file": "demo-studio/audio/VS4/pt/1-switch.mp3",
+  "chars": 36
+ },
+ "VS4/es/2-warning": {
+  "hash": "ab7748bc0b217e206a2f07c63702369a726f6025",
+  "file": "demo-studio/audio/VS4/es/2-warning.mp3",
+  "chars": 79
+ },
+ "VS4/pt/2-warning": {
+  "hash": "f70f30d630bcc9b3b1e6b51a331a6eaf60c4c407",
+  "file": "demo-studio/audio/VS4/pt/2-warning.mp3",
+  "chars": 80
+ },
+ "VS4/es/3-upload": {
+  "hash": "bed2a7364887558f7f9b7ccc8cef00c4dec74e0e",
+  "file": "demo-studio/audio/VS4/es/3-upload.mp3",
+  "chars": 49
+ },
+ "VS4/pt/3-upload": {
+  "hash": "d715c744c2181bd3514f0c5369b3338fa5d20b72",
+  "file": "demo-studio/audio/VS4/pt/3-upload.mp3",
+  "chars": 50
+ },
+ "VS4/es/4-charge": {
+  "hash": "66f714c2d9b182fb7cc316c5fb0e77ddcc00c32c",
+  "file": "demo-studio/audio/VS4/es/4-charge.mp3",
+  "chars": 35
+ },
+ "VS4/pt/4-charge": {
+  "hash": "33eaf26e93d92c9f1c57ae5f1d4ad76e21b45b3c",
+  "file": "demo-studio/audio/VS4/pt/4-charge.mp3",
+  "chars": 93
+ },
+ "VS4/es/5-paid": {
+  "hash": "996bafd2e3f37276f95c85e326bfae8c4087cfe2",
+  "file": "demo-studio/audio/VS4/es/5-paid.mp3",
+  "chars": 80
+ },
+ "VS4/pt/5-paid": {
+  "hash": "8441f4ff6db1e6b45591ad6fc2154afc43176697",
+  "file": "demo-studio/audio/VS4/pt/5-paid.mp3",
+  "chars": 83
+ },
+ "VS4/es/6-end": {
+  "hash": "498ced1f2dd507babf4a3f4c6a7b7c9b35c7ca7e",
+  "file": "demo-studio/audio/VS4/es/6-end.mp3",
+  "chars": 31
+ },
+ "VS4/pt/6-end": {
+  "hash": "5e2ce7a48ea9b852a5f6ff444a11446f8768be11",
+  "file": "demo-studio/audio/VS4/pt/6-end.mp3",
+  "chars": 40
+ },
+ "VS5-MX/es/1-charge": {
+  "hash": "0b0835fddc8b2b8c34597741a58171281e67a146",
+  "file": "demo-studio/audio/VS5-MX/es/1-charge.mp3",
+  "chars": 55
+ },
+ "VS5-MX/es/2-tip": {
+  "hash": "6d62d6b4b0f51f766021af12c204bbdf10225f9c",
+  "file": "demo-studio/audio/VS5-MX/es/2-tip.mp3",
+  "chars": 75
+ },
+ "VS5-MX/es/3-tap": {
+  "hash": "c1d8805726717b4bbd13d96e810ef22fcef9cf82",
+  "file": "demo-studio/audio/VS5-MX/es/3-tap.mp3",
+  "chars": 81
+ },
+ "VS5-MX/es/4-approved": {
+  "hash": "b994303a9eddac9702475af82d462fe219e5e3b4",
+  "file": "demo-studio/audio/VS5-MX/es/4-approved.mp3",
+  "chars": 44
+ },
+ "VS5-MX/es/5-end": {
+  "hash": "d3a37937e5b3442e5fe7d06611a1b0193aadbeea",
+  "file": "demo-studio/audio/VS5-MX/es/5-end.mp3",
+  "chars": 36
+ },
+ "VS5/es/1-charge": {
+  "hash": "0b0835fddc8b2b8c34597741a58171281e67a146",
+  "file": "demo-studio/audio/VS5/es/1-charge.mp3",
+  "chars": 55
+ },
+ "VS5/es/2-card": {
+  "hash": "e5192fdf3d9ae025be89d29cd39d695b5df6583e",
+  "file": "demo-studio/audio/VS5/es/2-card.mp3",
+  "chars": 44
+ },
+ "VS5/es/3-send": {
+  "hash": "ac75e128afb74b0324aa076acb162825abef09e4",
+  "file": "demo-studio/audio/VS5/es/3-send.mp3",
+  "chars": 45
+ },
+ "VS5/es/4-approved": {
+  "hash": "f7b43df0149985122a93313c33f1623792a43c5c",
+  "file": "demo-studio/audio/VS5/es/4-approved.mp3",
+  "chars": 48
+ },
+ "VS5/es/5-end": {
+  "hash": "d3a37937e5b3442e5fe7d06611a1b0193aadbeea",
+  "file": "demo-studio/audio/VS5/es/5-end.mp3",
+  "chars": 36
+ },
+ "VS6-MX/es/1-new": {
+  "hash": "a93fcaaa38dca9e6bff3aa9b97c97d93cc369651",
+  "file": "demo-studio/audio/VS6-MX/es/1-new.mp3",
+  "chars": 54
+ },
+ "VS6-MX/es/2-add": {
+  "hash": "464753dd86060e90fb0e03dcd24d2a49254e2be3",
+  "file": "demo-studio/audio/VS6-MX/es/2-add.mp3",
+  "chars": 30
+ },
+ "VS6-MX/es/3-charge": {
+  "hash": "c9a7b1ad93e70402fc1aae1396fdfe639442fadc",
+  "file": "demo-studio/audio/VS6-MX/es/3-charge.mp3",
+  "chars": 52
+ },
+ "VS6-MX/es/4-pick": {
+  "hash": "feee42c9175326283c0f5bbf77e138a9fa3a7a10",
+  "file": "demo-studio/audio/VS6-MX/es/4-pick.mp3",
+  "chars": 80
+ },
+ "VS6-MX/es/5-confirm": {
+  "hash": "2cd95626ab7b4797a84527678b9c9e51e2b58351",
+  "file": "demo-studio/audio/VS6-MX/es/5-confirm.mp3",
+  "chars": 49
+ },
+ "VS6-MX/es/6-end": {
+  "hash": "14b483c360504e38c464a687ea4c0140b4de8d97",
+  "file": "demo-studio/audio/VS6-MX/es/6-end.mp3",
+  "chars": 49
+ },
+ "VS6/es/1-new": {
+  "hash": "d6ec591b54e7bf3cbbf0c20977d28eca15ed33cc",
+  "file": "demo-studio/audio/VS6/es/1-new.mp3",
+  "chars": 47
+ },
+ "VS6/pt/1-new": {
+  "hash": "501d0dfbf41fa9bdd4770847b7950b4ce6df3519",
+  "file": "demo-studio/audio/VS6/pt/1-new.mp3",
+  "chars": 62
+ },
+ "VS6/es/2-add": {
+  "hash": "464753dd86060e90fb0e03dcd24d2a49254e2be3",
+  "file": "demo-studio/audio/VS6/es/2-add.mp3",
+  "chars": 30
+ },
+ "VS6/pt/2-add": {
+  "hash": "3bb0e53fdb92d1b72bbb2d545b27f2980bc4daf1",
+  "file": "demo-studio/audio/VS6/pt/2-add.mp3",
+  "chars": 35
+ },
+ "VS6/es/3-charge": {
+  "hash": "c9a7b1ad93e70402fc1aae1396fdfe639442fadc",
+  "file": "demo-studio/audio/VS6/es/3-charge.mp3",
+  "chars": 52
+ },
+ "VS6/pt/3-charge": {
+  "hash": "832681b253fa1edc3a14bbda9c1896218f45cbf8",
+  "file": "demo-studio/audio/VS6/pt/3-charge.mp3",
+  "chars": 106
+ },
+ "VS6/es/4-pick": {
+  "hash": "1fbadd34d1e9b29cd03ffc3e2ee4b1335209a4a3",
+  "file": "demo-studio/audio/VS6/es/4-pick.mp3",
+  "chars": 66
+ },
+ "VS6/pt/4-pick": {
+  "hash": "e66b894de023d0747ed2884ba0d300c818496574",
+  "file": "demo-studio/audio/VS6/pt/4-pick.mp3",
+  "chars": 90
+ },
+ "VS6/es/5-confirm": {
+  "hash": "2cd95626ab7b4797a84527678b9c9e51e2b58351",
+  "file": "demo-studio/audio/VS6/es/5-confirm.mp3",
+  "chars": 49
+ },
+ "VS6/pt/5-confirm": {
+  "hash": "b7275efb820369d0f8b889fd91ba94901d15e244",
+  "file": "demo-studio/audio/VS6/pt/5-confirm.mp3",
+  "chars": 54
+ },
+ "VS6/es/6-end": {
+  "hash": "14b483c360504e38c464a687ea4c0140b4de8d97",
+  "file": "demo-studio/audio/VS6/es/6-end.mp3",
+  "chars": 49
+ },
+ "VS6/pt/6-end": {
+  "hash": "1f45d7499cd325b69304acf35afbf6d72816714b",
+  "file": "demo-studio/audio/VS6/pt/6-end.mp3",
+  "chars": 63
+ },
+ "VS7/es/1-agenda": {
+  "hash": "de44a0f79eb9cee45b02975033e7972757d575dd",
+  "file": "demo-studio/audio/VS7/es/1-agenda.mp3",
+  "chars": 36
+ },
+ "VS7/pt/1-agenda": {
+  "hash": "c773fd3f59a0e6e87d7488517491cf04933333df",
+  "file": "demo-studio/audio/VS7/pt/1-agenda.mp3",
+  "chars": 41
+ },
+ "VS7/es/2-charge": {
+  "hash": "dd900df95079e966b1e96e6071b21a2c5aaab0ec",
+  "file": "demo-studio/audio/VS7/es/2-charge.mp3",
+  "chars": 27
+ },
+ "VS7/pt/2-charge": {
+  "hash": "728f6302ba784f0cce0930a6a4f705ef59732b71",
+  "file": "demo-studio/audio/VS7/pt/2-charge.mp3",
+  "chars": 64
+ },
+ "VS7/es/3-whatsapp": {
+  "hash": "c15c49e1bd07bb361cbcd0989445611c0d92a081",
+  "file": "demo-studio/audio/VS7/es/3-whatsapp.mp3",
+  "chars": 54
+ },
+ "VS7/pt/3-whatsapp": {
+  "hash": "971f49c84ab41c250f3e57d833e74f1680522218",
+  "file": "demo-studio/audio/VS7/pt/3-whatsapp.mp3",
+  "chars": 64
+ },
+ "VS7/es/4-send": {
+  "hash": "acfdd88e68d232b65dbb2e5605d85257f84b93e7",
+  "file": "demo-studio/audio/VS7/es/4-send.mp3",
+  "chars": 102
+ },
+ "VS7/pt/4-send": {
+  "hash": "e937fc532ed9d6ba3b26d2fb53ae579fb854c874",
+  "file": "demo-studio/audio/VS7/pt/4-send.mp3",
+  "chars": 109
+ },
+ "VS7/es/5-print": {
+  "hash": "d9f0145ff83f8a033f256232277baf43218744f8",
+  "file": "demo-studio/audio/VS7/es/5-print.mp3",
+  "chars": 74
+ },
+ "VS7/pt/5-print": {
+  "hash": "9e4aeb0441481fc2ad972aed2e0517f345557d47",
+  "file": "demo-studio/audio/VS7/pt/5-print.mp3",
+  "chars": 71
+ },
+ "VS7/es/6-new": {
+  "hash": "0f02ad006604996fb199861bcd55eb227301f9b9",
+  "file": "demo-studio/audio/VS7/es/6-new.mp3",
+  "chars": 17
+ },
+ "VS7/pt/6-new": {
+  "hash": "32cecfcdea041e1413d86fb9ab2f7754de584c44",
+  "file": "demo-studio/audio/VS7/pt/6-new.mp3",
+  "chars": 20
+ },
+ "VS7/es/7-end": {
+  "hash": "89618723d69d6d19283699c668dbb11c0370607b",
+  "file": "demo-studio/audio/VS7/es/7-end.mp3",
+  "chars": 54
+ },
+ "VS7/pt/7-end": {
+  "hash": "9663c1475f1d0a8f18fe2fa398ab07c7ef415849",
+  "file": "demo-studio/audio/VS7/pt/7-end.mp3",
+  "chars": 68
  }
 }
