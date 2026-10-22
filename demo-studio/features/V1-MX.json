@@ -1,0 +1,61 @@
+{
+  "id": "V1-MX",
+  "name": "Escoge tu oficio: tus servicios ya vienen escritos (México: sin precios sugeridos)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-oficio",
+      "voice": {
+        "es": "Escoge tu oficio. Toca Peluquería y Seguir."
+      }
+    },
+    {
+      "id": "2-populares",
+      "voice": {
+        "es": "Marca los populares de una vez y quita lo que no haces."
+      }
+    },
+    {
+      "id": "3-precios",
+      "voice": {
+        "es": "Tus servicios ya vienen escritos. Tú solo pones el precio."
+      }
+    },
+    {
+      "id": "4-detalle",
+      "voice": {
+        "es": "¿Tiene opciones? Toca el servicio para abrirlo."
+      }
+    },
+    {
+      "id": "5-lista",
+      "voice": {
+        "es": "Cada opción lleva su precio. Luego vuelve."
+      }
+    },
+    {
+      "id": "6-terminar",
+      "voice": {
+        "es": "Toca Terminar y tus servicios quedan listos."
+      }
+    },
+    {
+      "id": "7-caja",
+      "voice": {
+        "es": "Lo que dejes vacío se pregunta en la caja."
+      }
+    },
+    {
+      "id": "8-cierre",
+      "voice": {
+        "es": "Así tu negocio queda listo con Platata."
+      }
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "id": "V2-MX",
+  "name": "Ajusta tus precios y opciones (México: el precio se escribe)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-editar",
+      "voice": {
+        "es": "En la caja, toca Editar."
+      }
+    },
+    {
+      "id": "2-mis-servicios",
+      "voice": {
+        "es": "En Mis servicios ves todos tus precios."
+      }
+    },
+    {
+      "id": "3-servicio",
+      "voice": {
+        "es": "Toca el servicio que quieres cambiar."
+      }
+    },
+    {
+      "id": "4-precio",
+      "voice": {
+        "es": "Escribe el precio nuevo."
+      }
+    },
+    {
+      "id": "5-desde",
+      "voice": {
+        "es": "Si puede costar más, elige Desde."
+      }
+    },
+    {
+      "id": "6-duracion",
+      "voice": {
+        "es": "Cambia cuánto dura."
+      }
+    },
+    {
+      "id": "7-aparte",
+      "voice": {
+        "es": "Y ponle precio a lo que se cobra aparte."
+      }
+    },
+    {
+      "id": "8-listo",
+      "voice": {
+        "es": "Toca Listo: el cambio queda guardado."
+      }
+    },
+    {
+      "id": "9-cierre",
+      "voice": {
+        "es": "Así ajustas tus precios con Platata."
+      }
+    }
+  ]
+}

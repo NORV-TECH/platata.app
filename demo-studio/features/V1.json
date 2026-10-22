@@ -1,0 +1,73 @@
+{
+  "id": "V1",
+  "name": "Escoge tu oficio: tus servicios ya vienen escritos",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-oficio",
+      "voice": {
+        "es": "Escoge tu oficio. Toca Peluquería y Seguir.",
+        "pt": "Escolha seu ofício. Toque em Cabeleireiro e em Seguir."
+      }
+    },
+    {
+      "id": "2-populares",
+      "voice": {
+        "es": "Marca los populares de una vez y quita lo que no haces.",
+        "pt": "Marque os populares de uma vez e tire o que você não faz."
+      }
+    },
+    {
+      "id": "3-precios",
+      "voice": {
+        "es": "Cada servicio ya viene escrito, con el precio más común en Colombia.",
+        "pt": "Seus serviços já vêm escritos. Você só digita o preço."
+      }
+    },
+    {
+      "id": "4-detalle",
+      "voice": {
+        "es": "En Lo que trae ves lo incluido y lo que se cobra aparte.",
+        "pt": "Tem opções? Toque no serviço para abrir."
+      }
+    },
+    {
+      "id": "5-lista",
+      "voice": {
+        "es": "En la lista pones los precios que faltan.",
+        "pt": "Cada opção tem seu preço. Depois, volte."
+      }
+    },
+    {
+      "id": "6-terminar",
+      "voice": {
+        "es": "Toca Terminar y tus servicios quedan listos.",
+        "pt": "Toque em Concluir e seus serviços ficam prontos."
+      }
+    },
+    {
+      "id": "7-caja",
+      "voice": {
+        "es": "Ve a la caja: ya puedes cobrar.",
+        "pt": "O que ficar vazio, o caixa pergunta na hora."
+      }
+    },
+    {
+      "id": "8-cierre",
+      "voice": {
+        "es": "Así tu negocio queda listo con Platata.",
+        "pt": "Assim seu negócio fica pronto com o Platata."
+      }
+    }
+  ]
+}

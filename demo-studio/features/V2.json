@@ -1,0 +1,80 @@
+{
+  "id": "V2",
+  "name": "Ajusta tus precios y opciones",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-editar",
+      "voice": {
+        "es": "En la caja, toca Editar.",
+        "pt": "No caixa, toque em Editar."
+      }
+    },
+    {
+      "id": "2-mis-servicios",
+      "voice": {
+        "es": "En Mis servicios ves todos tus precios.",
+        "pt": "Em Meus serviços você vê todos os seus preços."
+      }
+    },
+    {
+      "id": "3-servicio",
+      "voice": {
+        "es": "Toca el servicio que quieres cambiar.",
+        "pt": "Toque no serviço que você quer mudar."
+      }
+    },
+    {
+      "id": "4-precio",
+      "voice": {
+        "es": "Toca el precio nuevo.",
+        "pt": "Digite o preço novo."
+      }
+    },
+    {
+      "id": "5-desde",
+      "voice": {
+        "es": "Si puede costar más, elige Desde.",
+        "pt": "Se pode custar mais, escolha A partir de."
+      }
+    },
+    {
+      "id": "6-duracion",
+      "voice": {
+        "es": "Cambia cuánto dura.",
+        "pt": "Mude quanto tempo demora."
+      }
+    },
+    {
+      "id": "7-aparte",
+      "voice": {
+        "es": "Y ponle precio a lo que se cobra aparte.",
+        "pt": "E dê um preço ao que se cobra à parte."
+      }
+    },
+    {
+      "id": "8-listo",
+      "voice": {
+        "es": "Toca Listo: el cambio queda guardado.",
+        "pt": "Toque em Pronto: a mudança fica salva."
+      }
+    },
+    {
+      "id": "9-cierre",
+      "voice": {
+        "es": "Así ajustas tus precios con Platata.",
+        "pt": "Assim você ajusta seus preços com o Platata."
+      }
+    }
+  ]
+}

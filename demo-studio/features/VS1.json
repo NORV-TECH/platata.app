@@ -1,0 +1,73 @@
+{
+  "id": "VS1",
+  "name": "Crear tu negocio de servicios",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-empezar",
+      "voice": {
+        "es": "Abre Platata y toca Empezar mi negocio.",
+        "pt": "Abra o Platata e toque em Começar meu negócio."
+      }
+    },
+    {
+      "id": "2-pais",
+      "voice": {
+        "es": "Tu país ya viene de tu celular. Toca Continuar.",
+        "pt": "Seu país já vem do celular. Toque em Continuar."
+      }
+    },
+    {
+      "id": "3-tipo",
+      "voice": {
+        "es": "Elige Servicios.",
+        "pt": "Escolha Serviços."
+      }
+    },
+    {
+      "id": "4-nombre",
+      "voice": {
+        "es": "Escribe el nombre de tu negocio.",
+        "pt": "Digite o nome do seu negócio."
+      }
+    },
+    {
+      "id": "5-google",
+      "voice": {
+        "es": "Entra con tu cuenta de Google.",
+        "pt": "Entre com sua conta Google."
+      }
+    },
+    {
+      "id": "6-listo",
+      "voice": {
+        "es": "Listo. Toca Escoger mis servicios.",
+        "pt": "Pronto. Toque em Escolher meus serviços."
+      }
+    },
+    {
+      "id": "7-oficio",
+      "voice": {
+        "es": "Ahora escoges tu oficio y sus servicios.",
+        "pt": "Agora você escolhe seu ofício e os serviços."
+      }
+    },
+    {
+      "id": "8-cierre",
+      "voice": {
+        "es": "Así creas tu negocio de servicios con Platata.",
+        "pt": "Assim você cria seu negócio de serviços com o Platata."
+      }
+    }
+  ]
+}
