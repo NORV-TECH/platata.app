@@ -306,7 +306,7 @@ VKIT.start(V, {
     {beat:2, hint:TAP+t("register_open_confirm"), target:'[data-t="open-confirm"]', tap(st){ st.screen="home"; st.isOpen=true; }},
     {beat:3, hint:TAP+RING.name, target:`[data-t="svc-${RING.id}"]`, tap(st){ if(RING_CHOICE!=null) st.sheet="choose"; else if(RING_HAS_OPTS) st.sheet="opts"; else st.count=1; }},
     ...addSteps,
-    ...(RING_HAS_OPTS ? [{beat:4, hint:TAP+(RING_PRICE>0 ? t("opt_add_to_sale", money(RING_PRICE)) : t("common_add")), target:'[data-t="opt-add"]', tap(st){ st.sheet=null; st.count=1; }}] : [])
+    ...(RING_HAS_OPTS ? [{beat:4, hint:TAP+(RING_PRICE>0 ? t("opt_add_to_sale", money(RING_PRICE)) : t("common_add")), target:'[data-t="opt-add"]', wait:1.2, tap(st){ st.sheet=null; st.count=1; }}] : [])
   ]
 });
 

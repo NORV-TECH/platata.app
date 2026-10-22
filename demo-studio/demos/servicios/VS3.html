@@ -369,7 +369,7 @@ VKIT.start(V, {
   steps:[
     {beat:0, hint:TAP+RING.name, target:`[data-t="svc-${RING.id}"]`, tap(st){ if(RING_CHOICE!=null) st.sheet="choose"; else if(RING_HAS_OPTS) st.sheet="opts"; else st.count=1; }},
     ...addSteps,
-    ...(RING_HAS_OPTS ? [{beat:1, hint:TAP+(RING_PRICE>0 ? t("opt_add_to_sale", money(RING_PRICE)) : t("common_add")), target:'[data-t="opt-add"]', tap(st){ st.sheet=null; st.count=1; }}] : []),
+    ...(RING_HAS_OPTS ? [{beat:1, hint:TAP+(RING_PRICE>0 ? t("opt_add_to_sale", money(RING_PRICE)) : t("common_add")), target:'[data-t="opt-add"]', wait:2.2, tap(st){ st.sheet=null; st.count=1; }}] : []),
     {beat:2, hint:TAP+t("common_charge", money(TOTAL)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
     {beat:3, hint:TAP+PKEYS.join(" "), target:`[data-t="key-${PKEYS[0]}"]`, tap(st,E){ st.typed=PKEYS[0];
         PKEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed += k; })); }},
