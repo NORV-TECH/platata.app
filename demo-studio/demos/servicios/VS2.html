@@ -184,7 +184,8 @@ const sw = (on, tag) => `<div class="rsw${on?" on":""}"${tag?` data-t="${tag}"`:
 function optionSheet(s, price){
   const rows = s.included.map(x => ({name:x.name, on:true, tail:""}))
     .concat(s.extras.map(x => ({name:x.name, on:false, tail: x.price==null ? " · "+t("opt_ask_at_till_row")
-      : x.per ? " · "+t("opt_per_unit_each", money(x.price), x.per) : " · +"+money(x.price)})));   // :219-229 (per-unit add-on, a stepper while on)
+      : (x.per && CC==="CO") ? " · "+t("opt_per_unit_each", money(x.price), x.per) : " · +"+money(x.price)})));   // :219-229 (per-unit add-on: the corpus's
+      // unit word, Colombia only; abroad the researched amount is stripped, CatalogoInvestigadoAssets.kt:76-90, and the owner typed a plain price)
   const sets = rows.map(r => `<div class="osl">${esc(r.name)}</div><div class="osr"><span>${esc(r.name+r.tail)}</span>${sw(r.on)}</div><hr>`).join("");
   return `<div class="mscrim"><div class="osheet"><div class="hdl"></div><h2>${esc(s.name)}</h2><div class="osets">${sets}</div>
     ${btn(price>0 ? t("opt_add_to_sale", money(price)) : t("common_add"), "pri", "opt-add")}</div></div>`;
