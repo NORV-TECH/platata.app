@@ -470,6 +470,8 @@ const MAIN = V.service(PAIR[0]), SECOND = V.service(PAIR[1]);
 const MAIN_CHOICE = MAIN.choices.length ? 0 : null;                 // the first choice, when the first service has choices
 const SEC_CHOICE = SECOND.choices.length > 1 ? 1 : 0;               // "Medio"
 const PCT = 10;
+/* subtitle 6 names the choice the till asks first when the first service has choices (MX, PE, BR salon: "el estilo") */
+const PICKS = MAIN.choices.length ? (V.biz === "peluqueria" ? {es:" y elige el estilo", pt:" e escolha o estilo", en:" and pick the style"} : {es:" y elige uno", pt:" e escolha um", en:" and pick one"}) : {es:"", pt:"", en:""};
 const COMBO_NAME = MAIN.name + " + " + SECOND.name;                 // NewDealScreen.kt:209-215 (names joined " + ")
 const MAIN_PRICE = MAIN_CHOICE != null ? MAIN.choices[MAIN_CHOICE].price : MAIN.price;
 const SEC_PRICE = SECOND.choices.length ? SECOND.choices[SEC_CHOICE].price : SECOND.price;
@@ -555,15 +557,15 @@ VKIT.start(V, {
   id:"VS18", tallVideo:true, clock:"12:41",
   endText:pick({es:"Así cobras menos por los dos con Platata.", pt:"Assim você cobra menos pelos dois com o Platata.", en:"That's how you charge less for the two with Platata."}),
   beats:pick({
-    es:["Descuentos y combos: toca Crear combo","Elige el primer servicio: " + MAIN.name,"Y el que va con él: " + SECOND.name,"Toca Siguiente y activa el descuento","Toca Guardar: el combo queda activo","En la caja, toca " + MAIN.name,"Toca Agregar oferta y elige " + SECOND.name,"Te pregunta cuál: elige y toca Agregar","Así cobras menos por los dos con Platata."],
-    pt:["Descontos e combos: toque em Criar combo","Escolha o primeiro serviço: " + MAIN.name,"E o que vai junto: " + SECOND.name,"Toque em Avançar e ative o desconto","Toque em Salvar: o combo fica ativo","No caixa, toque em " + MAIN.name,"Toque em Adicionar oferta e escolha " + SECOND.name,"Ele pergunta qual: escolha e toque em Adicionar","Assim você cobra menos pelos dois com o Platata."],
-    en:["Discounts and combos: tap Create combo","Pick the first service: " + MAIN.name,"And what goes with it: " + SECOND.name,"Tap Next and turn on the discount","Tap Save: the combo is live","At the register, tap " + MAIN.name,"Tap Add deal and pick " + SECOND.name,"It asks which one: pick and tap Add","That's how you charge less for the two with Platata."]}),
+    es:["Descuentos y combos: toca Crear combo","Elige el primer servicio: " + MAIN.name,"Y el que va con él: " + SECOND.name,"Toca Siguiente y activa el descuento","Toca Guardar: el combo queda activo","En la caja, toca " + MAIN.name + PICKS.es,"Toca Agregar oferta y elige " + SECOND.name,"Te pregunta cuál: elige y toca Agregar","Así cobras menos por los dos con Platata."],
+    pt:["Descontos e combos: toque em Criar combo","Escolha o primeiro serviço: " + MAIN.name,"E o que vai junto: " + SECOND.name,"Toque em Avançar e ative o desconto","Toque em Salvar: o combo fica ativo","No caixa, toque em " + MAIN.name + PICKS.pt,"Toque em Adicionar oferta e escolha " + SECOND.name,"Ele pergunta qual: escolha e toque em Adicionar","Assim você cobra menos pelos dois com o Platata."],
+    en:["Discounts and combos: tap Create combo","Pick the first service: " + MAIN.name,"And what goes with it: " + SECOND.name,"Tap Next and turn on the discount","Tap Save: the combo is live","At the register, tap " + MAIN.name + PICKS.en,"Tap Add deal and pick " + SECOND.name,"It asks which one: pick and tap Add","That's how you charge less for the two with Platata."]}),
   state:{screen:"disc", s1:false, s2:false, pick:1, psc:0, disc:false, ssc:0, saved:false, flash:false, cut:false, sheet:null, osc:0, gsc:0, q:false, ch:null, added:false},
   render,
   device: () => "phone",
   who: () => DEV_OWNER,
   steps: settled([
-    {beat:0, hint:H1("combo_tab_empty_button"), target:'[data-t="create"]', tap(st){ st.screen = "ov"; }},
+    {beat:0, hint:H1("combo_tab_empty_button"), target:'[data-t="create"]', wait:3, tap(st){ st.screen = "ov"; }},
     {beat:1, hint:H1("deal_pick_item"), target:'[data-t="slot-1"]', tap(st,E){ st.screen = "pick"; st.pick = 1; st.psc = 0; E.after(400, () => { st.psc = scrollNeed(`[data-t="pick-${MAIN.id}"]`, '.dbg .sv-scroll', 24); }); }},
     {beat:1, hint:TAPN(MAIN.name), target:`[data-t="pick-${MAIN.id}"]`, tap(st){ st.s1 = true; st.screen = "ov"; }},
     {beat:2, hint:H1("deal_pick_item"), target:'[data-t="slot-2"]', tap(st,E){ st.screen = "pick"; st.pick = 2; st.psc = 0; E.after(400, () => { st.psc = scrollNeed(`[data-t="pick-${SECOND.id}"]`, '.dbg .sv-scroll', 24); }); }},
@@ -581,7 +583,7 @@ VKIT.start(V, {
   ]).concat([
     {beat:6, hint:H1("deal_choice_add_deal"), target:'[data-t="opt-deal"]', tap(st){ st.sheet = "combo"; st.q = false; }},
     {beat:6, hint:TAPN(SECOND.name), target:`[data-t="cp-${SECOND.id}"]`, tap(st){ st.q = true; }},
-    {beat:7, hint:TAPN(SECOND.choices.length ? SECOND.choices[SEC_CHOICE].name : SECOND.name), target:`[data-t="ch-${SEC_CHOICE}"]`, tap(st){ st.ch = SEC_CHOICE; }},
+    {beat:7, hint:TAPN(SECOND.choices.length ? SECOND.choices[SEC_CHOICE].name : SECOND.name), target:`[data-t="ch-${SEC_CHOICE}"]`, wait:2, tap(st){ st.ch = SEC_CHOICE; }},
     {beat:7, hint:H1("common_add"), target:'[data-t="cp-add"]', tap(st){ st.sheet = null; st.added = true; }}
   ]))
 });

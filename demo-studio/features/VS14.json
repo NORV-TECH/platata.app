@@ -20,11 +20,11 @@
       "es": "En Permisos eliges qué puede hacer. Con Cancelar recibos y citas, puede cancelar una cita o marcar que no asistió.",
       "pt": "Em Permissões você escolhe o que ela pode fazer. Com Cancelar recibos e agendamentos, ela cancela um agendamento ou marca que não compareceu."}},
     {"id": "5-guardar", "voice": {
-      "es": "Su PIN se crea solo. Toca Guardar.",
-      "pt": "O PIN é criado sozinho. Toque em Salvar."}},
+      "es": "Toca Guardar: Platata le crea su PIN.",
+      "pt": "Toque em Salvar: o Platata cria o PIN dela."}},
     {"id": "6-pin", "voice": {
-      "es": "Anótalo y dáselo: con el código del negocio y su PIN, entra desde su teléfono o la tablet.",
-      "pt": "Anote e entregue: com o código do negócio e o PIN, ela entra pelo celular dela ou pelo tablet."}},
+      "es": "Anótalo y dáselo. Para que entre desde su teléfono, conéctala en Conexiones.",
+      "pt": "Anote e entregue. Para ela entrar pelo celular, conecte em Conexões."}},
     {"id": "7-fin", "voice": {
       "es": "Así armas tu equipo con Platata.",
       "pt": "Assim você monta sua equipe com o Platata."}}

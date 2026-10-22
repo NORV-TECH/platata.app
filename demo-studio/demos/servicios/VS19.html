@@ -435,7 +435,8 @@ function scrollNeed(sel, box, margin){
    type; only the paper accent is the services purple (PaperTheme accent = rules.colorKey SERVICIOS, PaperColor.kt:57-59).
    What is free and what is paid (sync/ConnectionAllocator.kt allocate, sync/Entitlement.kt FREE_COUNTRIES = US, CA):
      the owner's phone is connection 1, the OLDEST device (tablet or employee phone) is included, each later one takes a paid
-     connection (Google Play); US/CA allow every device at no charge (cap 10 devices everywhere). Mexico pays like Colombia.
+     connection (Google Play); US/CA allow every device at no charge (cap everywhere: 9 registers + the owner's phone =
+     10 connections, MAX_DEVICES = MAX_PAID + 1). Mexico pays like Colombia.
    Screens (app/src/main/java/com/example/):
    panel / hub      HomeScreen.kt services panel; SettingsHubScreen.kt HubRow.DEVICES = workspace_registers_and_printers "Conexiones"
    Connections      ui/screens/connections/ConnectionsScreen.kt:84-166 (paper Scaffold #FBFAF7, SumaTopBar paper; column 16 / 8,
@@ -468,6 +469,7 @@ function scrollNeed(sel, box, margin){
                     "Otros servicios" too (:649, the owner's grid filters it, HomeScreen.kt:942); categories ORDER BY sortOrder,
                     name; MiniPosActionDuo: "Teclado" link + FooterButtonPair "Agendar" | "Cobrar $X", off at an empty cart);
                     the same option sheet as the owner (ProductSheetHost); bottom bar Caja + flag (PlataApp.kt:305)
+   Device name on Connections = e.preferredName (ConnectionsPageActions.kt:93), which holds the whole typed name since F-22.
    The support strip shows on the LEVEL_2 routes settings_hub, registers_and_printers and connect_phone (reports/ReportLevels.kt:49-51).
    Demo data: kit/services-data.js (the shop, the stylists, the services). The business code and the PIN are the demo's (the
    app makes them: generatePairingToken 10 characters, generateUniquePin 4 digits); same as VS14. */
@@ -486,7 +488,7 @@ const jobOf = p => p.role.replace(/o\(a\)/, female(p) ? "a" : "o");
 const byFirst = (a, b) => a.first < b.first ? -1 : a.first > b.first ? 1 : 0;          // ORDER BY preferredName (SQLite BINARY)
 const PEOPLE = TEAM.map(p => ({name:p.name, first:firstOf(p.name), job:jobOf(p), fem:female(p)})).sort(byFirst);
 const NEW = PEOPLE.find(p => p.name === TEAM[0].name), FIRST = NEW.first;
-const CODE = "K7Q2M9XD4P", PIN = "4821";
+const CODE = "7C4E91A2B0", PIN = "4821";                    // generatePairingToken(): a stripped UUID, 10 hex characters
 const WHO_STAFF = pick({es:"Teléfono de " + FIRST, pt:"Celular " + (NEW.fem ? "da " : "do ") + FIRST, en:FIRST + "'s phone"});
 /* what she sells: a service with options (and choices where the kit gives them) */
 const SVC = V.service({peluqueria:"corte-dama", unas:"manicure-tradicional", veterinaria:"consulta-general", "taller-motos":"mantenimiento-preventivo"}[V.biz]);
@@ -508,10 +510,10 @@ function group(title, list, ok){
 const pbtn = (txt, tag, small) => `<div class="cn-btn${small?" sm":""}"${tag?` data-t="${tag}"`:""}>${I("add")}<span>${esc(txt)}</span></div>`;
 function connPage(st){
   const joined = st.joined;
-  const second = joined ? {k:"dev", n:2, name:FIRST, hl:st.flash} : {k:"open", n:2};
+  const second = joined ? {k:"dev", n:2, name:NEW.name, hl:st.flash} : {k:"open", n:2};
   let hero;
   if(FREE){
-    const row = [{k:"phone", n:1}].concat(joined ? [{k:"dev", n:2, name:FIRST, hl:st.flash}] : []);
+    const row = [{k:"phone", n:1}].concat(joined ? [{k:"dev", n:2, name:NEW.name, hl:st.flash}] : []);
     hero = `<div class="cn-card"><div class="h2 okc">${esc(S("conn_everything_included"))}</div>${group(S("conn_group_included"), row, true)}
       <p class="bd">${esc(S("conn_usa_body"))}</p>${joined ? "" : pbtn(S("conn_connect"), "conn-connect")}</div>`;
   } else {
@@ -524,7 +526,7 @@ function connPage(st){
   }
   let body = hero + `<div class="cn-prow"><span>${esc(S("conn_printers_other_row"))}</span>${I("chev")}</div>`;
   if(joined){
-    body += `<div class="cn-sec"><div class="kv">${esc(S("conn_sec_phones").toUpperCase())}</div><div class="cn-dev${st.flash?" sv-hl2":""}"><span class="tl">${I("smartphone")}</span><b>${esc(FIRST)}</b>
+    body += `<div class="cn-sec"><div class="kv">${esc(S("conn_sec_phones").toUpperCase())}</div><div class="cn-dev${st.flash?" sv-hl2":""}"><span class="tl">${I("smartphone")}</span><b>${esc(NEW.name)}</b>
       <span class="rt"><span class="chip">${esc(S("conn_included"))}</span><span class="rm">${esc(S("conn_remove"))}</span></span></div></div>` + pbtn(S("conn_connect"));
     body += FREE
       ? `<div class="cn-card cn-store" data-t="store"><div class="top"><span class="tl">${I("box")}</span><div><b>${esc(S("conn_store_title"))}</b><p>${esc(S("conn_store_usa_body"))}</p></div><span class="okp">${esc(S("conn_store_on"))}</span></div></div>`
@@ -633,7 +635,7 @@ VKIT.start(V, {
   steps: settled([
     {beat:0, hint:H1("settings_title"), target:'[data-t="settings"]', tap(st){ st.screen = "hub"; }},
     {beat:0, hint:H1("workspace_registers_and_printers"), target:'[data-t="hub-conn"]', tap(st){ st.screen = "conn"; }},
-    {beat:1, hint:H1("conn_connect"), target:'[data-t="conn-connect"]', tap(st){ st.sheet = "choose"; }},
+    {beat:1, hint:H1("conn_connect"), target:'[data-t="conn-connect"]', wait:3, tap(st){ st.sheet = "choose"; }},
     {beat:2, hint:H1("conn_opt_phone"), target:'[data-t="opt-phone"]', tap(st){ st.sheet = null; st.screen = "pick"; }},
     {beat:3, hint:H1("conn_connect"), target:'[data-t="emp-conn"]', tap(st,E){ st.invited = true; st.flash = true; E.after(1400, () => { st.flash = false; }); }},
     {beat:4, hint:H1("conn_pick_send_invite"), target:'[data-t="send"]', tap(st,E){ st.hop = 1;
@@ -653,8 +655,7 @@ VKIT.start(V, {
         E.after(2600, () => { st.hop = 2; });
         E.after(5000, () => { st.hop = 0; st.dev = "owner"; st.screen = "pick"; st.joined = true; st.invited = true; }); }},
     {beat:7, hint:pick({es:"Toca atrás", pt:"Toque em voltar", en:"Tap back"}), target:'[data-t="back"]', tap(st,E){ st.screen = "conn"; st.csc = 0; st.flash = true;
-        E.after(1600, () => { st.flash = false; });
-        E.after(3200, () => { st.csc = scrollNeed('[data-t="store"]', '.cn-scroll', 16); }); }}
+        E.after(1600, () => { st.flash = false; }); }}
   ]))
 });
 
