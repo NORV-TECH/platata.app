@@ -1,6 +1,6 @@
 # Report (keep this up to date)
 
-Last update: 22 Oct 2026, 1:45 PM PT (20:45 UTC), by the services builder (took over from the architect at 11:00 AM PT).
+Last update: 22 Oct 2026, 2:00 PM PT (21:00 UTC), by the services builder (took over from the architect at 11:00 AM PT).
 App commit last checked: 73c65f08 (sim/usa-canada, MERGE-23). Website work only on `demo-studio`, folder `demo-studio/`; nothing deployed, nothing published, main untouched.
 
 ## Summary
@@ -42,7 +42,7 @@ Services (es = Colombia, shown for every Spanish country; pt = Brazil; MX = Mexi
 | VS15 Pago a empleados (not US) | Peluquería | es, pt |
 | VS16 Descuentos y cargos | Peluquería | es, pt (cash discount + night charge; "Promo nuevo cliente" not demoed: its form text is wrong, coder item 5) |
 | VS17 Impuestos | Peluquería | es, pt |
-| VS18 Combos | Peluquería | es, pt, MX |
+| VS18 Combos | Peluquería | es, pt, MX (MX also shown for PE CL EC AR PA: the cut has choices outside Colombia) |
 | VS19 Otro celular o tableta | Peluquería | es, pt (Mexico pays for extra connections like Colombia; no price drawn: Google Play gives none yet) |
 | VS21 Sin internet | Peluquería | es, pt |
 | VS22 Google Drive | Veterinaria | es, pt |
