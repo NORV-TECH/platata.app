@@ -9,7 +9,7 @@ git add -A demo-studio .github .gitignore 2>/dev/null
 git commit -qm "$MSG
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
-Claude-Session: https://claude.ai/code/session_01CxcQsRVGpoSjQrcgYQSUer"
+Claude-Session: https://claude.ai/code/session_014AW49uTRjEExkSy8UXefSp"
 git pull -q --rebase origin demo-studio && git push -q origin demo-studio
 H=$(git log -1 --format=%h)
 flock -u 9
