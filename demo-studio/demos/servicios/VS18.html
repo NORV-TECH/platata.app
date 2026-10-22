@@ -547,7 +547,7 @@ function render(st){
   else if(st.sheet === "opt") over = optSheet(MAIN, {base: MAIN_PRICE, deal: true, scroll: st.osc});
   else if(st.sheet === "combo") over = comboSheet(st);
   const cut = st.cut ? timeCard(pick({es:"En la caja", pt:"No caixa", en:"At the register"}), pick({es:"Un cliente pide los dos.", pt:"Um cliente pede os dois.", en:"A client asks for both."})) : "";
-  return caja({combo, cartCount: st.added ? 2 : 0, total: st.added ? TOTAL : 0, sheet: over, hl: st.added ? null : null}) + cut;
+  return caja({combo, cartCount: st.added ? 2 : 0, total: st.added ? TOTAL : 0, sheet: over, scroll: st.gsc}) + cut;
 }
 const TAPN = n => HINT(n, n, n);
 VKIT.start(V, {
@@ -557,7 +557,7 @@ VKIT.start(V, {
     es:["Descuentos y combos: toca Crear combo","Elige el primer servicio: " + MAIN.name,"Y el que va con él: " + SECOND.name,"Toca Siguiente y activa el descuento","Toca Guardar: el combo queda activo","En la caja, toca " + MAIN.name,"Toca Agregar oferta y elige " + SECOND.name,"Te pregunta cuál: elige y toca Agregar","Así cobras menos por los dos con Platata."],
     pt:["Descontos e combos: toque em Criar combo","Escolha o primeiro serviço: " + MAIN.name,"E o que vai junto: " + SECOND.name,"Toque em Avançar e ative o desconto","Toque em Salvar: o combo fica ativo","No caixa, toque em " + MAIN.name,"Toque em Adicionar oferta e escolha " + SECOND.name,"Ele pergunta qual: escolha e toque em Adicionar","Assim você cobra menos pelos dois com o Platata."],
     en:["Discounts and combos: tap Create combo","Pick the first service: " + MAIN.name,"And what goes with it: " + SECOND.name,"Tap Next and turn on the discount","Tap Save: the combo is live","At the register, tap " + MAIN.name,"Tap Add deal and pick " + SECOND.name,"It asks which one: pick and tap Add","That's how you charge less for the two with Platata."]}),
-  state:{screen:"disc", s1:false, s2:false, pick:1, psc:0, disc:false, ssc:0, saved:false, flash:false, cut:false, sheet:null, osc:0, q:false, ch:null, added:false},
+  state:{screen:"disc", s1:false, s2:false, pick:1, psc:0, disc:false, ssc:0, saved:false, flash:false, cut:false, sheet:null, osc:0, gsc:0, q:false, ch:null, added:false},
   render,
   device: () => "phone",
   who: () => DEV_OWNER,
@@ -570,7 +570,8 @@ VKIT.start(V, {
     {beat:3, hint:H1("deal_next_button"), target:'[data-t="next"]', tap(st){ st.screen = "sum"; }},
     {beat:3, hint:pick({es:"Toca el interruptor", pt:"Toque no botão", en:"Tap the switch"}), target:'[data-t="disc"]', tap(st,E){ st.disc = true; E.after(500, () => { st.ssc = scrollNeed('.fh', '.dbg .sv-scroll', 12); }); }},
     {beat:4, hint:H1("deal_save_button"), target:'[data-t="save"]', tap(st,E){ st.screen = "disc"; st.saved = true; st.flash = true;
-        E.after(1900, () => { st.flash = false; st.cut = true; }); E.after(3800, () => { st.cut = false; st.screen = "caja"; }); }}
+        E.after(1900, () => { st.flash = false; st.cut = true; }); E.after(3800, () => { st.cut = false; st.screen = "caja"; });
+        E.after(4300, () => { st.gsc = scrollNeed(`[data-t="tile-${MAIN.id}"]`, '.sv-grid', 16); }); }}
   ].concat(MAIN_CHOICE != null ? [
     {beat:5, hint:TAPN(MAIN.name), target:`[data-t="tile-${MAIN.id}"]`, tap(st){ st.sheet = "var"; }},
     {beat:5, hint:TAPN(MAIN.choices[0].name), target:'[data-t="var-0"]', tap(st,E){ st.sheet = "opt"; st.osc = 0; E.after(500, () => { st.osc = scrollNeed('[data-t="opt-deal"]', '.sv-sheet .sc', 24); }); }}
