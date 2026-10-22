@@ -50,7 +50,7 @@ for biz, typ in (("tienda", ""), ("farmacia", "&type=pharmacy")):
 SERV_BIZ = {"peluqueria": "peluqueria", "veterinaria": "veterinaria", "motos": "taller-motos", "unas": "unas"}
 SERV_CL = [cl for cl in ALL_CL if not cl.startswith(("US", "CA"))]
 SERV_HOLD = {"V9", "VS20"}
-MX_SPEAKS_FOR = {"V1": ["MX", "PE", "CL", "EC", "AR", "PA"]}   # V1-MX: "no prices" is true in every Spanish country but Colombia
+MX_SPEAKS_FOR = {"V1": ["MX", "PE", "CL", "EC", "AR", "PA"], "V2": ["MX", "PE", "CL", "EC", "AR", "PA"]}   # V1-MX, V2-MX: "no suggested prices" is true in every Spanish country but Colombia
 for tree_id, slug in SERV_BIZ.items():
     for fid in [f"V{n}" for n in range(1, 10)] + [f"S{n}" for n in range(1, 25)]:
         page = fid if fid.startswith("V") else "V" + fid
