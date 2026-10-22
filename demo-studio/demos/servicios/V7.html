@@ -628,7 +628,7 @@ const steps = [
 ];
 if(NEEDS_CHOICE) steps.push({beat:0, hint:T(SV7.choices[0].name, SV7.choices[0].name, SV7.choices[0].name), target:'[data-t="choice-0"]', tap(st){ st.ci = 0; st.sheet = "opt"; }});
 steps.push(
-  {beat:1, hint:T(ADD, ADD, ADD), target:'[data-t="opt-add"]', tap(st){ addSvc(st); }},
+  {beat:1, wait:1.2, hint:T(ADD, ADD, ADD),   /* video-only: the sheet with its price stays up while the line names it */ target:'[data-t="opt-add"]', tap(st){ addSvc(st); }},
   {beat:2, hint:T1("home_tab_products"), target:'[data-t="tab-1"]', tap(st){ st.tab = 1; }},
   {beat:3, hint:T(PR7.name, PR7.name, PR7.name), target:`[data-t="prod-${PR7.id}"]`, tap(st){ st.lines.push(prodLine(PR7)); }},
   {beat:4, hint:T(S("ax_cobrar"), S("ax_cobrar"), S("ax_cobrar")), target:'[data-t="charge"]', tap(st){ st.screen = "pay"; }},

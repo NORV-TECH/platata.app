@@ -28,10 +28,10 @@
       }
     },
     {
-      "id": "3-promo",
+      "id": "3-efectivo",
       "voice": {
-        "es": "Promo nuevo cliente: diez por ciento en la primera visita. Toca Usar.",
-        "pt": "Promo novo cliente: dez por cento na primeira visita. Toque em Usar."
+        "es": "Descuento por pago en efectivo: tres por ciento si pagan en efectivo. Toca Usar.",
+        "pt": "Desconto por pagamento em dinheiro: três por cento se pagarem em dinheiro. Toque em Usar."
       }
     },
     {
@@ -44,15 +44,15 @@
     {
       "id": "5-guardar",
       "voice": {
-        "es": "Toca Guardar.",
-        "pt": "Toque em Salvar."
+        "es": "Toca Guardar: queda en tu lista.",
+        "pt": "Toque em Salvar: fica na sua lista."
       }
     },
     {
       "id": "6-cargos",
       "voice": {
         "es": "Ahora los cargos: toca Cargos.",
-        "pt": "Agora as taxas: toque em Acréscimos."
+        "pt": "Agora os acréscimos: toque em Acréscimos."
       }
     },
     {
@@ -65,8 +65,8 @@
     {
       "id": "8-guardar",
       "voice": {
-        "es": "Toca Guardar.",
-        "pt": "Toque em Salvar."
+        "es": "Toca Guardar: queda en Cargos.",
+        "pt": "Toque em Salvar: fica em Acréscimos."
       }
     },
     {

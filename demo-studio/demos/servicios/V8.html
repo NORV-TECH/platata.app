@@ -668,7 +668,7 @@ function render(st){
   if(st.screen==="till") return till({tab:0, lines:[LINE8]});
   const fee = st.picked==="domicilio" ? FEE : 0;
   if(st.screen==="pay") return payScreen({lines:[LINE8], where:{modes:["local","domicilio"], picked:st.picked}, fee});
-  return doneScreen(cashDue(lineUnit(LINE8) + fee)) + (st.receipt ? viewer(receiptText({lines:[LINE8], fees:[{name:S("where_mode_domicilio"), amount:fee}], time:"12:43"})) : "");
+  return doneScreen(cashDue(lineUnit(LINE8) + fee)) + (st.receipt ? viewer(receiptText({lines:[LINE8], fees:[{name:S("where_mode_domicilio"), amount:fee}], time:"12:41"})) : "");
 }
 const T = (es, pt, en) => pick({es:"Toca "+es, pt:"Toque em "+pt, en:"Tap "+en});
 const T1 = k => T(S(k), S(k), S(k));
@@ -676,9 +676,9 @@ VKIT.start(V, {
   id:"V8", tallVideo:true, clock:"12:41",
   endText:pick({es:"Así cobras tus visitas a domicilio, con Platata.", pt:"Assim você cobra seus atendimentos a domicílio, com o Platata.", en:"That's how you charge home visits, with Platata."}),
   beats:pick({
-    es:["En Mi negocio, toca Configuración", "Toca Dónde atiendes", "Enciende A domicilio y escribe cuánto cobras por ir", "Toca Listo", "Más tarde, en la caja: toca Cobrar", "Toca A domicilio: el cargo se suma al total", "Toca Exacto", "Toca Ver recibo: ahí está el cargo a domicilio", "Así cobras tus visitas a domicilio, con Platata."],
-    pt:["Em Meu negócio, toque em Configurações", "Toque em Onde você atende", "Ative A domicílio e digite quanto cobra para ir", "Toque em Pronto", "Mais tarde, no caixa: toque em Cobrar", "Toque em A domicílio: a taxa entra no total", "Toque em Exato", "Toque em Ver recibo: lá está a taxa a domicílio", "Assim você cobra seus atendimentos a domicílio, com o Platata."],
-    en:["In My business, tap Settings", "Tap Where you work", "Turn on At their place and type what you charge to go", "Tap Done", "Later, at the register: tap Charge", "Tap At their place: the charge joins the total", "Tap Exact", "Tap View receipt: there is the home-visit charge", "That's how you charge home visits, with Platata."]}),
+    es:["En Mi negocio, toca Configuración", "Toca Dónde atiendes: local, domicilio o recogida", "Enciende A domicilio y escribe cuánto cobras por ir", "Toca Listo", "Más tarde, en la caja: toca Cobrar", "Toca A domicilio: el cargo se suma al total", "Toca Exacto", "Toca Ver recibo: ahí está el cargo a domicilio", "Así cobras tus visitas a domicilio, con Platata."],
+    pt:["Em Meu negócio, toque em Configurações", "Toque em Onde você atende: local, domicílio ou retirada", "Ative A domicílio e digite quanto cobra para ir", "Toque em Pronto", "Mais tarde, no caixa: toque em Cobrar", "Toque em A domicílio: a taxa entra no total", "Toque em Exato", "Toque em Ver recibo: lá está a taxa a domicílio", "Assim você cobra seus atendimentos a domicílio, com o Platata."],
+    en:["In My business, tap Settings", "Tap Where you work: shop, their place or pickup", "Turn on At their place and type what you charge to go", "Tap Done", "Later, at the register: tap Charge", "Tap At their place: the charge joins the total", "Tap Exact", "Tap View receipt: there is the home-visit charge", "That's how you charge home visits, with Platata."]}),
   state:{screen:"panel", dom:false, focus:false, kbd:false, typed:"", time:false, picked:null, receipt:false, scroll:0},
   render,
   device: () => "phone",
@@ -693,7 +693,7 @@ VKIT.start(V, {
     {beat:3, hint:T1("where_done"), target:'[data-t="where-done"]', tap(st,E){ st.screen="hub"; E.after(900, () => { st.time=true; }); }},
     {beat:4, hint:pick({es:"Toca para seguir",pt:"Toque para continuar",en:"Tap to go on"}), target:'[data-t="time"]', tap(st){ st.time=false; st.screen="till"; }},
     {beat:4, hint:T(S("ax_cobrar"), S("ax_cobrar"), S("ax_cobrar")), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
-    {beat:5, hint:T1("where_mode_domicilio"), target:'[data-t="where-domicilio"]', tap(st){ st.picked="domicilio"; }},
+    {beat:5, wait:1.2, hint:T1("where_mode_domicilio"),   /* video-only: the unanswered chooser shows while the line says Platata asks */ target:'[data-t="where-domicilio"]', tap(st){ st.picked="domicilio"; }},
     {beat:6, hint:T1("cash_exact_short"), target:'[data-t="exact"]', tap(st){ st.screen="done"; }},
     {beat:7, hint:T1("receipt_opt_show_receipt"), target:'[data-t="view"]', tap(st){ st.receipt=true; }}
   ]

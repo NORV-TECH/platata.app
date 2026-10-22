@@ -715,7 +715,7 @@ function render(st){
   if(st.screen==="open") return openRegister();
   if(st.screen==="pay") return payScreen({lines:[BLINE], ticket:B.client, customer:B.client});
   const due = cashDue(lineUnit(BLINE));
-  return doneScreen(due) + (st.receipt ? viewer(receiptText({lines:[BLINE], time:"14:43", performer:B.who})) : "");
+  return doneScreen(due) + (st.receipt ? viewer(receiptText({lines:[BLINE], time:"14:41", performer:B.who})) : "");
 }
 const T = (es, pt, en) => pick({es:"Toca "+es, pt:"Toque em "+pt, en:"Tap "+en});
 const T1 = k => T(S(k), S(k), S(k));
@@ -731,13 +731,14 @@ VKIT.start(V, {
   render,
   device: () => "phone",
   who: () => pick({es:"Tu teléfono", pt:"Seu celular", en:"Your phone"}),
+  /* wait: a video-only delay so each tap lands on its line's "Toca …" (engine.js:157), not 0.8 s in */
   steps:[
     {beat:0, hint:T1("sx_agenda"), target:'[data-t="nav-agenda"]', tap(st){ st.screen="agenda"; }},
     {beat:0, hint:T(B.client, B.client, B.client), target:'[data-t="row-appt"]', tap(st){ st.screen="appt"; }},
-    {beat:1, hint:T1("ax_cobrar"), target:'[data-t="cobrar"]', tap(st){ st.screen="open"; }},
-    {beat:2, hint:T1("register_open_confirm"), target:'[data-t="open-confirm"]', tap(st){ st.screen="appt"; }},
-    {beat:3, hint:T1("ax_cobrar"), target:'[data-t="cobrar"]', tap(st){ st.screen="pay"; }},
-    {beat:4, hint:T1("cash_exact_short"), target:'[data-t="exact"]', tap(st){ st.screen="done"; }},
+    {beat:1, wait:1.5, hint:T1("ax_cobrar"), target:'[data-t="cobrar"]', tap(st){ st.screen="open"; }},
+    {beat:2, wait:3.0, hint:T1("register_open_confirm"), target:'[data-t="open-confirm"]', tap(st){ st.screen="appt"; }},
+    {beat:3, wait:0.8, hint:T1("ax_cobrar"), target:'[data-t="cobrar"]', tap(st){ st.screen="pay"; }},
+    {beat:4, wait:1.5, hint:T1("cash_exact_short"), target:'[data-t="exact"]', tap(st){ st.screen="done"; }},
     {beat:5, hint:T1("receipt_opt_show_receipt"), target:'[data-t="view"]', tap(st){ st.receipt=true; }}
   ]
 });
