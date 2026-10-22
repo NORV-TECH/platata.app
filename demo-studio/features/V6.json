@@ -1,0 +1,66 @@
+{
+  "id": "V6",
+  "name": "Cobrar la cita",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-agenda",
+      "voice": {
+        "es": "Tus citas están en Agenda. Toca la cita de Ana.",
+        "pt": "Seus agendamentos ficam em Agenda. Toque no da Ana."
+      }
+    },
+    {
+      "id": "2-cita",
+      "voice": {
+        "es": "Ves el servicio y quién lo hace. Toca Cobrar.",
+        "pt": "Você vê o serviço e quem faz. Toque em Cobrar."
+      }
+    },
+    {
+      "id": "3-caja",
+      "voice": {
+        "es": "La caja está cerrada, y para recibir dinero hay que abrirla. Toca Abrir caja.",
+        "pt": "O caixa está fechado, e para receber é preciso abrir. Toque em Abrir caixa."
+      }
+    },
+    {
+      "id": "4-otra-vez",
+      "voice": {
+        "es": "Vuelves a la cita. Toca Cobrar otra vez.",
+        "pt": "Você volta ao agendamento. Toque em Cobrar de novo."
+      }
+    },
+    {
+      "id": "5-exacto",
+      "voice": {
+        "es": "La cita ya es la venta, con Ana. Toca Exacto.",
+        "pt": "O agendamento já é a venda, com a Ana. Toque em Exato."
+      }
+    },
+    {
+      "id": "6-recibo",
+      "voice": {
+        "es": "En el recibo dice quién atendió: Carla.",
+        "pt": "No recibo aparece quem atendeu: a Carla."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así cobras tus citas, con Platata.",
+        "pt": "Assim você cobra seus agendamentos, com o Platata."
+      }
+    }
+  ]
+}

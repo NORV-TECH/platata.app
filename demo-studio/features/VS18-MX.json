@@ -1,0 +1,19 @@
+{
+  "id": "VS18-MX",
+  "name": "Combos (México)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {"stability": 0.5, "similarity_boost": 0.75}
+  },
+  "steps": [
+    {"id": "1-crear", "voice": {"es": "En Descuentos y combos, pestaña Combos, toca Crear combo."}},
+    {"id": "2-primero", "voice": {"es": "Elige el primer servicio: Corte de dama."}},
+    {"id": "3-segundo", "voice": {"es": "Y el que va con él: Cepillado."}},
+    {"id": "4-descuento", "voice": {"es": "Toca Siguiente y activa el descuento: diez por ciento."}},
+    {"id": "5-guardar", "voice": {"es": "Toca Guardar. El combo queda activo."}},
+    {"id": "6-caja", "voice": {"es": "En la caja, toca Corte de dama y elige el estilo."}},
+    {"id": "7-oferta", "voice": {"es": "Toca Agregar oferta y elige el Cepillado."}},
+    {"id": "8-pregunta", "voice": {"es": "El cepillado te pregunta el largo: elige Medio y toca Agregar. Los dos salen con diez por ciento menos."}},
+    {"id": "9-fin", "voice": {"es": "Así cobras menos por los dos con Platata."}}
+  ]
+}

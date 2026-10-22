@@ -602,9 +602,9 @@ document.addEventListener("transitionend", e => { if(e.propertyName==="transform
    after it, so the page moves the clock, not the booking.
    Screens (paths under app/src/main/java/com/example/):
    till          ui/screens/home/HomeScreen.kt (services: "Servicios · N | Productos · N", RegisterClosedBar on the owner phone :687)
-   Agenda        ui/screens/transactions/ServicesTransactionsScreen.kt (back arrow + TabRow "Ventas | Agenda N" :126-182, opens on
-                 Agenda (ownTab = 1, :103), search pill :188-212, day headers :248-262 (item 23), BookingRow :312-430: Viene / day /
-                 time | name, "service · phone" (the WhatsApp number raw, :299-302), the where line (item 24) | amount)
+   Agenda        ui/screens/transactions/ServicesTransactionsScreen.kt (back arrow + TabRow "Ventas | Agenda N" :140-182, opens on
+                 Agenda (ownTab = 1, :99), search pill :195-219, day headers :251-262 (item 23), BookingRow :370-480: Viene / day /
+                 time | name, "service · phone" (the WhatsApp number raw, :271-273), the where line (item 24) | amount)
    appointment   ui/screens/transactions/AppointmentDetailScreen.kt:180-330 (SumaTopBar = client; "Servicios"; every line with its money
                  (item 24); "<service> · Dura 40 min"; the where; "Atendió: <who>" (:244-254); Cobrar / No asistió (from its hour) /
                  Reprogramar / Cancelar cita; the collapsed WhenPicker "Hoy · 2:00 p. m. · Cambiar" (WhenPicker.kt:236-262) and the

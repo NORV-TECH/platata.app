@@ -1,0 +1,73 @@
+{
+  "id": "V7",
+  "name": "Servicios y productos en un solo ticket",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-corte",
+      "voice": {
+        "es": "En Servicios, toca el corte de caballero.",
+        "pt": "Em Serviços, toque no corte masculino."
+      }
+    },
+    {
+      "id": "2-agregar",
+      "voice": {
+        "es": "El botón ya dice el precio. Toca Agregar a la venta.",
+        "pt": "O botão já mostra o preço. Toque em Adicionar à venda."
+      }
+    },
+    {
+      "id": "3-productos",
+      "voice": {
+        "es": "Ahora toca Productos.",
+        "pt": "Agora toque em Produtos."
+      }
+    },
+    {
+      "id": "4-shampoo",
+      "voice": {
+        "es": "Toca el shampoo: va a la misma venta.",
+        "pt": "Toque no shampoo: entra na mesma venda."
+      }
+    },
+    {
+      "id": "5-cobrar",
+      "voice": {
+        "es": "Toca Cobrar: un solo total para los dos.",
+        "pt": "Toque em Cobrar: um total só para os dois."
+      }
+    },
+    {
+      "id": "6-articulos",
+      "voice": {
+        "es": "En Artículos ves el corte y el shampoo.",
+        "pt": "Em Itens você vê o corte e o shampoo."
+      }
+    },
+    {
+      "id": "7-exacto",
+      "voice": {
+        "es": "Toca Listo y luego Exacto.",
+        "pt": "Toque em Pronto e depois em Exato."
+      }
+    },
+    {
+      "id": "8-fin",
+      "voice": {
+        "es": "Así vendes servicios y productos juntos, con Platata.",
+        "pt": "Assim você vende serviços e produtos juntos, com o Platata."
+      }
+    }
+  ]
+}

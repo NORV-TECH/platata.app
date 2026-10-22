@@ -106,9 +106,10 @@ const ACTION_WORD = t(V.isOrder ? "services_action_crear_orden" : "services_acti
 const SERVICES = C.services;
 const svcPriceLabel = s => s.mode==="ask" ? t("items_price_unset") : s.mode==="from" ? t("items_price_from", money(s.price)) : money(s.price);
 
-/* the one service each page rings: fixed price in every country and carrying its researched options (Lavado / extras), so the
-   tap opens the option sheet everywhere (CartActions.handleProductClick :490-499). Other ?biz= values take their own. */
-const RING_ID = {peluqueria:"corte-caballero", veterinaria:"urgencias", "taller-motos":"revision-gases", unas:"manicure-tradicional"}[V.biz];
+/* the one service each page rings. Peluquería: "Corte de caballero / hombre", a fixed price in every country with its researched options
+   (Lavado + an unpriced add-on), so the tap opens the option sheet everywhere (CartActions.handleProductClick :490-499). The other ?biz=
+   values ring a service from their first grid row; where it has choices (outside Colombia, kit) "Elige uno" opens first. */
+const RING_ID = {peluqueria:"corte-caballero", veterinaria:"consulta-general", "taller-motos":"mantenimiento-preventivo", unas:"manicure-tradicional"}[V.biz];
 const RING = SERVICES.find(s => s.id===RING_ID) || SERVICES.find(s => s.price!=null) || SERVICES[0];
 const RING_CHOICE = RING.choices.length ? 0 : null;        // a service with choices opens "Elige uno" first (HomeScreen.kt:976-978)
 const RING_PRICE = RING_CHOICE!=null ? (RING.choices[0].price || RING.price || 0) : (RING.price || 0);
@@ -420,7 +421,8 @@ VKIT.start(V, {
 /* option sheet + Elige uno: M3 ModalBottomSheet defaults over the app theme (BottomSheetDefaults.ExpandedShape = shapes.extraLarge top = 50 dp
    in Theme.kt:100; container surfaceContainerLow #F7F7FA, the Elige uno sheet passes surface #FFF; drag handle 32x4) */
 .mat .hdl{width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#79747E;opacity:.4;margin:calc(var(--u)*22) auto calc(var(--u)*22)}
-.mat .osheet{width:100%;background:#F7F7FA;border-radius:calc(var(--u)*50) calc(var(--u)*50) 0 0;padding:0 calc(var(--u)*16) calc(var(--u)*24)}
+.mat .osheet{width:100%;background:#F7F7FA;border-radius:calc(var(--u)*50) calc(var(--u)*50) 0 0;padding:0 calc(var(--u)*16) calc(var(--u)*24);max-height:calc(100% - var(--u)*48);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.mat .osheet>*{flex:0 0 auto}   /* a sheet taller than the screen shows its end, as after a scroll (the CTA is the last thing in the sheet's scroll) */
 .mat .osheet h2{margin:0 0 calc(var(--u)*12);font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700}
 .mat .osl{font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);margin-bottom:calc(var(--u)*6)}
 .mat .osr{display:flex;align-items:center;gap:calc(var(--u)*8);min-height:calc(var(--u)*48)}

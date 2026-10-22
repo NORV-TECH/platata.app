@@ -1,0 +1,80 @@
+{
+  "id": "V8",
+  "name": "En el local, a domicilio, recogida",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-configuracion",
+      "voice": {
+        "es": "En Mi negocio, toca Configuración.",
+        "pt": "Em Meu negócio, toque em Configurações."
+      }
+    },
+    {
+      "id": "2-donde",
+      "voice": {
+        "es": "Toca Dónde atiendes.",
+        "pt": "Toque em Onde você atende."
+      }
+    },
+    {
+      "id": "3-domicilio",
+      "voice": {
+        "es": "Enciende A domicilio y escribe cuánto cobras por ir.",
+        "pt": "Ative A domicílio e digite quanto você cobra para ir."
+      }
+    },
+    {
+      "id": "4-listo",
+      "voice": {
+        "es": "Toca Listo.",
+        "pt": "Toque em Pronto."
+      }
+    },
+    {
+      "id": "5-cobrar",
+      "voice": {
+        "es": "Más tarde, en la caja, una venta. Toca Cobrar.",
+        "pt": "Mais tarde, no caixa, uma venda. Toque em Cobrar."
+      }
+    },
+    {
+      "id": "6-a-domicilio",
+      "voice": {
+        "es": "Platata pregunta dónde se hace. Toca A domicilio: el cargo de ir se suma al total.",
+        "pt": "O Platata pergunta onde é feito. Toque em A domicílio: a taxa entra no total."
+      }
+    },
+    {
+      "id": "7-exacto",
+      "voice": {
+        "es": "Toca Exacto.",
+        "pt": "Toque em Exato."
+      }
+    },
+    {
+      "id": "8-recibo",
+      "voice": {
+        "es": "Toca Ver recibo: ahí está el cargo a domicilio, en su propia línea.",
+        "pt": "Toque em Ver recibo: lá está a taxa a domicílio, em sua própria linha."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así cobras tus visitas a domicilio, con Platata.",
+        "pt": "Assim você cobra seus atendimentos a domicílio, com o Platata."
+      }
+    }
+  ]
+}

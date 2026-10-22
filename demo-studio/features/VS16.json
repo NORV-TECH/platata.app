@@ -1,0 +1,80 @@
+{
+  "id": "VS16",
+  "name": "Descuentos y cargos",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-configuracion",
+      "voice": {
+        "es": "En Mi negocio, toca Configuración.",
+        "pt": "Em Meu negócio, toque em Configurações."
+      }
+    },
+    {
+      "id": "2-descuentos",
+      "voice": {
+        "es": "Toca Descuentos y combos.",
+        "pt": "Toque em Descontos e combos."
+      }
+    },
+    {
+      "id": "3-promo",
+      "voice": {
+        "es": "Promo nuevo cliente: diez por ciento en la primera visita. Toca Usar.",
+        "pt": "Promo novo cliente: dez por cento na primeira visita. Toque em Usar."
+      }
+    },
+    {
+      "id": "4-peluqueria",
+      "voice": {
+        "es": "Elige a qué se aplica: marca Peluquería y toca Listo.",
+        "pt": "Escolha onde vale: marque Cabeleireiro e toque em Pronto."
+      }
+    },
+    {
+      "id": "5-guardar",
+      "voice": {
+        "es": "Toca Guardar.",
+        "pt": "Toque em Salvar."
+      }
+    },
+    {
+      "id": "6-cargos",
+      "voice": {
+        "es": "Ahora los cargos: toca Cargos.",
+        "pt": "Agora as taxas: toque em Acréscimos."
+      }
+    },
+    {
+      "id": "7-nocturno",
+      "voice": {
+        "es": "Cargo nocturno: Platata lo pregunta al cobrar. Toca Usar.",
+        "pt": "Sobretaxa noturna: o Platata pergunta na hora de cobrar. Toque em Usar."
+      }
+    },
+    {
+      "id": "8-guardar",
+      "voice": {
+        "es": "Toca Guardar.",
+        "pt": "Toque em Salvar."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así das descuentos y cobras cargos, con Platata.",
+        "pt": "Assim você dá descontos e cobra acréscimos, com o Platata."
+      }
+    }
+  ]
+}
