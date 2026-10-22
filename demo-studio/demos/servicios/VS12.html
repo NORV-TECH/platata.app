@@ -139,6 +139,19 @@ const SALES = earlySales().concat(C.sales).map((s, i) => {
     total: s.total, pay: PAYKEY(s.pay), by: s.by, client: s.client, emp: OWNER, performer, sched,
     status: "PAID", refunded: 0, cashRounding: 0, tax: 0, svc: 0, dining: 0, tip: 0, discount: 0 };
 });
+/* Two corrections to the copied data (totals untouched, the kit's random stream untouched):
+   - clients: the kit puts one of its 5 clients on 55% of all sales, so each regular would have ~49 visits in 7 weeks, three
+     in one day. A regular comes about once a week: a sale keeps its client's name only when that client's last kept visit is
+     at least 5 days earlier (about 1 sale in 9 carries a client, ~10 visits each).
+   - Mexico: Stripe cards reached Mexico on 21 Oct 2026 (STRIPE-MX-1); the kit gives MX "card" sales only because
+     COUNTRIES.MX.pay.card = "stripe". Before 21 Oct those were transfers, so September has no card charge (no fee note or fee
+     row on the accountant summary, EmployeePayActions.kt:346-352). */
+(() => { const last = {};
+  SALES.forEach(o => { if(!o.client) return;
+    if(last[o.client] != null && o.ts - last[o.client] < 5 * 864e5){ o.client = null; return; }
+    last[o.client] = o.ts; });
+  if(CC === "MX") SALES.forEach(o => { if(o.pay === "card" && o.ts < new Date(2026, 9, 21)) o.pay = "transfer"; });
+})();
 const SALE_BY_ID = id => SALES.find(s => s.id === id);
 
 /* ---------- data/SalesBreakdown.kt moneyOf + fromRows, data/NetSplits.kt (the Reports rules), ported ---------- */
@@ -312,13 +325,14 @@ function saleScreen(o, st){ st=st||{};
 }
 
 /* ---------- Reports (ui/screens/reports/ReportsScreen.kt:44-560) ----------
-   SumaTopBar reports_title; pinned FilterChip row (RangeSelector :567); periodLabel (:598) bodySmall; the chart (ReportsSalesChart.kt,
+   SumaTopBar reports_title; pinned FilterChip row (RangeSelector :567-594: FilterChip(selected, onClick, label), no leadingIcon, so the selected chip is
+   only filled, no check mark); periodLabel (:598) bodySmall; the chart (ReportsSalesChart.kt,
    190 dp, bars #007AFF 12 dp, two grid lines, y labels abbreviateAxis, x labels chartLabelIndices); the table card (:228-397:
    Gross; Discounts; Refunds (N); Net sales + NetSalesWords.noteRes + ComparisonLine; the charge / tax / tip lines only when > 0;
    Total collected; Number of sales + ComparisonLine; services only: "Citas sin asistir" when > 0 (:378, DBSVC-1); Average sale);
    ReportBreakdownList cards (sorted, 8 rows + "Otros"): Cómo te pagaron (+ after refunds), Ventas de artículos por categoría,
    [Ventas por lugar: needs 2+ ways of working], Servicios con más ingresos (services title, 10 rows, "N vendidos"),
-   Ventas por empleado (owner only, plural "N ventas"); bottom button reports_send_to_accountant (owner). LEVEL_2: support strip. */
+   Ventas por empleado (owner only, plural "N ventas"); bottom button reports_send_to_accountant (owner) on Surface(background, tonalElevation 2 dp): a #EDEDED band. LEVEL_2: support strip. */
 const PRESETS = ["today","yesterday","this_week","this_month","last_month","this_year","last_year","custom"];
 const DAYMS = 86400000;
 const startOfWeekMon = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
@@ -424,8 +438,8 @@ function reportLists(rg, sales){
 /* st: {range, chipX, scroll, sel} */
 function reportsScreen(st, o){ o=o||{};
   const rg = rangeOf(st.range);
-  const chips = `<div class="rp-chips"><div style="transform:translateX(calc(var(--u)*${-(st.chipX||0)}))">${PRESETS.map(p =>
-    `<span class="${p===st.range?"on":""}" data-t="chip-${p}">${p===st.range?I.check:""}${esc(S("reports_period_"+p))}</span>`).join("")}</div></div>`;
+  const chips = `<div class="rp-chips" data-t="chips"><div style="transform:translateX(calc(var(--u)*${-(st.chipX||0)}))">${PRESETS.map(p =>
+    `<span class="${p===st.range?"on":""}" data-t="chip-${p}">${esc(S("reports_period_"+p))}</span>`).join("")}</div></div>`;
   return topbar(S("reports_title")) + chips + `<div class="rp-per">${esc(rg.label)}</div>
     <div class="vs-scroll"><div class="in rp-in" style="transform:translateY(calc(var(--u)*${-(st.scroll||0)}))">
       <div class="rp-ct">${esc(S("reports_chart_title"))}</div>${chart(rg, SALES, st.sel)}
@@ -512,7 +526,7 @@ const VS_CSS = `
 .mat .rp-chips{flex:0 0 auto;overflow:hidden;padding:calc(var(--u)*8) 0}
 .mat .rp-chips>div{display:flex;gap:calc(var(--u)*8);padding:0 calc(var(--u)*16);transition:transform .5s ease;width:max-content}
 .mat .rp-chips span{height:calc(var(--u)*32);border-radius:calc(var(--u)*8);border:1px solid var(--m-outline);padding:0 calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);white-space:nowrap}
-.mat .rp-chips span.on{background:var(--m-ovar);border-color:transparent;color:var(--m-on);padding-left:calc(var(--u)*8)}
+.mat .rp-chips span.on{background:var(--m-ovar);border-color:transparent;color:var(--m-on)}
 .mat .rp-chips span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
 .mat .rp-per{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
 .mat .rp-in{padding-bottom:calc(var(--u)*16)}
@@ -556,7 +570,7 @@ const VS_CSS = `
 .mat .rp-card .br b{font-weight:600;white-space:nowrap}
 .mat .rp-card .trk{height:calc(var(--u)*6);border-radius:calc(var(--u)*6);background:#F2F2F7;margin:calc(var(--u)*4) 0 calc(var(--u)*12);overflow:hidden}
 .mat .rp-card .trk i{display:block;height:100%;background:#007AFF;border-radius:calc(var(--u)*6)}
-.mat .rp-bot{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);background:#fff;box-shadow:0 -1px 2px rgba(0,0,0,.06)}
+.mat .rp-bot{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);background:#EDEDED}
 `;
 const vsStyle_ = document.createElement("style"); vsStyle_.textContent = VS_CSS; document.head.appendChild(vsStyle_);
 /* a scrolled list slides (transform .5s); once it stops, ask the engine to put the tap ring on the target again */
@@ -585,8 +599,10 @@ const WHO_PHONE = () => S("conn_slot_phone");
                 with accountant_card_fees_none_note when the month had card charges and no fee is known (CO Wompi never knows it;
                 MX Stripe fees are asked to the server only AFTER this first draw, :274-281); Pagado a proveedores; Facturas de
                 proveedores; Pagado a empleados (only months entirely inside the range: September is)
-   the message  buildAccountantMessage (ShareAccountantScreen.kt:232-263) + WhatsappSignatureText.sign; shareText (:418) sends
-                ACTION_SEND to com.whatsapp: the screen after is WhatsApp's own (drawn plain, not Platata's).
+   the message  buildAccountantMessage (ShareAccountantScreen.kt:232-263) + WhatsappSignatureText.sign; shareText (:418-447) sends
+                ACTION_SEND to com.whatsapp with no number: WhatsApp's own "Send to" list comes first (the owner picks the
+                accountant and sends), then the chat. Both drawn plain: WhatsApp's screens, not Platata's.
+   Mexico: September has no card charge (Stripe cards came on 21 Oct, see the common header), so no card-fee note anywhere.
    Demo data the kit does not carry (copied here, see the build notes): September's supplier invoices scanned in Facturas
    (9 invoices, every amount read) and September's pay recorded for each employee (Team > Pago). Sept 1-9 sales: see the
    common header. */
@@ -641,6 +657,14 @@ function accountant(st){
 }
 /* WhatsApp's own chat with the shared text (com.whatsapp, ACTION_SEND): not a Platata screen */
 const CONTACT = pick({es:"Contador", pt:"Contador", en:"Accountant"});
+/* WhatsApp's "Send to" list: recent chats (the accountant, two of the team); pick one, then the green send button */
+const WA_PICK = [CONTACT].concat(C.staff.slice(0, 2).map(s => s.name));
+function waPicker(st){
+  const rows = WA_PICK.map((n, i) => `<div class="wpr" data-t="wa-c${i}"><span class="av">${I.person}${st.picked===i?`<i>${I.check}</i>`:""}</span><b>${esc(n)}</b></div>`).join("");
+  return `<div class="wa wa-pick"><div class="wtop">${I.back}<b>${esc(pick({es:"Enviar a…", pt:"Enviar para…", en:"Send to…"}))}</b><span class="sp"></span>${I.search}</div>
+    <div class="wlist"><p>${esc(pick({es:"Chats recientes", pt:"Conversas recentes", en:"Recent chats"}))}</p>${rows}</div>
+    ${st.picked!=null?`<div class="wsel"><span>${esc(WA_PICK[st.picked])}</span><span class="snd" data-t="wa-go">${I.send}</span></div>`:""}</div>`;
+}
 function whatsapp(st){
   const html = esc(MSG).replace(/\n/g, "<br>");
   return `<div class="wa"><div class="wtop">${I.back}<span class="av">${I.person}</span><b>${esc(CONTACT)}</b></div>
@@ -650,6 +674,7 @@ function whatsapp(st){
 function render(st){
   if(st.screen==="accountant") return accountant(st);
   if(st.screen==="wa") return whatsapp(st);
+  if(st.screen==="wapick") return waPicker(st);
   return reportsScreen(st, {});
 }
 const cssVS12 = document.createElement("style"); cssVS12.textContent = `
@@ -680,26 +705,44 @@ const cssVS12 = document.createElement("style"); cssVS12.textContent = `
 .mat .wa .box .txt{max-height:calc(var(--u)*300);overflow:hidden}
 .mat .wa .snd{width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:50%;background:#00A884;display:grid;place-items:center;flex:0 0 auto}
 .mat .wa .snd svg{fill:#fff}
+.mat .wa-pick{background:#fff}
+.mat .wa-pick .wtop .sp{flex:1}
+.mat .wa-pick .wlist{flex:1;min-height:0;overflow:hidden}
+.mat .wa-pick .wlist p{margin:0;padding:calc(var(--u)*16) calc(var(--u)*16) calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:#008069}
+.mat .wa-pick .wpr{display:flex;align-items:center;gap:calc(var(--u)*14);padding:calc(var(--u)*10) calc(var(--u)*16)}
+.mat .wa-pick .wpr .av{position:relative;width:calc(var(--u)*44);height:calc(var(--u)*44);border-radius:50%;background:#DFE5E7;display:grid;place-items:center;flex:0 0 auto}
+.mat .wa-pick .wpr .av svg{fill:#8696A0}
+.mat .wa-pick .wpr .av i{position:absolute;right:calc(var(--u)*-2);bottom:calc(var(--u)*-2);width:calc(var(--u)*20);height:calc(var(--u)*20);border-radius:50%;background:#00A884;border:2px solid #fff;display:grid;place-items:center}
+.mat .wa-pick .wpr .av i svg{width:calc(var(--u)*14);height:calc(var(--u)*14);fill:#fff}
+.mat .wa-pick .wpr b{font-size:calc(var(--u)*16);font-weight:500;color:#111B21}
+.mat .wa-pick .wsel{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;background:#F0F2F5;padding:calc(var(--u)*10) calc(var(--u)*12) calc(var(--u)*10) calc(var(--u)*16);font-size:calc(var(--u)*15);color:#111B21}
 `; document.head.appendChild(cssVS12);
 const pxToDp = px => px * 412 / document.getElementById("screen").clientWidth;
+/* how far the chip row must slide so "Mes pasado" shows whole, measured on screen (dp) */
+const chipShift = st => { const row = document.querySelector('[data-t="chips"]'), el = document.querySelector('[data-t="chip-last_month"]');
+  if(!row || !el) return 145; const r = row.getBoundingClientRect(), b = el.getBoundingClientRect();
+  return Math.max(0, Math.ceil(pxToDp(b.right - r.right) + 16 + (st.chipX || 0))); };
 const offsetDp = tag => { const el = document.querySelector(`[data-t="${tag}"]`); return el ? pxToDp(el.closest(".ac-row") ? el.closest(".ac-row").offsetTop : el.offsetTop) : 0; };
 VKIT.start(V, {
   id:"VS12", tallVideo:true, clock:"12:41",
   endText:pick({es:"Así le mandas el mes a tu contador con Platata.", pt:"Assim você manda o mês para o seu contador com o Platata.", en:"That's how your accountant gets the month, with Platata."}),
   beats:pick({
-    es:["¿Tu contador pide los números? Toca Mes pasado","Toca Resumen para el contador","Las ventas del mes: en efectivo y con tarjeta","Y lo pagado a proveedores y empleados; todo se copia","Toca Enviar resumen al contador","Se abre WhatsApp con todo el texto: envíalo","Así le mandas el mes a tu contador con Platata."],
-    pt:["O contador pediu os números? Toque em Mês passado","Toque em Resumo para o contador","As vendas do mês: em dinheiro e eletrônicas","E o pago a fornecedores e funcionários; tudo se copia","Toque em Enviar resumo ao contador","O WhatsApp abre com o texto todo: envie","Assim você manda o mês para o seu contador com o Platata."],
-    en:["Your accountant wants the numbers? Tap Last month","Tap Summary for the accountant","The month's sales: in cash and by card","And what you paid suppliers and staff; it all copies","Tap Send summary to the accountant","WhatsApp opens with the whole text: send it","That's how your accountant gets the month, with Platata."]}),
-  state:{screen:"reports", range:"today", sel:null, scroll:0, chipX:(L==="en"?175:145), toast:false, sent:false, hl:false},
+    es:["¿Tu contador pide los números? Toca Mes pasado","Toca Resumen para el contador","Las ventas del mes: en efectivo y con tarjeta","Y lo pagado a proveedores y empleados; todo se copia","Toca Enviar resumen al contador","Se abre WhatsApp: elige a tu contador y envía","Así le mandas el mes a tu contador con Platata."],
+    pt:["O contador pediu os números? Toque em Mês passado","Toque em Resumo para o contador","As vendas do mês: em dinheiro e eletrônicas","E o pago a fornecedores e funcionários; tudo se copia","Toque em Enviar resumo ao contador","O WhatsApp abre: escolha o contador e envie","Assim você manda o mês para o seu contador com o Platata."],
+    en:["Your accountant wants the numbers? Tap Last month","Tap Summary for the accountant","The month's sales: in cash and by card","And what you paid suppliers and staff; it all copies","Tap Send summary to the accountant","WhatsApp opens: pick your accountant and send","That's how your accountant gets the month, with Platata."]}),
+  state:{screen:"reports", range:"today", sel:null, scroll:0, chipX:0, toast:false, sent:false, hl:false, picked:null},
   render,
   device: () => "phone",
-  who: st => st.screen==="wa" ? "WhatsApp" : WHO_PHONE(),
+  who: st => (st.screen==="wa" || st.screen==="wapick") ? "WhatsApp" : WHO_PHONE(),
   steps:[
-    {beat:0, hint:HINT(S("reports_period_last_month")), target:'[data-t="chip-last_month"]', tap(st){ st.range="last_month"; st.scroll=0; }},
+    /* Reports opens with the chips at their start ("Hoy" selected); the owner slides them, then taps "Mes pasado" */
+    {beat:0, wait:pick({es:1.4, pt:1.6, en:1.4}), hint:pick({es:"Desliza los periodos", pt:"Deslize os períodos", en:"Swipe the periods"}), target:'[data-t="chips"]', tap(st){ st.chipX = chipShift(st); }},
+    {beat:0, wait:0.8, hint:HINT(S("reports_period_last_month")), target:'[data-t="chip-last_month"]', tap(st){ st.range="last_month"; st.scroll=0; }},
     {beat:1, hint:HINT(S("reports_send_to_accountant")), target:'[data-t="accountant"]', tap(st){ st.screen="accountant"; st.scroll=0; }},
-    {beat:3, hint:HINT(S("accountant_row_copy")), target:'[data-t="copy-5"]', tap(st,E){ st.toast=true; st.hl=true; E.after(1800, ()=>{ st.toast=false; }); }},
-    {beat:4, hint:HINT(S("accountant_send")), target:'[data-t="send"]', tap(st){ st.screen="wa"; }},
-    {beat:5, hint:pick({es:"Toca enviar", pt:"Toque em enviar", en:"Tap send"}), target:'[data-t="wa-send"]', tap(st){ st.sent=true; }}
+    {beat:3, wait:3.4, hint:HINT(S("accountant_row_copy")), target:'[data-t="copy-5"]', tap(st,E){ st.toast=true; st.hl=true; E.after(2400, ()=>{ st.toast=false; }); }},
+    {beat:4, hint:HINT(S("accountant_send")), target:'[data-t="send"]', tap(st){ st.screen="wapick"; }},
+    {beat:5, wait:1.0, hint:HINT(CONTACT), target:'[data-t="wa-c0"]', tap(st){ st.picked=0; }},
+    {beat:5, wait:0.6, hint:pick({es:"Toca enviar", pt:"Toque em enviar", en:"Tap send"}), target:'[data-t="wa-go"]', tap(st){ st.screen="wa"; st.sent=true; }}
   ]
 });
 

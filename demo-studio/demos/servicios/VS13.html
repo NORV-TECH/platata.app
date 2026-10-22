@@ -139,6 +139,19 @@ const SALES = earlySales().concat(C.sales).map((s, i) => {
     total: s.total, pay: PAYKEY(s.pay), by: s.by, client: s.client, emp: OWNER, performer, sched,
     status: "PAID", refunded: 0, cashRounding: 0, tax: 0, svc: 0, dining: 0, tip: 0, discount: 0 };
 });
+/* Two corrections to the copied data (totals untouched, the kit's random stream untouched):
+   - clients: the kit puts one of its 5 clients on 55% of all sales, so each regular would have ~49 visits in 7 weeks, three
+     in one day. A regular comes about once a week: a sale keeps its client's name only when that client's last kept visit is
+     at least 5 days earlier (about 1 sale in 9 carries a client, ~10 visits each).
+   - Mexico: Stripe cards reached Mexico on 21 Oct 2026 (STRIPE-MX-1); the kit gives MX "card" sales only because
+     COUNTRIES.MX.pay.card = "stripe". Before 21 Oct those were transfers, so September has no card charge (no fee note or fee
+     row on the accountant summary, EmployeePayActions.kt:346-352). */
+(() => { const last = {};
+  SALES.forEach(o => { if(!o.client) return;
+    if(last[o.client] != null && o.ts - last[o.client] < 5 * 864e5){ o.client = null; return; }
+    last[o.client] = o.ts; });
+  if(CC === "MX") SALES.forEach(o => { if(o.pay === "card" && o.ts < new Date(2026, 9, 21)) o.pay = "transfer"; });
+})();
 const SALE_BY_ID = id => SALES.find(s => s.id === id);
 
 /* ---------- data/SalesBreakdown.kt moneyOf + fromRows, data/NetSplits.kt (the Reports rules), ported ---------- */
@@ -312,13 +325,14 @@ function saleScreen(o, st){ st=st||{};
 }
 
 /* ---------- Reports (ui/screens/reports/ReportsScreen.kt:44-560) ----------
-   SumaTopBar reports_title; pinned FilterChip row (RangeSelector :567); periodLabel (:598) bodySmall; the chart (ReportsSalesChart.kt,
+   SumaTopBar reports_title; pinned FilterChip row (RangeSelector :567-594: FilterChip(selected, onClick, label), no leadingIcon, so the selected chip is
+   only filled, no check mark); periodLabel (:598) bodySmall; the chart (ReportsSalesChart.kt,
    190 dp, bars #007AFF 12 dp, two grid lines, y labels abbreviateAxis, x labels chartLabelIndices); the table card (:228-397:
    Gross; Discounts; Refunds (N); Net sales + NetSalesWords.noteRes + ComparisonLine; the charge / tax / tip lines only when > 0;
    Total collected; Number of sales + ComparisonLine; services only: "Citas sin asistir" when > 0 (:378, DBSVC-1); Average sale);
    ReportBreakdownList cards (sorted, 8 rows + "Otros"): Cómo te pagaron (+ after refunds), Ventas de artículos por categoría,
    [Ventas por lugar: needs 2+ ways of working], Servicios con más ingresos (services title, 10 rows, "N vendidos"),
-   Ventas por empleado (owner only, plural "N ventas"); bottom button reports_send_to_accountant (owner). LEVEL_2: support strip. */
+   Ventas por empleado (owner only, plural "N ventas"); bottom button reports_send_to_accountant (owner) on Surface(background, tonalElevation 2 dp): a #EDEDED band. LEVEL_2: support strip. */
 const PRESETS = ["today","yesterday","this_week","this_month","last_month","this_year","last_year","custom"];
 const DAYMS = 86400000;
 const startOfWeekMon = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
@@ -424,8 +438,8 @@ function reportLists(rg, sales){
 /* st: {range, chipX, scroll, sel} */
 function reportsScreen(st, o){ o=o||{};
   const rg = rangeOf(st.range);
-  const chips = `<div class="rp-chips"><div style="transform:translateX(calc(var(--u)*${-(st.chipX||0)}))">${PRESETS.map(p =>
-    `<span class="${p===st.range?"on":""}" data-t="chip-${p}">${p===st.range?I.check:""}${esc(S("reports_period_"+p))}</span>`).join("")}</div></div>`;
+  const chips = `<div class="rp-chips" data-t="chips"><div style="transform:translateX(calc(var(--u)*${-(st.chipX||0)}))">${PRESETS.map(p =>
+    `<span class="${p===st.range?"on":""}" data-t="chip-${p}">${esc(S("reports_period_"+p))}</span>`).join("")}</div></div>`;
   return topbar(S("reports_title")) + chips + `<div class="rp-per">${esc(rg.label)}</div>
     <div class="vs-scroll"><div class="in rp-in" style="transform:translateY(calc(var(--u)*${-(st.scroll||0)}))">
       <div class="rp-ct">${esc(S("reports_chart_title"))}</div>${chart(rg, SALES, st.sel)}
@@ -512,7 +526,7 @@ const VS_CSS = `
 .mat .rp-chips{flex:0 0 auto;overflow:hidden;padding:calc(var(--u)*8) 0}
 .mat .rp-chips>div{display:flex;gap:calc(var(--u)*8);padding:0 calc(var(--u)*16);transition:transform .5s ease;width:max-content}
 .mat .rp-chips span{height:calc(var(--u)*32);border-radius:calc(var(--u)*8);border:1px solid var(--m-outline);padding:0 calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);white-space:nowrap}
-.mat .rp-chips span.on{background:var(--m-ovar);border-color:transparent;color:var(--m-on);padding-left:calc(var(--u)*8)}
+.mat .rp-chips span.on{background:var(--m-ovar);border-color:transparent;color:var(--m-on)}
 .mat .rp-chips span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
 .mat .rp-per{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
 .mat .rp-in{padding-bottom:calc(var(--u)*16)}
@@ -556,7 +570,7 @@ const VS_CSS = `
 .mat .rp-card .br b{font-weight:600;white-space:nowrap}
 .mat .rp-card .trk{height:calc(var(--u)*6);border-radius:calc(var(--u)*6);background:#F2F2F7;margin:calc(var(--u)*4) 0 calc(var(--u)*12);overflow:hidden}
 .mat .rp-card .trk i{display:block;height:100%;background:#007AFF;border-radius:calc(var(--u)*6)}
-.mat .rp-bot{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);background:#fff;box-shadow:0 -1px 2px rgba(0,0,0,.06)}
+.mat .rp-bot{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);background:#EDEDED}
 `;
 const vsStyle_ = document.createElement("style"); vsStyle_.textContent = VS_CSS; document.head.appendChild(vsStyle_);
 /* a scrolled list slides (transform .5s); once it stops, ask the engine to put the tap ring on the target again */
@@ -594,8 +608,10 @@ const CLIENT = C.clients[0];
 const QUERY = V.biz === "veterinaria" ? CLIENT.pet : V.biz === "taller-motos" ? CLIENT.plate : CLIENT.name.split(" ")[0];
 const searchText = c => (c.name + " " + c.phone.replace(/\D/g,"") + " " + FIELDS(c).map(f => f.join(" ")).join(" ")).toLowerCase();
 const PURCHASES = SALES.filter(o => o.client === CLIENT.name && o.ts < NOW).sort((a,b) => b.ts - a.ts);    // CustomerPurchases.visible
-/* the purchase the owner opens: the newest one done by a member of the team (so it says who did it), not paid by card */
-const OPEN = PURCHASES.find(o => o.performer && o.pay !== "card") || PURCHASES.find(o => o.pay !== "card") || PURCHASES[0];
+/* the purchase the owner opens: the newest one done by a member of the team (so it says who did it), not paid by card, and in
+   Brazil not by Pix (a "Pix" receipt line would need the QR-2 voice line) */
+const plainPay = o => o.pay !== "card" && !(o.pay === "qr" && C.pay.qr === "pix");
+const OPEN = PURCHASES.find(o => o.performer && plainPay(o)) || PURCHASES.find(plainPay) || PURCHASES[0];
 const OPEN_INDEX = PURCHASES.indexOf(OPEN);
 const base = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"")[0].toUpperCase();
 function clientList(st){
@@ -685,10 +701,10 @@ VKIT.start(V, {
   device: () => "phone",
   who: () => WHO_PHONE(),
   steps:[
-    {beat:0, hint:HINT(S("more_customers_title")), target:'[data-t="row-clients"]', tap(st){ st.screen="list"; }},
+    {beat:0, wait:4.3, hint:HINT(S("more_customers_title")), target:'[data-t="row-clients"]', tap(st){ st.screen="list"; }},
     {beat:1, hint:SEARCH_HINT, target:'[data-t="search"]', tap(st,E){ st.focus=true; st.typed=""; E.after(350, ()=>{ E.type("typed", QUERY, null, 120); }); }},
     {beat:2, hint:HINT(CLIENT.name), target:'[data-t="open-client"]', tap(st){ st.screen="page"; st.focus=false; st.scroll = Math.max(0, 340 + OPEN_INDEX*72 - 420); }},
-    {beat:4, hint:HINT(F("tx_sale_number", OPEN ? OPEN.id : 0)), target:`[data-t="buy-${OPEN ? OPEN.id : 0}"]`, tap(st){ st.screen="sale"; }}
+    {beat:4, wait:1.4, hint:HINT(F("tx_sale_number", OPEN ? OPEN.id : 0)), target:`[data-t="buy-${OPEN ? OPEN.id : 0}"]`, tap(st){ st.screen="sale"; }}
   ]
 });
 

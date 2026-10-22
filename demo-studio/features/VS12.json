@@ -51,8 +51,8 @@
     {
       "id": "6-whatsapp",
       "voice": {
-        "es": "Se abre WhatsApp con todo el texto. Envíaselo a tu contador.",
-        "pt": "O WhatsApp abre com o texto todo. Envie para o seu contador."
+        "es": "Se abre WhatsApp: elige a tu contador y envíale todo el texto.",
+        "pt": "O WhatsApp abre: escolha o seu contador e envie o texto todo."
       }
     },
     {

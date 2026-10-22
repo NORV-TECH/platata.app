@@ -189,7 +189,10 @@ function hub(o){ o = o || {};
 /* ---------- the services owner's Caja (HomeScreen.kt) ---------- */
 // KEYS: home_tab_services,home_tab_products,common_edit,items_filter_all,items_price_from,items_price_unset,opt_min,scan_row_manual,services_action_agendar,services_action_crear_orden,common_charge,combo_label_offer_percent
 // PLURALS: home_current_sale_services
-const SERVICES = C.services, PRODUCTS = C.products;
+/* the library lists viewModel.products = ProductDao.getAllProducts "ORDER BY name ASC" (PosDao.kt:334; SQLite BINARY), split by
+   type (sync/ServicesLibrarySplit.kt): with "Todos" picked the grid is A-Z, not the setup's order */
+const byName = (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+const SERVICES = C.services.slice().sort(byName), PRODUCTS = C.products.slice().sort(byName);
 /* ServiceActionLabel.secondActionLabel: "Agendar" for beauty / pets, "Crear orden" for a workshop (TradeFamily ORDEN) */
 const BOOK_WORD = () => S(V.isOrder ? "services_action_crear_orden" : "services_action_agendar");
 /* the price a tile prints (ProductCard.kt:96-107): FIXED -> the price; FROM -> "Desde" + the price of the FIRST stored variation
@@ -207,10 +210,11 @@ function svcTile(s, o){ o = o || {};
   return `<div class="sv-tile${o.hl?" hl":""}" data-t="tile-${s.id}"><span class="icb" style="background:${TRADE_TILE[V.biz]}">${TRADE_SVG[V.biz]}</span>
     <b>${esc(s.name)}</b><div class="pr"><span data-fit="16">${esc(tilePrice(s))}</span>${s.min?`<small>${s.min} ${esc(S("opt_min"))}</small>`:""}</div>
     ${o.combo?`<span class="cpill">${esc(pillTxt)}</span>`:""}</div>`; }
-/* the Mini POS / plain tile (ProductCard.kt plain branch: square, category tint 12 %, border 35 %, name titleMedium bold, price) —
+/* the Mini POS / plain tile (ProductCard.kt:164-200 plain branch: square, category tint 12 %, border 35 %, name titleMedium 18 bold,
+   price ShrinkToFitText bodyLarge 16 Medium onSurfaceVariant) —
    the staff phone passes no serviceFacts (MiniPosSellScreen.kt:647-657), so its services wear the plain tile */
 function plainTile(s){
-  return `<div class="sv-ptile" data-t="tile-${s.id}" style="border-color:${hexA(CAT_COLOR,.35)}"><div class="in" style="background:${hexA(CAT_COLOR,.12)}"><b>${esc(s.name)}</b><span>${esc(tilePrice(s))}</span></div></div>`; }
+  return `<div class="sv-ptile" data-t="tile-${s.id}" style="border-color:${hexA(CAT_COLOR,.35)}"><div class="in" style="background:${hexA(CAT_COLOR,.12)}"><b>${esc(s.name)}</b><span data-fit="16">${esc(tilePrice(s))}</span></div></div>`; }
 const chips = (cats) => `<div class="sv-chips">${cats.map((c,i)=>{
   const col = i===0 ? ALL_COLOR : CAT_COLOR, on = i===0;
   const st = on ? `background:${hexA(col,.22)};border:calc(var(--u)*1.5) solid ${col};color:${col}` : `background:${hexA(col,.05)};border:1px solid ${hexA(col,.3)};color:var(--m-onv)`;
@@ -248,7 +252,7 @@ function optSheet(s, o){ o = o || {};
   const total = o.base;
   const add = `<div class="sv-btn pri" data-t="${o.addTag||"opt-add"}">${esc(total ? F("opt_add_to_sale", money(total)) : S("common_add"))}</div>`;
   const deal = o.deal ? `<div class="sv-btn sec" data-t="${o.dealTag||"opt-deal"}">${esc(S("deal_choice_add_deal"))}</div>` : "";
-  return `<div class="sv-scrim"></div><div class="sv-sheet full"><i class="hd"></i><div class="sc"><div class="in" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+  return `<div class="sv-scrim"></div><div class="sv-sheet"><i class="hd"></i><div class="sc"><div class="in" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
     <h3>${esc(s.name)}</h3>${body}${add}${deal}</div></div></div>`; }
 /* VariationSelectionSheet.kt: "Elige uno" (labelMedium bold primary), the name (headlineMedium ExtraBold), a row per choice */
 function varSheet(s, tagPrefix){
@@ -343,7 +347,7 @@ const SV_CSS = `
 .mat .sv-tile .pr{display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--u)*6)}
 .mat .sv-tile .pr span{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
 .mat .sv-tile .pr small{font-size:calc(var(--u)*12);color:var(--m-onv);white-space:nowrap;flex:0 0 auto}
-.mat .sv-tile .cpill{position:absolute;top:calc(var(--u)*6);right:calc(var(--u)*6);max-width:calc(100% - var(--u)*58);background:#10B981;color:#fff;border-radius:calc(var(--u)*6);padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*11);line-height:calc(var(--u)*14);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-tile .cpill{position:absolute;top:calc(var(--u)*6);right:calc(var(--u)*6);max-width:calc(100% - var(--u)*12);background:#10B981;color:#fff;border-radius:calc(var(--u)*6);padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*11);line-height:calc(var(--u)*14);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mat .sv-ptile{aspect-ratio:1;border-radius:calc(var(--u)*12);border:calc(var(--u)*1.5) solid;overflow:hidden;background:#fff}
 .mat .sv-ptile .in{height:100%;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:space-between}
 .mat .sv-ptile b{font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
@@ -364,12 +368,12 @@ const SV_CSS = `
 .mat .sv-sheet{position:absolute;left:0;right:0;bottom:0;z-index:15;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;max-height:92%;display:flex;flex-direction:column}
 .mat .sv-sheet.full{top:calc(var(--u)*44)}
 .mat .sv-sheet .hd{display:block;width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#79747E;margin:calc(var(--u)*22) auto calc(var(--u)*14);flex:0 0 auto}
-.mat .sv-sheet .sc{flex:1;min-height:0;overflow:hidden}
+.mat .sv-sheet .sc{flex:0 1 auto;min-height:0;overflow:hidden}
 .mat .sv-sheet .sc>.in{padding:0 calc(var(--u)*16) calc(var(--u)*24);transition:transform .5s ease}
 .mat .sv-sheet h3{margin:0 0 calc(var(--u)*12);font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on)}
 .mat .sv-sheet .os-h{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:500;color:var(--m-onv);margin-bottom:calc(var(--u)*6)}
 .mat .sv-sheet .os-r{display:flex;align-items:center;gap:calc(var(--u)*8);min-height:calc(var(--u)*48)}
-.mat .sv-sheet .os-r span{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
+.mat .sv-sheet .os-r>span:first-child{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
 .mat .sv-sheet hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*10) 0}
 .mat .sv-btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center;margin-top:calc(var(--u)*8)}
 .mat .sv-btn.pri{background:var(--m-on);color:#fff}

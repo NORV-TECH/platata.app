@@ -609,10 +609,10 @@ VKIT.start(V, {
     {beat:0, hint:tapHint(DEMO_SVC.name, DEMO_SVC.name, DEMO_SVC.name), target:`[data-t="svc-${DEMO_SVC.id}"]`, tap(st){ st.sheet = true; }},
     {beat:0, hint:tapHint(t("opt_add_to_sale", money(DEMO_PRICE)), t("opt_add_to_sale", money(DEMO_PRICE)), t("opt_add_to_sale", money(DEMO_PRICE))), target:'[data-t="opt-add"]',
       tap(st){ st.sheet = false; st.cart = [{sid:DEMO_SVC.id, price:DEMO_PRICE}]; }},
-    {beat:1, hint:tapHint(actionWord(), actionWord(), actionWord()), target:'[data-t="book"]', wait:2.0, tap(st){ st.screen = "book"; }},
+    {beat:1, hint:tapHint(actionWord(), actionWord(), actionWord()), target:'[data-t="book"]', wait:2.6, tap(st){ st.screen = "book"; }},
     {beat:2, hint:tapHint(dayLabel(BOOK_DAY), dayLabel(BOOK_DAY), dayLabel(BOOK_DAY)), target:`[data-t="arr-day-${BOOK_DAY}"]`,
       tap(st){ st.bk.day = BOOK_DAY; st.bk.period = 0; st.scrollTo = `[data-t="arr-slot-${BOOK_MIN}"]`; }},
-    {beat:2, hint:tapHint(fmtTime(BOOK_MIN), fmtTime(BOOK_MIN), fmtTime(BOOK_MIN)), target:`[data-t="arr-slot-${BOOK_MIN}"]`, wait:1.6,
+    {beat:2, hint:tapHint(fmtTime(BOOK_MIN), fmtTime(BOOK_MIN), fmtTime(BOOK_MIN)), target:`[data-t="arr-slot-${BOOK_MIN}"]`, wait:2.2,
       tap(st){ st.bk.mins = BOOK_MIN; st.bk.open = false; st.scrollTo = '[data-t="bk-client"]'; }},
     {beat:3, hint:tapHint(T("booking_for_who"), T("booking_for_who"), T("booking_for_who")), target:'[data-t="bk-client"]', tap(st){ st.picker = true; }},
     {beat:3, hint:tapHint(CL[WHO_CLIENT].name, CL[WHO_CLIENT].name, CL[WHO_CLIENT].name), target:`[data-t="pick-${WHO_CLIENT}"]`,
@@ -624,7 +624,7 @@ VKIT.start(V, {
     {beat:5, hint:tapHint(T("resch_notify"), T("resch_notify"), T("resch_notify")), target:'[data-t="bk-save-wa"]',
       tap(st, E){ st.screen = "till"; st.cart = []; st.snack = true; st.scrollTo = null;
         E.after(1100, ()=>{ st.screen = "wa"; }); }},
-    {beat:6, hint:H("Toca enviar","Toque em enviar","Tap send"), target:'[data-t="wa-send"]', wait:2.2,
+    {beat:6, hint:H("Toca enviar","Toque em enviar","Tap send"), target:'[data-t="wa-send"]', wait:2.8,
       tap(st){ st.sent = true; }}
   ])
 });

@@ -65,8 +65,8 @@
     {
       "id": "8-caja",
       "voice": {
-        "es": "En Mi negocio, abre la caja: la devolución ya está descontada del efectivo.",
-        "pt": "Em Meu negócio, abra o caixa: a devolução já foi descontada do dinheiro."
+        "es": "En Mi negocio, toca Caja abierta: la devolución ya está descontada del efectivo.",
+        "pt": "Em Meu negócio, toque em Caixa aberto: a devolução já foi descontada do dinheiro."
       }
     },
     {

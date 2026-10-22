@@ -210,10 +210,11 @@ function svcTile(s, o){ o = o || {};
   return `<div class="sv-tile${o.hl?" hl":""}" data-t="tile-${s.id}"><span class="icb" style="background:${TRADE_TILE[V.biz]}">${TRADE_SVG[V.biz]}</span>
     <b>${esc(s.name)}</b><div class="pr"><span data-fit="16">${esc(tilePrice(s))}</span>${s.min?`<small>${s.min} ${esc(S("opt_min"))}</small>`:""}</div>
     ${o.combo?`<span class="cpill">${esc(pillTxt)}</span>`:""}</div>`; }
-/* the Mini POS / plain tile (ProductCard.kt plain branch: square, category tint 12 %, border 35 %, name titleMedium bold, price) —
+/* the Mini POS / plain tile (ProductCard.kt:164-200 plain branch: square, category tint 12 %, border 35 %, name titleMedium 18 bold,
+   price ShrinkToFitText bodyLarge 16 Medium onSurfaceVariant) —
    the staff phone passes no serviceFacts (MiniPosSellScreen.kt:647-657), so its services wear the plain tile */
 function plainTile(s){
-  return `<div class="sv-ptile" data-t="tile-${s.id}" style="border-color:${hexA(CAT_COLOR,.35)}"><div class="in" style="background:${hexA(CAT_COLOR,.12)}"><b>${esc(s.name)}</b><span>${esc(tilePrice(s))}</span></div></div>`; }
+  return `<div class="sv-ptile" data-t="tile-${s.id}" style="border-color:${hexA(CAT_COLOR,.35)}"><div class="in" style="background:${hexA(CAT_COLOR,.12)}"><b>${esc(s.name)}</b><span data-fit="16">${esc(tilePrice(s))}</span></div></div>`; }
 const chips = (cats) => `<div class="sv-chips">${cats.map((c,i)=>{
   const col = i===0 ? ALL_COLOR : CAT_COLOR, on = i===0;
   const st = on ? `background:${hexA(col,.22)};border:calc(var(--u)*1.5) solid ${col};color:${col}` : `background:${hexA(col,.05)};border:1px solid ${hexA(col,.3)};color:var(--m-onv)`;

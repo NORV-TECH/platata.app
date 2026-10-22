@@ -693,7 +693,7 @@ VKIT.start(V, {
     {beat:5, hint:tapHint(DEMO_SVC.name, DEMO_SVC.name, DEMO_SVC.name), target:`[data-t="svc-${DEMO_SVC.id}"]`, tap(st){ st.snack = false; st.sheet = true; }},
     {beat:5, hint:tapHint(ADD, ADD, ADD), target:'[data-t="opt-add"]', tap(st){ st.sheet = false; st.cart = [{sid:DEMO_SVC.id, price:DEMO_PRICE}]; }},
     {beat:5, hint:T3("ax_cobrar"), target:'[data-t="charge"]', tap(st){ st.screen = "pay"; }},
-    {beat:6, hint:tapHint(t("cash_exact_short"), t("cash_exact_short"), t("cash_exact_short")), target:'[data-t="exact"]', wait:2.0, tap(st){ st.screen = "done"; st.cart = []; }}
+    {beat:6, hint:tapHint(t("cash_exact_short"), t("cash_exact_short"), t("cash_exact_short")), target:'[data-t="exact"]', wait:2.4, tap(st){ st.screen = "done"; st.cart = []; }}
   ])
 });
 

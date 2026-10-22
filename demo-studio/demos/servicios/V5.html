@@ -631,7 +631,7 @@ steps.push({beat:5, hint:tapHint(t("ax_no_show"), t("ax_no_show"), t("ax_no_show
 if(PT){
   steps.push({beat:6, hint:tapHint(t("dlg_noshow_ok"), t("dlg_noshow_ok"), t("dlg_noshow_ok")), target:'[data-t="dlg-yes"]', tap(st){ st.gone.push(NOSHOW_ID); back(st); }});
 } else {
-  steps.push({beat:6, hint:tapHint(t("dlg_noshow_ok"), t("dlg_noshow_ok"), t("dlg_noshow_ok")), target:'[data-t="dlg-yes"]', wait:2.4,
+  steps.push({beat:6, hint:tapHint(t("dlg_noshow_ok"), t("dlg_noshow_ok"), t("dlg_noshow_ok")), target:'[data-t="dlg-yes"]', wait:2.8,
     tap(st){ st.gone.push(NOSHOW_ID); st.dlg = false; st.screen = "wa"; st.waClient = NB.client; st.waText = WA_NOSHOW; st.sent = false; }});
   steps.push({beat:7, hint:H("Toca enviar","Toque em enviar","Tap send"), target:'[data-t="wa-send"]',
     tap(st, E){ st.sent = true; E.after(1500, ()=>{ back(st); }); }});

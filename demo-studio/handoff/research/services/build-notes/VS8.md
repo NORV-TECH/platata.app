@@ -13,7 +13,8 @@
   member came from a booking ("¿Quién lo hace?") so it carries performerName and its 15-min slot (its row and title read the
   appointment, its receipt "Atendió: X"); the owner's own sales are walk-ins ("Venta #N"). Sale numbers = the sales in time order.
   If the yesterday sale picked is a booked one (BR), the sale title is the appointment ("qua 21/10 · 17:15") and the receipt
-  says "Atendido por: André Lima" — that is the app.
+  says "Atendido por: André Lima" — that is the app. With clients on fewer sales (see 5), BR now refunds that booked sale
+  (R$ 32,00, "qua 21/10 · 17:15", no client); CO is unchanged (Venta #457 Sofía Vargas $ 40.000, drawer $ 287.000).
 - Stock question: verified — the "¿Vuelven al inventario?" sheet shows only when a refunded line counts stock
   (TransactionsScreen.kt:1450-1466 restockCandidates); a service never does, so it does not appear here.
 - Countries: identical flow everywhere (cash refund, LOCAL_ONLY route). No VS8-MX.json (Mexico's words are CO's).
@@ -44,3 +45,13 @@
 - 45 (footer): fixed — "¡Gracias por tu visita!" / "Obrigado pela preferência!"; included items print "(incluido)".
 - 51: back ARROW with label fixed; **phone numbers still raw** on the Agenda rows: "+573001234567"
   (ServicesTransactionsScreen.kt:271-273 builds "+$whatsappNumber"). Fix: formatWhatsappForReading.
+
+## 5. After the review (REVIEW-REPORTS.md)
+- VS8 had no MUST. Nice items done:
+  - Beat 0: the "Ventas" tap waits 3.0 s and the list jumps to yesterday 1.5 s later, so "toca Ventas" is said on the tap.
+  - Beat 3: "Seleccionar todos" waits 1.0 s.
+  - Beat 7: the voice says "toca Caja abierta" / "toque em Caixa aberto" (the card's own words), not "abre la caja";
+    subtitles too.
+  - The list's repeated client names: the common data now keeps a client on about 1 sale in 9, never twice in a day.
+- Note: VS8 line 1 says "la plata" (Colombian). If an MX VS8 video is ever made, say "el dinero" in a VS8-MX.json.
+- Re-checked: check_demo CO:es BR:pt MX:es OK.
