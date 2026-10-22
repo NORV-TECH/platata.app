@@ -235,6 +235,8 @@ const BIZ = [
 ];
 // where a feature exists at all
 const ONLY = { S4:["CO","MX","PE","CL","EC","AR","PA","BR"], S5:["CO","US","CA"], T2:["CO"] };   // no QR in the US and Canada (code: no QR method there)
+// a business can have its own country list for a feature: services take cards in Mexico too (Stripe, STRIPE-MX-1)
+["peluqueria","veterinaria","motos","unas"].forEach(b=>{ ONLY[b+":S5"] = ["CO","MX","US","CA"]; });
 // what is built: demo page per feature, and the languages that have a video
 const BUILT = {
 /* RESTAURANT-BEGIN (written by tools/tree_restaurant.py) */
@@ -364,7 +366,7 @@ const u = () => UI[st.l] || UI.es;
 const fname = id => { const a=F[id]; return a[IDX[st.l]] || a[0]; };
 function featuresOf(b, c){
   const shared = b.noShared ? [] : S_ALL;
-  const ok = id => (!ONLY[id] || ONLY[id].includes(c)) && !(b.hide||[]).includes(id);
+  const ok = id => { const o = ONLY[b.id+":"+id] || ONLY[id]; return (!o || o.includes(c)) && !(b.hide||[]).includes(id); };
   return { shared: shared.filter(ok), own: b.own.filter(ok) };
 }
 function fix(){

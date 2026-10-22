@@ -44,6 +44,22 @@ for biz, typ in (("tienda", ""), ("farmacia", "&type=pharmacy")):
             for c in ("MX", "PE", "CL", "EC", "AR", "PA"): v[f"{c}-es"] = "video/T12-MX-es.mp4"
         vv = ",".join(f'"{k}":"{p}"' for k, p in v.items())
         out.append(f' "{biz}:{fid}":{{ only:{RET_ALL!r}, page:(c,l)=>`demos/tienda/{page}.html?embed=1&country=${{c}}&lang=${{l}}{typ}`, video:{{{vv}}} }},'.replace("'", '"'))
+# ---- services: the four demo businesses share the pages demos/servicios/V<n>.html (own) and VS<n>.html (shared), with &biz=<trade>.
+#      Videos are made for CO es and BR pt with each page's own business (shown for all four); a "-MX" script's video is shown for the
+#      countries it speaks for. US and Canada are on hold (Monti, 21 Oct): no services pages there yet. V9 and S20 wait for Monti's go.
+SERV_BIZ = {"peluqueria": "peluqueria", "veterinaria": "veterinaria", "motos": "taller-motos", "unas": "unas"}
+SERV_CL = [cl for cl in ALL_CL if not cl.startswith(("US", "CA"))]
+SERV_HOLD = {"V9", "VS20"}
+MX_SPEAKS_FOR = {"V1": ["MX", "PE", "CL", "EC", "AR", "PA"]}   # V1-MX: "no prices" is true in every Spanish country but Colombia
+for tree_id, slug in SERV_BIZ.items():
+    for fid in [f"V{n}" for n in range(1, 10)] + [f"S{n}" for n in range(1, 25)]:
+        page = fid if fid.startswith("V") else "V" + fid
+        if page in SERV_HOLD or not os.path.exists(os.path.join(ROOT, "demos", "servicios", page + ".html")): continue
+        v = {l: p for l, p in vids_of(page).items() if l in ("es", "pt")}
+        if os.path.exists(os.path.join(ROOT, "video", f"{page}-MX-es.mp4")):
+            for c in MX_SPEAKS_FOR.get(page, ["MX"]): v[f"{c}-es"] = f"video/{page}-MX-es.mp4"
+        vv = ",".join(f'"{k}":"{p}"' for k, p in v.items())
+        out.append(f' "{tree_id}:{fid}":{{ only:{SERV_CL!r}, page:(c,l)=>`demos/servicios/{page}.html?embed=1&country=${{c}}&lang=${{l}}&biz={slug}`, video:{{{vv}}} }},'.replace("'", '"'))
 block = "/* RESTAURANT-BEGIN (written by tools/tree_restaurant.py) */\n" + "\n".join(out) + "\n /* RESTAURANT-END */"
 p = os.path.join(ROOT, "index.html"); s = open(p, encoding="utf-8").read()
 if "RESTAURANT-BEGIN" in s:
@@ -51,4 +67,4 @@ if "RESTAURANT-BEGIN" in s:
 else:
     s = re.sub(r'\n R4:\{ only:\["CO-es"\][^\n]*\n', "\n" + block + "\n", s)
 open(p, "w", encoding="utf-8").write(s)
-print(len(out), "restaurant entries")
+print(len(out), "restaurant, retail and services entries")
