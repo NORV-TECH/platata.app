@@ -1,0 +1,49 @@
+{
+  "id": "VS6-MX",
+  "name": "Other ways to pay (services, owner phone, Mexico)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-new",
+      "voice": {
+        "es": "En Métodos de pago, toca Nuevo y escribe Mercado Pago."
+      }
+    },
+    {
+      "id": "2-add",
+      "voice": {
+        "es": "Toca Agregar. Queda encendido."
+      }
+    },
+    {
+      "id": "3-charge",
+      "voice": {
+        "es": "En la caja, toca Cobrar y luego Otro método de pago."
+      }
+    },
+    {
+      "id": "4-pick",
+      "voice": {
+        "es": "Aquí están Mercado Pago y Cortesía, para regalar un servicio. Toca Mercado Pago."
+      }
+    },
+    {
+      "id": "5-confirm",
+      "voice": {
+        "es": "Confirma que recibiste el pago y toca Sí, cobrar."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Así cobras con otras formas de pago, con Platata."
+      }
+    }
+  ]
+}

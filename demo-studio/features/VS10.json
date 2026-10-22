@@ -1,0 +1,66 @@
+{
+  "id": "VS10",
+  "name": "Cerrar la caja",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-caja",
+      "voice": {
+        "es": "Al final del día, toca la caja abierta.",
+        "pt": "No fim do dia, toque no caixa aberto."
+      }
+    },
+    {
+      "id": "2-cerrar",
+      "voice": {
+        "es": "Baja y toca Cerrar caja.",
+        "pt": "Desça e toque em Fechar caixa."
+      }
+    },
+    {
+      "id": "3-contar",
+      "voice": {
+        "es": "Arriba ves cuánto debe haber: cuenta y escríbelo.",
+        "pt": "Em cima você vê quanto deve haver: conte e digite."
+      }
+    },
+    {
+      "id": "4-confirmar",
+      "voice": {
+        "es": "Cuadrado. Toca Cerrar caja y confírmalo.",
+        "pt": "Fechado exato. Toque em Fechar caixa e confirme."
+      }
+    },
+    {
+      "id": "5-resumen",
+      "voice": {
+        "es": "El resumen: ventas, efectivo y lo que salió.",
+        "pt": "O resumo: vendas, dinheiro e o que saiu."
+      }
+    },
+    {
+      "id": "6-whatsapp",
+      "voice": {
+        "es": "Envíalo por WhatsApp.",
+        "pt": "Envie pelo WhatsApp."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así cierras la caja con Platata.",
+        "pt": "Assim você fecha o caixa com o Platata."
+      }
+    }
+  ]
+}

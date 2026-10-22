@@ -1,0 +1,66 @@
+{
+  "id": "VS9",
+  "name": "Meter y sacar efectivo",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-negocio",
+      "voice": {
+        "es": "¿Sales a comprar insumos? Abre Mi negocio.",
+        "pt": "Vai comprar material? Abra Meu negócio."
+      }
+    },
+    {
+      "id": "2-caja",
+      "voice": {
+        "es": "Toca la caja abierta.",
+        "pt": "Toque no caixa aberto."
+      }
+    },
+    {
+      "id": "3-sacar",
+      "voice": {
+        "es": "Toca Sacar efectivo.",
+        "pt": "Toque em Retirar dinheiro."
+      }
+    },
+    {
+      "id": "4-monto",
+      "voice": {
+        "es": "Escribe cuánto sacas y elige Proveedor.",
+        "pt": "Digite quanto vai tirar e escolha Fornecedor."
+      }
+    },
+    {
+      "id": "5-guardar",
+      "voice": {
+        "es": "Toca Guardar.",
+        "pt": "Toque em Salvar."
+      }
+    },
+    {
+      "id": "6-anotado",
+      "voice": {
+        "es": "Queda anotado y la caja lo descuenta.",
+        "pt": "Fica anotado e o caixa desconta."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así sacas efectivo de la caja con Platata.",
+        "pt": "Assim você retira dinheiro do caixa com o Platata."
+      }
+    }
+  ]
+}

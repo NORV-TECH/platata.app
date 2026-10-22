@@ -1,0 +1,29 @@
+{
+  "id": "VS22",
+  "name": "Respaldo en Google Drive",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {"stability": 0.5, "similarity_boost": 0.75},
+    "pt": {"stability": 0.5, "similarity_boost": 0.75}
+  },
+  "steps": [
+    {"id": "1-barra", "voice": {
+      "es": "Si tu negocio no tiene respaldo, la barra amarilla te avisa. Toca Conectar.",
+      "pt": "Se o seu negócio não tem backup, a barra amarela avisa. Toque em Conectar."}},
+    {"id": "2-riesgo", "voice": {
+      "es": "Tus ventas, servicios, clientes y citas todavía no tienen copia.",
+      "pt": "Suas vendas, serviços, clientes e agendamentos ainda não têm cópia."}},
+    {"id": "3-drive", "voice": {
+      "es": "Toca Conectar Google Drive y elige tu cuenta de Google.",
+      "pt": "Toque em Conectar Google Drive e escolha sua conta do Google."}},
+    {"id": "4-respaldar", "voice": {
+      "es": "Toca Respaldar ahora y tu negocio queda guardado en tu Drive. Luego se respalda solo cada 6 horas, si algo cambió.",
+      "pt": "Toque em Fazer backup agora e seu negócio fica guardado no seu Drive. Depois o backup é feito sozinho a cada 6 horas, se algo mudou."}},
+    {"id": "5-restaurar", "voice": {
+      "es": "Se guardan los últimos 30 días. Para volver a una copia, toca Restaurar.",
+      "pt": "Os últimos 30 dias ficam guardados. Para voltar a uma cópia, toque em Restaurar."}},
+    {"id": "6-fin", "voice": {
+      "es": "Así respaldas tu negocio en Google Drive con Platata.",
+      "pt": "Assim você faz backup do seu negócio no Google Drive com o Platata."}}
+  ]
+}

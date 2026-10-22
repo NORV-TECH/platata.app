@@ -1,0 +1,59 @@
+{
+  "id": "VS4",
+  "name": "Take QR payments (services, owner phone)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-switch",
+      "voice": {
+        "es": "En Métodos de pago, enciende Pago QR.",
+        "pt": "Em Formas de pagamento, ligue o Pix."
+      }
+    },
+    {
+      "id": "2-warning",
+      "voice": {
+        "es": "Lee el aviso: revisa en tu banco cada pago antes de entregar. Marca la casilla.",
+        "pt": "Leia o aviso: confira no banco cada pagamento antes de entregar. Marque a caixa."
+      }
+    },
+    {
+      "id": "3-upload",
+      "voice": {
+        "es": "Toca Entendido y sube la foto del QR de tu banco.",
+        "pt": "Toque em Entendi e envie o QR do Pix do seu banco."
+      }
+    },
+    {
+      "id": "4-charge",
+      "voice": {
+        "es": "En la caja, toca Cobrar y luego QR.",
+        "pt": "No caixa, toque em Cobrar e em Pix. O QR já leva o valor da venda: o cliente não digita nada."
+      }
+    },
+    {
+      "id": "5-paid",
+      "voice": {
+        "es": "El cliente escanea con la app de su banco. Revisa que el pago llegó y toca Pagó.",
+        "pt": "O cliente escaneia e paga. Confira no banco que o pagamento chegou e toque em Pago."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Así cobras con QR, con Platata.",
+        "pt": "Assim você cobra com Pix, com o Platata."
+      }
+    }
+  ]
+}

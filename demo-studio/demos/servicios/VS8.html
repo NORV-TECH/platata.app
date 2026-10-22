@@ -1,0 +1,803 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Devolver una venta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/services-data.js"></script>
+<script src="../../kit/vkit.js"></script>
+<script>
+/* app strings (values / values-es / values-pt-rBR at 73c65f08), picked by the builder from the keys the code below uses */
+const STR={"cal_today": {"en": "Today", "es": "Hoy", "pt": "Hoje"}, "cal_tomorrow": {"en": "Tomorrow", "es": "Mañana", "pt": "Amanhã"}, "cash_movement_in": {"en": "Cash in", "es": "Meter efectivo", "pt": "Colocar dinheiro"}, "cash_movement_out": {"en": "Cash out", "es": "Sacar efectivo", "pt": "Retirar dinheiro"}, "common_cancel": {"en": "Cancel", "es": "Cancelar", "pt": "Cancelar"}, "conn_slot_phone": {"en": "Your phone", "es": "Tu teléfono", "pt": "Seu celular"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "invoices_row_this_month": {"en": "%1$d this month", "es": "%1$d este mes", "pt": "%1$d neste mês"}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "pay_methods_example_transfer": {"en": "Bank transfer", "es": "Transferencia", "pt": "Transferência"}, "payment_method_card": {"en": "Card", "es": "Tarjeta", "pt": "Cartão"}, "payment_method_cash": {"en": "Cash", "es": "Efectivo", "pt": "Dinheiro"}, "payment_method_qr": {"en": "QR Payment", "es": "Pago QR", "pt": "Pagamento QR"}, "receipt_action_share": {"en": "Share", "es": "Compartir", "pt": "Compartilhar"}, "receipt_btn_text": {"en": "Text", "es": "Mensaje", "pt": "Mensagem"}, "receipt_footer_default": {"en": "Thank you for your visit!", "es": "¡Gracias por tu visita!", "pt": "Obrigado pela preferência!"}, "receipt_label_date": {"en": "Date", "es": "Fecha", "pt": "Data"}, "receipt_label_each": {"en": "ea", "es": "c/u", "pt": "un"}, "receipt_label_order_number": {"en": "Sale #", "es": "Venta #", "pt": "Venda #"}, "receipt_label_performer": {"en": "Served by", "es": "Atendió", "pt": "Atendido por"}, "receipt_label_subtotal": {"en": "Subtotal", "es": "Subtotal", "pt": "Subtotal"}, "receipt_label_total": {"en": "TOTAL", "es": "TOTAL", "pt": "TOTAL"}, "receipt_opt_whatsapp_btn": {"en": "WhatsApp", "es": "WhatsApp", "pt": "WhatsApp"}, "refund_btn_amount": {"en": "Refund %1$s", "es": "Devolver %1$s", "pt": "Devolver %1$s"}, "refund_done_banner": {"en": "Refunded %1$s", "es": "Devuelto %1$s", "pt": "Devolvido %1$s"}, "refund_goes_cash": {"en": "Give %1$s back in cash", "es": "Entrega %1$s en efectivo", "pt": "Entregue %1$s em dinheiro"}, "refund_paid_left": {"en": "Paid %1$s · Left to refund %2$s", "es": "Pagado %1$s · Queda por devolver %2$s", "pt": "Pago %1$s · Ainda falta devolver %2$s"}, "refund_pin_subtitle": {"en": "Enter an authorized employee PIN", "es": "Ingresa el PIN de un empleado autorizado", "pt": "Digite o PIN de um funcionário autorizado"}, "refund_pin_title": {"en": "Refund approval", "es": "Aprobar devolución", "pt": "Aprovar devolução"}, "refund_pin_where": {"en": "It is in Settings › Security", "es": "Está en Configuración › Seguridad", "pt": "Está em Configurações › Segurança"}, "refunds_with_count": {"en": "Refunds (%1$d)", "es": "Devoluciones (%1$d)", "pt": "Devoluções (%1$d)"}, "register_close_old_refunds": {"en": "Refunds for earlier sales", "es": "Devoluciones de ventas anteriores", "pt": "Devoluções de vendas anteriores"}, "register_list_title": {"en": "Register history", "es": "Historial de caja", "pt": "Histórico de caixa"}, "register_nav_today": {"en": "Today · %1$s", "es": "Hoy · %1$s", "pt": "Hoje · %1$s"}, "register_status_cash_all": {"en": "All cash since it opened", "es": "Todo el efectivo desde que abrió", "pt": "Todo o dinheiro desde a abertura"}, "register_status_cash_sales_here": {"en": "Cash sales (this register)", "es": "Ventas en efectivo (esta caja)", "pt": "Vendas em dinheiro (neste caixa)"}, "register_status_close_btn": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_status_expected": {"en": "Should be in the drawer", "es": "Debe haber en la caja", "pt": "Deve haver no caixa"}, "register_status_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "register_status_opened_at": {"en": "Opened", "es": "Abierta", "pt": "Aberto em"}, "register_status_opened_by": {"en": "Opened by", "es": "Abierta por", "pt": "Aberto por"}, "register_status_pill_open": {"en": "● OPEN", "es": "● ABIERTA", "pt": "● ABERTO"}, "register_status_starting_cash": {"en": "Starting cash", "es": "Efectivo inicial", "pt": "Troco inicial"}, "reports_after_refunds": {"en": "after refunds", "es": "después de devoluciones", "pt": "após devoluções"}, "reports_avg_ticket": {"en": "Average sale", "es": "Venta promedio", "pt": "Venda média"}, "reports_avg_ticket_empty": {"en": "—", "es": "—", "pt": "—"}, "reports_breakdown_other": {"en": "Other", "es": "Otros", "pt": "Outros"}, "reports_category_title": {"en": "Item sales by category", "es": "Ventas de artículos por categoría", "pt": "Vendas de itens por categoria"}, "reports_chart_title": {"en": "Sales over time", "es": "Ventas por período", "pt": "Vendas por período"}, "reports_compare_vs_last_week": {"en": "vs last week", "es": "vs semana pasada", "pt": "vs semana passada"}, "reports_compare_vs_previous": {"en": "vs previous period", "es": "vs período anterior", "pt": "vs período anterior"}, "reports_compare_vs_yesterday": {"en": "vs yesterday", "es": "vs ayer", "pt": "vs ontem"}, "reports_discounts": {"en": "Discounts", "es": "Descuentos", "pt": "Descontos"}, "reports_employee_sales": {"en": "Sales by employee", "es": "Ventas por empleado", "pt": "Vendas por funcionário"}, "reports_gross_sales": {"en": "Gross sales", "es": "Ventas brutas", "pt": "Vendas brutas"}, "reports_net_sales": {"en": "Net sales", "es": "Ventas netas", "pt": "Vendas líquidas"}, "reports_net_sales_note": {"en": "Before tax, tips and charges", "es": "Antes de impuestos, propinas y cargos", "pt": "Antes de impostos, gorjetas e taxas"}, "reports_net_sales_note_no_tips": {"en": "Before tax and charges", "es": "Antes de impuestos y cargos", "pt": "Antes de impostos e taxas"}, "reports_no_data": {"en": "No sales data available.", "es": "Sin datos de ventas disponibles.", "pt": "Nenhum dado de vendas disponível."}, "reports_no_shows": {"en": "No-shows", "es": "Citas sin asistir", "pt": "Faltas"}, "reports_payment_split": {"en": "How you got paid", "es": "Cómo te pagaron", "pt": "Como você recebeu"}, "reports_period_custom": {"en": "Custom", "es": "Personalizado", "pt": "Personalizado"}, "reports_period_label_dated": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "reports_period_last_month": {"en": "Last month", "es": "Mes pasado", "pt": "Mês passado"}, "reports_period_last_year": {"en": "Last year", "es": "Año pasado", "pt": "Ano passado"}, "reports_period_this_month": {"en": "This month", "es": "Este mes", "pt": "Este mês"}, "reports_period_this_week": {"en": "This week", "es": "Esta semana", "pt": "Esta semana"}, "reports_period_this_year": {"en": "This year", "es": "Este año", "pt": "Este ano"}, "reports_period_today": {"en": "Today", "es": "Hoy", "pt": "Hoje"}, "reports_period_yesterday": {"en": "Yesterday", "es": "Ayer", "pt": "Ontem"}, "reports_send_to_accountant": {"en": "Summary for the accountant", "es": "Resumen para el contador", "pt": "Resumo para o contador"}, "reports_service_charges_services": {"en": "Extra charges", "es": "Cargos adicionales", "pt": "Cobranças adicionais"}, "reports_sold_count": {"en": "%d sold", "es": "%d vendidos", "pt": "%d vendidos"}, "reports_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "reports_tips": {"en": "Tips", "es": "Propinas", "pt": "Gorjetas"}, "reports_title": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "reports_top_items_services": {"en": "Top services", "es": "Servicios con más ingresos", "pt": "Serviços com mais receita"}, "reports_total_collected": {"en": "Total collected", "es": "Total cobrado", "pt": "Total recebido"}, "reports_transactions": {"en": "Number of sales", "es": "Número de ventas", "pt": "Número de vendas"}, "rp_my_title": {"en": "My reports", "es": "Mis reportes", "pt": "Meus relatos"}, "rp_sheet_my_reports_none": {"en": "No reports yet", "es": "Aún no hay reportes", "pt": "Ainda não há relatos"}, "rp_strip_support": {"en": "Support", "es": "Soporte", "pt": "Suporte"}, "rp_strip_support_sub": {"en": "Report a problem here", "es": "Reporta un problema aquí", "pt": "Relatar um problema aqui"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Vendas hoje · %s"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "settings_gate_subtitle": {"en": "Confirm your identity to open your business", "es": "Confirma tu identidad para abrir tu negocio", "pt": "Confirme sua identidade para abrir o seu negócio"}, "settings_gate_title": {"en": "Open your business?", "es": "¿Abrir tu negocio?", "pt": "Abrir o seu negócio?"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "sx_agenda": {"en": "Agenda", "es": "Agenda", "pt": "Agenda"}, "sx_comes": {"en": "Coming", "es": "Viene", "pt": "Vem"}, "sx_order_ready": {"en": "Ready", "es": "Listo", "pt": "Pronto"}, "sx_search": {"en": "By name or phone…", "es": "Por nombre o teléfono…", "pt": "Por nome ou telefone…"}, "tx_amount_tab": {"en": "Amount", "es": "Monto", "pt": "Valor"}, "tx_confirm_refund_body": {"en": "Are you sure you want to refund %s? This cannot be undone.", "es": "¿Estás seguro de que quieres devolver %s? Esta acción no se puede deshacer.", "pt": "Tem certeza que deseja devolver %s? Esta ação não pode ser desfeita."}, "tx_confirm_refund_title": {"en": "Confirm refund", "es": "Confirmar devolución", "pt": "Confirmar devolução"}, "tx_customer": {"en": "Client: %s", "es": "Cliente: %s", "pt": "Cliente: %s"}, "tx_employee": {"en": "Employee: %s", "es": "Empleado: %s", "pt": "Funcionário: %s"}, "tx_issue_refund": {"en": "Refund", "es": "Devolver", "pt": "Devolver"}, "tx_items_tab": {"en": "Items", "es": "Artículos", "pt": "Itens"}, "tx_net_after_refund": {"en": "Net after refund", "es": "Neto tras devolución", "pt": "Líquido após devolução"}, "tx_refunded_label": {"en": "Refunded", "es": "Devuelto", "pt": "Devolvido"}, "tx_sale_title": {"en": "Sale #%d", "es": "Venta #%d", "pt": "Venda #%d"}, "tx_select_all_items": {"en": "Select all items", "es": "Seleccionar todos los artículos", "pt": "Selecionar todos os itens"}, "tx_status_paid": {"en": "Paid", "es": "Pagada", "pt": "Paga"}, "tx_status_part_refund": {"en": "Part refund", "es": "Devolución parcial", "pt": "Devolução parcial"}, "tx_status_refunded": {"en": "Refunded", "es": "Devuelta", "pt": "Devolvida"}, "tx_tab_all": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "tx_yes_refund": {"en": "Yes, refund", "es": "Sí, devolver", "pt": "Sim, devolver"}, "where_mode_local": {"en": "In the shop", "es": "En el local", "pt": "No local"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}};
+const PLU={"home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_equipo_count_phones": {"en": {"one": "%1$d employee · %2$s", "other": "%1$d employees · %2$s"}, "es": {"one": "%1$d empleado · %2$s", "other": "%1$d empleados · %2$s"}, "pt": {"one": "%1$d funcionário · %2$s", "other": "%1$d funcionários · %2$s"}}, "home_equipo_on_phones": {"en": {"one": "%1$d on a phone", "other": "%1$d on phones"}, "es": {"one": "%1$d en celular", "other": "%1$d en celular"}, "pt": {"one": "%1$d no celular", "other": "%1$d no celular"}}, "reports_tx_count": {"en": {"one": "%d sale", "other": "%d sales"}, "es": {"one": "%d venta", "other": "%d ventas"}, "pt": {"one": "%d venda", "other": "%d vendas"}}};
+const PAGE_BIZ = "peluqueria";
+/* ===== VS8 / VS11 / VS12 / VS13 common (inlined into each page by the builder; not a kit file) =====
+   A SERVICES business on the OWNER's phone, plain Material light (ui/theme/Theme.kt LightColorScheme: primary #1C1C1E,
+   onSurfaceVariant #6E6E73, surfaceVariant #F2F2F7, outlineVariant #E5E5EA, outline #C7C7CC, error #FF3B30), read at
+   app commit 73c65f08 (sim/usa-canada); paths under app/src/main/java/com/example/.
+   bottom bar   ui/app/PlatataApp.kt:500-720 + ui/navigation/NavLabels.kt:24 (services: Caja · "Agenda" (sx_agenda, Receipt icon) ·
+                flag "Mi negocio"; a fingerprint in the 32 dp circle while Security is locked, isSecurityLocked :500)
+   panel        ui/screens/home/HomeScreen.kt:1466-1860 (name SumaBlue headlineMedium Black; register card; Sell online
+                (SellOnline.kt:26, every AMERICAS country); "Día a día"; NO Items row for services (workspaceHasItemsRow=false);
+                Clientes (no fiado: home_clientes_count); Facturas (hasSupplierInvoiceRow, invoicesRowLine); Equipo; Reportes
+                (NetSalesWords.panelTodayRes); divider; Configuración)
+   support strip ui/screens/reports/SupportStrip.kt (LEVEL_2 pages, reports/ReportLevels.kt: reports, customers, register_status,
+                share_with_accountant); the badge is the business accent: PaperColor.kt ServiciosBtn #7C55E0
+   data         kit/services-data.js (V.C: the business, its staff, clients, services, 6 weeks of sales).
+   THE SALES MODEL (one rule for all four pages, written down in the build notes):
+   - every sale is charged on the owner's phone (one register), so Order.employeeName = the owner (CheckoutActions.kt:395);
+   - a sale whose kit "by" is a staff member came from a booking that picked "¿Quién lo hace?" (DBSVC-1, item 21): it carries
+     performerName = that person (Order.kt:320) and its scheduledFor = the booking's 15-minute slot (WhenPicker.kt:47-49);
+     a sale done by the owner is a walk-in (no booking, no performer);
+   - sale numbers are the sales in time order (1, 2, 3 ...);
+   - the kit's 6 weeks start on 10 Sep. "Mes pasado" needs 1-9 Sep: those days are made HERE with the kit's own generator
+     (services-data.js:284-311, same rules, its own seed) and only for days the kit has no sale on. */
+const V = VKIT.ctx({biz: PAGE_BIZ});
+const C = V.C, L = V.lang, CC = V.country, esc = V.esc, pick = V.pick;
+const K = window.SERV.countries[CC];
+const money = v => V.money(v);
+const S = k => { const o = STR[k]; if(!o) throw new Error("missing string "+k); return o[L]; };
+const fmtA = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : String(v); }); };
+const F = (k, ...a) => fmtA(S(k), a);
+/* Android plural category: pt (CLDR) "one" for 0 and 1; es/en "one" for 1 */
+const PL = (k, n, ...a) => { const p = PLU[k][L]; const cat = L==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other"); return fmtA(p[cat]||p.other, a.length ? a : [n]); };
+const US_CA = CC==="US" || CC==="CA";
+const OWNER = C.owner;
+const DIAL = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54",PA:"507",BR:"55",US:"1",CA:"1"}[CC];
+
+/* ---------- dates: the app sets the language tag "es" / "pt-BR" / "en" (AppLanguage.kt); Java DateFormat ~ Intl ---------- */
+const LOCALE = {es:"es", pt:"pt-BR", en:"en-US"}[L];
+const fmtDT = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"medium",timeStyle:"short"}).format(d);   // DateFormat MEDIUM + SHORT
+const fmtDate = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"medium"}).format(d);                    // DateFormat MEDIUM
+const fmtTime = d => new Intl.DateTimeFormat(LOCALE,{timeStyle:"short"}).format(d);                     // DateFormat SHORT
+const longDate = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"long"}).format(d);                     // sync/AccountantDate.kt FormatStyle.LONG
+const pad2 = n => String(n).padStart(2,"0");
+const TODAY_ISO = V.today;                                   // "2026-10-22", a Thursday
+const NOW = new Date(2026, 9, 22, 12, 41);                   // the clock of every page
+const isoOf = d => d.getFullYear()+"-"+pad2(d.getMonth()+1)+"-"+pad2(d.getDate());
+const dateAt = (iso, hm) => { const [y,m,d] = iso.split("-").map(Number); const [h,mi] = (hm||"00:00").split(":").map(Number); return new Date(y, m-1, d, h, mi); };
+const addDaysIso = (iso, n) => isoOf(new Date(dateAt(iso).getTime() + n*86400000 + 3600000));
+/* ui/screens/services/WhenPicker.kt:76 fmtTimeCO ("3:00 p. m." es, "3:00 PM" en, "15:00" pt) and :183 dayLabelText */
+function fmtTimeCO(mins){ const h = Math.floor(mins/60), m = mins%60, mm = pad2(m);
+  if(L==="es") return `${h%12===0?12:h%12}:${mm} ${h<12?"a. m.":"p. m."}`;
+  if(L==="en") return `${h%12===0?12:h%12}:${mm} ${h<12?"AM":"PM"}`;
+  return `${h}:${mm}`; }
+const DOW = {es:["dom","lun","mar","mié","jue","vie","sáb"], en:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], pt:["dom","seg","ter","qua","qui","sex","sáb"]}[L];
+const MON = {es:["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"],
+  en:["January","February","March","April","May","June","July","August","September","October","November","December"],
+  pt:["janeiro","fevereiro","março","abril","maio","junho","julho","agosto","setembro","outubro","novembro","dezembro"]}[L];
+function dayLabel(iso){
+  if(iso === TODAY_ISO) return S("cal_today");
+  if(iso === addDaysIso(TODAY_ISO, 1)) return S("cal_tomorrow");
+  const d = dateAt(iso), dow = DOW[d.getDay()], ab = MON[d.getMonth()].slice(0,3);
+  if(L==="es") return `${dow} ${d.getDate()} de ${ab}`;
+  if(L==="en") return `${dow} ${d.getDate()} ${ab}`;
+  return `${dow} ${pad2(d.getDate())}/${pad2(d.getMonth()+1)}`;
+}
+const minsOf = d => d.getHours()*60 + d.getMinutes();
+
+/* ---------- the payment methods of the kit's sales (localizedPaymentMethod, utils/PaymentMethodLabels.kt:96-110) ----------
+   cash / qr (Pix in Brazil) / card are the built-in rows; "transfer" (and the kit's Brazilian "other") is the one method the
+   owner added by hand, named like the app's own example (pay_methods_example_transfer). */
+const PAYKEY = p => p==="other" ? "transfer" : p;
+const PAYNAME = p => ({cash:S("payment_method_cash"), qr:(C.pay.qr==="pix"?"Pix":S("payment_method_qr")), card:S("payment_method_card"),
+  transfer:S("pay_methods_example_transfer")})[PAYKEY(p)];
+
+/* ---------- the business's history ---------- */
+/* services-data.js:247-249 rng + hash, copied: the early days are made with the kit's own rules */
+function rng(seed){ let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const hash = s => { let h = 2166136261; for(const c of s){ h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+const hm = m => pad2(Math.floor(m/60)) + ":" + pad2(m%60);
+function earlySales(){
+  const first = C.sales.length ? C.sales[0].d : TODAY_ISO, out = [];
+  const R = rng(hash(CC + V.biz + "-early"));
+  const workers = [OWNER].concat(C.staff.map(s => s.name));
+  const perDay = {peluqueria:[7,13], veterinaria:[6,10], "taller-motos":[5,9], unas:[4,7]}[V.biz];
+  const payKinds = () => { const r = R();
+    if(K.pay.qr === "pix") return r < .45 ? "cash" : r < .85 ? "qr" : r < .95 ? "transfer" : "other";
+    if(K.pay.card) return r < .55 ? "cash" : r < .75 ? "card" : r < .9 ? "qr" : "transfer";
+    return r < .6 ? "cash" : r < .85 ? "qr" : "transfer"; };
+  const sv = C.services, pr = C.products, cl = C.clients;
+  const pickService = () => sv[Math.min(sv.length - 1, Math.floor(Math.pow(R(), 1.6) * sv.length))];
+  const lineOf = s => { let choice = null, price = s.price, min = s.min;
+    if(s.choices.length){ const ok = s.choices.map((c, i) => [c, i]).filter(x => x[0].price != null);
+      if(ok.length){ const [c, i] = ok[Math.floor(R() * Math.min(ok.length, 3))]; choice = i; price = c.price; min = c.min || min; } }
+    return { sid: s.id, name: s.name, choice, qty: 1, price: price || 0, min }; };
+  for(let d = "2026-09-01"; d < first; d = addDaysIso(d, 1)){
+    if(dateAt(d).getDay() === 0) continue;
+    const n = perDay[0] + Math.floor(R() * (perDay[1] - perDay[0] + 1)) + (dateAt(d).getDay() === 6 ? 3 : 0), end = 19*60 + 30;
+    for(let k = 0; k < n; k++){
+      const t = 8*60 + 30 + Math.floor((end - 8*60 - 30) * (k + R() * 0.8) / n);
+      const lines = [lineOf(pickService())];
+      if(R() < 0.18) lines.push(lineOf(pickService()));
+      if(R() < 0.2){ const p = pr[Math.floor(R() * pr.length)]; lines.push({ sid: p.id, name: p.name, choice: null, qty: 1, price: p.price, product: true }); }
+      const total = lines.reduce((a, l) => a + l.price * l.qty, 0);
+      out.push({ d, t: hm(t), lines, total, pay: payKinds(), by: workers[Math.floor(R() * workers.length)], client: R() < 0.55 ? cl[Math.floor(R() * cl.length)].name : null });
+    }
+  }
+  return out;
+}
+/* sync/SaleLineName.kt: the stored line name carries the chosen option, "Corte de dama (Largo)" */
+const choiceName = l => { if(l.choice == null || l.product) return null; const s = V.service(l.sid); return s && s.choices[l.choice] ? s.choices[l.choice].name : null; };
+const lineName = l => { const c = choiceName(l); return c ? `${l.name} (${c})` : l.name; };
+const liveName = l => { if(l.product) return (V.product(l.sid)||{name:l.name}).name; const s = V.service(l.sid); return s ? s.name : l.name; };
+const floor15 = m => Math.floor(m/15)*15;
+const SALES = earlySales().concat(C.sales).map((s, i) => {
+  const ts = dateAt(s.d, s.t), performer = s.by !== OWNER ? s.by : null;
+  const sched = performer ? dateAt(s.d, hm(floor15(minsOf(ts)))) : null;
+  return { id: i + 1, d: s.d, t: s.t, ts, lines: s.lines.map(l => Object.assign({}, l, {stored: lineName(l), live: liveName(l)})),
+    total: s.total, pay: PAYKEY(s.pay), by: s.by, client: s.client, emp: OWNER, performer, sched,
+    status: "PAID", refunded: 0, cashRounding: 0, tax: 0, svc: 0, dining: 0, tip: 0, discount: 0 };
+});
+const SALE_BY_ID = id => SALES.find(s => s.id === id);
+
+/* ---------- data/SalesBreakdown.kt moneyOf + fromRows, data/NetSplits.kt (the Reports rules), ported ---------- */
+const isSale = st => st==="PAID" || st==="COMPLETED" || st==="PARTIALLY_REFUNDED";
+const isInReport = st => isSale(st) || st==="FULLY_REFUNDED";
+function moneyOf(o){
+  if(!isInReport(o.status)) return null;
+  const full = o.status === "FULLY_REFUNDED", EPS = 0.005;
+  const exact = o.total - o.cashRounding, pool = exact - o.tip, netPre = pool - o.svc - o.dining - o.tax, refunded = o.refunded;
+  const tipBack = full ? o.tip : o.tip <= 0 ? 0 : pool > EPS ? Math.min(Math.max(refunded - pool, 0), o.tip) : Math.min(Math.max(refunded, 0), o.tip);
+  const q = full ? 1 : pool > EPS ? Math.min(Math.max((refunded - tipBack) / pool, 0), 1) : 0, keep = 1 - q;
+  const rounding = full ? 0 : o.cashRounding - Math.max(refunded - exact, 0);
+  const sold = exact > EPS, discount = sold ? o.discount : 0;
+  return { gross: sold ? netPre + discount : 0, discounts: discount, refunds: netPre * q, net: netPre * keep, service: o.svc * keep,
+    dining: o.dining * keep, taxes: o.tax * keep, tips: o.tip - tipBack, rounding, counted: isSale(o.status), refunded: o.status==="PARTIALLY_REFUNDED" || full };
+}
+function breakdown(sales){
+  const b = {gross:0, discounts:0, refunds:0, net:0, service:0, dining:0, taxes:0, tips:0, rounding:0, count:0, refundCount:0};
+  sales.forEach(o => { const m = moneyOf(o); if(!m) return; ["gross","discounts","refunds","net","service","dining","taxes","tips","rounding"].forEach(k => b[k] += m[k]);
+    if(m.counted) b.count++; if(m.refunded) b.refundCount++; });
+  b.total = b.net + b.service + b.dining + b.taxes + b.tips + b.rounding;   // Total collected (no tab in a services shop)
+  return b;
+}
+const counted = sales => sales.filter(o => isSale(o.status));
+/* "Cómo te pagaron": PosDao.kt:1079 SUM(totalAmount - refundedAmount) per method over PAID/COMPLETED/PARTIALLY_REFUNDED */
+function byMethod(sales){ const m = {};
+  counted(sales).forEach(o => { m[o.pay] = (m[o.pay] || 0) + o.total - o.refunded; });
+  return Object.keys(m).map(k => ({key:k, label:PAYNAME(k), v:m[k]})); }
+/* NetSplits.employees: performerName, else employeeName */
+function byEmployee(sales){ const m = {};
+  counted(sales).forEach(o => { const n = o.performer || o.emp; m[n] = m[n] || {label:n, v:0, n:0}; m[n].v += moneyOf(o).net; m[n].n++; });
+  return Object.values(m).sort((a,b) => b.v - a.v); }
+/* NetSplits.shares: a line's share of its sale's net, by quantity * price */
+function shares(sales){ const out = [];
+  counted(sales).forEach(o => { const net = moneyOf(o).net, priced = o.lines.reduce((a,l) => a + l.qty*l.price, 0);
+    o.lines.forEach(l => out.push({l, o, amount: (priced > 0 && net > 0) ? l.qty*l.price*(net/priced) : 0})); });
+  return out; }
+/* NetSplits.topItems: grouped by PRODUCT, the live catalogue name, limit 10 */
+function topItems(sales){ const m = {}, order = [];
+  shares(sales).forEach(x => { const k = x.l.sid; if(!m[k]){ m[k] = {label:x.l.live, n:0, v:0}; order.push(k); } m[k].n += x.l.qty; m[k].v += x.amount; });
+  return order.map(k => m[k]).sort((a,b) => b.v - a.v).slice(0, 10); }
+/* NetSplits.categories: services and the trade's seeded products share ONE category, the trade name (GuideActions.kt:488-491,
+   :582-597; REVIEW-2 A34) */
+function byCategory(sales){ const v = shares(sales).reduce((a,x) => a + x.amount, 0); return v > 0 ? [{label:V.tradeName, v}] : []; }
+const inRange = (sales, a, b) => sales.filter(o => o.ts >= a && o.ts < b);
+
+/* ---------- the money keypad / small pieces ---------- */
+const P = path => `<svg class="mi" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
+const I = {
+  back:P("M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"),
+  chev:P("M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"),
+  down:P("M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"),
+  person:P("M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"),
+  group:P("M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"),
+  rlong:P("M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"),
+  gear:P("M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"),
+  cart:P("M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"),
+  receipt:P("M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"),
+  search:P("M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"),
+  close:P("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"),
+  check:P("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"),
+  copy:P("M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"),
+  chevL:P("M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"),
+  chevR:P("M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"),
+  clock:P("M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"),
+  bksp:P("M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"),
+  send:P("M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"),
+  support:P("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z"),
+  fp:P("M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z")
+};
+/* SumaTopBar (ui/components/SumaTopBar.kt): 64 dp, back arrow 48 dp, titleLarge 22sp bold, optional subtitle, action slot */
+const topbar = (title, o) => { o=o||{};
+  return `<div class="vs-top">${o.noBack?"":`<span class="ib" data-t="${o.backTag||"back"}">${o.close?I.close:I.back}</span>`}<div class="tt"><b>${esc(title)}</b>${o.sub?`<small>${esc(o.sub)}</small>`:""}</div>${o.action||""}</div>`; };
+/* SumaButton: 52 dp, radius 12, titleMedium SemiBold; pri = #1C1C1E, sec = outlined, dst = error */
+const btn = (text, kind, dt, o) => { o=o||{}; return `<div class="vs-sb ${kind||"pri"}${o.off?" off":""}" ${dt?`data-t="${dt}"`:""}><span>${esc(text)}</span></div>`; };
+/* StatusBadge (TransactionsScreen.kt:117): labelSmall bold, shape extraSmall (6 dp), Color.kt:205-207 */
+const badge = st => { const m = {PAID:["ok","tx_status_paid"], COMPLETED:["ok","tx_status_paid"], PARTIALLY_REFUNDED:["wn","tx_status_part_refund"],
+  FULLY_REFUNDED:["er","tx_status_refunded"], REFUNDED:["er","tx_status_refunded"]}[st];
+  return `<span class="vs-bdg ${m[0]}">${esc(S(m[1]))}</span>`; };
+const toast = txt => `<div class="vs-toast">${esc(txt)}</div>`;
+/* the bottom bar of the owner's phone. lit: "caja" | "agenda" | "biz" */
+const nav = (lit, o) => { o=o||{};
+  return `<div class="mnav">
+  <div class="${lit==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${I.cart}</span>${esc(S("mamaship_tab_register"))}</div>
+  <div class="${lit==="agenda"?"on":""}" data-t="nav-agenda"><span class="pill">${I.receipt}</span>${esc(S("sx_agenda"))}</div>
+  <div class="${lit==="biz"?"on":""}" data-t="flag"><span class="flagc${lit==="biz"?" lit":""}">${o.locked?`<i class="fp">${I.fp}</i>`:V.flag()}</span>${esc(S("home_tab_my_business"))}</div></div>`; };
+/* the system biometric sheet the flag opens while Security is on (PlatataApp.kt:565-585 FlagGate -> showBiometricPrompt) */
+const bioSheet = ok => `<div class="mscrim"><div class="bio"><b>${esc(S("settings_gate_title"))}</b><small>${esc(S("settings_gate_subtitle"))}</small>
+  <span class="fpb${ok?" ok":""}">${ok?I.check:I.fp}</span></div></div>`;
+/* SupportStripDock (ui/screens/reports/SupportStrip.kt): Support | My reports, paper surface, badge = business accent */
+const strip = () => `<div class="vs-strip"><div class="h"><span class="bd">${I.support}</span><div><b>${esc(S("rp_strip_support"))}</b><small>${esc(S("rp_strip_support_sub"))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(S("rp_my_title"))}</b><small>${esc(S("rp_sheet_my_reports_none"))}</small></div>${I.chev}</div></div>`;
+/* the Android keyboard while a field has focus (the phone's, not Platata's) */
+function kbd(){
+  const row = keys => `<div class="r">${keys.map(k => `<span class="${k.length>1?"w":""}">${k==="⌫"?I.bksp:esc(k)}</span>`).join("")}</div>`;
+  const second = L === "es" ? "asdfghjklñ" : "asdfghjkl";
+  return `<div class="vs-kbd">${row("qwertyuiop".split(""))}${row(second.split(""))}${row(["⇧"].concat("zxcvbnm".split("")).concat(["⌫"]))}${row(["?123", ",", "          ", ".", "↵"])}</div>`;
+}
+/* utils/WhatsappUtils.kt:132 formatWhatsappForReading */
+function waRead(canonical){
+  const national = canonical.slice(DIAL.length); let body;
+  if(DIAL==="1" && national.length===10) body = "("+national.slice(0,3)+") "+national.slice(3,6)+"-"+national.slice(6);
+  else if(DIAL==="55" && national.length>=10 && national.length<=11) body = national.slice(0,2)+" "+national.slice(2,national.length-4)+"-"+national.slice(-4);
+  else if(DIAL==="54" && national.length===11 && national.startsWith("911")) body = "9 11 "+national.slice(3,7)+"-"+national.slice(7);
+  else { const sizes = {10:[3,3,4],9:[3,3,3],8:[4,4]}[national.length], g = []; let rest = national;
+    if(sizes) sizes.forEach(n => { g.push(rest.slice(0,n)); rest = rest.slice(n); }); else { while(rest.length>4){ g.push(rest.slice(0,3)); rest = rest.slice(3); } if(rest) g.push(rest); }
+    body = g.join(" "); }
+  return "+"+DIAL+" "+body;
+}
+const waOf = c => DIAL + c.phone.replace(/\D/g,"");
+
+/* ---------- the business panel of a SERVICES owner (HomeScreen.kt:1466-1860) ----------
+   Demo data the kit does not carry (copied here, see the notes): the owner scanned supplier invoices in Facturas,
+   4 of them this month (invoices_row_this_month). Nobody of the team uses a phone of their own (one register). */
+const INVOICES_THIS_MONTH = 4;
+const todayNet = () => breakdown(inRange(SALES, dateAt(TODAY_ISO), NOW)).net;
+const shiftOpenedAt = dateAt(TODAY_ISO, "08:00");
+function panelRow(tag, icon, title, sub, o){ o=o||{};
+  return `<div class="vs-wr" data-t="${tag}"><span class="ic">${icon}</span><div class="tx"><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>${o.trail||`<span class="ch">${I.chev}</span>`}</div>`; }
+function panel(p){ p=p||{};
+  const shiftSales = inRange(SALES, shiftOpenedAt, NOW);
+  const regTotal = shiftSales.filter(o => isSale(o.status)).reduce((a,o) => a + o.total - o.refunded, 0);   // paymentBreakdownSinceShift
+  const reg = `<div class="vs-wr reg" data-t="reg-card" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(S("workspace_register_open"))}</b><small style="color:rgba(46,125,50,.7)">${esc(S("workspace_register_sales"))}</small></div><b class="amt">${money(regTotal)}</b></div>`;
+  const team = C.staff.length;
+  return `<div class="vs-panel"><div class="ph"><b>${esc(C.place)}</b>${I.down}</div><div class="pl"><div class="pin" style="transform:translateY(calc(var(--u)*${-(p.scroll||0)}))">
+    ${reg}
+    ${panelRow("row-online", I.cart, S("sell_online_title"), S("sell_online_row_off"), {trail:`<span class="pill0">${esc(S("sell_online_pill_off"))}</span>`})}
+    <div class="eh">${esc(S("panel_heading_every_day"))}</div>
+    ${panelRow("row-clients", I.person, S("more_customers_title"), PL("home_clientes_count", C.clients.length, C.clients.length))}
+    ${panelRow("row-invoices", I.rlong, S("invoices_title"), F("invoices_row_this_month", INVOICES_THIS_MONTH))}
+    ${panelRow("row-team", I.group, S("more_team_title"), PL("home_equipo_count_phones", team, team, PL("home_equipo_on_phones", 0)))}
+    ${panelRow("row-reports", I.rlong, S("workspace_full_reports"), F(US_CA ? "scan_row_reports_today" : "scan_row_reports_today_net", money(todayNet())))}
+    <hr>
+    ${panelRow("row-settings", I.gear, S("settings_title"), S("panel_settings_row_sub"))}
+  </div></div></div>` + nav("biz");
+}
+
+/* ---------- the sale screen (TransactionsScreen.kt:868-1290 ReceiptDetailContent, inside ReceiptDialog :1358, full screen) ----------
+   title: appointmentDetailTitle (:106) for a sale that came from a booking ("mié 21 de oct · 5:00 p. m."), else tx_sale_title;
+   subtitle formattedTimestamp (Order.kt:378, DateFormat MEDIUM+SHORT); action StatusBadge; SaleActionRow (WhatsApp #25D366, or
+   "Mensaje" in US/CA; Print only with a receipt printer; Compartir); tx_employee; tx_customer; ReceiptPaperCard = the text
+   ReceiptFormatter.generatePastPlainTextReceipt (utils/ReceiptFormatter.kt:343-470) builds; OUTLINED red Devolver while the sale
+   is refundable; the void link only inside the open shift (a sale of an earlier day has none). */
+function saleTitle(o){ return o.sched ? `${dayLabel(isoOf(o.sched))} · ${fmtTimeCO(minsOf(o.sched))}` : F("tx_sale_title", o.id); }
+function receiptText(o){
+  const RL = "=".repeat(31), DL = "-".repeat(31);
+  const date = (US_CA ? `${pad2(o.ts.getMonth()+1)}/${pad2(o.ts.getDate())}/${o.ts.getFullYear()}` : `${pad2(o.ts.getDate())}/${pad2(o.ts.getMonth()+1)}/${o.ts.getFullYear()}`) + ` ${pad2(o.ts.getHours())}:${pad2(o.ts.getMinutes())}`;
+  const out = [C.place, S("receipt_label_order_number") + o.id, `${S("receipt_label_date")}: ${date}`, RL];
+  o.lines.forEach(l => { out.push(`${l.qty}x ${l.stored}`); out.push(`   @ ${money(l.price)} ${S("receipt_label_each")} ... ${money(l.price*l.qty)}`); });
+  out.push(DL, `${S("receipt_label_subtotal")}: ${money(o.total)}`);
+  out.push(S("where_mode_local"));            // SVC-4 item 43: the where mode prints even when it cost nothing (ReceiptFormatter.kt:90-102)
+  out.push(RL, `${S("receipt_label_total")}: ${money(o.total)}`);
+  if(o.refunded > 0){ out.push(`${S("tx_refunded_label")}: -${money(o.refunded)}`, `${S("tx_net_after_refund")}: ${money(o.total - o.refunded)}`); }
+  if(o.performer) out.push(`${S("receipt_label_performer")}: ${o.performer}`);
+  out.push(PAYNAME(o.pay), "", S("receipt_footer_default"));   // receipt_footer_default: written in the shop's language at creation (ReceiptFooterSeed.kt)
+  return out.join("\n");
+}
+function saleScreen(o, st){ st=st||{};
+  const refundable = isSale(o.status) && o.status !== "FULLY_REFUNDED";
+  const banner = st.banner ? `<div class="vs-okb${st.flash?" new":""}"><span>${esc(F("refund_done_banner", money(st.banner)))}</span>${I.close}</div>` : "";
+  const acts = `<div class="vs-arow">${US_CA?`<span class="ab out">${esc(S("receipt_btn_text"))}</span>`:`<span class="ab wa">${esc(S("receipt_opt_whatsapp_btn"))}</span>`}<span class="ab out">${esc(S("receipt_action_share"))}</span></div>`;
+  return `<div class="vs-pg">${topbar(saleTitle(o), {sub:fmtDT(o.ts), backTag:"sale-back", action:`${badge(o.status)}<span style="width:calc(var(--u)*12)"></span>`})}
+    <div class="vs-scroll"><div class="in vs-dbody" style="transform:translateY(calc(var(--u)*${-(st.scroll||0)}))">
+    ${banner}${acts}
+    <div class="vs-emp">${esc(F("tx_employee", o.emp))}</div>
+    ${o.client?`<div class="vs-emp">${esc(F("tx_customer", o.client))}</div>`:""}
+    <div class="vs-paper"><pre>${esc(receiptText(o))}</pre></div>
+    ${refundable && st.canRefund!==false ? `<div class="vs-rbtn" data-t="refund">${esc(S("tx_issue_refund"))}</div>` : ""}
+    <div style="height:calc(var(--u)*24)"></div>
+    </div></div></div>`;
+}
+
+/* ---------- Reports (ui/screens/reports/ReportsScreen.kt:44-560) ----------
+   SumaTopBar reports_title; pinned FilterChip row (RangeSelector :567); periodLabel (:598) bodySmall; the chart (ReportsSalesChart.kt,
+   190 dp, bars #007AFF 12 dp, two grid lines, y labels abbreviateAxis, x labels chartLabelIndices); the table card (:228-397:
+   Gross; Discounts; Refunds (N); Net sales + NetSalesWords.noteRes + ComparisonLine; the charge / tax / tip lines only when > 0;
+   Total collected; Number of sales + ComparisonLine; services only: "Citas sin asistir" when > 0 (:378, DBSVC-1); Average sale);
+   ReportBreakdownList cards (sorted, 8 rows + "Otros"): Cómo te pagaron (+ after refunds), Ventas de artículos por categoría,
+   [Ventas por lugar: needs 2+ ways of working], Servicios con más ingresos (services title, 10 rows, "N vendidos"),
+   Ventas por empleado (owner only, plural "N ventas"); bottom button reports_send_to_accountant (owner). LEVEL_2: support strip. */
+const PRESETS = ["today","yesterday","this_week","this_month","last_month","this_year","last_year","custom"];
+const DAYMS = 86400000;
+const startOfWeekMon = d => { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
+/* data/ReportRange.kt forPreset + previous(): Today runs to the end of the day and compares with yesterday up to now;
+   This week / This month run to now and compare with the same slice before; Last month compares with the month before */
+function rangeOf(key){
+  const t0 = dateAt(TODAY_ISO);
+  if(key==="today") return {key, unit:"hour", a:t0, b:new Date(t0.getTime()+DAYMS), pa:new Date(t0.getTime()-DAYMS), pb:new Date(NOW.getTime()-DAYMS),
+    label:F("reports_period_label_dated", S("reports_period_today"), `${t0.getDate()} ${shortMon(t0)}`), cmp:"reports_compare_vs_yesterday"};
+  if(key==="this_week"){ const a = startOfWeekMon(NOW), el = NOW - a; return {key, unit:"day", a, b:NOW, pa:new Date(a.getTime()-7*DAYMS), pb:new Date(a.getTime()-7*DAYMS+el),
+    label:`${a.getDate()}–${NOW.getDate()} ${shortMon(NOW)}`, cmp:"reports_compare_vs_last_week"}; }
+  if(key==="last_month"){ const a = new Date(2026,8,1), b = new Date(2026,9,1);
+    const mn = new Intl.DateTimeFormat(L==="pt"?"pt-BR":L==="es"?"es":"en", {month:"long"}).format(a);
+    return {key, unit:"day", a, b, pa:new Date(2026,7,1), pb:a, label:mn[0].toUpperCase()+mn.slice(1), cmp:"reports_compare_vs_previous"}; }
+  throw new Error("range "+key);
+}
+/* SimpleDateFormat "MMM" in the app's language (Java short month: "oct", "out", "Oct") */
+const shortMon = d => { const s = new Intl.DateTimeFormat(L==="pt"?"pt-BR":L==="es"?"es":"en", {month:"short"}).format(d).replace(/\.$/,""); return s; };
+/* data/ReportChartData.kt buildChartBuckets: a column is that bucket's Net sales; empty HOURS before the first and after the last
+   sale are trimmed; empty days are kept */
+function buckets(rg, sales){
+  const rows = counted(inRange(sales, rg.a, rg.b)).map(o => ({ts:o.ts, net:moneyOf(o).net}));
+  const out = [];
+  if(rg.unit==="hour"){ for(let h = 0; h < 24; h++){ const s = new Date(rg.a.getTime()+h*3600000); out.push({s, v:rows.filter(r => r.ts.getHours()===h).reduce((a,r)=>a+r.net,0)}); }
+    const f = out.findIndex(x => x.v > 0), l = out.length - 1 - out.slice().reverse().findIndex(x => x.v > 0);
+    return f < 0 ? [] : out.slice(f, l+1); }
+  for(let d = new Date(rg.a); d < rg.b; d = new Date(d.getFullYear(), d.getMonth(), d.getDate()+1)){ const iso = isoOf(d); out.push({s:d, v:rows.filter(r => isoOf(r.ts)===iso).reduce((a,r)=>a+r.net,0)}); }
+  return out;
+}
+/* ReportsSalesChart.kt:287 abbreviateAxis; the million's decimal uses the currency's mark (decimalSeparatorFor) */
+const COMMA_CUR = ["COP","CLP","ARS","BRL"].includes(K.cur);
+function abbr(v){ const a = Math.abs(v);
+  if(a >= 1e6){ const m = Math.round(v/1e5)/10; return (m%1===0 ? String(m) : String(m).replace(".", COMMA_CUR?",":"."))+"M"; }
+  if(a >= 1e3) return Math.round(v/1e3)+"k"; return String(Math.trunc(v)); }
+/* ReportsChartLabels.kt chartLabelIndices: the smallest step whose labels keep >= 8 dp apart; the last label always shows */
+function labelIdx(n, plotW, gutter, wOf){
+  if(n <= 1) return [0];
+  const slot = plotW/n, total = gutter + plotW, last = n-1, minGap = 8;
+  const left = i => Math.min(Math.max(gutter + slot*i + slot/2 - wOf(i)/2, 0), Math.max(total - wOf(i), 0));
+  const roomed = (a,b) => left(b) - (left(a) + wOf(a)) >= minGap;
+  for(let step = 1; step < n; step++){ const pk = []; for(let i = 0; i < last; i += step) pk.push(i);
+    while(pk.length > 1 && !roomed(pk[pk.length-1], last)) pk.pop(); pk.push(last);
+    if(pk.every((x,j) => j===0 || roomed(pk[j-1], x))) return pk; }
+  return [0, last];
+}
+function chart(rg, sales, sel){
+  const bs = buckets(rg, sales);
+  if(!bs.length) return `<div class="rp-empty">${esc(S("reports_no_data"))}</div>`;
+  const max = Math.max(...bs.map(b => b.v)), n = bs.length;
+  const lab = b => rg.unit==="hour" ? `${b.s.getHours()}h` : String(b.s.getDate());          // reports_chart_axis_hour "H'h'", _day "d"
+  const top = abbr(max), gutter = Math.max(top.length, 1)*6.2 + 8, plotW = 412 - 32 - gutter;
+  const shown = new Set(labelIdx(n, plotW, gutter, i => lab(bs[i]).length*6.2));
+  const mark = b => rg.unit==="hour" ? `${pad2(b.s.getHours())}:00` : `${DOW[b.s.getDay()]} ${b.s.getDate()} ${shortMon(b.s)}`;   // reports_chart_marker_hour / _day
+  const bars = bs.map((b,i) => `<div class="slot"${b.tag?"":""} data-t="bar-${i}"><i style="height:${max>0?b.v/max*100:0}%"></i>${shown.has(i)?`<em>${esc(lab(b))}</em>`:""}${sel===i?`<s></s><u>${esc(mark(b))}<br>${money(b.v)}</u>`:""}</div>`).join("");
+  return `<div class="rp-cht"><div class="ax" style="width:calc(var(--u)*${gutter-8})"><span>${top}</span><span>0</span></div><div class="plot"><hr class="t"><hr class="b">${bars}</div></div>`;
+}
+const tallest = (rg, sales) => { const bs = buckets(rg, sales); return bs.reduce((m,b,i,a) => b.v > a[m].v ? i : m, 0); };
+const sumLine = (lab, val, o) => { o=o||{}; return `<div class="sl${o.tap?" tap":""}${o.red?" red":""}"${o.tag?` data-t="${o.tag}"`:""}><span>${esc(lab)}</span><b>${esc(val)}</b>${o.tap?I.chev:""}</div>`; };
+const headLine = (lab, val, inner, tag) => `<div class="hm"${tag?` data-t="${tag}"`:""}><div><span>${esc(lab)}</span><b>${esc(val)}</b></div>${inner||""}</div>`;
+/* ComparisonLine (ReportsScreen.kt:655): nothing against a zero baseline; ▲ green SumaSafeGreen / ▼ red, "N%  vs ..." */
+const cmpLine = (cur, prev, key) => { if(!(prev > 0)) return ""; const p = Math.round((cur-prev)/prev*100);
+  return `<div class="cmp${p<0?" dn":p===0?" eq":""}">${p>0?"▲":p<0?"▼":"—"}${p===0?"":` ${Math.abs(p)}%`}  ${esc(S(key))}</div>`; };
+function reportTable(rg, sales, noShows){
+  const cur = inRange(sales, rg.a, rg.b), prev = inRange(sales, rg.pa, rg.pb);
+  const b = breakdown(cur), pb = breakdown(prev);
+  const avg = b.count ? b.net/b.count : null, pavg = pb.count ? pb.net/pb.count : 0;
+  return `<div class="rp-card">
+    ${sumLine(S("reports_gross_sales"), money(b.gross))}
+    ${sumLine(S("reports_discounts"), b.discounts>0 ? "-"+money(b.discounts) : money(0), {tap:b.discounts>0})}
+    ${sumLine(F("refunds_with_count", b.refundCount), b.refunds>0 ? "-"+money(b.refunds) : money(0), {tap:b.refunds>0, red:b.refunds>0, tag:"line-refunds"})}
+    <hr>
+    ${headLine(S("reports_net_sales"), money(b.net), `<small>${esc(S((US_CA || C.pay.card==="stripe") ? "reports_net_sales_note" : "reports_net_sales_note_no_tips"))}</small>${cmpLine(b.net, pb.net, rg.cmp)}`, "net")}
+    ${b.service>1e-9 ? sumLine(S("reports_service_charges_services"), "+"+money(b.service), {tap:true}) : ""}
+    ${b.taxes>1e-9 ? sumLine(S("reports_taxes"), "+"+money(b.taxes), {tap:true}) : ""}
+    ${b.tips>1e-9 ? sumLine(S("reports_tips"), "+"+money(b.tips), {tap:true}) : ""}
+    <hr>
+    ${headLine(S("reports_total_collected"), money(b.total))}
+    <hr>
+    ${headLine(S("reports_transactions"), String(b.count), cmpLine(b.count, pb.count, rg.cmp), "count")}
+    ${noShows>0 ? `<div class="pr" data-t="no-shows"><span>${esc(S("reports_no_shows"))}</span><b>${noShows}</b></div>` : ""}
+    <hr>
+    ${headLine(S("reports_avg_ticket"), avg!=null ? money(avg) : S("reports_avg_ticket_empty"), cmpLine(avg||0, pavg, rg.cmp))}
+  </div>`;
+}
+/* ReportBreakdownList.kt: sorted high to low, bars relative to the largest row; past maxRows the rest goes to "Otros" */
+function blist(title, rows, o){ o=o||{};
+  const sorted = rows.slice().sort((a,b) => b.v - a.v), max = o.max || 8;
+  const disp = sorted.length > max ? sorted.slice(0,max).concat([{label:S("reports_breakdown_other"), v:sorted.slice(max).reduce((a,r)=>a+r.v,0)}]) : sorted;
+  const top = Math.max(...disp.map(r => r.v), 0);
+  return `<div class="rp-card bl"${o.tag?` data-t="${o.tag}"`:""}><h4>${esc(title)}</h4>${o.note?`<small class="nt">${esc(o.note)}</small>`:""}<div class="sp8"></div>
+    ${disp.length ? disp.map((r,i) => `<div class="br"><div class="l"><span>${esc(r.label)}</span>${r.sec?`<small>${esc(r.sec)}</small>`:""}</div><b>${money(r.v)}</b></div><div class="trk"><i style="width:${top>0?Math.max(0,r.v)/top*100:0}%"></i></div>`).join("") : `<p class="nd">${esc(S("reports_no_data"))}</p>`}
+  </div>`;
+}
+function reportLists(rg, sales){
+  const cur = inRange(sales, rg.a, rg.b);
+  return blist(S("reports_payment_split"), byMethod(cur), {note:S("reports_after_refunds"), tag:"pay-card"}) + `<div class="sp24"></div>` +
+    blist(S("reports_category_title"), byCategory(cur)) + `<div class="sp24"></div>` +
+    blist(S("reports_top_items_services"), topItems(cur).map(r => Object.assign({}, r, {sec:F("reports_sold_count", r.n)})), {max:10, tag:"top-card"}) + `<div class="sp24"></div>` +
+    blist(S("reports_employee_sales"), byEmployee(cur).map(r => Object.assign({}, r, {sec:PL("reports_tx_count", r.n, r.n)})), {tag:"emp-card"});
+}
+/* st: {range, chipX, scroll, sel} */
+function reportsScreen(st, o){ o=o||{};
+  const rg = rangeOf(st.range);
+  const chips = `<div class="rp-chips"><div style="transform:translateX(calc(var(--u)*${-(st.chipX||0)}))">${PRESETS.map(p =>
+    `<span class="${p===st.range?"on":""}" data-t="chip-${p}">${p===st.range?I.check:""}${esc(S("reports_period_"+p))}</span>`).join("")}</div></div>`;
+  return topbar(S("reports_title")) + chips + `<div class="rp-per">${esc(rg.label)}</div>
+    <div class="vs-scroll"><div class="in rp-in" style="transform:translateY(calc(var(--u)*${-(st.scroll||0)}))">
+      <div class="rp-ct">${esc(S("reports_chart_title"))}</div>${chart(rg, SALES, st.sel)}
+      ${reportTable(rg, SALES, o.noShows ? o.noShows(rg) : 0)}<div class="sp12"></div>${reportLists(rg, SALES)}<div class="sp24"></div>
+    </div></div>
+    <div class="rp-bot"><div class="vs-sb pri" data-t="accountant"><span>${esc(S("reports_send_to_accountant"))}</span></div></div>` + strip();
+}
+// KEYS: reports_period_today,reports_period_yesterday,reports_period_this_week,reports_period_this_month,reports_period_last_month,reports_period_this_year,reports_period_last_year,reports_period_custom
+
+const VS_CSS = `
+.mat .app{font-family:"Roboto",system-ui,sans-serif}
+.mat .vs-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff;gap:calc(var(--u)*4)}
+.mat .vs-top .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .vs-top .tt{flex:1;min-width:0;padding-left:calc(var(--u)*4);display:flex;flex-direction:column;justify-content:center}
+.mat .vs-top .tt b{font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .vs-top .tt small{font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .vs-top .act{font-size:calc(var(--u)*14);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*40);display:flex;align-items:center}
+.mat .vs-pg{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;position:relative}
+.mat .vs-scroll{flex:1;min-height:0;overflow:hidden;position:relative}
+.mat .vs-scroll>.in{transition:transform .5s ease}
+.mat .vs-sb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*16);font-weight:600;padding:0 calc(var(--u)*16);text-align:center;flex:0 0 auto}
+.mat .vs-sb.pri{background:var(--m-on);color:#fff}
+.mat .vs-sb.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .vs-sb.dst{background:var(--m-err);color:#fff}
+.mat .vs-sb.off.dst,.mat .vs-sb.off.pri{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .vs-bdg{border-radius:calc(var(--u)*6);font-size:calc(var(--u)*11);line-height:calc(var(--u)*16);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*6);white-space:nowrap;margin:0 calc(var(--u)*2)}
+.mat .vs-bdg.ok{background:#E8F5E9;color:#2E7D32}.mat .vs-bdg.wn{background:#FFF3E0;color:#E65100}.mat .vs-bdg.er{background:#FFEBEE;color:#C62828}
+.mat .vs-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*90);background:#323232;color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:20;white-space:nowrap}
+.mat .mnav .flagc{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:var(--m-sv);display:grid;place-items:center}
+.mat .mnav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.mat .mnav .flagc svg:not(.mi){width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:2px}
+.mat .mnav .flagc .fp{display:grid;place-items:center;color:var(--m-onv)}
+.mat .mnav .flagc .fp svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:currentColor}
+.mat .mscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:15;display:flex;align-items:flex-end}
+.mat .bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*32) calc(var(--u)*24) calc(var(--u)*40);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*8);text-align:center}
+.mat .bio b{font-size:calc(var(--u)*22);font-weight:500}.mat .bio small{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .bio .fpb{margin-top:calc(var(--u)*28);width:calc(var(--u)*64);height:calc(var(--u)*64);border-radius:50%;display:grid;place-items:center;color:#1A73E8;border:calc(var(--u)*2) solid #1A73E8}
+.mat .bio .fpb svg{width:calc(var(--u)*40);height:calc(var(--u)*40);fill:currentColor}.mat .bio .fpb.ok{background:#1A73E8;color:#fff}
+.mat .vs-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .vs-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .vs-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .vs-strip .h>div{flex:1;min-width:0}
+.mat .vs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#7C55E0;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .vs-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:currentColor}
+.mat .vs-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
+.mat .vs-strip small{display:block;font-size:calc(var(--u)*13);line-height:calc(var(--u)*17);color:#737883}
+.mat .vs-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .vs-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.mat .vs-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF;flex:0 0 auto}
+.mat .vs-panel .ph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .vs-panel .ph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.mat .vs-panel .pl{flex:1;min-height:0;overflow:hidden}
+.mat .vs-panel .pin{display:flex;flex-direction:column;gap:calc(var(--u)*8);transition:transform .5s ease;padding-bottom:calc(var(--u)*16)}
+.mat .vs-panel hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0;flex:0 0 auto}
+.mat .vs-panel .eh{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);letter-spacing:.5px}
+.mat .vs-wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);color:var(--m-on);flex:0 0 auto}
+.mat .vs-wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .vs-wr .ic svg{fill:currentColor}
+.mat .vs-wr .tx{flex:1;min-width:0}
+.mat .vs-wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .vs-wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(var(--u)*16)}
+.mat .vs-wr .ch svg{fill:var(--m-onv)}
+.mat .vs-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
+.mat .vs-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .vs-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.mat .vs-kbd{flex:0 0 auto;background:#E8EAED;padding:calc(var(--u)*8) calc(var(--u)*4) calc(var(--u)*10);display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.mat .vs-kbd .r{display:flex;gap:calc(var(--u)*5);justify-content:center}
+.mat .vs-kbd span{flex:1;max-width:calc(var(--u)*38);height:calc(var(--u)*44);border-radius:calc(var(--u)*6);background:#fff;box-shadow:0 1px 0 #B5B9BE;display:grid;place-items:center;font-size:calc(var(--u)*20);color:#202124}
+.mat .vs-kbd span svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#202124}
+.mat .vs-kbd span.w{max-width:none;flex:1.6;background:#D3D6DB;font-size:calc(var(--u)*15)}
+.mat .vs-kbd .r span:nth-child(3).w{flex:5;background:#fff}
+.mat .vs-dbody{padding:calc(var(--u)*16)}
+.mat .vs-okb{display:flex;align-items:center;justify-content:space-between;border-radius:calc(var(--u)*12);background:rgba(26,127,60,.12);color:#1A7F3C;padding:calc(var(--u)*4) calc(var(--u)*4) calc(var(--u)*4) calc(var(--u)*16);min-height:calc(var(--u)*56);font-size:calc(var(--u)*14);font-weight:600;margin-bottom:calc(var(--u)*12)}
+.mat .vs-okb svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor;margin:calc(var(--u)*12)}.mat .vs-okb.new{animation:vsfl 1.4s ease}
+.mat .vs-arow{display:flex;gap:calc(var(--u)*8);margin-bottom:calc(var(--u)*8)}
+.mat .vs-arow .ab{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:600}
+.mat .vs-arow .ab.wa{background:#25D366;color:#fff}.mat .vs-arow .ab.out{border:1px solid var(--m-outline);color:var(--m-on)}
+.mat .vs-emp{font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);margin-bottom:calc(var(--u)*2)}
+.mat .vs-paper{margin-top:calc(var(--u)*12);background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*4) rgba(0,0,0,.18);padding:calc(var(--u)*16)}
+.mat .vs-paper pre{margin:0;font:calc(var(--u)*11.4)/1.45 "Roboto Mono","DejaVu Sans Mono",monospace;color:#000;white-space:pre-wrap;word-break:break-word}
+.mat .vs-rbtn{margin-top:calc(var(--u)*24);height:calc(var(--u)*52);border-radius:calc(var(--u)*12);border:1px solid var(--m-err);color:var(--m-err);display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:500}
+@keyframes vsfl{0%{background:#FFF3C4}100%{background:rgba(26,127,60,.12)}}
+@keyframes vshl{0%{background:#FFF3C4}100%{background:transparent}}
+.mat .rp-chips{flex:0 0 auto;overflow:hidden;padding:calc(var(--u)*8) 0}
+.mat .rp-chips>div{display:flex;gap:calc(var(--u)*8);padding:0 calc(var(--u)*16);transition:transform .5s ease;width:max-content}
+.mat .rp-chips span{height:calc(var(--u)*32);border-radius:calc(var(--u)*8);border:1px solid var(--m-outline);padding:0 calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);white-space:nowrap}
+.mat .rp-chips span.on{background:var(--m-ovar);border-color:transparent;color:var(--m-on);padding-left:calc(var(--u)*8)}
+.mat .rp-chips span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.mat .rp-per{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .rp-in{padding-bottom:calc(var(--u)*16)}
+.mat .rp-ct{padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*4);font-size:calc(var(--u)*14);font-weight:700;color:var(--m-onv)}
+.mat .rp-empty{height:calc(var(--u)*190);display:grid;place-items:center;color:var(--m-onv);font-size:calc(var(--u)*14)}
+.mat .rp-cht{height:calc(var(--u)*190);padding:0 calc(var(--u)*16);display:flex;gap:calc(var(--u)*8);margin-bottom:calc(var(--u)*12)}
+.mat .rp-cht .ax{display:flex;flex-direction:column;justify-content:space-between;font-size:calc(var(--u)*11);color:var(--m-onv);padding:0 0 calc(var(--u)*14);text-align:right;flex:0 0 auto}
+.mat .rp-cht .ax span{line-height:calc(var(--u)*16);transform:translateY(calc(var(--u)*-4))}
+.mat .rp-cht .ax span+span{transform:translateY(calc(var(--u)*6))}
+.mat .rp-cht .plot{flex:1;position:relative;display:flex;padding:calc(var(--u)*8) 0 calc(var(--u)*20)}
+.mat .rp-cht .plot hr{position:absolute;left:0;right:0;border:0;border-top:1px solid rgba(199,199,204,.35);margin:0}
+.mat .rp-cht .plot hr.t{top:calc(var(--u)*8)} .mat .rp-cht .plot hr.b{bottom:calc(var(--u)*20)}
+.mat .rp-cht .slot{flex:1;position:relative;display:flex;justify-content:center;align-items:flex-end;min-width:0}
+.mat .rp-cht .slot i{width:min(calc(var(--u)*12),calc(100% - var(--u)*4));background:#007AFF;border-radius:calc(var(--u)*3.6) calc(var(--u)*3.6) 0 0;display:block}
+.mat .rp-cht .slot em{position:absolute;bottom:calc(var(--u)*-18);font-style:normal;font-size:calc(var(--u)*11);color:var(--m-onv);white-space:nowrap}
+.mat .rp-cht .slot s{position:absolute;top:0;bottom:0;left:50%;border-left:1px solid #C7C7CC}
+.mat .rp-cht .slot u{position:absolute;top:calc(var(--u)*-6);left:50%;transform:translateX(-50%);text-decoration:none;background:#fff;border:1px solid #C7C7CC;border-radius:calc(var(--u)*8);padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);white-space:nowrap;color:var(--m-on);z-index:2}
+.mat .rp-cht .slot:first-child u{left:0;transform:none}
+.mat .rp-card{margin:0 calc(var(--u)*16);background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 1px 2px rgba(0,0,0,.18),0 1px 3px 1px rgba(0,0,0,.08);padding:calc(var(--u)*16)}
+.mat .rp-card hr{border:0;border-top:1px solid var(--m-ovar);margin:0}
+.mat .rp-card .sl{display:flex;align-items:center;gap:calc(var(--u)*12);padding:calc(var(--u)*4) 0;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24)}
+.mat .rp-card .sl.tap{min-height:calc(var(--u)*48)}
+.mat .rp-card .sl span{flex:1;color:var(--m-onv)} .mat .rp-card .sl b{font-weight:600;white-space:nowrap}
+.mat .rp-card .sl svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-onv);margin-left:calc(var(--u)*-8)}
+.mat .rp-card .sl.red span,.mat .rp-card .sl.red b{color:#FF3B30}
+.mat .rp-card .hm{padding:calc(var(--u)*12) 0}
+.mat .rp-card .hm>div{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .rp-card .hm>div span{flex:1;font-size:calc(var(--u)*16);color:var(--m-onv)}
+.mat .rp-card .hm>div b{font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;white-space:nowrap}
+.mat .rp-card .hm small{display:block;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .rp-card .cmp{font-size:calc(var(--u)*12);font-weight:600;color:#10B981;margin-top:calc(var(--u)*2);white-space:pre}
+.mat .rp-card .cmp.dn{color:#FF3B30} .mat .rp-card .cmp.eq{color:var(--m-onv)}
+.mat .rp-card .pr{display:flex;padding:calc(var(--u)*8) 0;font-size:calc(var(--u)*16)} .mat .rp-card .pr span{flex:1;color:var(--m-onv)}
+.mat .rp-card .pr.hl{animation:vshl 2s ease}
+.mat .rp-card h4{margin:0;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700}
+.mat .rp-card .nt{display:block;font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .rp-card .nd{margin:0;font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .sp8{height:calc(var(--u)*8)} .mat .sp12{height:calc(var(--u)*12)} .mat .sp24{height:calc(var(--u)*24)}
+.mat .rp-card .br{display:flex;gap:calc(var(--u)*8);font-size:calc(var(--u)*16);line-height:calc(var(--u)*24)}
+.mat .rp-card .br .l{flex:1;min-width:0} .mat .rp-card .br .l small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .rp-card .br b{font-weight:600;white-space:nowrap}
+.mat .rp-card .trk{height:calc(var(--u)*6);border-radius:calc(var(--u)*6);background:#F2F2F7;margin:calc(var(--u)*4) 0 calc(var(--u)*12);overflow:hidden}
+.mat .rp-card .trk i{display:block;height:100%;background:#007AFF;border-radius:calc(var(--u)*6)}
+.mat .rp-bot{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);background:#fff;box-shadow:0 -1px 2px rgba(0,0,0,.06)}
+`;
+const vsStyle_ = document.createElement("style"); vsStyle_.textContent = VS_CSS; document.head.appendChild(vsStyle_);
+/* a scrolled list slides (transform .5s); once it stops, ask the engine to put the tap ring on the target again */
+document.addEventListener("transitionend", e => { if(e.propertyName==="transform") window.dispatchEvent(new Event("resize")); });
+const HINT = s => pick({es:"Toca "+s, pt:"Toque em "+s, en:"Tap "+s});
+const WHO_PHONE = () => S("conn_slot_phone");
+// KEYS: conn_slot_phone
+// KEYS: tx_status_paid,tx_status_part_refund,tx_status_refunded,scan_row_reports_today,scan_row_reports_today_net,reports_net_sales_note,reports_net_sales_note_no_tips,reports_compare_vs_yesterday,reports_compare_vs_last_week,reports_compare_vs_previous
+
+/* ===== VS8 ===== */
+// TITLE: Platata · Devolver una venta
+// BIZ: peluqueria
+/* VS8 "Devolver una venta" as a SERVICES business (Peluquería by default; ?biz=veterinaria|taller-motos|unas work too), on the
+   OWNER's phone: the owner finds yesterday's sale in Agenda > Ventas, refunds all of it in cash, and the open register takes the
+   cash out by itself ("Devoluciones de ventas anteriores"). Every country, es/pt/en.
+   Screens at 73c65f08 (paths under app/src/main/java/com/example/):
+   Agenda / Ventas  ui/screens/transactions/ServicesTransactionsScreen.kt:72-327: the bottom tab is called "Agenda" for services
+                    (ui/navigation/NavLabels.kt:24, SVC-2 item 23) and opens on the AGENDA half (ownTab = 1, :98); top row = back
+                    ARROW with a label (SVC-2 item 51, :118-125) + TabRow "Ventas | Agenda N" (:140-180); the search pill (:186 /
+                    :247, sx_search, extraLarge = 50 dp, surfaceVariant); Agenda rows grouped by day (:229-243, dayLabelText) with
+                    BookingRow (:334-450: Viene · day · time | name / first service · phone / where · note | amount); Ventas rows
+                    SaleRow (:452-560: StatusBadge + method | client / first service · appointment time or formattedTimestamp |
+                    total, red "-$X" when refunded)
+   the sale         ReceiptDialog -> ReceiptDetailContent (TransactionsScreen.kt:868-1290): a walk-in sale is "Venta #N"
+                    (appointmentDetailTitle :106 only for a booked one); Cliente: line (:1112); no void link for a sale of an
+                    earlier day (saleWithinCancelWindow); OUTLINED red Devolver (:1236)
+   refund           SaleDetailHost.kt:126 -> IssueRefundScreen (TransactionsScreen.kt:1397-2015): refund_paid_left, Artículos |
+                    Monto, "Seleccionar todos los artículos" = the whole total, refund_goes_cash (RefundDestinationLine.kt:32-46,
+                    only when the amount > 0), red refund_btn_amount; SumaDialog tx_confirm_refund_title/_body/tx_yes_refund;
+                    RefundPinDialog (Security ON); the "¿Vuelven al inventario?" sheet is asked ONLY when a refunded line counts
+                    stock (:1450-1466 restockCandidates) - a service never does, so it does not show here
+   after            no stock line -> back to the sale (SaleDetailHost.kt:90-96) with RefundResultBanner (green, refund_done_banner),
+                    badge Devuelta, receipt lines tx_refunded_label / tx_net_after_refund (ReceiptFormatter.kt:428-431)
+   the register     the flag (biometric, FlagGate) -> panel register card -> RegisterStatusScreen.kt:140-505: drawer card with
+                    register_close_old_refunds "-$X" (:366-372, data/CashShift.kt:118-129 DRAWER_OLD_REFUNDS_SUB: cash handed back
+                    in THIS shift for a sale rung before it) and "Debe haber en la caja" = CashDrawer.expected (:77-78).
+   Demo data: the kit's sales (yesterday's last cash walk-in with a client), the kit's bookings (today's agenda), the opening
+   cash of the kit (V.C.openingCash) at 8:00 this morning. */
+// KEYS: sx_comes,sx_order_ready
+const YEST = addDaysIso(TODAY_ISO, -1);
+function pickTarget(){
+  for(let back = 1; back < 7; back++){
+    const day = SALES.filter(s => s.d === addDaysIso(TODAY_ISO, -back) && s.pay === "cash");
+    const svc = s => s.lines.every(l => !l.product);
+    const tries = [s => !s.performer && s.client && svc(s), s => s.client && svc(s), s => !s.performer && svc(s), s => svc(s), s => true];
+    for(const f of tries){ const r = day.filter(f); if(r.length) return r[r.length-1]; }
+  }
+  return SALES[SALES.length-1];
+}
+const SALE = pickTarget();
+const SHIFT_START = shiftOpenedAt;                 // the owner opened the register at 8:00 today with the kit's opening cash
+const LIST = () => SALES.filter(o => o.ts < NOW).slice().reverse();          // orderHistory, newest first
+const ROW_DP = 65;
+const TARGET_INDEX = LIST().findIndex(o => o.id === SALE.id);
+const LIST_SCROLL = Math.max(0, (TARGET_INDEX - 3) * ROW_DP);
+
+/* ---------- the services Ventas | Agenda screen ---------- */
+function txHeader(tab){
+  return `<div class="sx-top"><span class="ib">${I.back}</span><div class="tabs">
+    <span class="${tab===0?"on":""}" data-t="tab-ventas">${esc(S("tx_tab_all"))}</span>
+    <span class="${tab===1?"on":""}" data-t="tab-agenda">${esc(S("sx_agenda"))}${C.bookings.length?`<i>${C.bookings.length}</i>`:""}</span></div></div>
+    <div class="sx-search">${I.search}<span>${esc(S("sx_search"))}</span></div>`;
+}
+function agenda(){
+  const days = {};
+  C.bookings.forEach(b => { (days[b.d] = days[b.d] || []).push(b); });
+  const rows = Object.keys(days).sort().map(d => `<div class="sx-day">${esc(dayLabel(d))}</div>` + days[d].map(b => {
+    const cl = C.clients.find(c => c.name === b.client), s = V.service(b.sid);
+    const first = (b.choice != null && s && s.choices[b.choice]) ? `${b.name} (${s.choices[b.choice].name})` : b.name;
+    const [h, mi] = b.t.split(":").map(Number);
+    return `<div class="sx-row"><div class="lc"><b>${esc(S(V.isOrder ? "sx_order_ready" : "sx_comes"))}</b><small>${esc(dayLabel(b.d))}</small><small>${esc(fmtTimeCO(h*60+mi))}</small></div>
+      <div class="mc"><b>${esc(b.client)}</b><small>${esc([first, cl ? "+"+waOf(cl) : null].filter(Boolean).join(" · "))}</small><small>${esc(S("where_mode_local"))}</small></div>
+      <b class="am">${b.price > 0 ? money(b.price) : "—"}</b></div>`; }).join("")).join("");
+  return `<div class="vs-scroll"><div class="in">${rows}</div></div>`;
+}
+function saleRow(o){
+  const when = o.sched ? `${dayLabel(isoOf(o.sched))} · ${fmtTimeCO(minsOf(o.sched))}` : fmtDT(o.ts);
+  return `<div class="sx-row" data-t="row-${o.id}"><div class="lc">${badge(o.status)}<small class="pm">${esc(PAYNAME(o.pay))}</small></div>
+    <div class="mc"><b>${esc(o.client || "—")}</b><small>${esc(o.lines[0].stored)} · ${esc(when)}</small></div>
+    <div class="rc"><b>${money(o.total)}</b>${o.refunded>0?`<small>-${money(o.refunded)}</small>`:""}</div></div>`;
+}
+function sales(st){
+  const list = LIST().slice(0, TARGET_INDEX + 16);
+  return `<div class="vs-scroll"><div class="in" style="transform:translateY(calc(var(--u)*${-(st.scroll||0)}))">${list.map(saleRow).join("")}</div></div>`;
+}
+function txScreen(st){
+  return `<div class="vs-pg">${txHeader(st.tab)}${st.tab===1 ? agenda() : sales(st)}</div>` + nav("agenda", {locked:true}) + (st.bio!=null ? bioSheet(st.bio) : "");
+}
+
+/* ---------- the refund screen (IssueRefundScreen) ---------- */
+function refundScreen(st){
+  const amt = st.picked ? SALE.total : 0;
+  const ck = on => `<span class="cb${on?" on":""}">${on?I.check:""}</span>`;
+  const rows = SALE.lines.map(l => `<div class="ri"><div><b>${esc((l.qty>1?l.qty+"x ":"")+l.stored)}</b><small>${money(l.price*l.qty)}</small></div>${ck(st.picked)}</div>`).join("");
+  let h = `<div class="vs-pg">${topbar(S("tx_issue_refund"), {backTag:"refund-back"})}<div class="rf-body">
+    <div class="paidl">${esc(F("refund_paid_left", money(SALE.total), money(SALE.total)))}</div>
+    <div class="rtabs"><span class="on">${esc(S("tx_items_tab"))}</span><span>${esc(S("tx_amount_tab"))}</span></div>
+    <div class="ri all" data-t="all"><b>${esc(S("tx_select_all_items"))}</b>${ck(st.picked)}</div>${rows}</div>
+    <div class="rfoot">${amt?`<div class="goes">${esc(F("refund_goes_cash", money(amt)))}</div>`:""}${btn(F("refund_btn_amount", money(amt)), "dst", "refund-go", {off:!amt})}</div>`;
+  if(st.confirm) h += `<div class="dlg-s"><div class="dlg"><h3>${esc(S("tx_confirm_refund_title"))}</h3><p>${esc(F("tx_confirm_refund_body", money(amt)))}</p>
+      <div class="bt"><span>${esc(S("common_cancel"))}</span><span class="red" data-t="yes">${esc(S("tx_yes_refund"))}</span></div></div></div>`;
+  if(st.pin!=null){ const k = ["1","2","3","4","5","6","7","8","9","","0","⌫"];
+    h += `<div class="dlg-s"><div class="pind"><b>${esc(S("refund_pin_title"))}</b><small>${esc(S("refund_pin_subtitle"))}</small><small class="pw">${esc(S("refund_pin_where"))}</small>
+      <div class="pdots">${[0,1,2,3].map(i => `<i class="${i<st.pin?"f":""}"></i>`).join("")}</div>
+      <div class="pk">${k.map(x => x ? `<span data-t="pin-${x==="⌫"?"del":x}">${x==="⌫"?I.bksp:x}</span>` : `<em></em>`).join("")}</div><div class="pc">${esc(S("common_cancel"))}</div></div></div>`; }
+  return h + `</div>`;
+}
+
+/* ---------- the register (RegisterStatusScreen, one register: no tab row) ---------- */
+function registerScreen(st){
+  const shift = inRange(SALES, SHIFT_START, NOW).filter(o => isSale(o.status));
+  const cashSales = shift.filter(o => o.pay === "cash").reduce((a,o) => a + o.total - o.refunded, 0);   // DRAWER_CASH_SALES_SUB
+  const oldRefunds = SALE.status === "FULLY_REFUNDED" && SALE.ts < SHIFT_START ? SALE.refunded : 0;        // DRAWER_OLD_REFUNDS_SUB
+  const expected = C.openingCash + cashSales - oldRefunds;
+  const methods = {}; shift.forEach(o => { methods[o.pay] = (methods[o.pay] || 0) + o.total - o.refunded; });
+  const order = ["cash","qr"].concat(Object.keys(methods).filter(k => k!=="cash" && k!=="qr").sort((a,b) => PAYNAME(a).localeCompare(PAYNAME(b))));
+  const mrows = order.filter(k => methods[k] != null).map(k => `<div class="lr ms"><span>${esc(k==="cash" ? S("register_status_cash_all") : PAYNAME(k))}</span><span>${money(methods[k])}</span></div>
+    <div class="lr ind"><span>${esc(OWNER)}</span><span>${money(methods[k])}</span></div>`).join("");
+  const net = Object.values(methods).reduce((a,v) => a+v, 0);
+  const nav_ = `<div class="navd"><span>${I.chevL}</span><b>${esc(F("register_nav_today", `${NOW.getDate()} ${shortMon(NOW)}`))}</b><span class="dim">${I.chevR}</span></div>`;
+  return `<div class="vs-pg"><div class="vs-top"><span class="ib" data-t="reg-back">${I.back}</span><div class="tt">${nav_}</div><span class="tba">${esc(S("register_status_full_reports"))}</span></div>
+    <div class="vs-scroll"><div class="in rg" style="transform:translateY(calc(var(--u)*${-(st.regScroll||0)}))">
+    <div class="pillrow"><span class="spill">${esc(S("register_status_pill_open"))}</span></div>
+    <div class="scard"><div class="lr"><span>${esc(S("register_status_opened_at"))}</span><span>${esc(fmtDT(SHIFT_START))}</span></div>
+      <div class="lr"><span>${esc(S("register_status_opened_by"))}</span><span>${esc(OWNER)}</span></div></div>
+    <div class="scard"><div class="lr"><span>${esc(S("register_status_starting_cash"))}</span><span>${money(C.openingCash)}</span></div>
+      <div class="lr"><span>${esc(S("register_status_cash_sales_here"))}</span><span>${money(cashSales)}</span></div>
+      ${oldRefunds>0?`<div class="lr${st.flash?" flash":""}" data-t="old-refunds"><span>${esc(S("register_close_old_refunds"))}</span><span>${money(-oldRefunds)}</span></div>`:""}
+      <hr><div class="lr em${st.flash?" flash":""}"><span>${esc(S("register_status_expected"))}</span><span>${money(expected)}</span></div></div>
+    ${btn(S("cash_movement_out"),"sec")}${btn(S("cash_movement_in"),"sec")}
+    <div class="scard">${mrows}<hr><div class="lr em"><span>${esc(S("reports_total_collected"))}</span><span>${money(net)}</span></div></div>
+    <div class="hist">${I.clock}<span>${esc(S("register_list_title"))}</span></div>
+    ${btn(S("register_status_close_btn"),"sec")}<div style="height:calc(var(--u)*16)"></div>
+    </div></div></div>` + strip();
+}
+
+function render(st){
+  SALE.status = st.refunded ? "FULLY_REFUNDED" : "PAID"; SALE.refunded = st.refunded ? SALE.total : 0;   // the one sale this demo changes
+  if(st.screen==="tx") return txScreen(st);
+  if(st.screen==="sale") return saleScreen(SALE, {banner:st.banner, flash:st.flash, scroll:st.saleScroll});
+  if(st.screen==="refund") return refundScreen(st);
+  if(st.screen==="panel") return panel({});
+  if(st.screen==="register") return registerScreen(st);
+  return "";
+}
+const cssVS8 = document.createElement("style"); cssVS8.textContent = `
+.mat .sx-top{display:flex;align-items:center;height:calc(var(--u)*48);flex:0 0 auto;background:#fff}
+.mat .sx-top .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;flex:0 0 auto}
+.mat .sx-top .tabs{flex:1;display:flex;height:100%;border-bottom:1px solid var(--m-ovar)}
+.mat .sx-top .tabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*5);font-size:calc(var(--u)*14);color:var(--m-onv);position:relative}
+.mat .sx-top .tabs span.on{color:var(--m-on);font-weight:700}
+.mat .sx-top .tabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*2);background:var(--m-on)}
+.mat .sx-top .tabs i{font-style:normal;font-size:calc(var(--u)*11);font-weight:500;color:var(--m-on)}
+.mat .sx-search{margin:calc(var(--u)*8) calc(var(--u)*16);height:calc(var(--u)*56);border-radius:calc(var(--u)*50);background:var(--m-sv);border:1px solid var(--m-onv);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*14);color:var(--m-onv);font-size:calc(var(--u)*16);flex:0 0 auto}
+.mat .sx-search svg{fill:var(--m-onv)}
+.mat .sx-day{background:var(--m-sv);padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:700;color:var(--m-onv)}
+.mat .sx-row{display:flex;align-items:center;padding:calc(var(--u)*12) calc(var(--u)*16);border-bottom:.5px solid var(--m-ovar);gap:calc(var(--u)*10);min-height:calc(var(--u)*40)}
+.mat .sx-row .lc{width:calc(var(--u)*96);flex:0 0 auto;display:flex;flex-direction:column;align-items:flex-start;gap:calc(var(--u)*4)}
+.mat .sx-row .lc b{font-size:calc(var(--u)*12);font-weight:700;color:var(--m-on)}
+.mat .sx-row .lc small{font-size:calc(var(--u)*11);line-height:calc(var(--u)*14);color:var(--m-onv)}
+.mat .sx-row .lc small+small{margin-top:calc(var(--u)*-4)}
+.mat .sx-row .lc .pm{margin-top:0}
+.mat .sx-row .mc{flex:1;min-width:0}
+.mat .sx-row .mc b{display:block;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sx-row .mc small{display:block;font-size:calc(var(--u)*11);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sx-row .am{font-size:calc(var(--u)*14);font-weight:700;white-space:nowrap}
+.mat .sx-row .rc{display:flex;flex-direction:column;align-items:flex-end}
+.mat .sx-row .rc b{font-size:calc(var(--u)*14);font-weight:700;white-space:nowrap}
+.mat .sx-row .rc small{font-size:calc(var(--u)*11);color:var(--m-err);white-space:nowrap}
+.mat .rf-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 calc(var(--u)*16);overflow:hidden}
+.mat .paidl{padding-top:calc(var(--u)*12);font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:600}
+.mat .rtabs{display:flex;margin:calc(var(--u)*12) 0;border-bottom:1px solid var(--m-ovar)}
+.mat .rtabs span{flex:1;text-align:center;padding:calc(var(--u)*12) 0;font-size:calc(var(--u)*16);font-weight:500;color:var(--m-onv);position:relative}
+.mat .rtabs span.on{color:var(--m-on)}.mat .rtabs span.on::after{content:"";position:absolute;left:15%;right:15%;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on);border-radius:3px 3px 0 0}
+.mat .ri{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--u)*12);padding:calc(var(--u)*12) 0;border-bottom:1px solid var(--m-ovar)}
+.mat .ri b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:400}.mat .ri small{display:block;font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .ri.all b{font-weight:600}
+.mat .cb{width:calc(var(--u)*18);height:calc(var(--u)*18);border-radius:calc(var(--u)*2);border:calc(var(--u)*2) solid var(--m-onv);margin-right:calc(var(--u)*15);display:grid;place-items:center;flex:0 0 auto}
+.mat .cb.on{background:var(--m-on);border-color:var(--m-on);color:#fff}.mat .cb svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:#fff}
+.mat .rfoot{padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8);flex:0 0 auto}
+.mat .goes{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .dlg-s{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*24)}
+.mat .dlg{background:#ECECF1;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24);width:100%}
+.mat .dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:1.3}
+.mat .dlg p{margin:0;font-size:calc(var(--u)*14);color:var(--m-onv);line-height:1.45}
+.mat .dlg .bt{display:flex;justify-content:flex-end;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:500}
+.mat .dlg .bt span{padding:calc(var(--u)*10) calc(var(--u)*12)}
+.mat .dlg .bt .red{background:var(--m-err);color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*24)}
+.mat .pind{background:#fff;border-radius:calc(var(--u)*24);padding:calc(var(--u)*24);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*12);width:100%}
+.mat .pind>b{font-size:calc(var(--u)*22);font-weight:700}.mat .pind>small{font-size:calc(var(--u)*14);color:var(--m-onv);text-align:center}
+.mat .pind>small.pw{font-size:calc(var(--u)*12);margin-top:calc(var(--u)*-8)}
+.mat .pdots{display:flex;gap:calc(var(--u)*10);margin:calc(var(--u)*4) 0}
+.mat .pdots i{width:calc(var(--u)*14);height:calc(var(--u)*14);border-radius:50%;border:calc(var(--u)*2) solid var(--m-outline)}.mat .pdots i.f{background:var(--m-on);border-color:var(--m-on)}
+.mat .pk{display:grid;grid-template-columns:repeat(3,calc(var(--u)*64));gap:calc(var(--u)*8)}
+.mat .pk span{height:calc(var(--u)*64);border-radius:calc(var(--u)*14);background:var(--m-ovar);display:grid;place-items:center;font-size:calc(var(--u)*20);font-weight:500}
+.mat .pk svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+.mat .pc{font-size:calc(var(--u)*14);font-weight:500;padding:calc(var(--u)*10)}
+.mat .navd{display:flex;align-items:center}.mat .navd b{flex:1;text-align:center;font-size:calc(var(--u)*16);font-weight:700;white-space:nowrap}
+.mat .navd span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}.mat .navd span svg{fill:var(--m-on)}.mat .navd .dim svg{fill:rgba(28,28,30,.25)}
+.mat .tba{padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);color:var(--m-on);white-space:nowrap}
+.mat .rg{padding:0 calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.mat .pillrow{display:flex;justify-content:center;padding-top:calc(var(--u)*8)}
+.mat .spill{border-radius:calc(var(--u)*50);background:#E8F5E9;color:#2E7D32;font-size:calc(var(--u)*12);font-weight:700;padding:calc(var(--u)*8) calc(var(--u)*16)}
+.mat .scard{background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.2),0 calc(var(--u)*1) calc(var(--u)*1) rgba(0,0,0,.08);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .lr{display:flex;justify-content:space-between;gap:calc(var(--u)*12);font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
+.mat .lr span:last-child{text-align:right;white-space:nowrap}
+.mat .lr.em span{font-weight:600}.mat .lr.em span:last-child{font-size:calc(var(--u)*16)}
+.mat .lr.ms span{font-weight:600}
+.mat .lr.ind{padding-left:calc(var(--u)*16)}.mat .lr.ind span{color:var(--m-onv)}
+.mat .lr.flash span{animation:vshl 2.4s ease}
+.mat .scard hr{border:0;border-top:1px solid var(--m-ovar);margin:0}
+.mat .hist{height:calc(var(--u)*40);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500}
+.mat .hist svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor}
+`; document.head.appendChild(cssVS8);
+
+VKIT.start(V, {
+  id:"VS8", tallVideo:true, clock:"12:41",
+  endText:pick({es:"Así devuelves una venta con Platata.", pt:"Assim você devolve uma venda com o Platata.", en:"That's how you refund a sale with Platata."}),
+  beats:pick({
+    es:["¿Hay que devolver una venta? En Agenda, toca Ventas","Busca la venta de ayer y tócala","Toca Devolver","Para devolverla toda: Seleccionar todos","Toca Devolver y confírmalo","Apruébalo con tu PIN","La venta queda Devuelta, también en la lista","En Mi negocio abre la caja: ya está descontada","Así devuelves una venta con Platata."],
+    pt:["Precisa devolver uma venda? Em Agenda, toque em Vendas","Ache a venda de ontem e toque nela","Toque em Devolver","Para devolver tudo: Selecionar todos","Toque em Devolver e confirme","Aprove com o seu PIN","A venda fica Devolvida, também na lista","Em Meu negócio abra o caixa: já foi descontada","Assim você devolve uma venda com o Platata."],
+    en:["Need to refund a sale? In Agenda, tap Sales","Find yesterday's sale and tap it","Tap Refund","To refund all of it: Select all","Tap Refund and confirm","Approve it with your PIN","The sale is Refunded, in the list too","In My business open the register: already taken out","That's how you refund a sale with Platata."]}),
+  state:{screen:"tx", tab:1, refunded:false, scroll:0, picked:false, confirm:false, pin:null, banner:0, flash:false, bio:null, saleScroll:0},
+  render,
+  device: () => "phone",
+  who: () => WHO_PHONE(),
+  steps:[
+    {beat:0, hint:HINT(S("tx_tab_all")), target:'[data-t="tab-ventas"]', tap(st,E){ st.tab=0; st.scroll=0; E.after(700, ()=>{ st.scroll=LIST_SCROLL; }); }},
+    {beat:1, hint:SALE.client ? HINT(SALE.client) : pick({es:"Toca la venta de ayer", pt:"Toque na venda de ontem", en:"Tap yesterday's sale"}), target:`[data-t="row-${SALE.id}"]`, tap(st){ st.screen="sale"; }},
+    {beat:2, hint:HINT(S("tx_issue_refund")), target:'[data-t="refund"]', tap(st){ st.screen="refund"; }},
+    {beat:3, hint:HINT(S("tx_select_all_items")), target:'[data-t="all"]', tap(st){ st.picked=true; }},
+    {beat:4, hint:HINT(F("refund_btn_amount", money(SALE.total))), target:'[data-t="refund-go"]', tap(st){ st.confirm=true; }},
+    {beat:4, hint:HINT(S("tx_yes_refund")), target:'[data-t="yes"]', tap(st){ st.confirm=false; st.pin=0; }},
+    {beat:5, hint:pick({es:"Escribe tu PIN", pt:"Digite seu PIN", en:"Enter your PIN"}), target:'[data-t="pin-1"]', tap(st,E){ st.pin=1;
+        E.after(260,()=>{ st.pin=2; }); E.after(520,()=>{ st.pin=3; }); E.after(780,()=>{ st.pin=4; });
+        E.after(1150,()=>{ st.pin=null; st.refunded=true; st.screen="sale"; st.banner=SALE.total; st.flash=true; st.saleScroll=0; });
+        }},
+    {beat:6, hint:pick({es:"Toca la flecha para volver", pt:"Toque na seta para voltar", en:"Tap the arrow to go back"}), target:'[data-t="sale-back"]', tap(st){ st.screen="tx"; st.banner=0; }},
+    {beat:7, hint:HINT(S("home_tab_my_business")), target:'[data-t="flag"]', tap(st,E){ st.bio=false; E.after(800,()=>{ st.bio=true; }); E.after(1300,()=>{ st.bio=null; st.screen="panel"; }); }},
+    {beat:7, hint:HINT(S("workspace_register_open")), target:'[data-t="reg-card"]', tap(st,E){ st.screen="register"; st.flash=false; E.after(300,()=>{ st.flash=true; }); }}
+  ]
+});
+
+</script>
+</body>
+</html>

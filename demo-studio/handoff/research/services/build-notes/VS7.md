@@ -1,0 +1,27 @@
+# VS7 — Recibo por WhatsApp o impreso (services, owner phone)
+
+## 1. Built
+- Owner phone, Peluquería Carolina (`?biz=` works for the other three; the nail salon has no team, so no "Atendió").
+  Bottom tab "Agenda" (Agenda half, day headers Hoy / Mañana) → the 11:30 appointment of Sofía (Corte de dama + Cepillado /
+  secado, booked with Carla) → appointment page (lines with money, "Dura 40 min", "Atendió: Carla Gómez", Cobrar / No asistió /
+  Reprogramar / Cancelar cita) → Cobrar → pay screen with the amber bar and Sofía already on the sale → Exacto → ¡Venta
+  completada! (receipt printer saved) → WhatsApp opens straight on Sofía's chat (she has a WhatsApp number, no number box) →
+  send → back, sale still open → Imprimir otra vez (toast) → Nueva venta. 7 taps.
+- The receipt (stored sale): "1x Corte de dama" (BR "Corte feminino (Em camadas)": option in brackets, no blank "()"),
+  "+ Cepillado / secado con secador", "Lavado (Incluido)", "Atendió: Carla Gómez", "¡Gracias por tu visita!", signed
+  "Hecho con Platata · platata.app". US/CA: text + email route (no video). No MX json (same words). Checked at 73c65f08.
+- The 11:30 booking is this page's own (kit bookings start at 14:00); client, service, add-on and stylist are the kit's.
+
+## 2. Left out
+- "Ver recibo" (same text as the WhatsApp message) to stay at 7 taps; "Compartir" from Venta #N.
+
+## 3. New UX/UI problems (73c65f08)
+- small: item 51 only half fixed — the Agenda row still shows the raw number "+573014449911" (ServicesTransactionsScreen.kt:271-274);
+  the appointment page reads it (formatWhatsappForReading). Fix: the same call on the row.
+- Same "Artículos (1)" link as VS4.
+
+## 4. The 52 items checked here
+- 13 fixed (CheckoutActions.kt:305-307 + SavedTicketActions.kt:342,395 SaleLineName.of). 14 fixed (ReceiptActions.kt:172).
+- 45 fixed (ReceiptFormatter.kt:398-400 "(Incluido)"; PrintManager.kt:367-375 wraps; footer "¡Gracias por tu visita!").
+- 21 fixed for receipts and the appointment page (ReceiptBuilder.kt:84-85, CheckoutActions.kt:615-616).
+- 2 fixed (SavedTicketActions.kt:700 register gate on Agenda > Cobrar). 33 fixed (:830-900). 35, 23, 24 fixed. 51 partly.

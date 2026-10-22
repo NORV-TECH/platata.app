@@ -1,0 +1,80 @@
+{
+  "id": "VS8",
+  "name": "Devolver una venta (servicios)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-ventas",
+      "voice": {
+        "es": "¿Tienes que devolverle la plata a un cliente? En Agenda, toca Ventas.",
+        "pt": "Precisa devolver o dinheiro a um cliente? Em Agenda, toque em Vendas."
+      }
+    },
+    {
+      "id": "2-ayer",
+      "voice": {
+        "es": "Busca la venta de ayer y tócala.",
+        "pt": "Ache a venda de ontem e toque nela."
+      }
+    },
+    {
+      "id": "3-devolver",
+      "voice": {
+        "es": "Toca Devolver.",
+        "pt": "Toque em Devolver."
+      }
+    },
+    {
+      "id": "4-todo",
+      "voice": {
+        "es": "Para devolverla toda, toca Seleccionar todos.",
+        "pt": "Para devolver tudo, toque em Selecionar todos."
+      }
+    },
+    {
+      "id": "5-confirma",
+      "voice": {
+        "es": "Toca Devolver y confírmalo.",
+        "pt": "Toque em Devolver e confirme."
+      }
+    },
+    {
+      "id": "6-pin",
+      "voice": {
+        "es": "Apruébalo con tu PIN.",
+        "pt": "Aprove com o seu PIN."
+      }
+    },
+    {
+      "id": "7-devuelta",
+      "voice": {
+        "es": "La venta queda Devuelta, también en la lista.",
+        "pt": "A venda fica Devolvida, também na lista."
+      }
+    },
+    {
+      "id": "8-caja",
+      "voice": {
+        "es": "En Mi negocio, abre la caja: la devolución ya está descontada del efectivo.",
+        "pt": "Em Meu negócio, abra o caixa: a devolução já foi descontada do dinheiro."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así devuelves una venta con Platata.",
+        "pt": "Assim você devolve uma venda com o Platata."
+      }
+    }
+  ]
+}

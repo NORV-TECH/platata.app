@@ -1,0 +1,614 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Pago a empleados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/services-data.js"></script>
+<script src="../../kit/vkit.js"></script>
+<script>
+window.PAGE_BIZ = "peluqueria";
+const STR = {"team_title":{"en":"Team (%d)","es":"Equipo (%d)","pt":"Equipe (%d)"},"team_search_placeholder":{"en":"By name, job title…","es":"Por nombre, cargo…","pt":"Por nome, cargo…"},"team_business_code_title":{"en":"Business code","es":"Código del negocio","pt":"Código do negócio"},"team_business_code_copy":{"en":"Copy code","es":"Copiar código","pt":"Copiar código"},"team_business_code_sub":{"en":"Your employees type it with their PIN to join.","es":"Tus empleados lo escriben junto con su PIN para entrar.","pt":"Seus funcionários digitam junto com o PIN para entrar."},"employee_pay_switch_label":{"en":"Track employee payments","es":"Llevar la cuenta de los pagos a empleados","pt":"Acompanhar os pagamentos dos funcionários"},"team_role_owner":{"en":"Owner","es":"Dueño","pt":"Dono"},"team_badge_team":{"en":"Team","es":"Equipo","pt":"Equipe"},"more_team_title":{"en":"Team","es":"Equipo","pt":"Equipe"},"employee_pay_title":{"en":"Employee pay","es":"Pago de empleados","pt":"Pagamento de funcionários"},"employee_pay_consent_title":{"en":"We'll keep track of what you pay","es":"Vamos a llevar la cuenta de lo que pagas","pt":"Vamos anotar o que você paga"},"employee_pay_consent_lede":{"en":"Starting today. So you don't have to remember.","es":"Desde hoy. Así no tienes que acordarte tú.","pt":"A partir de hoje. Assim você não precisa lembrar."},"employee_pay_consent_row1_title":{"en":"On the 5th of every month we ask","es":"El 5 de cada mes te preguntamos","pt":"No dia 5 de cada mês, perguntamos"},"employee_pay_consent_row1_body":{"en":"How much you paid each person that month. Takes under a minute.","es":"Cuánto le pagaste a cada persona ese mes. Toma menos de un minuto.","pt":"Quanto você pagou a cada pessoa naquele mês. Leva menos de um minuto."},"employee_pay_consent_row2_title":{"en":"If you don't answer, we remind you","es":"Si no contestas, te recordamos","pt":"Se você não responder, a gente lembra"},"employee_pay_consent_row2_body":{"en":"On the 10th, the 20th and the 25th. We won't let it slide.","es":"El 10, el 20 y el 25. No te vamos a dejar en visto.","pt":"No dia 10, no 20 e no 25. Não vamos deixar passar."},"employee_pay_consent_row3_title":{"en":"If you do not answer by the 25th, it switches itself off","es":"Si pasa el 25 sin respuesta, se apaga solo","pt":"Se passar do dia 25 sem resposta, desliga sozinho"},"employee_pay_consent_row3_body":{"en":"Nothing is deleted. What you already told us stays, and you can turn it back on any time.","es":"No se borra nada. Lo que ya nos dijiste se queda, y lo puedes volver a prender cuando quieras.","pt":"Nada é apagado. O que você já nos disse fica, e você pode ligar de novo quando quiser."},"employee_pay_consent_confirm":{"en":"OK, I understand","es":"Listo, entiendo","pt":"Ok, entendi"},"employee_pay_consent_dismiss":{"en":"Not now","es":"Ahora no","pt":"Agora não"},"employee_pay_needs_all":{"en":"Everyone needs an amount before this turns on.","es":"Cada persona necesita un monto antes de activarlo.","pt":"Cada pessoa precisa de um valor antes de ativar."},"employee_pay_turn_on":{"en":"Turn on","es":"Activar","pt":"Ativar"},"employee_pay_history_title":{"en":"Past months","es":"Meses anteriores","pt":"Meses anteriores"},"employee_pay_ask_title":{"en":"%s pay","es":"Pago de %s","pt":"Pagamento de %s"},"employee_pay_ask_didnt_work":{"en":"Didn't work this month","es":"No trabajó este mes","pt":"Não trabalhou este mês"},"employee_pay_ask_tap_hint":{"en":"Tap any amount to change it before you confirm.","es":"Toca cualquier monto para cambiarlo antes de confirmar.","pt":"Toque em qualquer valor para alterá-lo antes de confirmar."},"employee_pay_ask_all_paid":{"en":"All paid","es":"Todo pagado","pt":"Tudo pago"},"employee_pay_ask_remind_later":{"en":"Remind me later","es":"Recordar más tarde","pt":"Lembrar mais tarde"},"employee_pay_history_year_total":{"en":"%1$d · %2$s paid so far","es":"%1$d · %2$s pagado hasta ahora","pt":"%1$d · %2$s pago até agora"},"mamaship_tab_register":{"en":"Register","es":"Caja","pt":"Caixa"},"sx_agenda":{"en":"Agenda","es":"Agenda","pt":"Agenda"},"home_tab_my_business":{"en":"My business","es":"Mi negocio","pt":"Meu negócio"},"rp_strip_support":{"en":"Support","es":"Soporte","pt":"Suporte"},"rp_strip_support_sub":{"en":"Report a problem here","es":"Reporta un problema aquí","pt":"Relatar um problema aqui"},"rp_my_title":{"en":"My reports","es":"Mis reportes","pt":"Meus relatos"},"rp_sheet_my_reports_none":{"en":"No reports yet","es":"Aún no hay reportes","pt":"Ainda não há relatos"},"workspace_register_open":{"en":"Register open","es":"Caja abierta","pt":"Caixa aberto"},"workspace_register_sales":{"en":"Sales","es":"Ventas","pt":"Vendas"},"sell_online_title":{"en":"Sell online","es":"Vender en línea","pt":"Vender online"},"sell_online_row_off":{"en":"Off","es":"Apagado","pt":"Desligado"},"sell_online_pill_off":{"en":"OFF","es":"APAGADO","pt":"DESLIGADO"},"panel_heading_every_day":{"en":"Every day","es":"Día a día","pt":"Dia a dia"},"more_customers_title":{"en":"Clients","es":"Clientes","pt":"Clientes"},"invoices_title":{"en":"Invoices","es":"Facturas","pt":"Notas"},"invoices_row_first":{"en":"Scan your first invoice","es":"Escanea tu primera factura","pt":"Escaneie sua primeira nota"},"workspace_full_reports":{"en":"Reports","es":"Reportes","pt":"Relatórios"},"scan_row_reports_today_net":{"en":"Net sales today · %s","es":"Ventas netas hoy · %s","pt":"Vendas hoje · %s"},"scan_row_reports_today":{"en":"Today · %s","es":"Hoy · %s","pt":"Hoje · %s"},"settings_title":{"en":"Settings","es":"Configuración","pt":"Configurações"},"panel_settings_row_sub":{"en":"Payments, taxes, receipts","es":"Cobros, impuestos, recibos","pt":"Cobranças, impostos, recibos"},"settings_hub_group_getting_paid":{"en":"Getting paid","es":"Cobros","pt":"Cobranças"},"settings_hub_payment_methods":{"en":"Payment methods","es":"Métodos de pago","pt":"Formas de pagamento"},"settings_hub_taxes":{"en":"Taxes","es":"Impuestos","pt":"Impostos"},"disc_title_with_combos":{"en":"Discounts and combos","es":"Descuentos y combos","pt":"Descontos e combos"},"settings_hub_receipts":{"en":"Receipts","es":"Recibos","pt":"Recibos"},"settings_hub_receipts_sub":{"en":"%1$s · %2$s","es":"%1$s · %2$s","pt":"%1$s · %2$s"},"receipt_layout_detailed":{"en":"Detailed","es":"Detallado","pt":"Detalhado"},"settings_hub_receipts_num_auto":{"en":"numbered automatically","es":"numeración automática","pt":"numeração automática"},"settings_hub_group_your_business":{"en":"Your business","es":"Tu negocio","pt":"Seu negócio"},"settings_hub_business_info":{"en":"Business info","es":"Datos del negocio","pt":"Dados do negócio"},"settings_where_you_work":{"en":"Where you work","es":"Dónde atiendes","pt":"Onde você atende"},"more_where_subtitle":{"en":"Store, home, pick-up","es":"Local, domicilio, recogida","pt":"Local, domicílio, coleta"},"workspace_registers_and_printers":{"en":"Connections","es":"Conexiones","pt":"Conexões"},"settings_hub_group_this_phone":{"en":"This phone","es":"Este teléfono","pt":"Este celular"},"settings_security_title":{"en":"Security","es":"Seguridad","pt":"Segurança"},"settings_hub_security_on_delete":{"en":"Asks for your fingerprint before deleting","es":"Pide huella antes de borrar","pt":"Pede a digital antes de apagar"},"settings_hub_backup":{"en":"Backup","es":"Respaldo","pt":"Backup"},"settings_hub_backup_last":{"en":"Last copy: %1$s","es":"Último respaldo: %1$s","pt":"Último backup: %1$s"},"notif_title":{"en":"Notifications","es":"Notificaciones","pt":"Notificações"},"notif_hub_sub":{"en":"Orders, payments and your register","es":"Pedidos, pagos y tu caja","pt":"Pedidos, pagamentos e seu caixa"},"settings_hub_language_appearance":{"en":"Language & appearance","es":"Idioma y apariencia","pt":"Idioma e aparência"},"settings_hub_language_sub":{"en":"%1$s · %2$s","es":"%1$s · %2$s","pt":"%1$s · %2$s"},"theme_light":{"en":"Light","es":"Claro","pt":"Claro"},"settings_section_account":{"en":"Account","es":"Cuenta","pt":"Conta"},"my_account_title":{"en":"My Account","es":"Mi cuenta","pt":"Minha conta"},"rp_my_row_sub":{"en":"What you told us and what we answered","es":"Lo que nos contaste y lo que respondimos","pt":"O que você nos contou e o que respondemos"},"home_tab_services":{"en":"Services","es":"Servicios","pt":"Serviços"},"home_tab_products":{"en":"Products","es":"Productos","pt":"Produtos"},"common_edit":{"en":"Edit","es":"Editar","pt":"Editar"},"items_filter_all":{"en":"All","es":"Todos","pt":"Todos"},"items_price_from":{"en":"From %1$s","es":"Desde %1$s","pt":"A partir de %1$s"},"items_price_unset":{"en":"No price","es":"Sin precio","pt":"Sem preço"},"opt_min":{"en":"min","es":"min","pt":"min"},"scan_row_manual":{"en":"Keypad","es":"Teclado","pt":"Teclado"},"services_action_agendar":{"en":"Book","es":"Agendar","pt":"Agendar"},"services_action_crear_orden":{"en":"Create order","es":"Crear orden","pt":"Criar ordem"},"common_charge":{"en":"Charge %s","es":"Cobrar %s","pt":"Cobrar %s"},"combo_label_offer_percent":{"en":"Combo Offer −%1$d%%","es":"Oferta de Combo −%1$d%%","pt":"Oferta de Combo −%1$d%%"},"opt_add_to_sale":{"en":"Add to sale · %1$s","es":"Agregar a la venta · %1$s","pt":"Adicionar à venda · %1$s"},"common_add":{"en":"Add","es":"Agregar","pt":"Adicionar"},"deal_choice_add_deal":{"en":"Add deal","es":"Agregar oferta","pt":"Adicionar oferta"},"opt_ask_at_till_row":{"en":"ask at the till","es":"se pregunta en la caja","pt":"perguntar no caixa"},"opt_per_unit_each":{"en":"%1$s per %2$s","es":"%1$s por %2$s","pt":"%1$s por %2$s"},"home_variation_choose_one":{"en":"Choose one","es":"Elige uno","pt":"Escolha um"},"common_ok":{"en":"OK","es":"OK","pt":"OK"},"common_save":{"en":"Save","es":"Guardar","pt":"Salvar"},"common_cancel":{"en":"Cancel","es":"Cancelar","pt":"Cancelar"},"common_back":{"en":"Back","es":"Atrás","pt":"Voltar"}};
+const PLU = {"employee_pay_history_people":{"en":{"one":"%1$d person","other":"%1$d people"},"es":{"one":"%1$d persona","other":"%1$d personas"},"pt":{"one":"%1$d pessoa","other":"%1$d pessoas"}},"home_clientes_count":{"en":{"one":"%1$d client","other":"%1$d clients"},"es":{"one":"%1$d cliente","other":"%1$d clientes"},"pt":{"one":"%1$d cliente","other":"%1$d clientes"}},"home_equipo_count_phones":{"en":{"one":"%1$d employee · %2$s","other":"%1$d employees · %2$s"},"es":{"one":"%1$d empleado · %2$s","other":"%1$d empleados · %2$s"},"pt":{"one":"%1$d funcionário · %2$s","other":"%1$d funcionários · %2$s"}},"home_equipo_on_phones":{"en":{"one":"%1$d on a phone","other":"%1$d on phones"},"es":{"one":"%1$d en celular","other":"%1$d en celular"},"pt":{"one":"%1$d no celular","other":"%1$d no celular"}},"home_current_sale_services":{"en":{"one":"Current sale · %d service","other":"Current sale · %d services"},"es":{"one":"Venta actual · %d servicio","other":"Venta actual · %d servicios"},"pt":{"one":"Venda atual · %d serviço","other":"Venda atual · %d serviços"}}};
+/* ===== VS14..VS19 common (services; inlined into each page by the builder from the helper's scratch file; not a kit file) =====
+   App at sim/usa-canada 73c65f08, paths under app/src/main/java/com/example/. Words come from STR / PLU (values / values-es /
+   values-pt-rBR, injected by the builder). Material light = ui/theme/Theme.kt LightColorScheme (#1C1C1E #6E6E73 #F2F2F7 #E5E5EA
+   #C7C7CC); paper = ui/theme/PaperColor.kt with the services accent (ServiciosMain/Btn #7C55E0, Soft #EEEAF5, Ink #6A45CC).
+   navOwner()  ui/app/PlatataApp.kt:305-327 + navigation/NavLabels.kt: a services owner has Caja (ShoppingCart) · Agenda (Receipt,
+               sx_agenda, SVC-2 item 23) · flag "Mi negocio"; the staff phone (Mini POS) has Caja · flag only (:313).
+   panel()     ui/screens/home/HomeScreen.kt:1420-1830: services = register card, Vender en línea, "Día a día", Clientes (plain count:
+               no fiado, ServicesRules.fiadoEnabled=false), Facturas (hasSupplierInvoiceRow), Equipo, Reportes, divider, Configuración.
+               No Artículos row (workspaceHasItemsRow=false) and no Inventario (retail only).
+   hub()       ui/screens/settings/SettingsHubScreen.kt:170-330 + sync/SettingsHubRules.kt (services: + "Dónde atiendes";
+               the discounts row is "Descuentos y combos", disc_title_with_combos)
+   strip()     ui/screens/reports/SupportStrip.kt (badge = the paper accentBtn: services purple) on LEVEL_2_PLUS routes only
+               (reports/ReportLevels.kt: team_management, settings_hub, registers_and_printers, connect_phone, new_deal,
+               discounts_workspace ...; never on register_home / the panel / a staff phone / employee_join).
+   caja()      HomeScreen.kt:592-1110 (services: TabRow "Servicios · N" | "Productos · N" HomeTabLabels.kt, ItemEditModeBar "Editar"
+               :2018, ProductLibraryView chips "Todos" + the trade category (the system "Otros servicios" filtered out, :942),
+               service tiles ProductCard.kt ServiceTileBody, footer :782-826 "Teclado" link + CurrentSaleStrip + FooterButtonPair
+               "Agendar" | "Cobrar $X").
+   optSheet()  ui/screens/home/OptionSelectionSheet.kt (ModalBottomSheet; one header + one switch row per researched option set;
+               "Agregar a la venta · $X" (SVC-1 item 1), "Agregar oferta" when the service starts a combo)
+   varSheet()  ui/screens/home/VariationSelectionSheet.kt ("Elige uno", the service name, one row per choice with its price)
+   Data: kit/services-data.js only (V.C). */
+const V = VKIT.ctx({biz: (window.PAGE_BIZ || "peluqueria")});
+const C = V.C, L = V.lang, esc = VKIT.esc, pick = V.pick, money = V.money;
+const FREE = (V.country === "US" || V.country === "CA");                 // sync/Entitlement.FREE_COUNTRIES
+const S = k => { const o = STR[k]; if(!o) throw new Error("missing string " + k); return o[L] != null ? o[L] : o.en; };
+const fmtA = (s, a) => { let i = 0; return String(s).replace(/%%|%(\d+)\$[sd]|%[sd]/g, (m, n) => { if(m === "%%") return "%"; const v = n ? a[n-1] : a[i++]; return v == null ? "" : String(v); }); };
+const F = (k, ...a) => fmtA(S(k), a);
+/* Android plurals: pt-BR (CLDR) "one" for 0 and 1; es / en "one" for 1 */
+const PL = (k, n, ...a) => { const p = PLU[k][L] || PLU[k].en; const cat = L === "pt" ? ((n === 0 || n === 1) ? "one" : "other") : (n === 1 ? "one" : "other"); return fmtA(p[cat] || p.other, a.length ? a : [n]); };
+const LOCALE = {es:"es", pt:"pt-BR", en:"en-US"}[L];          // AppLanguage.kt: the app sets "es" / "pt-BR" / "en"
+const HINT = (es, pt, en) => pick({es:"Toca " + es, pt:"Toque em " + pt, en:"Tap " + en});
+const H1 = k => HINT(S(k), S(k), S(k));
+const ini = n => String(n).split(/\s+/).filter(Boolean).slice(0,2).map(p => p[0]).join("").toUpperCase();
+const DEV_OWNER = pick({es:"Tu teléfono", pt:"Seu celular", en:"Your phone"});
+
+/* ---------- icons (Material Icons paths) ---------- */
+const P = (path, cls) => `<svg class="${cls||"mi"}" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
+const IP = {
+  back:"M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z",
+  chev:"M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z",
+  down:"M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z",
+  expand:"M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z",
+  person:"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+  group:"M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
+  rlong:"M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z",
+  gear:"M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z",
+  cart:"M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z",
+  receipt:"M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z",
+  search:"M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z",
+  more:"M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z",
+  edit:"M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z",
+  add:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z",
+  check:"M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z",
+  close:"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z",
+  phone:"M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z",
+  smartphone:"M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z",
+  tablet:"M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 1.99-.9 1.99-2L23 6c0-1.1-.9-2-2-2zm-2 14H5V6h14v12z",
+  badge:"M20 7h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM9 12c.83 0 1.5.67 1.5 1.5S9.83 15 9 15s-1.5-.67-1.5-1.5S8.17 12 9 12zm3 6H6v-.75c0-1 2-1.5 3-1.5s3 .5 3 1.5V18zm1-9h-2V4h2v5zm5 7.5h-4V15h4v1.5zm0-3h-4V12h4v1.5z",
+  block:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z",
+  card:"M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z",
+  pct:"M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.0025 18.5832 18.59 4l1.41 1.41L5.4125 19.9932zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z",
+  tag:"M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z",
+  store:"M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z",
+  place:"M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+  devices:"M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z",
+  lock:"M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z",
+  backup:"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z",
+  bell:"M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z",
+  globe:"M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z",
+  account:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z",
+  feedback:"M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z",
+  buoy:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z",
+  trash:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z",
+  box:"M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z",
+  pin:"M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z",
+  bksp:"M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"
+};
+const I = k => P(IP[k]);
+
+/* ---------- the trade's drawn icon and its family tile (tradepicker/TradeCatalogue.kt TRADE_VISUAL; PaperColor.kt Belleza /
+   Mascotas / Vehiculos soft = the light --tile; res/drawable/ic_drawn_*.xml converted to SVG) ---------- */
+const TRADE_SVG = {
+  peluqueria:'<svg viewBox="0 0 24 24"><path d="M7.3 12.8l1.6 7.1c.1.6.7 1 1.3.9l.9-.2c.6-.1 1-.7.9-1.3l-1.3-6.9" fill="#4E4A48" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.6,6.4 H17.2 A1.4,1.4 0 0 1 18.6,7.8 V10.2 A1.4,1.4 0 0 1 17.2,11.6 H9.6 A1.4,1.4 0 0 1 8.2,10.2 V7.8 A1.4,1.4 0 0 1 9.6,6.4 Z" fill="#E86A8E" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.8,9 A4.6,4.6 0 1 0 13,9 A4.6,4.6 0 1 0 3.8,9 Z" fill="#E86A8E" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.6,9 A1.8,1.8 0 1 0 10.2,9 A1.8,1.8 0 1 0 6.6,9 Z" fill="#EDF1F4" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.2,5.6 H19.8 A1,1 0 0 1 20.8,6.6 V11.4 A1,1 0 0 1 19.8,12.4 H19.2 A1,1 0 0 1 18.2,11.4 V6.6 A1,1 0 0 1 19.2,5.6 Z" fill="#B0B4B8" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.8 7.4h1M21.8 10.6h1" fill="none" stroke="#3A2A1F" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  unas:'<svg viewBox="0 0 24 24"><path d="M7.2,7.4 H16.8 A1.8,1.8 0 0 1 18.6,9.2 V18.8 A1.8,1.8 0 0 1 16.8,20.6 H7.2 A1.8,1.8 0 0 1 5.4,18.8 V9.2 A1.8,1.8 0 0 1 7.2,7.4 Z" fill="#D9422E" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.4 7.4c1.6-2.4 3.4-3.6 5.6-3.6s4 1.2 5.6 3.6" fill="none" stroke="#3A2A1F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.6,6.4 H18.4 A1,1 0 0 1 19.4,7.4 V7.8 A1,1 0 0 1 18.4,8.8 H5.6 A1,1 0 0 1 4.6,7.8 V7.4 A1,1 0 0 1 5.6,6.4 Z" fill="#B0B4B8" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  veterinaria:'<svg viewBox="0 0 24 24"><path d="M12 12.4c2.8 0 5.2 2.6 5.2 4.8 0 1.8-1.4 2.6-2.8 2.6-1 0-1.6-.6-2.4-.6s-1.4.6-2.4.6c-1.4 0-2.8-.8-2.8-2.6 0-2.2 2.4-4.8 5.2-4.8z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><g transform="rotate(-20 6.8 10.4)"><path d="M5.2,10.4 A1.6,2.1 0 1 0 8.4,10.4 A1.6,2.1 0 1 0 5.2,10.4 Z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2"/></g><g transform="rotate(-8 10.1 6.8)"><path d="M8.5,6.8 A1.6,2.2 0 1 0 11.7,6.8 A1.6,2.2 0 1 0 8.5,6.8 Z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2"/></g><g transform="rotate(8 13.9 6.8)"><path d="M12.3,6.8 A1.6,2.2 0 1 0 15.5,6.8 A1.6,2.2 0 1 0 12.3,6.8 Z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2"/></g><g transform="rotate(20 17.2 10.4)"><path d="M15.6,10.4 A1.6,2.1 0 1 0 18.8,10.4 A1.6,2.1 0 1 0 15.6,10.4 Z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2"/></g></svg>',
+  "taller-motos":'<svg viewBox="0 0 24 24"><path d="M2.6,16 A3.4,3.4 0 1 0 9.4,16 A3.4,3.4 0 1 0 2.6,16 Z" fill="#4E4A48" stroke="#3A2A1F" stroke-width="1.2"/><path d="M14.6,16 A3.4,3.4 0 1 0 21.4,16 A3.4,3.4 0 1 0 14.6,16 Z" fill="#4E4A48" stroke="#3A2A1F" stroke-width="1.2"/><path d="M4.8,16 A1.2,1.2 0 1 0 7.2,16 A1.2,1.2 0 1 0 4.8,16 Z" fill="#B0B4B8"/><path d="M16.8,16 A1.2,1.2 0 1 0 19.2,16 A1.2,1.2 0 1 0 16.8,16 Z" fill="#B0B4B8"/><path d="M6 16l4.2-5.6h4.4l3.4 5.6" fill="none" stroke="#3A2A1F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.8 10.4h6.4c.6 0 1.2-.5 1.2-1.2 0-.6-.5-1.2-1.2-1.2H10c-.7 0-1.2.6-1.2 1.2z" fill="#D9422E" stroke="#3A2A1F" stroke-width="1.2" stroke-linejoin="round"/><path d="M15.8 9.4l1.4-2.8h2.2" fill="none" stroke="#3A2A1F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+const TRADE_TILE = {peluqueria:"#F8E8EC", unas:"#F8E8EC", veterinaria:"#F0F2E3", "taller-motos":"#E8EBF4"};
+/* the trade's category: every services shop is born with the hidden system category "Otros servicios" (data/repo/SeedStore.kt
+   ensureServicesSystemCategory), so the trade category the setup makes is the 2nd row: CategoryChipPalette[2 % 10] (ui/theme/
+   Color.kt:232) = #81C784; "Todos" = CategoryChipNeutral #607D8B (HomeScreen.kt:2005 getCategoryBaseColor) */
+const CAT_COLOR = "#81C784", ALL_COLOR = "#607D8B";
+const hexA = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+
+/* ---------- pieces ---------- */
+// KEYS: mamaship_tab_register,sx_agenda,home_tab_my_business,rp_strip_support,rp_strip_support_sub,rp_my_title,rp_sheet_my_reports_none
+/* SumaTopBar (ui/components/SumaTopBar.kt): Material 64 dp, back arrow, titleLarge 22 bold; paper = 52 dp, 40 dp round button, Fredoka */
+const topbar = (title, o) => { o = o || {};
+  return `<div class="sv-top"><span class="ib" data-t="${o.backT||"back"}">${o.close?I("close"):I("back")}</span><b>${esc(title)}</b>${o.action||""}</div>`; };
+const ptop = (title, o) => { o = o || {};
+  return `<div class="sv-ptop"><span class="pib" data-t="${o.backT||"back"}">${I("back")}</span><b>${esc(title)}</b>${o.action||""}</div>`; };
+/* SupportStrip.kt: two equal halves, the Support badge in the services accent */
+const strip = () => `<div class="sv-strip"><div class="h"><span class="bd">${I("buoy")}</span><div><b>${esc(S("rp_strip_support"))}</b><small>${esc(S("rp_strip_support_sub"))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(S("rp_my_title"))}</b><small>${esc(S("rp_sheet_my_reports_none"))}</small></div>${I("chev")}</div></div>`;
+const sw = (on, tag) => `<span class="sv-sw${on?" on":""}"${tag?` data-t="${tag}"`:""}><i></i></span>`;
+const toast = txt => `<div class="sv-toast">${esc(txt)}</div>`;
+/* the bottom NavigationBar (PlatataApp.kt:503-722, Material3 defaults 80 dp, flag in a 32 dp circle) */
+const navOwner = (on, o) => { o = o || {};
+  return `<div class="mnav">
+  <div class="${on==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${I("cart")}</span>${esc(S("mamaship_tab_register"))}</div>
+  <div class="${on==="agenda"?"on":""}" data-t="nav-agenda"><span class="pill">${I("receipt")}</span>${esc(S("sx_agenda"))}</div>
+  <div class="${on==="biz"?"on":""}" data-t="${o.flagTag||"flag"}"><span class="pill"><span class="flagc${on==="biz"?" lit":""}">${V.flag()}</span></span>${esc(S("home_tab_my_business"))}</div></div>`; };
+const navMini = () => `<div class="mnav">
+  <div class="on"><span class="pill">${I("cart")}</span>${esc(S("mamaship_tab_register"))}</div>
+  <div><span class="pill"><span class="flagc">${V.flag()}</span></span>${esc(S("home_tab_my_business"))}</div></div>`;
+/* a full-width card between two moments (not an app screen) */
+const timeCard = (big, small, tag) => `<div class="sv-time"${tag?` data-t="${tag}"`:""}><div><b>${esc(big)}</b>${small?`<small>${esc(small)}</small>`:""}</div></div>`;
+
+/* ---------- the business panel of a SERVICES shop (HomeScreen.kt:1420-1830) ---------- */
+// KEYS: workspace_register_open,workspace_register_sales,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,more_customers_title,invoices_title,invoices_row_first,more_team_title,workspace_full_reports,scan_row_reports_today_net,scan_row_reports_today,settings_title,panel_settings_row_sub
+// PLURALS: home_clientes_count,home_equipo_count_phones,home_equipo_on_phones
+/* the money the register card and Reportes show: this morning's sales of the demo business (kit: C.sales of V.today) */
+const TODAY_SALES = C.sales.filter(s => s.d === V.today).reduce((a, s) => a + s.total, 0);
+function panelRow(tag, icon, title, sub, o){ o = o || {};
+  return `<div class="sv-wr${o.cls?" "+o.cls:""}"${tag?` data-t="${tag}"`:""}><span class="ic">${icon}${o.dot?'<i class="pdot"></i>':""}</span><div class="tx"><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>${o.trail||`<span class="ch">${I("chev")}</span>`}</div>`; }
+/* p = {team, phones, payDot, scroll} */
+function panel(p){ p = p || {};
+  const team = p.team != null ? p.team : C.staff.length, phones = p.phones || 0;
+  const reg = `<div class="sv-wr reg" data-t="reg-card" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(S("workspace_register_open"))}</b><small style="color:rgba(46,125,50,.7)">${esc(S("workspace_register_sales"))}</small></div><b class="amt">${money(TODAY_SALES)}</b></div>`;
+  return `<div class="sv-panel"><div class="ph"><b>${esc(V.place)}</b>${I("down")}</div><div class="pl"><div class="pin" style="transform:translateY(calc(var(--u)*${-(p.scroll||0)}))">
+    ${reg}
+    ${panelRow("row-online", I("cart"), S("sell_online_title"), S("sell_online_row_off"), {trail:`<span class="pill0">${esc(S("sell_online_pill_off"))}</span>`})}
+    <div class="eh">${esc(S("panel_heading_every_day"))}</div>
+    ${panelRow("row-clients", I("person"), S("more_customers_title"), PL("home_clientes_count", C.clients.length))}
+    ${panelRow("row-invoices", I("rlong"), S("invoices_title"), S("invoices_row_first"))}
+    ${panelRow("row-team", I("group"), S("more_team_title"), PL("home_equipo_count_phones", team, team, PL("home_equipo_on_phones", phones)), {dot:p.payDot})}
+    ${panelRow("row-reports", I("rlong"), S("workspace_full_reports"), F(FREE ? "scan_row_reports_today" : "scan_row_reports_today_net", money(TODAY_SALES)))}
+    <hr>
+    ${panelRow("settings", I("gear"), S("settings_title"), S("panel_settings_row_sub"))}
+  </div></div></div>` + navOwner("biz"); }
+
+/* ---------- the owner's Settings page (SettingsHubScreen.kt; SettingsHubRules: services add "Dónde atiendes") ---------- */
+// KEYS: settings_hub_group_getting_paid,settings_hub_payment_methods,settings_hub_taxes,disc_title_with_combos,settings_hub_receipts,settings_hub_receipts_sub,receipt_layout_detailed,settings_hub_receipts_num_auto,settings_hub_group_your_business,settings_hub_business_info,settings_where_you_work,more_where_subtitle,workspace_registers_and_printers,settings_hub_group_this_phone,settings_security_title,settings_hub_security_on_delete,settings_hub_backup,settings_hub_backup_last,notif_title,notif_hub_sub,settings_hub_language_appearance,settings_hub_language_sub,theme_light,settings_section_account,my_account_title,rp_my_title,rp_my_row_sub
+/* BackupDateFormat.dateTime: DateFormat MEDIUM date + SHORT time in the phone language (this morning's copy) */
+const backupWhen = () => new Intl.DateTimeFormat(LOCALE, {dateStyle:"medium", timeStyle:"short"}).format(new Date(2026, 9, 22, 7, 30));
+const LANGNAME = {es:"Español", pt:"Português (Brasil)", en:"English"};
+function hub(o){ o = o || {};
+  const g = t => `<div class="sv-hg">${esc(t)}</div>`;
+  const row = (tag, ic, t, s) => `<div class="sv-hr"${tag?` data-t="${tag}"`:""}><span class="ic">${I(ic)}</span><div class="tx"><b>${esc(t)}</b>${s?`<small>${esc(s)}</small>`:""}</div>${I("chev")}</div>`;
+  return topbar(S("settings_title")) + `<div class="sv-scroll"><div class="in sv-hub" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+    ${g(S("settings_hub_group_getting_paid"))}
+    ${row("hub-pay","card",S("settings_hub_payment_methods"))}
+    ${row("hub-taxes","pct",S("settings_hub_taxes"))}
+    ${row("hub-discounts","tag",S("disc_title_with_combos"))}
+    ${row("hub-receipts","receipt",S("settings_hub_receipts"),F("settings_hub_receipts_sub",S("receipt_layout_detailed"),S("settings_hub_receipts_num_auto")))}
+    ${g(S("settings_hub_group_your_business"))}
+    ${row("hub-info","store",S("settings_hub_business_info"))}
+    ${row("hub-where","place",S("settings_where_you_work"),S("more_where_subtitle"))}
+    ${row("hub-conn","devices",S("workspace_registers_and_printers"))}
+    ${g(S("settings_hub_group_this_phone"))}
+    ${row("hub-sec","lock",S("settings_security_title"),S("settings_hub_security_on_delete"))}
+    ${row("hub-backup","backup",S("settings_hub_backup"),F("settings_hub_backup_last",backupWhen()))}
+    ${row("hub-notif","bell",S("notif_title"),S("notif_hub_sub"))}
+    ${row("hub-lang","globe",S("settings_hub_language_appearance"),F("settings_hub_language_sub",LANGNAME[L],S("theme_light")))}
+  </div></div>` + strip(); }
+
+/* ---------- the services owner's Caja (HomeScreen.kt) ---------- */
+// KEYS: home_tab_services,home_tab_products,common_edit,items_filter_all,items_price_from,items_price_unset,opt_min,scan_row_manual,services_action_agendar,services_action_crear_orden,common_charge,combo_label_offer_percent
+// PLURALS: home_current_sale_services
+const SERVICES = C.services, PRODUCTS = C.products;
+/* ServiceActionLabel.secondActionLabel: "Agendar" for beauty / pets, "Crear orden" for a workshop (TradeFamily ORDEN) */
+const BOOK_WORD = () => S(V.isOrder ? "services_action_crear_orden" : "services_action_agendar");
+/* the price a tile prints (ProductCard.kt:96-107): FIXED -> the price; FROM -> "Desde" + the price of the FIRST stored variation
+   (ProductLibraryView.kt:331 takes variations.find{}, ORDER BY id = the catalogue's choice order, not the lowest); no price ->
+   "Sin precio" */
+function tilePrice(s){
+  if(!s.choices.length) return s.price != null ? money(s.price) : S("items_price_unset");
+  const first = s.choices[0].price;
+  return first ? F("items_price_from", money(first)) : S("items_price_unset");
+}
+/* CU-21 ServiceTileBody: icon box 40 r12 in the trade family's tile, name bodyLarge 500 (2 lines), price bold + "N min";
+   the combo pill (SVC-4 item 48) in the free TOP-RIGHT corner, SumaComboGreen #10B981 */
+function svcTile(s, o){ o = o || {};
+  const pillTxt = o.combo ? F("combo_label_offer_percent", o.combo) : "";
+  return `<div class="sv-tile${o.hl?" hl":""}" data-t="tile-${s.id}"><span class="icb" style="background:${TRADE_TILE[V.biz]}">${TRADE_SVG[V.biz]}</span>
+    <b>${esc(s.name)}</b><div class="pr"><span data-fit="16">${esc(tilePrice(s))}</span>${s.min?`<small>${s.min} ${esc(S("opt_min"))}</small>`:""}</div>
+    ${o.combo?`<span class="cpill">${esc(pillTxt)}</span>`:""}</div>`; }
+/* the Mini POS / plain tile (ProductCard.kt plain branch: square, category tint 12 %, border 35 %, name titleMedium bold, price) —
+   the staff phone passes no serviceFacts (MiniPosSellScreen.kt:647-657), so its services wear the plain tile */
+function plainTile(s){
+  return `<div class="sv-ptile" data-t="tile-${s.id}" style="border-color:${hexA(CAT_COLOR,.35)}"><div class="in" style="background:${hexA(CAT_COLOR,.12)}"><b>${esc(s.name)}</b><span>${esc(tilePrice(s))}</span></div></div>`; }
+const chips = (cats) => `<div class="sv-chips">${cats.map((c,i)=>{
+  const col = i===0 ? ALL_COLOR : CAT_COLOR, on = i===0;
+  const st = on ? `background:${hexA(col,.22)};border:calc(var(--u)*1.5) solid ${col};color:${col}` : `background:${hexA(col,.05)};border:1px solid ${hexA(col,.3)};color:var(--m-onv)`;
+  return `<span style="${st}">${on?I("check"):""}${esc(c)}</span>`; }).join("")}</div>`;
+/* o = {tab, cartCount, total, combo:{sid, pct}, hl, scroll, sheet (html drawn over)} */
+function caja(o){ o = o || {};
+  const tabs = [`${S("home_tab_services")} · ${SERVICES.length}`, `${S("home_tab_products")} · ${PRODUCTS.length}`];
+  const tabRow = `<div class="sv-tabs">${tabs.map((t,i)=>`<span class="${i===(o.tab||0)?"on":""}">${esc(t)}</span>`).join("")}</div>`;
+  const edit = `<div class="sv-editrow"><span>${I("edit")}${esc(S("common_edit"))}</span></div>`;
+  const grid = `<div class="sv-grid"><div class="in" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">${SERVICES.map(s => svcTile(s, {combo: o.combo && o.combo.sid === s.id ? o.combo.pct : 0, hl: o.hl === s.id})).join("")}</div></div>`;
+  const n = o.cartCount || 0, total = o.total || 0;
+  const foot = `<div class="sv-foot"><div class="lk"><span>${esc(S("scan_row_manual"))}</span></div>
+    ${n ? `<div class="cur" data-t="cur-sale"><span>${esc(PL("home_current_sale_services", n))}</span><i>›</i></div>` : ""}
+    <div class="pair"><span class="sec${n?"":" off"}">${esc(BOOK_WORD())}</span><span class="pri${total?"":" off"}" data-t="charge"><small>${esc(F("common_charge","").trim())}</small> ${esc(money(total))}</span></div></div>`;
+  return `<div class="sv-caja">${tabRow}${edit}${chips([S("items_filter_all"), V.tradeName])}${grid}${foot}</div>` + navOwner("caja") + (o.sheet || ""); }
+
+/* ---------- the option sheet (OptionSelectionSheet.kt) ---------- */
+// KEYS: opt_add_to_sale,common_add,deal_choice_add_deal,opt_ask_at_till_row,opt_per_unit_each,home_variation_choose_one
+/* the service's option sets, as the setup writes them (GuideActions.ensureResearchedOptions + ui/ResearchedOptionStates.kt): every
+   "Lo que trae" (INCLUIDO) and every "Cobra más" (AGREGAR) is ITS OWN set, displayName = its name, one value with the same name;
+   an included one rides at 0 (switch ON), a priced add-on is OFF, an add-on with no price asks at the till, a per-unit one says "por …" */
+function optionSets(s){
+  return s.included.map(x => ({name:x.name, price:0, inc:true})).concat(s.extras.map(x => ({name:x.name, price:x.price, per:x.per, ask:x.price == null})));
+}
+function optRowText(set){
+  if(set.inc) return set.name;
+  if(set.ask) return `${set.name} · ${S("opt_ask_at_till_row")}`;
+  if(set.per) return `${set.name} · ` + F("opt_per_unit_each", money(set.price), set.per);
+  return `${set.name} · +${money(set.price)}`;
+}
+/* o = {base (the line price), deal (show "Agregar oferta"), scroll, addTag, dealTag} */
+function optSheet(s, o){ o = o || {};
+  const sets = optionSets(s);
+  const body = sets.map(set => `<div class="os-h">${esc(set.name)}</div><div class="os-r"><span>${esc(optRowText(set))}</span>${sw(!!set.inc)}</div><hr>`).join("");
+  const total = o.base;
+  const add = `<div class="sv-btn pri" data-t="${o.addTag||"opt-add"}">${esc(total ? F("opt_add_to_sale", money(total)) : S("common_add"))}</div>`;
+  const deal = o.deal ? `<div class="sv-btn sec" data-t="${o.dealTag||"opt-deal"}">${esc(S("deal_choice_add_deal"))}</div>` : "";
+  return `<div class="sv-scrim"></div><div class="sv-sheet full"><i class="hd"></i><div class="sc"><div class="in" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+    <h3>${esc(s.name)}</h3>${body}${add}${deal}</div></div></div>`; }
+/* VariationSelectionSheet.kt: "Elige uno" (labelMedium bold primary), the name (headlineMedium ExtraBold), a row per choice */
+function varSheet(s, tagPrefix){
+  return `<div class="sv-scrim"></div><div class="sv-sheet"><i class="hd"></i><div class="vs"><small>${esc(S("home_variation_choose_one"))}</small><h2>${esc(s.name)}</h2>
+    ${s.choices.map((c,i)=>`<div class="vr" data-t="${tagPrefix||"var"}-${i}"><b>${esc(c.name)}</b><span>${esc(c.price ? money(c.price) : S("opt_ask_at_till_row"))}</span></div>`).join("")}</div></div>`; }
+
+/* ---------- the paper Connections-style pieces are page-specific; the dialog (SumaDialog = M3 AlertDialog) is shared ---------- */
+// KEYS: common_ok,common_save,common_cancel,common_back
+const dlg = (title, body, ok, okTag, o) => { o = o || {};
+  return `<div class="sv-dscrim"><div class="sv-dlg"><h3>${esc(title)}</h3><p>${body}</p><div class="acts">${o.no?`<span>${esc(o.no)}</span>`:""}<span data-t="${okTag||"ok"}">${esc(ok)}</span></div></div></div>`; };
+
+const SV_CSS = `
+.mat .sv-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff;gap:calc(var(--u)*4)}
+.mat .sv-top .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .sv-top>b{flex:1;min-width:0;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:calc(var(--u)*4)}
+.mat .sv-top .act{font-size:calc(var(--u)*14);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
+.mat .sv-ptop{height:calc(var(--u)*52);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*16);flex:0 0 auto;background:#FBFAF7}
+.mat .sv-ptop .pib{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;display:grid;place-items:center;color:#17181B;flex:0 0 auto}
+.mat .sv-ptop .pib svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .sv-ptop>b{flex:1;min-width:0;font:600 calc(var(--u)*20)/1.2 Fredoka,Roboto,sans-serif;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-scroll{flex:1;min-height:0;overflow:hidden;position:relative}
+.mat .sv-scroll>.in{transition:transform .5s ease}
+.mat .sv-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .sv-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .sv-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .sv-strip .h>div{flex:1;min-width:0}
+.mat .sv-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#7C55E0;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .sv-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .sv-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .sv-sw{display:inline-block;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #79747E;background:#E5E5EA;position:relative;flex:0 0 auto;box-sizing:border-box;transition:background .2s}
+.mat .sv-sw i{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E;transition:all .2s}
+.mat .sv-sw.on{background:var(--m-on);border-color:var(--m-on)}
+.mat .sv-sw.on i{left:calc(var(--u)*22);top:calc(var(--u)*2);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.mat .sv-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*100);background:#323232;color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:20;max-width:86%;text-align:center}
+.mat .mnav .flagc{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:var(--m-sv);display:grid;place-items:center;overflow:hidden}
+.mat .mnav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.mat .mnav .flagc svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
+.mat .mnav>div.on .pill{background:var(--m-ovar)}
+.mat .mnav>div:last-child .pill{background:none!important}
+.sv-time{position:absolute;inset:0;background:#F4EBDD;display:grid;place-items:center;z-index:16;text-align:center;font-family:Roboto,system-ui,sans-serif;color:#3A2A1F;padding:0 8%}
+.sv-time b{display:block;font:600 calc(var(--u)*30) Roboto,system-ui,sans-serif}
+.sv-time small{display:block;margin-top:calc(var(--u)*10);font:400 calc(var(--u)*17)/1.35 Roboto,system-ui,sans-serif;color:#6B5848;max-width:calc(var(--u)*320)}
+/* panel */
+.mat .sv-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.mat .sv-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF;flex:0 0 auto}
+.mat .sv-panel .ph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-panel .ph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.mat .sv-panel .pl{flex:1;min-height:0;overflow:hidden}
+.mat .sv-panel .pin{display:flex;flex-direction:column;gap:calc(var(--u)*8);transition:transform .5s ease;padding-bottom:calc(var(--u)*16)}
+.mat .sv-panel hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0;flex:0 0 auto}
+.mat .sv-panel .eh{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);letter-spacing:.5px}
+.mat .sv-wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);color:var(--m-on);flex:0 0 auto}
+.mat .sv-wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);position:relative;flex:0 0 auto}
+.mat .sv-wr .ic .pdot{position:absolute;right:calc(var(--u)*-4);top:calc(var(--u)*-4);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#FF6D00}
+.mat .sv-wr .tx{flex:1;min-width:0}
+.mat .sv-wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(var(--u)*16)}
+.mat .sv-wr .ch svg{fill:var(--m-onv)}
+.mat .sv-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
+.mat .sv-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .sv-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+/* settings hub */
+.mat .sv-hub{padding:0 calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .sv-hg{font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);padding:calc(var(--u)*16) calc(var(--u)*4) 0;letter-spacing:.5px}
+.mat .sv-hr{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .sv-hr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .sv-hr .tx{flex:1;min-width:0}
+.mat .sv-hr .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700;line-height:calc(var(--u)*24)}
+.mat .sv-hr .tx small{display:block;font-size:calc(var(--u)*12);color:var(--m-onv);line-height:calc(var(--u)*16)}
+.mat .sv-hr>svg{fill:var(--m-onv)}
+/* the services Caja */
+.mat .sv-caja{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff}
+.mat .sv-tabs{flex:0 0 auto;display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar)}
+.mat .sv-tabs span{flex:1;display:grid;place-items:center;font-size:calc(var(--u)*14);color:var(--m-onv);position:relative;letter-spacing:.1px}
+.mat .sv-tabs span.on{color:var(--m-on);font-weight:700}
+.mat .sv-tabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.mat .sv-editrow{flex:0 0 auto;display:flex;justify-content:flex-end;padding:0 calc(var(--u)*16)}
+.mat .sv-editrow span{display:flex;align-items:center;gap:calc(var(--u)*4);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .sv-editrow svg{width:calc(var(--u)*18);height:calc(var(--u)*18)}
+.mat .sv-chips{flex:0 0 auto;display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*12) calc(var(--u)*16);overflow:hidden}
+.mat .sv-chips span{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*6);padding:calc(var(--u)*8) calc(var(--u)*16);border-radius:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:600;line-height:calc(var(--u)*20);white-space:nowrap}
+.mat .sv-chips span svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:currentColor}
+.mat .sv-grid{flex:1;min-height:0;overflow:hidden;margin-top:calc(var(--u)*8)}
+.mat .sv-grid>.in{padding:calc(var(--u)*16);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(var(--u)*8);align-items:start;transition:transform .5s ease}
+.mat .sv-tile{position:relative;border:calc(var(--u)*1.5) solid var(--m-ovar);border-radius:calc(var(--u)*12);background:#fff;padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8);box-shadow:0 calc(var(--u)*1) calc(var(--u)*2) rgba(0,0,0,.08)}
+.mat .sv-tile.hl{box-shadow:0 0 0 calc(var(--u)*3) rgba(124,85,224,.35)}
+.mat .sv-tile .icb{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center}
+.mat .sv-tile .icb svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
+.mat .sv-tile>b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:500;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.mat .sv-tile .pr{display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--u)*6)}
+.mat .sv-tile .pr span{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+.mat .sv-tile .pr small{font-size:calc(var(--u)*12);color:var(--m-onv);white-space:nowrap;flex:0 0 auto}
+.mat .sv-tile .cpill{position:absolute;top:calc(var(--u)*6);right:calc(var(--u)*6);max-width:calc(100% - var(--u)*58);background:#10B981;color:#fff;border-radius:calc(var(--u)*6);padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*11);line-height:calc(var(--u)*14);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-ptile{aspect-ratio:1;border-radius:calc(var(--u)*12);border:calc(var(--u)*1.5) solid;overflow:hidden;background:#fff}
+.mat .sv-ptile .in{height:100%;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:space-between}
+.mat .sv-ptile b{font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.mat .sv-ptile span{font-size:calc(var(--u)*16);font-weight:500;color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-foot{flex:0 0 auto;padding:calc(var(--u)*12) calc(var(--u)*16);background:#fff}
+.mat .sv-foot .lk{display:flex}.mat .sv-foot .lk span{height:calc(var(--u)*40);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .sv-foot .cur{min-height:calc(var(--u)*44);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .sv-foot .cur i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.mat .sv-foot .pair{display:flex;gap:calc(var(--u)*12)}
+.mat .sv-foot .pair span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*5);font-size:calc(var(--u)*18);font-weight:600;white-space:nowrap;padding:0 calc(var(--u)*12)}
+.mat .sv-foot .pair span small{font-size:calc(var(--u)*15);font-weight:600}
+.mat .sv-foot .pair .pri{background:var(--m-on);color:#fff}
+.mat .sv-foot .pair .sec{border:1px solid var(--m-outline);color:var(--m-on)}
+.mat .sv-foot .pair .pri.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .sv-foot .pair .sec.off{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+/* sheets and dialogs */
+.mat .sv-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:14}
+.mat .sv-sheet{position:absolute;left:0;right:0;bottom:0;z-index:15;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;max-height:92%;display:flex;flex-direction:column}
+.mat .sv-sheet.full{top:calc(var(--u)*44)}
+.mat .sv-sheet .hd{display:block;width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#79747E;margin:calc(var(--u)*22) auto calc(var(--u)*14);flex:0 0 auto}
+.mat .sv-sheet .sc{flex:1;min-height:0;overflow:hidden}
+.mat .sv-sheet .sc>.in{padding:0 calc(var(--u)*16) calc(var(--u)*24);transition:transform .5s ease}
+.mat .sv-sheet h3{margin:0 0 calc(var(--u)*12);font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on)}
+.mat .sv-sheet .os-h{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:500;color:var(--m-onv);margin-bottom:calc(var(--u)*6)}
+.mat .sv-sheet .os-r{display:flex;align-items:center;gap:calc(var(--u)*8);min-height:calc(var(--u)*48)}
+.mat .sv-sheet .os-r span{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
+.mat .sv-sheet hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*10) 0}
+.mat .sv-btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center;margin-top:calc(var(--u)*8)}
+.mat .sv-btn.pri{background:var(--m-on);color:#fff}
+.mat .sv-btn.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .sv-btn.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38);border:0}
+.mat .sv-sheet .vs{padding:calc(var(--u)*16) calc(var(--u)*24) calc(var(--u)*24)}
+.mat .sv-sheet .vs small{display:block;font-size:calc(var(--u)*12);font-weight:700;color:var(--m-on);margin-bottom:calc(var(--u)*4)}
+.mat .sv-sheet .vs h2{margin:0 0 calc(var(--u)*20);font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:800;color:var(--m-on)}
+.mat .sv-sheet .vr{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--u)*8);padding:calc(var(--u)*16);border:1px solid var(--m-ovar);border-radius:calc(var(--u)*16);background:rgba(242,242,247,.3);margin-bottom:calc(var(--u)*10);box-shadow:0 calc(var(--u)*1) calc(var(--u)*2) rgba(0,0,0,.06)}
+.mat .sv-sheet .vr b{flex:1;font-size:calc(var(--u)*16);font-weight:600;color:var(--m-on)}
+.mat .sv-sheet .vr span{font-size:calc(var(--u)*18);font-weight:700;color:var(--m-on)}
+.mat .sv-dscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:15;display:grid;place-items:center}
+.mat .sv-dlg{width:calc(var(--u)*312);background:#fff;border-radius:calc(var(--u)*28);padding:calc(var(--u)*24)}
+.mat .sv-dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:calc(var(--u)*32);color:var(--m-on)}
+.mat .sv-dlg p{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .sv-dlg .acts{display:flex;justify-content:flex-end;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24)}
+.mat .sv-dlg .acts span{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .caret{display:inline-block;width:2px;height:1.1em;background:var(--m-on);vertical-align:-.15em;margin-left:1px;animation:svblink 1s steps(1) infinite}
+@keyframes svblink{50%{opacity:0}}
+.mat .sv-hl{animation:svhl 1.6s ease}
+@keyframes svhl{0%{background:#E6DDFB}100%{background:transparent}}
+`;
+const svStyle_ = document.createElement("style"); svStyle_.textContent = SV_CSS; document.head.appendChild(svStyle_);
+/* a slid list (transform .5s): once it stops, ask the engine to put the ring on the target again (it listens to resize) */
+document.addEventListener("transitionend", e => { if(e.propertyName === "transform") window.dispatchEvent(new Event("resize")); });
+/* ShrinkToFitText (ui/components/ShrinkToFitText.kt): one line, the font steps down 1 sp at a time to 12 sp, then "…" */
+function fitShrink(){
+  document.querySelectorAll('#app [data-fit]').forEach(el => {
+    let s = +el.dataset.fit; el.style.fontSize = `calc(var(--u)*${s})`;
+    while(el.scrollWidth > el.clientWidth + 0.5 && s > 12){ s--; el.style.fontSize = `calc(var(--u)*${s})`; }
+  });
+}
+setTimeout(() => { const app = document.getElementById("app"); if(app) new MutationObserver(fitShrink).observe(app, {childList:true, subtree:true}); fitShrink(); }, 0);
+/* demo plumbing only (not an app screen): each tap keeps the engine busy until its last scheduled change has settled */
+function settled(steps){
+  return steps.map(s => Object.assign({}, s, {tap(st, E){
+    let last = 0;
+    const E2 = Object.create(E);
+    E2.after = (ms, fn) => { last = Math.max(last, ms); return E.after(ms, fn); };
+    E2.type = (key, text, done, ms) => { last = Math.max(last, (String(text).length + 1) * (ms || 45)); return E.type(key, text, done, ms); };
+    s.tap(st, E2);
+    E.after(last + 450, () => {});
+  }}));
+}
+/* how far (dp) a scrolled column must move so that `sel` sits inside `box` (both CSS selectors under #app) */
+function scrollNeed(sel, box, margin){
+  const el = document.querySelector('#app ' + sel), pg = document.querySelector('#app ' + box); if(!el || !pg) return 0;
+  const u = document.getElementById('screen').getBoundingClientRect().width / 412;
+  const over = el.getBoundingClientRect().bottom - pg.getBoundingClientRect().bottom + (margin == null ? 16 : margin) * u;
+  return over > 0 ? Math.ceil(over / u) : 0;
+}
+/* ===== end VS common ===== */
+
+
+/* ===== VS15 ===== */
+/* VS15 "Pago a empleados" as a SERVICES business (Peluquería; ?biz= works for the other three). Identical screens to retail TS15
+   and restaurant RS15: the feature reads no business-type rule (ui/screens/team/EmployeePay*.kt, ui/pos/EmployeePayActions.kt).
+   The owner turns on "Llevar la cuenta de los pagos a empleados", reads the deal, types what each stylist earns a month, turns it
+   on; on the 5th of the next month the app asks what was paid, prefilled; he changes one amount by hand (the app computes no
+   commission: no per-service or per-stylist % exists anywhere in the code) and taps "Todo pagado"; the month is kept under
+   "Meses anteriores". Owner phone only (the ask is shown only in the owner's own view, HomeScreen.kt:1401).
+   NOT the US: there the old "Employee pay" is on hold with the US launch (payroll) — this page is not recorded for US/CA.
+   Screens (paths under app/src/main/java/com/example/):
+   the switch      ui/screens/team/TeamManagementScreen.kt:449, :900 EmployeePayTrackingSwitch (employee_pay_switch_label)
+   the deal        EmployeePayConsentScreen.kt (SumaTopBar employee_pay_title; headlineSmall bold consent_title; lede; three rows
+                   📅 🔔 ⏻ with 34 dp r10 tiles, the last SumaFiadoAmberTint; SumaButton consent_confirm; TextButton consent_dismiss).
+                   Commits nothing: it opens the amount entry (TeamManagementScreen.kt:233).
+   amount entry    EmployeeDirectoryView :420-600 (turning on: an amount field under each payable person, none for the owner;
+                   pinned bottom: employee_pay_needs_all in red until every amount is set, SumaButton employee_pay_turn_on,
+                   TextButton common_cancel); MoneyVisualTransformation draws the shop's grouping
+   on              EmployeePayAmountDisplay :966 (amount bold + pencil) and the pinned "Meses anteriores ›" bar :594
+   the ask         HomeScreen.kt:1396-1412 FullScreenDialog -> EmployeePayAskScreen.kt (SumaTopBar employee_pay_ask_title, no back;
+                   rows prefilled with the monthly pay (formatAmountForInput), a 160 dp box with a pencil, the outlined "⦸ No trabajó
+                   este mes", ask_tap_hint, SumaButton ask_all_paid, secondary ask_remind_later). The ask is for the PREVIOUS month
+                   from the 5th (employeePayAskDecision), never for a month before tracking began (askedMonthBeforeTrackingStarted:
+                   turned on in October -> first ask on 5 November, for October). The month name is java.time Month FULL.
+   Past months     EmployeePayHistoryScreen.kt EmployeePayHistoryContent (year line employee_pay_history_year_total, a row per
+                   month: name, plural employee_pay_history_people, total bold, chevron)
+   The "5 de noviembre" card between the two parts is the demo's, not the app's. Monthly pay figures are the demo owner's (typed by
+   him; the kit has none): a believable full-time salon wage per country. */
+// KEYS: team_title,team_search_placeholder,team_business_code_title,team_business_code_copy,team_business_code_sub,employee_pay_switch_label,team_role_owner,team_badge_team,more_team_title
+// KEYS: employee_pay_title,employee_pay_consent_title,employee_pay_consent_lede,employee_pay_consent_row1_title,employee_pay_consent_row1_body,employee_pay_consent_row2_title,employee_pay_consent_row2_body,employee_pay_consent_row3_title,employee_pay_consent_row3_body,employee_pay_consent_confirm,employee_pay_consent_dismiss
+// KEYS: employee_pay_needs_all,employee_pay_turn_on,employee_pay_history_title,employee_pay_ask_title,employee_pay_ask_didnt_work,employee_pay_ask_tap_hint,employee_pay_ask_all_paid,employee_pay_ask_remind_later,employee_pay_history_year_total
+// PLURALS: employee_pay_history_people
+const TEAM = C.staff.length ? C.staff : window.SERV.biz(V.country, "peluqueria", L).staff;
+const jobOf = (p, i) => p.role.replace(/o\(a\)/, i === 0 ? "a" : "o");
+/* the payable people in list order (employees ORDER BY preferredName, PosDao.kt:1399); [standing monthly pay, October paid] */
+const PAYS = {CO:[[1600000,1850000],[1400000,1400000]], MX:[[9500,11000],[8500,8500]], PE:[[1500,1750],[1300,1300]], CL:[[600000,690000],[520000,520000]],
+  EC:[[520,600],[470,470]], AR:[[900000,1050000],[800000,800000]], PA:[[700,800],[650,650]], BR:[[2000,2300],[1800,1800]],
+  US:[[2800,3200],[2600,2600]], CA:[[3000,3400],[2800,2800]]}[V.country];
+const PEOPLE = TEAM.slice(0, 2).map((p, i) => ({n:p.name, job:jobOf(p, i), pay:PAYS[i][0], oct:PAYS[i][1], i}));
+const PAYABLE = PEOPLE.slice().sort((a, b) => a.n < b.n ? -1 : a.n > b.n ? 1 : 0);
+const BUMP = PEOPLE[0];                                     // the stylist who did more this month (the kit's first: Carla)
+/* MoneyVisualTransformation: the shop money's grouping and decimal mark; formatAmountForInput keeps the currency's decimals */
+const NF = new Intl.NumberFormat(V.K.loc).formatToParts(12345.6);
+const GSEP = (NF.find(p => p.type === "group") || {value:","}).value, DSEP = (NF.find(p => p.type === "decimal") || {value:"."}).value;
+const grp = s => s.replace(/\B(?=(\d{3})+(?!\d))/g, GSEP);
+const drawn = raw => { const [i, f] = String(raw).split("."); return grp(i) + (f != null ? DSEP + f : ""); };
+const asInput = v => v.toFixed(V.K.dec);                    // formatAmountForInput
+const monthName = m => new Intl.DateTimeFormat(LOCALE, {month:"long"}).format(new Date(2026, m, 1));
+const OCT = monthName(9);
+const pen = P(IP.edit);
+
+function row(p, extra){
+  const badge = p.owner ? `<span class="tm-b own">${esc(S("team_role_owner"))}</span>` : `<span class="tm-b">${esc(p.job || S("team_badge_team"))}</span>`;
+  return `<div class="tm-row"><span class="av">${esc(ini(p.n))}</span><div class="nm"><b>${esc(p.n)}</b>${!p.owner?`<span class="jt">${esc(p.job)}</span>`:""}<div class="bd">${badge}</div>${extra||""}</div><span class="mv">${I("more")}</span></div>`;
+}
+function team(st){
+  const amt = p => {
+    if(st.mode === "entry") return `<div class="pf${st.focus===p.i?" foc":""}" data-t="pay-${p.i}">${esc(drawn(st["p"+p.i]))}${st.focus===p.i?'<i class="caret"></i>':""}</div>`;
+    if(st.mode === "on") return `<div class="pa"><b>${money(p.pay)}</b><span>${pen}</span></div>`;
+    return "";
+  };
+  const ppl = [{n:C.owner, owner:true}].concat(PEOPLE);
+  ppl.sort((a, b) => a.n < b.n ? -1 : a.n > b.n ? 1 : 0);
+  const groups = {}; ppl.forEach(p => { const k = p.n[0].toUpperCase(); (groups[k] = groups[k] || []).push(p); });
+  const ready = PEOPLE.every(p => !!st["p"+p.i]);
+  const bottom = st.mode === "entry" ? `<div class="pb">${ready?"":`<p>${esc(S("employee_pay_needs_all"))}</p>`}<div class="sv-btn ${ready?"pri":"off"}" data-t="turn-on">${esc(S("employee_pay_turn_on"))}</div><span class="cx">${esc(S("common_cancel"))}</span></div>`
+    : st.mode === "on" ? `<div class="ph2" data-t="history">${esc(S("employee_pay_history_title"))}${I("chev")}</div>` : "";
+  return `<div class="tm-lh"><div class="r1"><span class="ib">${I("back")}</span><b>${esc(F("team_title", PEOPLE.length))}</b><span class="nw">${esc(pick({es:"+ Nuevo",pt:"+ Novo",en:"+ New"}))}</span></div>
+    <div class="srch">${I("search")}<span>${esc(S("team_search_placeholder"))}</span></div></div>
+    <div class="tm-sw"><span>${esc(S("employee_pay_switch_label"))}</span>${sw(st.mode === "on", "switch")}</div>
+    <div class="sv-scroll"><div class="in" style="transform:translateY(calc(var(--u)*${-(st.scroll||0)}))">${Object.keys(groups).sort().map(k => `<div class="tm-h">${k}</div>` + groups[k].map(p => row(p, p.owner ? "" : amt(p))).join("")).join("")}</div></div>` + bottom + strip();
+}
+function consent(){
+  const r = (e, t, b, amber) => `<div class="cs-r"><span class="tl${amber?" am":""}">${e}</span><div><b>${esc(S(t))}</b><p>${esc(S(b))}</p></div></div>`;
+  return topbar(S("employee_pay_title")) + `<div class="sv-scroll"><div class="in cs">
+    <h2>${esc(S("employee_pay_consent_title"))}</h2><p class="ld">${esc(S("employee_pay_consent_lede"))}</p>
+    ${r("📅","employee_pay_consent_row1_title","employee_pay_consent_row1_body")}
+    ${r("🔔","employee_pay_consent_row2_title","employee_pay_consent_row2_body")}
+    ${r("⏻","employee_pay_consent_row3_title","employee_pay_consent_row3_body",true)}
+  </div></div><div class="cs-bot"><div class="sv-btn pri" data-t="ok">${esc(S("employee_pay_consent_confirm"))}</div><span>${esc(S("employee_pay_consent_dismiss"))}</span></div>` + strip();
+}
+function ask(st){
+  const r = p => { const raw = p.i === BUMP.i && st.bump != null ? st.bump : asInput(p.pay); const foc = p.i === BUMP.i && st.bump != null && !st.paid;
+    return `<div class="ak-r"><div class="t"><b>${esc(p.n)}</b><span class="bx${foc?" foc":""}" data-t="ask-${p.i}">${esc(drawn(raw))}${foc?'<i class="caret"></i>':""}${pen}</span></div><span class="dw">${I("block")}${esc(S("employee_pay_ask_didnt_work"))}</span></div>`; };
+  return `<div class="sv-top"><b style="padding-left:calc(var(--u)*12)">${esc(F("employee_pay_ask_title", OCT))}</b></div><div class="sv-scroll"><div class="in ak">
+    ${PAYABLE.map(r).join("")}
+    <p>${esc(S("employee_pay_ask_tap_hint"))}</p>
+    <div class="sv-btn pri" data-t="all-paid">${esc(S("employee_pay_ask_all_paid"))}</div>
+    <div class="sv-btn sec">${esc(S("employee_pay_ask_remind_later"))}</div></div></div>`;
+}
+function history(){
+  const total = PEOPLE.reduce((a, p) => a + p.oct, 0);
+  return topbar(S("employee_pay_history_title")) + `<div class="sv-scroll"><div class="in hs">
+    <h4>${esc(F("employee_pay_history_year_total", 2026, money(total)))}</h4>
+    <div class="hr sv-hl"><div><b>${esc(OCT)}</b><small>${esc(PL("employee_pay_history_people", PEOPLE.length))}</small></div><strong>${money(total)}</strong>${I("chev")}</div>
+  </div></div>` + strip();
+}
+function render(st){
+  if(st.screen === "panel") return panel({team:PEOPLE.length, phones:0});
+  if(st.screen === "consent") return consent();
+  if(st.screen === "ask") return caja() + `<div class="ak-over">${ask(st)}</div>`;
+  if(st.screen === "caja") return caja();
+  if(st.screen === "history") return history();
+  const card = st.time ? timeCard(pick({es:"5 de noviembre", pt:"5 de novembro", en:"November 5"}),
+    pick({es:"Al abrir Platata, te pregunta por " + OCT + ".", pt:"Ao abrir o Platata, ele pergunta sobre " + OCT + ".", en:"When you open Platata, it asks about " + OCT + "."}), "time") : "";
+  return team(st) + card;
+}
+VKIT.start(V, {
+  id:"VS15", tallVideo:true, clock:"12:41",
+  endText:pick({es:"Así llevas la cuenta de lo que pagas con Platata.", pt:"Assim você anota o que paga com o Platata.", en:"That's how you keep track of what you pay with Platata."}),
+  beats:pick({
+    es:["En Mi negocio, toca Equipo","Prende Llevar la cuenta de los pagos","Cada mes te pregunta. Toca Listo, entiendo","Escribe lo que le pagas a cada uno y toca Activar","El 5 de noviembre te pregunta por octubre","¿Carla hizo más? Cambia su monto","Toca Todo pagado","Meses anteriores guarda lo que pagaste","Así llevas la cuenta de lo que pagas con Platata."],
+    pt:["Em Meu negócio, toque em Equipe","Ligue Acompanhar os pagamentos","Todo mês ele pergunta. Toque em Ok, entendi","Escreva quanto paga a cada um e toque em Ativar","No dia 5 de novembro ele pergunta sobre outubro","A Carla fez mais? Mude o valor dela","Toque em Tudo pago","Meses anteriores guarda o que você pagou","Assim você anota o que paga com o Platata."],
+    en:["In My business, tap Team","Turn on Track employee payments","It asks every month. Tap Got it","Type what you pay each one and tap Turn on","On November 5 it asks about October","Did Carla do more? Change her amount","Tap All paid","Past months keeps what you paid","That's how you keep track of what you pay with Platata."]}),
+  state:{screen:"panel", mode:"off", p0:"", p1:"", focus:-1, time:false, bump:null, paid:false, scroll:0},
+  render,
+  device: () => "phone",
+  who: () => DEV_OWNER,
+  steps: settled([
+    {beat:0, hint:HINT(S("more_team_title"), S("more_team_title"), S("more_team_title")), target:'[data-t="row-team"]', tap(st){ st.screen = "team"; }},
+    {beat:1, hint:pick({es:"Toca el interruptor", pt:"Toque no botão", en:"Tap the switch"}), target:'[data-t="switch"]', tap(st){ st.screen = "consent"; }},
+    {beat:2, hint:H1("employee_pay_consent_confirm"), target:'[data-t="ok"]', tap(st){ st.screen = "team"; st.mode = "entry"; }},
+    {beat:3, hint:HINT(PAYABLE[0].n, PAYABLE[0].n, PAYABLE[0].n), target:`[data-t="pay-${PAYABLE[0].i}"]`, tap(st,E){ st.focus = PAYABLE[0].i; E.type("p" + PAYABLE[0].i, String(PAYABLE[0].pay), null, 80); }},
+    {beat:3, hint:HINT(PAYABLE[1].n, PAYABLE[1].n, PAYABLE[1].n), target:`[data-t="pay-${PAYABLE[1].i}"]`, tap(st,E){ st.focus = PAYABLE[1].i; E.type("p" + PAYABLE[1].i, String(PAYABLE[1].pay), null, 80); }},
+    {beat:3, hint:H1("employee_pay_turn_on"), target:'[data-t="turn-on"]', tap(st,E){ st.mode = "on"; st.focus = -1; E.after(1000, () => { st.time = true; }); }},
+    {beat:4, hint:pick({es:"Toca la tarjeta", pt:"Toque no cartão", en:"Tap the card"}), target:'[data-t="time"]', tap(st){ st.time = false; st.screen = "ask"; }},
+    {beat:5, hint:HINT(BUMP.n, BUMP.n, BUMP.n), target:`[data-t="ask-${BUMP.i}"]`, tap(st,E){ st.bump = ""; E.type("bump", asInput(BUMP.oct).replace(/\.0+$/, ""), null, 90); }},
+    {beat:6, hint:H1("employee_pay_ask_all_paid"), target:'[data-t="all-paid"]', tap(st,E){ st.paid = true; E.after(500, () => { st.screen = "caja"; }); }},
+    {beat:7, hint:HINT(S("home_tab_my_business"), S("home_tab_my_business"), S("home_tab_my_business")), target:'[data-t="flag"]', tap(st){ st.screen = "panel"; }},
+    {beat:7, hint:HINT(S("more_team_title"), S("more_team_title"), S("more_team_title")), target:'[data-t="row-team"]', tap(st){ st.screen = "team"; }},
+    {beat:7, hint:H1("employee_pay_history_title"), target:'[data-t="history"]', tap(st){ st.screen = "history"; }}
+  ])
+});
+
+const cssVS15 = document.createElement("style"); cssVS15.textContent = `
+.mat .tm-lh{padding:calc(var(--u)*8);flex:0 0 auto}
+.mat .tm-lh .r1{display:flex;align-items:center;height:calc(var(--u)*56)}
+.mat .tm-lh .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .tm-lh .r1 b{flex:1;font-size:calc(var(--u)*22);font-weight:700;padding-left:calc(var(--u)*4)}
+.mat .tm-lh .nw{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
+.mat .tm-lh .srch{margin:calc(var(--u)*4) calc(var(--u)*8) 0;height:calc(var(--u)*56);border:1px solid var(--m-outline);border-radius:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);color:var(--m-onv);font-size:calc(var(--u)*16)}
+.mat .tm-sw{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*8);background:rgba(242,242,247,.5);padding:calc(var(--u)*10) calc(var(--u)*16);margin-top:calc(var(--u)*8)}
+.mat .tm-sw span:first-child{flex:1;font-size:calc(var(--u)*14);font-weight:600;color:var(--m-onv)}
+.mat .tm-h{padding:calc(var(--u)*6) calc(var(--u)*16);background:rgba(242,242,247,.9);font-size:calc(var(--u)*14);font-weight:700;color:var(--m-on)}
+.mat .tm-row{display:flex;align-items:center;padding:calc(var(--u)*12) calc(var(--u)*4) calc(var(--u)*12) calc(var(--u)*16);border-bottom:1px solid rgba(229,229,234,.4)}
+.mat .tm-row .av{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:var(--m-sv);display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:700;flex:0 0 auto;align-self:flex-start}
+.mat .tm-row .nm{flex:1;min-width:0;margin-left:calc(var(--u)*14)}
+.mat .tm-row .nm b{display:block;font-size:calc(var(--u)*18);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .tm-row .nm .jt{display:block;font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .tm-row .bd{display:flex;gap:calc(var(--u)*6);margin-top:calc(var(--u)*4)}
+.mat .tm-b{font-size:calc(var(--u)*11);font-weight:500;padding:calc(var(--u)*2) calc(var(--u)*6);border-radius:calc(var(--u)*4);background:rgba(110,110,115,.15);color:#6E6E73}
+.mat .tm-b.own{background:rgba(28,28,30,.15);color:#1C1C1E}
+.mat .tm-row .mv{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-onv);align-self:flex-start}
+.mat .pf{margin-top:calc(var(--u)*6);min-height:calc(var(--u)*56);border:1px solid #79747E;border-radius:calc(var(--u)*6);display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16)}
+.mat .pf.foc{border:calc(var(--u)*2) solid var(--m-on)}
+.mat .pa{margin-top:calc(var(--u)*6);display:flex;align-items:center;gap:calc(var(--u)*8)} .mat .pa b{font-size:calc(var(--u)*16);font-weight:700}
+.mat .pa span{width:calc(var(--u)*28);height:calc(var(--u)*28);display:grid;place-items:center} .mat .pa svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:var(--m-on)}
+.mat .pb{flex:0 0 auto;padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*4);align-items:stretch}
+.mat .pb p{margin:0;font-size:calc(var(--u)*12);color:#FF3B30} .mat .pb .cx{align-self:center;font-size:calc(var(--u)*14);font-weight:500;padding:calc(var(--u)*8)}
+.mat .ph2{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;background:var(--m-sv);padding:calc(var(--u)*16);font-size:calc(var(--u)*16);font-weight:500}
+.mat .ph2 svg{fill:var(--m-onv)}
+.mat .cs{padding:calc(var(--u)*8) calc(var(--u)*16)}
+.mat .cs h2{margin:0;font-size:calc(var(--u)*24);line-height:calc(var(--u)*32);font-weight:700}
+.mat .cs .ld{margin:calc(var(--u)*8) 0 calc(var(--u)*24);font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .cs-r{display:flex;gap:calc(var(--u)*12);margin-bottom:calc(var(--u)*16)}
+.mat .cs-r .tl{width:calc(var(--u)*34);height:calc(var(--u)*34);border-radius:calc(var(--u)*10);background:var(--m-sv);display:grid;place-items:center;font-size:calc(var(--u)*16);flex:0 0 auto}
+.mat .cs-r .tl.am{background:#FFF6E5}
+.mat .cs-r b{display:block;font-size:calc(var(--u)*16);font-weight:600;line-height:calc(var(--u)*24)} .mat .cs-r p{margin:calc(var(--u)*4) 0 0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .cs-bot{flex:0 0 auto;padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;align-items:stretch;gap:calc(var(--u)*4)}
+.mat .cs-bot>span{align-self:center;font-size:calc(var(--u)*14);color:var(--m-onv);padding:calc(var(--u)*10)}
+.mat .ak-over{position:absolute;inset:0;z-index:18;background:#fff;display:flex;flex-direction:column}
+.mat .ak{padding:calc(var(--u)*8) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .ak-r{display:flex;flex-direction:column;gap:calc(var(--u)*4);padding-bottom:calc(var(--u)*12);border-bottom:1px solid rgba(229,229,234,.4)}
+.mat .ak-r .t{display:flex;align-items:center;gap:calc(var(--u)*12)} .mat .ak-r .t b{flex:1;font-size:calc(var(--u)*16);font-weight:500}
+.mat .ak-r .bx{width:calc(var(--u)*160);height:calc(var(--u)*56);border:1px solid #79747E;border-radius:calc(var(--u)*6);display:flex;align-items:center;padding:0 calc(var(--u)*12) 0 calc(var(--u)*16);font-size:calc(var(--u)*16);gap:calc(var(--u)*2)}
+.mat .ak-r .bx.foc{border:calc(var(--u)*2) solid var(--m-on)}
+.mat .ak-r .bx svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:var(--m-onv);margin-left:auto}
+.mat .ak-r .dw{align-self:flex-start;min-height:calc(var(--u)*44);border:1px solid var(--m-outline);border-radius:calc(var(--u)*8);display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .ak-r .dw svg{width:calc(var(--u)*18);height:calc(var(--u)*18)}
+.mat .ak>p{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .ak .sv-btn{margin-top:0}
+.mat .hs{padding:calc(var(--u)*12) calc(var(--u)*16)}
+.mat .hs h4{margin:0 0 calc(var(--u)*8);font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on)}
+.mat .hs .hr{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*12) 0;border-bottom:1px solid rgba(229,229,234,.4)}
+.mat .hs .hr div{flex:1} .mat .hs .hr b{display:block;font-size:calc(var(--u)*16);font-weight:500} .mat .hs .hr small{display:block;font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .hs .hr strong{font-size:calc(var(--u)*16);font-weight:700} .mat .hs .hr svg{fill:var(--m-onv)}
+`; document.head.appendChild(cssVS15);
+</script>
+</body>
+</html>

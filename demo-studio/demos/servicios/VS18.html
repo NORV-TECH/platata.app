@@ -1,0 +1,654 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Combos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/services-data.js"></script>
+<script src="../../kit/vkit.js"></script>
+<script>
+window.PAGE_BIZ = "peluqueria";
+const STR = {"disc_title_with_combos":{"en":"Discounts and combos","es":"Descuentos y combos","pt":"Descontos e combos"},"disc_hub_tab_discounts":{"en":"Discounts","es":"Descuentos","pt":"Descontos"},"disc_hub_tab_combos":{"en":"Combos","es":"Combos","pt":"Combos"},"disc_hub_tab_charges":{"en":"Extra charges","es":"Cargos","pt":"Acréscimos"},"common_new_short":{"en":"+ New","es":"+ Nuevo","pt":"+ Novo"},"combo_tab_empty_title":{"en":"No combos yet","es":"Aún no tienes combos","pt":"Você ainda não tem combos"},"combo_tab_empty_line":{"en":"Sell a few items together with a discount.","es":"Vende varios productos juntos con descuento.","pt":"Venda vários itens juntos com desconto."},"combo_tab_empty_button":{"en":"Create combo","es":"Crear combo","pt":"Criar combo"},"deal_new_title":{"en":"New Deal","es":"Nueva oferta","pt":"Nova oferta"},"deal_pick_lede":{"en":"Put two things together and charge less for the pair.","es":"Junta dos cosas y cobra menos por el par.","pt":"Junte duas coisas e cobre menos pelo par."},"deal_slot_overline_main":{"en":"1 · Main","es":"1 · Principal","pt":"1 · Principal"},"deal_slot_overline_linked":{"en":"2 · Goes with it","es":"2 · Acompañante","pt":"2 · Acompanhamento"},"deal_slot_overline_optional":{"en":"THIRD THING (OPTIONAL)","es":"TERCERA COSA (OPCIONAL)","pt":"TERCEIRA COISA (OPCIONAL)"},"deal_pick_item":{"en":"Choose one of yours","es":"Escoge una de las tuyas","pt":"Escolha uma das suas"},"deal_slot_clear":{"en":"Remove","es":"Quitar","pt":"Remover"},"deal_next_button":{"en":"Next","es":"Siguiente","pt":"Avançar"},"deal_pick_first":{"en":"What is the first thing?","es":"¿Cuál es la primera cosa?","pt":"Qual é a primeira coisa?"},"deal_pick_second":{"en":"And what goes with it?","es":"¿Y qué va con eso?","pt":"E o que vai com ela?"},"deal_summary_title":{"en":"Your combo","es":"Tu combo","pt":"Seu combo"},"deal_name_label":{"en":"Deal name","es":"Nombre de la oferta","pt":"Nome da oferta"},"deal_slot_not_set_summary":{"en":"Not set","es":"Sin configurar","pt":"Não definido"},"deal_discount_on_title":{"en":"Deal discount is on","es":"El descuento de la oferta está activado","pt":"O desconto da oferta está ativado"},"deal_discount_off_title":{"en":"Deal discount is off","es":"El descuento de la oferta está desactivado","pt":"O desconto da oferta está desativado"},"deal_discount_on_subtitle":{"en":"Clients get %1$s%% off when they order this deal.","es":"Los clientes obtienen %1$s%% de descuento al pedir esta oferta.","pt":"Os clientes recebem %1$s%% de desconto ao pedir esta oferta."},"deal_discount_off_subtitle":{"en":"Turn on to give this deal a percentage discount.","es":"Actívalo para darle a esta oferta un descuento porcentual.","pt":"Ative para dar a esta oferta um desconto percentual."},"deal_discount_label":{"en":"Discount","es":"Descuento","pt":"Desconto"},"deal_discount_caption":{"en":"The math on your prices is up to you — we apply the %1$s%% at checkout, print it on every receipt, and track it in your reports so you can see exactly how this deal is performing.","es":"Las cuentas de tus precios dependen de ti — aplicamos el %1$s%% al cobrar, lo imprimimos en cada recibo y lo registramos en tus reportes para que veas exactamente cómo está funcionando esta oferta.","pt":"A conta dos seus preços é com você — aplicamos os %1$s%% no checkout, imprimimos em cada recibo e registramos nos seus relatórios para você ver exatamente como esta oferta está performando."},"deal_free_category_hint":{"en":"≈ %2$d%% off is about the same as making %1$s free","es":"≈ %2$d%% de descuento equivale más o menos a hacer %1$s gratis","pt":"≈ %2$d%% de desconto é mais ou menos o mesmo que dar %1$s de graça"},"deal_save_button":{"en":"Save","es":"Guardar","pt":"Salvar"},"deal_discount_badge":{"en":"%1$d%% OFF","es":"%1$d%% DESCUENTO","pt":"%1$d%% DESC"},"deal_live_badge":{"en":"LIVE","es":"ACTIVO","pt":"ATIVO"},"deal_paused_badge":{"en":"PAUSED","es":"PAUSADO","pt":"PAUSADO"},"deal_picker_title":{"en":"Complete your %1$s","es":"Completa tu %1$s","pt":"Complete seu %1$s"},"common_back":{"en":"Back","es":"Atrás","pt":"Voltar"},"common_add":{"en":"Add","es":"Agregar","pt":"Adicionar"},"mamaship_tab_register":{"en":"Register","es":"Caja","pt":"Caixa"},"sx_agenda":{"en":"Agenda","es":"Agenda","pt":"Agenda"},"home_tab_my_business":{"en":"My business","es":"Mi negocio","pt":"Meu negócio"},"rp_strip_support":{"en":"Support","es":"Soporte","pt":"Suporte"},"rp_strip_support_sub":{"en":"Report a problem here","es":"Reporta un problema aquí","pt":"Relatar um problema aqui"},"rp_my_title":{"en":"My reports","es":"Mis reportes","pt":"Meus relatos"},"rp_sheet_my_reports_none":{"en":"No reports yet","es":"Aún no hay reportes","pt":"Ainda não há relatos"},"workspace_register_open":{"en":"Register open","es":"Caja abierta","pt":"Caixa aberto"},"workspace_register_sales":{"en":"Sales","es":"Ventas","pt":"Vendas"},"sell_online_title":{"en":"Sell online","es":"Vender en línea","pt":"Vender online"},"sell_online_row_off":{"en":"Off","es":"Apagado","pt":"Desligado"},"sell_online_pill_off":{"en":"OFF","es":"APAGADO","pt":"DESLIGADO"},"panel_heading_every_day":{"en":"Every day","es":"Día a día","pt":"Dia a dia"},"more_customers_title":{"en":"Clients","es":"Clientes","pt":"Clientes"},"invoices_title":{"en":"Invoices","es":"Facturas","pt":"Notas"},"invoices_row_first":{"en":"Scan your first invoice","es":"Escanea tu primera factura","pt":"Escaneie sua primeira nota"},"more_team_title":{"en":"Team","es":"Equipo","pt":"Equipe"},"workspace_full_reports":{"en":"Reports","es":"Reportes","pt":"Relatórios"},"scan_row_reports_today_net":{"en":"Net sales today · %s","es":"Ventas netas hoy · %s","pt":"Vendas hoje · %s"},"scan_row_reports_today":{"en":"Today · %s","es":"Hoy · %s","pt":"Hoje · %s"},"settings_title":{"en":"Settings","es":"Configuración","pt":"Configurações"},"panel_settings_row_sub":{"en":"Payments, taxes, receipts","es":"Cobros, impuestos, recibos","pt":"Cobranças, impostos, recibos"},"settings_hub_group_getting_paid":{"en":"Getting paid","es":"Cobros","pt":"Cobranças"},"settings_hub_payment_methods":{"en":"Payment methods","es":"Métodos de pago","pt":"Formas de pagamento"},"settings_hub_taxes":{"en":"Taxes","es":"Impuestos","pt":"Impostos"},"settings_hub_receipts":{"en":"Receipts","es":"Recibos","pt":"Recibos"},"settings_hub_receipts_sub":{"en":"%1$s · %2$s","es":"%1$s · %2$s","pt":"%1$s · %2$s"},"receipt_layout_detailed":{"en":"Detailed","es":"Detallado","pt":"Detalhado"},"settings_hub_receipts_num_auto":{"en":"numbered automatically","es":"numeración automática","pt":"numeração automática"},"settings_hub_group_your_business":{"en":"Your business","es":"Tu negocio","pt":"Seu negócio"},"settings_hub_business_info":{"en":"Business info","es":"Datos del negocio","pt":"Dados do negócio"},"settings_where_you_work":{"en":"Where you work","es":"Dónde atiendes","pt":"Onde você atende"},"more_where_subtitle":{"en":"Store, home, pick-up","es":"Local, domicilio, recogida","pt":"Local, domicílio, coleta"},"workspace_registers_and_printers":{"en":"Connections","es":"Conexiones","pt":"Conexões"},"settings_hub_group_this_phone":{"en":"This phone","es":"Este teléfono","pt":"Este celular"},"settings_security_title":{"en":"Security","es":"Seguridad","pt":"Segurança"},"settings_hub_security_on_delete":{"en":"Asks for your fingerprint before deleting","es":"Pide huella antes de borrar","pt":"Pede a digital antes de apagar"},"settings_hub_backup":{"en":"Backup","es":"Respaldo","pt":"Backup"},"settings_hub_backup_last":{"en":"Last copy: %1$s","es":"Último respaldo: %1$s","pt":"Último backup: %1$s"},"notif_title":{"en":"Notifications","es":"Notificaciones","pt":"Notificações"},"notif_hub_sub":{"en":"Orders, payments and your register","es":"Pedidos, pagos y tu caja","pt":"Pedidos, pagamentos e seu caixa"},"settings_hub_language_appearance":{"en":"Language & appearance","es":"Idioma y apariencia","pt":"Idioma e aparência"},"settings_hub_language_sub":{"en":"%1$s · %2$s","es":"%1$s · %2$s","pt":"%1$s · %2$s"},"theme_light":{"en":"Light","es":"Claro","pt":"Claro"},"settings_section_account":{"en":"Account","es":"Cuenta","pt":"Conta"},"my_account_title":{"en":"My Account","es":"Mi cuenta","pt":"Minha conta"},"rp_my_row_sub":{"en":"What you told us and what we answered","es":"Lo que nos contaste y lo que respondimos","pt":"O que você nos contou e o que respondemos"},"home_tab_services":{"en":"Services","es":"Servicios","pt":"Serviços"},"home_tab_products":{"en":"Products","es":"Productos","pt":"Produtos"},"common_edit":{"en":"Edit","es":"Editar","pt":"Editar"},"items_filter_all":{"en":"All","es":"Todos","pt":"Todos"},"items_price_from":{"en":"From %1$s","es":"Desde %1$s","pt":"A partir de %1$s"},"items_price_unset":{"en":"No price","es":"Sin precio","pt":"Sem preço"},"opt_min":{"en":"min","es":"min","pt":"min"},"scan_row_manual":{"en":"Keypad","es":"Teclado","pt":"Teclado"},"services_action_agendar":{"en":"Book","es":"Agendar","pt":"Agendar"},"services_action_crear_orden":{"en":"Create order","es":"Crear orden","pt":"Criar ordem"},"common_charge":{"en":"Charge %s","es":"Cobrar %s","pt":"Cobrar %s"},"combo_label_offer_percent":{"en":"Combo Offer −%1$d%%","es":"Oferta de Combo −%1$d%%","pt":"Oferta de Combo −%1$d%%"},"opt_add_to_sale":{"en":"Add to sale · %1$s","es":"Agregar a la venta · %1$s","pt":"Adicionar à venda · %1$s"},"deal_choice_add_deal":{"en":"Add deal","es":"Agregar oferta","pt":"Adicionar oferta"},"opt_ask_at_till_row":{"en":"ask at the till","es":"se pregunta en la caja","pt":"perguntar no caixa"},"opt_per_unit_each":{"en":"%1$s per %2$s","es":"%1$s por %2$s","pt":"%1$s por %2$s"},"home_variation_choose_one":{"en":"Choose one","es":"Elige uno","pt":"Escolha um"},"common_ok":{"en":"OK","es":"OK","pt":"OK"},"common_save":{"en":"Save","es":"Guardar","pt":"Salvar"},"common_cancel":{"en":"Cancel","es":"Cancelar","pt":"Cancelar"}};
+const PLU = {"home_clientes_count":{"en":{"one":"%1$d client","other":"%1$d clients"},"es":{"one":"%1$d cliente","other":"%1$d clientes"},"pt":{"one":"%1$d cliente","other":"%1$d clientes"}},"home_equipo_count_phones":{"en":{"one":"%1$d employee · %2$s","other":"%1$d employees · %2$s"},"es":{"one":"%1$d empleado · %2$s","other":"%1$d empleados · %2$s"},"pt":{"one":"%1$d funcionário · %2$s","other":"%1$d funcionários · %2$s"}},"home_equipo_on_phones":{"en":{"one":"%1$d on a phone","other":"%1$d on phones"},"es":{"one":"%1$d en celular","other":"%1$d en celular"},"pt":{"one":"%1$d no celular","other":"%1$d no celular"}},"home_current_sale_services":{"en":{"one":"Current sale · %d service","other":"Current sale · %d services"},"es":{"one":"Venta actual · %d servicio","other":"Venta actual · %d servicios"},"pt":{"one":"Venda atual · %d serviço","other":"Venda atual · %d serviços"}}};
+/* ===== VS14..VS19 common (services; inlined into each page by the builder from the helper's scratch file; not a kit file) =====
+   App at sim/usa-canada 73c65f08, paths under app/src/main/java/com/example/. Words come from STR / PLU (values / values-es /
+   values-pt-rBR, injected by the builder). Material light = ui/theme/Theme.kt LightColorScheme (#1C1C1E #6E6E73 #F2F2F7 #E5E5EA
+   #C7C7CC); paper = ui/theme/PaperColor.kt with the services accent (ServiciosMain/Btn #7C55E0, Soft #EEEAF5, Ink #6A45CC).
+   navOwner()  ui/app/PlatataApp.kt:305-327 + navigation/NavLabels.kt: a services owner has Caja (ShoppingCart) · Agenda (Receipt,
+               sx_agenda, SVC-2 item 23) · flag "Mi negocio"; the staff phone (Mini POS) has Caja · flag only (:313).
+   panel()     ui/screens/home/HomeScreen.kt:1420-1830: services = register card, Vender en línea, "Día a día", Clientes (plain count:
+               no fiado, ServicesRules.fiadoEnabled=false), Facturas (hasSupplierInvoiceRow), Equipo, Reportes, divider, Configuración.
+               No Artículos row (workspaceHasItemsRow=false) and no Inventario (retail only).
+   hub()       ui/screens/settings/SettingsHubScreen.kt:170-330 + sync/SettingsHubRules.kt (services: + "Dónde atiendes";
+               the discounts row is "Descuentos y combos", disc_title_with_combos)
+   strip()     ui/screens/reports/SupportStrip.kt (badge = the paper accentBtn: services purple) on LEVEL_2_PLUS routes only
+               (reports/ReportLevels.kt: team_management, settings_hub, registers_and_printers, connect_phone, new_deal,
+               discounts_workspace ...; never on register_home / the panel / a staff phone / employee_join).
+   caja()      HomeScreen.kt:592-1110 (services: TabRow "Servicios · N" | "Productos · N" HomeTabLabels.kt, ItemEditModeBar "Editar"
+               :2018, ProductLibraryView chips "Todos" + the trade category (the system "Otros servicios" filtered out, :942),
+               service tiles ProductCard.kt ServiceTileBody, footer :782-826 "Teclado" link + CurrentSaleStrip + FooterButtonPair
+               "Agendar" | "Cobrar $X").
+   optSheet()  ui/screens/home/OptionSelectionSheet.kt (ModalBottomSheet; one header + one switch row per researched option set;
+               "Agregar a la venta · $X" (SVC-1 item 1), "Agregar oferta" when the service starts a combo)
+   varSheet()  ui/screens/home/VariationSelectionSheet.kt ("Elige uno", the service name, one row per choice with its price)
+   Data: kit/services-data.js only (V.C). */
+const V = VKIT.ctx({biz: (window.PAGE_BIZ || "peluqueria")});
+const C = V.C, L = V.lang, esc = VKIT.esc, pick = V.pick, money = V.money;
+const FREE = (V.country === "US" || V.country === "CA");                 // sync/Entitlement.FREE_COUNTRIES
+const S = k => { const o = STR[k]; if(!o) throw new Error("missing string " + k); return o[L] != null ? o[L] : o.en; };
+const fmtA = (s, a) => { let i = 0; return String(s).replace(/%%|%(\d+)\$[sd]|%[sd]/g, (m, n) => { if(m === "%%") return "%"; const v = n ? a[n-1] : a[i++]; return v == null ? "" : String(v); }); };
+const F = (k, ...a) => fmtA(S(k), a);
+/* Android plurals: pt-BR (CLDR) "one" for 0 and 1; es / en "one" for 1 */
+const PL = (k, n, ...a) => { const p = PLU[k][L] || PLU[k].en; const cat = L === "pt" ? ((n === 0 || n === 1) ? "one" : "other") : (n === 1 ? "one" : "other"); return fmtA(p[cat] || p.other, a.length ? a : [n]); };
+const LOCALE = {es:"es", pt:"pt-BR", en:"en-US"}[L];          // AppLanguage.kt: the app sets "es" / "pt-BR" / "en"
+const HINT = (es, pt, en) => pick({es:"Toca " + es, pt:"Toque em " + pt, en:"Tap " + en});
+const H1 = k => HINT(S(k), S(k), S(k));
+const ini = n => String(n).split(/\s+/).filter(Boolean).slice(0,2).map(p => p[0]).join("").toUpperCase();
+const DEV_OWNER = pick({es:"Tu teléfono", pt:"Seu celular", en:"Your phone"});
+
+/* ---------- icons (Material Icons paths) ---------- */
+const P = (path, cls) => `<svg class="${cls||"mi"}" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
+const IP = {
+  back:"M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z",
+  chev:"M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z",
+  down:"M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z",
+  expand:"M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z",
+  person:"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+  group:"M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
+  rlong:"M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z",
+  gear:"M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z",
+  cart:"M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z",
+  receipt:"M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z",
+  search:"M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z",
+  more:"M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z",
+  edit:"M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z",
+  add:"M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z",
+  check:"M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z",
+  close:"M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z",
+  phone:"M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z",
+  smartphone:"M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z",
+  tablet:"M21 4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 1.99-.9 1.99-2L23 6c0-1.1-.9-2-2-2zm-2 14H5V6h14v12z",
+  badge:"M20 7h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM9 12c.83 0 1.5.67 1.5 1.5S9.83 15 9 15s-1.5-.67-1.5-1.5S8.17 12 9 12zm3 6H6v-.75c0-1 2-1.5 3-1.5s3 .5 3 1.5V18zm1-9h-2V4h2v5zm5 7.5h-4V15h4v1.5zm0-3h-4V12h4v1.5z",
+  block:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zM4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9C4.63 15.55 4 13.85 4 12zm8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1C19.37 8.45 20 10.15 20 12c0 4.42-3.58 8-8 8z",
+  card:"M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z",
+  pct:"M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.0025 18.5832 18.59 4l1.41 1.41L5.4125 19.9932zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z",
+  tag:"M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z",
+  store:"M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z",
+  place:"M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z",
+  devices:"M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z",
+  lock:"M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z",
+  backup:"M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z",
+  bell:"M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z",
+  globe:"M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z",
+  account:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z",
+  feedback:"M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-7 12h-2v-2h2v2zm0-4h-2V6h2v4z",
+  buoy:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z",
+  trash:"M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z",
+  box:"M20 2H4c-1 0-2 .9-2 2v3.01c0 .72.43 1.34 1 1.69V20c0 1.1 1.1 2 2 2h14c.9 0 2-.9 2-2V8.7c.57-.35 1-.97 1-1.69V4c0-1.1-1-2-2-2zm-5 12H9v-2h6v2zm5-7H4V4h16v3z",
+  pin:"M12.65 10C11.83 7.67 9.61 6 7 6c-3.31 0-6 2.69-6 6s2.69 6 6 6c2.61 0 4.83-1.67 5.65-4H17v4h4v-4h2v-4H12.65zM7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z",
+  bksp:"M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"
+};
+const I = k => P(IP[k]);
+
+/* ---------- the trade's drawn icon and its family tile (tradepicker/TradeCatalogue.kt TRADE_VISUAL; PaperColor.kt Belleza /
+   Mascotas / Vehiculos soft = the light --tile; res/drawable/ic_drawn_*.xml converted to SVG) ---------- */
+const TRADE_SVG = {
+  peluqueria:'<svg viewBox="0 0 24 24"><path d="M7.3 12.8l1.6 7.1c.1.6.7 1 1.3.9l.9-.2c.6-.1 1-.7.9-1.3l-1.3-6.9" fill="#4E4A48" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.6,6.4 H17.2 A1.4,1.4 0 0 1 18.6,7.8 V10.2 A1.4,1.4 0 0 1 17.2,11.6 H9.6 A1.4,1.4 0 0 1 8.2,10.2 V7.8 A1.4,1.4 0 0 1 9.6,6.4 Z" fill="#E86A8E" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.8,9 A4.6,4.6 0 1 0 13,9 A4.6,4.6 0 1 0 3.8,9 Z" fill="#E86A8E" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.6,9 A1.8,1.8 0 1 0 10.2,9 A1.8,1.8 0 1 0 6.6,9 Z" fill="#EDF1F4" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M19.2,5.6 H19.8 A1,1 0 0 1 20.8,6.6 V11.4 A1,1 0 0 1 19.8,12.4 H19.2 A1,1 0 0 1 18.2,11.4 V6.6 A1,1 0 0 1 19.2,5.6 Z" fill="#B0B4B8" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21.8 7.4h1M21.8 10.6h1" fill="none" stroke="#3A2A1F" stroke-width="1.1" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  unas:'<svg viewBox="0 0 24 24"><path d="M7.2,7.4 H16.8 A1.8,1.8 0 0 1 18.6,9.2 V18.8 A1.8,1.8 0 0 1 16.8,20.6 H7.2 A1.8,1.8 0 0 1 5.4,18.8 V9.2 A1.8,1.8 0 0 1 7.2,7.4 Z" fill="#D9422E" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.4 7.4c1.6-2.4 3.4-3.6 5.6-3.6s4 1.2 5.6 3.6" fill="none" stroke="#3A2A1F" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.6,6.4 H18.4 A1,1 0 0 1 19.4,7.4 V7.8 A1,1 0 0 1 18.4,8.8 H5.6 A1,1 0 0 1 4.6,7.8 V7.4 A1,1 0 0 1 5.6,6.4 Z" fill="#B0B4B8" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  veterinaria:'<svg viewBox="0 0 24 24"><path d="M12 12.4c2.8 0 5.2 2.6 5.2 4.8 0 1.8-1.4 2.6-2.8 2.6-1 0-1.6-.6-2.4-.6s-1.4.6-2.4.6c-1.4 0-2.8-.8-2.8-2.6 0-2.2 2.4-4.8 5.2-4.8z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/><g transform="rotate(-20 6.8 10.4)"><path d="M5.2,10.4 A1.6,2.1 0 1 0 8.4,10.4 A1.6,2.1 0 1 0 5.2,10.4 Z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2"/></g><g transform="rotate(-8 10.1 6.8)"><path d="M8.5,6.8 A1.6,2.2 0 1 0 11.7,6.8 A1.6,2.2 0 1 0 8.5,6.8 Z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2"/></g><g transform="rotate(8 13.9 6.8)"><path d="M12.3,6.8 A1.6,2.2 0 1 0 15.5,6.8 A1.6,2.2 0 1 0 12.3,6.8 Z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2"/></g><g transform="rotate(20 17.2 10.4)"><path d="M15.6,10.4 A1.6,2.1 0 1 0 18.8,10.4 A1.6,2.1 0 1 0 15.6,10.4 Z" fill="#8E5A34" stroke="#3A2A1F" stroke-width="1.2"/></g></svg>',
+  "taller-motos":'<svg viewBox="0 0 24 24"><path d="M2.6,16 A3.4,3.4 0 1 0 9.4,16 A3.4,3.4 0 1 0 2.6,16 Z" fill="#4E4A48" stroke="#3A2A1F" stroke-width="1.2"/><path d="M14.6,16 A3.4,3.4 0 1 0 21.4,16 A3.4,3.4 0 1 0 14.6,16 Z" fill="#4E4A48" stroke="#3A2A1F" stroke-width="1.2"/><path d="M4.8,16 A1.2,1.2 0 1 0 7.2,16 A1.2,1.2 0 1 0 4.8,16 Z" fill="#B0B4B8"/><path d="M16.8,16 A1.2,1.2 0 1 0 19.2,16 A1.2,1.2 0 1 0 16.8,16 Z" fill="#B0B4B8"/><path d="M6 16l4.2-5.6h4.4l3.4 5.6" fill="none" stroke="#3A2A1F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M8.8 10.4h6.4c.6 0 1.2-.5 1.2-1.2 0-.6-.5-1.2-1.2-1.2H10c-.7 0-1.2.6-1.2 1.2z" fill="#D9422E" stroke="#3A2A1F" stroke-width="1.2" stroke-linejoin="round"/><path d="M15.8 9.4l1.4-2.8h2.2" fill="none" stroke="#3A2A1F" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+};
+const TRADE_TILE = {peluqueria:"#F8E8EC", unas:"#F8E8EC", veterinaria:"#F0F2E3", "taller-motos":"#E8EBF4"};
+/* the trade's category: every services shop is born with the hidden system category "Otros servicios" (data/repo/SeedStore.kt
+   ensureServicesSystemCategory), so the trade category the setup makes is the 2nd row: CategoryChipPalette[2 % 10] (ui/theme/
+   Color.kt:232) = #81C784; "Todos" = CategoryChipNeutral #607D8B (HomeScreen.kt:2005 getCategoryBaseColor) */
+const CAT_COLOR = "#81C784", ALL_COLOR = "#607D8B";
+const hexA = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+
+/* ---------- pieces ---------- */
+// KEYS: mamaship_tab_register,sx_agenda,home_tab_my_business,rp_strip_support,rp_strip_support_sub,rp_my_title,rp_sheet_my_reports_none
+/* SumaTopBar (ui/components/SumaTopBar.kt): Material 64 dp, back arrow, titleLarge 22 bold; paper = 52 dp, 40 dp round button, Fredoka */
+const topbar = (title, o) => { o = o || {};
+  return `<div class="sv-top"><span class="ib" data-t="${o.backT||"back"}">${o.close?I("close"):I("back")}</span><b>${esc(title)}</b>${o.action||""}</div>`; };
+const ptop = (title, o) => { o = o || {};
+  return `<div class="sv-ptop"><span class="pib" data-t="${o.backT||"back"}">${I("back")}</span><b>${esc(title)}</b>${o.action||""}</div>`; };
+/* SupportStrip.kt: two equal halves, the Support badge in the services accent */
+const strip = () => `<div class="sv-strip"><div class="h"><span class="bd">${I("buoy")}</span><div><b>${esc(S("rp_strip_support"))}</b><small>${esc(S("rp_strip_support_sub"))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(S("rp_my_title"))}</b><small>${esc(S("rp_sheet_my_reports_none"))}</small></div>${I("chev")}</div></div>`;
+const sw = (on, tag) => `<span class="sv-sw${on?" on":""}"${tag?` data-t="${tag}"`:""}><i></i></span>`;
+const toast = txt => `<div class="sv-toast">${esc(txt)}</div>`;
+/* the bottom NavigationBar (PlatataApp.kt:503-722, Material3 defaults 80 dp, flag in a 32 dp circle) */
+const navOwner = (on, o) => { o = o || {};
+  return `<div class="mnav">
+  <div class="${on==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${I("cart")}</span>${esc(S("mamaship_tab_register"))}</div>
+  <div class="${on==="agenda"?"on":""}" data-t="nav-agenda"><span class="pill">${I("receipt")}</span>${esc(S("sx_agenda"))}</div>
+  <div class="${on==="biz"?"on":""}" data-t="${o.flagTag||"flag"}"><span class="pill"><span class="flagc${on==="biz"?" lit":""}">${V.flag()}</span></span>${esc(S("home_tab_my_business"))}</div></div>`; };
+const navMini = () => `<div class="mnav">
+  <div class="on"><span class="pill">${I("cart")}</span>${esc(S("mamaship_tab_register"))}</div>
+  <div><span class="pill"><span class="flagc">${V.flag()}</span></span>${esc(S("home_tab_my_business"))}</div></div>`;
+/* a full-width card between two moments (not an app screen) */
+const timeCard = (big, small, tag) => `<div class="sv-time"${tag?` data-t="${tag}"`:""}><div><b>${esc(big)}</b>${small?`<small>${esc(small)}</small>`:""}</div></div>`;
+
+/* ---------- the business panel of a SERVICES shop (HomeScreen.kt:1420-1830) ---------- */
+// KEYS: workspace_register_open,workspace_register_sales,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,more_customers_title,invoices_title,invoices_row_first,more_team_title,workspace_full_reports,scan_row_reports_today_net,scan_row_reports_today,settings_title,panel_settings_row_sub
+// PLURALS: home_clientes_count,home_equipo_count_phones,home_equipo_on_phones
+/* the money the register card and Reportes show: this morning's sales of the demo business (kit: C.sales of V.today) */
+const TODAY_SALES = C.sales.filter(s => s.d === V.today).reduce((a, s) => a + s.total, 0);
+function panelRow(tag, icon, title, sub, o){ o = o || {};
+  return `<div class="sv-wr${o.cls?" "+o.cls:""}"${tag?` data-t="${tag}"`:""}><span class="ic">${icon}${o.dot?'<i class="pdot"></i>':""}</span><div class="tx"><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>${o.trail||`<span class="ch">${I("chev")}</span>`}</div>`; }
+/* p = {team, phones, payDot, scroll} */
+function panel(p){ p = p || {};
+  const team = p.team != null ? p.team : C.staff.length, phones = p.phones || 0;
+  const reg = `<div class="sv-wr reg" data-t="reg-card" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(S("workspace_register_open"))}</b><small style="color:rgba(46,125,50,.7)">${esc(S("workspace_register_sales"))}</small></div><b class="amt">${money(TODAY_SALES)}</b></div>`;
+  return `<div class="sv-panel"><div class="ph"><b>${esc(V.place)}</b>${I("down")}</div><div class="pl"><div class="pin" style="transform:translateY(calc(var(--u)*${-(p.scroll||0)}))">
+    ${reg}
+    ${panelRow("row-online", I("cart"), S("sell_online_title"), S("sell_online_row_off"), {trail:`<span class="pill0">${esc(S("sell_online_pill_off"))}</span>`})}
+    <div class="eh">${esc(S("panel_heading_every_day"))}</div>
+    ${panelRow("row-clients", I("person"), S("more_customers_title"), PL("home_clientes_count", C.clients.length))}
+    ${panelRow("row-invoices", I("rlong"), S("invoices_title"), S("invoices_row_first"))}
+    ${panelRow("row-team", I("group"), S("more_team_title"), PL("home_equipo_count_phones", team, team, PL("home_equipo_on_phones", phones)), {dot:p.payDot})}
+    ${panelRow("row-reports", I("rlong"), S("workspace_full_reports"), F(FREE ? "scan_row_reports_today" : "scan_row_reports_today_net", money(TODAY_SALES)))}
+    <hr>
+    ${panelRow("settings", I("gear"), S("settings_title"), S("panel_settings_row_sub"))}
+  </div></div></div>` + navOwner("biz"); }
+
+/* ---------- the owner's Settings page (SettingsHubScreen.kt; SettingsHubRules: services add "Dónde atiendes") ---------- */
+// KEYS: settings_hub_group_getting_paid,settings_hub_payment_methods,settings_hub_taxes,disc_title_with_combos,settings_hub_receipts,settings_hub_receipts_sub,receipt_layout_detailed,settings_hub_receipts_num_auto,settings_hub_group_your_business,settings_hub_business_info,settings_where_you_work,more_where_subtitle,workspace_registers_and_printers,settings_hub_group_this_phone,settings_security_title,settings_hub_security_on_delete,settings_hub_backup,settings_hub_backup_last,notif_title,notif_hub_sub,settings_hub_language_appearance,settings_hub_language_sub,theme_light,settings_section_account,my_account_title,rp_my_title,rp_my_row_sub
+/* BackupDateFormat.dateTime: DateFormat MEDIUM date + SHORT time in the phone language (this morning's copy) */
+const backupWhen = () => new Intl.DateTimeFormat(LOCALE, {dateStyle:"medium", timeStyle:"short"}).format(new Date(2026, 9, 22, 7, 30));
+const LANGNAME = {es:"Español", pt:"Português (Brasil)", en:"English"};
+function hub(o){ o = o || {};
+  const g = t => `<div class="sv-hg">${esc(t)}</div>`;
+  const row = (tag, ic, t, s) => `<div class="sv-hr"${tag?` data-t="${tag}"`:""}><span class="ic">${I(ic)}</span><div class="tx"><b>${esc(t)}</b>${s?`<small>${esc(s)}</small>`:""}</div>${I("chev")}</div>`;
+  return topbar(S("settings_title")) + `<div class="sv-scroll"><div class="in sv-hub" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+    ${g(S("settings_hub_group_getting_paid"))}
+    ${row("hub-pay","card",S("settings_hub_payment_methods"))}
+    ${row("hub-taxes","pct",S("settings_hub_taxes"))}
+    ${row("hub-discounts","tag",S("disc_title_with_combos"))}
+    ${row("hub-receipts","receipt",S("settings_hub_receipts"),F("settings_hub_receipts_sub",S("receipt_layout_detailed"),S("settings_hub_receipts_num_auto")))}
+    ${g(S("settings_hub_group_your_business"))}
+    ${row("hub-info","store",S("settings_hub_business_info"))}
+    ${row("hub-where","place",S("settings_where_you_work"),S("more_where_subtitle"))}
+    ${row("hub-conn","devices",S("workspace_registers_and_printers"))}
+    ${g(S("settings_hub_group_this_phone"))}
+    ${row("hub-sec","lock",S("settings_security_title"),S("settings_hub_security_on_delete"))}
+    ${row("hub-backup","backup",S("settings_hub_backup"),F("settings_hub_backup_last",backupWhen()))}
+    ${row("hub-notif","bell",S("notif_title"),S("notif_hub_sub"))}
+    ${row("hub-lang","globe",S("settings_hub_language_appearance"),F("settings_hub_language_sub",LANGNAME[L],S("theme_light")))}
+  </div></div>` + strip(); }
+
+/* ---------- the services owner's Caja (HomeScreen.kt) ---------- */
+// KEYS: home_tab_services,home_tab_products,common_edit,items_filter_all,items_price_from,items_price_unset,opt_min,scan_row_manual,services_action_agendar,services_action_crear_orden,common_charge,combo_label_offer_percent
+// PLURALS: home_current_sale_services
+/* the library lists viewModel.products = ProductDao.getAllProducts "ORDER BY name ASC" (PosDao.kt:334; SQLite BINARY), split by
+   type (sync/ServicesLibrarySplit.kt): with "Todos" picked the grid is A-Z, not the setup's order */
+const byName = (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
+const SERVICES = C.services.slice().sort(byName), PRODUCTS = C.products.slice().sort(byName);
+/* ServiceActionLabel.secondActionLabel: "Agendar" for beauty / pets, "Crear orden" for a workshop (TradeFamily ORDEN) */
+const BOOK_WORD = () => S(V.isOrder ? "services_action_crear_orden" : "services_action_agendar");
+/* the price a tile prints (ProductCard.kt:96-107): FIXED -> the price; FROM -> "Desde" + the price of the FIRST stored variation
+   (ProductLibraryView.kt:331 takes variations.find{}, ORDER BY id = the catalogue's choice order, not the lowest); no price ->
+   "Sin precio" */
+function tilePrice(s){
+  if(!s.choices.length) return s.price != null ? money(s.price) : S("items_price_unset");
+  const first = s.choices[0].price;
+  return first ? F("items_price_from", money(first)) : S("items_price_unset");
+}
+/* CU-21 ServiceTileBody: icon box 40 r12 in the trade family's tile, name bodyLarge 500 (2 lines), price bold + "N min";
+   the combo pill (SVC-4 item 48) in the free TOP-RIGHT corner, SumaComboGreen #10B981 */
+function svcTile(s, o){ o = o || {};
+  const pillTxt = o.combo ? F("combo_label_offer_percent", o.combo) : "";
+  return `<div class="sv-tile${o.hl?" hl":""}" data-t="tile-${s.id}"><span class="icb" style="background:${TRADE_TILE[V.biz]}">${TRADE_SVG[V.biz]}</span>
+    <b>${esc(s.name)}</b><div class="pr"><span data-fit="16">${esc(tilePrice(s))}</span>${s.min?`<small>${s.min} ${esc(S("opt_min"))}</small>`:""}</div>
+    ${o.combo?`<span class="cpill">${esc(pillTxt)}</span>`:""}</div>`; }
+/* the Mini POS / plain tile (ProductCard.kt plain branch: square, category tint 12 %, border 35 %, name titleMedium bold, price) —
+   the staff phone passes no serviceFacts (MiniPosSellScreen.kt:647-657), so its services wear the plain tile */
+function plainTile(s){
+  return `<div class="sv-ptile" data-t="tile-${s.id}" style="border-color:${hexA(CAT_COLOR,.35)}"><div class="in" style="background:${hexA(CAT_COLOR,.12)}"><b>${esc(s.name)}</b><span>${esc(tilePrice(s))}</span></div></div>`; }
+const chips = (cats) => `<div class="sv-chips">${cats.map((c,i)=>{
+  const col = i===0 ? ALL_COLOR : CAT_COLOR, on = i===0;
+  const st = on ? `background:${hexA(col,.22)};border:calc(var(--u)*1.5) solid ${col};color:${col}` : `background:${hexA(col,.05)};border:1px solid ${hexA(col,.3)};color:var(--m-onv)`;
+  return `<span style="${st}">${on?I("check"):""}${esc(c)}</span>`; }).join("")}</div>`;
+/* o = {tab, cartCount, total, combo:{sid, pct}, hl, scroll, sheet (html drawn over)} */
+function caja(o){ o = o || {};
+  const tabs = [`${S("home_tab_services")} · ${SERVICES.length}`, `${S("home_tab_products")} · ${PRODUCTS.length}`];
+  const tabRow = `<div class="sv-tabs">${tabs.map((t,i)=>`<span class="${i===(o.tab||0)?"on":""}">${esc(t)}</span>`).join("")}</div>`;
+  const edit = `<div class="sv-editrow"><span>${I("edit")}${esc(S("common_edit"))}</span></div>`;
+  const grid = `<div class="sv-grid"><div class="in" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">${SERVICES.map(s => svcTile(s, {combo: o.combo && o.combo.sid === s.id ? o.combo.pct : 0, hl: o.hl === s.id})).join("")}</div></div>`;
+  const n = o.cartCount || 0, total = o.total || 0;
+  const foot = `<div class="sv-foot"><div class="lk"><span>${esc(S("scan_row_manual"))}</span></div>
+    ${n ? `<div class="cur" data-t="cur-sale"><span>${esc(PL("home_current_sale_services", n))}</span><i>›</i></div>` : ""}
+    <div class="pair"><span class="sec${n?"":" off"}">${esc(BOOK_WORD())}</span><span class="pri${total?"":" off"}" data-t="charge"><small>${esc(F("common_charge","").trim())}</small> ${esc(money(total))}</span></div></div>`;
+  return `<div class="sv-caja">${tabRow}${edit}${chips([S("items_filter_all"), V.tradeName])}${grid}${foot}</div>` + navOwner("caja") + (o.sheet || ""); }
+
+/* ---------- the option sheet (OptionSelectionSheet.kt) ---------- */
+// KEYS: opt_add_to_sale,common_add,deal_choice_add_deal,opt_ask_at_till_row,opt_per_unit_each,home_variation_choose_one
+/* the service's option sets, as the setup writes them (GuideActions.ensureResearchedOptions + ui/ResearchedOptionStates.kt): every
+   "Lo que trae" (INCLUIDO) and every "Cobra más" (AGREGAR) is ITS OWN set, displayName = its name, one value with the same name;
+   an included one rides at 0 (switch ON), a priced add-on is OFF, an add-on with no price asks at the till, a per-unit one says "por …" */
+function optionSets(s){
+  return s.included.map(x => ({name:x.name, price:0, inc:true})).concat(s.extras.map(x => ({name:x.name, price:x.price, per:x.per, ask:x.price == null})));
+}
+function optRowText(set){
+  if(set.inc) return set.name;
+  if(set.ask) return `${set.name} · ${S("opt_ask_at_till_row")}`;
+  if(set.per) return `${set.name} · ` + F("opt_per_unit_each", money(set.price), set.per);
+  return `${set.name} · +${money(set.price)}`;
+}
+/* o = {base (the line price), deal (show "Agregar oferta"), scroll, addTag, dealTag} */
+function optSheet(s, o){ o = o || {};
+  const sets = optionSets(s);
+  const body = sets.map(set => `<div class="os-h">${esc(set.name)}</div><div class="os-r"><span>${esc(optRowText(set))}</span>${sw(!!set.inc)}</div><hr>`).join("");
+  const total = o.base;
+  const add = `<div class="sv-btn pri" data-t="${o.addTag||"opt-add"}">${esc(total ? F("opt_add_to_sale", money(total)) : S("common_add"))}</div>`;
+  const deal = o.deal ? `<div class="sv-btn sec" data-t="${o.dealTag||"opt-deal"}">${esc(S("deal_choice_add_deal"))}</div>` : "";
+  return `<div class="sv-scrim"></div><div class="sv-sheet"><i class="hd"></i><div class="sc"><div class="in" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+    <h3>${esc(s.name)}</h3>${body}${add}${deal}</div></div></div>`; }
+/* VariationSelectionSheet.kt: "Elige uno" (labelMedium bold primary), the name (headlineMedium ExtraBold), a row per choice */
+function varSheet(s, tagPrefix){
+  return `<div class="sv-scrim"></div><div class="sv-sheet"><i class="hd"></i><div class="vs"><small>${esc(S("home_variation_choose_one"))}</small><h2>${esc(s.name)}</h2>
+    ${s.choices.map((c,i)=>`<div class="vr" data-t="${tagPrefix||"var"}-${i}"><b>${esc(c.name)}</b><span>${esc(c.price ? money(c.price) : S("opt_ask_at_till_row"))}</span></div>`).join("")}</div></div>`; }
+
+/* ---------- the paper Connections-style pieces are page-specific; the dialog (SumaDialog = M3 AlertDialog) is shared ---------- */
+// KEYS: common_ok,common_save,common_cancel,common_back
+const dlg = (title, body, ok, okTag, o) => { o = o || {};
+  return `<div class="sv-dscrim"><div class="sv-dlg"><h3>${esc(title)}</h3><p>${body}</p><div class="acts">${o.no?`<span>${esc(o.no)}</span>`:""}<span data-t="${okTag||"ok"}">${esc(ok)}</span></div></div></div>`; };
+
+const SV_CSS = `
+.mat .sv-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff;gap:calc(var(--u)*4)}
+.mat .sv-top .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .sv-top>b{flex:1;min-width:0;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:calc(var(--u)*4)}
+.mat .sv-top .act{font-size:calc(var(--u)*14);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
+.mat .sv-ptop{height:calc(var(--u)*52);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*16);flex:0 0 auto;background:#FBFAF7}
+.mat .sv-ptop .pib{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;display:grid;place-items:center;color:#17181B;flex:0 0 auto}
+.mat .sv-ptop .pib svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .sv-ptop>b{flex:1;min-width:0;font:600 calc(var(--u)*20)/1.2 Fredoka,Roboto,sans-serif;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-scroll{flex:1;min-height:0;overflow:hidden;position:relative}
+.mat .sv-scroll>.in{transition:transform .5s ease}
+.mat .sv-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .sv-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .sv-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .sv-strip .h>div{flex:1;min-width:0}
+.mat .sv-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#7C55E0;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .sv-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .sv-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .sv-sw{display:inline-block;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #79747E;background:#E5E5EA;position:relative;flex:0 0 auto;box-sizing:border-box;transition:background .2s}
+.mat .sv-sw i{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E;transition:all .2s}
+.mat .sv-sw.on{background:var(--m-on);border-color:var(--m-on)}
+.mat .sv-sw.on i{left:calc(var(--u)*22);top:calc(var(--u)*2);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.mat .sv-toast{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(var(--u)*100);background:#323232;color:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*10) calc(var(--u)*18);font-size:calc(var(--u)*14);z-index:20;max-width:86%;text-align:center}
+.mat .mnav .flagc{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:var(--m-sv);display:grid;place-items:center;overflow:hidden}
+.mat .mnav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.mat .mnav .flagc svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
+.mat .mnav>div.on .pill{background:var(--m-ovar)}
+.mat .mnav>div:last-child .pill{background:none!important}
+.sv-time{position:absolute;inset:0;background:#F4EBDD;display:grid;place-items:center;z-index:16;text-align:center;font-family:Roboto,system-ui,sans-serif;color:#3A2A1F;padding:0 8%}
+.sv-time b{display:block;font:600 calc(var(--u)*30) Roboto,system-ui,sans-serif}
+.sv-time small{display:block;margin-top:calc(var(--u)*10);font:400 calc(var(--u)*17)/1.35 Roboto,system-ui,sans-serif;color:#6B5848;max-width:calc(var(--u)*320)}
+/* panel */
+.mat .sv-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.mat .sv-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF;flex:0 0 auto}
+.mat .sv-panel .ph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-panel .ph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.mat .sv-panel .pl{flex:1;min-height:0;overflow:hidden}
+.mat .sv-panel .pin{display:flex;flex-direction:column;gap:calc(var(--u)*8);transition:transform .5s ease;padding-bottom:calc(var(--u)*16)}
+.mat .sv-panel hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0;flex:0 0 auto}
+.mat .sv-panel .eh{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);letter-spacing:.5px}
+.mat .sv-wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);color:var(--m-on);flex:0 0 auto}
+.mat .sv-wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);position:relative;flex:0 0 auto}
+.mat .sv-wr .ic .pdot{position:absolute;right:calc(var(--u)*-4);top:calc(var(--u)*-4);width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%;background:#FF6D00}
+.mat .sv-wr .tx{flex:1;min-width:0}
+.mat .sv-wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(var(--u)*16)}
+.mat .sv-wr .ch svg{fill:var(--m-onv)}
+.mat .sv-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
+.mat .sv-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .sv-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+/* settings hub */
+.mat .sv-hub{padding:0 calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .sv-hg{font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);padding:calc(var(--u)*16) calc(var(--u)*4) 0;letter-spacing:.5px}
+.mat .sv-hr{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .sv-hr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .sv-hr .tx{flex:1;min-width:0}
+.mat .sv-hr .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700;line-height:calc(var(--u)*24)}
+.mat .sv-hr .tx small{display:block;font-size:calc(var(--u)*12);color:var(--m-onv);line-height:calc(var(--u)*16)}
+.mat .sv-hr>svg{fill:var(--m-onv)}
+/* the services Caja */
+.mat .sv-caja{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff}
+.mat .sv-tabs{flex:0 0 auto;display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar)}
+.mat .sv-tabs span{flex:1;display:grid;place-items:center;font-size:calc(var(--u)*14);color:var(--m-onv);position:relative;letter-spacing:.1px}
+.mat .sv-tabs span.on{color:var(--m-on);font-weight:700}
+.mat .sv-tabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.mat .sv-editrow{flex:0 0 auto;display:flex;justify-content:flex-end;padding:0 calc(var(--u)*16)}
+.mat .sv-editrow span{display:flex;align-items:center;gap:calc(var(--u)*4);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .sv-editrow svg{width:calc(var(--u)*18);height:calc(var(--u)*18)}
+.mat .sv-chips{flex:0 0 auto;display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*12) calc(var(--u)*16);overflow:hidden}
+.mat .sv-chips span{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*6);padding:calc(var(--u)*8) calc(var(--u)*16);border-radius:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:600;line-height:calc(var(--u)*20);white-space:nowrap}
+.mat .sv-chips span svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:currentColor}
+.mat .sv-grid{flex:1;min-height:0;overflow:hidden;margin-top:calc(var(--u)*8)}
+.mat .sv-grid>.in{padding:calc(var(--u)*16);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(var(--u)*8);align-items:start;transition:transform .5s ease}
+.mat .sv-tile{position:relative;border:calc(var(--u)*1.5) solid var(--m-ovar);border-radius:calc(var(--u)*12);background:#fff;padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8);box-shadow:0 calc(var(--u)*1) calc(var(--u)*2) rgba(0,0,0,.08)}
+.mat .sv-tile.hl{box-shadow:0 0 0 calc(var(--u)*3) rgba(124,85,224,.35)}
+.mat .sv-tile .icb{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center}
+.mat .sv-tile .icb svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
+.mat .sv-tile>b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:500;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.mat .sv-tile .pr{display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--u)*6)}
+.mat .sv-tile .pr span{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
+.mat .sv-tile .pr small{font-size:calc(var(--u)*12);color:var(--m-onv);white-space:nowrap;flex:0 0 auto}
+.mat .sv-tile .cpill{position:absolute;top:calc(var(--u)*6);right:calc(var(--u)*6);max-width:calc(100% - var(--u)*12);background:#10B981;color:#fff;border-radius:calc(var(--u)*6);padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*11);line-height:calc(var(--u)*14);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-ptile{aspect-ratio:1;border-radius:calc(var(--u)*12);border:calc(var(--u)*1.5) solid;overflow:hidden;background:#fff}
+.mat .sv-ptile .in{height:100%;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:space-between}
+.mat .sv-ptile b{font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.mat .sv-ptile span{font-size:calc(var(--u)*16);font-weight:500;color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-foot{flex:0 0 auto;padding:calc(var(--u)*12) calc(var(--u)*16);background:#fff}
+.mat .sv-foot .lk{display:flex}.mat .sv-foot .lk span{height:calc(var(--u)*40);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .sv-foot .cur{min-height:calc(var(--u)*44);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .sv-foot .cur i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.mat .sv-foot .pair{display:flex;gap:calc(var(--u)*12)}
+.mat .sv-foot .pair span{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*5);font-size:calc(var(--u)*18);font-weight:600;white-space:nowrap;padding:0 calc(var(--u)*12)}
+.mat .sv-foot .pair span small{font-size:calc(var(--u)*15);font-weight:600}
+.mat .sv-foot .pair .pri{background:var(--m-on);color:#fff}
+.mat .sv-foot .pair .sec{border:1px solid var(--m-outline);color:var(--m-on)}
+.mat .sv-foot .pair .pri.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .sv-foot .pair .sec.off{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+/* sheets and dialogs */
+.mat .sv-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:14}
+.mat .sv-sheet{position:absolute;left:0;right:0;bottom:0;z-index:15;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;max-height:92%;display:flex;flex-direction:column}
+.mat .sv-sheet.full{top:calc(var(--u)*44)}
+.mat .sv-sheet .hd{display:block;width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#79747E;margin:calc(var(--u)*22) auto calc(var(--u)*14);flex:0 0 auto}
+.mat .sv-sheet .sc{flex:0 1 auto;min-height:0;overflow:hidden}
+.mat .sv-sheet .sc>.in{padding:0 calc(var(--u)*16) calc(var(--u)*24);transition:transform .5s ease}
+.mat .sv-sheet h3{margin:0 0 calc(var(--u)*12);font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on)}
+.mat .sv-sheet .os-h{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:500;color:var(--m-onv);margin-bottom:calc(var(--u)*6)}
+.mat .sv-sheet .os-r{display:flex;align-items:center;gap:calc(var(--u)*8);min-height:calc(var(--u)*48)}
+.mat .sv-sheet .os-r span{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
+.mat .sv-sheet hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*10) 0}
+.mat .sv-btn{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center;margin-top:calc(var(--u)*8)}
+.mat .sv-btn.pri{background:var(--m-on);color:#fff}
+.mat .sv-btn.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .sv-btn.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38);border:0}
+.mat .sv-sheet .vs{padding:calc(var(--u)*16) calc(var(--u)*24) calc(var(--u)*24)}
+.mat .sv-sheet .vs small{display:block;font-size:calc(var(--u)*12);font-weight:700;color:var(--m-on);margin-bottom:calc(var(--u)*4)}
+.mat .sv-sheet .vs h2{margin:0 0 calc(var(--u)*20);font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:800;color:var(--m-on)}
+.mat .sv-sheet .vr{display:flex;align-items:center;justify-content:space-between;gap:calc(var(--u)*8);padding:calc(var(--u)*16);border:1px solid var(--m-ovar);border-radius:calc(var(--u)*16);background:rgba(242,242,247,.3);margin-bottom:calc(var(--u)*10);box-shadow:0 calc(var(--u)*1) calc(var(--u)*2) rgba(0,0,0,.06)}
+.mat .sv-sheet .vr b{flex:1;font-size:calc(var(--u)*16);font-weight:600;color:var(--m-on)}
+.mat .sv-sheet .vr span{font-size:calc(var(--u)*18);font-weight:700;color:var(--m-on)}
+.mat .sv-dscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);z-index:15;display:grid;place-items:center}
+.mat .sv-dlg{width:calc(var(--u)*312);background:#fff;border-radius:calc(var(--u)*28);padding:calc(var(--u)*24)}
+.mat .sv-dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:calc(var(--u)*32);color:var(--m-on)}
+.mat .sv-dlg p{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .sv-dlg .acts{display:flex;justify-content:flex-end;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24)}
+.mat .sv-dlg .acts span{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .caret{display:inline-block;width:2px;height:1.1em;background:var(--m-on);vertical-align:-.15em;margin-left:1px;animation:svblink 1s steps(1) infinite}
+@keyframes svblink{50%{opacity:0}}
+.mat .sv-hl{animation:svhl 1.6s ease}
+@keyframes svhl{0%{background:#E6DDFB}100%{background:transparent}}
+`;
+const svStyle_ = document.createElement("style"); svStyle_.textContent = SV_CSS; document.head.appendChild(svStyle_);
+/* a slid list (transform .5s): once it stops, ask the engine to put the ring on the target again (it listens to resize) */
+document.addEventListener("transitionend", e => { if(e.propertyName === "transform") window.dispatchEvent(new Event("resize")); });
+/* ShrinkToFitText (ui/components/ShrinkToFitText.kt): one line, the font steps down 1 sp at a time to 12 sp, then "…" */
+function fitShrink(){
+  document.querySelectorAll('#app [data-fit]').forEach(el => {
+    let s = +el.dataset.fit; el.style.fontSize = `calc(var(--u)*${s})`;
+    while(el.scrollWidth > el.clientWidth + 0.5 && s > 12){ s--; el.style.fontSize = `calc(var(--u)*${s})`; }
+  });
+}
+setTimeout(() => { const app = document.getElementById("app"); if(app) new MutationObserver(fitShrink).observe(app, {childList:true, subtree:true}); fitShrink(); }, 0);
+/* demo plumbing only (not an app screen): each tap keeps the engine busy until its last scheduled change has settled */
+function settled(steps){
+  return steps.map(s => Object.assign({}, s, {tap(st, E){
+    let last = 0;
+    const E2 = Object.create(E);
+    E2.after = (ms, fn) => { last = Math.max(last, ms); return E.after(ms, fn); };
+    E2.type = (key, text, done, ms) => { last = Math.max(last, (String(text).length + 1) * (ms || 45)); return E.type(key, text, done, ms); };
+    s.tap(st, E2);
+    E.after(last + 450, () => {});
+  }}));
+}
+/* how far (dp) a scrolled column must move so that `sel` sits inside `box` (both CSS selectors under #app) */
+function scrollNeed(sel, box, margin){
+  const el = document.querySelector('#app ' + sel), pg = document.querySelector('#app ' + box); if(!el || !pg) return 0;
+  const u = document.getElementById('screen').getBoundingClientRect().width / 412;
+  const over = el.getBoundingClientRect().bottom - pg.getBoundingClientRect().bottom + (margin == null ? 16 : margin) * u;
+  return over > 0 ? Math.ceil(over / u) : 0;
+}
+/* ===== end VS common ===== */
+
+
+/* ===== VS18 ===== */
+/* VS18 "Combos" as a SERVICES business (Peluquería; ?biz= works for the other three). The owner builds a two-service combo
+   ("Corte de dama + Cepillado", 10 % off) and sells it at the till: the second service ASKS its choice (SVC-1 item 3).
+   Services use the DEAL builder, one named service per slot (ServicesRules: combosEngineRuns, usesDealWording,
+   discountsScreenHasComboTab), never the restaurant's category builder. Owner phone. Screens (app/src/main/java/com/example/):
+   host            ui/screens/discounts/DiscountsManagementScreen.kt:194-260 (SumaTopBar disc_title_with_combos + "+ Nuevo"; services
+                   = three tabs Descuentos · Combos · Cargos; the Combos tab = DealListBody, empty layout combo_tab_empty_* with
+                   SumaButton "Crear combo"). Reached from Mis servicios › "Combos" (opens on this tab, startOnCombos) or
+                   Configuración › "Descuentos y combos". LEVEL_2 route: the support strip shows.
+   builder         ui/screens/combos/NewDealScreen.kt:225-330 (SumaTopBar deal_new_title; lede deal_pick_lede; three SumaCards:
+                   overline labelSmall bold "1 · Principal" / "2 · Acompañante" / "TERCERA COSA (OPCIONAL)", body titleMedium
+                   "Escoge una de las tuyas" or the name bold + "Quitar"; picked = ModifierActiveBg #EEF4EC / border #CFE3D2;
+                   ComboBottomButton "Siguiente", off until slots 1 and 2 are filled)
+   pick            NewDealScreen.kt:337-398 (title deal_pick_first / deal_pick_second; SumaListItem per product A-Z (services AND
+                   products, used ones hidden); subtitle comboPickPriceText = the price, "Desde" the lowest when choices differ (SVC-4
+                   item 48))
+   summary         NewDealScreen.kt:400-480 + ComboSummaryParts.kt (title deal_summary_title "Tu combo"; "Nombre de la oferta" = the
+                   names joined " + "; green card of slots (name + lowest price, "Sin configurar"); ComboDiscountCard: switch,
+                   discountPercent starts "10" (:182), chips 5/10/15 % + an 80 dp box, caption; ComboFreeOptionsHint; "Guardar")
+   list row        DealListScreen.kt:110-130 + ComboRowCard.kt (name bold; description = ComboSummaryLine "2 Peluquería" (counts per
+                   category); amber "10% DESCUENTO"; "ACTIVO"; pause switch; red trash)
+   till            HomeScreen.kt services Caja; tile pill combo_label_offer_percent (ProductCard.kt:201-240, top-right on a
+                   service tile, SumaComboGreen); a service with choices opens VariationSelectionSheet first (HomeScreen.kt:950-956),
+                   then OptionSelectionSheet (CartActions.handleVariationPicked :556 / handleProductClick :495: option sets come
+                   before deals) with "Agregar oferta" (deal_choice_add_deal, ProductSheetHost.kt:186-201)
+   second service  ComboLinkedItemPickerSheet.kt (deal_picker_title "Completa tu …"; a row per eligible item with its first
+                   price; tap -> ComboPickQuestions: "Atrás", the name, "Elige uno" + FilterChips "Corto · $ 18.000", the price box
+                   when it is charged at the till, the owner's LIST add-ons; "Agregar" waits for a choice) — SVC-1 item 3
+   money           CatalogActions.completeComboSelection :658 (both lines share a comboGroupId) + data/ComboDiscount.kt (10 % of
+                   the two lines' unit prices); the footer shows grandTotal (PosViewModelTypes.kt:815-841)
+   The "En la caja" card between building and selling is the demo's, not the app's. No tax is set up in the demo salon. */
+// KEYS: disc_title_with_combos,disc_hub_tab_discounts,disc_hub_tab_combos,disc_hub_tab_charges,common_new_short,combo_tab_empty_title,combo_tab_empty_line,combo_tab_empty_button
+// KEYS: deal_new_title,deal_pick_lede,deal_slot_overline_main,deal_slot_overline_linked,deal_slot_overline_optional,deal_pick_item,deal_slot_clear,deal_next_button,deal_pick_first,deal_pick_second
+// KEYS: deal_summary_title,deal_name_label,deal_slot_not_set_summary,deal_discount_on_title,deal_discount_off_title,deal_discount_on_subtitle,deal_discount_off_subtitle,deal_discount_label,deal_discount_caption,deal_free_category_hint,deal_save_button
+// KEYS: deal_discount_badge,deal_live_badge,deal_paused_badge,deal_picker_title,common_back,common_add
+/* the pair per trade: a first service and a second one WITH choices, so the second is asked its choice (item 3) */
+const PAIR = {peluqueria:["corte-dama","cepillado"], unas:["manicure-tradicional","pedicure-tradicional"],
+  veterinaria:["consulta-general","vacunacion"], "taller-motos":["mantenimiento-preventivo","cambio-aceite"]}[V.biz];
+const MAIN = V.service(PAIR[0]), SECOND = V.service(PAIR[1]);
+const MAIN_CHOICE = MAIN.choices.length ? 0 : null;                 // the first choice, when the first service has choices
+const SEC_CHOICE = SECOND.choices.length > 1 ? 1 : 0;               // "Medio"
+const PCT = 10;
+const COMBO_NAME = MAIN.name + " + " + SECOND.name;                 // NewDealScreen.kt:209-215 (names joined " + ")
+const MAIN_PRICE = MAIN_CHOICE != null ? MAIN.choices[MAIN_CHOICE].price : MAIN.price;
+const SEC_PRICE = SECOND.choices.length ? SECOND.choices[SEC_CHOICE].price : SECOND.price;
+const r2 = v => Math.round(v * Math.pow(10, V.K.dec)) / Math.pow(10, V.K.dec);
+const TOTAL = r2((MAIN_PRICE + SEC_PRICE) * (1 - PCT / 100));       // ComboDiscount.discountForGroup over the two lines
+/* comboPickPriceText (ComboBottomButton.kt:40): the price, or "Desde" + the lowest when the prices differ */
+const pickPrice = s => { const ps = s.choices.length ? s.choices.map(c => c.price).filter(p => p) : [s.price].filter(p => p);
+  if(!ps.length) return null; const low = Math.min(...ps); return new Set(ps).size > 1 ? F("items_price_from", money(low)) : money(low); };
+const lowest = s => { const ps = s.choices.length ? s.choices.map(c => c.price).filter(p => p) : [s.price].filter(p => p); return ps.length ? Math.min(...ps) : 0; };
+/* the deal picker lists every product A-Z (services and products together), the used ones hidden */
+const ALL_ITEMS = C.services.concat(C.products.map(p => ({id:p.id, name:p.name, choices:[], price:p.price, product:true}))).sort(byName);
+
+function discounts(st){
+  const tabs = [S("disc_hub_tab_discounts"), S("disc_hub_tab_combos"), S("disc_hub_tab_charges")];
+  const body = st.saved ? `<div class="dl"><div class="crc${st.flash?" sv-hl":""}"><b>${esc(COMBO_NAME)}</b><div class="r"><span class="ds">${esc("2 " + V.tradeName)}</span>
+      <span class="amb">${esc(F("deal_discount_badge", PCT))}</span><span class="liv">${esc(S("deal_live_badge"))}</span>${sw(true)}<span class="tr">${I("trash")}</span></div></div></div>`
+    : `<div class="emp"><h3>${esc(S("combo_tab_empty_title"))}</h3><p>${esc(S("combo_tab_empty_line"))}</p><div class="sv-btn pri" data-t="create">${esc(S("combo_tab_empty_button"))}</div></div>`;
+  return topbar(S("disc_title_with_combos"), {action:`<span class="act">${esc(S("common_new_short"))}</span>`}) +
+    `<div class="mtab">${tabs.map((t, i) => `<span class="${i===1?"on":""}">${esc(t)}</span>`).join("")}</div>` + body + strip();
+}
+function slotCard(n, svc, tag){
+  const over = S(n === 1 ? "deal_slot_overline_main" : n === 2 ? "deal_slot_overline_linked" : "deal_slot_overline_optional");
+  return `<div class="slot${svc?" on":""}" data-t="${tag}"><small>${esc(over)}</small><div>${svc ? `<b>${esc(svc.name)}</b><span>${esc(S("deal_slot_clear"))}</span>` : `<em>${esc(S("deal_pick_item"))}</em>`}</div></div>`;
+}
+function overview(st){
+  const ok = st.s1 && st.s2;
+  return topbar(S("deal_new_title")) + `<div class="dbg"><div class="sv-scroll"><div class="in ov"><p>${esc(S("deal_pick_lede"))}</p>
+    ${slotCard(1, st.s1 ? MAIN : null, "slot-1")}${slotCard(2, st.s2 ? SECOND : null, "slot-2")}${slotCard(3, null, "slot-3")}</div></div>
+    <div class="bb"><div class="sv-btn ${ok?"pri":"off"}" data-t="next">${esc(S("deal_next_button"))}</div></div></div>` + strip();
+}
+function picker(st){
+  const used = st.pick === 2 ? [MAIN.id] : [];
+  const items = ALL_ITEMS.filter(x => !used.includes(x.id));
+  return topbar(S(st.pick === 1 ? "deal_pick_first" : "deal_pick_second")) + `<div class="dbg"><div class="sv-scroll"><div class="in pk" style="transform:translateY(calc(var(--u)*${-(st.psc||0)}))">
+    ${items.map(x => { const pp = pickPrice(x); return `<div class="li" data-t="pick-${x.id}"><b>${esc(x.name)}</b><small>${esc(pp || V.tradeName)}</small></div>`; }).join("")}</div></div></div>` + strip();
+}
+function summary(st){
+  const p1 = lowest(MAIN), p2 = lowest(SECOND);
+  const freePct = Math.floor(p2 / (p1 + p2) * 100);            // ComboFreeOption: (price / total * 100).toInt()
+  const rowS = (n, p) => `<div class="sr"><b>${esc(n)}</b>${p?`<small>${money(p)}</small>`:""}</div>`;
+  const disc = st.disc ? `<div class="dc on"><div class="t"><div><b>${esc(S("deal_discount_on_title"))}</b><small>${esc(F("deal_discount_on_subtitle", PCT))}</small></div>${sw(true, "disc")}</div>
+      <hr><label>${esc(S("deal_discount_label"))}</label><div class="pc">${[5,10,15].map(v => `<span class="fc${v===PCT?" on":""}">${v===PCT?I("check"):""}${v}%</span>`).join("")}<span class="bx">${PCT}<i>%</i></span></div>
+      <small class="cap">${esc(F("deal_discount_caption", PCT))}</small></div>`
+    : `<div class="dc"><div class="t"><div><b>${esc(S("deal_discount_off_title"))}</b><small>${esc(S("deal_discount_off_subtitle"))}</small></div>${sw(false, "disc")}</div></div>`;
+  return topbar(S("deal_summary_title")) + `<div class="dbg"><div class="sv-scroll"><div class="in sm" style="transform:translateY(calc(var(--u)*${-(st.ssc||0)}))">
+    <div class="nf"><label>${esc(S("deal_name_label"))}</label><span>${esc(COMBO_NAME)}</span></div>
+    <div class="gc">${rowS(MAIN.name, p1)}${rowS(SECOND.name, p2)}${rowS(S("deal_slot_not_set_summary"), 0)}</div>
+    ${disc}${st.disc ? `<small class="fh">${esc(F("deal_free_category_hint", SECOND.name, freePct))}</small>` : ""}
+  </div></div><div class="bb"><div class="sv-btn pri" data-t="save">${esc(S("deal_save_button"))}</div></div></div>` + strip();
+}
+/* ComboLinkedItemPickerSheet: the list, then the questions of the picked item */
+function comboSheet(st){
+  const title = `<h3>${esc(F("deal_picker_title", COMBO_NAME))}</h3>`;
+  if(!st.q) {
+    const first = SECOND.choices.length ? SECOND.choices[0].price : SECOND.price;   // priceOf = the first stored variation
+    return `<div class="sv-scrim"></div><div class="sv-sheet"><i class="hd"></i><div class="cp">${title}
+      <div class="cr" data-t="cp-${SECOND.id}"><span>${esc(SECOND.name)}</span>${first?`<small>${money(first)}</small>`:""}${I("chev")}</div></div></div>`;
+  }
+  const chips = SECOND.choices.map((c, i) => `<span class="fc${st.ch===i?" on":""}" data-t="ch-${i}">${st.ch===i?I("check"):""}${esc(c.name + " · " + (c.price ? money(c.price) : S("opt_ask_at_till_row")))}</span>`).join("");
+  return `<div class="sv-scrim"></div><div class="sv-sheet"><i class="hd"></i><div class="cp">${title}
+    <span class="tb">${esc(S("common_back"))}</span><b class="qn">${esc(SECOND.name)}</b>
+    ${SECOND.choices.length > 1 ? `<small class="q">${esc(S("home_variation_choose_one"))}</small><div class="fl">${chips}</div>` : ""}
+    <div class="sv-btn ${st.ch!=null?"pri":"off"}" data-t="cp-add">${esc(S("common_add"))}</div></div></div>`;
+}
+function render(st){
+  switch(st.screen){
+    case "disc": return discounts(st);
+    case "ov": return overview(st);
+    case "pick": return picker(st);
+    case "sum": return summary(st);
+  }
+  /* the till */
+  const combo = {sid: MAIN.id, pct: PCT};
+  let over = "";
+  if(st.sheet === "var") over = varSheet(MAIN, "var");
+  else if(st.sheet === "opt") over = optSheet(MAIN, {base: MAIN_PRICE, deal: true, scroll: st.osc});
+  else if(st.sheet === "combo") over = comboSheet(st);
+  const cut = st.cut ? timeCard(pick({es:"En la caja", pt:"No caixa", en:"At the register"}), pick({es:"Un cliente pide los dos.", pt:"Um cliente pede os dois.", en:"A client asks for both."})) : "";
+  return caja({combo, cartCount: st.added ? 2 : 0, total: st.added ? TOTAL : 0, sheet: over, hl: st.added ? null : null}) + cut;
+}
+const TAPN = n => HINT(n, n, n);
+VKIT.start(V, {
+  id:"VS18", tallVideo:true, clock:"12:41",
+  endText:pick({es:"Así cobras menos por los dos con Platata.", pt:"Assim você cobra menos pelos dois com o Platata.", en:"That's how you charge less for the two with Platata."}),
+  beats:pick({
+    es:["Descuentos y combos: toca Crear combo","Elige el primer servicio: " + MAIN.name,"Y el que va con él: " + SECOND.name,"Toca Siguiente y activa el descuento","Toca Guardar: el combo queda activo","En la caja, toca " + MAIN.name,"Toca Agregar oferta y elige " + SECOND.name,"Te pregunta cuál: elige y toca Agregar","Así cobras menos por los dos con Platata."],
+    pt:["Descontos e combos: toque em Criar combo","Escolha o primeiro serviço: " + MAIN.name,"E o que vai junto: " + SECOND.name,"Toque em Avançar e ative o desconto","Toque em Salvar: o combo fica ativo","No caixa, toque em " + MAIN.name,"Toque em Adicionar oferta e escolha " + SECOND.name,"Ele pergunta qual: escolha e toque em Adicionar","Assim você cobra menos pelos dois com o Platata."],
+    en:["Discounts and combos: tap Create combo","Pick the first service: " + MAIN.name,"And what goes with it: " + SECOND.name,"Tap Next and turn on the discount","Tap Save: the combo is live","At the register, tap " + MAIN.name,"Tap Add deal and pick " + SECOND.name,"It asks which one: pick and tap Add","That's how you charge less for the two with Platata."]}),
+  state:{screen:"disc", s1:false, s2:false, pick:1, psc:0, disc:false, ssc:0, saved:false, flash:false, cut:false, sheet:null, osc:0, q:false, ch:null, added:false},
+  render,
+  device: () => "phone",
+  who: () => DEV_OWNER,
+  steps: settled([
+    {beat:0, hint:H1("combo_tab_empty_button"), target:'[data-t="create"]', tap(st){ st.screen = "ov"; }},
+    {beat:1, hint:H1("deal_pick_item"), target:'[data-t="slot-1"]', tap(st,E){ st.screen = "pick"; st.pick = 1; st.psc = 0; E.after(400, () => { st.psc = scrollNeed(`[data-t="pick-${MAIN.id}"]`, '.dbg .sv-scroll', 24); }); }},
+    {beat:1, hint:TAPN(MAIN.name), target:`[data-t="pick-${MAIN.id}"]`, tap(st){ st.s1 = true; st.screen = "ov"; }},
+    {beat:2, hint:H1("deal_pick_item"), target:'[data-t="slot-2"]', tap(st,E){ st.screen = "pick"; st.pick = 2; st.psc = 0; E.after(400, () => { st.psc = scrollNeed(`[data-t="pick-${SECOND.id}"]`, '.dbg .sv-scroll', 24); }); }},
+    {beat:2, hint:TAPN(SECOND.name), target:`[data-t="pick-${SECOND.id}"]`, tap(st){ st.s2 = true; st.screen = "ov"; }},
+    {beat:3, hint:H1("deal_next_button"), target:'[data-t="next"]', tap(st){ st.screen = "sum"; }},
+    {beat:3, hint:pick({es:"Toca el interruptor", pt:"Toque no botão", en:"Tap the switch"}), target:'[data-t="disc"]', tap(st,E){ st.disc = true; E.after(500, () => { st.ssc = scrollNeed('.fh', '.dbg .sv-scroll', 12); }); }},
+    {beat:4, hint:H1("deal_save_button"), target:'[data-t="save"]', tap(st,E){ st.screen = "disc"; st.saved = true; st.flash = true;
+        E.after(1900, () => { st.flash = false; st.cut = true; }); E.after(3800, () => { st.cut = false; st.screen = "caja"; }); }}
+  ].concat(MAIN_CHOICE != null ? [
+    {beat:5, hint:TAPN(MAIN.name), target:`[data-t="tile-${MAIN.id}"]`, tap(st){ st.sheet = "var"; }},
+    {beat:5, hint:TAPN(MAIN.choices[0].name), target:'[data-t="var-0"]', tap(st,E){ st.sheet = "opt"; st.osc = 0; E.after(500, () => { st.osc = scrollNeed('[data-t="opt-deal"]', '.sv-sheet .sc', 24); }); }}
+  ] : [
+    {beat:5, hint:TAPN(MAIN.name), target:`[data-t="tile-${MAIN.id}"]`, tap(st,E){ st.sheet = "opt"; st.osc = 0; E.after(500, () => { st.osc = scrollNeed('[data-t="opt-deal"]', '.sv-sheet .sc', 24); }); }}
+  ]).concat([
+    {beat:6, hint:H1("deal_choice_add_deal"), target:'[data-t="opt-deal"]', tap(st){ st.sheet = "combo"; st.q = false; }},
+    {beat:6, hint:TAPN(SECOND.name), target:`[data-t="cp-${SECOND.id}"]`, tap(st){ st.q = true; }},
+    {beat:7, hint:TAPN(SECOND.choices.length ? SECOND.choices[SEC_CHOICE].name : SECOND.name), target:`[data-t="ch-${SEC_CHOICE}"]`, tap(st){ st.ch = SEC_CHOICE; }},
+    {beat:7, hint:H1("common_add"), target:'[data-t="cp-add"]', tap(st){ st.sheet = null; st.added = true; }}
+  ]))
+});
+
+const cssVS18 = document.createElement("style"); cssVS18.textContent = `
+.mat .sv-top .act{font-weight:700}
+.mat .mtab{flex:0 0 auto;display:flex;height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar)}
+.mat .mtab span{flex:1;display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);position:relative}
+.mat .mtab span.on{color:var(--m-on)}
+.mat .mtab span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.mat .emp{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;align-items:stretch;padding:calc(var(--u)*24);text-align:center}
+.mat .emp h3{margin:0;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on)}
+.mat .emp p{margin:calc(var(--u)*8) 0 calc(var(--u)*16);font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .emp .sv-btn{margin:0}
+.mat .dl{flex:1;min-height:0;padding:calc(var(--u)*16)}
+.mat .crc{background:#fff;border:calc(var(--u)*1.5) solid #E8E7E0;border-radius:calc(var(--u)*12);padding:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.12)}
+.mat .crc>b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on)}
+.mat .crc .r{display:flex;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*4)}
+.mat .crc .ds{flex:1;min-width:0;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .crc .amb{font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*4) calc(var(--u)*8);border-radius:calc(var(--u)*6);background:#FDF2E3;border:calc(var(--u)*1.5) solid #ECCF9E;color:#8A5A1F;white-space:nowrap}
+.mat .crc .liv{font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*4) calc(var(--u)*8);border-radius:calc(var(--u)*6);background:#EEF4EC;color:#1F5C33;white-space:nowrap}
+.mat .crc .tr{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:#FF3B30;flex:0 0 auto}
+.mat .dbg{flex:1;min-height:0;display:flex;flex-direction:column;background:#FCFCFD}
+.mat .ov{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.mat .ov>p{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .slot{background:#fff;border:calc(var(--u)*1.5) solid #E8E7E0;border-radius:calc(var(--u)*12);padding:calc(var(--u)*16);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.12)}
+.mat .slot.on{background:#EEF4EC;border-color:#CFE3D2}
+.mat .slot small{display:block;font-size:calc(var(--u)*11);line-height:calc(var(--u)*16);font-weight:700;color:var(--m-onv);letter-spacing:.5px}
+.mat .slot div{display:flex;align-items:center;margin-top:calc(var(--u)*8);min-height:calc(var(--u)*24)}
+.mat .slot em{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.mat .slot b{flex:1;font-size:calc(var(--u)*18);font-weight:700;color:var(--m-on)}
+.mat .slot div span{font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on);padding:calc(var(--u)*8) calc(var(--u)*12)}
+.mat .bb{flex:0 0 auto;background:#fff;padding:calc(var(--u)*16);box-shadow:0 calc(var(--u)*-1) calc(var(--u)*3) rgba(0,0,0,.06)}
+.mat .bb .sv-btn{margin:0}
+.mat .pk{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .li{background:#fff;padding:calc(var(--u)*8) calc(var(--u)*16);min-height:calc(var(--u)*72);display:flex;flex-direction:column;justify-content:center}
+.mat .li b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:600;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .li small{font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .sm{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16)}
+.mat .nf{position:relative;border:1px solid #79747E;border-radius:calc(var(--u)*6);min-height:calc(var(--u)*56);display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16);background:#fff}
+.mat .nf label{position:absolute;top:calc(var(--u)*-9);left:calc(var(--u)*12);background:#FCFCFD;padding:0 calc(var(--u)*4);font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .nf span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .gc{background:#EEF4EC;border:calc(var(--u)*1.5) solid #CFE3D2;border-radius:calc(var(--u)*16);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .gc .sr{background:#fff;border:calc(var(--u)*1.5) solid #E8E7E0;border-radius:calc(var(--u)*12);padding:calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*8)}
+.mat .gc .sr b{flex:1;font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on)} .mat .gc .sr small{font-size:calc(var(--u)*12);color:var(--m-onv)}
+.mat .dc{background:#fff;border:calc(var(--u)*1.5) solid #E8E7E0;border-radius:calc(var(--u)*16);padding:calc(var(--u)*16);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.1)}
+.mat .dc.on{background:#EEF4EC;border-color:#CFE3D2}
+.mat .dc .t{display:flex;align-items:center;gap:calc(var(--u)*12)} .mat .dc .t div{flex:1}
+.mat .dc .t b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:700;color:var(--m-on)} .mat .dc.on .t b{color:#1F5C33}
+.mat .dc .t small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);margin-top:calc(var(--u)*2)}
+.mat .dc hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*12) 0}
+.mat .dc label{display:block;font-size:calc(var(--u)*12);font-weight:700;color:var(--m-onv)}
+.mat .dc .pc{display:flex;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*8)}
+.mat .fc{height:calc(var(--u)*32);border-radius:calc(var(--u)*8);border:1px solid var(--m-outline);padding:0 calc(var(--u)*12);display:inline-flex;align-items:center;gap:calc(var(--u)*6);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);background:#fff;white-space:nowrap}
+.mat .fc.on{background:var(--m-ovar);border-color:transparent;color:var(--m-on);padding-left:calc(var(--u)*8)}
+.mat .fc svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:var(--m-on)}
+.mat .dc .bx{width:calc(var(--u)*80);height:calc(var(--u)*56);border:1px solid #79747E;border-radius:calc(var(--u)*6);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*12) 0 calc(var(--u)*16);font-size:calc(var(--u)*16);background:#fff}
+.mat .dc .bx i{font-style:normal;color:var(--m-onv)}
+.mat .dc .cap{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);margin-top:calc(var(--u)*12)}
+.mat .fh{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .sv-sheet .cp{padding:0 calc(var(--u)*16) calc(var(--u)*24)}
+.mat .sv-sheet .cp h3{margin:0 0 calc(var(--u)*16)}
+.mat .sv-sheet .cr{display:flex;align-items:center;gap:calc(var(--u)*12);min-height:calc(var(--u)*48);padding:calc(var(--u)*8) 0}
+.mat .sv-sheet .cr span{flex:1;font-size:calc(var(--u)*16);color:var(--m-on)} .mat .sv-sheet .cr small{font-size:calc(var(--u)*14);color:var(--m-onv)} .mat .sv-sheet .cr svg{fill:var(--m-onv)}
+.mat .sv-sheet .tb{display:inline-block;font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on);padding:calc(var(--u)*10) calc(var(--u)*12);margin-left:calc(var(--u)*-12)}
+.mat .sv-sheet .qn{display:block;font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on);margin-bottom:calc(var(--u)*8)}
+.mat .sv-sheet .q{display:block;font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);margin-bottom:calc(var(--u)*4)}
+.mat .sv-sheet .fl{display:flex;flex-wrap:wrap;gap:calc(var(--u)*4) calc(var(--u)*8);margin-bottom:calc(var(--u)*8)}
+`; document.head.appendChild(cssVS18);
+</script>
+</body>
+</html>

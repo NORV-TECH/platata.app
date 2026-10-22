@@ -1,0 +1,66 @@
+{
+  "id": "VS3",
+  "name": "Cobrar en efectivo",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-servicio",
+      "voice": {
+        "es": "Toca el servicio que hiciste.",
+        "pt": "Toque no serviço que você fez."
+      }
+    },
+    {
+      "id": "2-agregar",
+      "voice": {
+        "es": "Mira lo que incluye y toca Agregar a la venta.",
+        "pt": "Veja o que inclui e toque em Adicionar à venda."
+      }
+    },
+    {
+      "id": "3-cobrar",
+      "voice": {
+        "es": "Toca Cobrar.",
+        "pt": "Toque em Cobrar."
+      }
+    },
+    {
+      "id": "4-recibido",
+      "voice": {
+        "es": "Escribe con cuánto te paga el cliente.",
+        "pt": "Digite quanto o cliente te entrega."
+      }
+    },
+    {
+      "id": "5-cambio",
+      "voice": {
+        "es": "Platata te dice el cambio: toca Efectivo.",
+        "pt": "O Platata mostra o troco: toque em Dinheiro."
+      }
+    },
+    {
+      "id": "6-nueva",
+      "voice": {
+        "es": "Entrega el cambio y toca Nueva venta.",
+        "pt": "Entregue o troco e toque em Nova venda."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así cobras en efectivo con Platata.",
+        "pt": "Assim você cobra em dinheiro com o Platata."
+      }
+    }
+  ]
+}

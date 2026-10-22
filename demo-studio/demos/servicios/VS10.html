@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Cerrar la caja</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/services-data.js"></script>
+<script src="../../kit/vkit.js"></script>
+<script>
+// TITLE: Platata · Cerrar la caja
+/* app strings copied by the builder from res/values, values-es, values-pt-rBR at sim/usa-canada 73c65f08 */
+const STR={"cash_movement_in": {"en": "Cash in", "es": "Meter efectivo", "pt": "Colocar dinheiro"}, "cash_movement_out": {"en": "Cash out", "es": "Sacar efectivo", "pt": "Retirar dinheiro"}, "cash_movement_reason_supplier": {"en": "Supplier", "es": "Proveedor", "pt": "Fornecedor"}, "cash_movement_saved": {"en": "Saved", "es": "Guardado", "pt": "Salvo"}, "cash_movement_void": {"en": "Void", "es": "Anular", "pt": "Anular"}, "common_add": {"en": "Add", "es": "Agregar", "pt": "Adicionar"}, "common_charge": {"en": "Charge %s", "es": "Cobrar %s", "pt": "Cobrar %s"}, "common_done": {"en": "Done", "es": "Listo", "pt": "Concluído"}, "common_edit": {"en": "Edit", "es": "Editar", "pt": "Editar"}, "conn_slot_phone": {"en": "Your phone", "es": "Tu teléfono", "pt": "Seu celular"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "home_tab_products": {"en": "Products", "es": "Productos", "pt": "Produtos"}, "home_tab_services": {"en": "Services", "es": "Servicios", "pt": "Serviços"}, "home_variation_choose_one": {"en": "Choose one", "es": "Elige uno", "pt": "Escolha um"}, "invoices_row_first": {"en": "Scan your first invoice", "es": "Escanea tu primera factura", "pt": "Escaneie sua primeira nota"}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "items_filter_all": {"en": "All", "es": "Todos", "pt": "Todos"}, "items_price_from": {"en": "From %1$s", "es": "Desde %1$s", "pt": "A partir de %1$s"}, "items_price_unset": {"en": "No price", "es": "Sin precio", "pt": "Sem preço"}, "mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "opt_add_to_sale": {"en": "Add to sale · %1$s", "es": "Agregar a la venta · %1$s", "pt": "Adicionar à venda · %1$s"}, "opt_ask_at_till_row": {"en": "ask at the till", "es": "se pregunta en la caja", "pt": "perguntar no caixa"}, "opt_min": {"en": "min", "es": "min", "pt": "min"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "pay_methods_example_transfer": {"en": "Bank transfer", "es": "Transferencia", "pt": "Transferência"}, "payment_method_card": {"en": "Card", "es": "Tarjeta", "pt": "Cartão"}, "payment_method_cash": {"en": "Cash", "es": "Efectivo", "pt": "Dinheiro"}, "payment_method_qr": {"en": "QR Payment", "es": "Pago QR", "pt": "Pagamento QR"}, "register_close_balanced": {"en": "Balanced", "es": "Cuadrado", "pt": "Fechado exato"}, "register_close_by_method": {"en": "Money by payment method", "es": "Dinero por forma de pago", "pt": "Por forma de pagamento"}, "register_close_confirm": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_close_confirm_title": {"en": "Close the register with %1$s counted?", "es": "¿Cerrar la caja con %1$s contados?", "pt": "Fechar o caixa com %1$s contados?"}, "register_close_counted_label": {"en": "Counted", "es": "Contado", "pt": "Contado"}, "register_close_diff_label": {"en": "Difference", "es": "Diferencia", "pt": "Diferença"}, "register_close_expected_label": {"en": "Should be in the drawer", "es": "Debe haber en la caja", "pt": "Deve haver no caixa"}, "register_close_keep_counting": {"en": "Keep counting", "es": "Seguir contando", "pt": "Continuar contando"}, "register_close_over": {"en": "Over %s", "es": "Sobrante %s", "pt": "Sobra %s"}, "register_close_see_breakdown": {"en": "See money by payment method ›", "es": "Ver dinero por forma de pago ›", "pt": "Ver dinheiro por forma de pagamento ›"}, "register_close_short": {"en": "Short %s", "es": "Faltante %s", "pt": "Falta %s"}, "register_close_title": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_closed_title": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "register_closed_whatsapp": {"en": "Send by WhatsApp", "es": "Enviar por WhatsApp", "pt": "Enviar por WhatsApp"}, "register_list_title": {"en": "Register history", "es": "Historial de caja", "pt": "Histórico de caixa"}, "register_nav_today": {"en": "Today · %1$s", "es": "Hoy · %1$s", "pt": "Hoje · %1$s"}, "register_open_amount_hint": {"en": "Starting cash", "es": "Efectivo inicial", "pt": "Troco inicial"}, "register_open_confirm": {"en": "Open register", "es": "Abrir caja", "pt": "Abrir caixa"}, "register_open_title": {"en": "Open register", "es": "Abrir caja", "pt": "Abrir caixa"}, "register_status_cash_all": {"en": "All cash since it opened", "es": "Todo el efectivo desde que abrió", "pt": "Todo o dinheiro desde a abertura"}, "register_status_cash_sales": {"en": "Cash sales", "es": "Ventas en efectivo", "pt": "Vendas em dinheiro"}, "register_status_cash_sales_here": {"en": "Cash sales (this register)", "es": "Ventas en efectivo (esta caja)", "pt": "Vendas em dinheiro (neste caixa)"}, "register_status_close_btn": {"en": "Close register", "es": "Cerrar caja", "pt": "Fechar caixa"}, "register_status_closed_at": {"en": "Closed", "es": "Cerrada", "pt": "Fechado"}, "register_status_closed_by": {"en": "Closed by", "es": "Cerrada por", "pt": "Fechado por"}, "register_status_counted": {"en": "Counted", "es": "Contado", "pt": "Contado"}, "register_status_expected": {"en": "Should be in the drawer", "es": "Debe haber en la caja", "pt": "Deve haver no caixa"}, "register_status_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "register_status_net_sales": {"en": "Net sales", "es": "Ventas netas", "pt": "Vendas líquidas"}, "register_status_opened_at": {"en": "Opened", "es": "Abierta", "pt": "Aberto em"}, "register_status_opened_by": {"en": "Opened by", "es": "Abierta por", "pt": "Aberto por"}, "register_status_pill_open": {"en": "● OPEN", "es": "● ABIERTA", "pt": "● ABERTO"}, "register_status_starting_cash": {"en": "Starting cash", "es": "Efectivo inicial", "pt": "Troco inicial"}, "reports_total_collected": {"en": "Total collected", "es": "Total cobrado", "pt": "Total recebido"}, "scan_row_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Vendas hoje · %s"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "services_action_agendar": {"en": "Book", "es": "Agendar", "pt": "Agendar"}, "services_action_crear_orden": {"en": "Create order", "es": "Crear orden", "pt": "Criar ordem"}, "settings_gate_subtitle": {"en": "Confirm your identity to open your business", "es": "Confirma tu identidad para abrir tu negocio", "pt": "Confirme sua identidade para abrir o seu negócio"}, "settings_gate_title": {"en": "Open your business?", "es": "¿Abrir tu negocio?", "pt": "Abrir o seu negócio?"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "sx_agenda": {"en": "Agenda", "es": "Agenda", "pt": "Agenda"}, "whatsapp_signature": {"en": "Made with Platata · platata.app", "es": "Hecho con Platata · platata.app", "pt": "Feito com Platata · platata.app"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "workspace_register_closed": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "workspace_register_closed_sub": {"en": "Open it to start selling", "es": "Ábrela para empezar a vender", "pt": "Abra para começar a vender"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_open_action": {"en": "Open", "es": "Abrir", "pt": "Abrir"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}};
+const PLU={"home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_current_sale_services": {"en": {"one": "Current sale · %d service", "other": "Current sale · %d services"}, "es": {"one": "Venta actual · %d servicio", "other": "Venta actual · %d servicios"}, "pt": {"one": "Venda atual · %d serviço", "other": "Venda atual · %d serviços"}}, "home_equipo_count_phones": {"en": {"one": "%1$d employee · %2$s", "other": "%1$d employees · %2$s"}, "es": {"one": "%1$d empleado · %2$s", "other": "%1$d empleados · %2$s"}, "pt": {"one": "%1$d funcionário · %2$s", "other": "%1$d funcionários · %2$s"}}, "home_equipo_on_phones": {"en": {"one": "%1$d on a phone", "other": "%1$d on phones"}, "es": {"one": "%1$d en celular", "other": "%1$d en celular"}, "pt": {"one": "%1$d no celular", "other": "%1$d no celular"}}};
+/* the four trades' drawn icons: res/drawable/ic_drawn_secador / _esmalte / _huella / _moto (TradeCatalogue.kt TRADE_VISUAL), as SVG */
+const TRADE_ICONS={"peluqueria": "<svg viewBox=\"0 0 24 24\"><path d=\"M7.3 12.8l1.6 7.1c.1.6.7 1 1.3.9l.9-.2c.6-.1 1-.7.9-1.3l-1.3-6.9\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M9.6,6.4 H17.2 A1.4,1.4 0 0 1 18.6,7.8 V10.2 A1.4,1.4 0 0 1 17.2,11.6 H9.6 A1.4,1.4 0 0 1 8.2,10.2 V7.8 A1.4,1.4 0 0 1 9.6,6.4 Z\" fill=\"#E86A8E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M3.8,9 A4.6,4.6 0 1 0 13,9 A4.6,4.6 0 1 0 3.8,9 Z\" fill=\"#E86A8E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M6.6,9 A1.8,1.8 0 1 0 10.2,9 A1.8,1.8 0 1 0 6.6,9 Z\" fill=\"#EDF1F4\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M19.2,5.6 H19.8 A1,1 0 0 1 20.8,6.6 V11.4 A1,1 0 0 1 19.8,12.4 H19.2 A1,1 0 0 1 18.2,11.4 V6.6 A1,1 0 0 1 19.2,5.6 Z\" fill=\"#B0B4B8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M21.8 7.4h1M21.8 10.6h1\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "unas": "<svg viewBox=\"0 0 24 24\"><path d=\"M7.2,7.4 H16.8 A1.8,1.8 0 0 1 18.6,9.2 V18.8 A1.8,1.8 0 0 1 16.8,20.6 H7.2 A1.8,1.8 0 0 1 5.4,18.8 V9.2 A1.8,1.8 0 0 1 7.2,7.4 Z\" fill=\"#D9422E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M6.4 7.4c1.6-2.4 3.4-3.6 5.6-3.6s4 1.2 5.6 3.6\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M5.6,6.4 H18.4 A1,1 0 0 1 19.4,7.4 V7.8 A1,1 0 0 1 18.4,8.8 H5.6 A1,1 0 0 1 4.6,7.8 V7.4 A1,1 0 0 1 5.6,6.4 Z\" fill=\"#B0B4B8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "veterinaria": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 12.4c2.8 0 5.2 2.6 5.2 4.8 0 1.8-1.4 2.6-2.8 2.6-1 0-1.6-.6-2.4-.6s-1.4.6-2.4.6c-1.4 0-2.8-.8-2.8-2.6 0-2.2 2.4-4.8 5.2-4.8z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><g transform=\"rotate(-20 6.8 10.4)\"><path d=\"M5.2,10.4 A1.6,2.1 0 1 0 8.4,10.4 A1.6,2.1 0 1 0 5.2,10.4 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(-8 10.1 6.8)\"><path d=\"M8.5,6.8 A1.6,2.2 0 1 0 11.7,6.8 A1.6,2.2 0 1 0 8.5,6.8 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(8 13.9 6.8)\"><path d=\"M12.3,6.8 A1.6,2.2 0 1 0 15.5,6.8 A1.6,2.2 0 1 0 12.3,6.8 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(20 17.2 10.4)\"><path d=\"M15.6,10.4 A1.6,2.1 0 1 0 18.8,10.4 A1.6,2.1 0 1 0 15.6,10.4 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>", "taller-motos": "<svg viewBox=\"0 0 24 24\"><path d=\"M2.6,16 A3.4,3.4 0 1 0 9.4,16 A3.4,3.4 0 1 0 2.6,16 Z\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M14.6,16 A3.4,3.4 0 1 0 21.4,16 A3.4,3.4 0 1 0 14.6,16 Z\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M4.8,16 A1.2,1.2 0 1 0 7.2,16 A1.2,1.2 0 1 0 4.8,16 Z\" fill=\"#B0B4B8\"/><path d=\"M16.8,16 A1.2,1.2 0 1 0 19.2,16 A1.2,1.2 0 1 0 16.8,16 Z\" fill=\"#B0B4B8\"/><path d=\"M6 16l4.2-5.6h4.4l3.4 5.6\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M8.8 10.4h6.4c.6 0 1.2-.5 1.2-1.2 0-.6-.5-1.2-1.2-1.2H10c-.7 0-1.2.6-1.2 1.2z\" fill=\"#D9422E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M15.8 9.4l1.4-2.8h2.2\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"};
+const V = VKIT.ctx({biz:"peluqueria"});
+/* ===== VS2/VS3/VS9/VS10 common: one day of the same services register (inlined into each page by the builder; not a kit file) =====
+   App code read at sim/usa-canada 73c65f08 (paths under app/src/main/java/com/example/). Owner phone, plain Material light
+   (ui/theme/Color.kt: primary/onSurface #1C1C1E, onSurfaceVariant #6E6E73, surfaceVariant #F2F2F7, outlineVariant #E5E5EA, outline #C7C7CC).
+   services Home      ui/screens/home/HomeScreen.kt:563-690 top (one warning bar, TabRow "Servicios · N | Productos · N" HomeTabLabels.kt:28-31,
+                      RegisterClosedBar :682-686), body :921-990 (ItemEditModeBar "Editar" :929, ProductLibraryView.kt:212-360 chips + grid),
+                      footer :781-825 ("Teclado" link, CurrentSaleStrip with services words, FooterButtonPair Agendar | Cobrar $X)
+   service tile       ui/screens/home/ProductCard.kt:242-342 ServiceTileBody (trade icon in a 40 dp r12 box, the trade family's tile colour,
+                      name bodyLarge 500, price bold + "30 min"); price label :94-106 (Desde / Sin precio / En la caja)
+   bottom bar         ui/app/PlatataApp.kt:505-700 + ui/navigation/NavLabels.kt:22-27 (Caja · Agenda for services · flag "Mi negocio";
+                      a fingerprint while Security is locked: SeedStore.kt:139 turns Security on)
+   day data           kit/services-data.js: openingCash, this morning's sales, today's afternoon bookings, the services and prices */
+const C = V.C, K = V.K, LG = V.lang, esc = VKIT.esc, CC = V.country;
+const AL = {es:"es", pt:"pt-BR", en:"en"}[LG];          // the app's language tag (AppLanguage.kt); Locale.getDefault() has no country
+const fmtS = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : v; }); };
+const t = (k, ...a) => { const o = STR[k]; if(!o) throw new Error("missing string "+k); return fmtS(o[LG], a); };
+const plCat = n => LG==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other");
+const tp = (k, n, ...a) => { const p = PLU[k][LG]; return fmtS(p[plCat(n)] || p.other, a.length ? a : [n]); };
+const money = v => V.money(v);
+const pick = V.pick;
+const TAP = pick({es:"Toca ", pt:"Toque em ", en:"Tap "});
+/* the demo day: Thursday 22 Oct 2026 (V.today) */
+const D = (h, m) => new Date(2026, 9, 22, h, m);
+const fmtDT = d => new Intl.DateTimeFormat(AL, {dateStyle:"medium", timeStyle:"short"}).format(d);   // DateFormat MEDIUM, SHORT
+const fmtTime = d => new Intl.DateTimeFormat(AL, {timeStyle:"short"}).format(d);                     // DateFormat SHORT time
+const shortDay = d => new Intl.DateTimeFormat(AL, {day:"numeric", month:"short"}).format(d).replace(/ de /, " ");   // utils/ShortDay.kt drops "de"
+const r2 = v => Math.round(v * Math.pow(10, K.dec)) / Math.pow(10, K.dec);
+/* the ONE money keypad rule (ui/screens/cash/MoneyKeypadEntry.kt): whole units typed; the bottom-left key is the
+   country's decimal mark where the currency has cents, "000" where it has none (COP, CLP) */
+const DECMARK = new Intl.NumberFormat(K.loc).formatToParts(1.5).find(p=>p.type==="decimal").value;
+const ZKEY = K.dec===0 ? "000" : DECMARK;
+const press = (cur, key) => {
+  if(key==="del") return cur.slice(0,-1);
+  if(key==="z"){ if(K.dec===0) return (cur && cur!=="0") ? cur+"000" : cur; if(cur.includes(".")) return cur; return (cur||"0")+"."; }
+  if(cur.includes(".") && cur.split(".")[1].length>=K.dec) return cur;
+  if(cur==="0") return key;
+  return cur+key;
+};
+const amountOf = s => parseFloat(s||"0")||0;
+const keysFor = amount => {      // the taps that type `amount` with the rule above ("z" = the bottom-left key)
+  if(K.dec===0 && amount%1000===0 && amount>=1000) return String(amount/1000).split("").concat(["z"]);
+  const w = Math.floor(amount), c = Math.round((amount-w)*100);
+  const k = String(w).split("");
+  if(c) { k.push("z"); k.push(...String(c).padStart(2,"0").replace(/0$/,"").split("")); }
+  return k;
+};
+const keyLabel = k => k==="z" ? ZKEY : k;
+/* AutoSizeText (displaySmall 60sp bold, shrinks to fit the width, floor DesignTokens.AmountFontFloor): a long amount gets a smaller size */
+const amtFs = txt => `--fs:${Math.max(36, Math.min(60, Math.floor(380 / (txt.length * 0.56))))}`;
+const P = d => `<svg class="mi" viewBox="0 0 24 24"><path d="${d}"/></svg>`;
+const I = {
+  back:P("M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"),
+  chevL:P("M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"),
+  chevR:P("M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"),
+  down:P("M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"),
+  edit:P("M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"),
+  check:P("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"),
+  cart:P("M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"),
+  receipt:P("M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"),
+  rlong:P("M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"),
+  person:P("M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"),
+  group:P("M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"),
+  gear:P("M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"),
+  clock:P("M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"),
+  close:P("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"),
+  bksp:P("M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"),
+  card:P("M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"),
+  more:P("M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"),
+  fp:P("M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z"),
+  wa:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>'
+};
+
+/* ---- the business (kit) ---- */
+const OWNER = C.owner;                                   // the owner's name: register openings / closings / sales are saved with it (FIX-3 item 2, SVC-4)
+/* the trade's drawn icon (ui/screens/tradepicker/TradeCatalogue.kt:38-58 TRADE_VISUAL, res/drawable/ic_drawn_*.xml, converted)
+   and its family tile colour (PaperTheme.kt:93-99, PaperColor.kt:66-79: light --tile == the family's Soft) */
+const TRADE_TILE = {peluqueria:"#F8E8EC", unas:"#F8E8EC", veterinaria:"#F0F2E3", "taller-motos":"#E8EBF4"}[V.biz];
+const TRADE_SVG = TRADE_ICONS[V.biz];
+/* the left footer word follows the trade (sync/ServiceActionLabel.kt, data/TradeFamily): "Crear orden" for a workshop, else "Agendar" */
+const ACTION_WORD = t(V.isOrder ? "services_action_crear_orden" : "services_action_agendar");
+/* the home grid shows the services in the owner's menu order; the trade name is the one category (GuideActions.kt:221-226) */
+const SERVICES = C.services;
+const svcPriceLabel = s => s.mode==="ask" ? t("items_price_unset") : s.mode==="from" ? t("items_price_from", money(s.price)) : money(s.price);
+
+/* the one service each page rings: fixed price in every country and carrying its researched options (Lavado / extras), so the
+   tap opens the option sheet everywhere (CartActions.handleProductClick :490-499). Other ?biz= values take their own. */
+const RING_ID = {peluqueria:"corte-caballero", veterinaria:"urgencias", "taller-motos":"revision-gases", unas:"manicure-tradicional"}[V.biz];
+const RING = SERVICES.find(s => s.id===RING_ID) || SERVICES.find(s => s.price!=null) || SERVICES[0];
+const RING_CHOICE = RING.choices.length ? 0 : null;        // a service with choices opens "Elige uno" first (HomeScreen.kt:976-978)
+const RING_PRICE = RING_CHOICE!=null ? (RING.choices[0].price || RING.price || 0) : (RING.price || 0);
+const RING_HAS_OPTS = (RING.included.length + RING.extras.length) > 0;
+
+/* ---- the day (the same in the four pages): opened at 8:05 with the kit's openingCash; this morning's sales are the kit's;
+   at 12:41 a walk-in pays RING in cash (VS3); at 13:10 cash goes out for supplies (VS9); the afternoon's booked clients
+   (kit bookings of today) are charged in cash; at 19:40 the register is closed (VS10). ---- */
+const OPENED = D(8,5), VS3_AT = D(12,41), OUT_AT = D(13,10), CLOSED = D(19,40);
+const OPENING = C.openingCash;
+const OUT = {CO:40000, MX:200, PE:40, CL:12000, EC:12, AR:20000, PA:12, BR:60, US:40, CA:40}[CC];   // the supplies errand (VS9)
+/* the kit's pay kinds, as the app names them: US/CA have no QR (sync/QrCountries), so their "qr" is a card sale; "transfer"/"other" is a
+   method the owner added ("Transferencia", pay_methods_example_transfer) */
+const payKey = p => ((CC==="US"||CC==="CA") && p==="qr") ? "card" : (p==="transfer"||p==="other") ? "custom" : p;
+const MORNING = C.sales.filter(s => s.d===V.today).map(s => ({total:s.total, pay:payKey(s.pay)}));
+const AFTERNOON = C.bookings.filter(b => b.day===0 && b.price).map(b => ({total:b.price, pay:"cash"}));
+const VS3_SALE = {total:RING_PRICE, pay:"cash"};
+const sumPay = (list, key) => r2(list.filter(s => !key || s.pay===key).reduce((a,s)=>a+s.total, 0));
+/* the sales of the shift up to a moment: "noon" = before VS3, "after3" = with VS3, "night" = the whole day */
+const SALES_AT = when => when==="noon" ? MORNING : when==="after3" ? MORNING.concat([VS3_SALE]) : MORNING.concat([VS3_SALE], AFTERNOON);
+const METHOD_ORDER = ["cash","qr","card","custom"];
+const methodName = k => k==="cash" ? t("payment_method_cash") : k==="qr" ? (K.cur==="BRL" ? "Pix" : t("payment_method_qr"))
+                      : k==="card" ? t("payment_method_card") : t("pay_methods_example_transfer");   // utils/PaymentMethodLabels.kt:96-110
+const methodsOf = list => METHOD_ORDER.map(k => ({k, total:sumPay(list, k)})).filter(m => m.total>0);
+
+/* ---------- pieces ---------- */
+/* SumaTopBar (ui/components/SumaTopBar.kt): 64 dp, back arrow 48 dp, titleLarge 22sp bold */
+const topbar = (title, o={}) => `<div class="tb">${o.noBack?"":`<span class="ib" data-t="${o.backT||"back"}">${o.close?I.close:I.back}</span>`}<div class="tt">${o.html||esc(title)}</div>${o.action||""}</div>`;
+/* SumaButton (ui/components/SumaButton.kt): 52 dp min, shapes.medium r12 (pill = extraLarge), titleMedium SemiBold; Secondary = outlined */
+const btn = (text, kind, dt, o={}) => `<div class="sb ${kind||"pri"}${o.pill?" pill":""}${o.off?" off":""}" ${dt?`data-t="${dt}"`:""}>${o.icon||""}<span>${esc(text)}</span></div>`;
+/* CashKeypad (ui/screens/cash/OpenRegisterScreen.kt:189-262): 4 rows sharing the height, 48..72 dp, 4 dp gaps, grey keys r12, headlineLarge bold */
+const keypad = (pre, rowH) => { const rows=[["1","2","3"],["4","5","6"],["7","8","9"],["z","0","del"]];
+  return `<div class="ck" style="--kh:${rowH||64}">${rows.map(r=>`<div class="kr">${r.map(k=>`<span data-t="${pre}-${k}">${k==="del"?I.bksp:k==="z"?esc(ZKEY):k}</span>`).join("")}</div>`).join("")}</div>`; };
+/* owner bottom NavigationBar (PlatataApp.kt:525-700): Caja (ShoppingCart), Agenda (NavLabels.kt:24-26, a services shop), the flag "Mi negocio" */
+const nav = (on, o={}) => `<div class="mnav">
+  <div class="${on==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${I.cart}</span>${esc(t("mamaship_tab_register"))}</div>
+  <div class="${on==="agenda"?"on":""}" data-t="nav-agenda"><span class="pill">${I.receipt}</span>${esc(t("sx_agenda"))}</div>
+  <div class="${on==="biz"?"on":""}" data-t="nav-biz"><span class="flagc${on==="biz"?" lit":""}">${o.locked?`<i class="fp">${I.fp}</i>`:V.flag()}</span>${esc(t("home_tab_my_business"))}</div></div>`;
+/* RegisterClosedBar.kt: #FEF3C7 row, titleSmall bold #856404, orange pill "Abrir" (SumaWarning #FF9500) */
+const closedBar = () => `<div class="cbar"><b>${esc(t("workspace_register_closed"))}</b><span data-t="bar-open">${esc(t("workspace_register_open_action"))}</span></div>`;
+/* text width in dp with the app's font (Roboto), for ShrinkToFitText (ui/components/ShrinkToFitText.kt: starts at the style's size, steps
+   down 1 sp while it overflows, never under 12 sp, then ellipsis) */
+const _cv = document.createElement("canvas").getContext("2d");
+const textW = (txt, px, weight, ls) => { _cv.font = `${weight||400} ${px}px Roboto, system-ui, sans-serif`; return _cv.measureText(txt).width + (ls||0)*txt.length; };
+const shrinkFs = (txt, room, start, weight, ls) => { let f = start||16; while(f > 12 && textW(txt, f, weight, ls) > room) f--; return f; };
+/* ServiceTileBody (ProductCard.kt:262-342): tile = (412 - 2*16 padding - 2*8 gaps) / 3 wide, 12 dp padding inside; price row = the price
+   (ShrinkToFitText bodyLarge bold, weight(1f, fill=false)) + 8 dp + "30 min" (bodySmall) */
+const TILE_IN = (412 - 32 - 16) / 3 - 24;
+const tile = s => { const pl = svcPriceLabel(s), mins = s.min ? `${s.min} ${t("opt_min")}` : "";
+  const room = TILE_IN - (mins ? textW(mins, 12, 400, .4) + 8 : 0), fs = shrinkFs(pl, room, 16, 700, .5);
+  return `<div class="vtile" data-t="svc-${s.id}"><span class="ib" style="background:${TRADE_TILE}">${TRADE_SVG}</span>
+  <b>${esc(s.name)}</b><div class="pr"><b style="font-size:calc(var(--u)*${fs})">${esc(pl)}</b>${mins?`<small>${esc(mins)}</small>`:""}</div></div>`; };
+/* the owner's services Home. o = {closed, count, total, overlay, locked} */
+function home(o){
+  o = o||{};
+  const nP = C.products.length, n = o.count||0, tot = o.total||0;
+  const tabs = `<div class="htabs"><span class="on">${esc(t("home_tab_services"))} · ${SERVICES.length}</span><span>${esc(t("home_tab_products"))} · ${nP}</span></div>`;
+  /* ProductLibraryView.kt:212-286: "Todos" (CategoryChipNeutral #607D8B, picked: 22 % fill, 1.5 dp border, check) + the trade's one category
+     (CategoryChipPalette by category id: the system "Otros servicios" bucket is hidden, the trade category is the second row -> #81C784) */
+  const chips = `<div class="mcats"><span style="background:rgba(96,125,139,.22);border:calc(var(--u)*1.5) solid #607D8B;color:#607D8B">${I.check}${esc(t("items_filter_all"))}</span><span style="background:rgba(129,199,132,.05);border:1px solid rgba(129,199,132,.3)">${esc(V.tradeName)}</span></div>`;
+  const body = `<div class="hedit"><span>${I.edit}${esc(t("common_edit"))}</span></div>${chips}<div class="vgrid">${SERVICES.map(tile).join("")}</div>`;
+  const foot = `<div class="vfoot"><div class="klink"><span>${esc(t("scan_row_manual"))}</span></div>
+    ${n?`<div class="cstrip"><span>${esc(tp("home_current_sale_services", n, n))}</span><i>›</i></div>`:""}
+    <div class="fpair">${btn(ACTION_WORD,"sec","book",{pill:true,off:!n})}${btn(t("common_charge", money(tot)),"pri","charge",{pill:true,off:!n})}</div></div>`;
+  return `<div class="pg">${tabs}${o.closed?closedBar():""}${body}${foot}${nav("caja",{locked:o.locked!==false})}${o.overlay||""}</div>`;
+}
+/* the M3 Switch (Material3 defaults over the light scheme): checked = primary track + white 24 dp thumb */
+const sw = (on, tag) => `<div class="rsw${on?" on":""}"${tag?` data-t="${tag}"`:""}><i></i></div>`;
+/* OptionSelectionSheet.kt:186-330: ModalBottomSheet, 16 dp sides; title = the service (titleLarge bold); one block per option set
+   (its name titleSmall grey, then the row: "Lavado" ON (included), a priced add-on "· +$X" OFF, an unpriced one "· se pregunta en la caja"
+   OFF); the CTA "Agregar a la venta · $X" = the line's price + what is ticked (SVC-1 item 1, :319-331) */
+function optionSheet(s, price){
+  const rows = s.included.map(x => ({name:x.name, on:true, tail:""}))
+    .concat(s.extras.map(x => ({name:x.name, on:false, tail: x.price!=null ? " · +"+money(x.price) : " · "+t("opt_ask_at_till_row")})));
+  const sets = rows.map(r => `<div class="osl">${esc(r.name)}</div><div class="osr"><span>${esc(r.name+r.tail)}</span>${sw(r.on)}</div><hr>`).join("");
+  return `<div class="mscrim"><div class="osheet"><div class="hdl"></div><h2>${esc(s.name)}</h2><div class="osets">${sets}</div>
+    ${btn(price>0 ? t("opt_add_to_sale", money(price)) : t("common_add"), "pri", "opt-add")}</div></div>`;
+}
+/* VariationSelectionSheet.kt:43-125: "Elige uno" (labelMedium bold primary), the service (headlineMedium ExtraBold), one r16 row per choice */
+function chooseSheet(s){
+  return `<div class="mscrim"><div class="vsheet"><div class="hdl"></div><small>${esc(t("home_variation_choose_one"))}</small><h2>${esc(s.name)}</h2>
+    ${s.choices.map((c,i)=>`<div class="vrow" data-t="choice-${i}"><b>${esc(c.name)}</b><span>${c.price>0?money(c.price):esc(t("opt_ask_at_till_row"))}</span></div>`).join("")}</div></div>`;
+}
+/* the system biometric sheet that the locked flag opens (PlatataApp.kt:560-585 FlagGate -> showBiometricPrompt, settings_gate_*) */
+const bioSheet = ok => `<div class="mscrim"><div class="bio"><b>${esc(t("settings_gate_title"))}</b><small>${esc(t("settings_gate_subtitle"))}</small>
+  <span class="fpb${ok?" ok":""}" data-t="fingerprint">${ok?I.check:I.fp}</span></div></div>`;
+
+/* Open register (ui/screens/cash/OpenRegisterScreen.kt:96-187): SumaTopBar, "Efectivo inicial" centred, the amount (displaySmall bold,
+   start-aligned), CashKeypad taking the rest, SumaButton "Abrir caja" in the bottom bar */
+const openRegister = typed => `<div class="pg">${topbar(t("register_open_title"))}
+  <div class="pb"><div class="lbl" style="text-align:center">${esc(t("register_open_amount_hint"))}</div><div class="amt" style="${amtFs(money(amountOf(typed)))}">${money(amountOf(typed))}</div>
+  <div class="grow"></div>${keypad("k", 72)}</div>
+  <div class="pf">${btn(t("register_open_confirm"),"pri","open-confirm")}</div></div>`;
+
+/* ---------- the business panel of a services shop (HomeScreen.kt:1510-1870): register card (#E8F5E9/#2E7D32 open, #FFEBEE/#C62828 closed),
+   Vender en línea (owner phone, SellOnlineGate), "Día a día", Clientes (home_clientes_count: no fiado for services), Facturas
+   (hasSupplierInvoiceRow), Equipo, Reportes ("Ventas netas hoy", NetSalesWords: not US/CA), divider, Configuración. No Items row
+   (workspaceHasItemsRow = false) and no Inventory (retail only). ---------- */
+function panel(p){
+  p = p||{};
+  const open = p.open!==false;
+  const row = (tag, icon, title, sub, o={}) => `<div class="wr" data-t="${tag}"><span class="ic">${icon}</span><div class="tx"><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>${o.trail||""}</div>`;
+  const reg = open
+    ? `<div class="wr reg on" data-t="reg-card"><i class="dot">●</i><div class="tx"><b>${esc(t("workspace_register_open"))}</b><small>${esc(t("workspace_register_sales"))}</small></div><b class="amt">${money(p.sales||0)}</b></div>`
+    : `<div class="wr reg off" data-t="reg-card"><i class="dot">●</i><div class="tx"><b>${esc(t("workspace_register_closed"))}</b><small>${esc(t("workspace_register_closed_sub"))}</small></div><b class="act">${esc(t("workspace_register_open_action"))}</b></div>`;
+  const today = t((CC==="US"||CC==="CA") ? "scan_row_reports_today" : "scan_row_reports_today_net", money(p.today||0));
+  return `<div class="pg"><div class="wp"><div class="wph"><b>${esc(C.place)}</b>${I.down}</div><div class="wpl">${reg}
+    ${row("row-online", I.cart, t("sell_online_title"), t("sell_online_row_off"), {trail:`<span class="opill">${esc(t("sell_online_pill_off"))}</span>`})}
+    <div class="wps">${esc(t("panel_heading_every_day"))}</div>
+    ${row("row-clients", I.person, t("more_customers_title"), tp("home_clientes_count", C.clients.length, C.clients.length))}
+    ${row("row-invoices", I.rlong, t("invoices_title"), t("invoices_row_first"))}
+    ${row("row-team", I.group, t("more_team_title"), tp("home_equipo_count_phones", C.staff.length, C.staff.length, tp("home_equipo_on_phones", C.staff.length, C.staff.length)))}
+    ${row("row-reports", I.rlong, t("workspace_full_reports"), today)}
+    <hr>${row("row-settings", I.gear, t("settings_title"), t("panel_settings_row_sub"))}
+    </div></div>${nav("biz")}</div>`;
+}
+
+/* ---------- Register screen (ui/screens/cash/RegisterStatusScreen.kt:140-505), one register: no tab row. Top bar: ‹ Hoy · 22 oct › +
+   "Reportes"; pill "● ABIERTA"; info card (Abierta / Abierta por); drawer card (Efectivo inicial, Ventas en efectivo (esta caja), one line per
+   cash in/out with "Anular", Debe haber en la caja); Sacar efectivo / Meter efectivo (Secondary, owner phone); the money card (RegisterMethodMoneyCard
+   :674-738: each method with its collector under it, "Todo el efectivo desde que abrió" for the cash line, Total cobrado); Historial de caja;
+   Cerrar caja. o = {when, moves:[{amount,at,isNew}], scroll, snack, flash} ---------- */
+function registerScreen(o){
+  const sales = SALES_AT(o.when), cashSales = sumPay(sales, "cash");
+  const moves = o.moves||[];
+  const out = moves.reduce((a,m)=>a+m.amount, 0);
+  const exp = r2(OPENING + cashSales - out);
+  const mv = moves.map(m=>`<div class="mv${m.isNew?" new":""}"><span>${esc(t("cash_movement_out"))} · ${esc(t("cash_movement_reason_supplier"))} · ${esc(fmtTime(m.at))}</span><b class="out">-${money(m.amount)}</b><i>${esc(t("cash_movement_void"))}</i></div>`).join("");
+  const tbar = topbar("", {html:`<div class="navd"><span class="dim">${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(OPENED)))}</b><span class="dim">${I.chevR}</span></div>`,
+                 action:`<span class="tba">${esc(t("register_status_full_reports"))}</span>`});
+  const methods = methodsOf(sales);
+  const mcard = methods.map(m => `<div class="lr ms"><span>${esc(m.k==="cash" ? t("register_status_cash_all") : methodName(m.k))}</span><span>${money(m.total)}</span></div>
+      <div class="lr ind"><span>${esc(OWNER)}</span><span>${money(m.total)}</span></div>`).join("");
+  const body = `<div class="rs" style="transform:translateY(calc(var(--u)*${-(o.scroll||0)}))">
+    <div class="pillrow"><span class="spill">${esc(t("register_status_pill_open"))}</span></div>
+    <div class="scard"><div class="lr"><span>${esc(t("register_status_opened_at"))}</span><span>${esc(fmtDT(OPENED))}</span></div>
+      <div class="lr"><span>${esc(t("register_status_opened_by"))}</span><span>${esc(OWNER)}</span></div></div>
+    <div class="scard"><div class="lr"><span>${esc(t("register_status_starting_cash"))}</span><span>${money(OPENING)}</span></div>
+      <div class="lr"><span>${esc(t("register_status_cash_sales_here"))}</span><span>${money(cashSales)}</span></div>
+      ${mv}<hr><div class="lr em${o.flash?" flash":""}"><span>${esc(t("register_status_expected"))}</span><span class="pri">${money(exp)}</span></div></div>
+    ${btn(t("cash_movement_out"),"sec","cash-out")}${btn(t("cash_movement_in"),"sec","cash-in")}
+    <div class="scard">${mcard}<hr><div class="lr em"><span>${esc(t("reports_total_collected"))}</span><span>${money(sumPay(sales))}</span></div></div>
+    <div class="hist">${I.clock}<span>${esc(t("register_list_title"))}</span></div>
+    ${btn(t("register_status_close_btn"),"sec","close-reg")}<div style="height:calc(var(--u)*16)"></div></div>`;
+  return `<div class="pg">${tbar}<div class="pscroll">${body}</div>${o.snack?`<div class="msnack" style="bottom:calc(var(--u)*16)">${esc(t("cash_movement_saved"))}</div>`:""}</div>`;
+}
+/* how far (dp) the scrolled page on screen can move: its content minus the room it has (a Column with verticalScroll stops at the end) */
+const maxScrollDp = () => { const rs = document.querySelector(".pscroll .rs"); if(!rs) return 0; const ps = rs.parentElement, u = ps.getBoundingClientRect().width / 412;
+  return Math.max(0, Math.round((rs.scrollHeight - ps.clientHeight) / u)); };
+/* a scrolled list slides (transform .5s); once it stops, ask the engine to put the tap ring on the target again (it listens to resize) */
+document.addEventListener("transitionend", e => { if(e.propertyName==="transform") window.dispatchEvent(new Event("resize")); });
+
+/* ===== VS10 ===== */
+/* VS10 "Cerrar la caja" as a SERVICES business (Peluquería; ?biz= works for the other three), on the OWNER phone, at 19:40 of the same day.
+   Every country, es/pt/en. Screens at sim/usa-canada 73c65f08 (paths under app/src/main/java/com/example/):
+   business panel        ui/screens/home/HomeScreen.kt:1552-1610 (register card -> Screen.RegisterStatus)
+   Register screen       ui/screens/cash/RegisterStatusScreen.kt:140-505 (scrolled to the bottom: Cerrar caja, Secondary)
+   Close register        ui/screens/cash/CloseRegisterScreen.kt:365-566 (the Expected card, tight with a cash movement: "Debe haber en la caja",
+                         the red "Sacar efectivo -$X" line, "Ver dinero por forma de pago ›" (owner, money to break down); "Contado" + the amount;
+                         the Diferencia line (Cuadrado in onSurface); CashKeypad (MoneyKeypadEntry rule); "Cerrar caja" off until a digit)
+   the tomorrow check    CloseRegisterScreen.kt:75-84 + sync/OpenTablesAtClose.kt:36-46 (SVC-2, item 20, verified): only TODAY's unpaid bookings
+                         are counted, and a services shop says "citas de hoy" (register_close_open_appointments). The salon has tomorrow's and
+                         Saturday's bookings (kit) and charged all of today's, so no "Antes de cerrar" question shows: Cerrar caja goes straight
+                         to the confirm.
+   confirm               CloseRegisterScreen.kt:306-351 (AlertDialog: "¿Cerrar la caja con $X contados?", Cuadrado, Seguir contando | Cerrar caja)
+   summary               ui/screens/cash/RegisterClosedScreen.kt:181-322 (variance headline; times card; Ventas netas, Total cobrado, Dinero por forma
+                         de pago; the drawer card; no Print without a receipt printer; Enviar por WhatsApp; Listo pinned)
+   WhatsApp text         utils/ShiftSummaryText.kt build(plain = true) (business name, CAJA CERRADA, "Label: value", blank lines for the rules)
+                         + WhatsappSignatureText (one blank line + whatsapp_signature); RegisterClosedScreen.kt:95-113 hands it to WhatsApp (ACTION_SEND)
+   The day (common block): opened 8:05 with openingCash, the kit's morning sales, VS3's 12:41 cash sale, VS9's 13:10 cash out, today's afternoon
+   bookings charged in cash. */
+const SALES = SALES_AT("night");
+const CASH = sumPay(SALES, "cash");
+const EXP = r2(OPENING + CASH - OUT);
+const COUNTED = EXP;                                   // she counts what should be there: "Cuadrado"
+const KEYS = keysFor(COUNTED);
+const NET = sumPay(SALES);                             // no tax set up, no tips, no charges: Net sales = Total collected (REPORTS-11)
+const METHODS = methodsOf(SALES);
+const varText = d => d<0 ? t("register_close_short", money(-d)) : d>0 ? t("register_close_over", money(d)) : t("register_close_balanced");
+const varCls = d => d<0 ? "neg" : d>0 ? "pos" : "bal";
+function closeScreen(st){
+  const has = st.typed!=="", c = amountOf(st.typed), d = r2(c-EXP);
+  const a = money(c);
+  return `<div class="pg">${topbar(t("register_close_title"))}
+    <div class="pb"><div class="scard tight" style="margin-top:calc(var(--u)*8)"><div class="lr"><span>${esc(t("register_close_expected_label"))}</span><span class="v">${money(EXP)}</span></div>
+      <div class="lr sm neg"><span>${esc(t("cash_movement_out"))}</span><span>-${money(OUT)}</span></div>
+      <div class="seeb">${esc(t("register_close_see_breakdown"))}</div></div>
+    <div class="lbl2">${esc(t("register_close_counted_label"))}</div>
+    <div class="amt2" style="${amtFs(a)}">${a}</div>
+    <div class="diff">${has?`<span>${esc(t("register_close_diff_label"))}</span><b class="${varCls(d)}">${esc(varText(d))}</b>`:""}</div>
+    <div class="grow"></div>${keypad("k", 64)}</div>
+    <div class="pf">${btn(t("register_close_confirm"),"pri","close-confirm",{off:!has})}</div>
+    ${st.dlg?`<div class="dlg-s"><div class="dlg"><h3>${esc(t("register_close_confirm_title", money(c)))}</h3><p class="vt ${varCls(d)}">${esc(varText(d))}</p>
+      <div class="bt"><span>${esc(t("register_close_keep_counting"))}</span><span data-t="dlg-close">${esc(t("register_close_confirm"))}</span></div></div></div>`:""}</div>`;
+}
+function summary(st){
+  const lr = (l,v,c) => `<div class="lr k${c?" "+c:""}"><span>${esc(l)}</span><span>${esc(v)}</span></div>`;
+  return `<div class="pg">${topbar(t("register_closed_title"))}<div class="pscroll"><div class="rs" style="transform:translateY(calc(var(--u)*${-(st.scroll||0)}))">
+    <div class="vhead bal">${esc(varText(0))}</div>
+    <div class="scard">${lr(t("register_status_opened_at"), fmtDT(OPENED))}${lr(t("register_status_closed_at"), fmtDT(CLOSED))}${lr(t("register_status_closed_by"), OWNER)}</div>
+    <div class="scard">${lr(t("register_status_net_sales"), money(NET))}${lr(t("reports_total_collected"), money(NET), "em")}
+      <div class="sub">${esc(t("register_close_by_method"))}</div>${METHODS.map(m => lr(methodName(m.k), money(m.total), "ind2")).join("")}</div>
+    <div class="scard">${lr(t("register_status_starting_cash"), money(OPENING))}${lr(t("register_status_cash_sales"), money(CASH))}
+      ${lr(t("cash_movement_out"), "-"+money(OUT))}<hr>
+      ${lr(t("register_status_expected"), money(EXP), "em")}${lr(t("register_status_counted"), money(COUNTED), "em")}</div>
+    ${btn(t("register_closed_whatsapp"),"sec","wa")}<div style="height:calc(var(--u)*16)"></div></div></div>
+    <div class="pf">${btn(t("common_done"),"pri","done")}</div></div>`;
+}
+/* the text ShiftSummaryText.build(labels, summary, plain = true) makes for this shift, signed (WhatsappSignature.append) */
+function shiftText(){
+  const out = [], row = (l, r) => out.push((l.startsWith(" ") ? "- " : "") + l.trim() + ": " + r);
+  out.push(C.place); out.push(t("register_closed_title").toUpperCase()); out.push("");
+  row(t("register_status_opened_at"), fmtDT(OPENED)); row(t("register_status_closed_at"), fmtDT(CLOSED)); row(t("register_status_closed_by"), OWNER); out.push("");
+  row(t("register_status_net_sales"), money(NET)); row(t("reports_total_collected"), money(NET));
+  out.push(t("register_close_by_method")); METHODS.forEach(m => row("  "+methodName(m.k), money(m.total))); out.push("");
+  row(t("register_status_starting_cash"), money(OPENING)); row(t("register_status_cash_sales"), money(CASH)); row(t("cash_movement_out"), "-"+money(OUT));
+  row(t("register_status_expected"), money(EXP)); row(t("register_status_counted"), money(COUNTED)); out.push(""); out.push(varText(0));
+  return out.join("\n").replace(/[   ]/g," ") + "\n\n" + t("whatsapp_signature");
+}
+/* WhatsApp (not Platata): the chat the owner picked, the summary waiting in the message box */
+const waScreen = () => `<div class="wa"><div class="wah">${I.back}<b>WhatsApp</b></div><div class="wab"></div>
+  <div class="wain"><div class="box">${esc(shiftText())}</div><span class="sendb"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></span></div></div>`;
+function render(st){
+  if(st.screen==="panel") return panel({open:true, sales:NET, today:NET});
+  if(st.screen==="reg") return registerScreen({when:"night", moves:[{amount:OUT, at:OUT_AT}], scroll:st.scroll||0});
+  if(st.screen==="close") return closeScreen(st);
+  if(st.screen==="sum") return summary(st);
+  if(st.screen==="wa") return waScreen();
+  return "";
+}
+VKIT.start(V, {
+  id:"VS10", tallVideo:true, clock:"19:40",
+  endText:pick({es:"Así cierras la caja con Platata.", pt:"Assim você fecha o caixa com o Platata.", en:"That's how you close the register with Platata."}),
+  beats:pick({
+    es:["Al final del día, toca la caja abierta","Baja y toca Cerrar caja","Arriba ves cuánto debe haber: cuenta y escríbelo","Cuadrado. Toca Cerrar caja y confírmalo","El resumen: ventas, efectivo y lo que salió","Envíalo por WhatsApp","Así cierras la caja con Platata."],
+    pt:["No fim do dia, toque no caixa aberto","Desça e toque em Fechar caixa","Em cima você vê quanto deve haver: conte e digite","Fechado exato. Toque em Fechar caixa e confirme","O resumo: vendas, dinheiro e o que saiu","Envie pelo WhatsApp","Assim você fecha o caixa com o Platata."],
+    en:["At the end of the day, tap the open register","Scroll down and tap Close register","On top: what should be there. Count and type it","Balanced. Tap Close register and confirm","The summary: sales, cash and what went out","Send it by WhatsApp","That's how you close the register with Platata."]}),
+  state:{screen:"panel", scroll:0, typed:"", dlg:false},
+  render,
+  device: () => "phone",
+  who: st => st.screen==="wa" ? "WhatsApp" : t("conn_slot_phone"),
+  steps:[
+    {beat:0, hint:TAP+t("workspace_register_open"), target:'[data-t="reg-card"]', tap(st,E){ st.screen="reg"; E.after(900,()=>{ st.scroll=maxScrollDp(); }); }},
+    {beat:1, hint:TAP+t("register_status_close_btn"), target:'[data-t="close-reg"]', tap(st){ st.screen="close"; st.scroll=0; }},
+    {beat:2, hint:TAP+KEYS.map(keyLabel).join(" "), target:`[data-t="k-${KEYS[0]}"]`, tap(st,E){
+        st.typed=press(st.typed,KEYS[0]); KEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed=press(st.typed,k); })); }},
+    {beat:3, hint:TAP+t("register_close_confirm"), target:'[data-t="close-confirm"]', tap(st){ st.dlg=true; }},
+    {beat:3, hint:TAP+t("register_close_confirm"), target:'[data-t="dlg-close"]', tap(st,E){ st.dlg=false; st.screen="sum"; E.after(1000,()=>{ st.scroll=Math.min(150, maxScrollDp()); }); }},
+    {beat:5, hint:TAP+t("register_closed_whatsapp"), target:'[data-t="wa"]', tap(st){ st.screen="wa"; }}
+  ]
+});
+
+</script>
+<style>
+/* VS2/VS3/VS9/VS10 common look: Material light (ui/theme/Color.kt LightColorScheme), 1 dp = var(--u). Pieces copied from TS2/TS10/RS3. */
+.mat .app{font-family:"Roboto",system-ui,sans-serif}
+.mat .pg{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;position:relative}
+.mat .tb{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff}
+.mat .tb .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on)}
+.mat .tb .tt{flex:1;min-width:0;padding-left:calc(var(--u)*4);font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .tb .tba{padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);color:var(--m-on);white-space:nowrap}
+.mat .navd{display:flex;align-items:center}.mat .navd b{flex:1;text-align:center;font-size:calc(var(--u)*16);font-weight:700;white-space:nowrap;overflow:hidden}
+.mat .navd span{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}.mat .navd .dim{color:rgba(28,28,30,.25)}
+.mat .pb{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 calc(var(--u)*16)}
+.mat .pf{padding:calc(var(--u)*16);flex:0 0 auto}
+.mat .pb>.lbl{flex:0 0 auto;margin-top:calc(var(--u)*24);font-size:calc(var(--u)*16);color:var(--m-onv)}
+.mat .pb>.amt{flex:0 0 auto;margin-top:calc(var(--u)*8);font-size:calc(var(--u)*var(--fs,60));line-height:calc(var(--u)*68);font-weight:700;letter-spacing:-.5px;white-space:nowrap;overflow:hidden}
+.mat .grow{flex:1;min-height:0}
+.mat .ck{display:flex;flex-direction:column;gap:calc(var(--u)*4);margin-bottom:calc(var(--u)*16);flex:0 0 auto}
+.mat .ck .kr{display:flex;gap:calc(var(--u)*4);height:calc(var(--u)*var(--kh))}
+.mat .ck span{flex:1;border-radius:calc(var(--u)*12);background:var(--m-sv);display:grid;place-items:center;font-size:calc(var(--u)*32);font-weight:700}
+.mat .sb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center;flex:0 0 auto}
+.mat .sb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sb.pill{border-radius:calc(var(--u)*50)}
+.mat .sb.pri{background:var(--m-on);color:#fff}
+.mat .sb.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .sb.off.pri{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .sb.off.sec{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.mat .sb svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:currentColor}
+/* services Home: TabRow (labelLarge, selected bold, 3 dp primary indicator), Edit, chips, the service grid, footer */
+.mat .htabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.mat .htabs span{flex:1;display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*14);font-weight:400;color:var(--m-onv);position:relative;letter-spacing:.1px;white-space:nowrap}
+.mat .htabs span.on{color:var(--m-on);font-weight:700}
+.mat .htabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.mat .hedit{display:flex;justify-content:flex-end;padding:0 calc(var(--u)*16);flex:0 0 auto}
+.mat .hedit span{display:flex;align-items:center;gap:calc(var(--u)*4);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .hedit svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.mat .mcats{padding:calc(var(--u)*12) calc(var(--u)*16)}
+.mat .vgrid{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*24) calc(var(--u)*16) calc(var(--u)*16);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*8);align-content:start;align-items:start}
+.mat .vtile{border:calc(var(--u)*1.5) solid var(--m-ovar);border-radius:calc(var(--u)*12);background:#fff;padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8);min-width:0}
+.mat .vtile .ib{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center;flex:0 0 auto}
+.mat .vtile .ib svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
+.mat .vtile>b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:500;letter-spacing:.5px;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
+.mat .vtile .pr{display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--u)*8);margin-top:calc(var(--u)*-0)}
+.mat .vtile .pr b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;letter-spacing:.5px;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mat .vtile .pr small{font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;flex:0 0 auto;padding-bottom:calc(var(--u)*3)}
+.mat .vfoot{flex:0 0 auto;background:#fff;padding:calc(var(--u)*12) calc(var(--u)*16)}
+.mat .klink{display:flex}.mat .klink span{height:calc(var(--u)*40);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .cstrip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:600}
+.mat .cstrip i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.mat .fpair{display:flex;gap:calc(var(--u)*12)}
+.mat .fpair .sb{flex:1;min-width:0;padding:0 calc(var(--u)*12)}
+.mat .cbar{display:flex;align-items:center;justify-content:space-between;background:#FEF3C7;padding:calc(var(--u)*8) calc(var(--u)*16);flex:0 0 auto}
+.mat .cbar b{font-size:calc(var(--u)*14);color:#856404}
+.mat .cbar span{min-height:calc(var(--u)*44);display:grid;place-items:center;padding:0 calc(var(--u)*24);border-radius:calc(var(--u)*50);background:#FF9500;color:#fff;font-size:calc(var(--u)*14);font-weight:700}
+.mat .mnav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.mat .mnav .flagc .fp{display:grid;place-items:center;color:var(--m-onv)}
+.mat .mnav .flagc .fp svg{width:calc(var(--u)*20);height:calc(var(--u)*20)}
+/* option sheet + Elige uno: M3 ModalBottomSheet defaults over the app theme (BottomSheetDefaults.ExpandedShape = shapes.extraLarge top = 50 dp
+   in Theme.kt:100; container surfaceContainerLow #F7F7FA, the Elige uno sheet passes surface #FFF; drag handle 32x4) */
+.mat .hdl{width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#79747E;opacity:.4;margin:calc(var(--u)*22) auto calc(var(--u)*22)}
+.mat .osheet{width:100%;background:#F7F7FA;border-radius:calc(var(--u)*50) calc(var(--u)*50) 0 0;padding:0 calc(var(--u)*16) calc(var(--u)*24)}
+.mat .osheet h2{margin:0 0 calc(var(--u)*12);font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700}
+.mat .osl{font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);margin-bottom:calc(var(--u)*6)}
+.mat .osr{display:flex;align-items:center;gap:calc(var(--u)*8);min-height:calc(var(--u)*48)}
+.mat .osr span{flex:1;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
+.mat .osheet hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*10) 0}
+.mat .osheet .sb{margin-top:calc(var(--u)*4)}
+.mat .rsw{display:block;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #79747E;background:#E5E5EA;position:relative;flex:0 0 auto;box-sizing:border-box}
+.mat .rsw i{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E}
+.mat .rsw.on{background:var(--m-on);border-color:var(--m-on)}
+.mat .rsw.on i{left:calc(var(--u)*22);top:calc(var(--u)*2);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.mat .vsheet{width:100%;background:#fff;border-radius:calc(var(--u)*50) calc(var(--u)*50) 0 0;padding:0 calc(var(--u)*24) calc(var(--u)*40)}
+.mat .vsheet small{display:block;font-size:calc(var(--u)*12);font-weight:700;color:var(--m-on);margin-bottom:calc(var(--u)*4)}
+.mat .vsheet h2{margin:0 0 calc(var(--u)*20);font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:800}
+.mat .vrow{display:flex;align-items:center;gap:calc(var(--u)*12);border-radius:calc(var(--u)*16);border:1px solid var(--m-ovar);background:rgba(242,242,247,.3);padding:calc(var(--u)*16);margin-bottom:calc(var(--u)*10)}
+.mat .vrow b{flex:1;font-size:calc(var(--u)*16);font-weight:600}.mat .vrow span{font-size:calc(var(--u)*16);font-weight:700}
+.mat .bio{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*32) calc(var(--u)*24) calc(var(--u)*40);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*8);text-align:center}
+.mat .bio b{font-size:calc(var(--u)*22);font-weight:500}.mat .bio small{font-size:calc(var(--u)*14);color:var(--m-onv)}
+.mat .bio .fpb{margin-top:calc(var(--u)*28);width:calc(var(--u)*64);height:calc(var(--u)*64);border-radius:50%;display:grid;place-items:center;color:#1A73E8;border:calc(var(--u)*2) solid #1A73E8}
+.mat .bio .fpb svg{width:calc(var(--u)*40);height:calc(var(--u)*40)}.mat .bio .fpb.ok{background:#1A73E8;color:#fff}
+/* business panel (WorkspaceRow: r16, surfaceVariant, 14/15 dp padding, 42 dp icon circle) */
+.mat .wp{flex:1;min-height:0;overflow:hidden;background:#fff}
+.mat .wph{display:flex;align-items:center;gap:calc(var(--u)*4);padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12)}
+.mat .wph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;color:var(--m-blue);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .wph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-blue);flex:0 0 auto}
+.mat .wpl{display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .wr .tx{flex:1;min-width:0}.mat .wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .wr.reg.on{background:#E8F5E9;color:#2E7D32}.mat .wr.reg.off{background:#FFEBEE;color:#C62828}
+.mat .wr.reg .tx small{color:inherit;opacity:.7}.mat .wr.reg .dot{font-style:normal;font-size:calc(var(--u)*16)}
+.mat .wr.reg .amt{font-size:calc(var(--u)*16);font-weight:700}.mat .wr.reg .act{font-size:calc(var(--u)*14)}
+.mat .opill{font-size:calc(var(--u)*11);font-weight:700;color:var(--m-onv);background:#fff;border-radius:99px;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.mat .wps{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv)}
+.mat .wpl hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0}
+/* Register screen cards (SumaCard: white, r12, elevation 1) */
+.mat .pscroll{flex:1;min-height:0;overflow:hidden}
+.mat .rs{padding:0 calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16);transition:transform .5s ease}
+.mat .pillrow{display:flex;justify-content:center;padding-top:calc(var(--u)*8)}
+.mat .spill{border-radius:calc(var(--u)*50);background:#E8F5E9;color:#2E7D32;font-size:calc(var(--u)*12);font-weight:700;padding:calc(var(--u)*8) calc(var(--u)*16)}
+.mat .scard{background:#fff;border-radius:calc(var(--u)*12);box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.2),0 calc(var(--u)*1) calc(var(--u)*1) rgba(0,0,0,.08);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12);flex:0 0 auto}
+.mat .lr{display:flex;justify-content:space-between;gap:calc(var(--u)*12);font-size:calc(var(--u)*14)}
+.mat .lr span:first-child{color:var(--m-onv)}.mat .lr span:last-child{text-align:right;white-space:nowrap}
+.mat .lr.em span{font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}.mat .lr.em span:last-child{font-size:calc(var(--u)*18)}
+.mat .lr .pri{color:var(--m-on)}.mat .lr.ms span{font-weight:600;color:var(--m-on)}
+.mat .lr.ind{padding-left:calc(var(--u)*16)}.mat .lr.ind span{color:var(--m-onv)!important}
+.mat .lr.flash span:last-child{animation:fl 1.4s ease}
+@keyframes fl{0%{background:#FFF3C4}100%{background:transparent}}
+.mat .scard hr{border:0;border-top:1px solid var(--m-ovar);margin:0}
+.mat .mv{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14)}
+.mat .mv span{flex:1;color:var(--m-on)}.mat .mv b{font-weight:600}.mat .mv b.out{color:var(--m-err)}
+.mat .mv i{font-style:normal;font-size:calc(var(--u)*12);font-weight:500;color:var(--m-on);padding:0 calc(var(--u)*4) 0 calc(var(--u)*8)}
+.mat .mv.new{animation:fl 1.4s ease}
+.mat .hist{height:calc(var(--u)*40);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500;flex:0 0 auto}
+.mat .hist svg{width:calc(var(--u)*24);height:calc(var(--u)*24)}
+.mat .dlg-s{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*24)}
+.mat .dlg{background:#ECECF1;border-radius:calc(var(--u)*50);padding:calc(var(--u)*24);width:100%}
+.mat .dlg h3{margin:0 0 calc(var(--u)*16);font-size:calc(var(--u)*24);font-weight:400;line-height:1.3}
+.mat .dlg p{margin:0;font-size:calc(var(--u)*14);color:var(--m-onv);line-height:1.45}
+.mat .dlg .bt{display:flex;justify-content:flex-end;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:500}
+.mat .dlg .bt span{padding:calc(var(--u)*10) calc(var(--u)*12);color:var(--m-on)}
+
+/* Close register (CloseRegisterContent): the tight Expected card (12 dp padding, 8 dp gaps with a cash movement), Contado, the 24 dp Diferencia line */
+.mat .scard.tight{padding:calc(var(--u)*12);gap:calc(var(--u)*8)}
+.mat .scard.tight .lr span:last-child{color:var(--m-on);font-weight:600}
+.mat .lr.sm span{font-size:calc(var(--u)*12);font-weight:600}.mat .lr.neg span{color:var(--m-err)!important}
+.mat .seeb{font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
+.mat .lbl2{flex:0 0 auto;margin-top:calc(var(--u)*8);font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);color:var(--m-onv)}
+.mat .amt2{flex:0 0 auto;margin-top:calc(var(--u)*8);font-size:calc(var(--u)*var(--fs,60));line-height:calc(var(--u)*68);font-weight:700;letter-spacing:-.5px;white-space:nowrap;overflow:hidden}
+.mat .diff{flex:0 0 auto;margin-top:calc(var(--u)*8);height:calc(var(--u)*24);display:flex;justify-content:space-between;align-items:center;font-size:calc(var(--u)*14)}
+.mat .diff span{color:var(--m-onv)}.mat .diff b{font-weight:700}
+.mat .neg{color:var(--m-err)}.mat .pos{color:var(--m-on)}.mat .diff .bal,.mat .dlg p.vt.bal{color:var(--m-on)}
+.mat .dlg p.vt{font-size:calc(var(--u)*18);font-weight:700}.mat .dlg p.vt.neg{color:var(--m-err)}
+/* Register closed summary: headline headlineMedium bold, Cuadrado in SumaStatusSuccessText #2E7D32 */
+.mat .vhead{text-align:center;font-size:calc(var(--u)*28);font-weight:700;padding-top:calc(var(--u)*8);flex:0 0 auto}
+.mat .vhead.bal{color:#2E7D32}
+.mat .lr.k span{color:var(--m-on)}.mat .lr.ind2{padding-left:calc(var(--u)*16)}
+.mat .lr.k.em span:last-child{font-size:calc(var(--u)*14)}
+.mat .sub{font-size:calc(var(--u)*14);color:var(--m-onv)}
+/* WhatsApp (not Platata): the chat with the text in the message box */
+.mat .wa{flex:1;display:flex;flex-direction:column;background:#EFEAE2;min-height:0}
+.mat .wah{height:calc(var(--u)*56);background:#008069;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*16);padding:0 calc(var(--u)*16);font-size:calc(var(--u)*19);flex:0 0 auto}
+.mat .wah svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff}
+.mat .wab{flex:1;min-height:0}
+.mat .wain{display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*8);align-items:flex-end;flex:0 0 auto}
+.mat .wain .box{flex:1;max-height:calc(var(--u)*560);overflow:hidden;background:#fff;border-radius:calc(var(--u)*22);padding:calc(var(--u)*10) calc(var(--u)*14);font:calc(var(--u)*13)/1.35 Roboto,system-ui,sans-serif;white-space:pre-wrap;color:#111B21}
+.mat .wain .sendb{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#00A884;display:grid;place-items:center;flex:0 0 auto}
+.mat .wain .sendb svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff}
+
+</style>
+</body>
+</html>

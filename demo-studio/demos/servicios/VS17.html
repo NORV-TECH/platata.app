@@ -1,0 +1,636 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Impuestos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/services-data.js"></script>
+<script src="../../kit/vkit.js"></script>
+<script>
+/* VS17 — built from the helper's sources (common + page); strings, icons and potatoes are copied from the app at 73c65f08. */
+const PAGE_BIZ = "peluqueria";
+const STR={"bridge_add_option": {"en": "＋ Add another option", "es": "＋ Agregar otra opción", "pt": "＋ Adicionar outra opção"}, "bridge_how_charge": {"en": "How do you charge?", "es": "¿Cómo cobras?", "pt": "Como você cobra?"}, "bridge_mode_ask": {"en": "At the till", "es": "En la caja", "pt": "No caixa"}, "bridge_mode_by_choice": {"en": "By choice", "es": "Según la opción", "pt": "Conforme a opção"}, "bridge_mode_fixed": {"en": "Fixed price", "es": "Precio fijo", "pt": "Preço fixo"}, "bridge_mode_from": {"en": "From", "es": "Desde", "pt": "A partir de"}, "bridge_other": {"en": "Other", "es": "Otro", "pt": "Outro"}, "bridge_price_title": {"en": "What do you charge?", "es": "¿Cuánto cobras?", "pt": "Quanto você cobra?"}, "bridge_what_comes": {"en": "What usually comes with it", "es": "Lo que suele venir con esto", "pt": "O que costuma vir junto"}, "common_charge": {"en": "Charge %s", "es": "Cobrar %s", "pt": "Cobrar %s"}, "common_edit": {"en": "Edit", "es": "Editar", "pt": "Editar"}, "common_new_short": {"en": "+ New", "es": "+ Nuevo", "pt": "+ Novo"}, "common_save": {"en": "Save", "es": "Guardar", "pt": "Salvar"}, "disc_title_with_combos": {"en": "Discounts and combos", "es": "Descuentos y combos", "pt": "Descontos e combos"}, "home_add_tile": {"en": "+ Add", "es": "+ Agregar", "pt": "+ Adicionar"}, "home_editing": {"en": "Editing", "es": "Editando", "pt": "Editando"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "home_tab_products": {"en": "Products", "es": "Productos", "pt": "Produtos"}, "home_tab_services": {"en": "Services", "es": "Servicios", "pt": "Serviços"}, "invoices_row_first": {"en": "Scan your first invoice", "es": "Escanea tu primera factura", "pt": "Escaneie sua primeira nota"}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "items_field_taxable": {"en": "Charge tax on this item", "es": "Cobrar impuesto sobre este artículo", "pt": "Cobrar imposto sobre este item"}, "items_field_taxable_sales": {"en": "Charge sales tax on this item", "es": "Cobrar impuesto sobre este artículo", "pt": "Cobrar imposto sobre este item"}, "items_filter_all": {"en": "All", "es": "Todos", "pt": "Todos"}, "items_price_from": {"en": "From %1$s", "es": "Desde %1$s", "pt": "A partir de %1$s"}, "items_price_unset": {"en": "No price", "es": "Sin precio", "pt": "Sem preço"}, "mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "more_where_subtitle": {"en": "Store, home, pick-up", "es": "Local, domicilio, recogida", "pt": "Local, domicílio, coleta"}, "notif_hub_sub": {"en": "Orders, payments and your register", "es": "Pedidos, pagos y tu caja", "pt": "Pedidos, pagamentos e seu caixa"}, "notif_title": {"en": "Notifications", "es": "Notificaciones", "pt": "Notificações"}, "opt_ask_at_till_row": {"en": "ask at the till", "es": "se pregunta en la caja", "pt": "perguntar no caixa"}, "opt_min": {"en": "min", "es": "min", "pt": "min"}, "opt_tag_charge": {"en": "charges more", "es": "cobra más", "pt": "cobra mais"}, "opt_tag_included": {"en": "included", "es": "incluido", "pt": "incluído"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "receipt_layout_detailed": {"en": "Detailed", "es": "Detallado", "pt": "Detalhado"}, "rp_sheet_my_reports": {"en": "My reports", "es": "Mis reportes", "pt": "Meus relatos"}, "rp_sheet_my_reports_none": {"en": "No reports yet", "es": "Aún no hay reportes", "pt": "Ainda não há relatos"}, "rp_strip_support": {"en": "Support", "es": "Soporte", "pt": "Suporte"}, "rp_strip_support_sub": {"en": "Report a problem here", "es": "Reporta un problema aquí", "pt": "Relatar um problema aqui"}, "scan_row_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Vendas hoje · %s"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "services_action_agendar": {"en": "Book", "es": "Agendar", "pt": "Agendar"}, "services_action_crear_orden": {"en": "Create order", "es": "Crear orden", "pt": "Criar ordem"}, "services_menu_title": {"en": "Your services", "es": "Mis servicios", "pt": "Meus serviços"}, "settings_hub_backup": {"en": "Backup", "es": "Respaldo", "pt": "Backup"}, "settings_hub_backup_last": {"en": "Last copy: %1$s", "es": "Último respaldo: %1$s", "pt": "Último backup: %1$s"}, "settings_hub_business_info": {"en": "Business info", "es": "Datos del negocio", "pt": "Dados do negócio"}, "settings_hub_group_getting_paid": {"en": "Getting paid", "es": "Cobros", "pt": "Cobranças"}, "settings_hub_group_this_phone": {"en": "This phone", "es": "Este teléfono", "pt": "Este celular"}, "settings_hub_group_your_business": {"en": "Your business", "es": "Tu negocio", "pt": "Seu negócio"}, "settings_hub_payment_methods": {"en": "Payment methods", "es": "Métodos de pago", "pt": "Formas de pagamento"}, "settings_hub_receipts": {"en": "Receipts", "es": "Recibos", "pt": "Recibos"}, "settings_hub_receipts_num_auto": {"en": "numbered automatically", "es": "numeración automática", "pt": "numeração automática"}, "settings_hub_receipts_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "settings_hub_security_on_delete": {"en": "Asks for your fingerprint before deleting", "es": "Pide huella antes de borrar", "pt": "Pede a digital antes de apagar"}, "settings_hub_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "settings_security_title": {"en": "Security", "es": "Seguridad", "pt": "Segurança"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "settings_where_you_work": {"en": "Where you work", "es": "Dónde atiendes", "pt": "Onde você atende"}, "svc_delete_service": {"en": "Delete service", "es": "Eliminar servicio", "pt": "Excluir serviço"}, "svc_edit_duration_label": {"en": "Duration (minutes)", "es": "Duración (minutos)", "pt": "Duração (minutos)"}, "svc_edit_name_label": {"en": "Name", "es": "Nombre", "pt": "Nome"}, "svc_edit_picker_title": {"en": "The price is whatever they pick", "es": "El precio es lo que escojan", "pt": "O preço é o que escolherem"}, "svc_edit_title": {"en": "Edit service", "es": "Editar servicio", "pt": "Editar serviço"}, "tax_active_badge": {"en": "ACTIVE", "es": "ACTIVO", "pt": "ATIVO"}, "tax_add_section": {"en": "New tax", "es": "Nuevo impuesto", "pt": "Novo imposto"}, "tax_empty_state": {"en": "No taxes yet. Tap + New to add one.", "es": "Sin impuestos aún. Toca + Nuevo para agregar uno.", "pt": "Sem impostos ainda. Toque em + Novo para adicionar."}, "tax_field_name": {"en": "Tax name", "es": "Nombre del impuesto", "pt": "Nome do imposto"}, "tax_field_pct": {"en": "Percentage (%)", "es": "Porcentaje (%)", "pt": "Porcentagem (%)"}, "tax_in_prices_no": {"en": "No, add it on top", "es": "No, se suma al precio", "pt": "Não, soma-se ao preço"}, "tax_in_prices_question": {"en": "Is this tax already in your prices?", "es": "¿Este impuesto ya está en tus precios?", "pt": "Esse imposto já está nos seus preços?"}, "tax_in_prices_yes": {"en": "Yes, it's included", "es": "Sí, ya está incluido", "pt": "Sim, já está incluído"}, "tax_line_added": {"en": "%1$s · added on top", "es": "%1$s · se suma al precio", "pt": "%1$s · somado ao preço"}, "tax_line_included": {"en": "%1$s · included in prices", "es": "%1$s · incluido en los precios", "pt": "%1$s · incluído nos preços"}, "tax_saved_on": {"en": "Tax on. It applies to items marked to charge tax.", "es": "Impuesto activo. Se aplica a los artículos marcados con impuesto.", "pt": "Imposto ativo. Aplica-se aos itens marcados para cobrar imposto."}, "tax_title": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "till_tap_pointer": {"en": "Tap a service to charge it", "es": "Toca un servicio para cobrarlo", "pt": "Toque em um serviço para cobrar"}, "till_tap_pointer_ok": {"en": "Got it", "es": "Entendido", "pt": "Entendi"}, "trade_family_arreglos": {"en": "Repairs", "es": "Arreglos", "pt": "Consertos"}, "trade_family_belleza": {"en": "Beauty & wellness", "es": "Belleza y bienestar", "pt": "Beleza e bem-estar"}, "trade_family_hogar": {"en": "Home", "es": "Hogar", "pt": "Casa"}, "trade_family_mascotas": {"en": "Pets", "es": "Mascotas", "pt": "Pets"}, "trade_family_vehiculos": {"en": "Vehicles", "es": "Vehículos", "pt": "Veículos"}, "trade_name_barberia": {"en": "Barbershop", "es": "Barbería", "pt": "Barbearia"}, "trade_name_bronceado": {"en": "Tanning", "es": "Bronceado", "pt": "Bronzeamento"}, "trade_name_cejas_pestanas": {"en": "Lashes & brows", "es": "Cejas y pestañas", "pt": "Cílios e sobrancelhas"}, "trade_name_depilacion": {"en": "Hair removal", "es": "Depilación", "pt": "Depilação"}, "trade_name_estetica": {"en": "Aesthetics", "es": "Estética", "pt": "Estética"}, "trade_name_maquillaje": {"en": "Makeup", "es": "Maquillaje", "pt": "Maquiagem"}, "trade_name_masajes": {"en": "Massages", "es": "Masajes", "pt": "Massagens"}, "trade_name_peluqueria": {"en": "Hair salon", "es": "Peluquería", "pt": "Cabeleireiro"}, "trade_name_peluqueria_canina": {"en": "Dog grooming", "es": "Peluquería canina", "pt": "Banho e tosa"}, "trade_name_podologia": {"en": "Podiatry", "es": "Podología", "pt": "Podologia"}, "trade_name_spa": {"en": "Spa", "es": "Spa", "pt": "Spa"}, "trade_name_taller_motos": {"en": "Motorcycle repair", "es": "Taller de motos", "pt": "Oficina de motos"}, "trade_name_tatuajes": {"en": "Tattoos", "es": "Tatuajes", "pt": "Tatuagens"}, "trade_name_unas": {"en": "Nails", "es": "Uñas", "pt": "Unhas"}, "trade_name_unisex": {"en": "Unisex salon", "es": "Unisex", "pt": "Salão unissex"}, "trade_name_veterinaria": {"en": "Vet", "es": "Veterinaria", "pt": "Veterinário"}, "trade_picker_continue": {"en": "Continue with %1$s", "es": "Seguir con %1$s", "pt": "Seguir com %1$s"}, "trade_picker_continue_zero": {"en": "Pick at least one", "es": "Escoge al menos uno", "pt": "Escolha pelo menos um"}, "trade_picker_lede": {"en": "Pick your trade. We bring its services with prices.", "es": "Escoge tu oficio. Te traemos sus servicios con precios.", "pt": "Escolha seu ofício. Trazemos os serviços com preços."}, "trade_picker_lede_no_prices": {"en": "Pick your trade. We bring its services.", "es": "Escoge tu oficio. Te traemos sus servicios.", "pt": "Escolha seu ofício. Trazemos os serviços."}, "trade_picker_my_trade_missing": {"en": "My trade isn't here", "es": "Mi oficio no está", "pt": "Meu ofício não está"}, "trade_picker_search_hint": {"en": "Search your trade", "es": "Busca tu oficio", "pt": "Buscar seu ofício"}, "trade_picker_skip_for_now": {"en": "Skip for now", "es": "Saltar por ahora", "pt": "Pular por agora"}, "trade_picker_step_oficio": {"en": "Trade", "es": "Oficio", "pt": "Ofício"}, "trade_picker_title": {"en": "What do you do?", "es": "¿Qué haces?", "pt": "O que você faz?"}, "tx_tab_all": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "where_done": {"en": "Done", "es": "Listo", "pt": "Pronto"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "workspace_register_closed": {"en": "Register closed", "es": "Caja cerrada", "pt": "Caixa fechado"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_open_action": {"en": "Open", "es": "Abrir", "pt": "Abrir"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "workspace_registers_and_printers": {"en": "Connections", "es": "Conexiones", "pt": "Conexões"}};
+const PLU={"home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_equipo_count_phones": {"en": {"one": "%1$d employee · %2$s", "other": "%1$d employees · %2$s"}, "es": {"one": "%1$d empleado · %2$s", "other": "%1$d empleados · %2$s"}, "pt": {"one": "%1$d funcionário · %2$s", "other": "%1$d funcionários · %2$s"}}, "home_equipo_on_phones": {"en": {"one": "%1$d on a phone", "other": "%1$d on phones"}, "es": {"one": "%1$d en celular", "other": "%1$d en celular"}, "pt": {"one": "%1$d no celular", "other": "%1$d no celular"}}};
+const ASSET={"ic": {"drawn_navaja": "<svg viewBox=\"0 0 24 24\"><g transform=\"rotate(-35 12 12)\"><path d=\"M4,10.6 H10.8 A1.4,1.4 0 0 1 12.2,12 V12 A1.4,1.4 0 0 1 10.8,13.4 H4 A1.4,1.4 0 0 1 2.6,12 V12 A1.4,1.4 0 0 1 4,10.6 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M11.4 9.4h8.6c.8 0 1.4.6 1.4 1.4v1.4c0 1.3-1.1 2.4-2.4 2.4h-7.6z\" fill=\"#C4C8CC\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M10.7,12 A1.1,1.1 0 1 0 12.9,12 A1.1,1.1 0 1 0 10.7,12 Z\" fill=\"#EFC43E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>", "drawn_secador": "<svg viewBox=\"0 0 24 24\"><path d=\"M7.3 12.8l1.6 7.1c.1.6.7 1 1.3.9l.9-.2c.6-.1 1-.7.9-1.3l-1.3-6.9\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M9.6,6.4 H17.2 A1.4,1.4 0 0 1 18.6,7.8 V10.2 A1.4,1.4 0 0 1 17.2,11.6 H9.6 A1.4,1.4 0 0 1 8.2,10.2 V7.8 A1.4,1.4 0 0 1 9.6,6.4 Z\" fill=\"#E86A8E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M3.8,9 A4.6,4.6 0 1 0 13,9 A4.6,4.6 0 1 0 3.8,9 Z\" fill=\"#E86A8E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M6.6,9 A1.8,1.8 0 1 0 10.2,9 A1.8,1.8 0 1 0 6.6,9 Z\" fill=\"#EDF1F4\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M19.2,5.6 H19.8 A1,1 0 0 1 20.8,6.6 V11.4 A1,1 0 0 1 19.8,12.4 H19.2 A1,1 0 0 1 18.2,11.4 V6.6 A1,1 0 0 1 19.2,5.6 Z\" fill=\"#B0B4B8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M21.8 7.4h1M21.8 10.6h1\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_peine": "<svg viewBox=\"0 0 24 24\"><path d=\"M5.2 12.2v5M7.6 12.2v5M10 12.2v5M12.4 12.2v5M14.8 12.2v5M17.2 12.2v5M19.2 12.2v4\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M5.8,7.6 H18.4 A2.2,2.2 0 0 1 20.6,9.8 V10.2 A2.2,2.2 0 0 1 18.4,12.4 H5.8 A2.2,2.2 0 0 1 3.6,10.2 V9.8 A2.2,2.2 0 0 1 5.8,7.6 Z\" fill=\"#E86A8E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_esmalte": "<svg viewBox=\"0 0 24 24\"><path d=\"M7.2,7.4 H16.8 A1.8,1.8 0 0 1 18.6,9.2 V18.8 A1.8,1.8 0 0 1 16.8,20.6 H7.2 A1.8,1.8 0 0 1 5.4,18.8 V9.2 A1.8,1.8 0 0 1 7.2,7.4 Z\" fill=\"#D9422E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M6.4 7.4c1.6-2.4 3.4-3.6 5.6-3.6s4 1.2 5.6 3.6\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M5.6,6.4 H18.4 A1,1 0 0 1 19.4,7.4 V7.8 A1,1 0 0 1 18.4,8.8 H5.6 A1,1 0 0 1 4.6,7.8 V7.4 A1,1 0 0 1 5.6,6.4 Z\" fill=\"#B0B4B8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_pestana": "<svg viewBox=\"0 0 24 24\"><path d=\"M2.8 12.6c2.4-3.6 5.6-5.4 9.2-5.4s6.8 1.8 9.2 5.4c-2.4 3.4-5.6 5.2-9.2 5.2s-6.8-1.8-9.2-5.2z\" fill=\"#FFFFFF\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M9,12.4 A3,3 0 1 0 15,12.4 A3,3 0 1 0 9,12.4 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M10.8,12.4 A1.2,1.2 0 1 0 13.2,12.4 A1.2,1.2 0 1 0 10.8,12.4 Z\" fill=\"#3A2A1F\"/><path d=\"M6.4 8.8 5 6.8M9.2 7.5 8.6 5.1M12 7.2V4.6M14.8 7.5l.6-2.4M17.6 8.8l1.4-2\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_crema": "<svg viewBox=\"0 0 24 24\"><path d=\"M7.2,10.6 H16.8 A2.4,2.4 0 0 1 19.2,13 V17.6 A2.4,2.4 0 0 1 16.8,20 H7.2 A2.4,2.4 0 0 1 4.8,17.6 V13 A2.4,2.4 0 0 1 7.2,10.6 Z\" fill=\"#F4F0E6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M5.4,7.4 H18.6 A1.4,1.4 0 0 1 20,8.8 V10 A1.4,1.4 0 0 1 18.6,11.4 H5.4 A1.4,1.4 0 0 1 4,10 V8.8 A1.4,1.4 0 0 1 5.4,7.4 Z\" fill=\"#F2A7BF\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M8.4 15.2h7.2\" fill=\"none\" stroke=\"#F2A7BF\" stroke-width=\"1.6\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_aceite_de_almendras": "<svg viewBox=\"0 0 24 24\"><path d=\"M10 2.6h4v3.4l3 4.4v8.4c0 1.4-1.2 2.6-2.6 2.6H9.6C8.2 21.4 7 20.2 7 18.8v-8.4l3-4.4z\" fill=\"#EFD9A8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M9.4 13h5.2\" fill=\"none\" stroke=\"#FFFFFF\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_vela_aromatica": "<svg viewBox=\"0 0 24 24\"><path d=\"M10.2,8.6 H13.8 A1.8,1.8 0 0 1 15.6,10.4 V19.2 A1.8,1.8 0 0 1 13.8,21 H10.2 A1.8,1.8 0 0 1 8.4,19.2 V10.4 A1.8,1.8 0 0 1 10.2,8.6 Z\" fill=\"#B49ACE\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M12 8.4c-1.6-1.6-1.6-3.4 0-5 1.6 1.6 1.6 3.4 0 5z\" fill=\"#F5B942\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_labial": "<svg viewBox=\"0 0 24 24\"><path d=\"M9.8,13 H14.2 A1.4,1.4 0 0 1 15.6,14.4 V20 A1.4,1.4 0 0 1 14.2,21.4 H9.8 A1.4,1.4 0 0 1 8.4,20 V14.4 A1.4,1.4 0 0 1 9.8,13 Z\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M10,10 H14 A0.8,0.8 0 0 1 14.8,10.8 V12.6 A0.8,0.8 0 0 1 14,13.4 H10 A0.8,0.8 0 0 1 9.2,12.6 V10.8 A0.8,0.8 0 0 1 10,10 Z\" fill=\"#EFC43E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M9.8 10V5.9c0-.6.3-1.1.8-1.4l3.6-2.1V10z\" fill=\"#D9422E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_tatuaje": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 20.4 4.6 13.2C2.6 11.2 2.8 8 5 6.6c1.8-1.2 4.2-.8 5.6.8L12 8.8l1.4-1.4c1.4-1.6 3.8-2 5.6-.8 2.2 1.4 2.4 4.6.4 6.6z\" fill=\"#D9422E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M3.2 11.2h17.6l-1.5 1.9 1.5 1.9H3.2l1.5-1.9z\" fill=\"#F3E4C6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_sol": "<svg viewBox=\"0 0 24 24\"><path d=\"M7.4,12 A4.6,4.6 0 1 0 16.6,12 A4.6,4.6 0 1 0 7.4,12 Z\" fill=\"#EFC43E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_piedras": "<svg viewBox=\"0 0 24 24\"><g transform=\"rotate(-20 8 14.6)\"><path d=\"M4.6,14.6 A3.4,2.2 0 1 0 11.4,14.6 A3.4,2.2 0 1 0 4.6,14.6 Z\" fill=\"#8E96A8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(10 12.4 16)\"><path d=\"M9,16 A3.4,2.2 0 1 0 15.8,16 A3.4,2.2 0 1 0 9,16 Z\" fill=\"#8E96A8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(-30 15.6 12.4)\"><path d=\"M12.2,12.4 A3.4,2.2 0 1 0 19,12.4 A3.4,2.2 0 1 0 12.2,12.4 Z\" fill=\"#8E96A8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(25 10.6 10.8)\"><path d=\"M7.2,10.8 A3.4,2.2 0 1 0 14,10.8 A3.4,2.2 0 1 0 7.2,10.8 Z\" fill=\"#8E96A8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>", "drawn_pie": "<svg viewBox=\"0 0 24 24\"><g transform=\"rotate(-10 11.2 14.8)\"><path d=\"M7,14.8 A4.2,6.4 0 1 0 15.4,14.8 A4.2,6.4 0 1 0 7,14.8 Z\" fill=\"#F3E4C6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><path d=\"M8.5,5.3 A1.9,1.9 0 1 0 12.3,5.3 A1.9,1.9 0 1 0 8.5,5.3 Z\" fill=\"#F3E4C6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M11.95,5.6 A1.35,1.35 0 1 0 14.65,5.6 A1.35,1.35 0 1 0 11.95,5.6 Z\" fill=\"#F3E4C6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M14.25,6.7 A1.15,1.15 0 1 0 16.55,6.7 A1.15,1.15 0 1 0 14.25,6.7 Z\" fill=\"#F3E4C6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M16,8.3 A1,1 0 1 0 18,8.3 A1,1 0 1 0 16,8.3 Z\" fill=\"#F3E4C6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M17.15,10.2 A0.85,0.85 0 1 0 18.85,10.2 A0.85,0.85 0 1 0 17.15,10.2 Z\" fill=\"#F3E4C6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "drawn_huella": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 12.4c2.8 0 5.2 2.6 5.2 4.8 0 1.8-1.4 2.6-2.8 2.6-1 0-1.6-.6-2.4-.6s-1.4.6-2.4.6c-1.4 0-2.8-.8-2.8-2.6 0-2.2 2.4-4.8 5.2-4.8z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><g transform=\"rotate(-20 6.8 10.4)\"><path d=\"M5.2,10.4 A1.6,2.1 0 1 0 8.4,10.4 A1.6,2.1 0 1 0 5.2,10.4 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(-8 10.1 6.8)\"><path d=\"M8.5,6.8 A1.6,2.2 0 1 0 11.7,6.8 A1.6,2.2 0 1 0 8.5,6.8 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(8 13.9 6.8)\"><path d=\"M12.3,6.8 A1.6,2.2 0 1 0 15.5,6.8 A1.6,2.2 0 1 0 12.3,6.8 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g transform=\"rotate(20 17.2 10.4)\"><path d=\"M15.6,10.4 A1.6,2.1 0 1 0 18.8,10.4 A1.6,2.1 0 1 0 15.6,10.4 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>", "drawn_perro": "<svg viewBox=\"0 0 24 24\"><path d=\"M5.2 5.4c-1.4.8-2.2 3-1.6 5.6.3 1.2 1.6 1.4 2.2.4L8 7.6c.4-1.2-1.4-2.8-2.8-2.2z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M18.8 5.4c1.4.8 2.2 3 1.6 5.6-.3 1.2-1.6 1.4-2.2.4L16 7.6c-.4-1.2 1.4-2.8 2.8-2.2z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M12 5.6c3.6 0 6 2.6 6 6.2 0 4.2-2.6 7.6-6 7.6s-6-3.4-6-7.6c0-3.6 2.4-6.2 6-6.2z\" fill=\"#C4854E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M8.8,15.2 A3.2,2.6 0 1 0 15.2,15.2 A3.2,2.6 0 1 0 8.8,15.2 Z\" fill=\"#F3E4C6\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M10.7,13.9 A1.3,0.9 0 1 0 13.3,13.9 A1.3,0.9 0 1 0 10.7,13.9 Z\" fill=\"#3A2A1F\"/><path d=\"M8.7,10.6 A0.9,0.9 0 1 0 10.5,10.6 A0.9,0.9 0 1 0 8.7,10.6 Z\" fill=\"#3A2A1F\"/><path d=\"M13.5,10.6 A0.9,0.9 0 1 0 15.3,10.6 A0.9,0.9 0 1 0 13.5,10.6 Z\" fill=\"#3A2A1F\"/></svg>", "drawn_moto": "<svg viewBox=\"0 0 24 24\"><path d=\"M2.6,16 A3.4,3.4 0 1 0 9.4,16 A3.4,3.4 0 1 0 2.6,16 Z\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M14.6,16 A3.4,3.4 0 1 0 21.4,16 A3.4,3.4 0 1 0 14.6,16 Z\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M4.8,16 A1.2,1.2 0 1 0 7.2,16 A1.2,1.2 0 1 0 4.8,16 Z\" fill=\"#B0B4B8\"/><path d=\"M16.8,16 A1.2,1.2 0 1 0 19.2,16 A1.2,1.2 0 1 0 16.8,16 Z\" fill=\"#B0B4B8\"/><path d=\"M6 16l4.2-5.6h4.4l3.4 5.6\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M8.8 10.4h6.4c.6 0 1.2-.5 1.2-1.2 0-.6-.5-1.2-1.2-1.2H10c-.7 0-1.2.6-1.2 1.2z\" fill=\"#D9422E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M15.8 9.4l1.4-2.8h2.2\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"}, "pot": {}};
+/* ===== V1 / V2 / VS1 / VS17 common (inlined into each page by the builder in the helper's scratchpad; not a kit file) =====
+   App code read at sim/usa-canada 73c65f08 (paths under app/src/main/java/com/example/). Strings: STR / PLU, copied by the builder
+   from res/values (en), values-es, values-pt-rBR. Drawn icons: ASSET.ic, converted from res/drawable/ic_drawn_*.xml.
+   Paper look (setup, Mis servicios): ui/theme/PaperColor.kt, PaperType.kt, DesignTokens.kt (Paper*), PaperShapes.kt.
+   Material look (the till, Editar servicio, Settings, Taxes): ui/theme/Color.kt LightColorScheme (kit/material.css). */
+const V = VKIT.ctx({biz: PAGE_BIZ});
+const C = V.C, LG = V.lang, CC = V.country, esc = V.esc, money = V.money, pick = V.pick;
+const AL = {es:"es", pt:"pt-BR", en:"en"}[LG];                 // the app's language tag (AppLanguage.kt)
+const fmtS = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : String(v); }); };
+const t = (k, ...a) => { const o = STR[k]; if(!o) throw new Error("missing string " + k); return fmtS(o[LG], a); };
+/* Android plural categories: pt "one" for 0 and 1; es/en "one" for 1 */
+const tp = (k, n, ...a) => { const p = PLU[k][LG]; const cat = LG==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other"); return fmtS(p[cat] || p.other, a.length ? a : [n]); };
+const H = (es, pt, en) => pick({es, pt, en});
+const TAP = H("Toca ", "Toque em ", "Tap ");
+const CO = CC==="CO", BR = CC==="BR", MX = CC==="MX", USCA = CC==="US" || CC==="CA";
+const K = window.SERV.countries[CC];
+const cmp = new Intl.Collator(AL).compare;
+
+/* Material icons (filled, 24 viewBox) */
+const P = d => `<svg class="mi" viewBox="0 0 24 24"><path d="${d}"/></svg>`;
+const I = {
+  back:P("M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"),
+  check:P("M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"),
+  chevR:P("M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"),
+  down:P("M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"),
+  edit:P("M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"),
+  search:P("M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"),
+  star:P("M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"),
+  clock:P("M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"),
+  close:P("M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"),
+  cart:P("M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"),
+  receipt:P("M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"),
+  person:P("M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"),
+  group:P("M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"),
+  rlong:P("M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"),
+  gear:P("M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"),
+  pct:P("M7.5 11C9.43 11 11 9.43 11 7.5S9.43 4 7.5 4 4 5.57 4 7.5 5.57 11 7.5 11zm0-5C8.33 6 9 6.67 9 7.5S8.33 9 7.5 9 6 8.33 6 7.5 6.67 6 7.5 6zM4.0025 18.5832 18.59 4l1.41 1.41L5.4125 19.9932zM16.5 13c-1.93 0-3.5 1.57-3.5 3.5s1.57 3.5 3.5 3.5 3.5-1.57 3.5-3.5-1.57-3.5-3.5-3.5zm0 5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"),
+  card:P("M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"),
+  tag:P("M21.41 11.58l-9-9C12.05 2.22 11.55 2 11 2H4c-1.1 0-2 .9-2 2v7c0 .55.22 1.05.59 1.42l9 9c.36.36.86.58 1.41.58.55 0 1.05-.22 1.41-.59l7-7c.37-.36.59-.86.59-1.41 0-.55-.23-1.06-.59-1.42zM5.5 7C4.67 7 4 6.33 4 5.5S4.67 4 5.5 4 7 4.67 7 5.5 6.33 7 5.5 7z"),
+  store:P("M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"),
+  place:P("M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"),
+  devices:P("M4 6h18V4H4c-1.1 0-2 .9-2 2v11H0v3h14v-3H4V6zm19 2h-6c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h6c.55 0 1-.45 1-1V9c0-.55-.45-1-1-1zm-1 9h-4v-7h4v7z"),
+  trash:P("M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"),
+  support:P("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z"),
+  warn:P("M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z")
+};
+const IC = (n, dp) => `<i class="dic"${dp?` style="--ic:${dp}"`:""}>${ASSET.ic[n]||""}</i>`;
+const POT = (n, dp) => `<img class="pot" src="${ASSET.pot[n]}" style="width:calc(var(--u)*${dp});height:calc(var(--u)*${dp})" alt="">`;
+
+/* ---- colours: ui/theme/PaperColor.kt ---- */
+const SV = {main:"#7C55E0", btn:"#7C55E0", soft:"#EEEAF5", ink:"#6A45CC"};          // ServiciosMain/Btn/Soft/Ink
+const FAMILY = {                                                                        // trade families: Main / Soft (= light tile) / Ink
+  BELLEZA:{main:"#D9468A", soft:"#F8E8EC", ink:"#C03E7A", name:"trade_family_belleza"},
+  MASCOTAS:{main:"#8BAA2E", soft:"#F0F2E3", ink:"#617622", name:"trade_family_mascotas"},
+  VEHICULOS:{main:"#3D63DD", soft:"#E8EBF4", ink:"#3D63DD", name:"trade_family_vehiculos"},
+  ARREGLOS:{main:"#1A8FC4", soft:"#E4EFF2", ink:"#1477A3", name:"trade_family_arreglos"},
+  HOGAR:{main:"#E0A31C", soft:"#F8F1E1", ink:"#8E6810", name:"trade_family_hogar"}
+};
+/* ui/screens/tradepicker/TradeCatalogue.kt TRADE_ORDER + TRADE_VISUAL (only the trades a demo can show: the Belleza section
+   that fills the first screen, and the other three demo trades, reached through the search box) */
+const TRADES = [
+  ["barberia","drawn_navaja","BELLEZA"],["peluqueria","drawn_secador","BELLEZA"],["unisex","drawn_peine","BELLEZA"],["unas","drawn_esmalte","BELLEZA"],
+  ["cejas-pestanas","drawn_pestana","BELLEZA"],["estetica","drawn_crema","BELLEZA"],["masajes","drawn_aceite_de_almendras","BELLEZA"],
+  ["depilacion","drawn_vela_aromatica","BELLEZA"],["maquillaje","drawn_labial","BELLEZA"],["tatuajes","drawn_tatuaje","BELLEZA"],
+  ["bronceado","drawn_sol","BELLEZA"],["spa","drawn_piedras","BELLEZA"],["podologia","drawn_pie","BELLEZA"],
+  ["veterinaria","drawn_huella","MASCOTAS"],["peluqueria-canina","drawn_perro","MASCOTAS"],
+  ["taller-motos","drawn_moto","VEHICULOS"]
+];
+const FAMILY_COUNT = {BELLEZA:13, MASCOTAS:2, VEHICULOS:8, ARREGLOS:8, HOGAR:10};          // 41 researched trades
+const tradeOf = slug => TRADES.find(x => x[0]===slug);
+const TRADE_NAME = slug => t("trade_name_" + slug.replace(/-/g, "_"));
+const MY = tradeOf(V.biz), MYFAM = FAMILY[MY[2]];
+
+/* ---- paper pieces (ui/components/paper/*) ---- */
+/* PaperCheckCircle: 24 dp, accent fill + white check / 2 dp line2 ring; square = r8 */
+const pChk = (on, color, square) => `<span class="pchk${on?" on":""}${square?" sq":""}" style="${on?`background:${color||SV.main}`:""}">${on?I.check:""}</span>`;
+/* PaperProgressBar: 6 dp segments, r3, gap 6; partial = the share of the last active segment */
+const pProg = (active, segs, partial) => `<div class="pprog">${Array.from({length:segs}, (_, i) => {
+  if(partial != null && i === active) return `<i><b style="width:${Math.round(partial*100)}%"></b></i>`;
+  return `<i${i < active ? ' class="on"' : ""}></i>`; }).join("")}</div>`;
+/* PaperIconButton: 40 dp round, surface, 1 dp line */
+const pBack = dt => `<span class="pib"${dt?` data-t="${dt}"`:""}>${I.back}</span>`;
+/* SumaButton paper: 54 dp, r18, Fredoka 500 18; FilledAccent = services button; disabled = Material onSurface 12% / 38% */
+const pBtn = (text, dt, o) => { o=o||{}; return `<div class="pbtn${o.off?" off":""}${o.cls?" "+o.cls:""}"${dt&&!o.off?` data-t="${dt}"`:""}>${o.icon||""}<span>${esc(text)}</span></div>`; };
+/* PaperLink: Roboto 500 15, underlined; accent = accent-ink */
+const pLink = (text, accent, dt) => `<span class="plink${accent?" acc":""}"${dt?` data-t="${dt}"`:""}>${esc(text)}</span>`;
+/* PaperSegmentedControl: 40 dp track r14 (line colour), cells r11, the picked one white */
+const pSeg = (opts, on, tags) => `<div class="pseg">${opts.map((o, i) => `<span class="${i===on?"on":""}"${tags&&tags[i]?` data-t="${tags[i]}"`:""}>${esc(o)}</span>`).join("")}</div>`;
+/* PaperPill (Acc): accent-soft fill, accent-ink Roboto 500 13 */
+const pPill = (text, fam) => `<span class="ppill" style="${fam?`background:${fam.soft};color:${fam.ink}`:""}">${esc(text)}</span>`;
+const flagCircle = (dp, dt) => `<span class="pflagc" style="width:calc(var(--u)*${dp});height:calc(var(--u)*${dp})"${dt?` data-t="${dt}"`:""}>${V.flag()}</span>`;
+
+/* ---- the trade picker body: ui/screens/tradepicker/TradePickerScreen.kt:127-277 TradePickerBody (paper, accent SERVICIOS
+   once the type is known). o = {picked: slug|null, query, focus} ---- */
+// KEYS: trade_picker_title,trade_picker_lede,trade_picker_lede_no_prices,trade_picker_search_hint,trade_picker_step_oficio,trade_picker_continue,trade_picker_continue_zero,trade_picker_my_trade_missing,trade_picker_skip_for_now,trade_family_belleza,trade_family_mascotas,trade_family_vehiculos,trade_family_arreglos,trade_family_hogar
+// KEYS: trade_name_barberia,trade_name_peluqueria,trade_name_unisex,trade_name_unas,trade_name_cejas_pestanas,trade_name_estetica,trade_name_masajes,trade_name_depilacion,trade_name_maquillaje,trade_name_tatuajes,trade_name_bronceado,trade_name_spa,trade_name_podologia,trade_name_veterinaria,trade_name_peluqueria_canina,trade_name_taller_motos
+// ICONS: drawn_navaja,drawn_secador,drawn_peine,drawn_esmalte,drawn_pestana,drawn_crema,drawn_aceite_de_almendras,drawn_vela_aromatica,drawn_labial,drawn_tatuaje,drawn_sol,drawn_piedras,drawn_pie,drawn_huella,drawn_perro,drawn_moto
+function tradePicker(o){
+  o = o||{};
+  const q = (o.query||"").trim().toLocaleLowerCase(AL);
+  /* TradeAliases / filterTrades: the name or an alias contains the query (the demo only ever types a trade's own name) */
+  const shown = TRADES.filter(x => !q || TRADE_NAME(x[0]).toLocaleLowerCase(AL).includes(q));
+  const fams = ["BELLEZA","MASCOTAS","VEHICULOS"].filter(f => shown.some(x => x[2]===f));
+  const grid = fams.map(f => { const F = FAMILY[f], list = shown.filter(x => x[2]===f);
+    return `<div class="tfh"><i style="background:${F.main}"></i><b>${esc(t(F.name))}</b><small>${q ? list.length : FAMILY_COUNT[f]}</small></div>
+      <div class="tgr">${list.map(x => { const on = o.picked===x[0];
+        return `<div class="ttile${on?" on":""}" data-t="trade-${x[0]}" style="${on?`background:${F.soft};border-color:${F.main}`:""}">
+          <span class="tib" style="background:${on?"#fff":F.soft}">${IC(x[1])}</span><b style="${on?`color:${F.ink}`:""}">${esc(TRADE_NAME(x[0]))}</b>${on?`<span class="tck">${pChk(true, F.main)}</span>`:""}</div>`; }).join("")}</div>`; }).join("");
+  const lede = t(CO ? "trade_picker_lede" : "trade_picker_lede_no_prices");      // SVC-3 item 16 (TradePickerScreen.kt:180-186)
+  const field = `<div class="tsearch${o.focus?" foc":""}" data-t="trade-search">${I.search}${o.query?`<span>${esc(o.query)}</span>${o.focus?'<i class="pcaret"></i>':""}`:`${o.focus?'<i class="pcaret"></i>':""}<em>${esc(t("trade_picker_search_hint"))}</em>`}</div>`;
+  const btn = o.picked ? pBtn(t("trade_picker_continue", TRADE_NAME(o.picked)), "trade-go") : pBtn(t("trade_picker_continue_zero"), null, {off:true});
+  return `<div class="ppage">
+    <div class="tphead"><div class="tprow">${pProg(1, 3)}<span class="pstep">${esc(t("trade_picker_step_oficio"))}</span>${flagCircle(40)}</div>
+      <div class="tptitle"><div><div class="ph1">${esc(t("trade_picker_title"))}</div><div class="psub">${esc(lede)}</div></div>${POT("pointing", 84)}</div>
+      ${field}</div>
+    <div class="tpgrid">${grid}</div>
+    <div class="pfoot c">${btn}<div class="tplinks">${pLink(t("trade_picker_my_trade_missing"), true)}${pLink(t("trade_picker_skip_for_now"))}</div></div></div>`;
+}
+
+/* ---- Material pieces of the owner's phone ---- */
+// KEYS: mamaship_tab_register,tx_tab_all,home_tab_my_business,rp_strip_support,rp_strip_support_sub,rp_sheet_my_reports,rp_sheet_my_reports_none
+/* bottom NavigationBar (ui/app/PlatataApp.kt:505-700): Caja, Ventas, the flag "Mi negocio" (lit while the panel is open) */
+const nav = (on, o) => { o=o||{};
+  return `<div class="mnav">
+  <div class="${on==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${I.cart}</span>${esc(t("mamaship_tab_register"))}</div>
+  <div class="${on==="ventas"?"on":""}" data-t="nav-ventas"><span class="pill">${I.receipt}</span>${esc(t("tx_tab_all"))}</div>
+  <div class="${on==="biz"?"on":""}" data-t="nav-biz"><span class="pill"><span class="flagc">${V.flag()}</span></span>${esc(t("home_tab_my_business"))}</div></div>`; };
+/* SumaTopBar (ui/components/SumaTopBar.kt): 64 dp, back arrow 48 dp, titleLarge 22 bold */
+const topbar = (title, o) => { o=o||{};
+  return `<div class="rs-top"><span class="ib" data-t="${o.backT||"back"}">${I.back}</span><b>${esc(title)}</b>${o.action||""}</div>`; };
+/* the support strip under every LEVEL_2 page (reports/ReportLevels.kt; ui/screens/reports/SupportStrip.kt SupportStripBar), accent = services */
+const strip = () => `<div class="rs-strip"><div class="h"><span class="bd">${I.support}</span><div><b>${esc(t("rp_strip_support"))}</b><small>${esc(t("rp_strip_support_sub"))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(t("rp_sheet_my_reports"))}</b><small>${esc(t("rp_sheet_my_reports_none"))}</small></div>${I.chevR}</div></div>`;
+/* outlined text field (OutlinedTextField / SumaTextField) */
+const field = (label, value, o) => { o=o||{};
+  const has = value!==undefined && value!==null && value!=="";
+  return `<div class="rs-fld${o.focus?" foc":""}${has||o.focus?" up":""}"${o.tag?` data-t="${o.tag}"`:""}${o.w?` style="width:calc(var(--u)*${o.w})"`:""}><label>${esc(label)}</label><span class="v">${has?esc(value):(o.focus&&o.ph?`<em>${esc(o.ph)}</em>`:"")}${o.focus?`<i class="caret"></i>`:""}</span></div>`; };
+
+/* ---- the services till (owner phone, Home tab "Servicios"), plain Material:
+   tabs      ui/screens/home/HomeScreen.kt:612-668 (TabRow, labelLarge, 3 dp primary indicator) + HomeTabLabels.kt:28-31
+   edit row  HomeScreen.kt:2018-2100 ItemEditModeBar ("Editar" text button; editing = #FEF3C7 bar, "Editando", "Mis servicios >", "Listo")
+   chips     ProductLibraryView.kt:209-286 ("Todos" + the trade's ONE category, palette by id: the trade category is the shop's 2nd)
+   tiles     ProductLibraryView.kt:322-360 (GridCells.Adaptive(120) = 3 columns at 412 dp), ProductCard.kt:94-114 priceLabel and
+             :297-340 ServiceTileBody (40 dp trade icon box in the family tint, name bodyLarge 500, price bold left, minutes right)
+   footer    HomeScreen.kt:787-823 ("Teclado" link, FooterButtonPair: outlined "Agendar" / "Crear orden" + "Cobrar $X")
+   o = {services:[{name, label, min}], products:n, editing, top:html, ring:index, tooltip:true, cartCount, total} ---- */
+// KEYS: home_add_tile,home_tab_services,home_tab_products,common_edit,home_editing,services_menu_title,where_done,items_filter_all,scan_row_manual,common_charge,services_action_agendar,services_action_crear_orden,items_price_from,items_price_unset,bridge_mode_ask,opt_min,till_tap_pointer,till_tap_pointer_ok,workspace_register_closed,workspace_register_open_action
+const CHIP_COLOR = "#81C784";             // CategoryChipPalette[2]: the trade category is created after the hidden "Otros servicios" (id 1)
+const ALL_COLOR = "#607D8B";              // CategoryChipNeutral
+const hexA = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+/* ProductCard priceLabel: ASK -> "En la caja"; no price -> "Sin precio"; FROM -> "Desde $X"; else $X. The number is the FIRST
+   variation's price (ProductLibraryView.kt:331), not the lowest. s = {mode:"fixed"|"from"|"ask"|"unset", first} */
+function tileLabel(s){
+  if(s.mode==="ask") return t("bridge_mode_ask");
+  if(s.first==null) return t("items_price_unset");
+  if(s.mode==="from") return t("items_price_from", money(s.first));
+  return money(s.first);
+}
+/* a kit service as the till holds it: a picker is FROM (SVC-3 item 37), its tile shows the first choice's price */
+const tillOf = (s, over) => Object.assign({
+  id: s.id, name: s.name, min: s.min,
+  mode: s.choices.length > 1 ? "from" : (s.price==null ? "unset" : "fixed"),
+  first: s.choices.length > 1 ? s.choices[0].price : s.price,
+  lowest: s.price, choices: s.choices.length > 1 ? s.choices.length : 0
+}, over||{});
+const ACTION = V.isOrder ? "services_action_crear_orden" : "services_action_agendar";   // sync/ServiceActionLabel.kt (TradeFamily ORDEN)
+function servicesHome(o){
+  o = o||{};
+  const list = o.services||[];
+  const tabs = `<div class="htabs"><span class="on">${esc(t("home_tab_services")+" · "+list.length)}</span><span>${esc(t("home_tab_products")+" · "+(o.products||0))}</span></div>`;
+  const edit = o.editing
+    ? `<div class="ebar"><span class="el">${I.edit}<b>${esc(t("home_editing"))}</b></span><span class="er"><span class="eb" data-t="my-services">${esc(t("services_menu_title"))}${I.chevR}</span><span class="eb strong" data-t="edit-done">${esc(t("where_done"))}</span></span></div>`
+    : `<div class="hedit"><span data-t="edit">${I.edit}${esc(t("common_edit"))}</span></div>`;
+  const chips = `<div class="mcats"><span style="background:${hexA(ALL_COLOR,.22)};border:calc(var(--u)*1.5) solid ${ALL_COLOR};color:${ALL_COLOR}">${I.check}${esc(t("items_filter_all"))}</span>
+    <span style="background:${hexA(CHIP_COLOR,.05)};border:1px solid ${hexA(CHIP_COLOR,.3)}">${esc(V.tradeName)}</span></div>`;
+  const tiles = list.map((s, i) => {
+    const lbl = tileLabel(s);
+    return `<div class="stile${o.ring===i?" ring":""}${o.hl===s.id?" hl":""}" data-t="tile-${s.id}"><span class="sib" style="background:${MYFAM.soft}">${IC(MY[1])}</span>
+      <b>${esc(s.name)}</b><div class="pr"><span class="p fit" data-sp="16">${esc(lbl)}</span>${s.min?`<small>${s.min} ${esc(t("opt_min"))}</small>`:""}</div></div>`; }).join("");
+  /* C-23: the "+ Agregar" tile at the grid end while the owner is editing (ProductLibraryView.kt:365-392, square GridItem) */
+  const add = o.editing ? `<div class="stile addt">${P("M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z")}<span>${esc(t("home_add_tile"))}</span></div>` : "";
+  const tip = o.tooltip ? `<div class="ttip"><b>${esc(t("till_tap_pointer"))}</b><span>${esc(t("till_tap_pointer_ok"))}</span></div>` : "";
+  const total = o.total||0, n = o.cartCount||0;
+  const foot = o.editing ? "" : `<div class="sfoot"><div class="mlink2"><span>${esc(t("scan_row_manual"))}</span></div>
+    <div class="fpair"><div class="sb sec pill${n?"":" off"}">${esc(t(ACTION))}</div><div class="sb pri pill${n?"":" off"}">${esc(t("common_charge", money(total)))}</div></div></div>`;
+  return (o.top||"") + tabs + (o.regClosed ? closedBar() : "") + edit + chips + `<div class="sgrid-w"><div class="sgrid">${tiles}${add}</div>${tip}</div>` + foot + nav("caja");
+}
+/* RegisterClosedBar.kt: #FEF3C7 row, titleSmall bold #856404, orange pill "Abrir" */
+const closedBar = () => `<div class="cbar"><b>${esc(t("workspace_register_closed"))}</b><span>${esc(t("workspace_register_open_action"))}</span></div>`;
+
+/* ---- money typing (a price box takes whole units and, where the currency has cents, the decimal mark) ---- */
+const DECMARK = new Intl.NumberFormat(K.loc).formatToParts(1.5).find(p => p.type==="decimal").value;
+const SEEDED = v => new Intl.NumberFormat(K.loc, {minimumFractionDigits:K.dec, maximumFractionDigits:K.dec}).format(v);   // seedMoneyField + MoneyVisualTransformation
+const GROUPED = v => new Intl.NumberFormat(K.loc, {minimumFractionDigits:0, maximumFractionDigits:K.dec}).format(v);   // MoneyVisualTransformation draws the grouping
+const typedOf = v => (K.dec && v % 1 ? String(v.toFixed(2)).replace(".", DECMARK) : String(Math.round(v)));
+const currencySymbol = () => new Intl.NumberFormat(K.loc, {style:"currency", currency:K.cur}).formatToParts(0).find(p => p.type==="currency").value.replace(/US\$|USD/, "$");
+
+/* the phone's number keyboard (Gboard number pad) while a money / number box has the focus; act = "next" (Sig.) or "done" */
+const numKbd = (act) => { const k = [["1","2","3","−"],["4","5","6","␣"],["7","8","9","⌫"],[",","0",".",act==="next"?"→":"✓"]];
+  return `<div class="nkbd">${k.map(r => `<div class="nkr">${r.map((x, i) => `<span class="${i===3?(x==="→"||x==="✓"?"act":"fn"):""}">${x}</span>`).join("")}</div>`).join("")}</div>`; };
+
+/* ShrinkToFitText (ui/components/ShrinkToFitText.kt): one line, 1 sp smaller until it fits, never under 12 sp, then an ellipsis.
+   Applied after every draw to the elements marked .fit (data-sp = the start size). */
+function fitAll(){
+  document.querySelectorAll("#app .fit").forEach(el => {
+    let sp = +(el.dataset.sp || 16);
+    el.style.fontSize = `calc(var(--u)*${sp})`;
+    while(el.scrollWidth > el.clientWidth + 0.5 && sp > 12){ sp -= 1; el.style.fontSize = `calc(var(--u)*${sp})`; }
+  });
+}
+new MutationObserver(() => fitAll()).observe(document.getElementById("root"), {childList:true, subtree:true});
+
+/* scrolled lists slide with a transform; when it stops, ask the engine to place the ring again */
+document.addEventListener("transitionend", e => { if(e.propertyName==="transform") window.dispatchEvent(new Event("resize")); });
+
+/* ===== VS17 "Impuestos" as a SERVICES business, owner's phone (plain Material). The look is TS17/RS17's; what differs is new.
+   Screens at sim/usa-canada 73c65f08 (paths under app/src/main/java/com/example/):
+   panel         ui/screens/home/HomeScreen.kt:1503-1860 for a services shop: register card, "Vender en línea" (SellOnlineGate.showRow:
+                 services are eligible), "Día a día", NO items row (ServicesRules.workspaceHasItemsRow = false), NO inventory row
+                 (retail only), Clientes without the fiado line (ServicesRules.fiadoEnabled = false), Facturas
+                 (hasSupplierInvoiceRow), Equipo, Reportes, divider, Configuración.
+   Settings      ui/screens/settings/SettingsHubScreen.kt:116-330 + sync/SettingsHubRules.kt (services: "Descuentos y combos",
+                 disc_title_with_combos; "Dónde atiendes" in Tu negocio, workspaceHasServicesRows).
+   Taxes         ui/screens/settings/TaxesManagementScreen.kt:116-421: the list (SumaTopBar tax_title + "+ Nuevo"; empty line; a
+                 rate card with "ACTIVO", "19% · incluido en los precios", switch, pencil, trash), the form (country chips from
+                 sync/TaxPresets.kt; a services shop gets NO impoconsumo chip and NO "los restaurantes cobran impoconsumo" note:
+                 forCountry / rivalOf(isRestaurant = false), MKT4-1 M1; name, %; "¿Este impuesto ya está en tus precios?" radios,
+                 default sync/TaxPriceDefault (included except US/CA); "Guardar" -> snackbar tax_saved_on; saved ON).
+                 Brazil has no preset (the owner types his own: here the municipal service tax "ISS" 5 %); US/CA a sales tax on top.
+   back          SettingsHub back pops to Home with the panel still open (SettingsHubScreen.kt:110-114); "Caja" closes it.
+   per service   a long press on a tile opens "Editar servicio" for the owner (HomeScreen.kt:975-978, C-41). With a tax on, it shows
+                 the same "Cobrar impuesto sobre este artículo" checkbox as the item form (SVC-3 item 5,
+                 ServiceEditScreen.kt:370-392, ShopSwitches.showTaxCheckbox): every service starts taxed (Product.isTaxable = true).
+   Data: kit/services-data.js (the business, its services, today's sales so far). */
+// TITLE: Platata · Impuestos
+// KEYS: workspace_register_open,workspace_register_sales,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,more_customers_title,invoices_title,invoices_row_first,more_team_title,workspace_full_reports,scan_row_reports_today_net,scan_row_reports_today,settings_title,panel_settings_row_sub
+// PLURALS: home_clientes_count,home_equipo_count_phones,home_equipo_on_phones
+// KEYS: settings_hub_group_getting_paid,settings_hub_group_your_business,settings_hub_payment_methods,settings_hub_taxes,disc_title_with_combos,settings_hub_receipts,settings_hub_receipts_sub,receipt_layout_detailed,settings_hub_receipts_num_auto,settings_hub_business_info,settings_where_you_work,more_where_subtitle,workspace_registers_and_printers
+// KEYS: settings_hub_group_this_phone,settings_security_title,settings_hub_security_on_delete,settings_hub_backup,settings_hub_backup_last,notif_title,notif_hub_sub
+// KEYS: tax_title,tax_empty_state,tax_add_section,tax_field_name,tax_field_pct,tax_in_prices_question,tax_in_prices_yes,tax_in_prices_no,tax_saved_on,tax_line_included,tax_line_added,tax_active_badge,common_save,common_new_short
+// KEYS: svc_edit_title,svc_edit_name_label,bridge_how_charge,bridge_mode_fixed,bridge_mode_from,bridge_mode_by_choice,bridge_price_title,bridge_other,svc_edit_duration_label,bridge_what_comes,bridge_add_option,opt_tag_included,opt_tag_charge,opt_ask_at_till_row,svc_delete_service,items_field_taxable,items_field_taxable_sales,svc_edit_picker_title
+/* sync/TaxPresets.kt table (services: no Impoconsumo); Brazil none; US/CA typed, added on top (TaxPriceDefault) */
+const PRESET = ({CO:["IVA",19],MX:["IVA",16],PE:["IGV",18],CL:["IVA",19],EC:["IVA",15],AR:["IVA",21],PA:["ITBMS",7]})[CC] || null;
+const TYPED = ({BR:["ISS","5"],US:["Sales tax","8.25"],CA:["HST","13"]})[CC] || null;
+const TNAME = PRESET ? PRESET[0] : TYPED[0], TPCT = PRESET ? String(PRESET[1]) : TYPED[1];
+const INCLUDED = !USCA;
+/* utils/CurrencyUtils.kt formatTaxRate: the decimal mark of the currency */
+const rate = v => String(v).replace(".", ["COP","CLP","ARS","BRL"].includes(K.cur) ? "," : ".") + "%";
+/* the night's Drive copy (BackupDateFormat.dateTime: DateFormat MEDIUM date + SHORT time in the app language) */
+const BACKUP_AT = new Intl.DateTimeFormat(AL, {dateStyle:"medium", timeStyle:"short"}).format(new Date(2026, 9, 22, 3, 0));
+const TODAY_SALES = C.sales.filter(s => s.d === V.today).reduce((a, s) => a + s.total, 0);
+
+/* ---- the services business panel ---- */
+const sw = on => `<span class="rs-sw${on?" on":""}"><i></i></span>`;
+function panelRow(tag, icon, title, sub, o){ o=o||{};
+  return `<div class="rs-wr"${tag?` data-t="${tag}"`:""}><span class="ic">${icon}</span><div class="tx"><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>${o.trail||""}</div>`; }
+function panel(){
+  const staff = C.staff.length;
+  return `<div class="rs-panel"><div class="ph"><b>${esc(C.place)}</b>${I.down}</div><div class="pl"><div class="pin">
+    <div class="rs-wr reg" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(t("workspace_register_open"))}</b><small style="color:rgba(46,125,50,.7)">${esc(t("workspace_register_sales"))}</small></div><b class="amt">${money(TODAY_SALES)}</b></div>
+    ${panelRow(null, I.cart, t("sell_online_title"), t("sell_online_row_off"), {trail:`<span class="pill0">${esc(t("sell_online_pill_off"))}</span>`})}
+    <div class="eh">${esc(t("panel_heading_every_day"))}</div>
+    ${panelRow(null, I.person, t("more_customers_title"), tp("home_clientes_count", C.clients.length, C.clients.length))}
+    ${panelRow(null, I.rlong, t("invoices_title"), t("invoices_row_first"))}
+    ${panelRow(null, I.group, t("more_team_title"), tp("home_equipo_count_phones", staff, staff, tp("home_equipo_on_phones", 0, 0)))}
+    ${panelRow(null, I.rlong, t("workspace_full_reports"), t(USCA ? "scan_row_reports_today" : "scan_row_reports_today_net", money(TODAY_SALES)))}
+    <hr>
+    ${panelRow("row-settings", I.gear, t("settings_title"), t("panel_settings_row_sub"))}
+  </div></div></div>` + nav("biz");
+}
+function hub(){
+  const g = x => `<div class="rs-hg">${esc(x)}</div>`;
+  const row = (tag, icon, ti, sub) => `<div class="rs-hr"${tag?` data-t="${tag}"`:""}><span class="ic">${icon}</span><div class="tx"><b>${esc(ti)}</b>${sub?`<small>${esc(sub)}</small>`:""}</div>${I.chevR}</div>`;
+  return topbar(t("settings_title")) + `<div class="rs-scroll"><div class="rs-hub">
+    ${g(t("settings_hub_group_getting_paid"))}
+    ${row(null, I.card, t("settings_hub_payment_methods"))}
+    ${row("hub-taxes", I.pct, t("settings_hub_taxes"))}
+    ${row(null, I.tag, t("disc_title_with_combos"))}
+    ${row(null, I.receipt, t("settings_hub_receipts"), t("settings_hub_receipts_sub", t("receipt_layout_detailed"), t("settings_hub_receipts_num_auto")))}
+    ${g(t("settings_hub_group_your_business"))}
+    ${row(null, I.store, t("settings_hub_business_info"))}
+    ${row(null, I.place, t("settings_where_you_work"), t("more_where_subtitle"))}
+    ${row(null, I.devices, t("workspace_registers_and_printers"))}
+    ${g(t("settings_hub_group_this_phone"))}
+    ${row(null, P("M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"), t("settings_security_title"), t("settings_hub_security_on_delete"))}
+    ${row(null, P("M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"), t("settings_hub_backup"), t("settings_hub_backup_last", BACKUP_AT))}
+    ${row(null, P("M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"), t("notif_title"), t("notif_hub_sub"))}
+  </div></div>` + strip();
+}
+function list(st){
+  const body = !st.saved ? `<p class="tx-empty">${esc(t("tax_empty_state"))}</p>` :
+    `<div class="tx-card${st.hl?" hl":""}"><div class="l"><div class="n"><b>${esc(TNAME)}</b><span class="bd">${esc(t("tax_active_badge"))}</span></div>
+      <small>${esc(t(INCLUDED ? "tax_line_included" : "tax_line_added", rate(TPCT)))}</small></div>
+      <span class="sw2">${sw(true)}</span><span class="ic">${I.edit}</span><span class="ic red">${I.trash}</span></div>`;
+  return topbar(t("tax_title"), {action:`<span class="rs-new" data-t="new">${esc(t("common_new_short"))}</span>`, backT:"list-back"}) +
+    `<div class="rs-scroll"><div class="in tx-list">${body}</div>${st.snack?`<div class="msnack rs-snack">${esc(t("tax_saved_on"))}</div>`:""}</div>` + strip();
+}
+const radio = (on, x) => `<div class="tx-rad"><span class="rb${on?" on":""}"><i></i></span><span>${esc(x)}</span></div>`;
+function form(st){
+  const chips = PRESET ? `<div class="tx-chips"><span class="tx-chip" data-t="chip">${esc(PRESET[0] + " " + rate(PRESET[1]))}</span></div>` : "";
+  return topbar(t("tax_add_section")) + `<div class="tx-form">${chips}
+    ${field(t("tax_field_name"), st.name, {focus:st.focus==="name", tag:"f-name"})}
+    ${field(t("tax_field_pct"), st.pct, {focus:st.focus==="pct", tag:"f-pct"})}
+    <p class="tx-q">${esc(t("tax_in_prices_question"))}</p>${radio(INCLUDED, t("tax_in_prices_yes"))}${radio(!INCLUDED, t("tax_in_prices_no"))}
+    <div class="sp"></div><div class="sb pri" data-t="save">${esc(t("common_save"))}</div></div>` + strip();
+}
+
+/* ---- the till and the service's edit page ---- */
+const CAT = window.SERV.CATALOG[V.biz].services;
+const noPicker = id => { const c = CAT.find(x => x.id === id); return c && !c.ones.length; };
+const SVC = C.services.find(s => noPicker(s.id) && s.extras.length && s.choices.length <= 1) || C.services.find(s => s.choices.length <= 1) || C.services[0];
+const TILL = C.services.map(s => tillOf(s)).sort((a, b) => cmp(a.name, b.name));
+const PILLS = p => p == null ? [] : [...new Set([Math.round(p*0.8/1000)*1000, p, Math.round(p*1.2/1000)*1000])].sort((a,b)=>a-b);
+const chip = (label, on) => `<span class="fchip${on?" on":""}">${esc(label)}</span>`;
+function editPage(st){
+  const picker = SVC.choices.length > 1;
+  const modes = picker ? [t("bridge_mode_by_choice"), t("bridge_mode_ask")] : [t("bridge_mode_fixed"), t("bridge_mode_from"), t("bridge_mode_ask")];
+  const price = picker ? `<div class="tm">${esc(t("svc_edit_picker_title"))}</div>`
+    : CO ? `<div class="tm">${esc(t("bridge_price_title"))}</div><div class="frow">${PILLS(SVC.price).map(p => chip(money(p), p === SVC.price)).join("")}</div><div class="frow">${chip(t("bridge_other"), false)}</div>`
+    : `<div class="tm">${esc(t("bridge_price_title"))}</div>${field(t("bridge_price_title"), SEEDED(SVC.price))}`;
+  const rows = SVC.included.map(o => `<div class="orow"><div><b>${esc(o.name)}</b><small>${esc(t("opt_tag_included"))}</small></div><span class="otag">${esc(t("opt_tag_included"))}</span></div>`).join("")
+    + SVC.extras.map(o => `<div class="orow"><div><b>${esc(o.name)}</b><small>${esc(o.price != null ? "+" + money(o.price) : t("opt_ask_at_till_row"))}</small></div><span class="otag">${esc(t("opt_tag_charge"))}</span></div>`).join("");
+  const tax = `<div class="taxrow hl" data-t="taxrow"><span class="cbx">${I.check}</span><span>${esc(t(USCA ? "items_field_taxable_sales" : "items_field_taxable"))}</span></div>`;
+  return `<div class="pg">${topbar(t("svc_edit_title"), {action:`<span class="rs-act">${esc(t("where_done"))}</span>`})}
+    <div class="rs-scroll"><div class="in" style="transform:translateY(calc(var(--u)*${-(st.editScroll||0)}))"><div class="ein">
+    ${field(t("svc_edit_name_label"), SVC.name)}
+    <div class="tm">${esc(t("bridge_how_charge"))}</div><div class="frow">${modes.map((m, i) => chip(m, i === 0)).join("")}</div>
+    ${price}
+    ${field(t("svc_edit_duration_label"), String(SVC.min || ""), {w:200})}
+    <div class="tm big">${esc(t("bridge_what_comes"))}</div>${rows}
+    <div class="tbtn">${esc(t("bridge_add_option"))}</div>
+    ${tax}
+    <div class="sb pri">${esc(t("where_done"))}</div>
+    <hr><div class="tbtn red">${esc(t("svc_delete_service"))}</div></div></div></div>${strip()}</div>`;
+}
+function render(st){
+  let h;
+  if(st.screen==="panel") h = panel();
+  else if(st.screen==="hub") h = hub();
+  else if(st.screen==="form") h = form(st);
+  else if(st.screen==="list") h = list(st);
+  else if(st.screen==="till") h = servicesHome({services: TILL, products: C.products.length});
+  else h = editPage(st);
+  return `<div class="x">${h}</div>`;
+}
+const fill = PRESET
+  ? [{beat:3, hint:TAP+PRESET[0]+" "+rate(PRESET[1]), target:'[data-t="chip"]', tap(st){ st.name = TNAME; st.pct = TPCT; }}]
+  : [{beat:3, hint:TAP+t("tax_field_name"), target:'[data-t="f-name"]', tap(st,E){ st.focus = "name"; E.type("name", TNAME, null, 90); }},
+     {beat:3, hint:TAP+t("tax_field_pct"), target:'[data-t="f-pct"]', tap(st,E){ st.focus = "pct"; E.type("pct", TPCT, () => { st.focus = ""; }, 160); }}];
+VKIT.start(V, {
+  id:"VS17", tallVideo:true, clock:"12:41",
+  endText:H("Así cobras tus impuestos con Platata.","Assim você cobra seus impostos com o Platata.","That's how you charge your taxes with Platata."),
+  beats:pick({
+    es:["En Mi negocio, toca Configuración","Toca Impuestos","Aún no hay impuestos. Toca + Nuevo",PRESET?"Toca el impuesto de tu país: se llena solo":"Escribe el nombre y el porcentaje",INCLUDED?"¿Ya está en tus precios? Toca Guardar":"Se suma al precio. Toca Guardar","Listo: Platata lo calcula en cada venta","Mantén presionado un servicio","¿Un servicio sin impuesto? Quita la marca","Así cobras tus impuestos con Platata."],
+    pt:["Em Meu negócio, toque em Configurações","Toque em Impostos","Ainda não há impostos. Toque em + Novo",PRESET?"Toque no imposto do seu país: ele se preenche":"Escreva o nome e a porcentagem",INCLUDED?"Já está nos seus preços? Toque em Salvar":"Soma-se ao preço. Toque em Salvar","Pronto: o Platata calcula em cada venda","Mantenha um serviço pressionado","Um serviço sem imposto? Tire a marca","Assim você cobra seus impostos com o Platata."],
+    en:["In My business, tap Settings","Tap Taxes","No taxes yet. Tap + New",PRESET?"Tap your country's tax: it fills in":"Type the name and the rate",INCLUDED?"Is it in your prices? Tap Save":"It's added on top. Tap Save","Done: Platata works it out on every sale","Press and hold a service","A service without tax? Untick it","That's how you charge your taxes with Platata."]}),
+  state:{screen:"panel", name:"", pct:"", focus:"", saved:false, snack:false, hl:false, editScroll:0},
+  render,
+  device: () => "phone",
+  who: () => H("Tu teléfono","Seu celular","Your phone"),
+  steps:[
+    {beat:0, hint:TAP+t("settings_title"), target:'[data-t="row-settings"]', tap(st){ st.screen = "hub"; }},
+    {beat:1, hint:TAP+t("settings_hub_taxes"), target:'[data-t="hub-taxes"]', tap(st){ st.screen = "list"; }},
+    {beat:2, hint:TAP+t("common_new_short"), target:'[data-t="new"]', tap(st){ st.screen = "form"; }},
+    ...fill,
+    {beat:4, hint:TAP+t("common_save"), target:'[data-t="save"]', tap(st,E){ st.screen = "list"; st.saved = true; st.focus = ""; st.snack = true; st.hl = true; E.after(2600, () => { st.snack = false; }); }},
+    {beat:5, hint:H("Toca la flecha","Toque na seta","Tap the arrow"), target:'[data-t="list-back"]', tap(st){ st.screen = "hub"; st.snack = false; }},
+    {beat:5, hint:H("Toca la flecha","Toque na seta","Tap the arrow"), target:'[data-t="back"]', tap(st){ st.screen = "panel"; }},
+    {beat:5, hint:TAP+t("mamaship_tab_register"), target:'[data-t="nav-caja"]', tap(st){ st.screen = "till"; }},
+    {beat:6, hint:H("Mantén presionado ","Mantenha pressionado ","Press and hold ")+SVC.name, target:`[data-t="tile-${SVC.id}"]`, tap(st){ st.screen = "edit"; }}
+  ]
+});
+
+</script>
+<style>
+/* ===== V1 / V2 / VS1 / VS17 common styles. Paper: PaperColor.kt (bg #FBFAF7, surface #FFF, ink #17181B, ink2 #464A52,
+   muted #737883, line #E6E2D9, line2 #D9D4C9), services accent #7C55E0 / soft #EEEAF5 / ink #6A45CC; PaperType.kt; DesignTokens.kt.
+   Material: ui/theme/Color.kt LightColorScheme (kit/material.css). 1 dp = var(--u). ===== */
+.mat .app{font-family:"Roboto",system-ui,sans-serif}
+.mat .dic{display:grid;place-items:center;font-style:normal}
+.mat .dic svg{width:calc(var(--u)*var(--ic,26));height:calc(var(--u)*var(--ic,26));display:block}
+.mat .pot{position:relative;object-fit:contain;display:block;flex:0 0 auto}
+
+/* ---- paper page ---- */
+.mat .ppage{flex:1;display:flex;flex-direction:column;background:#FBFAF7;min-height:0;position:relative;color:#17181B;overflow:hidden}
+.mat .pbody{flex:1;min-height:0;overflow:hidden;padding:0 calc(var(--u)*20);display:flex;flex-direction:column;position:relative}
+.mat .pbody.c{align-items:center}
+.mat .pbody>*{flex-shrink:0}
+.mat .pfoot{padding:calc(var(--u)*8) calc(var(--u)*20) calc(var(--u)*10);display:flex;flex-direction:column;gap:calc(var(--u)*4);flex:0 0 auto;background:#FBFAF7}
+.mat .pfoot.c{align-items:center}
+.mat .pfoot.lift{box-shadow:0 calc(var(--u)*-4) calc(var(--u)*10) rgba(23,24,27,.06)}
+.mat .ph1{font:600 calc(var(--u)*27)/1.14 Fredoka,sans-serif;letter-spacing:-.2px;color:#17181B}
+.mat .ph2{font:600 calc(var(--u)*20)/1.2 Fredoka,sans-serif;color:#17181B}
+.mat .mhead{font:600 calc(var(--u)*17)/1.2 Fredoka,sans-serif;color:#17181B}
+.mat .psub{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*15);line-height:1.45;color:#464A52}
+.mat .psmall{font-size:calc(var(--u)*13);line-height:1.35;color:#737883}
+.mat .pbtn{width:100%;height:calc(var(--u)*54);border-radius:calc(var(--u)*18);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*10);font:500 calc(var(--u)*18) Fredoka,sans-serif;background:#7C55E0;color:#fff;flex:0 0 auto;padding:0 calc(var(--u)*12);text-align:center}
+.mat .pbtn.off{background:#E1E0DD;color:rgba(23,24,27,.38)}
+.mat .pbtn.brand{background:#3A2A1F;color:#fff}
+.mat .pbtn.goog{background:#fff;color:#17181B;border:1px solid #D9D4C9;font:500 calc(var(--u)*17) Roboto,sans-serif}
+.mat .pbtn.olacc{width:auto;align-self:flex-start;height:calc(var(--u)*44);border-radius:calc(var(--u)*14);background:transparent;border:calc(var(--u)*1.5) solid #7C55E0;color:#6A45CC;font-size:calc(var(--u)*16);padding:0 calc(var(--u)*14);gap:calc(var(--u)*8)}
+.mat .pbtn.olacc svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#7C55E0}
+.mat .plink{font:500 calc(var(--u)*15) Roboto,sans-serif;text-decoration:underline;color:#17181B;padding:calc(var(--u)*6) calc(var(--u)*2)}
+.mat .plink.acc{color:#6A45CC}
+.mat .pchk{width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:50%;border:calc(var(--u)*2) solid #D9D4C9;display:grid;place-items:center;flex:0 0 auto;color:#fff;box-sizing:border-box}
+.mat .pchk.sq{border-radius:calc(var(--u)*8)}
+.mat .pchk.on{border-color:transparent}.mat .pchk svg{width:calc(var(--u)*15);height:calc(var(--u)*15);fill:#fff}
+.mat .pprog{flex:1;display:flex;gap:calc(var(--u)*6)}
+.mat .pprog i{flex:1;height:calc(var(--u)*6);border-radius:calc(var(--u)*3);background:#E6E2D9;overflow:hidden;display:block}
+.mat .pprog i.on{background:#7C55E0}.mat .pprog i b{display:block;height:100%;background:#7C55E0;border-radius:calc(var(--u)*3)}
+.mat .pstep{font:400 calc(var(--u)*13) Roboto,sans-serif;color:#737883;white-space:nowrap}
+.mat .pib{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;background:#fff;border:1px solid #E6E2D9;display:grid;place-items:center;flex:0 0 auto}
+.mat .pib svg{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#17181B}
+.mat .ptop{height:calc(var(--u)*52);padding:0 calc(var(--u)*16);display:flex;align-items:center;gap:calc(var(--u)*12);flex:0 0 auto}
+.mat .pflagc{display:grid;place-items:center;border-radius:50%;background:#fff;border:1px solid #E6E2D9;flex:0 0 auto;overflow:hidden}
+.mat .pflagc svg{width:56%;height:auto;border-radius:calc(var(--u)*2)}
+.mat .pseg{display:flex;gap:calc(var(--u)*4);padding:calc(var(--u)*4);border-radius:calc(var(--u)*14);background:#E6E2D9;flex:0 0 auto}
+.mat .pseg span{flex:1;height:calc(var(--u)*40);border-radius:calc(var(--u)*11);display:grid;place-items:center;font:500 calc(var(--u)*14) Roboto,sans-serif;color:#464A52;text-align:center;padding:0 calc(var(--u)*4)}
+.mat .pseg span.on{background:#fff;color:#17181B;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.mat .ppill{display:inline-flex;align-items:center;min-height:calc(var(--u)*28);padding:0 calc(var(--u)*10);border-radius:99px;background:#EEEAF5;color:#6A45CC;font:500 calc(var(--u)*13) Roboto,sans-serif;white-space:nowrap;flex:0 0 auto}
+.mat .pcard{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20)}
+.mat .pcaret{display:inline-block;width:2px;height:calc(var(--u)*20);background:#7C55E0;margin:0 1px;animation:pblink 1s steps(1) infinite;vertical-align:middle}
+@keyframes pblink{50%{opacity:0}}
+.mat .plbl{font:600 calc(var(--u)*12) Roboto,sans-serif;letter-spacing:.06em;color:#737883;text-transform:uppercase}
+
+/* ---- the trade picker (TradePickerScreen.kt) ---- */
+.mat .tphead{padding:calc(var(--u)*12) calc(var(--u)*20) 0;display:flex;flex-direction:column;gap:calc(var(--u)*16);flex:0 0 auto}
+.mat .tprow{display:flex;align-items:center;gap:calc(var(--u)*10)}
+.mat .tprow .pstep{font-weight:500}
+.mat .tptitle{display:flex;align-items:flex-start}
+.mat .tptitle>div{flex:1}
+.mat .tsearch{height:calc(var(--u)*48);border-radius:calc(var(--u)*16);border:calc(var(--u)*1.5) solid #D9D4C9;background:#fff;display:flex;align-items:center;gap:calc(var(--u)*10);padding:0 calc(var(--u)*16);font-size:calc(var(--u)*15);color:#17181B}
+.mat .tsearch.foc{border-color:#7C55E0}
+.mat .tsearch svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .tsearch em{font-style:normal;color:#737883}
+.mat .tpgrid{flex:1;min-height:0;overflow:hidden;padding:0 calc(var(--u)*20)}
+.mat .tfh{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*12) 0 calc(var(--u)*4)}
+.mat .tfh i{width:calc(var(--u)*10);height:calc(var(--u)*10);border-radius:50%}
+.mat .tfh b{font:600 calc(var(--u)*17) Fredoka,sans-serif}
+.mat .tfh small{font-size:calc(var(--u)*13);color:#737883}
+.mat .tgr{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*8);padding-top:calc(var(--u)*4)}
+.mat .ttile{position:relative;background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*18);padding:calc(var(--u)*12) calc(var(--u)*8) calc(var(--u)*10);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*8)}
+.mat .ttile.on{border-width:calc(var(--u)*2);padding:calc(var(--u)*11) calc(var(--u)*7) calc(var(--u)*9)}
+.mat .ttile .tib{width:calc(var(--u)*52);height:calc(var(--u)*52);border-radius:calc(var(--u)*16);display:grid;place-items:center}
+.mat .ttile .tib .dic svg{width:calc(var(--u)*32);height:calc(var(--u)*32)}
+.mat .ttile b{font:500 calc(var(--u)*13)/1.3 Roboto,sans-serif;text-align:center;color:#17181B}
+.mat .ttile .tck{position:absolute;top:calc(var(--u)*6);right:calc(var(--u)*6)}
+.mat .tplinks{display:flex;gap:calc(var(--u)*24);justify-content:center}
+
+/* ---- Material: top bar, nav, fields, strip ---- */
+.mat .rs-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff;gap:calc(var(--u)*4)}
+.mat .rs-top .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .rs-top>b{flex:1;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:calc(var(--u)*4)}
+.mat .rs-act{font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
+.mat .rs-new{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
+.mat .rs-scroll{flex:1;min-height:0;overflow:hidden;position:relative;background:#fff}
+.mat .rs-scroll>.in{transition:transform .5s ease}
+.mat .rs-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .rs-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .rs-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .rs-strip .h>div{flex:1;min-width:0}
+.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#7C55E0;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .rs-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
+.mat .rs-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
+.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+.mat .rs-fld{position:relative;min-height:calc(var(--u)*56);border:1px solid #79747E;border-radius:calc(var(--u)*4);display:flex;align-items:center;padding:0 calc(var(--u)*16);gap:calc(var(--u)*12);font-size:calc(var(--u)*16);color:var(--m-on);flex:0 0 auto;background:#fff}
+.mat .rs-fld.foc{border:calc(var(--u)*2) solid var(--m-on)}
+.mat .rs-fld label{position:absolute;left:calc(var(--u)*16);top:50%;transform:translateY(-50%);color:var(--m-onv);font-size:calc(var(--u)*16);background:#fff;padding:0 calc(var(--u)*4);margin-left:calc(var(--u)*-4);transition:all .15s;white-space:nowrap}
+.mat .rs-fld.up label{top:0;font-size:calc(var(--u)*12)}
+.mat .rs-fld.foc label{color:var(--m-on)}
+.mat .rs-fld .v{flex:1;min-width:0;white-space:nowrap;overflow:hidden}
+.mat .rs-fld .v em{font-style:normal;color:var(--m-onv)}
+.mat .caret{display:inline-block;width:2px;height:1.1em;background:var(--m-on);vertical-align:-.15em;margin-left:1px;animation:pblink 1s steps(1) infinite}
+.mat .sb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*12);text-align:center;white-space:nowrap}
+.mat .sb.pill{border-radius:calc(var(--u)*50)}
+.mat .sb.pri{background:var(--m-on);color:#fff}
+.mat .sb.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .sb.off.pri{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .sb.off.sec{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.mat .mnav .flagc svg{width:calc(var(--u)*20);height:calc(var(--u)*14)}
+
+/* ---- the services till ---- */
+.mat .htabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.mat .htabs span{flex:1;display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*14);font-weight:400;color:var(--m-onv);position:relative;letter-spacing:.1px}
+.mat .htabs span.on{color:var(--m-on);font-weight:700}
+.mat .htabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.mat .hedit{display:flex;justify-content:flex-end;padding:calc(var(--u)*2) calc(var(--u)*16) 0;flex:0 0 auto}
+.mat .hedit span{display:flex;align-items:center;gap:calc(var(--u)*8);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .hedit svg,.mat .ebar svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.mat .ebar{display:flex;align-items:center;justify-content:space-between;background:#FEF3C7;color:#856404;padding:calc(var(--u)*4) calc(var(--u)*16);flex:0 0 auto}
+.mat .ebar .el{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14)}
+.mat .ebar .er{display:flex;align-items:center}
+.mat .ebar .eb{display:flex;align-items:center;gap:calc(var(--u)*2);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:600}
+.mat .ebar .eb.strong{font-weight:700}
+.mat .mcats{display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*12) calc(var(--u)*16);overflow:hidden;flex:0 0 auto}
+.mat .mcats span{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*6);padding:calc(var(--u)*8) calc(var(--u)*16);border-radius:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:600;line-height:calc(var(--u)*20);color:var(--m-onv);white-space:nowrap}
+.mat .mcats span svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:currentColor}
+.mat .sgrid-w{flex:1;min-height:0;overflow:hidden;position:relative}
+.mat .sgrid{padding:calc(var(--u)*4) calc(var(--u)*16) calc(var(--u)*16);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*8);align-content:start}
+.mat .stile{border-radius:calc(var(--u)*12);border:calc(var(--u)*1.5) solid var(--m-ovar);background:#fff;padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8);min-width:0;position:relative}
+.mat .stile.ring{box-shadow:0 0 0 calc(var(--u)*3) rgba(28,28,30,.3)}
+.mat .stile.hl{animation:shl 1.6s ease}
+@keyframes shl{0%{background:#FFF3C4}100%{background:#fff}}
+.mat .stile .sib{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center}
+.mat .stile b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:500;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;min-height:calc(var(--u)*44)}
+.mat .stile .pr{display:flex;align-items:flex-end;justify-content:space-between}
+.mat .stile .p{flex:0 1 auto;font-size:calc(var(--u)*16);line-height:1.4;font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mat .stile small{font-size:calc(var(--u)*12);line-height:1.4;color:var(--m-onv);white-space:nowrap;flex:0 0 auto;margin-left:calc(var(--u)*8)}
+.mat .ttip{position:absolute;left:calc(var(--u)*16);top:calc(var(--u)*156);width:calc(var(--u)*224);background:#17181B;color:#FBFAF7;border-radius:calc(var(--u)*14);padding:calc(var(--u)*10) calc(var(--u)*14);display:flex;flex-direction:column;gap:calc(var(--u)*2);z-index:3;box-shadow:0 calc(var(--u)*2) calc(var(--u)*6) rgba(0,0,0,.2)}
+.mat .ttip::before{content:"";position:absolute;top:calc(var(--u)*-6);left:calc(var(--u)*34);width:calc(var(--u)*14);height:calc(var(--u)*14);background:#17181B;border-radius:calc(var(--u)*2);transform:rotate(45deg)}
+.mat .ttip b{font:500 calc(var(--u)*14) Roboto,sans-serif;position:relative}.mat .ttip span{font:700 calc(var(--u)*14) Roboto,sans-serif;position:relative}
+.mat .nkbd{flex:0 0 auto;background:#E8EAED;padding:calc(var(--u)*8) calc(var(--u)*6) calc(var(--u)*10);display:flex;flex-direction:column;gap:calc(var(--u)*7)}
+.mat .nkr{display:flex;gap:calc(var(--u)*6)}
+.mat .nkr span{flex:1;height:calc(var(--u)*46);border-radius:calc(var(--u)*8);background:#fff;display:grid;place-items:center;font:400 calc(var(--u)*22) Roboto,sans-serif;color:#202124}
+.mat .nkr span.fn{background:#D3D6DB;font-size:calc(var(--u)*18)}
+.mat .nkr span.act{background:#0B57D0;color:#fff;border-radius:calc(var(--u)*23);font-size:calc(var(--u)*20)}
+.mat .sfoot{flex:0 0 auto;background:#fff;padding:calc(var(--u)*4) calc(var(--u)*16) calc(var(--u)*12)}
+.mat .mlink2{display:flex}.mat .mlink2 span{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .fpair{display:flex;gap:calc(var(--u)*12);padding-top:calc(var(--u)*4)}
+.mat .fpair .sb{flex:1}
+.mat .cbar{display:flex;align-items:center;justify-content:space-between;background:#FEF3C7;padding:calc(var(--u)*8) calc(var(--u)*16);flex:0 0 auto}
+.mat .cbar b{font-size:calc(var(--u)*14);color:#856404}
+.mat .cbar span{min-height:calc(var(--u)*40);display:grid;place-items:center;padding:0 calc(var(--u)*24);border-radius:calc(var(--u)*50);background:#FF9500;color:#fff;font-size:calc(var(--u)*14);font-weight:700}
+.mat .bwarn{display:flex;align-items:center;gap:calc(var(--u)*8);background:#FEF3C7;color:#856404;padding:calc(var(--u)*12) calc(var(--u)*16);flex:0 0 auto}
+.mat .bwarn svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#856404;flex:0 0 auto}.mat .bwarn b{flex:1;font-size:calc(var(--u)*14);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .bwarn span{font-size:calc(var(--u)*14);font-weight:700}
+
+.mat .stile.addt{aspect-ratio:1;align-items:center;justify-content:center;gap:calc(var(--u)*8);border-color:#E5E5EA}
+.mat .stile.addt svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-on)}
+.mat .stile.addt span{font-size:calc(var(--u)*12);font-weight:500;color:var(--m-on)}
+
+/* ---- VS17: panel, Settings, Taxes (the RS17 / TS17 look), the service edit page (as V2) ---- */
+.mat .x{flex:1;display:flex;flex-direction:column;min-height:0;position:relative;background:#fff}
+.mat .rs-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.mat .rs-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF;flex:0 0 auto}
+.mat .rs-panel .ph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-panel .ph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.mat .rs-panel .pl{flex:1;min-height:0;overflow:hidden}
+.mat .rs-panel .pin{display:flex;flex-direction:column;gap:calc(var(--u)*8);padding-bottom:calc(var(--u)*16)}
+.mat .rs-panel hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0;flex:0 0 auto}
+.mat .rs-panel .eh{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);letter-spacing:.5px}
+.mat .rs-wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);color:var(--m-on);flex:0 0 auto}
+.mat .rs-wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .rs-wr .tx{flex:1;min-width:0}
+.mat .rs-wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .rs-wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(var(--u)*16)}
+.mat .rs-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
+.mat .rs-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .rs-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
+.mat .rs-hub{padding:0 calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .rs-hg{font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);padding:calc(var(--u)*16) calc(var(--u)*4) 0}
+.mat .rs-hr{border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .rs-hr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);flex:0 0 auto}
+.mat .rs-hr .tx{flex:1;min-width:0}
+.mat .rs-hr .tx b{display:block;font-size:calc(var(--u)*16);font-weight:700;line-height:calc(var(--u)*24)}
+.mat .rs-hr .tx small{display:block;font-size:calc(var(--u)*12);color:var(--m-onv);line-height:calc(var(--u)*16)}
+.mat .rs-hr>svg{fill:var(--m-onv)}
+.mat .rs-sw{display:inline-block;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #79747E;background:#E5E5EA;position:relative;flex:0 0 auto;box-sizing:border-box}
+.mat .rs-sw i{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E}
+.mat .rs-sw.on{background:var(--m-on);border-color:var(--m-on)}
+.mat .rs-sw.on i{left:calc(var(--u)*22);top:calc(var(--u)*2);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.mat .rs-snack{bottom:calc(var(--u)*12);line-height:1.35;padding:calc(var(--u)*12) calc(var(--u)*16)}
+.mat .tx-list{padding:calc(var(--u)*12) calc(var(--u)*16) calc(var(--u)*84)}
+.mat .tx-empty{margin:0;padding:calc(var(--u)*32) 0;text-align:center;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .tx-card{margin:calc(var(--u)*4) 0;border-radius:calc(var(--u)*12);background:rgba(242,242,247,.5);padding:calc(var(--u)*16);display:flex;align-items:center}
+.mat .tx-card.hl{animation:shl 1.6s ease}
+.mat .tx-card .l{flex:1;min-width:0}
+.mat .tx-card .n{display:flex;align-items:center}
+.mat .tx-card .n b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700}
+.mat .tx-card .bd{margin-left:calc(var(--u)*8);background:var(--m-on);color:#fff;border-radius:calc(var(--u)*6);font-size:calc(var(--u)*11);line-height:calc(var(--u)*16);font-weight:500;padding:calc(var(--u)*4)}
+.mat .tx-card small{display:block;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-onv)}
+.mat .tx-card .sw2{margin-right:calc(var(--u)*12)}
+.mat .tx-card .ic{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;flex:0 0 auto;color:var(--m-onv)}
+.mat .tx-card .ic.red{color:var(--m-err)}
+.mat .tx-form{flex:1;display:flex;flex-direction:column;gap:calc(var(--u)*12);padding:calc(var(--u)*16);min-height:0;background:#fff}
+.mat .tx-chips{display:flex;gap:calc(var(--u)*8);overflow:hidden}
+.mat .tx-chip{flex:0 0 auto;height:calc(var(--u)*32);display:flex;align-items:center;padding:0 calc(var(--u)*16);border:1px solid var(--m-outline);border-radius:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:500}
+.mat .tx-q{margin:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);font-weight:600}
+.mat .tx-rad{display:flex;align-items:center;min-height:calc(var(--u)*48);font-size:calc(var(--u)*16)}
+.mat .tx-rad .rb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;flex:0 0 auto}
+.mat .tx-rad .rb i{width:calc(var(--u)*20);height:calc(var(--u)*20);border-radius:50%;border:calc(var(--u)*2) solid var(--m-onv);box-sizing:border-box;position:relative}
+.mat .tx-rad .rb.on i{border-color:var(--m-on)}
+.mat .tx-rad .rb.on i::after{content:"";position:absolute;left:50%;top:50%;width:calc(var(--u)*10);height:calc(var(--u)*10);margin:calc(var(--u)*-5) 0 0 calc(var(--u)*-5);border-radius:50%;background:var(--m-on)}
+.mat .tx-rad>span:last-child{margin-left:calc(var(--u)*8)}
+.mat .tx-form .sp{flex:1}
+.mat .taxrow{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*12) 0;font-size:calc(var(--u)*16);color:var(--m-on);border-radius:calc(var(--u)*8)}
+.mat .taxrow.hl{animation:shl 2.4s ease}
+.mat .taxrow .cbx{width:calc(var(--u)*18);height:calc(var(--u)*18);margin:calc(var(--u)*11);border-radius:calc(var(--u)*2);background:var(--m-on);display:grid;place-items:center;flex:0 0 auto}
+.mat .taxrow .cbx svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:#fff}
+.mat .pg{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;position:relative}
+.mat .ein{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .ein .rs-fld{margin-bottom:calc(var(--u)*8)}
+.mat .tm{font-size:calc(var(--u)*16);font-weight:500;line-height:calc(var(--u)*24);color:var(--m-on);padding-top:calc(var(--u)*8)}
+.mat .tm.big{padding-top:calc(var(--u)*16)}
+.mat .frow{display:flex;gap:calc(var(--u)*8);flex-wrap:nowrap}
+.mat .fchip{height:calc(var(--u)*32);display:flex;align-items:center;padding:0 calc(var(--u)*12);border-radius:calc(var(--u)*8);border:1px solid #C7C7CC;font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);white-space:nowrap;flex:0 0 auto}
+.mat .fchip.on{background:#E5E5EA;border-color:#E5E5EA;color:var(--m-on)}
+.mat .orow{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*10) calc(var(--u)*12);margin:calc(var(--u)*-4) 0;border-radius:calc(var(--u)*12)}
+.mat .orow.hl{animation:shl 1.6s ease}
+.mat .orow>div{flex:1;min-width:0}
+.mat .orow b{display:block;font-size:calc(var(--u)*16);font-weight:400;line-height:calc(var(--u)*24);color:var(--m-on)}
+.mat .orow small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
+.mat .otag{border-radius:99px;background:#E5E5EA;color:var(--m-on);font-size:calc(var(--u)*11);font-weight:500;padding:calc(var(--u)*4) calc(var(--u)*8);white-space:nowrap}
+.mat .tbtn{align-self:flex-start;padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .tbtn.red{color:var(--m-err);align-self:center}
+.mat .ein .sb{margin-top:calc(var(--u)*16)}
+.mat .ein hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*16) 0 0;width:100%}
+.mat .tbtn.c{margin-top:calc(var(--u)*16)}
+
+</style>
+</body>
+</html>

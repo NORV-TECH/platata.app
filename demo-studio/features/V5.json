@@ -1,0 +1,80 @@
+{
+  "id": "V5",
+  "name": "Mover una cita o marcar que no asistió",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-cita",
+      "voice": {
+        "es": "¿El cliente no puede? Toca su cita.",
+        "pt": "O cliente não pode? Toque no horário dele."
+      }
+    },
+    {
+      "id": "2-reprogramar",
+      "voice": {
+        "es": "Toca Reprogramar y escoge mañana.",
+        "pt": "Toque em Reagendar e escolha amanhã."
+      }
+    },
+    {
+      "id": "3-hora",
+      "voice": {
+        "es": "Toca la hora nueva. Ves de dónde a dónde se mueve.",
+        "pt": "Toque na nova hora. Você vê de onde para onde muda."
+      }
+    },
+    {
+      "id": "4-guardar",
+      "voice": {
+        "es": "Toca Guardar y avisar por WhatsApp.",
+        "pt": "Toque em Salvar."
+      }
+    },
+    {
+      "id": "5-aviso",
+      "voice": {
+        "es": "El mensaje ya va escrito. Envíalo.",
+        "pt": "Pronto: ele passa para amanhã."
+      }
+    },
+    {
+      "id": "6-no-asistio",
+      "voice": {
+        "es": "¿No llegó? Toca su cita y No asistió.",
+        "pt": "Não veio? Toque no horário e em Não compareceu."
+      }
+    },
+    {
+      "id": "7-confirmar",
+      "voice": {
+        "es": "Confírmalo: sale de la agenda, sin cobrar nada.",
+        "pt": "Confirme: sai da agenda, sem cobrar nada."
+      }
+    },
+    {
+      "id": "8-whatsapp",
+      "voice": {
+        "es": "Y le escribes por WhatsApp. Envíalo.",
+        "pt": "O horário fica livre na sua agenda."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así mueves tus citas con Platata.",
+        "pt": "Assim você muda seus horários com o Platata."
+      }
+    }
+  ]
+}

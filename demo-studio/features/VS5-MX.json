@@ -1,0 +1,43 @@
+{
+  "id": "VS5-MX",
+  "name": "Take a card (services, owner phone, Mexico)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-charge",
+      "voice": {
+        "es": "Con la vacuna en la venta, toca Cobrar y luego Tarjeta."
+      }
+    },
+    {
+      "id": "2-tip",
+      "voice": {
+        "es": "El cliente elige la propina, o Sin propina. Con ese toque empieza el cobro."
+      }
+    },
+    {
+      "id": "3-tap",
+      "voice": {
+        "es": "Acerca su tarjeta o su teléfono al tuyo. El total ya lleva la propina."
+      }
+    },
+    {
+      "id": "4-approved",
+      "voice": {
+        "es": "Pago aprobado. La venta queda guardada sola."
+      }
+    },
+    {
+      "id": "5-end",
+      "voice": {
+        "es": "Así cobras con tarjeta, con Platata."
+      }
+    }
+  ]
+}

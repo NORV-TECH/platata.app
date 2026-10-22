@@ -1,0 +1,761 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Cobrar con tarjeta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/services-data.js"></script>
+<script src="../../kit/vkit.js"></script>
+<script>
+/* VS5 "Cobrar con tarjeta" as a SERVICES business (Veterinaria by default; ?biz= works for the other three), owner phone.
+   Checked against the app at 73c65f08 (sim/usa-canada). The card flow never asks the business type; what differs for
+   services is the tip default (ServicesRules.kt:34 tipDefaultOn = true) and the pay screen without Save/Fiar.
+   The sale: Vacunación (Antirrábica) already in the sale on the till (the services till, HomeScreen.kt:780-830).
+   Colombia = Wompi, the TYPED card form (WompiPaymentOverlay.kt: entry -> "Enviando al banco…" -> approved; the sale saves
+     itself on APPROVED) -> ¡Venta completada! "Pago aprobado" + "VISA ••4242" (the brand Wompi returns for its test card).
+     There is NO camera card scan in the app (not built): never shown.
+   Mexico = Stripe Tap to Pay since STRIPE-MX-1 (sync/CardCountryGate.kt:33-37 "MX" -> STRIPE), the same flow as the US:
+     services ask for a tip first (StripePaymentSheet.kt:153-165, StripeTipScreen :230-330; 15/18/20 %, a tap starts the
+     charge) -> "Total a cobrar" + "Acerca la tarjeta" -> "Procesando…" -> ¡Venta completada! "Pago aprobado" (Stripe
+     card-present gives no brand / last four in this build: StripePaymentActions.kt:41, TerminalReaderManager.kt:445, so no
+     card line). Mexico keeps its QR (QrCountries) and a phone that can tap shows "Cobrar con enlace" under the row
+     (CheckoutSheetBody.kt:487-505); the page does not tap it. No fee is shown anywhere (Platata takes none in Mexico).
+     TapToPayMode.REAL_TAP_TO_PAY = false (sync/TapToPayMode.kt:25): this build uses Stripe's simulated reader.
+   US / Canada (on hold, no video): the same Stripe flow as Mexico.
+   Everywhere else (BR PE CL EC AR PA) there is NO card: no Card button (PayWaysVisibility.kt) and no Card row in Payment
+     methods (PaymentMethodsScreen.kt:288-293): the honest page charges cash and shows the list without Tarjeta.
+   Demo setup: register open; QR already set up (VS4); CO: Wompi keys saved, Card on; MX/US/CA: Stripe connected, Card on,
+   "Pedir propina" left on (the services default). */
+// TITLE: Platata · Cobrar con tarjeta
+const STR={"card_approved_title": {"en": "Payment approved", "es": "Pago aprobado", "pt": "Pagamento aprovado"}, "card_charge_button": {"en": "Charge %1$s", "es": "Cobrar %1$s", "pt": "Cobrar %1$s"}, "card_consent_data_full": {"en": "I authorize the processing of my personal data", "es": "Autorizo el tratamiento de mis datos personales", "pt": "Autorizo o tratamento dos meus dados pessoais"}, "card_consent_data_link": {"en": "processing of my personal data", "es": "tratamiento de mis datos personales", "pt": "tratamento dos meus dados pessoais"}, "card_consent_terms_full": {"en": "I accept Wompi's Terms and Conditions", "es": "Acepto los Términos y Condiciones de Wompi", "pt": "Aceito os Termos e Condições da Wompi"}, "card_consent_terms_link": {"en": "Terms and Conditions", "es": "Términos y Condiciones", "pt": "Termos e Condições"}, "card_entry_title": {"en": "Card details", "es": "Datos de la tarjeta", "pt": "Dados do cartão"}, "card_field_cvc": {"en": "CVC", "es": "CVC", "pt": "CVC"}, "card_field_expiry": {"en": "Expires", "es": "Vence", "pt": "Validade"}, "card_field_expiry_hint": {"en": "MM / YY", "es": "MM / AA", "pt": "MM / AA"}, "card_field_holder": {"en": "Name on card", "es": "Nombre en la tarjeta", "pt": "Nome no cartão"}, "card_field_number": {"en": "Number", "es": "Número", "pt": "Número"}, "card_overlay_total_label": {"en": "Total to charge", "es": "Total a cobrar", "pt": "Total a cobrar"}, "card_sending_label": {"en": "Charging", "es": "Cobrando", "pt": "Cobrando"}, "card_sending_subtitle": {"en": "Don't close the app.", "es": "No cierres la app.", "pt": "Não feche o app."}, "card_sending_title": {"en": "Sending to the bank…", "es": "Enviando al banco…", "pt": "Enviando ao banco…"}, "cash_exact": {"en": "Exact · %s", "es": "Exacto · %s", "pt": "Exato · %s"}, "cash_exact_short": {"en": "Exact", "es": "Exacto", "pt": "Exato"}, "cash_rounding_line": {"en": "Cash rounding %s", "es": "Redondeo en efectivo %s", "pt": "Arredondamento em dinheiro %s"}, "cash_shortfall": {"en": "Short %s", "es": "Faltan %s", "pt": "Faltam %s"}, "checkout_add_customer_cta": {"en": "Add a client to the sale", "es": "Agrega un cliente a la venta", "pt": "Adicione um cliente à venda"}, "checkout_cash_label": {"en": "Cash", "es": "Efectivo", "pt": "Dinheiro"}, "checkout_change_row_label": {"en": "Change", "es": "Cambio", "pt": "Troco"}, "checkout_clear": {"en": "Clear", "es": "Borrar", "pt": "Limpar"}, "checkout_items_link": {"en": "Items (%1$d)", "es": "Artículos (%1$d)", "pt": "Itens (%1$d)"}, "checkout_other_method": {"en": "Other payment method (%d)", "es": "Otro método de pago (%d)", "pt": "Outra forma de pagamento (%d)"}, "checkout_other_method_subtitle": {"en": "Total %s · you confirm before it is charged", "es": "Total %s · confirmas antes de cobrar", "pt": "Total %s · você confirma antes de cobrar"}, "checkout_other_method_title": {"en": "Other payment method", "es": "Otro método de pago", "pt": "Outra forma de pagamento"}, "checkout_received_label": {"en": "Received", "es": "Recibido", "pt": "Recebido"}, "common_add": {"en": "Add", "es": "Agregar", "pt": "Adicionar"}, "common_cancel": {"en": "Cancel", "es": "Cancelar", "pt": "Cancelar"}, "common_charge": {"en": "Charge %s", "es": "Cobrar %s", "pt": "Cobrar %s"}, "common_edit": {"en": "Edit", "es": "Editar", "pt": "Editar"}, "common_included": {"en": "Included", "es": "Incluido", "pt": "Incluído"}, "common_new_short": {"en": "+ New", "es": "+ Nuevo", "pt": "+ Novo"}, "common_send": {"en": "Send", "es": "Enviar", "pt": "Enviar"}, "common_total": {"en": "Total", "es": "Total", "pt": "Total"}, "conn_slot_phone": {"en": "Your phone", "es": "Tu teléfono", "pt": "Seu celular"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "home_tab_products": {"en": "Products", "es": "Productos", "pt": "Produtos"}, "home_tab_services": {"en": "Services", "es": "Servicios", "pt": "Serviços"}, "items_filter_all": {"en": "All", "es": "Todos", "pt": "Todos"}, "items_price_from": {"en": "From %1$s", "es": "Desde %1$s", "pt": "A partir de %1$s"}, "items_price_unset": {"en": "No price", "es": "Sin precio", "pt": "Sem preço"}, "mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "open_ticket_exit": {"en": "Exit", "es": "Salir", "pt": "Sair"}, "opt_min": {"en": "min", "es": "min", "pt": "min"}, "pay_card_link_under": {"en": "Charge by link", "es": "Cobrar con enlace", "pt": "Cobrar por link"}, "pay_card_setup_hint": {"en": "Set up", "es": "Configurar", "pt": "Configurar"}, "pay_card_short": {"en": "Card", "es": "Tarjeta", "pt": "Cartão"}, "pay_custom_confirm_back": {"en": "Go back", "es": "Volver", "pt": "Voltar"}, "pay_custom_confirm_title": {"en": "Confirm you received the %1$s payment in %2$s.", "es": "Confirma que recibiste el pago de %1$s en %2$s.", "pt": "Confirme que recebeu o pagamento de %1$s em %2$s."}, "pay_custom_confirm_yes": {"en": "Yes, charge", "es": "Sí, cobrar", "pt": "Sim, cobrar"}, "pay_methods_comp_note": {"en": "Only you and people you allow in Team > Permissions.", "es": "Solo tú y quien autorices en Equipo > Permisos.", "pt": "Só você e quem você autorizar em Equipe > Permissões."}, "pay_methods_dialog_title": {"en": "Add Payment Method", "es": "Agregar método de pago", "pt": "Adicionar forma de pagamento"}, "pay_methods_example_transfer": {"en": "Bank transfer", "es": "Transferencia", "pt": "Transferência"}, "pay_methods_field_name": {"en": "Name (e.g. %1$s)", "es": "Nombre (ej. %1$s)", "pt": "Nome (ex. %1$s)"}, "pay_methods_title": {"en": "Payment methods", "es": "Métodos de pago", "pt": "Formas de pagamento"}, "pay_qr_short": {"en": "QR", "es": "QR", "pt": "QR"}, "pay_setup_link_card": {"en": "Set up card", "es": "Configurar tarjeta", "pt": "Configurar cartão"}, "pay_setup_link_dismiss": {"en": "No thanks", "es": "No, gracias", "pt": "Não, obrigado"}, "pay_setup_link_pix": {"en": "Set up Pix", "es": "Configurar Pix", "pt": "Configurar Pix"}, "pay_setup_link_qr": {"en": "Set up QR", "es": "Configurar QR", "pt": "Configurar QR"}, "pay_setup_link_qr_card": {"en": "Set up QR or card", "es": "Configurar QR o tarjeta", "pt": "Configurar QR ou cartão"}, "payment_method_card": {"en": "Card", "es": "Tarjeta", "pt": "Cartão"}, "payment_method_cash": {"en": "Cash", "es": "Efectivo", "pt": "Dinheiro"}, "payment_method_comp": {"en": "On the house", "es": "Cortesía", "pt": "Cortesia"}, "payment_method_qr": {"en": "QR Payment", "es": "Pago QR", "pt": "Pagamento QR"}, "qr_no_receipt_needed": {"en": "Paid · No photo", "es": "Pagó · Sin foto", "pt": "Pago · Sem foto"}, "qr_options_row": {"en": "QR code & cashier note", "es": "Código QR y nota del cajero", "pt": "Código QR e nota do caixa"}, "qr_options_row_pix": {"en": "Pix QR code & cashier note", "es": "QR de Pix y nota del cajero", "pt": "QR do Pix e nota do caixa"}, "qr_payment_default_message": {"en": "Check in your bank app that the payment arrived before you complete the sale.", "es": "Revisa en tu app del banco que el pago llegó antes de entregar.", "pt": "Confira no app do banco que o pagamento chegou antes de entregar."}, "qr_payment_receipt_btn": {"en": "Paid · Photo of transfer", "es": "Pagó · Foto del pago", "pt": "Pago · Foto do comprovante"}, "qr_scan_hint": {"en": "Have the client scan\nwith their bank app", "es": "Que el cliente escanee\ncon su app del banco", "pt": "Peça ao cliente que escaneie\ncom o app do banco"}, "qr_terms_note_bold": {"en": "Platata is not responsible for QR payments.", "es": "Platata no es responsable por los pagos QR.", "pt": "A Platata não é responsável por pagamentos por QR."}, "qr_terms_note_bold_pix": {"en": "Platata is not responsible for Pix payments.", "es": "Platata no es responsable por los pagos con Pix.", "pt": "A Platata não é responsável por pagamentos por Pix."}, "qr_terms_note_rest": {"en": "Before you hand over each sale, check in your bank that the payment arrived.", "es": "Antes de entregar cada compra, revisa en tu banco que el pago haya llegado.", "pt": "Antes de entregar cada compra, confira no seu banco se o pagamento chegou."}, "qr_total_to_charge": {"en": "Total to charge", "es": "Total a cobrar", "pt": "Total a cobrar"}, "receipt_action_print": {"en": "Print", "es": "Imprimir", "pt": "Imprimir"}, "receipt_dlg_title": {"en": "Receipt", "es": "Recibo", "pt": "Recibo"}, "receipt_email_receipt": {"en": "Email receipt", "es": "Recibo por correo", "pt": "Recibo por e-mail"}, "receipt_footer_default": {"en": "Thank you for your visit!", "es": "¡Gracias por tu visita!", "pt": "Obrigado pela preferência!"}, "receipt_label_cash_rounding": {"en": "Cash rounding", "es": "Redondeo en efectivo", "pt": "Arredondamento em dinheiro"}, "receipt_label_cash_total": {"en": "Cash total", "es": "Total en efectivo", "pt": "Total em dinheiro"}, "receipt_label_change_due": {"en": "Change Due", "es": "Cambio", "pt": "Troco"}, "receipt_label_date": {"en": "Date", "es": "Fecha", "pt": "Data"}, "receipt_label_each": {"en": "ea", "es": "c/u", "pt": "un"}, "receipt_label_order_number": {"en": "Sale #", "es": "Venta #", "pt": "Venda #"}, "receipt_label_performer": {"en": "Served by", "es": "Atendió", "pt": "Atendido por"}, "receipt_label_subtotal": {"en": "Subtotal", "es": "Subtotal", "pt": "Subtotal"}, "receipt_label_tip": {"en": "Tip", "es": "Propina", "pt": "Gorjeta"}, "receipt_label_total": {"en": "TOTAL", "es": "TOTAL", "pt": "TOTAL"}, "receipt_opt_change_label": {"en": "CHANGE", "es": "CAMBIO", "pt": "TROCO"}, "receipt_opt_completed": {"en": "Sale complete!", "es": "¡Venta completada!", "pt": "Venda concluída!"}, "receipt_opt_how_receipt": {"en": "How do you send the receipt?", "es": "¿Cómo envías el recibo?", "pt": "Como você envia o recibo?"}, "receipt_opt_new_sale": {"en": "New sale", "es": "Nueva venta", "pt": "Nova venda"}, "receipt_opt_new_sale_no_receipt": {"en": "New sale · No receipt", "es": "Nueva venta · Sin recibo", "pt": "Nova venda · Sem recibo"}, "receipt_opt_privacy": {"en": "Privacy notice", "es": "Aviso de privacidad", "pt": "Aviso de privacidade"}, "receipt_opt_received": {"en": "You received %s", "es": "Recibiste %s", "pt": "Você recebeu %s"}, "receipt_opt_show_receipt": {"en": "View receipt", "es": "Ver recibo", "pt": "Ver recibo"}, "receipt_opt_tendered": {"en": "from %s received", "es": "de %s recibidos", "pt": "de %s recebidos"}, "receipt_opt_whatsapp_btn": {"en": "WhatsApp", "es": "WhatsApp", "pt": "WhatsApp"}, "receipt_print_again": {"en": "Print again", "es": "Imprimir otra vez", "pt": "Imprimir de novo"}, "receipt_text_receipt": {"en": "Text receipt", "es": "Recibo por mensaje", "pt": "Recibo por mensagem"}, "scan_row_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "services_action_agendar": {"en": "Book", "es": "Agendar", "pt": "Agendar"}, "services_action_crear_orden": {"en": "Create order", "es": "Crear orden", "pt": "Criar ordem"}, "stripe_cancel": {"en": "Cancel", "es": "Cancelar", "pt": "Cancelar"}, "stripe_present_tap": {"en": "Tap the card", "es": "Acerca la tarjeta", "pt": "Aproxime o cartão"}, "stripe_processing_hint": {"en": "Don't remove the card", "es": "No retires la tarjeta", "pt": "Não retire o cartão"}, "stripe_processing_title": {"en": "Processing…", "es": "Procesando…", "pt": "Processando…"}, "stripe_starting_title": {"en": "Preparing the charge…", "es": "Preparando el cobro…", "pt": "Preparando a cobrança…"}, "stripe_tip_custom": {"en": "Other amount", "es": "Otro monto", "pt": "Outro valor"}, "stripe_tip_none": {"en": "No tip", "es": "Sin propina", "pt": "Sem gorjeta"}, "stripe_tip_preset": {"en": "%1$d%% · %2$s", "es": "%1$d%% · %2$s", "pt": "%1$d%% · %2$s"}, "stripe_tip_title": {"en": "Add a tip?", "es": "¿Agregar propina?", "pt": "Adicionar gorjeta?"}, "stripe_total_label": {"en": "Total to charge", "es": "Total a cobrar", "pt": "Total a cobrar"}, "sx_agenda": {"en": "Agenda", "es": "Agenda", "pt": "Agenda"}, "whatsapp_signature": {"en": "Made with Platata · platata.app", "es": "Hecho con Platata · platata.app", "pt": "Feito com Platata · platata.app"}, "wompi_options_row": {"en": "Wompi settings", "es": "Ajustes de Wompi", "pt": "Configurações do Wompi"}};
+const PLU={"card_installments": {"en": {"one": "%1$d installment", "other": "%1$d installments"}, "es": {"one": "%1$d cuota", "other": "%1$d cuotas"}, "pt": {"one": "%1$d parcela", "other": "%1$d parcelas"}}, "home_current_sale_services": {"en": {"one": "Current sale · %d service", "other": "Current sale · %d services"}, "es": {"one": "Venta actual · %d servicio", "other": "Venta actual · %d servicios"}, "pt": {"one": "Venda atual · %d serviço", "other": "Venda atual · %d serviços"}}};
+const ASSET={"pot": {"celebrating": "data:image/webp;base64,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"}};
+/* the app's own drawn icons (res/drawable/<name>.xml), converted path for path */
+const DRAWN={"ic_drawn_secador": "<svg viewBox=\"0 0 24 24\"><path d=\"M7.3 12.8l1.6 7.1c.1.6.7 1 1.3.9l.9-.2c.6-.1 1-.7.9-1.3l-1.3-6.9\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M9.6,6.4 H17.2 A1.4,1.4 0 0 1 18.6,7.8 V10.2 A1.4,1.4 0 0 1 17.2,11.6 H9.6 A1.4,1.4 0 0 1 8.2,10.2 V7.8 A1.4,1.4 0 0 1 9.6,6.4 Z\" fill=\"#E86A8E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M3.8,9 A4.6,4.6 0 1 0 13,9 A4.6,4.6 0 1 0 3.8,9 Z\" fill=\"#E86A8E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M6.6,9 A1.8,1.8 0 1 0 10.2,9 A1.8,1.8 0 1 0 6.6,9 Z\" fill=\"#EDF1F4\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M19.2,5.6 H19.8 A1,1 0 0 1 20.8,6.6 V11.4 A1,1 0 0 1 19.8,12.4 H19.2 A1,1 0 0 1 18.2,11.4 V6.6 A1,1 0 0 1 19.2,5.6 Z\" fill=\"#B0B4B8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M21.8 7.4h1M21.8 10.6h1\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.1\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "ic_drawn_huella": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 12.4c2.8 0 5.2 2.6 5.2 4.8 0 1.8-1.4 2.6-2.8 2.6-1 0-1.6-.6-2.4-.6s-1.4.6-2.4.6c-1.4 0-2.8-.8-2.8-2.6 0-2.2 2.4-4.8 5.2-4.8z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><g><path d=\"M5.2,10.4 A1.6,2.1 0 1 0 8.4,10.4 A1.6,2.1 0 1 0 5.2,10.4 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g><path d=\"M8.5,6.8 A1.6,2.2 0 1 0 11.7,6.8 A1.6,2.2 0 1 0 8.5,6.8 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g><path d=\"M12.3,6.8 A1.6,2.2 0 1 0 15.5,6.8 A1.6,2.2 0 1 0 12.3,6.8 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g><g><path d=\"M15.6,10.4 A1.6,2.1 0 1 0 18.8,10.4 A1.6,2.1 0 1 0 15.6,10.4 Z\" fill=\"#8E5A34\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></g></svg>", "ic_drawn_moto": "<svg viewBox=\"0 0 24 24\"><path d=\"M2.6,16 A3.4,3.4 0 1 0 9.4,16 A3.4,3.4 0 1 0 2.6,16 Z\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M14.6,16 A3.4,3.4 0 1 0 21.4,16 A3.4,3.4 0 1 0 14.6,16 Z\" fill=\"#4E4A48\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M4.8,16 A1.2,1.2 0 1 0 7.2,16 A1.2,1.2 0 1 0 4.8,16 Z\" fill=\"#B0B4B8\"/><path d=\"M16.8,16 A1.2,1.2 0 1 0 19.2,16 A1.2,1.2 0 1 0 16.8,16 Z\" fill=\"#B0B4B8\"/><path d=\"M6 16l4.2-5.6h4.4l3.4 5.6\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M8.8 10.4h6.4c.6 0 1.2-.5 1.2-1.2 0-.6-.5-1.2-1.2-1.2H10c-.7 0-1.2.6-1.2 1.2z\" fill=\"#D9422E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M15.8 9.4l1.4-2.8h2.2\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>", "ic_drawn_esmalte": "<svg viewBox=\"0 0 24 24\"><path d=\"M7.2,7.4 H16.8 A1.8,1.8 0 0 1 18.6,9.2 V18.8 A1.8,1.8 0 0 1 16.8,20.6 H7.2 A1.8,1.8 0 0 1 5.4,18.8 V9.2 A1.8,1.8 0 0 1 7.2,7.4 Z\" fill=\"#D9422E\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M6.4 7.4c1.6-2.4 3.4-3.6 5.6-3.6s4 1.2 5.6 3.6\" fill=\"none\" stroke=\"#3A2A1F\" stroke-width=\"1.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M5.6,6.4 H18.4 A1,1 0 0 1 19.4,7.4 V7.8 A1,1 0 0 1 18.4,8.8 H5.6 A1,1 0 0 1 4.6,7.8 V7.4 A1,1 0 0 1 5.6,6.4 Z\" fill=\"#B0B4B8\" stroke=\"#3A2A1F\" stroke-width=\"1.2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>"};
+
+const PAGE = {id:"VS5", biz:"veterinaria"};
+const J = {
+  pen:'<svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a1 1 0 000-1.41l-2.34-2.34a1 1 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  cart:'<svg class="mi" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  receipt:'<svg class="mi" viewBox="0 0 24 24"><path d="M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"/></svg>',
+  check:'<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>',
+  person:'<svg class="i" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>',
+  back:'<svg class="i" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>',
+  more:'<svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>',
+  card:'<svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H4v-6h16v6zm0-10H4V6h16v2z"/></svg>',
+  trash:'<svg class="i" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>',
+  camera:'<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>',
+  image:'<svg class="i" viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
+  chev:'<svg class="i" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  down:'<svg class="i" viewBox="0 0 24 24"><path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></svg>',
+  close:'<svg class="i" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>',
+  print:'<svg class="i" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>',
+  send:'<svg class="i" viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>',
+  camAlt:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>'
+};
+const I2 = {
+  edit:'<svg class="mi" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>',
+  chevR:'<svg class="mi" viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>',
+  search:'<svg class="mi" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>',
+  wa:'<svg class="mi" viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.6-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2.1 1-2.4c.3-.3.6-.3.8-.3h.6c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.1 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>',
+  fp:'<svg class="mi" viewBox="0 0 24 24"><path d="M17.81 4.47c-.08 0-.16-.02-.23-.06C15.66 3.42 14 3 12.01 3c-1.98 0-3.86.47-5.57 1.41-.24.13-.54.04-.68-.2-.13-.24-.04-.55.2-.68C7.82 2.52 9.86 2 12.01 2c2.13 0 3.99.47 6.03 1.52.25.13.34.43.21.67-.09.18-.26.28-.44.28zM3.5 9.72c-.1 0-.2-.03-.29-.09-.23-.16-.28-.47-.12-.7.99-1.4 2.25-2.5 3.75-3.27C9.98 4.04 14 4.03 17.15 5.65c1.5.77 2.76 1.86 3.75 3.25.16.22.11.54-.12.7-.23.16-.54.11-.7-.12-.9-1.26-2.04-2.25-3.39-2.94-2.87-1.47-6.54-1.47-9.4.01-1.36.7-2.5 1.7-3.4 2.96-.08.14-.23.21-.39.21zm6.25 12.07c-.13 0-.26-.05-.35-.15-.87-.87-1.34-1.43-2.01-2.64-.69-1.23-1.05-2.73-1.05-4.34 0-2.97 2.54-5.39 5.66-5.39s5.66 2.42 5.66 5.39c0 .28-.22.5-.5.5s-.5-.22-.5-.5c0-2.42-2.09-4.39-4.66-4.39-2.57 0-4.66 1.97-4.66 4.39 0 1.44.32 2.77.93 3.85.64 1.15 1.08 1.64 1.85 2.42.19.2.19.51 0 .71-.11.1-.24.15-.37.15zm7.17-1.85c-1.19 0-2.24-.3-3.1-.89-1.49-1.01-2.38-2.65-2.38-4.39 0-.28.22-.5.5-.5s.5.22.5.5c0 1.41.72 2.74 1.94 3.56.71.48 1.54.71 2.54.71.24 0 .64-.03 1.04-.1.27-.05.53.13.58.41.05.27-.13.53-.41.58-.57.11-1.07.12-1.21.12zM14.91 22c-.04 0-.09-.01-.13-.02-1.59-.44-2.63-1.03-3.72-2.1-1.4-1.39-2.17-3.24-2.17-5.22 0-1.62 1.38-2.94 3.08-2.94 1.7 0 3.08 1.32 3.08 2.94 0 1.07.93 1.94 2.08 1.94s2.08-.87 2.08-1.94c0-3.77-3.25-6.83-7.25-6.83-2.84 0-5.44 1.58-6.61 4.03-.39.81-.59 1.76-.59 2.8 0 .78.07 2.01.67 3.61.1.26-.03.55-.29.64-.26.1-.55-.04-.64-.29-.49-1.31-.73-2.61-.73-3.96 0-1.2.23-2.29.68-3.24 1.33-2.79 4.28-4.6 7.51-4.6 4.55 0 8.25 3.51 8.25 7.83 0 1.62-1.38 2.94-3.08 2.94s-3.08-1.32-3.08-2.94c0-1.07-.93-1.94-2.08-1.94s-2.08.87-2.08 1.94c0 1.71.66 3.31 1.87 4.51.95.94 1.86 1.46 3.27 1.85.27.07.42.35.35.61-.05.23-.26.38-.47.38z"/></svg>',
+  clock:'<svg class="mi" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>',
+};
+
+/* ======== shared by the services pay pages VS4..VS7 (one source, copied into each page at build time; strings from the
+   app's values / values-es / values-pt-rBR at 73c65f08). Every screen names its composable (file:line). ======== */
+// KEYS: common_charge,common_total,common_cancel,common_add,common_send,common_edit,common_new_short,common_included
+// KEYS: home_tab_services,home_tab_products,items_filter_all,items_price_from,items_price_unset,opt_min,scan_row_manual,services_action_agendar,services_action_crear_orden
+// KEYS: mamaship_tab_register,sx_agenda,home_tab_my_business,conn_slot_phone
+// KEYS: checkout_clear,checkout_items_link,checkout_other_method,checkout_other_method_title,checkout_other_method_subtitle,checkout_add_customer_cta
+// KEYS: checkout_received_label,checkout_change_row_label,cash_shortfall,checkout_cash_label,cash_exact,cash_exact_short,cash_rounding_line
+// KEYS: pay_qr_short,pay_card_short,pay_card_setup_hint,pay_setup_link_qr,pay_setup_link_pix,pay_setup_link_card,pay_setup_link_qr_card,pay_setup_link_dismiss,pay_card_link_under
+// KEYS: open_ticket_exit
+// KEYS: receipt_opt_completed,receipt_opt_received,receipt_opt_tendered,receipt_opt_change_label,receipt_opt_how_receipt,receipt_opt_whatsapp_btn,receipt_print_again
+// KEYS: receipt_opt_show_receipt,receipt_opt_new_sale,receipt_opt_new_sale_no_receipt,receipt_opt_privacy,receipt_text_receipt,receipt_email_receipt,card_approved_title
+// KEYS: receipt_label_order_number,receipt_label_date,receipt_label_each,receipt_label_subtotal,receipt_label_total,receipt_label_tip,receipt_label_change_due
+// KEYS: receipt_label_performer,receipt_label_cash_rounding,receipt_label_cash_total,receipt_footer_default,receipt_dlg_title,receipt_action_print,whatsapp_signature
+// KEYS: payment_method_cash,payment_method_qr,payment_method_card,payment_method_comp,pay_methods_title,pay_methods_comp_note,qr_terms_note_bold,qr_terms_note_bold_pix,qr_terms_note_rest
+// KEYS: qr_options_row,qr_options_row_pix,wompi_options_row,pay_methods_dialog_title,pay_methods_field_name,pay_methods_example_transfer
+// KEYS: pay_custom_confirm_title,pay_custom_confirm_yes,pay_custom_confirm_back
+// KEYS: qr_total_to_charge,qr_scan_hint,qr_payment_default_message,qr_payment_receipt_btn,qr_no_receipt_needed
+// KEYS: card_overlay_total_label,card_entry_title,card_field_number,card_field_expiry,card_field_expiry_hint,card_field_cvc,card_field_holder
+// KEYS: card_consent_terms_full,card_consent_terms_link,card_consent_data_full,card_consent_data_link,card_charge_button,card_sending_label,card_sending_title,card_sending_subtitle
+// KEYS: stripe_tip_title,stripe_tip_preset,stripe_tip_none,stripe_tip_custom,stripe_total_label,stripe_starting_title,stripe_present_tap,stripe_cancel,stripe_processing_title,stripe_processing_hint
+// PLURALS: home_current_sale_services,card_installments
+const V = VKIT.ctx({biz: PAGE.biz});
+const C = V.C, LG = V.lang, CC = V.country, KC = V.K, esc = VKIT.esc;
+const fmtS = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : v; }).replace(/%%/g, "%"); };
+const t = (k, ...a) => { const o = STR[k]; if(!o) return "??"+k; return fmtS(o[LG] ?? o.en, a); };
+/* Android plural categories: pt "one" = 0 and 1; es/en "one" = 1 */
+const plCat = n => LG==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other");
+const tp = (k, n, ...a) => { const p = PLU[k][LG]; return fmtS(p[plCat(n)] || p.other, a.length ? a : [n]); };
+const money = v => V.money(v);
+const H = (es,pt,en) => V.pick({es,pt,en});
+const TAP = H("Toca ","Toque em ","Tap ");
+const hexA = (hex, a) => { const n = parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
+
+/* ---- the country facts the pay screens read ----
+   sync/CardCountryGate.kt:33-37   Stripe = US, CA, MX (STRIPE-MX-1); Wompi = CO; everyone else no card
+   sync/QrCountries.kt:10          no QR only in US and CA (Mexico keeps its QR)
+   utils/PixLabels.kt:16            the QR is "Pix" when the money is the real
+   sync/ReceiptSendRoute.kt:23     text + email in US and CA, WhatsApp everywhere else
+   sync/PosLinkRules.kt:74         "Cobrar con enlace" countries: US, CA, MX */
+const STRIPE = CC==="US" || CC==="CA" || CC==="MX";
+const WOMPI = CC==="CO";
+const CARDC = STRIPE || WOMPI;
+const QRC = !(CC==="US" || CC==="CA");
+const PIX = KC.cur==="BRL";
+const TEXT_ROUTE = CC==="US" || CC==="CA";
+const DIAL = {CO:"+57",MX:"+52",PE:"+51",CL:"+56",EC:"+593",AR:"+54",PA:"+507",BR:"+55",US:"+1",CA:"+1"}[CC];
+/* utils/PixLabels.kt:40-60 PIX_TEXT_RES: only these QR strings have a Pix twin */
+const PIX_RES = ["qr_terms_bar_title","qr_terms_subtitle","qr_terms_agree","qr_terms_cta","qr_terms_note_bold","qr_options_row","qr_upload_image",
+  "qr_setup_button","qr_setup_take_photo","qr_setup_saved"];
+const qrS = k => (PIX && PIX_RES.includes(k)) ? t(k+"_pix") : t(k);
+/* utils/CashRounding.kt: CL to $10 (1-5 down, 6-9 up), PE always down to S/ 0.10, CA to the nearest 5 cents. Cash only. */
+function cashDue(v){
+  if(CC==="CL"){ const r = Math.round(v) % 10; return r<=5 ? Math.round(v)-r : Math.round(v)-r+10; }
+  if(CC==="PE") return Math.floor(v*10+1e-6)/10;
+  if(CC==="CA") return Math.round(v*20)/20;
+  return v;
+}
+const DECKEY = KC.dec===0 ? "000" : new Intl.NumberFormat(KC.loc).formatToParts(1.5).find(p=>p.type==="decimal").value;   // CheckoutSheetBody onTripleZero
+
+/* ---- a services sale line: {sid, ci (choice index or null), add:[extra indexes], qty} ----
+   CheckoutActions.kt:305-312: the stored line is SaleLineName.of(product, variation) ("Cepillado (Largo)"; a blank or
+   "Regular" variation adds nothing, item 14) at MoneyLines.lineUnitPrice = variation price + every option's price.
+   The "Lo que trae" options come switched on at 0 (OptionSelectionSheet.kt:145-150); paid ones ("Cobra más") only when ticked. */
+function svcLine(l){
+  const s = V.service(l.sid);
+  const ch = (l.ci!=null && s.choices[l.ci]) ? s.choices[l.ci] : null;
+  const base = ch ? ch.price : s.price;
+  const paid = (l.add||[]).map(i => s.extras[i]).filter(Boolean);
+  const unit = (base||0) + paid.reduce((a,e)=>a+(e.price||0), 0);
+  const name = (ch && ch.name && ch.name.trim() && ch.name!=="Regular") ? `${s.name} (${ch.name})` : s.name;   // sync/SaleLineName.kt:32-37
+  return {s, ch, unit, qty:l.qty||1, name, paid:paid.map(e=>e.name), incl:s.included.map(i=>i.name), min:(ch&&ch.min)||s.min};
+}
+const saleTotal = lines => lines.reduce((a,l)=>{ const x = svcLine(l); return a + x.unit*x.qty; }, 0);
+const unitCount = lines => lines.reduce((a,l)=>a+(l.qty||1), 0);
+
+/* ---- trade family colours: ui/theme/PaperColor.kt:66-79 (tile = soft in light), TradeCatalogue.kt:140-157 icons ---- */
+const FAMILY = {peluqueria:"#F8E8EC", unas:"#F8E8EC", veterinaria:"#F0F2E3", "taller-motos":"#E8EBF4"};
+const TRADE_ICON = {peluqueria:"ic_drawn_secador", unas:"ic_drawn_esmalte", veterinaria:"ic_drawn_huella", "taller-motos":"ic_drawn_moto"};
+const X = h => `<div class="x">${h}</div>`;
+
+/* ======== owner bottom bar: PlatataApp.kt:505-700 + ui/navigation/NavLabels.kt:24-31 — a services shop's middle tab is
+   "Agenda" (SVC-2 item 23), with the Receipt icon (Screen.kt:42); the flag tab "Mi negocio" ======== */
+const nav = on => `<div class="mnav">
+  <div class="${on==="caja"?"on":""}" data-t="nav-caja"><span class="pill">${J.cart}</span>${esc(t("mamaship_tab_register"))}</div>
+  <div class="${on==="agenda"?"on":""}" data-t="nav-agenda"><span class="pill">${J.receipt}</span>${esc(t("sx_agenda"))}</div>
+  <div data-t="nav-biz"><span class="flagc">${V.flag()}</span>${esc(t("home_tab_my_business"))}</div></div>`;
+
+/* ======== the services till: HomeScreen.kt:600-660 (TabRow "Servicios · N | Productos · N", HomeTabLabels.kt:28-31),
+   ItemEditModeBar :2080-2097 (owner "Editar"), ProductLibraryView.kt:209-286 chips ("Todos" + the trade, the system
+   bucket hidden, HomeScreen.kt:942), the service tiles ProductCard.kt:262-341 (ServiceTileBody: trade icon 40/r12 on the
+   trade tile colour, name 16/500, price bold "Desde $X" for a FROM service, minutes), and the services footer
+   HomeScreen.kt:780-830 ("Teclado", CurrentSaleStrip.kt:26-61 "Venta actual · 1 servicio", FooterButtonPair "Agendar" |
+   "Cobrar $X"; a work-order trade says "Crear orden", ServiceActionLabel + TradeFamily). ======== */
+/* ShrinkToFitText.kt:23-45: one line, 16 sp stepping down to 12 sp, then "…". Measured here with a canvas (dp at 1:1). */
+const MEAS = document.createElement("canvas").getContext("2d");
+function textDp(text, weight, sp){ MEAS.font = `${weight} 100px Roboto, system-ui, sans-serif`; return MEAS.measureText(text).width * sp / 100; }
+function fitSp(text, weight, startSp, minSp, availDp){ for(let sp = startSp; sp > minSp; sp--) if(textDp(text, weight, sp) <= availDp) return sp; return minSp; }
+/* the tile on a 412 dp phone: Adaptive(120 dp) -> 3 columns of 121 dp (ProductLibraryView.kt:322-330), padding 12 -> 97 dp inside */
+function svcTile(s){
+  const price = s.mode==="ask" ? null : s.price;
+  const label = price==null ? t("items_price_unset") : s.mode==="from" ? t("items_price_from", money(price)) : money(price);   // ProductCard.kt:96-107
+  const mins = s.min ? `${s.min} ${t("opt_min")}` : "";
+  const avail = 97 - (mins ? 8 + textDp(mins, 400, 12) : 0);
+  const sp = fitSp(label, 700, 16, 12, avail);
+  return `<div class="vtile" data-t="svc-${s.id}"><span class="vic" style="background:${FAMILY[V.biz]}">${DRAWN[TRADE_ICON[V.biz]]}</span>
+    <b>${esc(s.name)}</b><div class="vpr"><span style="font-size:calc(var(--u)*${sp})">${esc(label)}</span>${mins?`<small>${esc(mins)}</small>`:""}</div></div>`;
+}
+function svcHome(lines){
+  const n = unitCount(lines), tot = saleTotal(lines);
+  const tabs = `<div class="vtabs"><span class="on">${esc(t("home_tab_services"))} · ${V.services.length}</span><span>${esc(t("home_tab_products"))} · ${C.products.length}</span></div>`;
+  const edit = `<div class="hedit"><span>${I2.edit}${esc(t("common_edit"))}</span></div>`;
+  const chips = `<div class="mcats"><span style="background:${hexA("#607D8B",.22)};border:calc(var(--u)*1.5) solid #607D8B;color:#607D8B">${J.check}${esc(t("items_filter_all"))}</span>` +
+    `<span style="background:${hexA("#81C784",.05)};border:1px solid ${hexA("#81C784",.3)}">${esc(V.tradeName)}</span></div>`;
+  const grid = `<div class="vgrid">${V.services.map(svcTile).join("")}</div>`;
+  const foot = `<div class="vfoot"><div class="vkey"><span>${esc(t("scan_row_manual"))}</span></div>
+    ${n?`<div class="cstrip"><span>${esc(tp("home_current_sale_services", n, n))}</span><i>›</i></div>`:""}
+    <div class="vpair"><div class="sb sec pill${n?"":" off"}" data-t="book"><span>${esc(t(V.isOrder ? "services_action_crear_orden" : "services_action_agendar"))}</span></div>
+    <div class="sb pri pill${n?"":" off"}" data-t="charge"><span>${esc(t("common_charge", money(tot)))}</span></div></div></div>`;
+  return tabs + edit + chips + grid + foot + nav("caja");
+}
+
+/* ======== the pay screen: CheckoutSheetBody.kt:1040-1240 (phone) + CheckoutPayBlock.kt:143-470.
+   SERVICES: no Save / Fiar button at all (hasSaveTicketButton = false, CheckoutSheetBody.kt:138, 1230): the tinted bottom
+   section holds only the client field. A booking being charged shows the amber open-ticket bar (OpenTicketBanner.kt:36-110,
+   label = the client's name, "Salir") in that section (CheckoutSheetBody.kt:438-455) and no "Borrar" link (:1084).
+   Ways to pay drawn by sync/PayWaysVisibility.kt:54-83: QR when switched on and its photo saved; Card when on and
+   connected (Stripe: the big button, weights Exacto 1.2 · QR 1 · Tarjeta 2, CheckoutPayBlock.kt:302-311); the owner's one
+   set-up link only for what is missing, else (Stripe, a phone that can tap) "Cobrar con enlace" (CheckoutSheetBody.kt:487-505).
+   o = {lines, qr, card:"none"|"ready"|"setup", others, customer, banner, typed, cardLink} ======== */
+function payScreen(o){
+  const total = saleTotal(o.lines), due = cashDue(total), typed = o.typed||"";
+  const qrOn = QRC && !!o.qr, cardOn = o.card==="ready" || o.card==="setup", cardReady = o.card==="ready";
+  const cardPrimary = STRIPE && cardReady;
+  const qrNotSetUp = !o.qr, cardNotSetUp = WOMPI && !cardReady;
+  let link = null, dismiss = true;
+  if(QRC && (qrNotSetUp || cardNotSetUp)){
+    link = WOMPI ? (qrNotSetUp && cardNotSetUp ? "pay_setup_link_qr_card" : cardNotSetUp ? "pay_setup_link_card" : "pay_setup_link_qr") : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");
+  } else if(cardReady && STRIPE && o.cardLink){ link = "pay_card_link_under"; dismiss = false; }
+  let rc = "";
+  if(typed){ const v = Number(typed); const ch = v - due;
+    rc = `<div class="ln"><small>${esc(t("checkout_received_label"))}</small><b>${money(v)}</b></div>` +
+      (ch >= -1e-9 ? `<div class="ln"><small>${esc(t("checkout_change_row_label"))}</small><b class="chg">${money(ch)}</b></div>`
+                   : `<div class="short">${esc(t("cash_shortfall", money(-ch)))}</div>`); }
+  const keys = ["1","2","3","4","5","6","7","8","9",DECKEY,"0","⌫"];
+  const enough = !typed || Number(typed) >= due-1e-9;
+  const cashW = cardPrimary ? 1.2 : (cardOn && qrOn) ? 1.3 : qrOn ? 2 : 1;
+  const exactLabel = cardOn ? t("cash_exact_short") : t("cash_exact", money(due));
+  let btns = `<div style="flex:${cashW}" class="${!typed?"exact":enough?"cash":"dis"}" data-t="${typed?"cash":"exact"}">${esc(typed?t("checkout_cash_label"):exactLabel)}</div>`;
+  if(qrOn) btns += `<div style="flex:1" class="ob" data-t="qr"><i class="x-qrg"></i>${esc(PIX?"Pix":t("pay_qr_short"))}</div>`;
+  if(cardOn) btns += cardReady ? `<div style="flex:${cardPrimary?2:1}" class="ob" data-t="card">${J.card}${esc(t("pay_card_short"))}</div>`
+                               : `<div style="flex:1" class="nudge" data-t="card-setup"><span>+ ${esc(t("pay_card_short"))}</span><small>${esc(t("pay_card_setup_hint"))}</small></div>`;
+  const rounding = Math.abs(due-total) > 1e-9 ? `<div class="x-round">${esc(t("cash_rounding_line", (due-total<0?"-":"+")+money(Math.abs(due-total))))}</div>` : "";
+  const links = `<span>${esc(t("checkout_items_link", unitCount(o.lines)))} ›</span>` +
+    (o.others ? `<span class="oth" data-t="other">${J.more}<span>${esc(t("checkout_other_method", o.others))}</span></span>` : "");
+  const banner = o.banner ? `<div class="v-otb"><b>${esc(o.banner)}</b><span>${esc(t("open_ticket_exit"))}</span></div>` : "";
+  return `<div class="x-phd"><span class="chev">‹</span><span class="wm">Platata</span>${o.banner?"":`<span class="clr">${esc(t("checkout_clear"))}</span>`}</div><div class="grow"></div>
+    <div class="x-pb"><div class="x-tot"><small>${esc(t("common_total"))}</small><b>${money(total)}</b></div>${rounding}
+    <div class="x-amt"><div class="x-links">${links}</div><div class="x-rc">${rc}</div></div>
+    <div class="x-kp">${keys.map(k=>`<span class="${k===DECKEY||k==="⌫"?"s":""}" data-t="key-${k}">${esc(k)}</span>`).join("")}</div>
+    <div class="x-btns">${btns}</div>
+    ${link?`<div class="x-slink"><span data-t="slink">${esc(t(link))}</span>${dismiss?`<span>${esc(t("pay_setup_link_dismiss"))}</span>`:""}</div>`:`<div style="height:calc(var(--u)*14)"></div>`}</div>
+    <div class="x-sec">${banner}${custField(o.customer)}</div>`;
+}
+/* the client field on the phone pay screen: CheckoutCustomerField.kt CustomerOnlyRow: 62 dp, surfaceVariant r14, person
+   icon + "Agrega un cliente a la venta", or the client's name bold + the X */
+function custField(name){
+  return `<div class="x-cust${name?" on":""}" data-t="cust">${J.person}${name?`<b>${esc(name)}</b><span class="xx">${J.close}</span>`:esc(t("checkout_add_customer_cta"))}</div>`; }
+/* "Otro método de pago" sheet: OtherPaymentSheetContent.kt:40-70 (title + total line pinned, one row per method) */
+function otherSheet(total, names){ return `<div class="x-sheet-scrim"><div class="x-sheet"><div class="handle"></div><h3>${esc(t("checkout_other_method_title"))}</h3><div class="st">${esc(t("checkout_other_method_subtitle", money(total)))}</div>
+  <div class="rows">${names.map((n,i)=>`<div class="row" data-t="om-${i}"><span>${esc(n)}</span>${J.chev}</div>`).join("")}</div></div></div>`; }
+
+/* ======== Sale complete: ReceiptOptionsScreen.kt:185-470. hero: {kind:"exact",received} | {kind:"change",change,received} |
+   {kind:"title"} | {kind:"card",line}; the card line (brand ••last four) only when the gateway gave one: Wompi does,
+   Stripe card-present gives neither in this build (TerminalReaderManager.kt:445, StripePaymentActions.kt:41), so
+   ReceiptFormatter.cardTenderLine returns null and only "Pago aprobado" shows. ======== */
+function doneScreen(hero, o){ o=o||{};
+  let b = `<img src="${ASSET.pot.celebrating}" alt="">`;
+  if(hero.kind==="change") b += `<div class="lbl">${esc(t("receipt_opt_change_label"))}</div><div class="big">${money(hero.change)}</div><div class="sub">${esc(t("receipt_opt_tendered", money(hero.received)))}</div>`;
+  else if(hero.kind==="exact") b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div><div class="sub">${esc(t("receipt_opt_received", money(hero.received)))}</div>`;
+  else if(hero.kind==="card") b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div><div class="ok">${esc(t("card_approved_title"))}</div>${hero.line?`<div class="sub">${esc(hero.line)}</div>`:""}`;
+  else b += `<div class="ttl">${esc(t("receipt_opt_completed"))}</div>`;
+  b += `<div class="q">${esc(t("receipt_opt_how_receipt"))}</div>`;
+  let f = TEXT_ROUTE ? `<div class="b pri" data-t="text">${esc(t("receipt_text_receipt"))}</div><div class="b ol" data-t="email">${esc(t("receipt_email_receipt"))}</div>`
+                     : `<div class="b wa" data-t="wa">${esc(t("receipt_opt_whatsapp_btn"))}</div>`;
+  if(o.printer) f += `<div class="b ol" data-t="print">${esc(t("receipt_print_again"))}</div>`;
+  f += `<div class="b ol" data-t="view">${esc(t("receipt_opt_show_receipt"))}</div><div class="b pri" data-t="new">${esc(t(o.printer?"receipt_opt_new_sale":"receipt_opt_new_sale_no_receipt"))}</div><div class="pv">${esc(t("receipt_opt_privacy"))}</div>`;
+  return `<div class="x-sc-body">${b}</div><div class="x-sc-foot">${f}</div>`;
+}
+/* ======== the receipt the client gets: utils/ReceiptFormatter.kt:343-470 generatePastPlainTextReceipt, built from the
+   STORED sale (CheckoutActions.kt:667-669): store name = the business (SeedStore.kt:78), "Venta #N", the date
+   (dd/MM/yyyy HH:mm, US/CA month first :186), each line "1x Cepillado (Largo)" with its option (item 13), "@ $x c/u",
+   the paid options with "+", the included ones as "Lavado profundo (Incluido)" (ModifierLines.split, item 45), Subtotal,
+   the tip (card), TOTAL, the card line, "Atendió: Carla" when the sale settles a booking that named someone
+   (ReceiptBuilder.kt:84-85, item 21), the change, the method, the shop's footer ("¡Gracias por tu visita!",
+   receipt_footer_default seeded by ReceiptFooterSeed.kt). o = {method, performer, tip, cardLine, received, no} ======== */
+const DATE = (CC==="US"||CC==="CA") ? "10/22/2026 12:41" : "22/10/2026 12:41";
+function receiptText(lines, o){ o=o||{};
+  const each = t("receipt_label_each"), total = saleTotal(lines), tip = o.tip||0;
+  let s = `${C.place}\n${t("receipt_label_order_number")}${o.no||C.sales.length+1}\n${t("receipt_label_date")}: ${DATE}\n===============================\n`;
+  lines.forEach(l=>{ const x = svcLine(l);
+    s += `${x.qty}x ${x.name}\n   @ ${money(x.unit)} ${each} ... ${money(x.unit*x.qty)}\n`;
+    x.paid.forEach(m => { s += `   + ${m}\n`; });
+    x.incl.forEach(m => { s += `   ${m} (${t("common_included")})\n`; }); });
+  s += `-------------------------------\n${t("receipt_label_subtotal")}: ${money(total)}\n`;
+  if(tip) s += `${t("receipt_label_tip")}: ${money(tip)}\n`;
+  s += `===============================\n${t("receipt_label_total")}: ${money(total + tip)}\n`;
+  const due = cashDue(total);
+  if(o.cash && Math.abs(due-total) > 1e-9){ s += `${t("receipt_label_cash_rounding")}: ${(due-total<0?"-":"+")+money(Math.abs(due-total))}\n${t("receipt_label_cash_total")}: ${money(due)}\n`; }
+  if(o.cardLine) s += o.cardLine + "\n";
+  if(o.performer) s += `${t("receipt_label_performer")}: ${o.performer}\n`;
+  if(o.received && o.received - (o.cash?due:total) > 1e-9) s += `${t("receipt_label_change_due")}: ${money(o.received - (o.cash?due:total))}\n`;
+  s += `${o.method}\n\n${t("receipt_footer_default")}`;
+  return s;
+}
+/* "Ver recibo": ui/common/ShowReceiptDialog.kt:123-190 (title, Imprimir when a printer is saved, Enviar, X, the paper card) */
+function viewer(text, printer){ return `<div class="x-rv"><div class="hd"><b>${esc(t("receipt_dlg_title"))}</b><div class="acts">
+  ${printer?`<span class="ac">${J.print}${esc(t("receipt_action_print"))}</span>`:""}<span class="ac${TEXT_ROUTE?"":" wa"}">${J.send}${esc(t("common_send"))}</span><span class="xb" data-t="rv-close">${J.close}</span></div></div>
+  <div class="x-paper">${esc(text)}</div></div>`; }
+const toast = msg => `<div class="x-toast">${esc(msg)}</div>`;
+function dialog(title, body, acts){ return `<div class="x-dlgscrim"><div class="x-dlg">${title?`<h3>${esc(title)}</h3>`:""}${body?`<div class="body">${body}</div>`:""}
+  <div class="acts">${acts.map(a=>`<span class="${a.fill?"fb":"tb"}" data-t="${a.t||""}">${esc(a.label)}</span>`).join("")}</div></div></div>`; }
+const field = (label, value, focus) => `<div class="x-field${focus?" focus":""}"><label>${esc(label)}</label><span>${esc(value)}${focus?'<i class="x-caret"></i>':""}</span></div>`;
+
+/* ======== Payment methods: ui/screens/settings/PaymentMethodsScreen.kt:259-560 (SumaTopBar + "+ Nuevo", one
+   surfaceContainerLow card per method, PaymentMethodRowHead.kt:32-84). A services shop has NO Fiado row
+   (data/FiadoScope.kt:12, ServicesRules.fiadoEnabled = false). Order (PosViewModel.kt:2109-2124): Efectivo, QR, Mercado
+   Pago, then as seeded: Tarjeta, Cortesía, the shop's own. QR: the red note always (QrResponsibilityNote), the
+   "Código QR y nota del cajero" row when on. Card row only in a card country (:288-293); switched on in Colombia it shows
+   the "Ajustes de Wompi" row (:516-530). st = {qrOn, cardOn, customs:[]} ======== */
+function pmTop(){ return `<div class="x-top"><span class="nb">${J.back}</span><h1>${esc(t("pay_methods_title"))}</h1><span class="act" data-t="pm-new">${esc(t("common_new_short"))}</span></div>`; }
+function pmSwitch(on, tag){ return `<span class="x-sw${on?" on":""}"${tag?` data-t="${tag}"`:""}></span>`; }
+function pmRow(name, on, opts){ opts=opts||{};
+  return `<div class="x-pmh"><div class="nm"><b>${esc(name)}</b>${opts.note?`<small>${esc(opts.note)}</small>`:""}</div>${pmSwitch(on, opts.tag)}${opts.del?`<span class="del">${J.trash}</span>`:""}</div>`; }
+function pmScreen(st){
+  const qrName = PIX ? "Pix" : t("payment_method_qr");
+  const acc = label => `<div class="x-acc"><span>${esc(label)}</span>${J.down}</div>`;
+  let h = `<div class="x-pml">`;
+  h += `<div class="x-pmc">${pmRow(t("payment_method_cash"), true)}</div>`;
+  if(QRC) h += `<div class="x-pmc">${pmRow(qrName, !!st.qrOn, {tag:"sw-qr"})}<div class="x-qrnote"><i>!</i><span><b>${esc(qrS("qr_terms_note_bold"))}</b> ${esc(t("qr_terms_note_rest"))}</span></div>${st.qrOn?acc(qrS("qr_options_row")):""}</div>`;
+  const cu = st.customs||[], mp = cu.filter(n=>n==="Mercado Pago"), rest = cu.filter(n=>n!=="Mercado Pago");
+  mp.forEach(n => { h += `<div class="x-pmc${st.fresh===n?" fresh":""}">${pmRow(n, true, {del:true})}</div>`; });
+  if(CARDC) h += `<div class="x-pmc">${pmRow(t("payment_method_card"), !!st.cardOn)}${st.cardOn && WOMPI ? acc(t("wompi_options_row")) : ""}</div>`;
+  h += `<div class="x-pmc">${pmRow(t("payment_method_comp"), true, {note:t("pay_methods_comp_note")})}</div>`;
+  rest.forEach(n => { h += `<div class="x-pmc${st.fresh===n?" fresh":""}">${pmRow(n, true, {del:true})}</div>`; });
+  return pmTop() + h + `</div>`;
+}
+/* "Otro método de pago" lists the active methods that are not cash, QR or card (CheckoutSheetBody.kt:318-322), Mercado Pago first */
+const othersList = customs => customs.filter(n=>n==="Mercado Pago").concat([t("payment_method_comp")], customs.filter(n=>n!=="Mercado Pago"));
+/* sync/PaymentMethodExample.kt: the example the add box shows (null = the word for a bank transfer) */
+const EXAMPLE = ({CO:"Nequi",PE:"Yape",AR:"Mercado Pago",MX:"Mercado Pago",US:"Zelle",CA:"Interac e-Transfer"})[CC] || null;
+/* AddPaymentMethodDialog, PaymentMethodsScreen.kt:770-820 */
+function addMethodDialog(typed){ const ex = EXAMPLE || t("pay_methods_example_transfer");
+  return dialog(t("pay_methods_dialog_title"), field(t("pay_methods_field_name", ex), typed, true), [{label:t("common_cancel")},{label:t("common_add"), fill:true, t:"pm-add"}]); }
+/* CustomMethodConfirmDialog.kt:40-55 (PAY-1 #14): a method the shop made waits for "Sí, cobrar" */
+const confirmCustom = (total, name) => dialog(t("pay_custom_confirm_title", money(total), name), "", [{label:t("pay_custom_confirm_back")},{label:t("pay_custom_confirm_yes"), fill:true, t:"yes"}]);
+
+/* a placeholder QR picture (not scannable): the shop's own bank QR is a photo the owner uploads; in Brazil the overlay
+   draws a NEW QR that carries the sale total (QrPaymentOverlay.kt:180-185, PixBrCode.withAmount) */
+function fakeQr(seed, mod){ mod = mod||29; let x = seed>>>0 || 7; const rnd = () => (x = (x*1103515245+12345)>>>0, (x>>>16)&1);
+  let r = ""; const fp = (cx,cy)=>{ r += `<rect x="${cx}" y="${cy}" width="7" height="7" fill="#000"/><rect x="${cx+1}" y="${cy+1}" width="5" height="5" fill="#fff"/><rect x="${cx+2}" y="${cy+2}" width="3" height="3" fill="#000"/>`; };
+  for(let yy=0; yy<mod; yy++) for(let xx=0; xx<mod; xx++){ const inF = (xx<8&&yy<8)||(xx>=mod-8&&yy<8)||(xx<8&&yy>=mod-8); if(!inF && rnd()) r += `<rect x="${xx}" y="${yy}" width="1" height="1" fill="#000"/>`; }
+  fp(0,0); fp(mod-7,0); fp(0,mod-7);
+  return `<svg viewBox="-2 -2 ${mod+4} ${mod+4}" shape-rendering="crispEdges"><rect x="-2" y="-2" width="${mod+4}" height="${mod+4}" fill="#fff"/>${r}</svg>`; }
+/* QrPaymentOverlay.kt:93-300: back arrow, "TOTAL A COBRAR", the amount 36 ExtraBold, the QR card, the hint, the cashier
+   note in red (on by default, QrPaymentConfig.isMessageActive = true), "Pagó · Foto del pago" (green), "Pagó · Sin foto" */
+function qrOverlay(total){ return `<div class="x-qro"><span class="bk">${J.back}</span><div class="lb">${esc(t("qr_total_to_charge").toUpperCase())}</div><div class="am">${money(total)}</div>
+  <div class="mid"><div class="card">${fakeQr(PIX ? Math.round(total*100)+11 : 4242)}</div><div class="hint">${esc(t("qr_scan_hint"))}</div></div>
+  <div class="note">${esc(t("qr_payment_default_message"))}</div>
+  <div class="bb"><div class="g">${J.camAlt}${esc(t("qr_payment_receipt_btn"))}</div><div class="o" data-t="qr-paid">${esc(t("qr_no_receipt_needed"))}</div></div></div>`; }
+
+/* WompiPaymentOverlay.kt:340-460 EntryScreen (number and CVC masked, expiry as typed "MM / AA", two pre-ticked consents,
+   "Cobrar $X" blue once filled) and SendingScreen ("Cobrando", spinner, "Enviando al banco…", pill "Tarjeta · 1 cuota":
+   the brand is known only after the answer, :128-144) */
+function wompi(st, base){
+  if(st.wstage==="send") return `<div class="x-wo" style="align-items:center;justify-content:center;text-align:center;gap:calc(var(--u)*14)">
+      <div class="lb">${esc(t("card_sending_label").toUpperCase())}</div><div class="am">${money(base)}</div>
+      <div class="x-spin"></div><div style="font-size:calc(var(--u)*19);font-weight:800">${esc(t("card_sending_title"))}</div>
+      <div style="font-size:calc(var(--u)*12.5);color:#6E6E73">${esc(t("card_sending_subtitle"))}</div>
+      <div class="x-cpill">${esc(t("payment_method_card"))} · ${esc(tp("card_installments", 1))}</div></div>`;
+  const f = (lbl, val, hint) => `<div class="x-wf"><small>${esc(lbl.toUpperCase())}</small><div>${val ? esc(val) : `<span class="h">${esc(hint||"")}</span>`}</div></div>`;
+  const ready = st.num.length>=16 && st.exp.length===4 && st.cvc.length===3 && st.name.length>3;
+  const ck = (full, link) => { const i = full.indexOf(link); return `<div class="x-ck"><i>✓</i><span>${esc(full.slice(0,i))}<u>${esc(link)}</u>${esc(full.slice(i+link.length))}</span></div>`; };
+  const exp = st.exp.length>2 ? st.exp.slice(0,2)+" / "+st.exp.slice(2) : st.exp;
+  return `<div class="x-wo"><div class="hdr"><div><div class="lb">${esc(t("card_overlay_total_label").toUpperCase())}</div><div class="am">${money(base)}</div></div><span class="xc">✕</span></div>
+    <h3>${esc(t("card_entry_title"))}</h3>
+    <div data-t="card-num">${f(t("card_field_number"), "•".repeat(st.num.length))}</div>
+    <div class="x-wrow">${f(t("card_field_expiry"), exp, t("card_field_expiry_hint"))}${f(t("card_field_cvc"), "•".repeat(st.cvc.length))}</div>
+    ${f(t("card_field_holder"), st.name)}
+    <div style="margin-top:calc(var(--u)*14)">${ck(t("card_consent_terms_full"), t("card_consent_terms_link"))}${ck(t("card_consent_data_full"), t("card_consent_data_link"))}</div>
+    <div class="grow"></div><div class="x-fb${ready?" on":""}" data-t="wcharge">${esc(t("card_charge_button", money(base)))}</div></div>`;
+}
+/* StripePaymentSheet.kt:153-180, 230-330 StripeTipScreen (title, the pre-tip total, 15/18/20 % presets StripeTip.kt:23,
+   "Sin propina", "Otro monto", Cancelar: a preset tap STARTS the charge), then the sheet ("Total a cobrar" + total with the
+   tip): Idle (spinner "Preparando el cobro…"), Collecting ("Acerca la tarjeta" + Cancelar), Processing. Services ask for a
+   tip by default (ServicesRules.kt:34 tipDefaultOn, OwnerSettings.resolveAskForTip). TapToPayMode.REAL_TAP_TO_PAY = false:
+   this build uses Stripe's simulated reader. */
+function stripe(st, base, tip){
+  if(st.sstage==="tip"){
+    const b = (lbl, tag) => `<div class="sb"${tag?` data-t="${tag}"`:""}>${esc(lbl)}</div>`;
+    return `<div class="x-st top"><h2>${esc(t("stripe_tip_title"))}</h2><div class="hm">${money(base)}</div>
+      ${[15,18,20].map(p=>b(t("stripe_tip_preset", p, money(tipOf(base,p))), "tip-"+p)).join("")}${b(t("stripe_tip_none"),"tip-0")}${b(t("stripe_tip_custom"))}
+      <div class="tb">${esc(t("common_cancel"))}</div></div>`;
+  }
+  let body = "";
+  if(st.sstage==="idle") body = `<div class="x-spin s48"></div><div class="bm">${esc(t("stripe_starting_title"))}</div>`;
+  if(st.sstage==="collect") body = `<div class="hs">${esc(t("stripe_present_tap"))}</div><div class="sb" style="align-self:stretch">${esc(t("stripe_cancel"))}</div>`;
+  if(st.sstage==="proc") body = `<div class="x-spin s48"></div><div class="hs">${esc(t("stripe_processing_title"))}</div><div class="bm">${esc(t("stripe_processing_hint"))}</div>`;
+  return `<div class="x-st"><div class="tm">${esc(t("stripe_total_label"))}</div><div class="hm">${money(base+(tip||0))}</div><div style="height:calc(var(--u)*16)"></div>${body}</div>` +
+    (st.sstage==="collect"||st.sstage==="proc" ? `<div class="x-card3d" data-t="tapcard" style="top:${st.sstage==="proc"?"38%":"74%"};${st.sstage==="proc"?"opacity:.0":""}"></div>` : "");
+}
+/* StripeTip.presetTip: base x percent, rounded to the currency's minor unit */
+const tipOf = (base, p) => { const f = Math.pow(10, KC.dec); return Math.round(base*p/100*f)/f; };
+
+/* the other apps Android opens (WhatsApp / Messages / Email): drawn plainly, they are not Platata */
+function waApp(st, to, text){ return `<div class="x"><div class="x-wa"><div class="hd">${J.back}<i></i><span>${esc(to)}</span></div>
+  <div class="chat">${st.waSent?`<div class="bub">${esc(text)}</div>`:""}</div>
+  <div class="in"><div class="box">${st.waSent?"":esc(text)}</div><div class="sendb" data-t="wa-send">${J.send}</div></div></div></div>`; }
+
+const SALE_FOR = {veterinaria:{sid:"vacunacion", ci:0}, peluqueria:{sid:"cepillado", ci:2}, "taller-motos":{sid:"cambio-aceite", ci:1}, unas:{sid:"manicure-semipermanente", ci:0}};
+const SALE = [SALE_FOR[V.biz]];
+const BASE = saleTotal(SALE);
+const TIP = STRIPE ? tipOf(BASE, 18) : 0;
+const LINE = WOMPI ? "VISA ••4242" : null;     // ReceiptFormatter.cardTenderLine(brand, lastFour, null)
+
+function render(st){
+  if(st.screen==="home") return X(svcHome(st.lines));
+  if(st.screen==="pay") return X(payScreen({lines:SALE, others:1, qr:true, card:CARDC?"ready":"none", cardLink:STRIPE}) +
+      (st.wstage ? wompi(st, BASE) : "") + (st.sstage ? stripe(st, BASE, st.sstage==="tip"?0:TIP) : ""));
+  if(st.screen==="done") return X(doneScreen(CARDC ? {kind:"card", line:LINE} : {kind:"exact", received:cashDue(BASE)}));
+  if(st.screen==="pm") return X(pmScreen({qrOn:true, cardOn:false, customs:[]}));
+  return "";
+}
+const stepsWompi = [
+  {beat:0, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
+  {beat:0, hint:TAP+t("pay_card_short"), target:'[data-t="card"]', tap(st){ st.wstage="entry"; }},
+  {beat:1, hint:H("Toca el número de la tarjeta","Toque no número do cartão","Tap the card number"), target:'[data-t="card-num"]', tap(st,E){
+      E.type("num", "4242424242424242", ()=>E.type("exp", "1228", ()=>E.type("cvc", "123", ()=>E.type("name", C.clients[0].name, null, 60), 90), 90), 55); }},
+  {beat:2, hint:TAP+t("card_charge_button", money(BASE)), target:'[data-t="wcharge"]', tap(st,E){ st.wstage="send";
+      E.after(2600,()=>{ st.wstage=null; st.screen="done"; }); }}
+];
+const stepsStripe = [
+  {beat:0, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
+  {beat:0, hint:TAP+t("pay_card_short"), target:'[data-t="card"]', tap(st){ st.sstage="tip"; }},
+  {beat:1, wait:1.2, hint:TAP+t("stripe_tip_preset", 18, money(TIP)), target:'[data-t="tip-18"]', tap(st,E){ st.sstage="idle"; E.after(1300,()=>{ st.sstage="collect"; }); }},
+  {beat:2, hint:H("El cliente acerca su tarjeta","O cliente aproxima o cartão","The client taps their card"), target:'[data-t="tapcard"]', tap(st,E){ st.sstage="proc";
+      E.after(2200,()=>{ st.sstage=null; st.screen="done"; }); }}
+];
+const stepsNone = [
+  {beat:0, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
+  {beat:1, hint:TAP+t("cash_exact", money(cashDue(BASE))), target:'[data-t="exact"]', tap(st){ st.screen="done"; }},
+  {beat:2, hint:TAP+t("receipt_opt_new_sale_no_receipt").split(" · ")[0], target:'[data-t="new"]', tap(st,E){ st.screen="home"; st.lines=[]; E.after(1500,()=>{ st.screen="pm"; }); }}
+];
+VKIT.start(V, {
+  id:"VS5", tallVideo:true, clock:"12:41",
+  endText: CARDC ? H("Así cobras con tarjeta, con Platata.","Assim você cobra com cartão, com o Platata.","That's how you take cards with Platata.")
+                 : H("Así cobras sin tarjeta, con Platata.","Assim você cobra sem cartão, com o Platata.","That's how you take payments without cards, with Platata."),
+  beats: WOMPI ? V.pick({
+      es:["Con la vacuna en la venta: Cobrar y luego Tarjeta","Escribe los datos de la tarjeta del cliente","Las casillas ya vienen marcadas: toca Cobrar","El banco aprueba y la venta queda guardada","Así cobras con tarjeta, con Platata."],
+      pt:["Com a vacina na venda: Cobrar e depois Cartão","Digite os dados do cartão do cliente","As caixas já vêm marcadas: toque em Cobrar","O banco aprova e a venda fica salva","Assim você cobra com cartão, com o Platata."],
+      en:["With the vaccine in the sale: Charge, then Card","Type in the client's card details","The boxes come ticked: tap Charge","The bank approves and the sale is saved","That's how you take cards with Platata."]})
+    : STRIPE ? V.pick({
+      es:["Con la vacuna en la venta: Cobrar y luego Tarjeta","El cliente elige la propina, o Sin propina","Acerca su tarjeta: el total ya lleva la propina","Pago aprobado: la venta queda guardada","Así cobras con tarjeta, con Platata."],
+      pt:["Com a vacina na venda: Cobrar e depois Cartão","O cliente escolhe a gorjeta, ou Sem gorjeta","Ele aproxima o cartão: o total já tem a gorjeta","Pagamento aprovado: a venda fica salva","Assim você cobra com cartão, com o Platata."],
+      en:["With the vaccine in the sale: Charge, then Card","The client picks a tip, or No tip","They tap their card: the total includes the tip","Payment approved: the sale is saved","That's how you take cards with Platata."]})
+    : V.pick({
+      es:["En tu país Platata no cobra con tarjeta: toca Cobrar","Cobra en efectivo: toca Exacto","Venta completada: toca Nueva venta","En Métodos de pago no aparece Tarjeta","Así cobras sin tarjeta, con Platata."],
+      pt:["No Brasil, o Platata não cobra com cartão: Cobrar","Receba em dinheiro: toque em Exato","Venda concluída: toque em Nova venda","Em Formas de pagamento não aparece Cartão","Assim você cobra sem cartão, com o Platata."],
+      en:["Platata takes no cards in your country: tap Charge","Take cash: tap Exact","Sale complete: tap New sale","Payment methods has no Card row here","That's how you take payments without cards, with Platata."]}),
+  state:{screen:"home", lines:SALE.slice(), wstage:null, sstage:null, num:"", exp:"", cvc:"", name:""},
+  render,
+  device: () => "phone",
+  who: () => t("conn_slot_phone"),
+  steps: WOMPI ? stepsWompi : STRIPE ? stepsStripe : stepsNone
+});
+
+</script>
+<style>
+
+/* RS3..RS7 owner-phone payment screens. Material light (ui/theme/Color.kt LightColorScheme), 1dp = var(--u). */
+.mat .app{font-family:"Roboto",system-ui,sans-serif}
+.x{flex:1;display:flex;flex-direction:column;min-height:0;position:relative;background:#fff;color:#1C1C1E}
+.x svg.i{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor;display:block;flex:0 0 auto}
+.x .grow{flex:1;min-height:0}
+
+/* ---- Register tab: HomeScreen.kt:599-660 TabRow (indicator 3dp primary, labelLarge, selected bold) ---- */
+.x-tabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid #E5E5EA;flex:0 0 auto}
+.x-tabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73;position:relative;letter-spacing:.1px}
+.x-tabs span svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.x-tabs span.on{color:#1C1C1E;font-weight:700}
+.x-tabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:#1C1C1E}
+/* footer: CurrentSaleStrip.kt + HomeFooterButtons.kt (SumaButton pill, 52dp min, titleMedium 18 SemiBold) */
+.x-strip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:600;flex:0 0 auto}
+.x-strip b{font-size:calc(var(--u)*18);font-weight:400;color:#6E6E73}
+.x-pair{display:flex;gap:calc(var(--u)*12);padding:calc(var(--u)*16);flex:0 0 auto}
+.x-pill{flex:1;height:calc(var(--u)*52);border-radius:calc(var(--u)*50);display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*18);font-weight:600;white-space:nowrap;padding:0 calc(var(--u)*12);letter-spacing:.15px}
+.x-pill.out{border:1px solid #C7C7CC;color:#1C1C1E;background:#fff}
+.x-pill.fill{background:#1C1C1E;color:#fff}
+.x-pill.off{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.x-pill.out.off{background:#fff;border-color:rgba(28,28,30,.12)}
+.x-nav{height:calc(var(--u)*80);display:flex;flex:0 0 auto;background:#fff}
+.x-nav>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:500;color:#6E6E73}
+.x-nav .pill{width:calc(var(--u)*64);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);display:grid;place-items:center}
+.x-nav .on{color:#1C1C1E}.x-nav .on .pill{background:#E5E5EA}
+.x-nav .flagc{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:#F2F2F7;display:grid;place-items:center}
+.x-nav .flagc svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
+
+/* ---- Pay screen: CheckoutSheetBody.kt CheckoutLayoutContent + CheckoutPayBlock.kt (CheckoutSpacing.Ceiling on a tall phone) ---- */
+.x-phd{height:calc(var(--u)*50);padding:calc(var(--u)*4) calc(var(--u)*12) calc(var(--u)*6);display:flex;align-items:center;justify-content:space-between;position:relative;flex:0 0 auto}
+.x-phd .chev{width:calc(var(--u)*40);height:calc(var(--u)*40);display:grid;place-items:center;font-size:calc(var(--u)*34);font-weight:300;line-height:1}
+.x-phd .wm{position:absolute;left:0;right:0;text-align:center;font:600 calc(var(--u)*22) "Fredoka",sans-serif;color:#1A120C;pointer-events:none}
+.x-phd .clr{font-size:calc(var(--u)*20);font-weight:700;color:#6E6E73;text-decoration:underline;padding:calc(var(--u)*4)}
+.x-pb{padding:calc(var(--u)*20) calc(var(--u)*12) 0;flex:0 0 auto}
+.x-tot{min-height:calc(var(--u)*42);display:flex;align-items:flex-end;justify-content:space-between}
+.x-tot small{font-size:calc(var(--u)*12);font-weight:600;color:#6E6E73;padding-bottom:calc(var(--u)*5)}
+.x-tot b{font-size:calc(var(--u)*30);font-weight:700;letter-spacing:-.3px;line-height:1.15;white-space:nowrap}
+.x-round{font-size:calc(var(--u)*12);color:#6E6E73;margin-top:calc(var(--u)*2)}
+.x-amt{margin-top:calc(var(--u)*4);min-height:calc(var(--u)*92);display:flex;gap:calc(var(--u)*12);align-items:flex-start}
+.x-links{display:flex;flex-direction:column;gap:calc(var(--u)*9);max-width:40%}
+.x-links span{font-size:calc(var(--u)*16);font-weight:700;text-decoration:underline;color:#1C1C1E;line-height:1.25}
+.x-links .oth{display:flex;gap:calc(var(--u)*6);align-items:flex-start}
+.x-links .oth svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:#1C1C1E;margin-top:calc(var(--u)*3)}
+.x-rc{flex:1;display:flex;flex-direction:column;gap:calc(var(--u)*4);align-items:stretch;min-width:0}
+.x-rc .ln{display:flex;align-items:baseline;justify-content:space-between;gap:calc(var(--u)*8)}
+.x-rc .ln small{font-size:calc(var(--u)*12);font-weight:600;color:#6E6E73}
+.x-rc .ln b{font-size:calc(var(--u)*22);font-weight:700;letter-spacing:-.9px;white-space:nowrap}
+.x-rc .ln b.chg{font-size:calc(var(--u)*30);letter-spacing:-.6px;color:#2E7D32}
+.x-rc .short{text-align:right;font-size:calc(var(--u)*26);font-weight:700;color:#FF3B30;letter-spacing:-.6px;white-space:nowrap}
+.x-kp{margin-top:calc(var(--u)*14);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*7)}
+.x-kp span{height:calc(var(--u)*48);border-radius:calc(var(--u)*12);background:#F2F2F7;display:grid;place-items:center;font-size:calc(var(--u)*22);font-weight:600}
+.x-kp span.s{font-size:calc(var(--u)*14);font-weight:700}
+.x-btns{margin-top:calc(var(--u)*8);display:flex;gap:calc(var(--u)*8)}
+.x-btns>div{height:calc(var(--u)*54);border-radius:calc(var(--u)*27);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*7);font-size:calc(var(--u)*17);font-weight:700;white-space:nowrap;overflow:hidden;padding:0 calc(var(--u)*8)}
+.x-btns .exact{background:#007AFF;color:#fff}
+.x-btns .cash{background:#1C1C1E;color:#fff}
+.x-btns .dis{background:#E5E5EA;color:rgba(110,110,115,.6)}
+.x-btns .ob{border:calc(var(--u)*1.5) solid #1C1C1E;color:#1C1C1E}
+.x-btns .ob svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.x-btns .nudge{border:calc(var(--u)*1.5) solid rgba(110,110,115,.55);color:#6E6E73;flex-direction:column;gap:0;font-size:calc(var(--u)*17)}
+.x-btns .nudge small{font-size:calc(var(--u)*12);font-weight:600}
+.x-qrg{width:calc(var(--u)*18);height:calc(var(--u)*18);border:calc(var(--u)*2) solid currentColor;border-radius:calc(var(--u)*2);position:relative;box-sizing:border-box;flex:0 0 auto}
+.x-qrg::after{content:"";position:absolute;inset:calc(var(--u)*3);background:currentColor;border-radius:1px}
+.x-slink{display:flex;justify-content:center;align-items:center;min-height:calc(var(--u)*44);font-size:calc(var(--u)*12);font-weight:600;color:#6E6E73;gap:calc(var(--u)*8)}
+.x-slink span:first-child{text-decoration:underline}
+.x-sec{margin-top:calc(var(--u)*8);background:#F7F7FA;border-radius:calc(var(--u)*20) calc(var(--u)*20) 0 0;padding:calc(var(--u)*10) calc(var(--u)*12);flex:0 0 auto}
+.x-cust{height:calc(var(--u)*62);border-radius:calc(var(--u)*14);background:#F2F2F7;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);color:#6E6E73;font-size:calc(var(--u)*14);font-weight:500}
+/* dining gate: DiningGate (scrim 60%, card 86% r20 p20), DiningChooserContent table grid */
+.x-scrim{position:absolute;inset:0;background:rgba(0,0,0,.6);display:grid;place-items:center;z-index:12}
+.x-gate{width:86%;background:#fff;border-radius:calc(var(--u)*20);padding:calc(var(--u)*20)}
+.x-gate h3{margin:0 0 calc(var(--u)*12);font-size:calc(var(--u)*18);font-weight:700}
+.x-gate .g{display:grid;grid-template-columns:repeat(4,1fr);gap:calc(var(--u)*8)}
+.x-gate .g span{aspect-ratio:1;border-radius:calc(var(--u)*12);background:#F2F2F7;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:700}
+
+/* ---- Sale complete: ReceiptOptionsScreen.kt SaleCompleteContent ---- */
+.x-sc-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 calc(var(--u)*20);text-align:center;min-height:0}
+.x-sc-body img{width:calc(var(--u)*132);height:calc(var(--u)*132);object-fit:contain}
+.x-sc-body .lbl{margin-top:calc(var(--u)*6);font-size:calc(var(--u)*13);font-weight:700;letter-spacing:1.2px;color:#6E6E73}
+.x-sc-body .big{font-size:calc(var(--u)*56);font-weight:700;letter-spacing:-2px;line-height:1.05;white-space:nowrap}
+.x-sc-body .ttl{margin-top:calc(var(--u)*8);font-size:calc(var(--u)*26);font-weight:700;letter-spacing:-.7px}
+.x-sc-body .sub{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);color:#6E6E73}
+.x-sc-body .ok{margin-top:calc(var(--u)*4);font-size:calc(var(--u)*14);font-weight:700;color:#2E7D32}
+.x-sc-body .q{margin-top:calc(var(--u)*22);font-size:calc(var(--u)*15);font-weight:700;color:#6E6E73}
+.x-sc-foot{padding:0 calc(var(--u)*16) calc(var(--u)*20);display:flex;flex-direction:column;gap:calc(var(--u)*10);align-items:stretch;flex:0 0 auto}
+.x-sc-foot .b{height:calc(var(--u)*52);border-radius:calc(var(--u)*26);display:grid;place-items:center;font-size:calc(var(--u)*16);font-weight:600}
+.x-sc-foot .wa{background:#25D366;color:#fff;font-weight:700}
+.x-sc-foot .pri{background:#1C1C1E;color:#fff;font-weight:700}
+.x-sc-foot .ol{border:1px solid #C7C7CC;color:#1C1C1E}
+.x-sc-foot .pv{text-align:center;font-size:calc(var(--u)*11);color:#6E6E73;text-decoration:underline;margin-top:calc(var(--u)*4)}
+.x-chip{margin-top:calc(var(--u)*14);display:inline-flex;align-items:center;gap:calc(var(--u)*6);height:calc(var(--u)*32);padding:0 calc(var(--u)*14);border-radius:calc(var(--u)*18);background:#F2F2F7;font-size:calc(var(--u)*13);color:#1C1C1E}
+
+/* ---- toast (Android Toast) ---- */
+.x-toast{position:absolute;left:50%;bottom:calc(var(--u)*96);transform:translateX(-50%);max-width:80%;background:rgba(40,40,40,.92);color:#fff;font-size:calc(var(--u)*14);padding:calc(var(--u)*10) calc(var(--u)*16);border-radius:calc(var(--u)*22);z-index:30;text-align:center;line-height:1.35}
+
+/* ---- Material dialog (SumaDialog = AlertDialog, shapes.medium r12) and bottom sheet ---- */
+.x-dlgscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:20}
+.x-dlg{width:calc(var(--u)*312);max-width:86%;background:#fff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24)}
+.x-dlg h3{margin:0;font-size:calc(var(--u)*24);font-weight:400;line-height:1.3}
+.x-dlg .body{margin-top:calc(var(--u)*16)}
+.x-dlg .acts{margin-top:calc(var(--u)*24);display:flex;justify-content:flex-end;gap:calc(var(--u)*8);align-items:center}
+.x-dlg .acts .tb{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:#1C1C1E}
+.x-dlg .acts .fb{height:calc(var(--u)*40);padding:0 calc(var(--u)*24);border-radius:calc(var(--u)*20);background:#1C1C1E;color:#fff;font-size:calc(var(--u)*14);font-weight:500;display:grid;place-items:center}
+.x-li{display:flex;align-items:center;gap:calc(var(--u)*16);height:calc(var(--u)*56);font-size:calc(var(--u)*16);color:#1C1C1E}
+.x-li svg{fill:#6E6E73}
+.x-field{position:relative;border:1px solid #6E6E73;border-radius:calc(var(--u)*8);height:calc(var(--u)*56);display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16)}
+.x-field.focus{border:2px solid #1C1C1E}
+.x-field label{position:absolute;top:calc(var(--u)*-9);left:calc(var(--u)*12);background:#fff;padding:0 calc(var(--u)*4);font-size:calc(var(--u)*12);color:#6E6E73}
+.x-field.focus label{color:#1C1C1E}
+.x-field .ph{color:#6E6E73}
+.x-caret{display:inline-block;width:1.5px;height:1.1em;background:#1C1C1E;margin-left:1px;vertical-align:-0.15em;animation:xblink 1s steps(1) infinite}
+@keyframes xblink{50%{opacity:0}}
+.x-sheet-scrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:flex;align-items:flex-end;z-index:18}
+.x-sheet{width:100%;background:#fff;border-radius:calc(var(--u)*28) calc(var(--u)*28) 0 0;padding:calc(var(--u)*22) calc(var(--u)*16) calc(var(--u)*20)}
+.x-sheet .handle{width:calc(var(--u)*32);height:calc(var(--u)*4);border-radius:2px;background:#C7C7CC;margin:calc(var(--u)*-6) auto calc(var(--u)*14)}
+.x-sheet h3{margin:0;font-size:calc(var(--u)*16);font-weight:700}
+.x-sheet .st{margin-top:calc(var(--u)*3);font-size:calc(var(--u)*12);color:#6E6E73}
+.x-sheet .rows{margin-top:calc(var(--u)*10)}
+.x-sheet .row{height:calc(var(--u)*48);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*15);font-weight:600;border-bottom:1px solid #E5E5EA}
+.x-sheet .row:last-child{border-bottom:0}
+.x-sheet .row svg{fill:#C7C7CC}
+
+/* ---- Payment methods: PaymentMethodsScreen.kt (SumaTopBar 64dp, cards surfaceContainerLow r12) ---- */
+.x-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto}
+.x-top .nb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.x-top h1{flex:1;margin:0 0 0 calc(var(--u)*4);font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x-top .act{padding:0 calc(var(--u)*12);height:calc(var(--u)*48);display:grid;place-items:center;font-size:calc(var(--u)*14);font-weight:700}
+.x-pml{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.x-pmc{background:#F7F7FA;border-radius:calc(var(--u)*12);overflow:hidden;flex:0 0 auto}
+.x-pmh{display:flex;align-items:center;padding:calc(var(--u)*6) calc(var(--u)*8) calc(var(--u)*6) calc(var(--u)*16);min-height:calc(var(--u)*52)}
+.x-pmh .nm{flex:1;min-width:0}
+.x-pmh .nm b{display:block;font-size:calc(var(--u)*16);font-weight:600}
+.x-pmh .nm small{display:block;font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+.x-pmh .del{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:#FF3B30}
+.x-sw{width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);background:#E5E5EA;border:calc(var(--u)*2) solid #C7C7CC;position:relative;box-sizing:border-box;flex:0 0 auto;margin:0 calc(var(--u)*8)}
+.x-sw::after{content:"";position:absolute;width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#C7C7CC;top:calc(var(--u)*6);left:calc(var(--u)*6);transition:all .2s}
+.x-sw.on{background:#1C1C1E;border-color:#1C1C1E}
+.x-sw.on::after{width:calc(var(--u)*24);height:calc(var(--u)*24);top:calc(var(--u)*2);left:calc(var(--u)*22);background:#fff}
+.x-qrnote{background:#FFE5E3;color:#7A0000;padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;gap:calc(var(--u)*10);font-size:calc(var(--u)*13.5);font-weight:500;line-height:1.4}
+.x-qrnote i{flex:0 0 auto;width:calc(var(--u)*22);height:calc(var(--u)*22);border-radius:50%;background:#FF3B30;color:#fff;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:calc(var(--u)*14)}
+.x-acc{border-top:1px solid rgba(229,229,234,.4);display:flex;justify-content:space-between;align-items:center;padding:calc(var(--u)*12) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:500}
+.x-acc svg{fill:#6E6E73}
+
+/* ---- QR responsibility page: QrResponsibilityScreen.kt (PaperTheme, potato accent) ---- */
+.x.paper{background:#FBFAF7;color:#17181B}
+.x-ptop{min-height:calc(var(--u)*52);display:flex;align-items:center;gap:calc(var(--u)*6);padding:0 calc(var(--u)*16) 0 calc(var(--u)*8);flex:0 0 auto}
+.x-ptop .rb{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:50%;display:grid;place-items:center}
+.x-ptop b{font:600 calc(var(--u)*17)/1.2 "Fredoka",sans-serif}
+.x-pscroll{flex:1;min-height:0;overflow:hidden;position:relative}
+.x-pinner{padding:0 calc(var(--u)*20) calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*16);transition:transform .7s ease}
+.x-pinner .pot{width:calc(var(--u)*92);height:calc(var(--u)*92);object-fit:contain;margin-left:calc(var(--u)*-8)}
+.x-pinner h1{margin:0;font:600 calc(var(--u)*27)/1.14 "Fredoka",sans-serif;letter-spacing:-.2px}
+.x-pinner .sub{margin-top:calc(var(--u)*6);font-size:calc(var(--u)*15);line-height:1.45;color:#464A52}
+.x-bad{background:#F7E6E2;border:1px solid #E8B4A9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;gap:calc(var(--u)*12);color:#A2382A}
+.x-bad i{flex:0 0 auto;width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:#C0392B;color:#fff;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:calc(var(--u)*18)}
+.x-bad b{display:block;font-size:calc(var(--u)*16);line-height:1.3}
+.x-bad p{margin:calc(var(--u)*4) 0 0;font-size:calc(var(--u)*14);line-height:1.42}
+.x-pinner h2{margin:calc(var(--u)*4) 0 0;font:600 calc(var(--u)*20)/1.2 "Fredoka",sans-serif}
+.x-tip{display:flex;gap:calc(var(--u)*12);font-size:calc(var(--u)*15);line-height:1.4}
+.x-tip .tile{flex:0 0 auto;width:calc(var(--u)*44);height:calc(var(--u)*44);border-radius:calc(var(--u)*14);background:#F4EBDD;display:grid;place-items:center}
+.x-tip .tile svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
+.x-tip b{font-weight:600}
+.x-agree{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*14) calc(var(--u)*16);display:flex;gap:calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;line-height:1.42}
+.x-agree.on{border-color:#E8B4A9}
+.x-agree .bx{flex:0 0 auto;width:calc(var(--u)*24);height:calc(var(--u)*24);border-radius:calc(var(--u)*8);border:calc(var(--u)*2) solid #D9D4C9;box-sizing:border-box;display:grid;place-items:center}
+.x-agree.on .bx{background:#C0392B;border-color:#C0392B}
+.x-agree .bx svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:#fff}
+.x-pfoot{padding:calc(var(--u)*12) calc(var(--u)*20) calc(var(--u)*14);display:flex;flex-direction:column;gap:calc(var(--u)*8);box-shadow:0 calc(var(--u)*-6) calc(var(--u)*6) -calc(var(--u)*6) rgba(0,0,0,.06);background:#FBFAF7;flex:0 0 auto}
+.x-pfoot .main{min-height:calc(var(--u)*54);border-radius:calc(var(--u)*18);background:#E6E2D9;color:#737883;display:grid;place-items:center;font:500 calc(var(--u)*18) "Fredoka",sans-serif;text-align:center;padding:0 calc(var(--u)*16)}
+.x-pfoot .main.on{background:#3A2A1F;color:#fff}
+.x-pfoot .sec{min-height:calc(var(--u)*44);border-radius:calc(var(--u)*14);border:calc(var(--u)*1.5) solid #D9D4C9;display:grid;place-items:center;font:500 calc(var(--u)*16) "Fredoka",sans-serif}
+
+/* ---- Android system file picker (OpenDocument "image/*"): not Platata, the phone's own screen ---- */
+.x-pick{flex:1;background:#fff;display:flex;flex-direction:column}
+.x-pick .hd{height:calc(var(--u)*64);display:flex;align-items:center;gap:calc(var(--u)*16);padding:0 calc(var(--u)*16);font-size:calc(var(--u)*20);color:#1C1C1E}
+.x-pick .cap{padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*14);color:#6E6E73}
+.x-pick .gr{display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*6);padding:calc(var(--u)*8) calc(var(--u)*16)}
+.x-pick .gr div{aspect-ratio:1;border-radius:calc(var(--u)*8);overflow:hidden;background:#E9E3D8;display:grid;place-items:center}
+.x-pick .gr .q{background:#fff;border:1px solid #E5E5EA}
+.x-pick .gr .q svg{width:78%;height:78%}
+
+/* ---- QR overlay: QrPaymentOverlay.kt ---- */
+.x-qro{position:absolute;inset:0;background:#fff;z-index:14;display:flex;flex-direction:column;padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*24)}
+.x-qro .bk{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;margin-left:calc(var(--u)*-12)}
+.x-qro .lb{font-size:calc(var(--u)*10.5);font-weight:700;letter-spacing:.9px;color:#6E6E73}
+.x-qro .am{font-size:calc(var(--u)*36);font-weight:800;letter-spacing:-1.1px;line-height:1.2}
+.x-qro .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*12)}
+.x-qro .card{background:#fff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*11);box-shadow:0 0 0 1px #E5E5EA}
+.x-qro .card svg{width:calc(var(--u)*200);height:calc(var(--u)*200);display:block}
+.x-qro .hint{font-size:calc(var(--u)*12.5);color:#6E6E73;text-align:center;line-height:1.5;white-space:pre-line}
+.x-qro .note{margin:calc(var(--u)*16) calc(var(--u)*32) 0;color:#FF3B30;font-size:calc(var(--u)*24);font-weight:600;text-align:center;line-height:1.3}
+.x-qro .bb{margin-top:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.x-qro .bb>div{height:calc(var(--u)*48);border-radius:calc(var(--u)*50);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*14);font-weight:800}
+.x-qro .g{background:#34C759;color:#fff}
+.x-qro .g svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#fff}
+.x-qro .o{border:calc(var(--u)*1.5) solid #1C1C1E}
+
+/* ---- Wompi card overlay: WompiPaymentOverlay.kt ---- */
+.x-wo{position:absolute;inset:0;background:#fff;z-index:14;display:flex;flex-direction:column;padding:calc(var(--u)*12) calc(var(--u)*16) calc(var(--u)*24)}
+.x-wo .hdr{display:flex;justify-content:space-between;align-items:flex-start}
+.x-wo .lb{font-size:calc(var(--u)*10.5);font-weight:700;letter-spacing:.9px;color:#6E6E73}
+.x-wo .am{font-size:calc(var(--u)*33);font-weight:800;letter-spacing:-1px;line-height:1.2}
+.x-wo .xc{font-size:calc(var(--u)*21);font-weight:300;color:#6E6E73;padding:calc(var(--u)*8)}
+.x-wo h3{margin:calc(var(--u)*24) 0 0;font-size:calc(var(--u)*17.5);font-weight:800}
+.x-wf{padding-top:calc(var(--u)*12)}
+.x-wf small{display:block;font-size:calc(var(--u)*10);font-weight:700;letter-spacing:.3px;color:#6E6E73}
+.x-wf div{margin-top:calc(var(--u)*4);height:calc(var(--u)*42);border-radius:calc(var(--u)*10);background:#F2F2F7;border:1px solid #E5E5EA;display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);letter-spacing:.5px}
+.x-wf div .h{color:rgba(110,110,115,.6)}
+.x-wrow{display:flex;gap:calc(var(--u)*12)}.x-wrow>*{flex:1}
+.x-ck{display:flex;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*10);font-size:calc(var(--u)*10.5);color:#6E6E73}
+.x-ck i{width:calc(var(--u)*19);height:calc(var(--u)*19);border-radius:calc(var(--u)*5);background:#34C759;color:#fff;display:grid;place-items:center;font-style:normal;font-weight:900;font-size:calc(var(--u)*12);flex:0 0 auto}
+.x-ck u{color:#007AFF}
+.x-fb{height:calc(var(--u)*48);border-radius:calc(var(--u)*24);display:grid;place-items:center;font-size:calc(var(--u)*15);font-weight:800;background:#F2F2F7;color:#6E6E73}
+.x-fb.on{background:#007AFF;color:#fff}
+.x-spin{width:calc(var(--u)*50);height:calc(var(--u)*50);border-radius:50%;border:calc(var(--u)*3) solid #E5E5EA;border-top-color:#1C1C1E;animation:xspin 1s linear infinite}
+.x-spin.s48{width:calc(var(--u)*48);height:calc(var(--u)*48);border-width:calc(var(--u)*4);border-top-color:#1C1C1E}
+@keyframes xspin{to{transform:rotate(360deg)}}
+.x-cpill{border:1px solid #E5E5EA;border-radius:calc(var(--u)*20);padding:calc(var(--u)*8) calc(var(--u)*12);font-size:calc(var(--u)*10.5);color:#6E6E73}
+
+/* ---- Stripe sheet + tip screen: StripePaymentSheet.kt ---- */
+.x-st{position:absolute;inset:0;background:#fff;z-index:14;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--u)*24);gap:calc(var(--u)*16);text-align:center}
+.x-st.top{justify-content:flex-start;padding-top:calc(var(--u)*40)}
+.x-st h2{margin:0;font-size:calc(var(--u)*22);font-weight:400}
+.x-st .hm{font-size:calc(var(--u)*28);font-weight:400}
+.x-st .tm{font-size:calc(var(--u)*16);color:#6E6E73}
+.x-st .sb{align-self:stretch;min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);border:1px solid #C7C7CC;display:grid;place-items:center;font-size:calc(var(--u)*18);font-weight:600}
+.x-st .tb{font-size:calc(var(--u)*14);font-weight:500;padding:calc(var(--u)*10)}
+.x-st .hs{font-size:calc(var(--u)*24);font-weight:400}
+.x-st .bm{font-size:calc(var(--u)*14);color:#6E6E73}
+.x-card3d{position:absolute;left:50%;width:calc(var(--u)*170);height:calc(var(--u)*106);border-radius:calc(var(--u)*12);background:linear-gradient(135deg,#2F4E8C,#1C2E55);box-shadow:0 calc(var(--u)*10) calc(var(--u)*24) rgba(0,0,0,.3);z-index:15;transition:all 1s ease;transform:translateX(-50%)}
+.x-card3d::before{content:"";position:absolute;left:calc(var(--u)*18);top:calc(var(--u)*36);width:calc(var(--u)*30);height:calc(var(--u)*22);border-radius:calc(var(--u)*4);background:#E8C76A}
+.x-card3d::after{content:"";position:absolute;right:calc(var(--u)*16);bottom:calc(var(--u)*14);width:calc(var(--u)*46);height:calc(var(--u)*8);border-radius:4px;background:rgba(255,255,255,.5)}
+
+/* ---- receipt viewer: ShowReceiptDialog.kt ReceiptContent + ReceiptPaperCard ---- */
+.x-rv{position:absolute;inset:0;background:#fff;z-index:16;display:flex;flex-direction:column;padding:calc(var(--u)*16) calc(var(--u)*16) calc(var(--u)*16)}
+.x-rv .hd{display:flex;align-items:center;justify-content:space-between}
+.x-rv .hd b{font-size:calc(var(--u)*22);font-weight:700}
+.x-rv .acts{display:flex;align-items:center}
+.x-rv .ac{display:flex;flex-direction:column;align-items:center;padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*11);font-weight:500}
+.x-rv .ac.wa svg{fill:#25D366}
+.x-rv .xb{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.x-paper{margin-top:calc(var(--u)*16);flex:1;min-height:0;overflow:hidden;background:#fff;border-radius:calc(var(--u)*8);box-shadow:0 1px 4px rgba(0,0,0,.18);padding:calc(var(--u)*16);font:calc(var(--u)*14.5)/1.5 "Roboto Mono",ui-monospace,Menlo,Consolas,monospace;white-space:pre;color:#000}
+
+/* ---- the other apps (WhatsApp / Messages / Email): what Android opens, drawn plainly ---- */
+.x-wa{flex:1;display:flex;flex-direction:column;background:#ECE5DD;min-height:0}
+.x-wa .hd{height:calc(var(--u)*56);background:#075E54;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*17);font-weight:500}
+.x-wa .hd i{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C5D1D6;flex:0 0 auto}
+.x-wa .chat{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:flex-end}
+.x-wa .bub{align-self:flex-end;max-width:86%;background:#DCF8C6;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font:calc(var(--u)*12)/1.4 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;box-shadow:0 1px 1px rgba(0,0,0,.12)}
+.x-wa .in{display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*8);align-items:flex-end}
+.x-wa .in .box{flex:1;max-height:calc(var(--u)*420);overflow:hidden;background:#fff;border-radius:calc(var(--u)*22);padding:calc(var(--u)*10) calc(var(--u)*14);font:calc(var(--u)*12)/1.4 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;color:#1C1C1E}
+.x-wa .in .sendb{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#00A884;display:grid;place-items:center;flex:0 0 auto}
+.x-wa .in .sendb svg{fill:#fff}
+.x-sms{flex:1;display:flex;flex-direction:column;background:#fff;min-height:0}
+.x-sms .hd{height:calc(var(--u)*56);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*18);border-bottom:1px solid #E5E5EA}
+.x-sms .to{padding:calc(var(--u)*12) calc(var(--u)*16);font-size:calc(var(--u)*15);border-bottom:1px solid #E5E5EA;color:#1C1C1E}
+.x-sms .to span{color:#6E6E73;margin-right:calc(var(--u)*8)}
+.x-sms .body{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*12) calc(var(--u)*16);display:flex;flex-direction:column;justify-content:flex-end}
+.x-sms .msg{background:#F2F2F7;border-radius:calc(var(--u)*18);padding:calc(var(--u)*10) calc(var(--u)*14);font:calc(var(--u)*12)/1.4 "Roboto Mono",ui-monospace,monospace;white-space:pre-wrap;max-height:calc(var(--u)*360);overflow:hidden}
+.x-sms .msg.sent{align-self:flex-end;background:#3D74DB;color:#fff;max-width:86%}
+.x-sms .bar{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12) calc(var(--u)*28)}
+.x-sms .bar .send{width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#3D74DB;display:grid;place-items:center;margin-left:auto}
+.x-sms .bar .send svg{fill:#fff}
+
+
+/* ---- the services till (HomeScreen.kt TabRow :612-660, ItemEditModeBar :2080-2097, ProductLibraryView.kt chips/grid,
+   ProductCard.kt ServiceTileBody :262-341, the services footer :780-830, CurrentSaleStrip.kt, HomeFooterButtons.kt) ---- */
+.mat .vtabs{display:flex;margin:0 calc(var(--u)*16);height:calc(var(--u)*48);border-bottom:1px solid var(--m-ovar);flex:0 0 auto}
+.mat .vtabs span{flex:1;display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*14);font-weight:400;color:var(--m-onv);position:relative;letter-spacing:.1px;white-space:nowrap}
+.mat .vtabs span.on{color:var(--m-on);font-weight:700}
+.mat .vtabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:var(--m-on)}
+.mat .hedit{display:flex;justify-content:flex-end;padding:calc(var(--u)*4) calc(var(--u)*16) 0;flex:0 0 auto}
+.mat .hedit span{display:flex;align-items:center;gap:calc(var(--u)*4);height:calc(var(--u)*40);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .hedit svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:currentColor}
+.mat .vgrid{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*16);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*8);align-content:start}
+.mat .vtile{border-radius:calc(var(--u)*12);border:1px solid var(--m-ovar);background:#fff;padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8);min-width:0}
+.mat .vtile .vic{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center}
+.mat .vtile .vic svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
+.mat .vtile b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:500;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:calc(var(--u)*44);overflow-wrap:anywhere}
+.mat .vtile .vpr{display:flex;align-items:flex-end;justify-content:space-between;gap:calc(var(--u)*6)}
+.mat .vtile .vpr span{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mat .vtile .vpr small{font-size:calc(var(--u)*12);color:var(--m-onv);white-space:nowrap;flex:0 0 auto}
+.mat .vfoot{flex:0 0 auto;background:#fff;padding:calc(var(--u)*12) calc(var(--u)*16)}
+.mat .vkey{height:calc(var(--u)*40);display:flex;align-items:center}
+.mat .vkey span{padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .cstrip{min-height:calc(var(--u)*44);padding:0 calc(var(--u)*16);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:600}
+.mat .cstrip i{font-style:normal;font-size:calc(var(--u)*18);color:var(--m-onv)}
+.mat .vpair{display:flex;gap:calc(var(--u)*12)}
+.mat .vpair .sb{flex:1;padding:0 calc(var(--u)*12)}
+.mat .sb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center;white-space:nowrap;overflow:hidden}
+.mat .sb.pill{border-radius:calc(var(--u)*50)}
+.mat .sb.pri{background:var(--m-on);color:#fff}
+.mat .sb.sec{background:#fff;color:var(--m-on);border:1px solid var(--m-outline)}
+.mat .sb.off.pri{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .sb.off.sec{color:rgba(28,28,30,.38);border-color:rgba(28,28,30,.12)}
+.mat .mnav .flagc svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
+/* ---- the pay screen's services bottom section: only the client field; an open booking adds the amber bar
+   (OpenTicketBanner.kt:45-110: SumaWarning #FF9500, labelLarge ExtraBold white, "Salir" TextButton) ---- */
+.v-otb{display:flex;align-items:center;justify-content:space-between;background:#FF9500;color:#fff;padding:calc(var(--u)*8) calc(var(--u)*4) calc(var(--u)*8) calc(var(--u)*16)}
+.v-otb b{font-size:calc(var(--u)*14);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-otb span{padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:700}
+.x-pmc.fresh{animation:fl 1.4s ease}
+@keyframes fl{0%{background:#FFF3C4}100%{background:#F7F7FA}}
+.x-cust .xx{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.x-cust.on{justify-content:flex-start;padding:0 calc(var(--u)*4) 0 calc(var(--u)*16);color:#6E6E73}
+.x-cust.on b{flex:1;color:#1C1C1E;font-size:calc(var(--u)*17);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.x-slink span[data-t]{cursor:default}
+
+</style>
+</body>
+</html>

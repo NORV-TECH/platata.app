@@ -1,0 +1,32 @@
+{
+  "id": "VS14",
+  "name": "Equipo y PIN",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {"stability": 0.5, "similarity_boost": 0.75},
+    "pt": {"stability": 0.5, "similarity_boost": 0.75}
+  },
+  "steps": [
+    {"id": "1-equipo", "voice": {
+      "es": "En Mi negocio, toca Equipo.",
+      "pt": "Em Meu negócio, toque em Equipe."}},
+    {"id": "2-nuevo", "voice": {
+      "es": "Aquí ves a tu equipo y el código del negocio. Toca Nuevo.",
+      "pt": "Aqui você vê sua equipe e o código do negócio. Toque em Novo."}},
+    {"id": "3-datos", "voice": {
+      "es": "Escribe su nombre, su WhatsApp y su cargo.",
+      "pt": "Escreva o nome, o WhatsApp e o cargo."}},
+    {"id": "4-permisos", "voice": {
+      "es": "En Permisos eliges qué puede hacer. Con Cancelar recibos y citas, puede cancelar una cita o marcar que no asistió.",
+      "pt": "Em Permissões você escolhe o que ela pode fazer. Com Cancelar recibos e agendamentos, ela cancela um agendamento ou marca que não compareceu."}},
+    {"id": "5-guardar", "voice": {
+      "es": "Su PIN se crea solo. Toca Guardar.",
+      "pt": "O PIN é criado sozinho. Toque em Salvar."}},
+    {"id": "6-pin", "voice": {
+      "es": "Anótalo y dáselo: con el código del negocio y su PIN, entra desde su teléfono o la tablet.",
+      "pt": "Anote e entregue: com o código do negócio e o PIN, ela entra pelo celular dela ou pelo tablet."}},
+    {"id": "7-fin", "voice": {
+      "es": "Así armas tu equipo con Platata.",
+      "pt": "Assim você monta sua equipe com o Platata."}}
+  ]
+}

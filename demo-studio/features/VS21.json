@@ -1,0 +1,80 @@
+{
+  "id": "VS21",
+  "name": "Funciona sin internet",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-sin-internet",
+      "voice": {
+        "es": "¿Se fue el internet? Lo dice arriba. Sigue trabajando.",
+        "pt": "Caiu a internet? Está escrito no alto. Continue trabalhando."
+      }
+    },
+    {
+      "id": "2-agendar",
+      "voice": {
+        "es": "Agrega el servicio y toca Agendar.",
+        "pt": "Adicione o serviço e toque em Agendar."
+      }
+    },
+    {
+      "id": "3-dia-hora",
+      "voice": {
+        "es": "Escoge el día y la hora.",
+        "pt": "Escolha o dia e a hora."
+      }
+    },
+    {
+      "id": "4-guardar",
+      "voice": {
+        "es": "Escoge al cliente y toca Guardar.",
+        "pt": "Escolha o cliente e toque em Salvar."
+      }
+    },
+    {
+      "id": "5-agendado",
+      "voice": {
+        "es": "Agendado. Queda guardado en tu teléfono.",
+        "pt": "Agendado. Fica salvo no seu celular."
+      }
+    },
+    {
+      "id": "6-cobrar",
+      "voice": {
+        "es": "Y cobras igual: agrega el servicio y toca Cobrar.",
+        "pt": "E você cobra igual: adicione o serviço e toque em Cobrar."
+      }
+    },
+    {
+      "id": "7-exacto",
+      "voice": {
+        "es": "Toca Exacto. La tarjeta espera a que vuelva el internet.",
+        "pt": "Em dinheiro: toque em Exato."
+      }
+    },
+    {
+      "id": "8-venta",
+      "voice": {
+        "es": "Venta completada, sin internet.",
+        "pt": "Venda concluída, sem internet."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así sigues trabajando sin internet con Platata.",
+        "pt": "Assim você continua trabalhando sem internet com o Platata."
+      }
+    }
+  ]
+}

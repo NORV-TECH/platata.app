@@ -1,0 +1,59 @@
+{
+  "id": "VS6",
+  "name": "Other ways to pay (services, owner phone)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-new",
+      "voice": {
+        "es": "En Métodos de pago, toca Nuevo y escribe Nequi.",
+        "pt": "Em Formas de pagamento, toque em Novo e escreva Transferência."
+      }
+    },
+    {
+      "id": "2-add",
+      "voice": {
+        "es": "Toca Agregar. Queda encendido.",
+        "pt": "Toque em Adicionar. Já fica ligada."
+      }
+    },
+    {
+      "id": "3-charge",
+      "voice": {
+        "es": "En la caja, toca Cobrar y luego Otro método de pago.",
+        "pt": "No caixa, toque em Cobrar e em Outra forma de pagamento."
+      }
+    },
+    {
+      "id": "4-pick",
+      "voice": {
+        "es": "Aquí están Nequi y Cortesía, para regalar un servicio. Toca Nequi.",
+        "pt": "Aqui estão Transferência e Cortesia, para dar um serviço de graça. Toque em Transferência."
+      }
+    },
+    {
+      "id": "5-confirm",
+      "voice": {
+        "es": "Confirma que recibiste el pago y toca Sí, cobrar.",
+        "pt": "Confira que o pagamento chegou e toque em Sim, cobrar."
+      }
+    },
+    {
+      "id": "6-end",
+      "voice": {
+        "es": "Así cobras con otras formas de pago, con Platata.",
+        "pt": "Assim você cobra com outras formas de pagamento, com o Platata."
+      }
+    }
+  ]
+}

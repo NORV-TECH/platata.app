@@ -1,0 +1,66 @@
+{
+  "id": "VS7",
+  "name": "Receipt by WhatsApp or printer (services, owner phone)",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-agenda",
+      "voice": {
+        "es": "En la Agenda, toca la cita de Sofía.",
+        "pt": "Na Agenda, toque no agendamento da Sofia."
+      }
+    },
+    {
+      "id": "2-charge",
+      "voice": {
+        "es": "Toca Cobrar y luego Exacto.",
+        "pt": "Toque em Cobrar e depois em Exato."
+      }
+    },
+    {
+      "id": "3-whatsapp",
+      "voice": {
+        "es": "Toca WhatsApp: se abre el chat de Sofía con el recibo.",
+        "pt": "Toque em WhatsApp: abre a conversa com a Sofia, já com o recibo."
+      }
+    },
+    {
+      "id": "4-send",
+      "voice": {
+        "es": "El recibo muestra el corte, el cepillado que se sumó, lo que estaba incluido y quién atendió. Envíalo.",
+        "pt": "O recibo mostra o corte com o estilo escolhido, a escova somada, o que estava incluído e quem atendeu. Envie."
+      }
+    },
+    {
+      "id": "5-print",
+      "voice": {
+        "es": "El recibo ya salió en la impresora. Si hace falta, toca Imprimir otra vez.",
+        "pt": "O recibo já saiu na impressora. Se precisar, toque em Imprimir de novo."
+      }
+    },
+    {
+      "id": "6-new",
+      "voice": {
+        "es": "Toca Nueva venta.",
+        "pt": "Toque em Nova venda."
+      }
+    },
+    {
+      "id": "7-end",
+      "voice": {
+        "es": "Así das el recibo por WhatsApp o impreso, con Platata.",
+        "pt": "Assim você entrega o recibo por WhatsApp ou impresso, com o Platata."
+      }
+    }
+  ]
+}
