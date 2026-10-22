@@ -502,7 +502,7 @@ function slot(c){
   return `<div class="cn-slot${c.hl?" sv-hl2":""}"><div class="cn-circ ${ring}">${inner}<span class="bdg">${c.n}</span></div><b>${esc(l1)}</b><small class="${ok?"ok":""}">${esc(l2)}</small></div>`;
 }
 function group(title, list, ok){
-  return `<div class="cn-grp"><div class="kv${ok?" ok":""}">${esc(title.toUpperCase())}</div><div class="row">${list.map(slot).join("")}</div></div>`;
+  return `<div class="cn-grp"><div class="kv${ok?" ok":""}">${esc(title.toUpperCase())}</div><div class="cr">${list.map(slot).join("")}</div></div>`;
 }
 const pbtn = (txt, tag, small) => `<div class="cn-btn${small?" sm":""}"${tag?` data-t="${tag}"`:""}>${I("add")}<span>${esc(txt)}</span></div>`;
 function connPage(st){
@@ -668,7 +668,7 @@ const cssVS19 = document.createElement("style"); cssVS19.textContent = `
 .mat .cn-page .bd{margin:0;font:400 calc(var(--u)*15)/1.4 Roboto,sans-serif;color:#464A52}
 .mat .cn-card{background:#fff;border:1px solid #E6E2D9;border-radius:calc(var(--u)*20);padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
 .mat .cn-grp{display:flex;flex-direction:column;gap:calc(var(--u)*4)}
-.mat .cn-grp .row{display:flex;flex-wrap:wrap;gap:calc(var(--u)*8) calc(var(--u)*4)}
+.mat .cn-grp .cr{display:flex;flex-wrap:wrap;gap:calc(var(--u)*8) calc(var(--u)*4)}
 .mat .cn-slot{width:calc(var(--u)*72);display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*4);border-radius:calc(var(--u)*12)}
 .mat .cn-circ{position:relative;width:calc(var(--u)*46);height:calc(var(--u)*46);border-radius:50%;display:grid;place-items:center;box-sizing:border-box}
 .mat .cn-circ.f{background:#7C55E0;color:#fff}
@@ -743,7 +743,7 @@ const cssVS19 = document.createElement("style"); cssVS19.textContent = `
 .mat .jn .lbl{margin-top:calc(var(--u)*14);font:600 calc(var(--u)*12) Roboto,sans-serif;letter-spacing:.72px;color:#737883}
 .mat .jn .crow{display:flex;align-items:center;gap:calc(var(--u)*6)}
 .mat .jn .crow>b{font:700 calc(var(--u)*15) Roboto,sans-serif;color:#737883}
-.mat .jn .cg{flex:1;display:flex;gap:calc(var(--u)*4)}
+.mat .jn .cg{flex:1;min-width:0;display:flex;gap:calc(var(--u)*4)}
 .mat .jn .cs{flex:1;height:calc(var(--u)*52);background:#fff;border:calc(var(--u)*2) solid #D9D4C9;border-radius:calc(var(--u)*12);display:grid;place-items:center;font:600 calc(var(--u)*21) Roboto,sans-serif;color:#17181B;box-sizing:border-box;min-width:0}
 .mat .jn .cs.on,.mat .jn .ps.on{border-color:#3A2A1F}
 .mat .jn .ct{display:block;width:calc(var(--u)*2);height:calc(var(--u)*24);background:#3A2A1F;animation:svblink 1s steps(1) infinite}
