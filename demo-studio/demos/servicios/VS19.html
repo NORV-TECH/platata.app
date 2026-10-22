@@ -588,7 +588,7 @@ function miniSell(st){
     <div class="pair"><span class="sec${total?"":" off"}">${esc(BOOK_WORD())}</span><span class="pri${total?"":" off"}"><small>${esc(F("common_charge","").trim())}</small> ${esc(money(total))}</span></div></div>`;
   let over = "";
   if(st.sheet === "var") over = varSheet(SVC, "var");
-  else if(st.sheet === "opt") over = optSheet(SVC, {base: SVC_PRICE});
+  else if(st.sheet === "opt") over = optSheet(SVC, {base: SVC_PRICE, scroll: st.osc});
   return `<div class="sv-caja">${tabRow}${chipRow}${grid}${foot}</div>` + navMini() + over;
 }
 
@@ -626,7 +626,7 @@ VKIT.start(V, {
         "Pick An employee phone", "Tap Connect next to " + FIRST, "Tap Send invitation: the code and PIN go out",
         "On the other phone: the code, the PIN, then Join", FIRST + " sells from their own phone, as a register",
         FREE ? "2 connections in use: all included in your country" : "2 of 2: the third connection is paid", "That's how you connect another phone with Platata."]}),
-  state:{screen:"panel", dev:"owner", sheet:null, invited:false, joined:false, flash:false, hop:0, code:"", pin:"", focus:"", busy:false, gsc:0, csc:0, added:false},
+  state:{screen:"panel", dev:"owner", sheet:null, invited:false, joined:false, flash:false, hop:0, code:"", pin:"", focus:"", busy:false, gsc:0, csc:0, osc:0, added:false},
   render,
   device: () => "phone",
   who: st => st.dev === "staff" ? WHO_STAFF : DEV_OWNER,
@@ -645,9 +645,9 @@ VKIT.start(V, {
         E.after(1400, () => { st.gsc = scrollNeed(`[data-t="tile-${SVC.id}"]`, '.mp-grid', 16); }); }}
   ].concat(SVC_CHOICE != null ? [
     {beat:6, hint:TAPN(SVC.name), target:`[data-t="tile-${SVC.id}"]`, tap(st){ st.sheet = "var"; }},
-    {beat:6, hint:TAPN(SVC.choices[0].name), target:'[data-t="var-0"]', tap(st){ st.sheet = "opt"; }}
+    {beat:6, hint:TAPN(SVC.choices[0].name), target:'[data-t="var-0"]', tap(st,E){ st.sheet = "opt"; st.osc = 0; E.after(500, () => { st.osc = scrollNeed('[data-t="opt-add"]', '.sv-sheet .sc', 24); }); }}
   ] : [
-    {beat:6, hint:TAPN(SVC.name), target:`[data-t="tile-${SVC.id}"]`, tap(st){ st.sheet = "opt"; }}
+    {beat:6, hint:TAPN(SVC.name), target:`[data-t="tile-${SVC.id}"]`, tap(st,E){ st.sheet = "opt"; st.osc = 0; E.after(500, () => { st.osc = scrollNeed('[data-t="opt-add"]', '.sv-sheet .sc', 24); }); }}
   ]).concat([
     {beat:6, hint:H1("opt_add_to_sale").replace(/\s*·.*$/, ""), target:'[data-t="opt-add"]', tap(st,E){ st.sheet = null; st.added = true;
         E.after(2600, () => { st.hop = 2; });

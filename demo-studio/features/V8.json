@@ -37,8 +37,8 @@
     {
       "id": "4-listo",
       "voice": {
-        "es": "Toca Listo.",
-        "pt": "Toque em Pronto."
+        "es": "Toca Listo: ya queda guardado.",
+        "pt": "Toque em Pronto: já fica salvo."
       }
     },
     {
@@ -73,7 +73,7 @@
       "id": "9-fin",
       "voice": {
         "es": "Así cobras tus visitas a domicilio, con Platata.",
-        "pt": "Assim você cobra seus atendimentos a domicílio, com o Platata."
+        "pt": "Assim você cobra suas visitas a domicílio, com o Platata."
       }
     }
   ]

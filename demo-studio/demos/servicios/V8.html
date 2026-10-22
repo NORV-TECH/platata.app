@@ -674,11 +674,11 @@ const T = (es, pt, en) => pick({es:"Toca "+es, pt:"Toque em "+pt, en:"Tap "+en})
 const T1 = k => T(S(k), S(k), S(k));
 VKIT.start(V, {
   id:"V8", tallVideo:true, clock:"12:41",
-  endText:pick({es:"Así cobras tus visitas a domicilio, con Platata.", pt:"Assim você cobra seus atendimentos a domicílio, com o Platata.", en:"That's how you charge home visits, with Platata."}),
+  endText:pick({es:"Así cobras tus visitas a domicilio, con Platata.", pt:"Assim você cobra suas visitas a domicílio, com o Platata.", en:"That's how you charge home visits, with Platata."}),
   beats:pick({
-    es:["En Mi negocio, toca Configuración", "Toca Dónde atiendes: local, domicilio o recogida", "Enciende A domicilio y escribe cuánto cobras por ir", "Toca Listo", "Más tarde, en la caja: toca Cobrar", "Toca A domicilio: el cargo se suma al total", "Toca Exacto", "Toca Ver recibo: ahí está el cargo a domicilio", "Así cobras tus visitas a domicilio, con Platata."],
-    pt:["Em Meu negócio, toque em Configurações", "Toque em Onde você atende: local, domicílio ou retirada", "Ative A domicílio e digite quanto cobra para ir", "Toque em Pronto", "Mais tarde, no caixa: toque em Cobrar", "Toque em A domicílio: a taxa entra no total", "Toque em Exato", "Toque em Ver recibo: lá está a taxa a domicílio", "Assim você cobra seus atendimentos a domicílio, com o Platata."],
-    en:["In My business, tap Settings", "Tap Where you work: shop, their place or pickup", "Turn on At their place and type what you charge to go", "Tap Done", "Later, at the register: tap Charge", "Tap At their place: the charge joins the total", "Tap Exact", "Tap View receipt: there is the home-visit charge", "That's how you charge home visits, with Platata."]}),
+    es:["En Mi negocio, toca Configuración", "Toca Dónde atiendes: local, domicilio o recogida", "Enciende A domicilio y escribe cuánto cobras por ir", "Toca Listo: ya queda guardado", "Más tarde, en la caja: toca Cobrar", "Toca A domicilio: el cargo se suma al total", "Toca Exacto", "Toca Ver recibo: ahí está el cargo a domicilio", "Así cobras tus visitas a domicilio, con Platata."],
+    pt:["Em Meu negócio, toque em Configurações", "Toque em Onde você atende: local, domicílio ou retirada", "Ative A domicílio e digite quanto cobra para ir", "Toque em Pronto: já fica salvo", "Mais tarde, no caixa: toque em Cobrar", "Toque em A domicílio: a taxa entra no total", "Toque em Exato", "Toque em Ver recibo: lá está a taxa a domicílio", "Assim você cobra suas visitas a domicílio, com o Platata."],
+    en:["In My business, tap Settings", "Tap Where you work: shop, their place or pickup", "Turn on At their place and type what you charge to go", "Tap Done: it's saved", "Later, at the register: tap Charge", "Tap At their place: the charge joins the total", "Tap Exact", "Tap View receipt: there is the home-visit charge", "That's how you charge home visits, with Platata."]}),
   state:{screen:"panel", dom:false, focus:false, kbd:false, typed:"", time:false, picked:null, receipt:false, scroll:0},
   render,
   device: () => "phone",
