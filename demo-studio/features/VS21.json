@@ -58,7 +58,7 @@
     {
       "id": "7-exacto",
       "voice": {
-        "es": "Toca Exacto. La tarjeta espera a que vuelva el internet.",
+        "es": "La tarjeta necesita internet. Toca Exacto.",
         "pt": "Em dinheiro: toque em Exato."
       }
     },

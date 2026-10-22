@@ -11,6 +11,7 @@
 - Nothing in these screens reads the business type; no fiado line for services. A "Proveedor" cash-out is not a supplier invoice (S7-D14a, by design).
 
 ## 3. New UX/UI problems
+- Review fixes: video wait before the Mi negocio tap; the Register screen's left arrow is enabled (earlier shifts exist).
 - None new. (TS9's page drew "Anular" in red; the app's TextButton is primary #1C1C1E — drawn right here.)
 
 ## 4. The 52 items

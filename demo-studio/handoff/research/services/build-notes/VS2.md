@@ -4,7 +4,7 @@
 - Peluquería Carolina, "Tu teléfono", 8:05. Services till with the amber "Caja cerrada · Abrir" bar under the "Servicios · 11 | Productos · 4" tabs →
   Abrir caja (Efectivo inicial = kit openingCash, typed with the one keypad rule: "000" in COP/CLP, decimal key elsewhere) → back on the till, bar gone →
   tap "Corte de caballero / hombre" → option sheet (Lavado on, unpriced add-on "se pregunta en la caja") → "Agregar a la venta · $X" → "Venta actual · 1 servicio", Cobrar $X.
-- 6 beats, 5 taps. Same day as VS3/VS9/VS10 (common block: opened 8:05 with openingCash). Countries differ only in money / keypad key. ?biz= works for the
+- 6 beats, 5 taps. Review fixes: video waits before Abrir (2.6 s) and the tile tap (1.6 s), so the words come before the taps. Same day as VS3/VS9/VS10 (common block: opened 8:05 with openingCash). Countries differ only in money / keypad key. ?biz= works for the
   other three trades (their own icon, tile colour, "Crear orden" for the workshop; a service with choices opens "Elige uno" first).
 - App checked at sim/usa-canada 73c65f08. Builder + sources: scratchpad `vsreg_cash/` (vcommon.js/.css shared by VS2/VS3/VS9/VS10).
 

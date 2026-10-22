@@ -258,8 +258,9 @@ const hm = s => { const [h,m] = s.split(":").map(Number); return h*60+m; };
 
 /* ---------- clients: the kit's, saved with first name + last name and a WhatsApp number ----------
    whatsappNumber is stored canonical (country code + national digits, WA-FIX-1: EC trunk 0 out, AR mobile 9).
-   The Agenda ROW prints "+" + those digits raw (ServicesTransactionsScreen.kt:271-274); the appointment page reads it
-   through utils/WhatsappUtils.kt:132 formatWhatsappForReading (AppointmentDetailScreen.kt:101). */
+   The Agenda ROW prints "+" + those digits raw (ServicesTransactionsScreen.kt:271-274), and so does the appointment page:
+   it hands "+digits" to formatWhatsappForReading (AppointmentDetailScreen.kt:92-101), which returns any text holding a
+   non-digit unchanged (utils/WhatsappUtils.kt:133) — so "+573001234567" there too. waRead is WhatsApp's own header. */
 const DIAL = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54",PA:"507",BR:"55",US:"1",CA:"1"}[CC];
 const nationalOf = p => { let n = p.replace(/\D/g,""); if(CC==="EC") n = n.replace(/^0/,""); if(CC==="AR") n = "9"+n; return n; };
 function waRead(canon){
@@ -287,13 +288,15 @@ const lineName = (s, choice) => (choice!=null && s.choices[choice]) ? `${s.name}
 const DEMO_SVC = V.services.find(s => s.id==="corte-caballero" && !s.choices.length && s.price!=null)
   || V.services.find(s => !s.choices.length && s.price!=null) || V.services[0];
 const DEMO_PRICE = DEMO_SVC.price != null ? DEMO_SVC.price : (DEMO_SVC.choices.find(c=>c.price!=null)||{price:0}).price;
-/* the people on the Team list: the owner's own row first (data/repo/SeedStore.kt:120-134 isOwner), then the staff */
-const TEAM = [C.owner].concat(C.staff.map(s => s.name));
+/* the people on the Team list as the booking screen lists them: viewModel.employees = EmployeeDao "ORDER BY preferredName ASC"
+   (data/PosDao.kt:1399, SQLite binary order), the owner's own row (SeedStore.kt:120-134) among them */
+const cmpBin = (a, b) => a < b ? -1 : a > b ? 1 : 0;
+const TEAM = [C.owner].concat(C.staff.map(s => s.name)).sort((a,b) => cmpBin(a.split(" ")[0], b.split(" ")[0]) || cmpBin(a, b));
 /* the kit's bookings (today's afternoon, tomorrow, Saturday) as open tickets */
 const BOOKINGS = C.bookings.map(b => { const s = V.service(b.sid);
   return { id: b.id, day: b.day, t: hm(b.t), client: clientIdx(b.client), sid: b.sid, name: lineName(s, b.choice), price: b.price || 0, who: b.who, min: durOf(s) }; });
 /* the booking V3 makes: client 2 of the kit, Saturday 10:00, the demo service, the last person on the Team list */
-const V3_BOOKING = { id: 10, day: 2, t: 10*60, client: 1, sid: DEMO_SVC.id, name: DEMO_SVC.name, price: DEMO_PRICE, who: TEAM[TEAM.length-1], min: durOf(DEMO_SVC), v3: true };
+const V3_BOOKING = { id: 10, day: 2, t: 10*60, client: 1, sid: DEMO_SVC.id, name: DEMO_SVC.name, price: DEMO_PRICE, who: C.staff.length ? C.staff[C.staff.length-1].name : C.owner, min: durOf(DEMO_SVC), v3: true };
 const sortB = list => list.slice().sort((a,b) => (a.day-b.day) || (a.t-b.t) || (a.id-b.id));
 /* takenByDay (WhenPicker.kt:152-179): each open booking greys its own length in 15-min slots (BookingOverlap.lengthOf = max(min, 15)),
    with the client's first name; the booking being edited is left out */
@@ -413,7 +416,7 @@ function till(o){
    (:427-445; basePrice from ProductSheetHost.kt:162 — SVC-1 item 1). */
 function optionSheet(s){
   const rows = s.included.map(x => ({name:x.name, on:true, add:null}))
-    .concat(s.extras.map(x => ({name:x.name, on:false, add: x.price==null ? t("opt_ask_at_till_row") : x.per ? t("opt_per_unit_each", money(x.price), x.per) : "+"+money(x.price)})));
+    .concat(s.extras.map(x => ({name:x.name, on:false, add: x.price==null ? t("opt_ask_at_till_row") : x.per && CC==="CO" ? t("opt_per_unit_each", money(x.price), x.per) : "+"+money(x.price)})));
   const sets = rows.map(r => `<div class="osh">${esc(r.name)}</div><div class="orow"><span>${esc(r.name)}${r.add?` · ${esc(r.add)}`:""}</span><i class="sw${r.on?" on":""}"></i></div><hr>`).join("");
   return `<div class="shs"><div class="sht"><div class="hdl"></div><div class="shc"><h2>${esc(s.name)}</h2>${sets}
     ${btn(t("opt_add_to_sale", money(DEMO_PRICE)), "pri", "opt-add")}</div></div></div>`;
@@ -535,7 +538,7 @@ function agendaScreen(o){
    SumaButtons (:280-312): Cobrar (filled), No asistió (Secondary, only when the hour is here or past and the person may
    cancel, :146-152 items 17/29), Reprogramar (Secondary), Cancelar cita (Secondary, not when the day is past);
    WhenPicker "¿Cuándo viene?" (:314-327, opened by Reprogramar = forceOpen); "2:00 p. m. → 2:40 p. m. · Dura 40 min"
-   (:329-341); the clash box when the new slot is taken (:377-403); "¿Para quién?" + "Ana · +57 300 123 4567" (:405-414);
+   (:329-341); the clash box when the new slot is taken (:377-403); "¿Para quién?" + "Ana · +57 300 123 4567" (:405-414, the phone raw: see the clients block);
    footer (:418-463): time unchanged → Guardar; moved → "Movida de … a …" bodySmall + Guardar + "Guardar y avisar por WhatsApp". */
 function detailScreen(o){
   const b = o.b, c = CL[b.client], s = V.service(b.sid);
@@ -553,7 +556,7 @@ function detailScreen(o){
     taken, nowMins: day===0 ? o.now : null});
   if(dur) h += `<div class="dsm">${esc(t("agenda_end_hint", fmtTime(mins), fmtTime(mins+dur), dur))}</div>`;
   if(moved && taken[mins]) h += `<div class="clash"><b>⚠ ${esc(t("sx_overbook"))}</b><span>${esc(t("sx_overbook_body", taken[mins], fmtTime(mins)))}</span></div>`;
-  h += `<div class="dlb">${esc(t("booking_for_who"))}</div><div class="dln"><span>${esc(c.first)} · ${esc(c.waRead)}</span></div><div style="height:calc(var(--u)*4)"></div>`;
+  h += `<div class="dlb">${esc(t("booking_for_who"))}</div><div class="dln"><span>${esc(c.first)} · ${esc(c.waRow)}</span></div><div style="height:calc(var(--u)*4)"></div>`;
   if(moved) h += `<div class="dsm ink" data-t="moved">${esc(t("agenda_resch_moved_line", dayLabel(b.day)+" · "+fmtTime(b.t), dayLabel(day)+" · "+fmtTime(mins)))}</div>`
     + btn(t("booking_save"),"pri","dt-save") + btn(t("resch_notify"),"sec","dt-save-wa");
   else h += btn(t("booking_save"),"pri","dt-done");
@@ -571,8 +574,8 @@ function detailScreen(o){
 })();
 
 
-const WHO_CLIENT = 1, PERF = TEAM.length - 1, BOOK_DAY = 2, BOOK_MIN = 10*60;
-const NOW = 12*60 + 41;
+const WHO_CLIENT = 1, PERF = TEAM.indexOf(V3_BOOKING.who), BOOK_DAY = 2, BOOK_MIN = 10*60;
+const NOW = 8*60 + 5;                      /* before the register is opened (V4 later the same day has it open) */
 /* AppointmentText.booked (utils/AppointmentText.kt:71-84): "Hola Juan, tu cita en <tienda> es el sábado 24 a las 10:00 (<servicio>)."
    who = preferredName, noun = cita (arrival = CITA, appt_wa_appointment), shop = the business name, service = the first line */
 const WA_TEXT = signed(t("appt_wa_booked", CL[WHO_CLIENT].first, t("appt_wa_appointment"), C.place, waWhen(BOOK_DAY, BOOK_MIN), DEMO_SVC.name));
@@ -591,7 +594,7 @@ function settled(steps){
     E2.after = (ms, fn) => { last = Math.max(last, ms); return E.after(ms, fn); }; s.tap(st, E2); E.after(last + 450, ()=>{}); }}));
 }
 VKIT.start(V, {
-  id:"V3", tallVideo:true, clock:"12:41",
+  id:"V3", tallVideo:true, clock:"8:05",
   endText: H("Así agendas tus citas con Platata.", "Assim você agenda com o Platata.", "That's how you book appointments with Platata."),
   beats: V.pick({
     es: VOICE.es.map((v,i) => i===4 && V.biz!=="peluqueria" ? "¿Quién lo hace? Escoge de tu equipo." : v),
@@ -606,10 +609,10 @@ VKIT.start(V, {
     {beat:0, hint:tapHint(DEMO_SVC.name, DEMO_SVC.name, DEMO_SVC.name), target:`[data-t="svc-${DEMO_SVC.id}"]`, tap(st){ st.sheet = true; }},
     {beat:0, hint:tapHint(t("opt_add_to_sale", money(DEMO_PRICE)), t("opt_add_to_sale", money(DEMO_PRICE)), t("opt_add_to_sale", money(DEMO_PRICE))), target:'[data-t="opt-add"]',
       tap(st){ st.sheet = false; st.cart = [{sid:DEMO_SVC.id, price:DEMO_PRICE}]; }},
-    {beat:1, hint:tapHint(actionWord(), actionWord(), actionWord()), target:'[data-t="book"]', tap(st){ st.screen = "book"; }},
+    {beat:1, hint:tapHint(actionWord(), actionWord(), actionWord()), target:'[data-t="book"]', wait:2.0, tap(st){ st.screen = "book"; }},
     {beat:2, hint:tapHint(dayLabel(BOOK_DAY), dayLabel(BOOK_DAY), dayLabel(BOOK_DAY)), target:`[data-t="arr-day-${BOOK_DAY}"]`,
       tap(st){ st.bk.day = BOOK_DAY; st.bk.period = 0; st.scrollTo = `[data-t="arr-slot-${BOOK_MIN}"]`; }},
-    {beat:2, hint:tapHint(fmtTime(BOOK_MIN), fmtTime(BOOK_MIN), fmtTime(BOOK_MIN)), target:`[data-t="arr-slot-${BOOK_MIN}"]`,
+    {beat:2, hint:tapHint(fmtTime(BOOK_MIN), fmtTime(BOOK_MIN), fmtTime(BOOK_MIN)), target:`[data-t="arr-slot-${BOOK_MIN}"]`, wait:1.6,
       tap(st){ st.bk.mins = BOOK_MIN; st.bk.open = false; st.scrollTo = '[data-t="bk-client"]'; }},
     {beat:3, hint:tapHint(T("booking_for_who"), T("booking_for_who"), T("booking_for_who")), target:'[data-t="bk-client"]', tap(st){ st.picker = true; }},
     {beat:3, hint:tapHint(CL[WHO_CLIENT].name, CL[WHO_CLIENT].name, CL[WHO_CLIENT].name), target:`[data-t="pick-${WHO_CLIENT}"]`,
@@ -621,7 +624,7 @@ VKIT.start(V, {
     {beat:5, hint:tapHint(T("resch_notify"), T("resch_notify"), T("resch_notify")), target:'[data-t="bk-save-wa"]',
       tap(st, E){ st.screen = "till"; st.cart = []; st.snack = true; st.scrollTo = null;
         E.after(1100, ()=>{ st.screen = "wa"; }); }},
-    {beat:6, hint:H("Toca enviar","Toque em enviar","Tap send"), target:'[data-t="wa-send"]',
+    {beat:6, hint:H("Toca enviar","Toque em enviar","Tap send"), target:'[data-t="wa-send"]', wait:2.2,
       tap(st){ st.sent = true; }}
   ])
 });
