@@ -86,3 +86,11 @@ TS16
 TS17
 # voice run 2026-10-21T11:02:39Z
 # voice run 2026-10-21T12:09:22Z
+# Services (22 Oct): reviewed and fixed, cleared for voice (es CO, pt BR; -MX es)
+VS4
+VS5
+VS5-MX
+VS6
+VS6-MX
+VS7
+# voice run 2026-10-22T19:20:28Z
