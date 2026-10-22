@@ -156,9 +156,12 @@ const prodLine = p => ({kind:"prod", id:p.id, name:p.name, opt:null, price:p.pri
 const storedName = l => l.opt ? `${l.name} (${l.opt})` : l.name;          // sync/SaleLineName.kt:of
 
 /* ---------- pieces ---------- */
-/* SumaTopBar (ui/components/SumaTopBar.kt:59): 64 dp, back arrow, titleLarge 22 sp bold; o.plain = M3 TopAppBar title (titleLarge Medium) */
+/* SumaTopBar (ui/components/SumaTopBar.kt:59): 64 dp, back arrow, titleLarge 22 sp bold; a title that would be cut takes titleMedium
+   18 sp on up to two lines (TopBarTitle, G-08); o.plain = the plain M3 TopAppBar title (titleLarge Medium) */
 const topbar = (title, o) => { o=o||{};
-  return `<div class="sv-top">${o.noBack?"":`<span class="ib" data-t="${o.backT||"back"}">${o.close?I.close:I.back}</span>`}<b class="${o.plain?"pl":""}">${esc(title)}</b>${o.action||""}</div>`; };
+  const avail = 412 - 4 - 48 - 16 - (o.action ? 96 : 16);
+  const two = !o.plain && textW(title, 22, 700) > avail;
+  return `<div class="sv-top">${o.noBack?"":`<span class="ib" data-t="${o.backT||"back"}">${o.close?I.close:I.back}</span>`}<b class="${o.plain?"pl":""}${two?" two":""}">${esc(title)}</b>${o.action||""}</div>`; };
 /* SumaButton (ui/components/SumaButton.kt): 52 dp, radius 12 (pill 50), 16 sp SemiBold; primary #1C1C1E, secondary outlined */
 const btn = (text, kind, dt, o) => { o=o||{}; return `<div class="sv-b ${kind||"pri"}${o.pill?" pill":""}${o.off?" off":""}"${dt?` data-t="${dt}"`:""}>${o.icon||""}<span>${esc(text)}</span></div>`; };
 /* M3 Switch: track 52x32, checked = primary + white 24 dp thumb, unchecked = #E5E5EA track, #C7C7CC 2 dp border and 16 dp thumb */
@@ -384,6 +387,7 @@ const SV_CSS = `
 .mat .sv-top .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
 .mat .sv-top>b{flex:1;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:calc(var(--u)*4)}
 .mat .sv-top>b.pl{font-weight:500}
+.mat .sv-top>b.two{font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .mat .sv-top .act{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);padding:0 calc(var(--u)*12);min-height:calc(var(--u)*48);display:flex;align-items:center;white-space:nowrap}
 .mat .sv-scroll{flex:1;min-height:0;overflow:hidden;position:relative}
 .mat .sv-scroll>.in{transition:transform .5s ease}
