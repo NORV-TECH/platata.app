@@ -685,9 +685,9 @@ VKIT.start(V, {
   id:"VS12", tallVideo:true, clock:"12:41",
   endText:pick({es:"Así le mandas el mes a tu contador con Platata.", pt:"Assim você manda o mês para o seu contador com o Platata.", en:"That's how you send the month to your accountant with Platata."}),
   beats:pick({
-    es:["¿Tu contador pide los números? Toca Mes pasado","Toca Resumen para el contador","Las ventas del mes; cada número se copia","Y lo que pagaste a proveedores y empleados","Toca Enviar resumen al contador","Se abre WhatsApp con todo el texto: envíalo","Así le mandas el mes a tu contador con Platata."],
-    pt:["O contador pediu os números? Toque em Mês passado","Toque em Resumo para o contador","As vendas do mês; cada número se copia","E o que você pagou a fornecedores e funcionários","Toque em Enviar resumo ao contador","O WhatsApp abre com o texto todo: envie","Assim você manda o mês para o seu contador com o Platata."],
-    en:["Your accountant wants the numbers? Tap Last month","Tap Summary for the accountant","The month's sales; each number copies","And what you paid suppliers and employees","Tap Send summary to the accountant","WhatsApp opens with the whole text: send it","That's how you send the month to your accountant with Platata."]}),
+    es:["¿Tu contador pide los números? Toca Mes pasado","Toca Resumen para el contador","Las ventas del mes: en efectivo y con tarjeta","Y lo pagado a proveedores y empleados; todo se copia","Toca Enviar resumen al contador","Se abre WhatsApp con todo el texto: envíalo","Así le mandas el mes a tu contador con Platata."],
+    pt:["O contador pediu os números? Toque em Mês passado","Toque em Resumo para o contador","As vendas do mês: em dinheiro e eletrônicas","E o pago a fornecedores e funcionários; tudo se copia","Toque em Enviar resumo ao contador","O WhatsApp abre com o texto todo: envie","Assim você manda o mês para o seu contador com o Platata."],
+    en:["Your accountant wants the numbers? Tap Last month","Tap Summary for the accountant","The month's sales: in cash and by card","And what you paid suppliers and staff; it all copies","Tap Send summary to the accountant","WhatsApp opens with the whole text: send it","That's how you send the month to your accountant with Platata."]}),
   state:{screen:"reports", range:"today", sel:null, scroll:0, chipX:(L==="en"?175:145), toast:false, sent:false, hl:false},
   render,
   device: () => "phone",
@@ -695,8 +695,7 @@ VKIT.start(V, {
   steps:[
     {beat:0, hint:HINT(S("reports_period_last_month")), target:'[data-t="chip-last_month"]', tap(st){ st.range="last_month"; st.scroll=0; }},
     {beat:1, hint:HINT(S("reports_send_to_accountant")), target:'[data-t="accountant"]', tap(st){ st.screen="accountant"; st.scroll=0; }},
-    {beat:2, hint:HINT(S("accountant_row_copy")), target:'[data-t="copy-0"]', tap(st,E){ st.toast=true; E.after(1800, ()=>{ st.toast=false; }); }},
-    {beat:3, hint:pick({es:"Baja a Pagado a proveedores", pt:"Role até Pago a fornecedores", en:"Scroll to Paid to suppliers"}), target:'[data-t="copy-3"]', tap(st){ st.scroll=Math.max(0, offsetDp("copy-5") - 160); st.hl=true; }},
+    {beat:3, hint:HINT(S("accountant_row_copy")), target:'[data-t="copy-5"]', tap(st,E){ st.toast=true; st.hl=true; E.after(1800, ()=>{ st.toast=false; }); }},
     {beat:4, hint:HINT(S("accountant_send")), target:'[data-t="send"]', tap(st){ st.screen="wa"; }},
     {beat:5, hint:pick({es:"Toca enviar", pt:"Toque em enviar", en:"Tap send"}), target:'[data-t="wa-send"]', tap(st){ st.sent=true; }}
   ]
