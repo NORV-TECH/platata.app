@@ -240,7 +240,7 @@ function registerScreen(o){
   const out = moves.reduce((a,m)=>a+m.amount, 0);
   const exp = r2(OPENING + cashSales - out);
   const mv = moves.map(m=>`<div class="mv${m.isNew?" new":""}"><span>${esc(t("cash_movement_out"))} · ${esc(t("cash_movement_reason_supplier"))} · ${esc(fmtTime(m.at))}</span><b class="out">-${money(m.amount)}</b><i>${esc(t("cash_movement_void"))}</i></div>`).join("");
-  const tbar = topbar("", {html:`<div class="navd"><span class="dim">${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(OPENED)))}</b><span class="dim">${I.chevR}</span></div>`,
+  const tbar = topbar("", {html:`<div class="navd"><span>${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(OPENED)))}</b><span class="dim">${I.chevR}</span></div>`,
                  action:`<span class="tba">${esc(t("register_status_full_reports"))}</span>`});
   const methods = methodsOf(sales);
   const mcard = methods.map(m => `<div class="lr ms"><span>${esc(m.k==="cash" ? t("register_status_cash_all") : methodName(m.k))}</span><span>${money(m.total)}</span></div>
@@ -300,11 +300,11 @@ VKIT.start(V, {
   device: () => "phone",
   who: () => t("conn_slot_phone"),
   steps:[
-    {beat:0, hint:TAP+t("workspace_register_open_action"), target:'[data-t="bar-open"]', tap(st){ st.screen="open"; }},
+    {beat:0, hint:TAP+t("workspace_register_open_action"), target:'[data-t="bar-open"]', wait:2.6, tap(st){ st.screen="open"; }},
     {beat:1, hint:TAP+KEYS.map(keyLabel).join(" "), target:`[data-t="k-${KEYS[0]}"]`, tap(st,E){
         st.typed=press(st.typed,KEYS[0]); KEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed=press(st.typed,k); })); }},
     {beat:2, hint:TAP+t("register_open_confirm"), target:'[data-t="open-confirm"]', tap(st){ st.screen="home"; st.isOpen=true; }},
-    {beat:3, hint:TAP+RING.name, target:`[data-t="svc-${RING.id}"]`, tap(st){ if(RING_CHOICE!=null) st.sheet="choose"; else if(RING_HAS_OPTS) st.sheet="opts"; else st.count=1; }},
+    {beat:3, hint:TAP+RING.name, target:`[data-t="svc-${RING.id}"]`, wait:1.6, tap(st){ if(RING_CHOICE!=null) st.sheet="choose"; else if(RING_HAS_OPTS) st.sheet="opts"; else st.count=1; }},
     ...addSteps,
     ...(RING_HAS_OPTS ? [{beat:4, hint:TAP+(RING_PRICE>0 ? t("opt_add_to_sale", money(RING_PRICE)) : t("common_add")), target:'[data-t="opt-add"]', wait:1.2, tap(st){ st.sheet=null; st.count=1; }}] : [])
   ]

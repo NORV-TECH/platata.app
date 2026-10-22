@@ -30,8 +30,8 @@
     {
       "id": "3-precios",
       "voice": {
-        "es": "Cada servicio ya viene escrito, con el precio más común en Colombia.",
-        "pt": "Seus serviços já vêm escritos. Você só digita o preço."
+        "es": "Los servicios ya vienen escritos, casi todos con el precio más común en Colombia.",
+        "pt": "Seus serviços já vêm escritos. Digite o preço; se cobra no caixa, deixe vazio."
       }
     },
     {
@@ -58,8 +58,8 @@
     {
       "id": "7-caja",
       "voice": {
-        "es": "Ve a la caja: ya puedes cobrar.",
-        "pt": "O que ficar vazio, o caixa pergunta na hora."
+        "es": "Ve a la caja: toca un servicio para cobrarlo.",
+        "pt": "Você já pode cobrar. Altere quando quiser com Editar."
       }
     },
     {

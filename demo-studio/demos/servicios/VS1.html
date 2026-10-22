@@ -369,10 +369,10 @@ const steps = [
   {beat:0, hint:TAP+t("welcome_start_cta"), target:'[data-t="start"]', tap(st){ st.screen="country"; }},
   {beat:1, hint:TAP+t("biz_start_cta"), target:'[data-t="country-go"]', tap(st){ st.screen="type"; }},
   {beat:2, hint:TAP+t("biz_tab_serv"), target:'[data-t="tile-serv"]', tap(st){ st.type="serv"; }},
-  {beat:2, hint:TAP+t("biz_pick_continue_with", t("biz_setup_type_services")), target:'[data-t="type-go"]', tap(st){ st.screen="name"; }},
+  {beat:2, hint:TAP+t("biz_pick_continue_with", t("biz_setup_type_services")), target:'[data-t="type-go"]', wait:1.5, tap(st){ st.screen="name"; }},
   {beat:3, hint:H("Toca el campo del nombre","Toque no campo do nome","Tap the name field"), target:'[data-t="name-field"]', tap(st,E){ E.type("name", NAME, null, 70); }},
   {beat:4, hint:TAP+t("biz_start_cta"), target:'[data-t="name-go"]', tap(st){ st.screen="google"; }},
-  {beat:4, hint:TAP+t("auth_google_btn"), target:'[data-t="google"]', tap(st,E){ st.screen="setup"; st.done=0;
+  {beat:4, hint:TAP+t("auth_google_btn"), target:'[data-t="google"]', wait:1.0, tap(st,E){ st.screen="setup"; st.done=0;
       E.after(700,()=>{ st.done=1; }); E.after(1300,()=>{ st.done=2; }); E.after(1900,()=>{ st.done=3; }); E.after(2500,()=>{ st.screen="ready"; }); }},
   {beat:5, hint:TAP+t("ready_cta_services"), target:'[data-t="ready-go"]', tap(st){ st.screen="landing"; }}
 ];

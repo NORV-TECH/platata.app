@@ -240,7 +240,7 @@ function registerScreen(o){
   const out = moves.reduce((a,m)=>a+m.amount, 0);
   const exp = r2(OPENING + cashSales - out);
   const mv = moves.map(m=>`<div class="mv${m.isNew?" new":""}"><span>${esc(t("cash_movement_out"))} · ${esc(t("cash_movement_reason_supplier"))} · ${esc(fmtTime(m.at))}</span><b class="out">-${money(m.amount)}</b><i>${esc(t("cash_movement_void"))}</i></div>`).join("");
-  const tbar = topbar("", {html:`<div class="navd"><span class="dim">${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(OPENED)))}</b><span class="dim">${I.chevR}</span></div>`,
+  const tbar = topbar("", {html:`<div class="navd"><span>${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(OPENED)))}</b><span class="dim">${I.chevR}</span></div>`,
                  action:`<span class="tba">${esc(t("register_status_full_reports"))}</span>`});
   const methods = methodsOf(sales);
   const mcard = methods.map(m => `<div class="lr ms"><span>${esc(m.k==="cash" ? t("register_status_cash_all") : methodName(m.k))}</span><span>${money(m.total)}</span></div>
@@ -346,20 +346,20 @@ VKIT.start(V, {
   id:"VS10", tallVideo:true, clock:"19:40",
   endText:pick({es:"Así cierras la caja con Platata.", pt:"Assim você fecha o caixa com o Platata.", en:"That's how you close the register with Platata."}),
   beats:pick({
-    es:["Al final del día, toca la caja abierta","Baja y toca Cerrar caja","Arriba ves cuánto debe haber: cuenta y escríbelo","Cuadrado. Toca Cerrar caja y confírmalo","El resumen: ventas, efectivo y lo que salió","Envíalo por WhatsApp","Así cierras la caja con Platata."],
-    pt:["No fim do dia, toque no caixa aberto","Desça e toque em Fechar caixa","Em cima você vê quanto deve haver: conte e digite","Fechado exato. Toque em Fechar caixa e confirme","O resumo: vendas, dinheiro e o que saiu","Envie pelo WhatsApp","Assim você fecha o caixa com o Platata."],
-    en:["At the end of the day, tap the open register","Scroll down and tap Close register","On top: what should be there. Count and type it","Balanced. Tap Close register and confirm","The summary: sales, cash and what went out","Send it by WhatsApp","That's how you close the register with Platata."]}),
+    es:["Al final del día, toca la caja abierta","Abajo, toca Cerrar caja","Arriba ves cuánto debe haber: cuenta y escríbelo","Cuadrado. Toca Cerrar caja y confírmalo","El resumen: ventas, efectivo y lo que salió","Envíalo por WhatsApp","Así cierras la caja con Platata."],
+    pt:["No fim do dia, toque no caixa aberto","Embaixo, toque em Fechar caixa","Em cima você vê quanto deve haver: conte e digite","Fechado exato. Toque em Fechar caixa e confirme","O resumo: vendas, dinheiro e o que saiu","Envie pelo WhatsApp","Assim você fecha o caixa com o Platata."],
+    en:["At the end of the day, tap the open register","At the bottom, tap Close register","On top: what should be there. Count and type it","Balanced. Tap Close register and confirm","The summary: sales, cash and what went out","Send it by WhatsApp","That's how you close the register with Platata."]}),
   state:{screen:"panel", scroll:0, typed:"", dlg:false},
   render,
   device: () => "phone",
   who: st => st.screen==="wa" ? "WhatsApp" : t("conn_slot_phone"),
   steps:[
-    {beat:0, hint:TAP+t("workspace_register_open"), target:'[data-t="reg-card"]', tap(st,E){ st.screen="reg"; E.after(900,()=>{ st.scroll=maxScrollDp(); }); }},
+    {beat:0, hint:TAP+t("workspace_register_open"), target:'[data-t="reg-card"]', wait:1.5, tap(st,E){ st.screen="reg"; E.after(900,()=>{ st.scroll=maxScrollDp(); }); }},
     {beat:1, hint:TAP+t("register_status_close_btn"), target:'[data-t="close-reg"]', tap(st){ st.screen="close"; st.scroll=0; }},
     {beat:2, hint:TAP+KEYS.map(keyLabel).join(" "), target:`[data-t="k-${KEYS[0]}"]`, tap(st,E){
         st.typed=press(st.typed,KEYS[0]); KEYS.slice(1).forEach((k,i)=>E.after(380*(i+1),()=>{ st.typed=press(st.typed,k); })); }},
     {beat:3, hint:TAP+t("register_close_confirm"), target:'[data-t="close-confirm"]', tap(st){ st.dlg=true; }},
-    {beat:3, hint:TAP+t("register_close_confirm"), target:'[data-t="dlg-close"]', tap(st,E){ st.dlg=false; st.screen="sum"; E.after(1000,()=>{ st.scroll=Math.min(150, maxScrollDp()); }); }},
+    {beat:3, hint:TAP+t("register_close_confirm"), target:'[data-t="dlg-close"]', wait:1.3, tap(st,E){ st.dlg=false; st.screen="sum"; E.after(1000,()=>{ st.scroll=Math.min(150, maxScrollDp()); }); }},
     {beat:5, hint:TAP+t("register_closed_whatsapp"), target:'[data-t="wa"]', tap(st){ st.screen="wa"; }}
   ]
 });

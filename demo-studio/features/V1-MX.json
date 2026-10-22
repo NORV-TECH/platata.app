@@ -24,7 +24,7 @@
     {
       "id": "3-precios",
       "voice": {
-        "es": "Tus servicios ya vienen escritos. Tú solo pones el precio."
+        "es": "Tus servicios ya vienen escritos. Pon tu precio; si lo cobras en la caja, déjalo vacío."
       }
     },
     {
@@ -48,7 +48,7 @@
     {
       "id": "7-caja",
       "voice": {
-        "es": "Lo que dejes vacío se pregunta en la caja."
+        "es": "Ya puedes cobrar. Los cambias cuando quieras con Editar."
       }
     },
     {

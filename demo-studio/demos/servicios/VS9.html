@@ -240,7 +240,7 @@ function registerScreen(o){
   const out = moves.reduce((a,m)=>a+m.amount, 0);
   const exp = r2(OPENING + cashSales - out);
   const mv = moves.map(m=>`<div class="mv${m.isNew?" new":""}"><span>${esc(t("cash_movement_out"))} · ${esc(t("cash_movement_reason_supplier"))} · ${esc(fmtTime(m.at))}</span><b class="out">-${money(m.amount)}</b><i>${esc(t("cash_movement_void"))}</i></div>`).join("");
-  const tbar = topbar("", {html:`<div class="navd"><span class="dim">${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(OPENED)))}</b><span class="dim">${I.chevR}</span></div>`,
+  const tbar = topbar("", {html:`<div class="navd"><span>${I.chevL}</span><b>${esc(t("register_nav_today", shortDay(OPENED)))}</b><span class="dim">${I.chevR}</span></div>`,
                  action:`<span class="tba">${esc(t("register_status_full_reports"))}</span>`});
   const methods = methodsOf(sales);
   const mcard = methods.map(m => `<div class="lr ms"><span>${esc(m.k==="cash" ? t("register_status_cash_all") : methodName(m.k))}</span><span>${money(m.total)}</span></div>
@@ -314,7 +314,7 @@ VKIT.start(V, {
   device: () => "phone",
   who: () => t("conn_slot_phone"),
   steps:[
-    {beat:0, hint:TAP+t("home_tab_my_business"), target:'[data-t="nav-biz"]', tap(st){ st.bio=true; }},
+    {beat:0, hint:TAP+t("home_tab_my_business"), target:'[data-t="nav-biz"]', wait:1.6, tap(st){ st.bio=true; }},
     {beat:0, hint:pick({es:"Pon tu huella", pt:"Use sua digital", en:"Touch the fingerprint"}), target:'[data-t="fingerprint"]', tap(st,E){ st.bioOk=true; E.after(500,()=>{ st.bio=false; st.screen="panel"; }); }},
     {beat:1, hint:TAP+t("workspace_register_open"), target:'[data-t="reg-card"]', tap(st){ st.screen="reg"; }},
     {beat:2, hint:TAP+t("cash_movement_out"), target:'[data-t="cash-out"]', tap(st){ st.screen="move"; }},

@@ -326,7 +326,12 @@ function form(st){
     ${field(t("tax_field_name"), st.name, {focus:st.focus==="name", tag:"f-name"})}
     ${field(t("tax_field_pct"), st.pct, {focus:st.focus==="pct", tag:"f-pct"})}
     <p class="tx-q">${esc(t("tax_in_prices_question"))}</p>${radio(INCLUDED, t("tax_in_prices_yes"))}${radio(!INCLUDED, t("tax_in_prices_no"))}
-    <div class="sp"></div><div class="sb pri" data-t="save">${esc(t("common_save"))}</div></div>` + strip();
+    <div class="sp"></div><div class="sb pri" data-t="save">${esc(t("common_save"))}</div></div>` + (st.focus === "name" ? textKbd() : st.focus === "pct" ? numKbd("done") : strip());
+}
+function textKbd(){
+  const r = ["qwertyuiop", LG === "es" ? "asdfghjklñ" : "asdfghjkl", "zxcvbnm"];
+  return `<div class="kbd">${r.map((row,i)=>`<div class="kr2">${i===2?"<span class=w>⇧</span>":""}${row.split("").map(c=>`<span>${c}</span>`).join("")}${i===2?"<span class=w>⌫</span>":""}</div>`).join("")}
+    <div class="kr2"><span class="w">?123</span><span>,</span><span class="sp"></span><span>.</span><span class="w">✓</span></div></div>`;
 }
 
 /* ---- the till and the service's edit page ---- */
@@ -345,7 +350,7 @@ function editPage(st){
     : `<div class="tm">${esc(t("bridge_price_title"))}</div>${field(t("bridge_price_title"), SEEDED(SVC.price))}`;
   const rows = SVC.included.map(o => `<div class="orow"><div><b>${esc(o.name)}</b><small>${esc(t("opt_tag_included"))}</small></div><span class="otag">${esc(t("opt_tag_included"))}</span></div>`).join("")
     + SVC.extras.map(o => `<div class="orow"><div><b>${esc(o.name)}</b><small>${esc(o.price != null ? "+" + money(o.price) : t("opt_ask_at_till_row"))}</small></div><span class="otag">${esc(t("opt_tag_charge"))}</span></div>`).join("");
-  const tax = `<div class="taxrow hl" data-t="taxrow"><span class="cbx">${I.check}</span><span>${esc(t(USCA ? "items_field_taxable_sales" : "items_field_taxable"))}</span></div>`;
+  const tax = `<div class="taxrow${st.taxOff?"":" hl"}" data-t="taxrow"><span class="cbx${st.taxOff?" off":""}">${st.taxOff?"":I.check}</span><span>${esc(t(USCA ? "items_field_taxable_sales" : "items_field_taxable"))}</span></div>`;
   return `<div class="pg">${topbar(t("svc_edit_title"), {action:`<span class="rs-act">${esc(t("where_done"))}</span>`})}
     <div class="rs-scroll"><div class="in" style="transform:translateY(calc(var(--u)*${-(st.editScroll||0)}))"><div class="ein">
     ${field(t("svc_edit_name_label"), SVC.name)}
@@ -371,28 +376,29 @@ function render(st){
 const fill = PRESET
   ? [{beat:3, hint:TAP+PRESET[0]+" "+rate(PRESET[1]), target:'[data-t="chip"]', tap(st){ st.name = TNAME; st.pct = TPCT; }}]
   : [{beat:3, hint:TAP+t("tax_field_name"), target:'[data-t="f-name"]', tap(st,E){ st.focus = "name"; E.type("name", TNAME, null, 90); }},
-     {beat:3, hint:TAP+t("tax_field_pct"), target:'[data-t="f-pct"]', tap(st,E){ st.focus = "pct"; E.type("pct", TPCT, () => { st.focus = ""; }, 160); }}];
+     {beat:3, hint:TAP+t("tax_field_pct"), target:'[data-t="f-pct"]', wait:0.6, tap(st,E){ st.focus = "pct"; E.type("pct", TPCT, () => { E.after(500, () => { st.focus = ""; }); }, 160); }}];
 VKIT.start(V, {
   id:"VS17", tallVideo:true, clock:"12:41",
   endText:H("Así cobras tus impuestos con Platata.","Assim você cobra seus impostos com o Platata.","That's how you charge your taxes with Platata."),
   beats:pick({
-    es:["En Mi negocio, toca Configuración","Toca Impuestos","Aún no hay impuestos. Toca + Nuevo",PRESET?"Toca el impuesto de tu país: se llena solo":"Escribe el nombre y el porcentaje",INCLUDED?"¿Ya está en tus precios? Toca Guardar":"Se suma al precio. Toca Guardar","Listo: Platata lo calcula en cada venta","Mantén presionado un servicio","¿Un servicio sin impuesto? Quita la marca","Así cobras tus impuestos con Platata."],
-    pt:["Em Meu negócio, toque em Configurações","Toque em Impostos","Ainda não há impostos. Toque em + Novo",PRESET?"Toque no imposto do seu país: ele se preenche":"Escreva o nome e a porcentagem",INCLUDED?"Já está nos seus preços? Toque em Salvar":"Soma-se ao preço. Toque em Salvar","Pronto: o Platata calcula em cada venda","Mantenha um serviço pressionado","Um serviço sem imposto? Tire a marca","Assim você cobra seus impostos com o Platata."],
-    en:["In My business, tap Settings","Tap Taxes","No taxes yet. Tap + New",PRESET?"Tap your country's tax: it fills in":"Type the name and the rate",INCLUDED?"Is it in your prices? Tap Save":"It's added on top. Tap Save","Done: Platata works it out on every sale","Press and hold a service","A service without tax? Untick it","That's how you charge your taxes with Platata."]}),
-  state:{screen:"panel", name:"", pct:"", focus:"", saved:false, snack:false, hl:false, editScroll:0},
+    es:["En Mi negocio, toca Configuración","Toca Impuestos","Aún no hay impuestos. Toca + Nuevo",PRESET?"Toca el impuesto de tu país: se llena solo":"Escribe el nombre y el porcentaje",INCLUDED?"¿Ya está en tus precios? Toca Guardar":"Se suma al precio. Toca Guardar","Listo: el impuesto queda activo","Mantén presionado un servicio","¿Un servicio sin impuesto? Quita la marca","Así cobras tus impuestos con Platata."],
+    pt:["Em Meu negócio, toque em Configurações","Toque em Impostos","Ainda não há impostos. Toque em + Novo",PRESET?"Toque no imposto do seu país: ele se preenche":"Escreva o nome e a porcentagem",INCLUDED?"Já está nos seus preços? Toque em Salvar":"Soma-se ao preço. Toque em Salvar","Pronto: o imposto fica ativo","Mantenha um serviço pressionado","Um serviço sem imposto? Tire a marca","Assim você cobra seus impostos com o Platata."],
+    en:["In My business, tap Settings","Tap Taxes","No taxes yet. Tap + New",PRESET?"Tap your country's tax: it fills in":"Type the name and the rate",INCLUDED?"Is it in your prices? Tap Save":"It's added on top. Tap Save","Done: the tax is on","Press and hold a service","A service without tax? Untick it","That's how you charge your taxes with Platata."]}),
+  state:{screen:"panel", name:"", pct:"", focus:"", saved:false, snack:false, hl:false, editScroll:0, taxOff:false},
   render,
   device: () => "phone",
   who: () => H("Tu teléfono","Seu celular","Your phone"),
   steps:[
     {beat:0, hint:TAP+t("settings_title"), target:'[data-t="row-settings"]', tap(st){ st.screen = "hub"; }},
     {beat:1, hint:TAP+t("settings_hub_taxes"), target:'[data-t="hub-taxes"]', tap(st){ st.screen = "list"; }},
-    {beat:2, hint:TAP+t("common_new_short"), target:'[data-t="new"]', tap(st){ st.screen = "form"; }},
+    {beat:2, hint:TAP+t("common_new_short"), target:'[data-t="new"]', wait:1.0, tap(st){ st.screen = "form"; }},
     ...fill,
-    {beat:4, hint:TAP+t("common_save"), target:'[data-t="save"]', tap(st,E){ st.screen = "list"; st.saved = true; st.focus = ""; st.snack = true; st.hl = true; E.after(2600, () => { st.snack = false; }); }},
-    {beat:5, hint:H("Toca la flecha","Toque na seta","Tap the arrow"), target:'[data-t="list-back"]', tap(st){ st.screen = "hub"; st.snack = false; }},
-    {beat:5, hint:H("Toca la flecha","Toque na seta","Tap the arrow"), target:'[data-t="back"]', tap(st){ st.screen = "panel"; }},
-    {beat:5, hint:TAP+t("mamaship_tab_register"), target:'[data-t="nav-caja"]', tap(st){ st.screen = "till"; }},
-    {beat:6, hint:H("Mantén presionado ","Mantenha pressionado ","Press and hold ")+SVC.name, target:`[data-t="tile-${SVC.id}"]`, tap(st){ st.screen = "edit"; }}
+    {beat:4, hint:TAP+t("common_save"), target:'[data-t="save"]', wait:2.0, tap(st){ st.screen = "list"; st.saved = true; st.focus = ""; st.snack = true; st.hl = true; }},
+    {beat:5, hint:H("Toca la flecha","Toque na seta","Tap the arrow"), target:'[data-t="list-back"]', wait:2.2, tap(st){ st.screen = "hub"; st.snack = false; }},
+    {beat:5, hint:H("Toca la flecha","Toque na seta","Tap the arrow"), target:'[data-t="back"]', wait:1.8, tap(st){ st.screen = "panel"; }},
+    {beat:5, hint:TAP+t("mamaship_tab_register"), target:'[data-t="nav-caja"]', wait:1.8, tap(st){ st.screen = "till"; }},
+    {beat:6, hint:H("Mantén presionado ","Mantenha pressionado ","Press and hold ")+SVC.name, target:`[data-t="tile-${SVC.id}"]`, tap(st){ st.screen = "edit"; }},
+    {beat:7, hint:H("Toca la marca para quitarla","Toque na marca para tirá-la","Tap the box to untick it"), target:'[data-t="taxrow"]', wait:2.0, tap(st){ st.taxOff = true; }}
   ]
 });
 
@@ -637,6 +643,13 @@ VKIT.start(V, {
 .mat .chrow{display:flex;align-items:center;gap:calc(var(--u)*8);padding:calc(var(--u)*4) 0}
 .mat .chrow>span{flex:1;min-width:0;font-size:calc(var(--u)*16)}
 .mat .chrow .rs-fld{min-height:calc(var(--u)*56)}
+/* the phone keyboard while the name / % are typed (BR: no preset) */
+.mat .kbd{background:#E8EAED;padding:calc(var(--u)*8) calc(var(--u)*4) calc(var(--u)*10);display:flex;flex-direction:column;gap:calc(var(--u)*8);flex:0 0 auto}
+.mat .kr2{display:flex;gap:calc(var(--u)*5);justify-content:center}
+.mat .kr2 span{flex:0 0 calc(var(--u)*36);height:calc(var(--u)*44);border-radius:calc(var(--u)*6);background:#fff;display:grid;place-items:center;font-size:calc(var(--u)*19);color:#202124}
+.mat .kr2 span.w{flex:0 0 calc(var(--u)*52);background:#D3D6DB;font-size:calc(var(--u)*14)}.mat .kr2 span.sp{flex:1 1 auto}
+/* Material Checkbox unchecked: 2 dp outline in onSurfaceVariant, no fill */
+.mat .taxrow .cbx.off{background:transparent;border:calc(var(--u)*2) solid #6E6E73;box-sizing:border-box}
 
 </style>
 </body>

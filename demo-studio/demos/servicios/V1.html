@@ -376,7 +376,7 @@ function donePage(){
   const names = ORDER.map(s => s.name);
   const conf = [[26,70,"#D9468A",20],[92,130,"#EAB04C",-30],[160,52,"#7C55E0",60],[236,110,"#D9468A",-10],[304,66,"#EAB04C",35],[276,190,"#7C55E0",-50],[44,230,"#7C55E0",15],[318,280,"#D9468A",-25]]
     .map(([l,tp2,c,d]) => `<i class="cf" style="left:calc(var(--u)*${l*412/360});top:calc(var(--u)*${tp2});background:${c};transform:rotate(${d}deg)"></i>`).join("");
-  return `<div class="ppage">${conf}<div class="pbody c dnb">${POT("celebrating", 180)}
+  return `<div class="ppage">${conf}<div class="pbody c dnb">${POT("celebrating", 210)}
     <div class="ph1" style="text-align:center">${esc(names.length===1 ? t("bridge_done_title_one") : t("bridge_done_title_many", names.length))}</div>
     <div class="psub" style="text-align:center">${esc(t("bridge_done_line"))}</div>
     <div class="dpills">${names.map(n => pPill(n, MYFAM)).join("")}</div></div>
@@ -413,7 +413,7 @@ steps.push(
   {beat:0, hint:TAP+t("trade_picker_continue", V.tradeName), target:'[data-t="trade-go"]', tap(st){ st.screen = "pick"; }},
   {beat:1, hint:TAP+t("guide_mark_popular", STARTERS.length), target:'[data-t="popular"]', tap(st){ st.ticked = STARTERS.slice(); }});
 UNTICK.forEach(id => steps.push({beat:1, hint:TAP+svc(id).name, target:`[data-t="svc-${id}"]`, tap(st){ st.ticked = st.ticked.filter(x => x !== id); }}));
-steps.push({beat:1, hint:TAP+tp("guide_use_services", TICKED.length, TICKED.length), target:'[data-t="use"]', tap(st){ st.screen = CO ? "bridge" : "list"; if(!CO && FIRST_PLAIN) st.focus = FIRST_PLAIN.id; }});
+steps.push({beat:1, hint:TAP+tp("guide_use_services", TICKED.length, TICKED.length), target:'[data-t="use"]', wait:0.8, tap(st){ st.screen = CO ? "bridge" : "list"; if(!CO && FIRST_PLAIN) st.focus = FIRST_PLAIN.id; }});
 /* typing the empty boxes of the list, one after the other ("Sig." on the keyboard moves to the next box) */
 function typeBoxes(st, E){
   let at = 0;
@@ -427,8 +427,8 @@ function typeBoxes(st, E){
 }
 if(CO){
   steps.push(
-    {beat:2, hint:TAP+t("bridge_comes_title"), target:'[data-t="comes"]', tap(st){ st.sheet = true; }},
-    {beat:3, hint:TAP+t("opt_done"), target:'[data-t="sheet-done"]', tap(st){ st.sheet = false; }},
+    {beat:3, hint:TAP+t("bridge_comes_title"), target:'[data-t="comes"]', tap(st){ st.sheet = true; }},
+    {beat:3, hint:TAP+t("opt_done"), target:'[data-t="sheet-done"]', wait:1.6, tap(st){ st.sheet = false; }},
     {beat:4, hint:TAP+t("bridge_see_all"), target:'[data-t="see-all"]', tap(st){ st.screen = "list"; }});
   if(PLAIN_EMPTY.length) steps.push({beat:4, hint:H("Toca el precio de ","Toque no preço de ","Tap the price of ")+PLAIN_EMPTY[0].name, target:`[data-t="box-${PLAIN_EMPTY[0].id}"]`, tap(st,E){ typeBoxes(st, E); }});
   steps.push(
@@ -454,13 +454,13 @@ if(CO){
 /* every beat but the last has a tap except the one that explains the result (the till in Colombia, the done page elsewhere) */
 const TRADE = V.tradeName;
 const BEATS = CO ? {
-  es:["Toca tu oficio: "+TRADE,"Marca los populares y quita lo que no haces","Cada servicio ya trae su precio en Colombia","Lo que trae: lo incluido y lo que se cobra aparte","Ver todos en una lista: pon los que faltan","Toca Terminar: tus servicios están listos","Ir a la caja: ya puedes cobrar","Así tu negocio queda listo con Platata."],
-  pt:["Toque no seu ofício: "+TRADE,"Marque os populares e tire o que você não faz","Cada serviço já traz seu preço na Colômbia","O que vem junto: incluído e cobrado à parte","Veja todos em uma lista: complete os preços","Toque em Concluir: seus serviços estão prontos","Ir para o caixa: você já pode cobrar","Assim seu negócio fica pronto com o Platata."],
-  en:["Tap your trade: "+TRADE,"Mark the popular ones, untick what you don't do","Each service already has its price in Colombia","What it includes, and what's charged extra","See all in a list: fill in the missing ones","Tap Finish: your services are ready","Go to the till: you can charge now","That's how your business gets ready with Platata."]
+  es:["Toca tu oficio: "+TRADE,"Marca los populares y quita lo que no haces","Casi todos ya traen su precio en Colombia","Lo que trae: lo incluido y lo que se cobra aparte","Ver todos en una lista: pon los que faltan","Toca Terminar: tus servicios están listos","Ir a la caja: toca un servicio para cobrarlo","Así tu negocio queda listo con Platata."],
+  pt:["Toque no seu ofício: "+TRADE,"Marque os populares e tire o que você não faz","Quase todos já trazem o preço na Colômbia","O que vem junto: incluído e cobrado à parte","Veja todos em uma lista: complete os preços","Toque em Concluir: seus serviços estão prontos","Ir para o caixa: toque em um serviço para cobrar","Assim seu negócio fica pronto com o Platata."],
+  en:["Tap your trade: "+TRADE,"Mark the popular ones, untick what you don't do","Most already come with their price in Colombia","What it includes, and what's charged extra","See all in a list: fill in the missing ones","Tap Finish: your services are ready","Go to the till: tap a service to charge it","That's how your business gets ready with Platata."]
 } : {
-  es:["Toca tu oficio: "+TRADE,"Marca los populares y quita lo que no haces","Tus servicios ya vienen escritos: pon tu precio","¿Tiene opciones? Ábrelo","Cada opción con su precio. Vuelve","Toca Terminar: tus servicios están listos","Lo que dejes vacío se pregunta en la caja","Así tu negocio queda listo con Platata."],
-  pt:["Toque no seu ofício: "+TRADE,"Marque os populares e tire o que você não faz","Seus serviços já vêm escritos: digite o preço","Tem opções? Abra o serviço","Cada opção com seu preço. Volte","Toque em Concluir: seus serviços estão prontos","O que ficar vazio, o caixa pergunta","Assim seu negócio fica pronto com o Platata."],
-  en:["Tap your trade: "+TRADE,"Mark the popular ones, untick what you don't do","Your services come written: type your price","Has options? Open it","Each option gets its price. Go back","Tap Finish: your services are ready","Whatever you leave empty is asked at the till","That's how your business gets ready with Platata."]
+  es:["Toca tu oficio: "+TRADE,"Marca los populares y quita lo que no haces","Pon tu precio; si lo cobras en la caja, déjalo vacío","¿Tiene opciones? Ábrelo","Cada opción con su precio. Vuelve","Toca Terminar: tus servicios están listos","Ya puedes cobrar: cámbialos con Editar","Así tu negocio queda listo con Platata."],
+  pt:["Toque no seu ofício: "+TRADE,"Marque os populares e tire o que você não faz","Digite o preço; se cobra no caixa, deixe vazio","Tem opções? Abra o serviço","Cada opção com seu preço. Volte","Toque em Concluir: seus serviços estão prontos","Já pode cobrar: altere com Editar","Assim seu negócio fica pronto com o Platata."],
+  en:["Tap your trade: "+TRADE,"Mark the popular ones, untick what you don't do","Type your price; charged at the till? Leave it empty","Has options? Open it","Each option gets its price. Go back","Tap Finish: your services are ready","You can charge now: change them with Edit","That's how your business gets ready with Platata."]
 };
 VKIT.start(V, {
   id:"V1", tallVideo:true, clock:"12:41",

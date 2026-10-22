@@ -384,7 +384,7 @@ if(!PICKER && NEW_PRICE != null){
   else steps.push({beat:3, hint:TAP+t("bridge_price_title"), target:'[data-t="price"]', tap(st,E){ st.focus = "price"; typeInto(st, E, "priceText", typedOf(NEW_PRICE), () => { st.focus = null; }); }});
 }
 steps.push(
-  {beat:4, hint:TAP+(PICKER ? t("bridge_mode_ask") : t("bridge_mode_from")), target:`[data-t="mode-1"]`, tap(st){ st.mode = 1; }},
+  {beat:4, hint:TAP+(PICKER ? t("bridge_mode_ask") : t("bridge_mode_from")), target:`[data-t="mode-1"]`, wait:1.2, tap(st){ st.mode = 1; }},
   {beat:5, hint:TAP+t("svc_edit_duration_label"), target:'[data-t="dur"]', tap(st,E){ st.focus = "dur"; typeInto(st, E, "durText", String(NEW_MIN), () => { st.focus = null; }); }});
 if(OPT){
   steps.push({beat:6, hint:TAP+OPT.name, target:'[data-t="opt"]', tap(st){ st.screen = "opt"; }});
@@ -399,7 +399,7 @@ VKIT.start(V, {
   endText:H("Así ajustas tus precios con Platata.","Assim você ajusta seus preços com o Platata.","That's how you adjust your prices with Platata."),
   beats:pick({
     es:["En la caja, toca Editar","Toca Mis servicios: todos tus precios","Toca el servicio que quieres cambiar",CO?"Toca el precio nuevo":"Escribe el precio nuevo","¿Puede costar más? Elige Desde","Cambia la duración","Ponle precio a lo que se cobra aparte","Toca Listo: queda guardado","Así ajustas tus precios con Platata."],
-    pt:["No caixa, toque em Editar","Toque em Meus serviços: todos os seus preços","Toque no serviço que você quer mudar","Digite o preço novo","Pode custar mais? Escolha A partir de","Mude a duração","Dê preço ao que se cobra à parte","Toque em Pronto: fica salvo","Assim você ajusta seus preços com o Platata."],
+    pt:["No caixa, toque em Editar","Toque em Meus serviços: todos os seus preços","Toque no serviço que você quer mudar","Digite o preço novo","Pode custar mais? Escolha A partir de","Mude a duração","Dê preço ao que é cobrado à parte","Toque em Pronto: fica salvo","Assim você ajusta seus preços com o Platata."],
     en:["At the till, tap Edit","Tap Your services: all your prices","Tap the service you want to change",CO?"Tap the new price":"Type the new price","Can it cost more? Pick From","Change the length","Price what's charged on top","Tap Done: it's saved","That's how you adjust your prices with Platata."]}),
   state:{screen:"till", editing:false, saved:false, price:null, priceText:null, mode:0, durText:null, focus:null, editScroll:0, upPill:false, upText:"", optSaved:false},
   render,
