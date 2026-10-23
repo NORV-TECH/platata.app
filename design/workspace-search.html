@@ -7,204 +7,216 @@
 <title>Workspace Search Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
 /* ── page ── */
 :root{--pg:#eceef1;--pg-ink:#17181b;--pg-sub:#55595f;--pg-line:#d6d9de;--pg-card:#ffffff}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0b0c0e;--pg-ink:#f1f2f4;--pg-sub:#a3a8ae;--pg-line:#2a2d31;--pg-card:#17191c}}
 :root[data-theme="dark"]{--pg:#0b0c0e;--pg-ink:#f1f2f4;--pg-sub:#a3a8ae;--pg-line:#2a2d31;--pg-card:#17191c}
 *{box-sizing:border-box}
-body{margin:0;background:var(--pg);color:var(--pg-ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-  -webkit-font-smoothing:antialiased;letter-spacing:-.005em}
-.wrap{max-width:2200px;margin:0 auto;padding:0 40px}
-header.top{padding:56px 0 8px;max-width:820px}
+body{margin:0;background:var(--pg);color:var(--pg-ink);font-family:Roboto,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:2600px;margin:0 auto;padding:0 40px}
+header.top{padding:56px 0 8px;max-width:840px}
 header.top p.k{margin:0 0 10px;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--pg-sub)}
-header.top h1{margin:0;font-size:44px;line-height:1.1;font-weight:800;letter-spacing:-.03em}
+header.top h1{margin:0;font-size:44px;line-height:1.1;font-weight:900;letter-spacing:-.02em}
 header.top p{margin:16px 0 0;font-size:17px;line-height:1.55;color:var(--pg-sub)}
-header.top p b{color:var(--pg-ink);font-weight:600}
+header.top p b{color:var(--pg-ink);font-weight:500}
+header.top code,section.doc code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.88em;padding:1px 5px;border-radius:5px;
+  background:color-mix(in srgb,var(--pg-ink) 8%,transparent);color:var(--pg-ink)}
 section.band{padding:48px 0 8px}
-section.band>h2{margin:0 0 28px;font-size:28px;line-height:1.2;font-weight:800;letter-spacing:-.02em}
+section.band>h2{margin:0 0 28px;font-size:28px;line-height:1.2;font-weight:900;letter-spacing:-.01em}
 .boards{display:flex;flex-wrap:wrap;gap:48px 36px;align-items:flex-start}
 figure{margin:0;width:390px;max-width:100%}
 figcaption{padding:18px 6px 0}
 figcaption .n{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--pg-sub)}
-figcaption .t{display:block;margin-top:4px;font-size:19px;font-weight:700;letter-spacing:-.01em}
+figcaption .t{display:block;margin-top:4px;font-size:19px;font-weight:700}
 figcaption .d{display:block;margin-top:8px;font-size:15px;line-height:1.55;color:var(--pg-sub)}
-section.rules{padding:64px 0 96px;max-width:860px}
-section.rules h2{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.02em}
-section.rules>p{margin:0 0 24px;font-size:16px;line-height:1.55;color:var(--pg-sub)}
-section.rules ol{margin:0;padding:0;list-style:none;counter-reset:r;display:flex;flex-direction:column;gap:12px}
-section.rules li{counter-increment:r;position:relative;padding:18px 20px 18px 60px;border-radius:16px;background:var(--pg-card);
+section.doc{padding:64px 0 0;max-width:900px}
+section.doc:last-of-type{padding-bottom:96px}
+section.doc h2{margin:0 0 8px;font-size:28px;font-weight:900;letter-spacing:-.01em}
+section.doc>p{margin:0 0 24px;font-size:16px;line-height:1.55;color:var(--pg-sub)}
+section.doc ol{margin:0;padding:0;list-style:none;counter-reset:r;display:flex;flex-direction:column;gap:12px}
+section.doc li{counter-increment:r;position:relative;padding:18px 20px 18px 60px;border-radius:16px;background:var(--pg-card);
   border:1px solid var(--pg-line);font-size:15.5px;line-height:1.55;color:var(--pg-sub)}
-section.rules li::before{content:counter(r);position:absolute;left:20px;top:17px;width:26px;height:26px;border-radius:50%;
+section.doc li::before{content:counter(r);position:absolute;left:20px;top:17px;width:26px;height:26px;border-radius:50%;
   display:grid;place-items:center;background:var(--pg-ink);color:var(--pg);font-size:13px;font-weight:700}
-section.rules li b{display:block;margin-bottom:2px;font-size:16px;color:var(--pg-ink);font-weight:700}
-section.rules code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em;padding:1px 5px;border-radius:5px;
-  background:color-mix(in srgb,var(--pg-ink) 8%,transparent);color:var(--pg-ink)}
+section.doc li b{display:block;margin-bottom:2px;font-size:16px;color:var(--pg-ink);font-weight:700}
+.tbl{overflow-x:auto;border-radius:16px;border:1px solid var(--pg-line);background:var(--pg-card)}
+.tbl table{width:100%;min-width:640px;border-collapse:collapse;font-size:15px;line-height:1.5}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:14px 18px;border-bottom:1px solid var(--pg-line)}
+.tbl tr:last-child td{border-bottom:0}
+.tbl th{font-size:12px;font-weight:700;letter-spacing:.07em;color:var(--pg-sub);text-transform:uppercase}
+.tbl td{color:var(--pg-sub)}
+.tbl td:first-child{color:var(--pg-ink);font-weight:700;white-space:nowrap}
 @media (max-width:600px){.wrap{padding:0 16px}header.top{padding-top:32px}header.top h1{font-size:34px}
-  section.band>h2{font-size:23px}section.rules li{padding-left:56px}}
+  section.band>h2{font-size:23px}section.doc li{padding-left:56px}}
 
-/* ── the phone: Platata's own tokens (from the demo's --s-* set) ── */
-.phone{--bg:#ffffff;--row:#f1f1f2;--ink:#1f1f22;--sub:#5f6368;--line:#e8e8ea;--line2:#dadce0;--blue:#1a73e8;--blueText:#1967d2;
-  --blueTint:#e8f0fe;--onBlue:#ffffff;--icon:#ffffff;--ok:#137333;--okBg:#e6f4ea;--okBd:#a8d5b5;--warn:#985000;--warnBg:#fef7e0;
-  --roleBg:rgba(95,99,104,.14);--roleFg:#3c4043;--outline:#80868b;--inv:#1f1f22;--onInv:#ffffff;
-  --ham-bg:#fce8da;--ham-fg:#a04a14;--per-bg:#fce8e6;--per-fg:#b3261e;--aco-bg:#fef3c7;--aco-fg:#7a5600;--beb-bg:#e8f0fe;--beb-fg:#1967d2;
-  --pos-bg:#f3e8fd;--pos-fg:#7b2cbf;--com-bg:#e6f4ea;--com-fg:#137333;--des-bg:#e4f7fb;--des-fg:#00696f;
+/* ── the phone: tokens from ui/theme/Color.kt ── */
+.phone{--bg:#ffffff;--row:#f2f2f7;--ink:#1c1c1e;--sub:#6e6e73;--line:#e5e5ea;--line2:#c7c7cc;--blue:#007aff;--blueText:#0066d6;
+  --blueTint:#e5f0ff;--icon:#ffffff;--prim:#1c1c1e;--onPrim:#ffffff;--ok:#1a7f3c;--okBg:#e5f8ec;--okBd:#b8e6c8;
+  --warn:#856404;--warnBg:#fef3c7;--roleBg:rgba(110,110,115,.14);--roleFg:#3a3a3c;--outline:#8e8e93;--inv:#1c1c1e;--onInv:#ffffff;--nav:#f2f2f7;--navInd:#e5e5ea;
+  --ham-bg:#fce8da;--ham-fg:#a04a14;--per-bg:#fce8e6;--per-fg:#b3261e;--aco-bg:#fef3c7;--aco-fg:#7a5600;--beb-bg:#e5f0ff;--beb-fg:#0066d6;
+  --pos-bg:#f3e8fd;--pos-fg:#7b2cbf;--com-bg:#e5f8ec;--com-fg:#1a7f3c;--des-bg:#e4f7fb;--des-fg:#00696f;
   position:relative;width:390px;max-width:100%;height:844px;border-radius:40px;overflow:hidden;background:var(--bg);color:var(--ink);
-  box-shadow:0 0 0 1px rgba(0,0,0,.09),0 30px 60px -30px rgba(0,0,0,.4);font-family:Inter,system-ui,sans-serif;font-size:16px;
+  box-shadow:0 0 0 1px rgba(0,0,0,.09),0 30px 60px -30px rgba(0,0,0,.4);font-family:Roboto,system-ui,sans-serif;font-size:16px;
   transition:background .2s,color .2s}
-.phone.dark{--bg:#111316;--row:#1e2125;--ink:#e8eaed;--sub:#9aa0a6;--line:#2a2d31;--line2:#3c4043;--blue:#8ab4f8;--blueText:#8ab4f8;
-  --blueTint:#1c2b44;--onBlue:#062e6f;--icon:#111316;--ok:#81c995;--okBg:#12301f;--okBd:#255c3a;--warn:#fdd663;--warnBg:#3a2f10;
-  --roleBg:rgba(154,160,166,.18);--roleFg:#bdc1c6;--outline:#8e9297;--inv:#e8eaed;--onInv:#1f1f22;
-  --ham-bg:#3a2418;--ham-fg:#f6ae7e;--per-bg:#3b1f1e;--per-fg:#f28b82;--aco-bg:#362c10;--aco-fg:#fdd663;--beb-bg:#1c2b44;--beb-fg:#8ab4f8;
-  --pos-bg:#2f2140;--pos-fg:#d7aefb;--com-bg:#12301f;--com-fg:#81c995;--des-bg:#0f3036;--des-fg:#78d9ec;
-  box-shadow:0 0 0 1px rgba(255,255,255,.12),0 30px 60px -30px rgba(0,0,0,.8)}
+.phone.dark{--bg:#000000;--row:#1c1c1e;--ink:#f5f5f7;--sub:#aeaeb2;--line:#2c2c2e;--line2:#38383a;--blue:#0a84ff;--blueText:#4da3ff;
+  --blueTint:#0f2847;--icon:#2c2c2e;--prim:#f5f5f7;--onPrim:#1c1c1e;--ok:#30d158;--okBg:#0a2412;--okBd:#1c4d2b;
+  --warn:#ffd60a;--warnBg:#332b00;--roleBg:rgba(174,174,178,.18);--roleFg:#d1d1d6;--outline:#8e8e93;--inv:#f5f5f7;--onInv:#1c1c1e;--nav:#242426;--navInd:#38383a;
+  --ham-bg:#3a2418;--ham-fg:#f6ae7e;--per-bg:#3b1f1e;--per-fg:#f28b82;--aco-bg:#362c10;--aco-fg:#fdd663;--beb-bg:#0f2847;--beb-fg:#4da3ff;
+  --pos-bg:#2f2140;--pos-fg:#d7aefb;--com-bg:#0a2412;--com-fg:#30d158;--des-bg:#0f3036;--des-fg:#78d9ec;
+  box-shadow:0 0 0 1px rgba(255,255,255,.14),0 30px 60px -30px rgba(0,0,0,.8)}
 .phone button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.phone button:focus-visible,.phone input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.phone button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .phone svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
 .screen{position:absolute;inset:0;display:flex;flex-direction:column}
 .screen[hidden]{display:none}
 
-/* workspace */
-.ws-head{flex:0 0 auto;padding:28px 20px 12px}
-.ws-biz{display:flex;align-items:center;gap:10px}
-.ws-biz h3{margin:0;font-size:28px;line-height:1.2;font-weight:700;letter-spacing:-.02em;color:var(--blue)}
-.boss{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--sub);border:1px solid var(--line2);border-radius:999px;padding:3px 8px}
-.ws-switch{margin:2px 0 0 -6px;padding:8px 6px;border:0;background:none;font-size:14px;font-weight:700;color:var(--sub)}
-.ws-search{flex:0 0 auto;margin:0 16px 14px;height:52px;display:flex;align-items:center;gap:12px;padding:0 18px;border:0;border-radius:26px;
-  background:var(--row);color:var(--sub);font-size:16px;font-weight:500;text-align:left}
+/* My business panel (HomeScreen.kt WorkspaceRow) */
+.ws-head{flex:0 0 auto;padding:26px 14px 10px}
+.biz{display:flex;align-items:center;gap:4px;min-height:48px;padding:0 6px;border:0;background:none;color:var(--blue);text-align:left}
+.biz b{font-size:28px;line-height:1.15;font-weight:700;letter-spacing:-.01em}
+.biz svg{width:26px;height:26px;stroke-width:2.2}
+.ws-search{flex:0 0 auto;margin:0 16px 12px;height:52px;display:flex;align-items:center;gap:12px;padding:0 18px;border:0;border-radius:26px;
+  background:var(--row);color:var(--sub);font-size:16px;text-align:left}
 .ws-search svg{width:20px;height:20px;stroke-width:2}
 .ws-search span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ws-rows{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 16px 16px;display:flex;flex-direction:column;gap:6px}
-.wr{flex:0 0 auto;display:flex;align-items:center;gap:13px;width:100%;min-height:64px;padding:11px 14px;border:0;border-radius:18px;
+.ws-rows{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 16px 16px;display:flex;flex-direction:column;gap:8px}
+.ws-rows::-webkit-scrollbar{display:none}
+.wr{flex:0 0 auto;display:flex;align-items:center;gap:14px;width:100%;min-height:70px;padding:14px 15px;border:0;border-radius:16px;
   background:var(--row);color:var(--ink);text-align:left}
-.wr-ic{width:38px;height:38px;flex:0 0 auto;border-radius:50%;background:var(--icon);color:var(--sub);display:grid;place-items:center}
-.wr-ic svg{width:20px;height:20px;stroke-width:1.7}
+.wr-ic{width:42px;height:42px;flex:0 0 auto;border-radius:50%;background:var(--icon);color:var(--ink);display:grid;place-items:center}
+.wr-ic svg{width:22px;height:22px;stroke-width:1.8}
 .wr-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
-.wr-t b{font-size:16px;font-weight:700;letter-spacing:-.01em}
-.wr-t i{font-style:normal;font-size:14px;color:var(--sub)}
-.wr-t i.ok{color:var(--ok);font-weight:500}
+.wr-t b{font-size:16px;font-weight:700}
+.wr-t i{font-style:normal;font-size:14px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .wr .chev{width:18px;height:18px;stroke-width:2;color:var(--sub)}
-.wr.open{gap:10px;background:var(--okBg);box-shadow:inset 0 0 0 1px var(--okBd);color:var(--ok)}
-.wr.open .dot{width:22px;text-align:center;font-size:13px}
-.wr.open .wr-t i{color:var(--ok);font-weight:500}
-.wr.open .money{font-size:17px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
-.wds{display:flex;flex-direction:column;margin-top:6px}
-.wd{display:flex;align-items:center;gap:14px;width:100%;min-height:50px;padding:0 6px;border:0;border-bottom:1px solid var(--line);
-  background:none;color:var(--ink);font-size:16px;font-weight:500;text-align:left}
-.wd svg{width:20px;height:20px;stroke-width:1.7;color:var(--sub)}
-.wd span{flex:1}
-.wd .chev{width:16px;height:16px;stroke-width:2}
-.ws-bar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 18px 16px;border-top:1px solid var(--line)}
-.lang{display:flex;align-items:center;gap:10px;height:44px;padding:0 16px;border:0;border-radius:999px;background:var(--row);color:var(--ink);
-  font-size:14px;font-weight:700;letter-spacing:.04em}
-.lang svg{width:18px;height:18px;stroke-width:1.7;color:var(--sub)}
-.dollar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg);font-size:18px;font-weight:800}
+.wr.open{background:var(--okBg);box-shadow:inset 0 0 0 1px var(--okBd);color:var(--ok);gap:10px}
+.wr.open .dot{width:42px;text-align:center;font-size:14px}
+.wr.open .wr-t b,.wr.open .wr-t i{color:var(--ok)}
+.wr .money{font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.pill{flex:0 0 auto;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.04em;background:var(--roleBg);color:var(--roleFg)}
+.ws-h{margin:10px 4px 0;font-size:14px;font-weight:700;color:var(--sub)}
+.ws-div{height:1px;margin:6px 4px;background:var(--line);flex:0 0 auto}
+.nav{flex:0 0 auto;display:flex;justify-content:space-around;align-items:center;height:80px;padding-bottom:6px;background:var(--nav)}
+.nvi{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:72px;border:0;background:none;color:var(--sub);font-size:12px;font-weight:500}
+.nvp{width:64px;height:32px;border-radius:16px;display:grid;place-items:center}
+.nvp svg{width:24px;height:24px;stroke-width:1.8}
+.nvi.on{color:var(--ink);font-weight:700}
+.nvi.on .nvp{background:var(--navInd)}
+.flag{width:26px;height:26px;border-radius:50%;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.flag svg{display:block;width:100%;height:100%}
 
 /* search */
 .sbar{flex:0 0 auto;display:flex;align-items:center;gap:4px;padding:20px 12px 8px 6px}
-.ib{width:44px;height:44px;flex:0 0 auto;display:grid;place-items:center;border:0;border-radius:22px;background:none;color:var(--ink)}
+.ib{width:48px;height:48px;flex:0 0 auto;display:grid;place-items:center;border:0;border-radius:24px;background:none;color:var(--ink)}
 .ib svg{width:22px;height:22px;stroke-width:2}
-.field{flex:1;min-width:0;display:flex;align-items:center;gap:10px;height:52px;padding:0 4px 0 16px;border-radius:26px;
-  background:var(--row);border:2px solid var(--blue)}
+.field{flex:1;min-width:0;display:flex;align-items:center;gap:10px;height:52px;padding:0 2px 0 16px;border-radius:26px;
+  background:var(--row);border:2px solid var(--prim)}
 .field>svg{width:20px;height:20px;stroke-width:2;color:var(--sub)}
-.field input{flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;padding:0;font:500 17px Inter,system-ui,sans-serif;color:var(--ink)}
+.field input{flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;padding:0;font:400 17px Roboto,system-ui,sans-serif;color:var(--ink)}
 .field input::placeholder{color:var(--sub);opacity:1}
-.field input:focus-visible{outline:0}
-.field .ib{color:var(--sub)}
+.field .ib{width:44px;height:44px;color:var(--sub)}
 .field .ib svg{width:18px;height:18px;stroke-width:2.2}
 .chips{flex:0 0 auto;display:flex;gap:8px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
 .chip{flex:0 0 auto;height:40px;display:flex;align-items:center;gap:6px;padding:0 15px;border-radius:20px;border:1px solid var(--line2);
-  background:transparent;color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap}
-.chip i{font-style:normal;font-weight:500;opacity:.75;font-variant-numeric:tabular-nums}
-.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+  background:transparent;color:var(--ink);font-size:14px;font-weight:500;white-space:nowrap}
+.chip i{font-style:normal;opacity:.72;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--prim);border-color:var(--prim);color:var(--onPrim);font-weight:700}
 .body{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 16px 28px;border-top:1px solid var(--line)}
 .body::-webkit-scrollbar{display:none}
 .lbl{margin:20px 4px 10px;font-size:12px;font-weight:700;letter-spacing:.07em;color:var(--sub)}
 .recents{display:flex;flex-wrap:wrap;gap:8px}
-.recent{height:44px;display:flex;align-items:center;gap:8px;padding:0 16px 0 12px;border:0;border-radius:22px;background:var(--row);
-  color:var(--ink);font-size:15px;font-weight:500}
+.recent{height:44px;display:flex;align-items:center;gap:8px;padding:0 16px 0 12px;border:0;border-radius:22px;background:var(--row);color:var(--ink);font-size:15px}
 .recent svg{width:18px;height:18px;stroke-width:1.8;color:var(--sub)}
 .tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.tile{min-height:108px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 12px 12px;
-  border:0;border-radius:18px;background:var(--row);text-align:left;color:var(--ink)}
-.tile .ic{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:var(--icon);color:var(--sub)}
-.tile .ic svg{width:20px;height:20px;stroke-width:1.8}
-.tile b{display:block;font-size:15px;font-weight:700}
-.tile i{display:block;margin-top:2px;font-style:normal;font-size:13px;font-weight:500;color:var(--sub)}
-.tile i.warn{color:var(--warn)}
+.tile{min-height:110px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 12px 12px;
+  border:0;border-radius:16px;background:var(--row);text-align:left;color:var(--ink)}
+.tile .ic{width:40px;height:40px;display:grid;place-items:center;border-radius:50%;background:var(--icon);color:var(--ink)}
+.tile .ic svg{width:21px;height:21px;stroke-width:1.8}
+.tile b{display:block;font-size:15px;font-weight:700;line-height:1.25}
+.tile i{display:block;margin-top:2px;font-style:normal;font-size:13px;color:var(--sub)}
+.tile i.warn{color:var(--warn);font-weight:500}
 .hint{margin:26px 4px 0;font-size:15px;line-height:1.45;color:var(--sub)}
-.linkbtn{display:inline-flex;align-items:center;min-height:44px;margin:4px 0 0;padding:0 4px;border:0;background:none;
-  font-size:15px;font-weight:600;color:var(--blueText)}
+.linkbtn{display:inline-flex;align-items:center;min-height:48px;padding:0 4px;border:0;background:none;font-size:15px;font-weight:700;color:var(--blueText)}
 .sh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:20px 4px 8px;min-height:22px}
 .sh span{font-size:12px;font-weight:700;letter-spacing:.07em;color:var(--sub)}
-.sh button{margin:-12px -8px;padding:12px 8px;border:0;background:none;font-size:14px;font-weight:600;color:var(--blueText)}
+.sh button{margin:-13px -8px;padding:13px 8px;border:0;background:none;font-size:14px;font-weight:700;color:var(--blueText)}
 .list{display:flex;flex-direction:column;gap:6px}
-.row{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;padding:11px 14px;border:0;border-radius:18px;
+.row{display:flex;align-items:center;gap:14px;width:100%;min-height:64px;padding:11px 14px;border:0;border-radius:16px;
   background:var(--row);color:var(--ink);text-align:left}
-.row.big{min-height:76px;padding:16px;border-radius:22px}
-.lead{width:40px;height:40px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;background:var(--icon);color:var(--sub);
-  font-size:15px;font-weight:700;letter-spacing:-.01em}
-.lead svg{width:20px;height:20px;stroke-width:1.8}
-.row.big .lead{width:48px;height:48px}
-.row.big .lead svg{width:24px;height:24px}
+.row.big{min-height:78px;padding:16px;border-radius:20px}
+.card{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:var(--row)}
+.card.slim{padding:11px 14px 14px;border-radius:16px}
+.card>.row{padding:0;min-height:0;background:none;border-radius:0}
+.lead{width:42px;height:42px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;background:var(--icon);color:var(--ink);
+  font-size:15px;font-weight:700}
+.lead svg{width:21px;height:21px;stroke-width:1.8}
+.row.big .lead{width:50px;height:50px}
+.row.big .lead svg{width:25px;height:25px}
 .lead.accent{background:var(--blueTint);color:var(--blueText)}
 .lead.sq{border-radius:12px}
-.lead.txt{color:var(--ink)}
 .lead.inv{background:var(--inv);color:var(--onInv)}
 .lead.letter{font-size:19px}
+.lead.warn{background:var(--warnBg);color:var(--warn)}
 .cat-ham{background:var(--ham-bg);color:var(--ham-fg)}.cat-per{background:var(--per-bg);color:var(--per-fg)}
 .cat-aco{background:var(--aco-bg);color:var(--aco-fg)}.cat-beb{background:var(--beb-bg);color:var(--beb-fg)}
 .cat-pos{background:var(--pos-bg);color:var(--pos-fg)}.cat-com{background:var(--com-bg);color:var(--com-fg)}
 .cat-des{background:var(--des-bg);color:var(--des-fg)}
 .rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .rtt,.rts{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.rtt{font-size:16px;line-height:1.3;font-weight:500}
+.rtt{font-size:16px;line-height:1.3}
 .row.big .rtt{font-size:19px}
-.rtt b{font-weight:800}
-.rtt.act{font-weight:600;color:var(--blueText)}
+.rtt b{font-weight:900}
+.rtt.act{font-weight:700;color:var(--blueText)}
 .rts{font-size:14px;line-height:1.35;color:var(--sub)}
 .rtn{font-size:13.5px;line-height:1.35;font-weight:500;color:var(--sub)}
+.rtn.ok{color:var(--ok)}
 .badge{flex:0 0 auto;padding:4px 9px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
 .badge.ok{background:var(--okBg);color:var(--ok)}
 .badge.warn{background:var(--warnBg);color:var(--warn)}
 .badge.role{background:var(--roleBg);color:var(--roleFg)}
-.val{flex:0 0 auto;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:14px;font-weight:500;color:var(--sub)}
-.val.strong{font-size:15px;font-weight:650;color:var(--ink)}
+.val{flex:0 0 auto;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:14px;color:var(--sub)}
+.val.strong{font-size:15px;font-weight:700;color:var(--ink)}
 .row .chev{width:18px;height:18px;margin-left:-6px;stroke-width:2;color:var(--sub)}
 .sw{position:relative;flex:0 0 auto;width:52px;height:32px;border-radius:16px;border:2px solid var(--outline);transition:background .15s,border-color .15s}
 .sw i{position:absolute;top:6px;left:6px;width:16px;height:16px;border-radius:50%;background:var(--outline);transition:all .15s}
-.sw.on{background:var(--blue);border-color:var(--blue)}
-.sw.on i{top:2px;left:22px;width:24px;height:24px;background:var(--onBlue)}
-.row.seg{flex-direction:column;align-items:stretch;gap:14px}
-.seg-top{display:flex;align-items:center;gap:14px}
+.sw.on{background:var(--prim);border-color:var(--prim)}
+.sw.on i{top:2px;left:22px;width:24px;height:24px;background:var(--onPrim)}
 .segc{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--bg);border:1px solid var(--line2)}
-.segc button{flex:1 1 0;height:44px;border:0;border-radius:999px;background:transparent;color:var(--ink);font-size:15px;font-weight:600;
-  transition:background .15s,color .15s}
-.segc button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.segc button{flex:1 1 0;min-width:0;height:44px;padding:0 4px;border:0;border-radius:999px;background:transparent;color:var(--ink);font-size:14px;font-weight:500;
+  white-space:nowrap;transition:background .15s,color .15s}
+.segc button[aria-pressed="true"]{background:var(--prim);color:var(--onPrim);font-weight:700}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.acts button{height:44px;padding:0 16px;border-radius:22px;border:1px solid var(--line2);background:var(--bg);color:var(--ink);font-size:14px;font-weight:700}
 .nores{padding:32px 8px 4px;text-align:center}
 .nores b{display:block;font-size:19px;line-height:1.3}
 .nores span{display:block;margin-top:8px;font-size:15px;line-height:1.45;color:var(--sub)}
-.foot{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+.foot{display:flex;flex-direction:column;align-items:center;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
 .foot span{font-size:14px;color:var(--sub)}
-.toast{position:absolute;left:16px;right:16px;bottom:24px;padding:14px 16px;border-radius:14px;background:var(--inv);color:var(--onInv);
-  font-size:15px;font-weight:500;line-height:1.35;box-shadow:0 8px 24px rgba(0,0,0,.22);opacity:0;transform:translateY(8px);
-  transition:opacity .18s,transform .18s;pointer-events:none}
-.toast.show{opacity:1;transform:none}
-.row:active,.wr:active,.wd:active,.tile:active,.recent:active{opacity:.7}
+.toast{position:absolute;left:16px;right:16px;bottom:24px;display:flex;align-items:center;gap:12px;min-height:52px;padding:8px 8px 8px 16px;border-radius:14px;
+  background:var(--inv);color:var(--onInv);font-size:15px;line-height:1.35;box-shadow:0 8px 24px rgba(0,0,0,.22);
+  opacity:0;transform:translateY(8px);transition:opacity .18s,transform .18s;pointer-events:none}
+.toast.show{opacity:1;transform:none;pointer-events:auto}
+.toast span{flex:1}
+.toast button{flex:0 0 auto;height:40px;padding:0 14px;border:0;border-radius:20px;background:transparent;color:var(--onInv);font-size:15px;font-weight:700}
+.toast button[hidden]{display:none}
+.row:active,.wr:active,.tile:active,.recent:active,.acts button:active{opacity:.7}
 @media (prefers-reduced-motion:reduce){.phone,.phone *{transition:none!important}}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <p class="k">PLATATA · DESIGN V1 · FOR DISCUSSION</p>
+    <p class="k">PLATATA · DESIGN V2 · FOR DISCUSSION</p>
     <h1>Workspace Search</h1>
-    <p>One box on the Workspace that finds <b>settings, menu, clients, team, sales and suppliers</b> as you type, grouped by kind,
-      and lets you change a setting right in the results. <b>Every phone below is live:</b> type, tap the chips, flip the switches.</p>
-    <p>Built on the Workspace screen and the Burger House demo data in this repo. Setting names, taxes and printers are
-      placeholders until we map them to the app's real settings.</p>
+    <p>A search box at the top of <b>My business</b> that finds settings, the menu, clients, the team, connections, sales and invoices as
+      you type, grouped by kind, and lets you change a setting right in the results. <b>Every phone below is live:</b> type, tap the chips,
+      flip the switches.</p>
+    <p>Built against the app's code on <code>claude/payroll-us</code> (the newest line: <code>sim/usa-canada</code> plus payroll).
+      The My business panel, the Settings page, Connections, employee phones and every setting name are the real ones.
+      The business is the demo's Burger House in Colombia.</p>
   </header>
 
   <section class="band">
@@ -213,36 +225,57 @@ section.rules code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-
   </section>
 
   <section class="band">
-    <h2>Items, people and sales in the same box</h2>
+    <h2>Connections, people, the menu and sales in the same box</h2>
     <div class="boards" id="band2"></div>
   </section>
 
-  <section class="rules">
+  <section class="doc">
     <h2>How search decides</h2>
-    <p>The rules the prototype above runs on. They're simple on purpose, so they're easy to build and easy to predict.</p>
+    <p>The rules the phones above run on. Simple on purpose, so they're easy to build and easy to predict.</p>
     <ol>
-      <li><b>Every word you type must match the start of a word.</b> Case and accents don't matter: <code>andres</code> finds Andrés,
-        <code>ham pol</code> finds Hamburguesa de Pollo. With 3+ letters it also matches inside a word.</li>
-      <li><b>More than names are searched.</b> Each setting has aliases (<code>dark mode</code> → Theme, <code>receipt printer</code> →
-        Registers &amp; Printers, the Spanish and Portuguese names). Records match on secondary fields: a client's phone, an order number,
-        the employee, client and items on a sale, the options inside a modifier group.</li>
+      <li><b>Every word typed must match the start of a word.</b> Case and accents don't matter: <code>andres</code> finds Andrés,
+        <code>ham pol</code> finds Hamburguesa de Pollo. With 3+ letters it also matches inside a word. Fold text with the app's existing
+        <code>foldForSearch</code> (<code>utils/TextFold.kt</code>).</li>
+      <li><b>More than names are searched.</b> Each setting has aliases in English, Spanish, French and Portuguese, plus the words people
+        actually use: <code>modifiers</code> → Add-ons, <code>dark mode</code> → Appearance, <code>receipt printer</code> → Printers and other
+        connections. Records match on secondary fields: a client's phone, a sale number, the employee, client and dishes on a sale,
+        the options inside an add-on, the employee behind a connected phone.</li>
       <li><b>Scores.</b> Exact name 100 · name starts with it 92 · words found 84 down to 76 (earlier is better) · alias 6 less than the same
-        on the name · keyword 55 · secondary field 45. Sales count ×0.85, suppliers ×0.9, reports ×0.8 so they never bury settings or people.
-        Frequently used things get up to +2.5.</li>
-      <li><b>Best match only when there's a clear winner:</b> the top result scores 85 or more and leads the next one by 6 or more.
-        Two clients called Andrés tie, so nothing is picked for you.</li>
-      <li><b>Sections.</b> Create actions come first (at most 2). Then sections by their best score, in steps of 10; ties use one fixed order:
-        taxes, payment methods, printers, modifier groups, settings, items, categories, combos, clients, team, sales, suppliers, reports.
-        Short configured lists (taxes, payment methods, printers) keep their own order. In All, 3 rows per section and "See all N".</li>
-      <li><b>Chips are scopes.</b> With a query they show only the kinds that have results, with counts. Tapping one shows everything of
-        that kind, with no 3-row cap.</li>
-      <li><b>Settings act in place.</b> Switches and choices change the setting from the result row. Every setting shows its path
-        (Workspace › Tax) so people learn where it lives, and "Browse all settings" is always one tap away.</li>
-      <li><b>Never a dead end.</b> With no results: the closest matches using the first 3 letters of each word, "New item …" with what
-        was typed, and the way back to browsing.</li>
-      <li><b>Speed (proposal).</b> Settings, menu, clients and team live on the device and update on every keystroke. Sales search the
-        server about 250 ms after typing stops, showing today's sales from the device first.</li>
+        on the name · keyword 55 · secondary field 45. Sales ×0.85, connections ×0.85 and invoices ×0.9, so they never bury settings or
+        people. Frequently used things get up to +2.5.</li>
+      <li><b>Best match only when there's a clear winner:</b> the top result scores 85 or more and leads the next by 6 or more. Two people
+        called Andrés tie, so nothing is picked for you. An employee as Best match shows their phone connection and its next step.</li>
+      <li><b>Sections.</b> Create actions first (at most 2). When the Best match is a page, what's inside it comes next (Taxes → each tax,
+        Connections → each device). Then sections by best score, in steps of 10; ties use one fixed order: taxes, payment methods,
+        connections, printers and screens, add-ons, settings, my business, menu, categories, combos, clients, team, sales, invoices.
+        Short configured lists keep their own order, and problems ("Not connected") go first. In All, 3 rows per section and "See all N".</li>
+      <li><b>Settings act in place, with the same rules as their screen.</b> A switch in a result is the same switch: in Colombia turning on
+        IVA turns off Impoconsumo (with Undo), and Tables can't be on with For Here. Every setting shows its path
+        (Settings › Getting paid) so people learn where it lives.</li>
+      <li><b>Only what this person may open.</b> Settings, Connections and Invoices are owner-only today, so they never appear for a
+        staff PIN session or on an employee's phone.</li>
+      <li><b>Never a dead end.</b> No results: the closest matches using the first 3 letters of each word, "New dish …" with what was
+        typed, and a way into Settings.</li>
+      <li><b>Speed (proposal).</b> Settings, menu, clients, team and connections are on the device and update on every keystroke.
+        Sales older than today search the database about 250 ms after typing stops.</li>
     </ol>
+  </section>
+
+  <section class="doc">
+    <h2>What each kind matches, today and with this</h2>
+    <p>From the current list searches in the code. Global search should use one matcher so these stop drifting apart.</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Kind</th><th>Today, in its own screen</th><th>In this search</th></tr></thead>
+      <tbody>
+        <tr><td>Settings</td><td>No search anywhere.</td><td>Every setting and record on the Settings page, with its path and aliases.</td></tr>
+        <tr><td>Menu</td><td>Name or barcode, <code>contains</code>, no accent folding (<code>ItemsListRules.search</code>).</td><td>Dish name, category, size names, barcode; add-ons by their options.</td></tr>
+        <tr><td>Clients</td><td>First name, last name, WhatsApp and notes checked one by one, so "ana perez" finds nothing.</td><td>Full name, phone and WhatsApp, accent-insensitive.</td></tr>
+        <tr><td>Team</td><td>First name and job title only.</td><td>Full name, job title and phone, showing the phone connection ("On their phone", "Invited").</td></tr>
+        <tr><td>Connections</td><td>No search.</td><td>Tablets, employee phones, printers and kitchen screens, by name or by the employee behind the phone.</td></tr>
+        <tr><td>Sales</td><td>Employee, client, dishes, raw payment key, total, number, note, status enum.</td><td>The same, with the labels people see ("Card", "Part refund") instead of stored keys.</td></tr>
+        <tr><td>Invoices</td><td>Supplier name (and phone in By supplier).</td><td>Supplier name and phone.</td></tr>
+      </tbody>
+    </table></div>
   </section>
 </div>
 
@@ -250,59 +283,65 @@ section.rules code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-
 (function () {
 'use strict';
 
-/* ───────── icons (24×24, stroke) ───────── */
 var IC = {
   search: 'M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13zM15.5 15.5L20 20',
-  back: 'M15 5l-7 7 7 7', x: 'M6 6l12 12M18 6L6 18', chev: 'M9 6l6 6-6 6',
+  back: 'M15 5l-7 7 7 7', x: 'M6 6l12 12M18 6L6 18', chev: 'M9 6l6 6-6 6', down: 'M7 10l5 5 5-5',
   clock: 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17zM12 7.5V12l3 2',
-  sun: 'M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8zM12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4',
-  menu: 'M6 3v8a2 2 0 0 0 4 0V3M8 11v10M17 3c-1.4 1.6-2 3.4-2 5.5 0 1.6.6 2.5 2 2.5v10',
-  client: 'M12 4.6a3.4 3.4 0 1 0 0 6.8a3.4 3.4 0 1 0 0-6.8zM5.5 20a6.5 6.5 0 0 1 13 0',
-  team: 'M9 5.5a3 3 0 1 0 0 6a3 3 0 1 0 0-6zM3.5 19a5.5 5.5 0 0 1 11 0M16.5 5.6a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM15 13.6a4.6 4.6 0 0 1 5.5 4.5',
-  camera: 'M4 7.5h3l1.5-2h7L17 7.5h3v11H4zM12 9.8a3.2 3.2 0 1 0 0 6.4a3.2 3.2 0 1 0 0-6.4z',
+  restaurant: 'M6 3v8a2 2 0 0 0 4 0V3M8 11v10M17 3c-1.4 1.6-2 3.4-2 5.5 0 1.6.6 2.5 2 2.5v10',
+  cart: 'M2.5 3.5h2.5l2.2 11h10.3l2-7.5H6.2M9 17.4a1.6 1.6 0 1 0 0 3.2a1.6 1.6 0 1 0 0-3.2zM17 17.4a1.6 1.6 0 1 0 0 3.2a1.6 1.6 0 1 0 0-3.2z',
+  person: 'M12 4.6a3.4 3.4 0 1 0 0 6.8a3.4 3.4 0 1 0 0-6.8zM5.5 20a6.5 6.5 0 0 1 13 0',
+  group: 'M9 5.5a3 3 0 1 0 0 6a3 3 0 1 0 0-6zM3.5 19a5.5 5.5 0 0 1 11 0M16.5 5.6a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM15 13.6a4.6 4.6 0 0 1 5.5 4.5',
+  receiptLong: 'M6 3.5h12v17l-2-1.4-2 1.4-2-1.4-2 1.4-2-1.4-2 1.4zM9 8h6M9 11.5h6M9 15h4',
+  settings: 'M12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6zM12 2.8l1.6 2.3 2.7-.6.6 2.7 2.4 1.4-1.1 2.5 1.1 2.5-2.4 1.4-.6 2.7-2.7-.6L12 21.2l-1.6-2.3-2.7.6-.6-2.7-2.4-1.4 1.1-2.5-1.1-2.5 2.4-1.4.6-2.7 2.7.6z',
   tax: 'M6 18.5L18 5.5M8 5.8a2.2 2.2 0 1 0 0 4.4a2.2 2.2 0 1 0 0-4.4zM16 13.8a2.2 2.2 0 1 0 0 4.4a2.2 2.2 0 1 0 0-4.4z',
-  pay: 'M11.5 3.5H20v8.5L11.5 20.5 3.5 12zM16 6.7a1.3 1.3 0 1 0 0 2.6a1.3 1.3 0 1 0 0-2.6z',
-  grid: 'M3.5 3.5h7v7h-7zM13.5 3.5h7v7h-7zM3.5 13.5h7v7h-7zM13.5 13.5h7v7h-7z',
-  mods: 'M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4',
+  pay: 'M3 6h18v12H3zM3 10h18M6.5 14.5h4',
+  percent: 'M11.5 3.5H20v8.5L11.5 20.5 3.5 12zM16 6.7a1.3 1.3 0 1 0 0 2.6a1.3 1.3 0 1 0 0-2.6z',
+  receipt: 'M5.5 3.5h13v17l-2.2-1.6-2.1 1.6-2.2-1.6-2.2 1.6-2.1-1.6-2.2 1.6zM9 8h6M9 12h6',
+  info: 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17zM12 11v5M12 8v.01',
+  dining: 'M4 13h16M6 13a6 6 0 0 1 12 0M12 7V5.5M3.5 17h17',
+  devices: 'M3.5 5h12v9h-12zM7 17.5h5M9.5 14v3.5M17 9h3.5v10.5H17z',
+  printer: 'M7 8V3.5h10V8M7 17H4.5V10a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7H17M7 14h10v6.5H7z',
+  screen: 'M3.5 5h17v11h-17zM8.5 20h7M12 16v4',
+  tablet: 'M6 3h12a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM11 18h2',
+  phone: 'M8 2.5h8a1 1 0 0 1 1 1v17a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1v-17a1 1 0 0 1 1-1zM11 18.5h2',
+  shield: 'M12 3.5l7 3v5.5c0 4.2-3 7.4-7 8.5-4-1.1-7-4.3-7-8.5V6.5z',
+  cloud: 'M7 18.5a4 4 0 0 1-.6-8 5.5 5.5 0 0 1 10.7 1.2A3.5 3.5 0 0 1 17 18.5z',
+  bell: 'M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0',
+  globe: 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17zM3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5z',
+  moon: 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',
+  account: 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17zM12 7.4a3 3 0 1 0 0 6a3 3 0 1 0 0-6zM6.6 17.8a6 6 0 0 1 10.8 0',
+  chat: 'M4 5h16v11H9l-5 4z',
+  addon: 'M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4',
   folder: 'M3.5 6.5h6l2 2h9v10h-17z',
   combo: 'M4 9h16v4H4zM5.5 13v7h13v-7M12 9v11M12 9c-1.6-3.2-5.5-3.6-5.5-1.4C6.5 9 10 9 12 9zM12 9c1.6-3.2 5.5-3.6 5.5-1.4C17.5 9 14 9 12 9z',
-  moon: 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',
-  globe: 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17zM3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5z',
-  receipt: 'M5.5 3.5h13v17l-2.2-1.6-2.1 1.6-2.2-1.6-2.2 1.6-2.1-1.6-2.2 1.6zM9 8h6M9 12h6',
-  star: 'M12 3.8l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.7-5 2.7 1-5.6-4.1-4 5.6-.8z',
-  share: 'M17 3.1a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM6.5 9.6a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM17 16.1a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM8.7 10.8l6.1-3.6M8.7 13.2l6.1 3.6',
-  store: 'M4 10v10h16V10M3 10l1.8-5.5h14.4L21 10zM9.5 20v-5h5v5',
-  shield: 'M12 3.5l7 3v5.5c0 4.2-3 7.4-7 8.5-4-1.1-7-4.3-7-8.5V6.5z',
-  flame: 'M12 3c1 3 4.5 4.5 4.5 9a4.5 4.5 0 0 1-9 0c0-2 1-3.5 2-4.5.3 1.8 1.2 2.6 2.2 2.6C11 7.8 11 5.2 12 3z',
-  printer: 'M7 8V3.5h10V8M7 17H4.5V10a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7H17M7 14h10v6.5H7z',
-  drawer: 'M3.5 10h17v9.5h-17zM6 10V5.5h12V10M9 14.5h6',
-  bag: 'M5 8h14l-1 12H6zM9 8V6.5a3 3 0 0 1 6 0V8',
   cash: 'M3 7h18v10H3zM12 9.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5z',
-  card: 'M3 6h18v12H3zM3 10h18M6.5 14.5h4',
-  transfer: 'M4 9h14l-3.5-3.5M20 15H6l3.5 3.5',
   qr: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 20h1M20 14v1',
-  chart: 'M4 20h16M7 16v-5M12 16V6M17 16v-8',
-  truck: 'M2.5 7.5h10v9h-10zM12.5 11h4l3 3v2.5h-7zM6 16.4a1.6 1.6 0 1 0 0 3.2a1.6 1.6 0 1 0 0-3.2zM16.5 16.4a1.6 1.6 0 1 0 0 3.2a1.6 1.6 0 1 0 0-3.2z',
+  gift: 'M4 9h16v4H4zM5.5 13v7h13v-7M12 9v11M9 9a2 2 0 1 1 3-2.5A2 2 0 1 1 15 9',
+  transfer: 'M4 9h14l-3.5-3.5M20 15H6l3.5 3.5',
+  drawer: 'M3.5 10h17v9.5h-17zM6 10V5.5h12V10M9 14.5h6',
+  lock: 'M6 11h12v9.5H6zM8.5 11V8a3.5 3.5 0 0 1 7 0v3',
+  key: 'M8 10.5a3.5 3.5 0 1 0 0 7a3.5 3.5 0 1 0 0-7zM10.5 12.5L20 4.5M17 7l2 2M14.5 9.2l1.6 1.6',
   plus: 'M12 5v14M5 12h14',
-  doc: 'M5.5 3.5h13v17l-2.2-1.6-2.1 1.6-2.2-1.6-2.2 1.6-2.1-1.6-2.2 1.6zM9 8h6M9 12h6'
+  pos: 'M4 4h16v10H4zM8 18h8M12 14v4'
 };
 function svg(d, cls) { return '<svg viewBox="0 0 24 24" aria-hidden="true"' + (cls ? ' class="' + cls + '"' : '') + '><path d="' + d + '"/></svg>'; }
 function esc(s) { return String(s).replace(/[&<>"']/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]; }); }
+var CO_FLAG = '<span class="flag" aria-hidden="true"><svg viewBox="0 0 26 26"><rect width="26" height="13" fill="#FCD116"/><rect y="13" width="26" height="6.5" fill="#003893"/><rect y="19.5" width="26" height="6.5" fill="#CE1126"/></svg></span>';
 
-/* ───────── what search knows about ───────── */
-var SEC_ORDER = ['create', 'taxes', 'payments', 'printers', 'modifiers', 'settings', 'items', 'categories', 'combos', 'clients', 'team', 'sales', 'suppliers', 'reports'];
-var SEC_LABEL = { create: 'CREATE', taxes: 'YOUR TAXES', payments: 'PAYMENT METHODS', printers: 'PRINTERS', modifiers: 'MODIFIER GROUPS',
-  settings: 'SETTINGS', items: 'ITEMS', categories: 'CATEGORIES', combos: 'COMBOS', clients: 'CLIENTS', team: 'TEAM',
-  sales: 'SALES', suppliers: 'SUPPLIERS', reports: 'REPORTS' };
-var SEC_SCOPE = { taxes: 'settings', payments: 'settings', printers: 'settings', settings: 'settings', modifiers: 'menu', items: 'menu',
-  categories: 'menu', combos: 'menu', clients: 'clients', team: 'team', sales: 'sales', suppliers: 'suppliers', reports: 'reports' };
-var NATURAL = { taxes: 1, payments: 1, printers: 1 };
-var MULT = { sales: 0.85, reports: 0.8, suppliers: 0.9 };
-var CHIPS = [['all', 'All'], ['settings', 'Settings'], ['menu', 'Menu'], ['clients', 'Clients'], ['team', 'Team'], ['sales', 'Sales'], ['suppliers', 'Suppliers'], ['reports', 'Reports']];
-var PLACEHOLDER = { all: 'Search settings, menu, clients…', settings: 'Search any setting…', menu: 'Items, categories, modifiers…',
-  clients: 'Name or phone…', team: 'Name or job…', sales: 'Order #, client, item…', suppliers: 'Supplier name…', reports: 'Search reports…' };
-var THEMES = [['light', 'Light'], ['dark', 'Dark'], ['auto', 'Auto']];
-var THEME_SUM = { light: 'Always light', dark: 'Always dark', auto: 'Follows your phone' };
+var SEC_ORDER = ['create', 'taxes', 'payments', 'connections', 'printers', 'addons', 'settings', 'areas', 'items', 'categories', 'combos', 'clients', 'team', 'sales', 'suppliers'];
+var SEC_LABEL = { create: 'CREATE', taxes: 'TAXES', payments: 'PAYMENT METHODS', connections: 'CONNECTIONS', printers: 'PRINTERS AND SCREENS',
+  addons: 'ADD-ONS', settings: 'SETTINGS', areas: 'MY BUSINESS', items: 'MENU', categories: 'CATEGORIES', combos: 'COMBOS',
+  clients: 'CLIENTS', team: 'TEAM', sales: 'SALES', suppliers: 'INVOICES' };
+var SEC_SCOPE = { taxes: 'settings', payments: 'settings', connections: 'settings', printers: 'settings', settings: 'settings', areas: 'settings',
+  addons: 'menu', items: 'menu', categories: 'menu', combos: 'menu', clients: 'clients', team: 'team', sales: 'sales', suppliers: 'invoices' };
+var NATURAL = { taxes: 1, payments: 1, connections: 1, printers: 1 };
+var MULT = { sales: 0.85, connections: 0.85, suppliers: 0.9 };
+var NO_TOP = { action: 1, device: 1 };
+/* The page each kind of record lives in: when that page is the Best match, its records come right after it. */
+var PARENT = { taxes: 'st-tax', payments: 'st-pay', connections: 'st-conn', printers: 'st-prn', addons: 'mn-addons', combos: 'mn-combos' };
+var CHIPS = [['all', 'All'], ['settings', 'Settings'], ['menu', 'Menu'], ['clients', 'Clients'], ['team', 'Team'], ['sales', 'Sales'], ['invoices', 'Invoices']];
+var PLACEHOLDER = { all: 'Search settings, menu, clients…', settings: 'Search any setting…', menu: 'Dishes, categories, add-ons…',
+  clients: 'By name, phone…', team: 'By name, job title…', sales: 'By items, clients, employees…', invoices: 'By name or phone…' };
 
 function norm(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
 function money(n) { return '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
@@ -317,6 +356,7 @@ var INDEX = [], BY_ID = {};
 function add(o) {
   o.ord = INDEX.length;
   o.scope = o.scope || SEC_SCOPE[o.sec];
+  o.parent = o.parent || PARENT[o.sec] || '';
   o.nTitle = norm(o.title);
   o.nAlias = (o.alias || []).map(function (a) { return { a: a, n: norm(a) }; });
   o.bag = norm([o.title].concat(o.alias || []).concat([o.kw || '']).join(' ')).split(/[^a-z0-9]+/).filter(Boolean);
@@ -324,54 +364,96 @@ function add(o) {
   INDEX.push(o); BY_ID[o.id] = o;
 }
 
+/* ── the Settings page (SettingsHubRules.kt) and what is inside each screen ── */
+var P_PAID = 'Settings › Getting paid', P_BIZ = 'Settings › Your business', P_PHONE = 'Settings › This phone', P_ACCT = 'Settings › Account';
 [
-  { id: 'p-tax', kind: 'page', sec: 'settings', icon: 'tax', title: 'Tax', path: 'Workspace › Tax', sum: '2 of 3 taxes on · prices include tax', val: '2 on', kw: 'taxes impuesto impuestos iva vat impoconsumo', pop: 5 },
-  { id: 'p-pay', kind: 'page', sec: 'settings', icon: 'pay', title: 'Payment Method', path: 'Workspace › Payment Method', sum: 'Cash, Card and Transfer on · QR off', val: '3 on', alias: ['Payment methods', 'Métodos de pago'], kw: 'payments pay pago cash card transfer qr efectivo tarjeta', pop: 4 },
-  { id: 'p-rp', kind: 'page', sec: 'settings', icon: 'grid', title: 'Registers & Printers', path: 'Workspace › Registers & Printers', sum: '5 active · the Barra printer is offline', val: '5 active', alias: ['Printers', 'Receipt printer', 'Ticket printer', 'Kitchen printer', 'Cash drawer', 'Impresora'], kw: 'register registers terminal terminals device devices bluetooth epson caja', pop: 4 },
-  { id: 'p-mod', kind: 'page', sec: 'settings', icon: 'mods', title: 'Modifiers', path: 'Menu › Modifiers', sum: '6 groups · on 41 items', val: '6 groups', alias: ['Modificadores', 'Extras', 'Add-ons'], kw: 'options toppings adiciones salsas sauces', pop: 4 },
-  { id: 'p-cat', kind: 'page', sec: 'settings', icon: 'folder', title: 'Categories', path: 'Menu › Categories', sum: '7 categories · 70 items', val: '7', alias: ['Categorías'], pop: 2 },
-  { id: 'p-combo', kind: 'page', sec: 'settings', icon: 'combo', title: 'Combos', path: 'Menu › Combos', sum: '1 live · Combo Burger House −15%', val: '1 live', kw: 'bundle deal promo promocion oferta', pop: 2 },
-  { id: 's-theme', kind: 'seg', sec: 'settings', icon: 'moon', title: 'Theme', path: 'Workspace › Appearance', alias: ['Dark mode', 'Light mode', 'Night mode', 'Appearance', 'Tema', 'Modo oscuro'], kw: 'colors display screen', pop: 3 },
-  { id: 'p-lang', kind: 'page', sec: 'settings', icon: 'globe', title: 'Language', path: 'Workspace › Appearance', val: 'English', alias: ['Idioma'], kw: 'english espanol spanish portugues portuguese', pop: 2 },
-  { id: 'p-rec', kind: 'page', sec: 'settings', icon: 'receipt', title: 'Receipt', path: 'Registers & Printers › Receipt', sum: 'Sent by WhatsApp · printed when asked', val: 'WhatsApp', alias: ['Recibo', 'Ticket'], kw: 'whatsapp print printer logo footer factura', pop: 3 },
-  { id: 's-pts', kind: 'switch', sec: 'settings', icon: 'star', title: 'Points', path: 'Clients › Points', sum: 'Clients earn points on every sale', on: true, alias: ['Loyalty', 'Puntos', 'Rewards'], kw: 'fidelidad', pop: 2 },
-  { id: 'p-acct', kind: 'page', sec: 'settings', icon: 'share', title: 'Share with accountant', path: 'Workspace', sum: 'Monthly export in Excel or PDF', alias: ['Contador', 'Accountant'], kw: 'export excel pdf dian', pop: 2 },
-  { id: 'p-biz', kind: 'page', sec: 'settings', icon: 'store', title: 'Businesses', path: 'Workspace', val: 'Burger House', alias: ['Negocios', 'Switch business'], kw: 'business store branch sede tienda local', pop: 1 },
-  { id: 'p-roles', kind: 'page', sec: 'settings', icon: 'shield', title: 'Roles & permissions', path: 'Team › Roles', val: '4 roles', alias: ['Permissions', 'Permisos'], kw: 'owner boss patron cashier role access pin', pop: 1 },
-  { id: 'p-kds', kind: 'page', sec: 'settings', icon: 'flame', title: 'Kitchen display', path: 'Registers & Printers › Kitchen', sum: 'Always dark, easy to read across the kitchen', val: '2 screens', kw: 'kds screen cocina dark comandas', pop: 1 },
-  { id: 't-incl', kind: 'switch', sec: 'settings', icon: 'tax', title: 'Prices include tax', path: 'Workspace › Tax', on: true, kw: 'iva impuesto incluido included', pop: 2 },
-  { id: 't-rec', kind: 'switch', sec: 'settings', icon: 'receipt', title: 'Show taxes on the receipt', path: 'Workspace › Tax', on: true, kw: 'iva recibo', pop: 1 },
-  { id: 'm-ask', kind: 'switch', sec: 'settings', icon: 'mods', title: 'Ask for modifiers when adding an item', path: 'Menu › Modifiers', on: true, pop: 1 },
-  { id: 'm-kit', kind: 'switch', sec: 'settings', icon: 'printer', title: 'Print modifiers on kitchen tickets', path: 'Registers & Printers › Kitchen', on: true, kw: 'comanda', pop: 1 },
-  { id: 'm-rec', kind: 'switch', sec: 'settings', icon: 'receipt', title: 'Show modifier prices on the receipt', path: 'Registers & Printers › Receipt', on: false, pop: 1 },
-  { id: 'r-auto', kind: 'switch', sec: 'settings', icon: 'printer', title: 'Print a receipt after every sale', path: 'Registers & Printers › Receipt', on: false, kw: 'printer automatic auto', pop: 1 },
-  { id: 'r-drw', kind: 'switch', sec: 'settings', icon: 'drawer', title: 'Open the cash drawer on cash sales', path: 'Registers & Printers', on: true, kw: 'cajon printer register', pop: 1 },
+  { id: 'st-pay', kind: 'page', sec: 'settings', icon: 'pay', title: 'Payment methods', path: P_PAID, sum: 'Cash, Nequi and On the house on · QR and Card off', val: '3 on', alias: ['Payment method', 'Métodos de pago', 'Pagos'], kw: 'payments pay cash card qr efectivo tarjeta nequi wompi', pop: 4 },
+  { id: 'st-tax', kind: 'page', sec: 'settings', icon: 'tax', title: 'Taxes', path: P_PAID, sum: '1 active · Impoconsumo 8%', val: '1 active', alias: ['Tax', 'Impuestos', 'Impuesto'], kw: 'iva impoconsumo vat', pop: 5 },
+  { id: 'st-disc', kind: 'page', sec: 'settings', icon: 'percent', title: 'Discounts and charges', path: P_PAID, sum: 'No discounts · Service charge paused', alias: ['Discounts', 'Extra charges', 'Descuentos', 'Fees'], kw: 'discount charge fee propina', pop: 3 },
+  { id: 'st-rec', kind: 'page', sec: 'settings', icon: 'receipt', title: 'Receipts', path: P_PAID, sum: 'Detailed · numbered automatically', val: 'Detailed', alias: ['Receipt', 'Recibo', 'Recibos', 'Ticket'], kw: 'message number whatsapp', pop: 4 },
+  { id: 'st-biz', kind: 'page', sec: 'settings', icon: 'info', title: 'Business info', path: P_BIZ, sum: 'Name, phone, website and address', alias: ['Address', 'Business name', 'Dirección', 'Website'], kw: 'phone nit name', pop: 2 },
+  { id: 'st-din', kind: 'page', sec: 'settings', icon: 'dining', title: 'Dining options', path: P_BIZ, sum: 'For here, to go, delivery and tables', val: '3 on', alias: ['Para llevar', 'Domicilio', 'Mesas'], kw: 'dine takeout delivery tables here go', pop: 3 },
+  { id: 'st-conn', kind: 'page', sec: 'settings', icon: 'devices', title: 'Connections', path: P_BIZ, sum: '4 of 4 in use · 1 device is not connected', val: '4 of 4', alias: ['Conexiones', 'Registers', 'Devices', 'Tablets', 'Employee phones', 'Registers & Printers'], kw: 'connection connect register tablet device phone code pair', pop: 4 },
+  { id: 'st-prn', kind: 'page', sec: 'settings', icon: 'printer', title: 'Printers and other connections', path: 'Settings › Connections', sum: '2 printers · 1 kitchen screen · they never use a connection', alias: ['Printers', 'Receipt printer', 'Kitchen printer', 'Kitchen screen', 'Impresora', 'Impresoras', 'KDS'], kw: 'print printer screen kitchen bluetooth', pop: 3 },
+  { id: 'st-sec', kind: 'page', sec: 'settings', icon: 'shield', title: 'Security', path: P_PHONE, sum: 'Asks for your fingerprint before deleting', val: 'On', alias: ['Seguridad', 'Fingerprint', 'Huella'], kw: 'security protect lock pin', pop: 2 },
+  { id: 'st-bak', kind: 'page', sec: 'settings', icon: 'cloud', title: 'Backup', path: P_PHONE, sum: 'Last copy: today 9:02', val: 'Today 9:02', alias: ['Back up', 'Google Drive', 'Restore', 'Copia de seguridad'], kw: 'backup drive restore', pop: 2 },
+  { id: 'st-not', kind: 'page', sec: 'settings', icon: 'bell', title: 'Notifications', path: P_PHONE, sum: 'Orders, payments and your register', alias: ['Notificaciones', 'Alerts'], kw: 'notify alert push', pop: 2 },
+  { id: 'st-lang', kind: 'page', sec: 'settings', icon: 'globe', title: 'Language & appearance', path: P_PHONE, val: 'English · Light', alias: ['Language', 'Idioma', 'Langue', 'Idioma da app'], kw: 'english espanol francais portugues spanish french portuguese', pop: 3 },
+  { id: 'ap-theme', kind: 'seg', sec: 'settings', icon: 'moon', title: 'Appearance', path: 'Settings › Language & appearance', opts: [['light', 'Light'], ['dark', 'Dark']], alias: ['Dark mode', 'Light mode', 'Night mode', 'Theme', 'Tema', 'Modo oscuro'], kw: 'dark light color colors screen', pop: 3 },
+  { id: 'st-acct', kind: 'page', sec: 'settings', icon: 'account', title: 'My Account', path: P_ACCT, val: 'Google account', alias: ['Account', 'Sign out', 'Cuenta'], kw: 'google email logout delete', pop: 1 },
+  { id: 'st-myrep', kind: 'page', sec: 'settings', icon: 'chat', title: 'My reports', path: P_ACCT, sum: 'What you told us and what we answered', alias: ['Report a problem', 'Support', 'Help', 'Ayuda'], kw: 'problem soporte ticket', pop: 1 },
 
-  { id: 'x-ico', kind: 'switch', sec: 'taxes', icon: 'tax', title: 'Impoconsumo 8%', path: 'Applies to 61 items', on: true, kw: 'tax taxes impuesto inc consumo restaurant', pop: 2 },
-  { id: 'x-iva', kind: 'switch', sec: 'taxes', icon: 'tax', title: 'IVA 19%', path: 'Applies to 9 items', on: true, kw: 'tax taxes impuesto vat', pop: 2 },
-  { id: 'x-bag', kind: 'switch', sec: 'taxes', icon: 'bag', title: 'Bag tax $66', path: 'Per plastic bag · not charged', on: false, alias: ['Impuesto a la bolsa'], kw: 'taxes impuesto plastic', pop: 1 },
+  { id: 'rc-style', kind: 'seg', sec: 'settings', icon: 'receipt', title: 'Style', path: 'Settings › Receipts', opts: [['detailed', 'Detailed'], ['compact', 'Compact']], def: 'detailed', alias: ['Receipt style', 'Receipt layout'], kw: 'receipt recibo', pop: 1 },
+  { id: 'rc-num', kind: 'page', sec: 'settings', icon: 'receipt', title: 'Receipt number', path: 'Settings › Receipts', val: 'Next: 1093', alias: ['Order number', 'Numbering', 'Number my receipts automatically'], kw: 'receipt recibo consecutive', pop: 1 },
+  { id: 'rc-phone', kind: 'switch', sec: 'settings', icon: 'receipt', title: 'Phone Number', path: 'Receipts › Show on the receipt', on: true, kw: 'receipt recibo show', pop: 0 },
+  { id: 'rc-addr', kind: 'switch', sec: 'settings', icon: 'receipt', title: 'Store Address', path: 'Receipts › Show on the receipt', on: true, kw: 'receipt recibo show address', pop: 0 },
+  { id: 'rc-web', kind: 'switch', sec: 'settings', icon: 'receipt', title: 'Website URL', path: 'Receipts › Show on the receipt', on: false, kw: 'receipt recibo show web', pop: 0 },
+  { id: 'sc-del', kind: 'switch', sec: 'settings', icon: 'shield', title: 'Delete data', path: 'Security › Protected actions', sum: 'Items, categories, modifiers and options', on: true, kw: 'security fingerprint protect', pop: 0 },
+  { id: 'sc-del2', kind: 'switch', sec: 'settings', icon: 'shield', title: 'Delete employees & clients', path: 'Security › Protected actions', on: true, kw: 'security fingerprint protect', pop: 0 },
+  { id: 'sc-fees', kind: 'switch', sec: 'settings', icon: 'shield', title: 'Removing fees', path: 'Security › Protected actions', on: false, kw: 'security fingerprint protect charge', pop: 0 },
+  { id: 'sc-lock', kind: 'seg', sec: 'settings', icon: 'lock', title: 'Lock the register after', path: 'Settings › Security', opts: [['1', '1 minute'], ['5', '5 minutes'], ['15', '15 minutes'], ['never', 'Never']], def: '5', alias: ['Auto lock', 'Screen lock', 'Bloquear'], kw: 'security timeout pin', pop: 1 },
+  { id: 'sc-pin', kind: 'page', sec: 'settings', icon: 'key', title: 'Refund PIN', path: 'Settings › Security', val: '••••', alias: ['PIN'], kw: 'refund security password', pop: 1 },
+  { id: 'nt-all', kind: 'switch', sec: 'settings', icon: 'bell', title: 'Allow notifications', path: 'Settings › Notifications', on: true, kw: 'notification notifications alert', pop: 1 },
+  { id: 'nt-pay', kind: 'switch', sec: 'settings', icon: 'bell', title: 'Payment problems', path: 'Settings › Notifications', on: true, kw: 'notification notifications alert', pop: 0 },
+  { id: 'nt-reg', kind: 'switch', sec: 'settings', icon: 'bell', title: 'Register still open', path: 'Settings › Notifications', on: true, kw: 'notification notifications alert', pop: 0 },
+  { id: 'nt-other', kind: 'switch', sec: 'settings', icon: 'bell', title: 'A sale on another register', path: 'Settings › Notifications', on: false, kw: 'notification notifications alert', pop: 0 },
+  { id: 'nt-ref', kind: 'switch', sec: 'settings', icon: 'bell', title: 'A refund or a void', path: 'Settings › Notifications', on: false, kw: 'notification notifications alert', pop: 0 },
+  { id: 'nt-day', kind: 'switch', sec: 'settings', icon: 'bell', title: 'Daily sales summary', path: 'Settings › Notifications', on: true, kw: 'notification notifications alert report', pop: 0 },
+  { id: 'nt-kds', kind: 'switch', sec: 'settings', icon: 'bell', title: 'Kitchen and register connection', path: 'Settings › Notifications', on: true, kw: 'notification notifications alert kitchen', pop: 0 },
+  { id: 'dn-here', kind: 'switch', sec: 'settings', icon: 'dining', title: 'For Here', path: 'Settings › Dining options', on: true, rival: 'dn-tab', rivalMode: 'block', kw: 'dining dine', pop: 0 },
+  { id: 'dn-go', kind: 'switch', sec: 'settings', icon: 'dining', title: 'To Go', path: 'Settings › Dining options', on: true, alias: ['Para llevar', 'Takeout'], kw: 'dining', pop: 0 },
+  { id: 'dn-del', kind: 'switch', sec: 'settings', icon: 'dining', title: 'Delivery', path: 'Dining options · Upcharge: $3.000', on: true, alias: ['Domicilio'], kw: 'dining', pop: 0 },
+  { id: 'dn-tab', kind: 'switch', sec: 'settings', icon: 'dining', title: 'Tables', path: 'Dining options · Not configured', on: false, rival: 'dn-here', rivalMode: 'block', alias: ['Mesas'], kw: 'dining table', pop: 0 },
+  { id: 'ds-svc', kind: 'switch', sec: 'settings', icon: 'percent', title: 'Service charge', path: 'Discounts and charges · + 10% · asked at checkout', on: false, alias: ['Propina', 'Servicio', 'Tip'], kw: 'charge fee extra', pop: 1 },
+  { id: 'pr-drw', kind: 'switch', sec: 'settings', icon: 'drawer', title: 'Open the drawer after a cash sale', path: 'Printers › Caja', on: true, alias: ['Cash drawer', 'Cajón'], kw: 'printer drawer', pop: 0 },
 
-  { id: 'y-cash', kind: 'switch', sec: 'payments', icon: 'cash', title: 'Cash', path: 'Payment Method', on: true, alias: ['Efectivo'], kw: 'payment payments pay pago' },
-  { id: 'y-card', kind: 'switch', sec: 'payments', icon: 'card', title: 'Card', path: 'Payment Method', on: true, alias: ['Tarjeta', 'Datáfono'], kw: 'payment payments pay pago credit debit' },
-  { id: 'y-tr', kind: 'switch', sec: 'payments', icon: 'transfer', title: 'Transfer', path: 'Payment Method', on: true, alias: ['Transferencia', 'Nequi', 'Daviplata'], kw: 'payment payments pay pago bank' },
-  { id: 'y-qr', kind: 'switch', sec: 'payments', icon: 'qr', title: 'QR', path: 'Payment Method', on: false, alias: ['Código QR'], kw: 'payment payments pay pago' },
+  { id: 'tx-ico', kind: 'switch', sec: 'taxes', icon: 'tax', title: 'Impoconsumo 8%', path: '8% · included in prices', on: true, rival: 'tx-iva', rivalMode: 'swap', kw: 'tax taxes impuesto', pop: 1 },
+  { id: 'tx-iva', kind: 'switch', sec: 'taxes', icon: 'tax', title: 'IVA 19%', path: '19% · included in prices', on: false, rival: 'tx-ico', rivalMode: 'swap', kw: 'tax taxes impuesto vat', pop: 1 },
 
-  { id: 'pr-1', kind: 'printer', sec: 'printers', icon: 'printer', title: 'Caja principal', path: 'Epson TM-T20III · receipts', badge: 'Connected', tone: 'ok', kw: 'printer printers receipt receipts ticket impresora' },
-  { id: 'pr-2', kind: 'printer', sec: 'printers', icon: 'printer', title: 'Cocina', path: 'Kitchen tickets', badge: 'Connected', tone: 'ok', kw: 'printer printers kitchen comanda impresora ticket' },
-  { id: 'pr-3', kind: 'printer', sec: 'printers', icon: 'printer', title: 'Barra', path: 'Bar · receipts and drink tickets', badge: 'Offline', tone: 'warn', kw: 'printer printers receipt receipts bar drinks bebidas impresora ticket' },
+  { id: 'pm-cash', kind: 'switch', sec: 'payments', icon: 'cash', title: 'Cash', path: 'Payment methods', on: true, alias: ['Efectivo'], kw: 'payment payments pay method' },
+  { id: 'pm-qr', kind: 'switch', sec: 'payments', icon: 'qr', title: 'QR Payment', path: 'Payment methods', on: false, alias: ['QR', 'Código QR', 'Bank QR'], kw: 'payment payments pay method transfer' },
+  { id: 'pm-card', kind: 'switch', sec: 'payments', icon: 'pay', title: 'Card', path: 'Payment methods · with Wompi', on: false, alias: ['Tarjeta', 'Wompi', 'Datáfono'], kw: 'payment payments pay method credit debit' },
+  { id: 'pm-nequi', kind: 'switch', sec: 'payments', icon: 'transfer', title: 'Nequi', path: 'Payment methods · your own', on: true, kw: 'payment payments pay method transfer' },
+  { id: 'pm-comp', kind: 'switch', sec: 'payments', icon: 'gift', title: 'On the house', path: 'Payment methods', on: true, alias: ['Comp', 'Cortesía', 'Free'], kw: 'payment payments pay method' },
 
-  { id: 'a-tax', kind: 'action', sec: 'create', scope: 'settings', title: 'Create new tax', kw: 'taxes impuesto iva add' },
-  { id: 'a-prn', kind: 'action', sec: 'create', scope: 'settings', title: 'Add a printer', kw: 'printers impresora new' },
-  { id: 'a-pay', kind: 'action', sec: 'create', scope: 'settings', title: 'Add a payment method', kw: 'pay payments pago new' },
-  { id: 'a-mod', kind: 'action', sec: 'create', scope: 'menu', title: 'Create modifier group', kw: 'modifiers modificador adiciones add new' },
-  { id: 'a-item', kind: 'action', sec: 'create', scope: 'menu', title: 'New item', kw: 'items product producto plato add create' },
-  { id: 'a-combo', kind: 'action', sec: 'create', scope: 'menu', title: 'New combo', kw: 'combos add create promo' },
-  { id: 'a-cli', kind: 'action', sec: 'create', scope: 'clients', title: 'New client', kw: 'clients cliente customer add create' },
-  { id: 'a-emp', kind: 'action', sec: 'create', scope: 'team', title: 'Add employee', kw: 'employees team empleado staff new create' },
-  { id: 'a-inv', kind: 'action', sec: 'create', scope: 'suppliers', title: 'Add supplier invoice', alias: ['Take a photo, we do the rest'], kw: 'invoice factura supplier proveedor photo' }
+  /* Connections (ConnectionsScreen.kt): counter tablets and employee phones; printers and screens never use a connection */
+  { id: 'cn-me', kind: 'device', sec: 'connections', icon: 'phone', title: 'Your phone', path: 'This phone', badge: 'Included', tone: 'ok', kw: 'connection connections device owner' },
+  { id: 'cn-caja', kind: 'device', sec: 'connections', icon: 'tablet', title: 'Caja 1', path: 'Counter tablet', badge: 'Included', tone: 'ok', kw: 'connection connections device register tablet counter' },
+  { id: 'cn-andres', kind: 'device', sec: 'connections', icon: 'phone', title: 'Andrés', path: 'Employee phone · Andrés Villalba', badge: 'Paid', tone: 'role', kw: 'connection connections device phone employee', extra: [{ t: 'Andrés Villalba', show: 'Employee phone · Andrés Villalba' }] },
+  { id: 'cn-wilmer', kind: 'device', sec: 'connections', icon: 'phone', title: 'Wilmer', path: 'Employee phone · Wilmer Cárdenas', badge: 'Paid', tone: 'role', kw: 'connection connections device phone employee', extra: [{ t: 'Wilmer Cárdenas', show: 'Employee phone · Wilmer Cárdenas' }] },
+  { id: 'cn-luisa', kind: 'device', sec: 'connections', icon: 'phone', warnLead: true, title: 'Luisa', path: 'Employee phone · Luisa Ospina', badge: 'Not connected', tone: 'warn', kw: 'connection connections device phone employee', extra: [{ t: 'Luisa Ospina', show: 'Employee phone · Luisa Ospina' }] },
+  { id: 'pt-caja', kind: 'device', sec: 'printers', icon: 'printer', title: 'Caja', path: 'Receipts for the customer · Printed fine at 9:14', kw: 'printer printers receipt receipts impresora print' },
+  { id: 'pt-cocina', kind: 'device', sec: 'printers', icon: 'printer', title: 'Cocina', path: 'Orders for the kitchen · Not tested yet', kw: 'printer printers kitchen impresora print comanda' },
+  { id: 'pt-kds', kind: 'device', sec: 'printers', icon: 'screen', title: 'Pantalla cocina', path: 'Kitchen screen', badge: 'Connected', tone: 'ok', kw: 'kitchen screen screens kds display cocina' },
+
+  /* My business panel rows (HomeScreen.kt) */
+  { id: 'mn-addons', kind: 'page', sec: 'settings', scope: 'menu', icon: 'addon', title: 'Add-ons', path: 'Menu › My add-ons', sum: '6 add-ons · 5 linked to dishes', val: '6', alias: ['Modifiers', 'Modificadores', 'Extras', 'Adiciones', 'Toppings', 'Options'], kw: 'addon addons add-on', pop: 3 },
+  { id: 'mn-combos', kind: 'page', sec: 'settings', scope: 'menu', icon: 'combo', title: 'Combos', path: 'Menu › Combos', sum: '1 live · Combo Burger House 15% OFF', val: '1 live', alias: ['Combo', 'Promos'], kw: 'bundle deal promo promocion', pop: 2 },
+  { id: 'ws-reg', kind: 'page', sec: 'areas', icon: 'pos', title: 'Register', path: 'My business', val: 'Open', alias: ['Register open', 'Close register', 'Caja', 'Shift'], kw: 'register drawer cierre turno', pop: 2 },
+  { id: 'ws-online', kind: 'switch', sec: 'areas', icon: 'cart', title: 'Sell online', path: 'My business', sum: 'Your online store', on: false, alias: ['Online store', 'Tienda online', 'Online orders'], kw: 'online web store link pickup', pop: 2 },
+  { id: 'ws-menu', kind: 'page', sec: 'areas', icon: 'restaurant', title: 'Menu', path: 'My business', val: '70 items', alias: ['Items', 'Dishes', 'Products', 'Platos', 'Productos'], kw: 'menu catalog', pop: 3 },
+  { id: 'ws-cli', kind: 'page', sec: 'areas', icon: 'person', title: 'Clients', path: 'My business', val: '186', alias: ['Customers', 'Clientes'], kw: 'client customer', pop: 2 },
+  { id: 'ws-inv', kind: 'page', sec: 'areas', icon: 'receiptLong', title: 'Invoices', path: 'My business', val: '4 this month', alias: ['Supplier invoices', 'Suppliers', 'Facturas', 'Proveedores'], kw: 'invoice supplier scan photo', pop: 2 },
+  { id: 'ws-team', kind: 'page', sec: 'areas', icon: 'group', title: 'Team', path: 'My business', val: '6 · 2 on phones', alias: ['Employees', 'Staff', 'Equipo', 'Empleados'], kw: 'team employee', pop: 2 },
+  { id: 'ws-rep', kind: 'page', sec: 'areas', icon: 'receiptLong', title: 'Reports', path: 'My business', val: 'Today', alias: ['Reportes', 'Net sales'], kw: 'report reports analytics', pop: 3 },
+
+  /* Create: each screen's "+ New" or Connect button */
+  { id: 'a-tax', kind: 'action', sec: 'create', scope: 'settings', title: 'New tax', kw: 'tax taxes impuesto iva add create' },
+  { id: 'a-pay', kind: 'action', sec: 'create', scope: 'settings', title: 'Add Payment Method', kw: 'payment payments pay method new nequi' },
+  { id: 'a-conn', kind: 'action', sec: 'create', scope: 'settings', title: 'Connect a tablet or an employee phone', kw: 'connection connections connect tablet register phone pair device' },
+  { id: 'a-more', kind: 'action', sec: 'create', scope: 'settings', title: 'Add a connection', kw: 'connection connections extra buy more' },
+  { id: 'a-prn', kind: 'action', sec: 'create', scope: 'settings', title: 'Connect a printer', kw: 'printer printers impresora receipt' },
+  { id: 'a-kds', kind: 'action', sec: 'create', scope: 'settings', title: 'Connect a kitchen screen', kw: 'kitchen screen kds display' },
+  { id: 'a-disc', kind: 'action', sec: 'create', scope: 'settings', title: 'New discount', kw: 'discount discounts charge descuento' },
+  { id: 'a-addon', kind: 'action', sec: 'create', scope: 'menu', title: 'New add-on', alias: ['New modifier'], kw: 'add-ons addon addons modifier modifiers modificador extras' },
+  { id: 'a-dish', kind: 'action', sec: 'create', scope: 'menu', title: 'New dish', kw: 'item items product dish dishes menu plato add create' },
+  { id: 'a-combo', kind: 'action', sec: 'create', scope: 'menu', title: 'New combo', kw: 'combo combos promo' },
+  { id: 'a-cli', kind: 'action', sec: 'create', scope: 'clients', title: 'New client', kw: 'client clients cliente customer add' },
+  { id: 'a-emp', kind: 'action', sec: 'create', scope: 'team', title: 'Add employee', kw: 'employee employees team empleado staff new' },
+  { id: 'a-inv', kind: 'action', sec: 'create', scope: 'invoices', title: 'Scan an invoice', alias: ['Add supplier invoice'], kw: 'invoice invoices factura supplier photo' }
 ].forEach(add);
 
-/* The demo's restaurant menu (demo/demo.js), 70 items in 7 categories; a third number is "sold today". */
+/* ── the demo restaurant (Burger House) ── */
 var PRICE = {};
 [
   ['ham', 'Hamburguesas', [['Hamburguesa Clásica', 18900, 18], ['Hamburguesa Doble Carne', 27900], ['Hamburguesa BBQ', 23900], ['Hamburguesa con Tocineta', 24900], ['Hamburguesa Criolla', 22900], ['Hamburguesa Ranchera', 25900], ['Hamburguesa Hawaiana', 24900], ['Hamburguesa Mexicana', 26900], ['Hamburguesa de Pollo', 19900, 11], ['Hamburguesa Vegetariana', 21900], ['Hamburguesa Tres Quesos', 26900], ['Hamburguesa Picante', 23900], ['Hamburguesa de la Casa', 29900], ['Mini Hamburguesa', 12900]]],
@@ -384,85 +466,85 @@ var PRICE = {};
 ].forEach(function (c) {
   c[2].forEach(function (it) {
     PRICE[it[0]] = it[1];
-    add({ id: 'i-' + it[0], kind: 'item', sec: 'items', cat: c[0], title: it[0], path: c[1] + (it[2] ? ' · ' + it[2] + ' sold today' : ''), val: money(it[1]), kw: c[1], pop: it[2] ? Math.min(5, it[2] / 5) : 0 });
+    add({ id: 'i-' + it[0], kind: 'item', sec: 'items', cat: c[0], title: it[0], path: c[1] + (it[2] ? ' · ' + it[2] + ' sold today' : ''), val: money(it[1]), kw: c[1] + ' dish', pop: it[2] ? Math.min(5, it[2] / 5) : 0 });
   });
-  add({ id: 'c-' + c[0], kind: 'cat', sec: 'categories', cat: c[0], title: c[1], path: c[2].length + ' items', kw: 'category categoria' });
+  add({ id: 'c-' + c[0], kind: 'cat', sec: 'categories', cat: c[0], title: c[1], path: c[2].length + ' dishes', kw: 'category categoria' });
 });
-add({ id: 'cb-1', kind: 'combo', sec: 'combos', icon: 'combo', title: 'Combo Burger House', path: '−15% · burger or hot dog + side + drink', badge: 'Live', tone: 'ok', kw: 'combo combos promo' });
+add({ id: 'cb-1', kind: 'combo', sec: 'combos', icon: 'combo', title: 'Combo Burger House', path: '15% OFF · 1 Burger + 1 Side + 1 Drink', badge: 'LIVE', tone: 'ok', kw: 'combo combos promo' });
 
+/* Add-ons (CategoryHubScreen "My add-ons"): name · "Linked to N dishes" · Active / Not on any dish yet */
 [
-  ['Término de la carne', 'Required · pick 1', 14, [['Medio'], ['Tres cuartos'], ['Bien asado']]],
-  ['Adiciones', 'Optional · up to 6', 22, [['Queso extra', 3000], ['Tocineta', 4000], ['Huevo', 2500], ['Pollo extra', 5000], ['Aguacate', 3500], ['Jalapeños', 2000]]],
-  ['Salsas', 'Optional', 31, [['Rosada'], ['BBQ'], ['Ajo'], ['Piña'], ['Mostaza miel']]],
-  ['Sin ingredientes', 'Optional', 22, [['Sin cebolla'], ['Sin tomate'], ['Sin lechuga'], ['Sin salsas']]],
-  ['Proteína', 'Required · pick 1', 9, [['Res'], ['Pollo'], ['Cerdo']]],
-  ['Tamaño de bebida', 'Required · pick 1', 4, [['Personal'], ['1.5 L']]]
+  ['Término de la carne', 14, ['Medio', 'Tres cuartos', 'Bien asado']],
+  ['Adiciones', 22, ['Queso extra +$3.000', 'Tocineta +$4.000', 'Huevo +$2.500', 'Pollo extra +$5.000', 'Aguacate +$3.500', 'Jalapeños +$2.000']],
+  ['Salsas', 31, ['Rosada', 'BBQ', 'Ajo', 'Piña', 'Mostaza miel']],
+  ['Sin ingredientes', 22, ['Sin cebolla', 'Sin tomate', 'Sin lechuga', 'Sin salsas']],
+  ['Proteína', 9, ['Res', 'Pollo', 'Cerdo']],
+  ['Tamaño de bebida', 0, ['Personal', '1.5 L']]
 ].forEach(function (g) {
-  add({ id: 'm-' + g[0], kind: 'mod', sec: 'modifiers', icon: 'mods', title: g[0], path: g[1] + ' · ' + g[3].length + ' options · on ' + g[2] + ' items',
-    kw: 'modifier modifiers modificador modificadores',
-    extra: g[3].map(function (o) { return { t: o[0], show: 'Has “' + o[0] + '”' + (o[1] ? ' +' + money(o[1]) : '') + ' · on ' + g[2] + ' items' }; }) });
+  var linked = g[1] ? 'Linked to ' + g[1] + ' dishes' : 'Not on any dish yet';
+  add({ id: 'ad-' + g[0], kind: 'addon', sec: 'addons', icon: 'addon', title: g[0], path: linked, badge: g[1] ? 'Active' : '', tone: 'ok',
+    kw: 'add-on add-ons addon addons modifier modifiers modificador modificadores',
+    extra: g[2].map(function (o) { return { t: o.replace(/ \+\$.*/, ''), show: 'Has “' + o + '” · ' + linked }; }) });
 });
 
+/* Clients (CustomerCrmScreen): restaurants keep no tabs, and points are off in this build */
 [
-  ['Andrés Cárdenas', '310 441 2290', 12, 340], ['Andrés Restrepo', '315 208 7731', 3, 85], ['María Gómez', '300 512 0094', 31, 1120],
-  ['María José Quiñones', '318 774 1203', 9, 260], ['Ana Zapata', '301 655 4410', 5, 140], ['Carlos Ramírez', '312 390 8812', 18, 610],
-  ['Camila Herrera', '304 118 2276', 7, 205], ['Diana Ospina', '317 902 3345', 22, 790], ['Juan Salazar', '320 441 0098', 2, 40],
-  ['Laura Vargas', '311 276 5530', 14, 455], ['Paula Arango', '313 860 1172', 6, 180], ['Santiago Muñoz', '316 334 9021', 11, 395],
-  ['Natalia Jaramillo', '305 778 6604', 4, 95], ['Sebastián Londoño', '319 205 4487', 8, 230]
+  ['Andrés Cárdenas', '310 441 2290', 12], ['Andrés Restrepo', '315 208 7731', 3], ['María Gómez', '300 512 0094', 31],
+  ['María José Quiñones', '318 774 1203', 9], ['Ana Zapata', '301 655 4410', 5], ['Carlos Ramírez', '312 390 8812', 18],
+  ['Camila Herrera', '304 118 2276', 7], ['Diana Ospina', '317 902 3345', 22], ['Juan Salazar', '320 441 0098', 2],
+  ['Laura Vargas', '311 276 5530', 14], ['Paula Arango', '313 860 1172', 6], ['Santiago Muñoz', '316 334 9021', 11],
+  ['Natalia Jaramillo', '305 778 6604', 4], ['Sebastián Londoño', '319 205 4487', 8]
 ].forEach(function (p) {
   var line = p[1] + ' · ' + p[2] + ' visits';
-  add({ id: 'cl-' + p[0], kind: 'client', sec: 'clients', title: p[0], path: line, val: String(p[3]).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' pts',
-    kw: 'client clients cliente', pop: Math.min(5, p[2] / 6), extra: [{ t: p[1], show: line }, { t: p[1].replace(/ /g, ''), show: line }] });
+  add({ id: 'cl-' + p[0], kind: 'client', sec: 'clients', title: p[0], path: line, kw: 'client clients cliente customer', pop: Math.min(5, p[2] / 6),
+    extra: [{ t: p[1], show: line }, { t: p[1].replace(/ /g, ''), show: line }] });
 });
 
+/* Team (TeamManagementScreen EmployeeRow): job title + the phone pill from StaffPhoneState */
+var PHONE = { on: ['On their phone', 'ok', 'On their phone · uses 1 connection'], inv: ['Invited', 'role', 'Invited · waiting for them to sign in'] };
 [
-  ['Andrés Villalba', 'Cajero', '7:02'], ['Luisa Ospina', 'Cajera', '11:00'], ['Jhon Mosquera', 'Cocina', '6:45'],
-  ['Paola Gutiérrez', 'Mesera', ''], ['Wilmer Cárdenas', 'Domicilios', '10:30'], ['Yuliana Restrepo', 'Cajera', '']
+  ['Andrés Villalba', 'Cajero', '310 220 4471', 'on'], ['Luisa Ospina', 'Cajera', '318 902 1150', 'inv'],
+  ['Jhon Mosquera', 'Cocina', '311 504 7712', ''], ['Paola Gutiérrez', 'Mesera', '300 781 2290', ''],
+  ['Wilmer Cárdenas', 'Domicilios', '316 430 0921', 'on'], ['Yuliana Restrepo', 'Cajera', '319 118 6645', '']
 ].forEach(function (p) {
-  add({ id: 'e-' + p[0], kind: 'emp', sec: 'team', title: p[0], path: p[1] + (p[2] ? ' · since ' + p[2] : ''), badge: p[2] ? 'On shift' : 'Off today', tone: p[2] ? 'ok' : 'role',
-    kw: 'employee employees team empleado ' + p[1], pop: p[2] ? 1 : 0 });
+  var ph = PHONE[p[3]];
+  add({ id: 'e-' + p[0], kind: 'emp', sec: 'team', title: p[0], path: p[1], badge: ph ? ph[0] : '', tone: ph ? ph[1] : '', phone: p[3],
+    sum: ph ? ph[2] : 'No phone connected', kw: 'employee employees team empleado ' + p[1], pop: p[3] === 'on' ? 1 : 0,
+    extra: [{ t: p[2], show: p[1] + ' · ' + p[2] }, { t: p[2].replace(/ /g, ''), show: p[1] + ' · ' + p[2] }] });
 });
 
+/* Sales (TransactionsScreen): "Sale #N" once paid, "Order #N" while the ticket is still open */
 [
+  [1092, 'Today 13:44', 'Paola Gutiérrez', '', 'Open', ['Hamburguesa de la Casa', 'Limonada de Coco']],
   [1091, 'Today 13:40', 'Luisa Ospina', 'María Gómez', 'Card', ['Combo Doble', 'Malteada de Oreo']],
   [1090, 'Today 13:31', 'Andrés Villalba', '', 'Cash', ['Hamburguesa Clásica', 'Gaseosa Personal']],
-  [1089, 'Today 13:18', 'Luisa Ospina', '', 'Cash', ['Salchipapa Especial', 'Cerveza Nacional', 'Cerveza Nacional']],
+  [1089, 'Today 13:18', 'Luisa Ospina', '', 'Nequi', ['Salchipapa Especial', 'Cerveza Nacional', 'Cerveza Nacional']],
   [1088, 'Today 13:12', 'Andrés Villalba', 'Andrés Cárdenas', 'Card', ['Hamburguesa de Pollo', 'Papas a la Francesa', 'Limonada Natural']],
-  [1085, 'Today 12:55', 'Andrés Villalba', '', 'Transfer', ['Combo Pollo', 'Combo Infantil']],
+  [1085, 'Today 12:55', 'Andrés Villalba', '', 'Nequi', ['Combo Pollo', 'Combo Infantil']],
   [1081, 'Today 12:40', 'Andrés Villalba', '', 'Cash', ['Hamburguesa BBQ']],
-  [1077, 'Today 12:21', 'Luisa Ospina', 'Camila Herrera', 'Card', ['Sándwich de Pollo', 'Jugo de Mora']],
-  [1069, 'Today 11:48', 'Wilmer Cárdenas', 'Diana Ospina', 'Transfer', ['Combo Familiar']],
+  [1077, 'Today 12:21', 'Luisa Ospina', 'Camila Herrera', 'Card', ['Sándwich de Pollo', 'Jugo de Mora'], 'Part refund'],
+  [1069, 'Today 11:48', 'Wilmer Cárdenas', 'Diana Ospina', 'Nequi', ['Combo Familiar']],
   [977, 'Sep 24', 'Andrés Villalba', 'Andrés Cárdenas', 'Card', ['Hamburguesa Doble Carne', 'Aros de Cebolla', 'Gaseosa 1.5 L']],
   [954, 'Sep 23', 'Luisa Ospina', 'Andrés Restrepo', 'Cash', ['Hamburguesa de Pollo', 'Malteada de Vainilla']]
 ].forEach(function (s, i) {
-  var id = (s[0] < 1000 ? '0' : '') + s[0];
+  var id = String(s[0]), open = s[4] === 'Open';
   var total = s[5].reduce(function (a, n) { return a + (PRICE[n] || 0); }, 0);
   var extra = [{ t: s[2], show: 'Sold by ' + s[2] + ' · ' + s[1] }];
   if (s[3]) extra.push({ t: s[3], show: 'Client: ' + s[3] + ' · ' + s[1] });
-  s[5].forEach(function (n) { extra.push({ t: n, show: n + (s[5].length > 1 ? ' + ' + (s[5].length - 1) + ' more' : '') + ' · ' + s[1] }); });
-  add({ id: 'o-' + id, kind: 'sale', sec: 'sales', icon: 'receipt', title: 'Order #' + id, alias: [id], path: s[1] + ' · ' + s[2] + ' · ' + s[4], val: money(total),
-    kw: 'sale sales venta ventas order orden', pop: 5 - i * 0.4, extra: extra });
+  s[5].forEach(function (n) { extra.push({ t: n, show: n + (s[5].length > 1 ? ' and ' + (s[5].length - 1) + ' more' : '') + ' · ' + s[1] }); });
+  add({ id: 'o-' + id, kind: 'sale', sec: 'sales', icon: 'receipt', title: (open ? 'Order #' : 'Sale #') + id, alias: [id], path: s[1] + ' · ' + (open ? 'Saved' : s[4]) + ' · ' + s[2],
+    val: money(total), badge: open ? 'Open' : (s[6] || ''), tone: open ? 'role' : 'warn', kw: 'sale sales venta ventas order', pop: 5 - i * 0.4, extra: extra });
 });
 
+/* Invoices › By supplier */
 [
-  ['Carnes La Ceja', 'Carnes y embutidos'], ['Distribuidora El Novillo', 'Carnes'], ['Panadería San Martín', 'Pan y bollería'],
-  ['Lácteos del Valle', 'Quesos y lácteos'], ['Verduras Doña Rosa', 'Frutas y verduras'], ['Gaseosas del Norte', 'Bebidas'],
-  ['Papa Criolla S.A.S.', 'Papa y tubérculos'], ['Salsas La Abuela', 'Salsas y aderezos'], ['Aceites Montería', 'Aceites'],
-  ['Desechables JR', 'Empaques'], ['Quesos Paipa', 'Quesos'], ['Café La Montaña', 'Café'], ['Hielo Polar', 'Hielo'], ['Cervecería Andina', 'Cerveza']
+  ['Carnes La Ceja', 6], ['Distribuidora El Novillo', 3], ['Panadería San Martín', 8], ['Lácteos del Valle', 4], ['Verduras Doña Rosa', 9],
+  ['Gaseosas del Norte', 2], ['Papa Criolla S.A.S.', 5], ['Salsas La Abuela', 1], ['Desechables JR', 2], ['Cervecería Andina', 3]
 ].forEach(function (s) {
-  add({ id: 'su-' + s[0], kind: 'sup', sec: 'suppliers', icon: 'truck', title: s[0], path: s[1], kw: 'supplier suppliers proveedor ' + s[1] });
+  add({ id: 'su-' + s[0], kind: 'sup', sec: 'suppliers', icon: 'receiptLong', title: s[0], path: s[1] + ' invoice' + (s[1] > 1 ? 's' : ''), kw: 'supplier suppliers proveedor invoice' });
 });
 
-[
-  { id: 'rp-full', title: 'Full Reports', path: 'Workspace › Full Reports', val: 'Today', kw: 'reports analytics reportes informes sales ventas', pop: 3 },
-  { id: 'rp-emp', title: 'Sales by employee', path: 'Full Reports', kw: 'team empleado ventas' },
-  { id: 'rp-top', title: 'Top items by revenue', path: 'Full Reports', kw: 'best sellers mas vendidos' },
-  { id: 'rp-pay', title: 'Payment split', path: 'Full Reports', kw: 'cash card transfer efectivo tarjeta payment' },
-  { id: 'rp-din', title: 'Sales by dining option', path: 'Full Reports', kw: 'takeout delivery domicilio dine para llevar' },
-  { id: 'rp-tax', title: 'Taxes collected', path: 'Share with accountant', val: 'This month', kw: 'tax iva impuestos' }
-].forEach(function (r) { r.kind = 'page'; r.sec = 'reports'; r.icon = 'chart'; add(r); });
-
-/* ───────── matching and ranking (see "How search decides") ───────── */
+/* ── matching and ranking (see "How search decides") ── */
 function scoreText(nt, toks, qn) {
   if (nt === qn) return 100;
   if (nt.indexOf(qn) === 0) return 92;
@@ -472,10 +554,7 @@ function scoreText(nt, toks, qn) {
     if (p < 0) { first = -2; break; }
     if (first < 0 || p < first) first = p;
   }
-  if (first >= 0) {
-    var wi = nt.slice(0, first).split(/[^a-z0-9]+/).filter(Boolean).length;
-    return 84 - Math.min(8, wi * 2);
-  }
+  if (first >= 0) return 84 - Math.min(8, nt.slice(0, first).split(/[^a-z0-9]+/).filter(Boolean).length * 2);
   for (var j = 0; j < toks.length; j++) if (toks[j].length < 3 || nt.indexOf(toks[j]) < 0) return 0;
   return 62;
 }
@@ -520,22 +599,19 @@ function matchEntry(e, toks, qn) {
   return { e: e, s: best, why: why, alias: alias, show: show, title: title };
 }
 
+function weigh(m) { m.w = m.s * (MULT[m.e.sec] || 1) + (m.e.pop || 0) * 0.5; return m; }
+
 function search(q, scope) {
   var toks = norm(q).split(/[^a-z0-9]+/).filter(Boolean);
   var qn = toks.join(' ');
   var results = [];
-  if (toks.length) INDEX.forEach(function (e) {
-    var m = matchEntry(e, toks, qn);
-    if (!m) return;
-    m.w = m.s * (MULT[e.sec] || 1) + (e.pop || 0) * 0.5;
-    results.push(m);
-  });
+  if (toks.length) INDEX.forEach(function (e) { var m = matchEntry(e, toks, qn); if (m) results.push(weigh(m)); });
   var counts = {}, total = 0;
   results.forEach(function (m) { if (m.e.kind !== 'action') { counts[m.e.scope] = (counts[m.e.scope] || 0) + 1; total++; } });
   var scoped = scope === 'all' ? results : results.filter(function (m) { return m.e.scope === scope; });
   scoped.sort(function (a, b) { return b.w - a.w || a.e.ord - b.e.ord; });
 
-  var cands = scoped.filter(function (m) { return m.e.kind !== 'action'; });
+  var cands = scoped.filter(function (m) { return !NO_TOP[m.e.kind]; });
   var top = cands.length && cands[0].w >= 85 && (cands.length < 2 || cands[0].w - cands[1].w >= 6) ? cands[0] : null;
 
   var groups = {};
@@ -543,8 +619,10 @@ function search(q, scope) {
   var secs = Object.keys(groups).map(function (key) {
     var list = groups[key];
     if (NATURAL[key]) list.sort(function (a, b) { return a.e.ord - b.e.ord; });
+    list.sort(function (a, b) { return (a.e.tone === 'warn' ? 0 : 1) - (b.e.tone === 'warn' ? 0 : 1); });
     var bw = 0; list.forEach(function (m) { if (m.w > bw) bw = m.w; });
-    return { key: key, list: list, bucket: key === 'create' ? 99 : Math.floor(bw / 10), oi: SEC_ORDER.indexOf(key) };
+    var child = top && list[0].e.parent === top.e.id;
+    return { key: key, list: list, bucket: key === 'create' ? 99 : child ? 98 : Math.floor(bw / 10), oi: SEC_ORDER.indexOf(key) };
   });
   secs.sort(function (a, b) { return b.bucket - a.bucket || a.oi - b.oi; });
 
@@ -554,40 +632,46 @@ function search(q, scope) {
     INDEX.forEach(function (e) {
       if (e.kind === 'action' || (scope !== 'all' && e.scope !== scope)) return;
       var m = matchEntry(e, loose, loose.join(' '));
-      if (m) { m.w = m.s * (MULT[e.sec] || 1) + (e.pop || 0) * 0.5; near.push(m); }
+      if (m) near.push(weigh(m));
     });
     near.sort(function (a, b) { return b.w - a.w; });
   }
   return { hasQ: toks.length > 0, counts: counts, total: total, top: top, secs: secs, empty: toks.length > 0 && !scoped.length, near: near.slice(0, 3) };
 }
 
-/* ───────── drawing a phone ───────── */
+/* ── drawing ── */
 var CHEV = svg(IC.chev, 'chev');
 
 function workspaceHTML() {
-  function wr(icon, t, sub, subOk) {
-    return '<button type="button" class="wr" data-act="open" data-v="' + esc(t) + '"><span class="wr-ic">' + svg(icon) + '</span>' +
-      '<span class="wr-t"><b>' + esc(t) + '</b><i' + (subOk ? ' class="ok"' : '') + '>' + esc(sub) + '</i></span>' + CHEV + '</button>';
+  function wr(icon, t, sub, right) {
+    return '<button type="button" class="wr" data-act="open" data-v="' + esc(t) + '"><span class="wr-ic">' + svg(IC[icon]) + '</span>' +
+      '<span class="wr-t"><b>' + esc(t) + '</b>' + (sub ? '<i>' + esc(sub) + '</i>' : '') + '</span>' + (right || '') + CHEV + '</button>';
   }
-  function wd(icon, t) { return '<button type="button" class="wd" data-act="open" data-v="' + esc(t) + '">' + svg(icon) + '<span>' + esc(t) + '</span>' + CHEV + '</button>'; }
-  return '<div class="ws-head"><div class="ws-biz"><h3>Burger House</h3><span class="boss">BOSS</span></div>' +
-      '<button type="button" class="ws-switch" data-act="open" data-v="Businesses">Businesses ›</button></div>' +
+  return '<div class="ws-head"><button type="button" class="biz" data-act="open" data-v="Businesses" aria-label="Burger House, Businesses"><b>Burger House</b>' + svg(IC.down) + '</button></div>' +
     '<button type="button" class="ws-search" data-act="open-search">' + svg(IC.search) + '<span>Search settings, menu, clients, sales…</span></button>' +
     '<div class="ws-rows">' +
-      wr(IC.menu, 'Menu', '70 items') + wr(IC.truck, 'Suppliers', '14 suppliers') + wr(IC.client, 'Clients', '186 clients') +
-      wr(IC.team, 'Team', '6 employees') +
       '<button type="button" class="wr open" data-act="open" data-v="Register"><span class="dot" aria-hidden="true">●</span>' +
         '<span class="wr-t"><b>Register open</b><i>Sales</i></span><span class="money">$1.284.600</span></button>' +
-      wr(IC.camera, 'Add Supplier Invoice', 'Take a photo, we do the rest') + wr(IC.grid, 'Registers & Printers', '5 active', true) +
-      '<div class="wds">' + wd(IC.doc, 'Full Reports') + wd(IC.share, 'Share with accountant') + wd(IC.pay, 'Payment Method') + wd(IC.tax, 'Tax') + '</div>' +
+      wr('cart', 'Sell online', 'Off', '<span class="pill">OFF</span>') +
+      '<div class="ws-h">Every day</div>' +
+      wr('restaurant', 'Menu', '70 items') +
+      wr('person', 'Clients', '186 clients') +
+      wr('receiptLong', 'Invoices', '4 this month') +
+      wr('group', 'Team', '6 employees · 2 on phones') +
+      wr('receiptLong', 'Reports', 'Net sales today · $1.284.600') +
+      '<div class="ws-div"></div>' +
+      wr('settings', 'Settings', 'Payments, taxes, receipts') +
     '</div>' +
-    '<div class="ws-bar"><button type="button" class="lang" data-act="open" data-v="Language and theme">EN' + svg(IC.sun) + '</button>' +
-      '<span class="dollar" aria-hidden="true">$</span></div>';
+    '<nav class="nav" aria-label="Main">' +
+      '<button type="button" class="nvi" data-act="open" data-v="Register"><span class="nvp">' + svg(IC.pos) + '</span>Register</button>' +
+      '<button type="button" class="nvi" data-act="open" data-v="Sales"><span class="nvp">' + svg(IC.receipt) + '</span>Sales</button>' +
+      '<button type="button" class="nvi on" aria-current="page"><span class="nvp">' + CO_FLAG + '</span>My business</button>' +
+    '</nav>';
 }
 
 function searchShellHTML() {
-  return '<div class="sbar"><button type="button" class="ib" data-act="back" aria-label="Back to Workspace">' + svg(IC.back) + '</button>' +
-    '<label class="field">' + svg(IC.search) + '<input class="q" type="text" aria-label="Search the workspace" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
+  return '<div class="sbar"><button type="button" class="ib" data-act="back" aria-label="Back to My business">' + svg(IC.back) + '</button>' +
+    '<label class="field">' + svg(IC.search) + '<input class="q" type="text" aria-label="Search My business" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
     '<button type="button" class="ib clr" data-act="clear" aria-label="Clear search">' + svg(IC.x) + '</button></label></div>' +
     '<div class="chips" role="toolbar" aria-label="What to search"></div><div class="body"></div>';
 }
@@ -596,19 +680,25 @@ function leadHTML(e, big) {
   var k = e.kind;
   if (k === 'item') return '<span class="lead sq letter cat-' + e.cat + '" aria-hidden="true">' + esc(e.title.charAt(0)) + '</span>';
   if (k === 'cat') return '<span class="lead sq cat-' + e.cat + '" aria-hidden="true">' + svg(IC.folder) + '</span>';
-  if (k === 'client') return '<span class="lead txt" aria-hidden="true">' + initials(e.title) + '</span>';
-  if (k === 'emp') return '<span class="lead sq inv" aria-hidden="true">' + initials(e.title) + '</span>';
+  if (k === 'client') return '<span class="lead" aria-hidden="true">' + initials(e.title) + '</span>';
+  if (k === 'emp') return '<span class="lead inv" aria-hidden="true">' + initials(e.title) + '</span>';
   if (k === 'action') return '<span class="lead accent" aria-hidden="true">' + svg(IC.plus) + '</span>';
-  return '<span class="lead' + (big ? ' accent' : '') + '" aria-hidden="true">' + svg(IC[e.icon] || IC.tax) + '</span>';
+  if (e.warnLead) return '<span class="lead sq warn" aria-hidden="true">' + svg(IC[e.icon]) + '</span>';
+  return '<span class="lead' + (k === 'device' ? ' sq' : '') + (big ? ' accent' : '') + '" aria-hidden="true">' + svg(IC[e.icon] || IC.settings) + '</span>';
 }
+
+function isOn(S, e) { return S.ons[e.id] != null ? S.ons[e.id] : !!e.on; }
+function segVal(S, e) { return e.id === 'ap-theme' ? S.theme : (S.vals[e.id] != null ? S.vals[e.id] : e.def); }
 
 function rowHTML(m, big, S) {
   var e = m.e, k = e.kind;
-  var on = S.ons[e.id] != null ? S.ons[e.id] : !!e.on;
+  var on = isOn(S, e);
   var sub = m.why === 'extra' ? m.show : (e.path || '');
-  var note = m.why === 'alias' ? 'Also called “' + m.alias + '”' : k === 'seg' ? THEME_SUM[S.theme] : big && e.sum ? e.sum : '';
+  var note = '', noteCls = '';
+  if (m.why === 'alias') note = 'Also called “' + m.alias + '”';
+  else if (big && e.sum) { note = e.sum; if (k === 'emp' && e.phone === 'on') noteCls = ' ok'; }
   var texts = '<span class="rt"><span class="rtt' + (k === 'action' ? ' act' : '') + '">' + (m.title || esc(e.title)) + '</span>' +
-    (sub ? '<span class="rts">' + esc(sub) + '</span>' : '') + (note ? '<span class="rtn">' + esc(note) + '</span>' : '') + '</span>';
+    (sub ? '<span class="rts">' + esc(sub) + '</span>' : '') + (note ? '<span class="rtn' + noteCls + '">' + esc(note) + '</span>' : '') + '</span>';
   var cls = 'row' + (big ? ' big' : '');
   var lead = leadHTML(e, big);
   if (k === 'switch') {
@@ -616,15 +706,24 @@ function rowHTML(m, big, S) {
       lead + texts + '<span class="sw' + (on ? ' on' : '') + '" aria-hidden="true"><i></i></span></button>';
   }
   if (k === 'seg') {
-    return '<div class="' + cls + ' seg"><div class="seg-top">' + lead + texts + '</div><div class="segc" role="group" aria-label="Theme">' +
-      THEMES.map(function (t) { return '<button type="button" aria-pressed="' + (S.theme === t[0]) + '" data-act="theme" data-v="' + t[0] + '">' + t[1] + '</button>'; }).join('') +
+    var v = segVal(S, e);
+    return '<div class="card' + (big ? '' : ' slim') + '"><div class="' + cls + '">' + lead + texts + '</div><div class="segc" role="group" aria-label="' + esc(e.title) + '">' +
+      e.opts.map(function (o) { return '<button type="button" aria-pressed="' + (v === o[0]) + '" data-act="seg" data-v="' + esc(e.id) + '" data-o="' + o[0] + '">' + o[1] + '</button>'; }).join('') +
       '</div></div>';
   }
-  var strong = k === 'item' || k === 'sale' || k === 'client';
+  var strong = k === 'item' || k === 'sale';
   var trail = (e.badge ? '<span class="badge ' + e.tone + '">' + esc(e.badge) + '</span>' : '') +
     (e.val ? '<span class="val' + (strong ? ' strong' : '') + '">' + esc(e.val) + '</span>' : '') +
-    (k !== 'action' && !(e.val && strong) ? CHEV : '');
-  return '<button type="button" class="' + cls + '" data-act="' + (e.act || 'open') + '" data-v="' + esc(e.actV || e.title) + '">' + lead + texts + trail + '</button>';
+    (k !== 'action' && !strong ? CHEV : '');
+  var btn = '<button type="button" class="' + cls + '" data-act="' + (e.act || 'open') + '" data-v="' + esc(e.actV || e.title) + '">' + lead + texts + trail + '</button>';
+  if (big && k === 'emp') {
+    var acts = e.phone === 'on' ? [['Connection', 'Connections › ' + e.title], ['Permissions', 'Permissions for ' + e.title]]
+      : e.phone === 'inv' ? [['Send invitation', 'WhatsApp invitation for ' + e.title], ['Connection', 'Connections › ' + e.title]]
+      : [['Connect their phone', 'Connect an employee phone › ' + e.title], ['Permissions', 'Permissions for ' + e.title]];
+    return '<div class="card">' + btn + '<div class="acts">' +
+      acts.map(function (a) { return '<button type="button" data-act="open" data-v="' + esc(a[1]) + '">' + a[0] + '</button>'; }).join('') + '</div></div>';
+  }
+  return btn;
 }
 
 function sectionHTML(label, rows, more) {
@@ -634,11 +733,10 @@ function sectionHTML(label, rows, more) {
 
 function bodyHTML(S, r) {
   if (!r.hasQ) {
-    var themeLabel = THEMES.filter(function (t) { return t[0] === S.theme; })[0][1];
-    var tiles = [['Tax', '2 on', 'tax', 'tax'], ['Payments', '3 on', 'pay', 'payment'], ['Printers', '1 offline', 'printer', 'printer', 1],
-      ['Modifiers', '6 groups', 'mods', 'modif'], ['Theme', themeLabel, 'moon', 'dark'], ['Receipt', 'WhatsApp', 'receipt', 'receipt']];
+    var tiles = [['Taxes', '1 active', 'tax', 'tax'], ['Payment methods', '3 on', 'pay', 'payment'], ['Connections', '1 not connected', 'devices', 'connection', 1],
+      ['Add-ons', '6 add-ons', 'addon', 'modifiers'], ['Appearance', S.theme === 'dark' ? 'Dark' : 'Light', 'moon', 'dark'], ['Receipts', 'Detailed', 'receipt', 'receipt']];
     return '<div class="lbl">RECENT</div><div class="recents">' +
-      ['IVA', 'andres', 'pollo', '#1088', 'receipt printer'].map(function (v) {
+      ['IVA', 'andres', 'pollo', '#1088', 'printer'].map(function (v) {
         return '<button type="button" class="recent" data-act="q" data-v="' + esc(v) + '">' + svg(IC.clock) + '<span>' + esc(v) + '</span></button>';
       }).join('') + '</div>' +
       '<div class="lbl" style="margin-top:26px">SHORTCUTS</div><div class="tiles">' +
@@ -646,8 +744,8 @@ function bodyHTML(S, r) {
         return '<button type="button" class="tile" data-act="q" data-v="' + t[3] + '"><span class="ic" aria-hidden="true">' + svg(IC[t[2]]) + '</span>' +
           '<span><b>' + t[0] + '</b><i' + (t[4] ? ' class="warn"' : '') + '>' + esc(t[1]) + '</i></span></button>';
       }).join('') + '</div>' +
-      '<p class="hint">Type anything: an item, a client\'s name or phone, an order number, an employee, or any setting.</p>' +
-      '<button type="button" class="linkbtn" data-act="back">Browse all settings ›</button>';
+      '<p class="hint">Type anything: a dish, a client\'s name or phone, a sale number, an employee, a device, or any setting.</p>' +
+      '<button type="button" class="linkbtn" data-act="back">Back to My business ›</button>';
   }
   var out = '';
   if (r.top) out += sectionHTML('BEST MATCH', [rowHTML(r.top, true, S)]);
@@ -660,11 +758,11 @@ function bodyHTML(S, r) {
     var typed = S.q.trim(); typed = typed.charAt(0).toUpperCase() + typed.slice(1);
     out += '<div class="nores"><b>Nothing matches “' + esc(S.q.trim()) + '”</b><span>Check the spelling, or try fewer letters.</span></div>';
     if (r.near.length) out += sectionHTML('CLOSEST MATCHES', r.near.map(function (m) { return rowHTML(m, false, S); }));
-    var make = [rowHTML({ e: { id: 'new-item', kind: 'action', title: 'New item “' + typed + '”' } }, false, S)];
+    var make = [rowHTML({ e: { id: 'new-dish', kind: 'action', title: 'New dish “' + typed + '”' } }, false, S)];
     if (S.scope !== 'all') make.push(rowHTML({ e: { id: 'all', kind: 'action', title: 'Search everything instead', act: 'scope', actV: 'all' } }, false, S));
     out += sectionHTML('CREATE IT', make);
   }
-  out += '<div class="foot"><span>Can\'t find it?</span><button type="button" class="linkbtn" data-act="back">Browse all settings ›</button></div>';
+  out += '<div class="foot"><span>Can\'t find it?</span><button type="button" class="linkbtn" data-act="open" data-v="Settings">Open Settings ›</button></div>';
   return out;
 }
 
@@ -679,18 +777,18 @@ function chipsHTML(S, r) {
 function mount(host, cfg) {
   var fig = document.createElement('figure');
   fig.innerHTML = '<div class="phone"><div class="screen ws">' + workspaceHTML() + '</div><div class="screen search">' + searchShellHTML() + '</div>' +
-    '<div class="toast" role="status" aria-live="polite"></div></div>' +
+    '<div class="toast" role="status" aria-live="polite"><span></span><button type="button" data-act="undo" hidden>Undo</button></div></div>' +
     '<figcaption><span class="n">' + cfg.n + '</span><span class="t">' + cfg.t + '</span><span class="d">' + cfg.d + '</span></figcaption>';
   host.appendChild(fig);
 
-  var S = { screen: cfg.screen || 'search', q: cfg.q || '', scope: 'all', theme: 'auto', phoneDark: !!cfg.dark, ons: {}, timer: 0 };
+  var S = { screen: cfg.screen || 'search', q: cfg.q || '', scope: 'all', theme: cfg.dark ? 'dark' : 'light', ons: {}, vals: {}, undo: null, timer: 0 };
   var el = fig.querySelector('.phone');
   var input = el.querySelector('input.q'), chips = el.querySelector('.chips'), body = el.querySelector('.body');
-  var clr = el.querySelector('.clr'), toastEl = el.querySelector('.toast');
+  var clr = el.querySelector('.clr'), toastEl = el.querySelector('.toast'), toastTxt = toastEl.querySelector('span'), undoBtn = toastEl.querySelector('button');
   var wsEl = el.querySelector('.screen.ws'), srEl = el.querySelector('.screen.search');
 
   function render() {
-    el.classList.toggle('dark', S.theme === 'dark' || (S.theme === 'auto' && S.phoneDark));
+    el.classList.toggle('dark', S.theme === 'dark');
     wsEl.hidden = S.screen !== 'ws';
     srEl.hidden = S.screen !== 'search';
     if (input.value !== S.q) input.value = S.q;
@@ -700,11 +798,29 @@ function mount(host, cfg) {
     chips.innerHTML = chipsHTML(S, r);
     body.innerHTML = bodyHTML(S, r);
   }
-  function toast(msg) {
-    toastEl.textContent = msg;
+  function toast(msg, undo) {
+    toastTxt.textContent = msg;
+    S.undo = undo || null;
+    undoBtn.hidden = !undo;
     toastEl.classList.add('show');
     clearTimeout(S.timer);
-    S.timer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
+    S.timer = setTimeout(function () { toastEl.classList.remove('show'); S.undo = null; }, undo ? 4000 : 1800);
+  }
+  function short(t) { return t.replace(/ \d.*$/, ''); }
+  function toggle(id) {
+    var e = BY_ID[id], next = !isOn(S, e), before = Object.assign({}, S.ons);
+    var rival = e.rival && BY_ID[e.rival];
+    if (next && rival && isOn(S, rival)) {
+      if (e.rivalMode === 'block') { toast('Cannot be on at the same time as ' + rival.title + '.'); return; }
+      S.ons[rival.id] = false;
+      S.ons[id] = true;
+      render();
+      toast(short(e.title) + ' on · ' + short(rival.title) + ' turned off', before);
+      return;
+    }
+    S.ons[id] = next;
+    render();
+    toast(e.title + (next ? ' on' : ' off'), before);
   }
 
   input.addEventListener('input', function () { S.q = input.value; render(); body.scrollTop = 0; });
@@ -718,8 +834,13 @@ function mount(host, cfg) {
       case 'clear': S.q = ''; render(); input.focus({ preventScroll: true }); break;
       case 'scope': S.scope = v; render(); body.scrollTop = 0; break;
       case 'q': S.q = v; render(); body.scrollTop = 0; break;
-      case 'toggle': var cur = S.ons[v] != null ? S.ons[v] : !!(BY_ID[v] && BY_ID[v].on); S.ons[v] = !cur; render(); break;
-      case 'theme': S.theme = v; render(); break;
+      case 'toggle': toggle(v); break;
+      case 'seg':
+        var o = b.getAttribute('data-o');
+        if (v === 'ap-theme') S.theme = o; else S.vals[v] = o;
+        render();
+        break;
+      case 'undo': if (S.undo) { S.ons = S.undo; S.undo = null; render(); toastEl.classList.remove('show'); } break;
       case 'open': toast('Opens ' + v); break;
     }
   });
@@ -728,26 +849,30 @@ function mount(host, cfg) {
 
 var band1 = document.getElementById('band1'), band2 = document.getElementById('band2');
 [
-  { n: '1', screen: 'ws', t: 'Workspace, search on top',
-    d: 'Search goes first on the Workspace, right under the business name. The rows stay below as the map for people who would rather browse. Tap the bar to open search.' },
+  { n: '1', screen: 'ws', t: 'My business, search on top',
+    d: 'The real panel from HomeScreen.kt with one addition: the search bar under the business name. Settings stays the last row for people who would rather browse. Tap the bar.' },
   { n: '2', q: '', t: 'Before typing',
-    d: 'Recent searches and six shortcuts to the most-used settings, each showing its current state. Chips narrow the scope. The back arrow returns to the Workspace.' },
+    d: 'Recent searches and six shortcuts to the settings people change most, each showing its current state. Chips narrow the scope. Back returns to My business.' },
   { n: '3', q: 'tax', t: '“tax”',
-    d: 'An exact name match becomes the Best match. “Create new tax” comes next, then every tax with a live switch. Each setting shows its path, so people learn where it lives.' },
-  { n: '4', q: 'modif', t: '“modif”',
-    d: 'Half a word is enough: the Modifiers page, every modifier setting with its switch, and the modifier groups with their item counts.' },
+    d: 'Taxes is the Best match, then "New tax", then each tax with its switch. Colombia\'s rule comes along: turn IVA on and Impoconsumo turns off, with Undo.' },
+  { n: '4', q: 'modifiers', t: '“modifiers”',
+    d: 'The app calls them add-ons. Aliases catch the word people use, and each add-on shows how many dishes it\'s linked to, exactly like My add-ons.' },
   { n: '5', q: 'dark', t: '“dark”',
-    d: '“dark” isn\'t the setting\'s name. Aliases catch it. The control works in place: tap Dark and this phone goes dark.' }
+    d: 'Appearance is Light or Dark, as in Language & appearance. The control works in place: tap Dark and this phone goes dark.' }
 ].forEach(function (c) { mount(band1, c); });
 [
-  { n: '6', q: 'receipt printer', t: '“receipt printer”',
-    d: 'Not what the app calls it either. Aliases send it to Registers & Printers, and the offline printer shows up as a problem right in the results.' },
-  { n: '7', q: 'andres', dark: true, t: '“andres”, phone in dark mode',
-    d: 'No Best match when results tie. Andrés the client and Andrés the cashier sit in separate sections with different avatar shapes. Accents don\'t matter.' },
-  { n: '8', q: 'pollo', t: '“pollo”',
-    d: 'Items with the word in their name, modifier groups with a matching option, and sales that included it. Chip counts show where the results are.' },
-  { n: '9', q: 'hamburguesa vegana', t: 'Nothing found',
-    d: 'Never a dead end: the closest match, an offer to create the item that wasn\'t found, and the way back to browsing.' }
+  { n: '6', q: 'printer', t: '“printer”',
+    d: 'Printers live under Settings › Connections › Printers and other connections. Search goes straight there and lists each printer with its last test, plus the drawer switch.' },
+  { n: '7', q: 'connection', t: '“connection”',
+    d: 'Connections at a glance: what\'s included, what\'s paid, and Luisa\'s phone that isn\'t connected because all 4 are in use. "Add a connection" is right there.' },
+  { n: '8', q: 'luisa', t: '“luisa”, an employee',
+    d: 'An employee as Best match shows their phone connection ("Invited · waiting for them to sign in") with the next step one tap away, then their phone under Connections and their sales.' },
+  { n: '9', q: 'andres', dark: true, t: '“andres”, phone in dark mode',
+    d: 'Two Andrés tie, so nothing is picked. Andrés the cashier shows "On their phone", and his phone appears under Connections. Accents don\'t matter.' },
+  { n: '10', q: 'pollo', t: '“pollo”',
+    d: 'Dishes with the word in their name, add-ons with a matching option, and sales that included it. Chip counts show where the results are.' },
+  { n: '11', q: 'hamburguesa vegana', t: 'Nothing found',
+    d: 'Never a dead end: the closest dish, an offer to create the one that wasn\'t found, and a way into Settings.' }
 ].forEach(function (c) { mount(band2, c); });
 })();
 </script>
