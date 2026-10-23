@@ -11,7 +11,12 @@ Script: `features/TS5-MX.json` (5 steps = 5 beats for `?country=MX`). Device: ow
 - Sale complete: Mexico shows "Pago aprobado" with no card line (see problems).
 - STR: added `pay_card_link_under`; refreshed en `qr_payment_default_message` and pt `scan_row_reports_today_net` to the app's
   current text (neither is drawn by this page).
-- Video-only `wait` on the Tarjeta and card taps.
+- Video-only `wait` timed against TS5-MX.json at 0.067 s per character: Cobrar +2.4 s (on "Cobrar"), Tarjeta +0.8 s (right after
+  "Toca Tarjeta", no wait: the new line 2 starts with it), card +2.0 s (after "acerca su tarjeta"); "Procesando…" now 2.8 s so Sale
+  complete arrives as line 3 ends.
+- REVIEW-MX1 applied: TS5 nice 1 (I used `wait:1.6`, not 1.2, so the tap lands on "Cobrar") and nice 2 (line 2: "aquí no se pide propina",
+  true for the shop and the pharmacy default). Nice 3 needed nothing.
+- Other countries: video playback compared with the old page (DOM every 0.1 s) for CO, BR, US en/es, CA, PE and pharmacy CO/US: identical.
 
 ## Screens (MX), with the app code
 1. Scan register with two scanned products, "Cobrar $66.00": `ui/screens/home/ScanCheckoutTab.kt` (unchanged page piece).
@@ -23,7 +28,7 @@ Script: `features/TS5-MX.json` (5 steps = 5 beats for `?country=MX`). Device: ow
 
 ## Left out
 - The link flow (separate video), the failure screen, Payment methods. No fee anywhere.
-- Voice says "en una tienda no se pide propina": that is the shop default; the owner can turn "Pedir propina" on.
+- Voice says "aquí no se pide propina": that is the shop/pharmacy default; the owner can turn "Pedir propina" on.
 
 ## App problems found
 - `utils/TerminalReaderManager.kt:445`: Tap to Pay sales carry no brand/last four, so no "VISA ••4242" on Sale complete or the receipt. Small.

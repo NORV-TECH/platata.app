@@ -11,7 +11,12 @@ Script: `features/RS5-MX.json` (6 steps = 6 beats for `?country=MX`). Device: ow
 - New link slot "Cobrar con enlace" (LINK-3 UNDER_TAP): drawn only in Mexico, never tapped, no "No, gracias".
 - Sale complete: a card hero can have no card line (Mexico shows none, see problems).
 - STR: added `pay_card_link_under` (en/es/pt); refreshed en `qr_payment_default_message` to the app's current text (not drawn here).
-- Video-only `wait` on the Tarjeta, tip and card taps so each screen is on while its line is said.
+- Video-only `wait` on every Mexico tap, timed against RS5-MX.json at 0.067 s per character (no clips yet): Cobrar +1.7 s (on
+  "Cobrar"), Tarjeta +3.7 s (on "Tarjeta"), 18 % +3.2 s (after "elige la propina"; "Preparando el cobro…" under "y el cobro empieza"),
+  card +2.0 s (after "acerca su tarjeta"); "Procesando…" now lasts 2.8 s, so Sale complete arrives as line 4 ends.
+- REVIEW-MX1 applied: RS5 nice 1-4. Nice 1 asked for `wait:0.6`; I used 0.9 so the tap lands on the word "Cobrar", not on "toca".
+  Lines 3 and 5 of the script use the review's wording (line 5 no longer says "con la propina incluida": Sale complete shows no amount).
+- Other countries: video playback compared with the old page (DOM every 0.1 s) for CO, BR, US en/es, CA, PE: identical.
 
 ## Screens (MX), with the app code
 1. Pay screen: `ui/screens/home/CheckoutSheetBody.kt:240-260` (payWays, `cardIsPrimary = stripeOn && cardConfigured`),
