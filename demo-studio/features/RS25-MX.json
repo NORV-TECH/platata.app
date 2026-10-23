@@ -18,7 +18,7 @@
   {
    "id": "2-card",
    "voice": {
-    "es": "Si tu teléfono no lee tarjetas al acercarlas, igual cobras con tarjeta, con un enlace. Toca Tarjeta."
+    "es": "Si tu teléfono no lee tarjetas al acercarlas, aun así cobras con tarjeta, con un enlace. Toca Tarjeta."
    }
   },
   {
@@ -30,7 +30,7 @@
   {
    "id": "4-tip",
    "voice": {
-    "es": "El cliente elige la propina."
+    "es": "El cliente elige la propina en tu celular."
    }
   },
   {
