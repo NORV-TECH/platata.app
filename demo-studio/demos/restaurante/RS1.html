@@ -284,7 +284,7 @@ const COUNTRY = new Intl.DisplayNames([AL], {type:"region"}).of(R.country);
 const CURNAME = new Intl.DisplayNames([AL], {type:"currency"}).of(C.cur);
 const NAME = C.place;
 /* lineaDePago (BusinessTypeOptions.kt:338): card only where there is a gateway (CO Wompi, US/CA Stripe), Pix in Brazil */
-const PAYLINE = (USCA ? t("biz_pitch_pay_cash_card") : BR ? t("biz_pitch_pay_nocard_pix") : CO ? t("biz_pitch_pay_card") : t("biz_pitch_pay_nocard"))
+const PAYLINE = (USCA ? t("biz_pitch_pay_cash_card") : BR ? t("biz_pitch_pay_nocard_pix") : (CO || R.country==="MX") ? t("biz_pitch_pay_card") : t("biz_pitch_pay_nocard"))   /* MX: Stripe card + its QR (STRIPE-MX-1) */
   + " · " + (USCA ? t("biz_band_pos_free_comision") + " " + t("biz_band_pos_rest_comision") : t("biz_band_pos_free"));
 const FAM = {rest:{soft:"#F9EAE3",acc:"#EB5A2E",ink:"#BE4927",ic:"drawn_hamburguesa",lbl:"biz_tab_rest",desc:"biz_tile_rest_desc"},
   shop:{soft:"#E5F1E7",acc:"#1E9E55",ink:"#178046",ic:"drawn_carrito",lbl:"biz_tab_shop",desc:CO?"biz_tile_shop_desc_co":"biz_tile_shop_desc"},

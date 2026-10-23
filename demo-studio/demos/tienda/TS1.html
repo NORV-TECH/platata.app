@@ -279,10 +279,11 @@ const COMMON_CSS = `
 
 /* ======== the pay block (from RS3, CheckoutSheetBody / CheckoutPayBlock / ReceiptOptionsScreen) ======== */
 const L = LG, CC = R.country;
-const STRIPE = CC==="US" || CC==="CA";          // Stripe country: no QR row at all, Card = Tap to Pay (PayWaysVisibility.kt)
+const STRIPE = CC==="US" || CC==="CA" || CC==="MX";   // Stripe card country: Card = Tap to Pay (sync/CardCountryGate.kt; MX since STRIPE-MX-1)
+const NO_QR = CC==="US" || CC==="CA";           // sync/QrCountries.NO_QR: no QR row at all (Mexico keeps its QR)
 const WOMPI = CC==="CO";                          // Wompi country: the typed card form
 const PIX = C.cur==="BRL";                        // QR is "Pix" and carries the amount (utils/PixLabels.kt, QR-2)
-const TEXT_ROUTE = STRIPE;                        // sync/ReceiptSendRoute: own {US, CA} set
+const TEXT_ROUTE = CC==="US" || CC==="CA";      // sync/ReceiptSendRoute: own {US, CA} set (Mexico: WhatsApp)
 const DIAL = {CO:"+57",MX:"+52",PE:"+51",CL:"+56",EC:"+593",AR:"+54",PA:"+507",BR:"+55",US:"+1",CA:"+1"}[CC];
 /* utils/CashRounding.kt: CL to $10 (1-5 down, 6-9 up), PE always down to S/ 0.10, CA to the nearest 5 cents. Cash only. */
 function cashDue(v){
@@ -328,9 +329,9 @@ function payScreen(o){
   const total = saleTotal(o.lines), due = cashDue(total), typed = o.typed||"";
   const qr = !!o.qr, cardOn = o.card && o.card!=="none", cardReady = o.card==="ready";
   const cardPrimary = STRIPE && cardReady;
-  /* PayWaysVisibility.link: owner, not dismissed, not a Stripe country, something not set up yet; Colombia asks only for what is missing: QR or card / card / QR (MKT3-2) */
+  /* PayWaysVisibility.link: owner, not dismissed, a QR country (QrCountries: not US/CA), something not set up yet; Colombia asks only for what is missing: QR or card / card / QR (MKT3-2) */
   const qrNotSetUp = !qr, cardNotSetUp = WOMPI && !cardReady;
-  let link = (STRIPE || !(qrNotSetUp || cardNotSetUp)) ? null : WOMPI ? (qrNotSetUp && cardNotSetUp ? "pay_setup_link_qr_card" : cardNotSetUp ? "pay_setup_link_card" : "pay_setup_link_qr") : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");   /* MKT3-2 (16): only what is missing; CARD_ONLY = "Configurar tarjeta" */
+  let link = (NO_QR || !(qrNotSetUp || cardNotSetUp)) ? null : WOMPI ? (qrNotSetUp && cardNotSetUp ? "pay_setup_link_qr_card" : cardNotSetUp ? "pay_setup_link_card" : "pay_setup_link_qr") : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");   /* MKT3-2 (16): only what is missing; CARD_ONLY = "Configurar tarjeta" */
   if(o.noLink) link = null;
   let rc = "";
   if(typed){ const v = typedValue(typed); const ch = v - due;
@@ -417,7 +418,7 @@ function pmScreen(st){
   const qrName = PIX ? "Pix" : t("payment_method_qr");
   let h = `<div class="x-pml">`;
   h += `<div class="x-pmc">${pmRow(t("payment_method_cash"), true)}</div>`;
-  if(!STRIPE) h += `<div class="x-pmc">${pmRow(qrName, !!st.qrOn, {tag:"sw-qr"})}<div class="x-qrnote"><i>!</i><span><b>${esc(qrS("qr_terms_note_bold"))}</b> ${esc(t("qr_terms_note_rest"))}</span></div>${st.qrOn?`<div class="x-acc"><span>${esc(qrS("qr_options_row"))}</span>${J.down}</div>`:""}</div>`;
+  if(!NO_QR) h += `<div class="x-pmc">${pmRow(qrName, !!st.qrOn, {tag:"sw-qr"})}<div class="x-qrnote"><i>!</i><span><b>${esc(qrS("qr_terms_note_bold"))}</b> ${esc(t("qr_terms_note_rest"))}</span></div>${st.qrOn?`<div class="x-acc"><span>${esc(qrS("qr_options_row"))}</span>${J.down}</div>`:""}</div>`;
   const cu = st.customs||[], mp = cu.filter(n=>n==="Mercado Pago"), rest = cu.filter(n=>n!=="Mercado Pago");   // PosViewModel.paymentMethods sort
   mp.forEach(n => { h += `<div class="x-pmc">${pmRow(n, true, {del:true})}</div>`; });
   /* a shop's Tab (fiado) row: no switch, the note pay_methods_tab_note (PaymentMethodRowHead.kt isTab) */
@@ -521,7 +522,7 @@ const PHWORD = t(CO ? "biz_setup_type_pharmacy_co" : "biz_setup_type_pharmacy");
 const TYPEWORD = PH ? PHWORD : t("biz_pg_shop_store");                               // palabraDelBoton
 const READYWORD = PH ? PHWORD : t("biz_setup_type_retail");                          // BusinessReadyScreen ShopCard typeLabel
 /* lineaDePago (BusinessTypeOptions.kt:338): card only where there is a gateway (CO Wompi, US/CA Stripe), Pix in Brazil */
-const PAYLINE = (USCA ? t("biz_pitch_pay_cash_card") : BR ? t("biz_pitch_pay_nocard_pix") : CO ? t("biz_pitch_pay_card") : t("biz_pitch_pay_nocard"))
+const PAYLINE = (USCA ? t("biz_pitch_pay_cash_card") : BR ? t("biz_pitch_pay_nocard_pix") : (CO || R.country==="MX") ? t("biz_pitch_pay_card") : t("biz_pitch_pay_nocard"))   /* MX: Stripe card + its QR (STRIPE-MX-1) */
   + " · " + (USCA ? t("biz_band_pos_free_comision") + " " + t("biz_band_pos_rest_comision") : t("biz_band_pos_free"));
 /* Tienda colours: PaperColor.kt:52-54 */
 const AC = {main:"#1E9E55", btn:"#188448", soft:"#E5F1E7", ink:"#178046"};

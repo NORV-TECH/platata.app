@@ -528,7 +528,7 @@ function sellPage(st){
     b += `<div class="hd">${esc(t("howH"))}</div><div class="scard"><div class="srow"><span class="tx"><span class="ts">${esc(t("pickup"))}</span><span class="bs">${esc(t("pickupS"))}</span></span>${sw(true,"",true)}</div></div>`;
     b += `<div class="hd">${esc(t("payH"))}</div><div class="scard"><div class="srow"><span class="tx"><span class="ts">${esc(t("payP"))}</span><span class="bs">${esc(t("payPS"))}</span></span>${sw(true,"",true)}</div>`;
     if(C.pay.card==="wompi") b += `<div class="divd"></div><div class="soon"><span>${esc(t("cardOnline"))}</span><b>${esc(t("soon"))}</b></div>`;
-    else if(C.pay.card==="stripe") b += `<div class="divd"></div><div class="srow"><span class="tx"><span class="ts">${esc(t("cardOnline"))}</span><span class="bs cfirst">${esc(t("cardFirst"))}</span></span>${I("chev")}</div>`;
+    else if(C.pay.card==="stripe" && R.country!=="MX") b += `<div class="divd"></div><div class="srow"><span class="tx"><span class="ts">${esc(t("cardOnline"))}</span><span class="bs cfirst">${esc(t("cardFirst"))}</span></span>${I("chev")}</div>`;   /* CardCountryGate.forOnlineStore: MX = NONE (SellOnline.cardOnlineRow HIDDEN) */
     b += `</div>`;
   }
   let h = topbar(t("title")) + `<div class="spage"><div class="cin">${b}</div></div>`;

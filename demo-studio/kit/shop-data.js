@@ -3,9 +3,11 @@
    window.SHOP[country] = {
      name, lang (default UI language), loc, cur, dec,           // money: Intl locale, ISO currency, decimals (COP 0, CLP 0, rest 2)
      place, placePharm, city, owner,                            // the shop and the pharmacy shown in every demo
-     pay: { card, qr, tips, tipOption },                        // card "wompi" (CO) | "stripe" (US/CA) | null; qr "pix" (BR, amount inside) | "bank";
+     pay: { card, qr, tips, tipOption },                        // card "wompi" (CO) | "stripe" (US/CA/MX, sync/CardCountryGate.kt) | null; qr "pix" (BR, amount inside) | "bank";
                                                                 //   tips false everywhere: a shop's "Ask for a tip" starts OFF (RetailRules.tipDefaultOn=false);
-                                                                //   tipOption true only where the Stripe tip screen exists (US/CA)
+                                                                //   tipOption true only where the Stripe tip screen exists (US/CA/MX)
+                                                                //   QR is its own set (sync/QrCountries: none in US/CA; Mexico keeps it) and so is the receipt
+                                                                //   route (sync/ReceiptSendRoute: text/email in US/CA): "stripe" never means "no QR".
      people: { cashier, customer, customer2, supplier1, supplier2, phone },
      weightUnit,        // unit an item made in the item form is weighed in: "Libra" CO, "Kilogram" other LatAm + BR, "Pound" US/CA (sync/UnitPicker)
      noBarcodeWeightUnit, // unit the "Sin código" page picks for a weighed item: "Pound" US/CA, "Libra" CO (COP), "Kilogram" everywhere else
@@ -122,7 +124,7 @@ const BASE = {
      pay:{card:"wompi",qr:"bank",tips:false,tipOption:false},
      people:{cashier:"Camila Rojas",customer:"Ana Gómez",customer2:"Juan Pérez",supplier1:"Lácteos del Valle",supplier2:"Panadería San José",phone:"300 123 4567"}},
  MX:{name:"México",lang:"es",loc:"es-MX",cur:"MXN",dec:2,place:"Abarrotes Doña Rosa",placePharm:"Farmacia San Rafael",city:"Guadalajara",owner:"Rosa Martínez",
-     pay:{card:null,qr:"bank",tips:false,tipOption:false},
+     pay:{card:"stripe",qr:"bank",tips:false,tipOption:true},
      people:{cashier:"Camila Ramírez",customer:"Ana Hernández",customer2:"Juan Martínez",supplier1:"Lácteos La Pradera",supplier2:"Abarrotes del Centro",phone:"33 1234 5678"}},
  PE:{name:"Perú",lang:"es",loc:"es-PE",cur:"PEN",dec:2,place:"Bodega Doña Rosa",placePharm:"Farmacia San Rafael",city:"Lima",owner:"Rosa Huamán",
      pay:{card:null,qr:"bank",tips:false,tipOption:false},

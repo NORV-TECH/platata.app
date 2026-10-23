@@ -286,7 +286,7 @@ const mains = R.C.items.filter(i => catOf(i) === 0);
 const sides = R.C.items.filter(i => catOf(i) === 1);
 const drinks = R.C.items.filter(i => i.cat === DRINK_CAT);
 const xM = k => mains[k % mains.length], xS = k => sides[k % sides.length], xD = k => drinks[k % drinks.length];
-const HAS_CARD = !!R.C.pay.card, TIPS = !!R.C.pay.tips, HAS_QR = !(R.country==="US"||R.country==="CA");
+const HAS_CARD = !!R.C.pay.card && R.country!=="MX", TIPS = !!R.C.pay.tips && R.country!=="MX",   /* MX: no card sales in this demo (no fee line on the accountant sheet) */ HAS_QR = !(R.country==="US"||R.country==="CA");
 const SVC = R.country === "CO" ? 0.10 : 0;       // the seeded "Cargo por servicio", switched on, answered "Sí"
 const WAITER = R.C.people.waiter, WAITER2 = R.C.people.waiter2;
 const DIN_T = pick({es:"Mesas",pt:"Mesas",en:"Tables"}), DIN_G = pick({es:"Para llevar",pt:"Para viagem",en:"To Go"});
@@ -475,7 +475,7 @@ function table(st){
     ${sum(S("reports_discounts"), b.discounts>0 ? "-"+mm(b.discounts) : money(0), {tap:b.discounts>0, tag:"line-discounts"})}
     ${sum(F("refunds_with_count", b.refundCount), b.refunds>0 ? "-"+mm(b.refunds) : money(0), {tap:b.refunds>0, red:b.refunds>0, tag:"line-refunds"})}
     <hr>
-    ${head(S("reports_net_sales"), mm(b.net), `<small>${esc(S((R.country==="US"||R.country==="CA")?"reports_net_sales_note":"reports_net_sales_note_no_tips"))}</small>${cmp(b.net, pv.net, month)}`)}
+    ${head(S("reports_net_sales"), mm(b.net), `<small>${esc(S((R.country==="US"||R.country==="CA"||R.country==="MX")?"reports_net_sales_note":"reports_net_sales_note_no_tips"))}</small>${cmp(b.net, pv.net, month)}`)}
     ${b.service>0 ? sum(S("reports_service_charges"), "+"+mm(b.service), {tap:true, tag:"line-service"}) : ""}
     ${b.tax>0 ? sum(S("reports_taxes"), "+"+mm(b.tax), {tap:true, tag:"line-taxes"}) : ""}
     ${b.tips>0 ? sum(S("reports_tips"), "+"+mm(b.tips), {tap:true, tag:"line-tips"}) : ""}
@@ -599,7 +599,7 @@ const PAY = {CO:2900000,MX:17500,PE:2500,CL:1150000,EC:970,AR:1750000,PA:1350,BR
 const INV = 14, UNREAD = 2, SEND_SCROLL = 240;
 const RG = RANGES.lastmonth, B = RG.b;
 const CASH = Math.round(((byMethod(ORDERS).find(x=>x.key==="cash")||{v:0}).v) * RG.f);
-const HAS_CARD_SALES = !!R.C.pay.card;
+const HAS_CARD_SALES = HAS_CARD;
 const longDate = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"long"}).format(d);
 const RANGE_LABEL = longDate(new Date(2026,8,1)) + " – " + longDate(new Date(2026,8,30));
 /* the rows, in the app's order */

@@ -3,9 +3,11 @@
      name, lang (default UI language), loc, cur, dec,       // money: Intl locale, ISO currency, decimals
      place, city, owner,                                    // the restaurant shown in every demo
      pay: { card, qr, tips },                               // from the app (RESTAURANT-FEATURE-MAP §1h):
-                                                            //   card "wompi" (CO typed form) | "stripe" (US/CA Tap to Pay) | null
+                                                            //   card "wompi" (CO typed form) | "stripe" (US/CA/MX Tap to Pay, sync/CardCountryGate.kt; MX since STRIPE-MX-1) | null
                                                             //   qr   "pix" (BR, QR carries the amount) | "bank" (static bank QR)
-                                                            //   tips true only with Stripe (opt-in tip screen). No LatAm tips, no service charge.
+                                                            //   tips true only with Stripe (US/CA/MX: the tip screen, RestaurantRules.tipDefaultOn). No other LatAm tips, no service charge.
+                                                           //   QR is its own set (sync/QrCountries: none in US/CA) and the receipt route too
+                                                           //   (sync/ReceiptSendRoute: text/email in US/CA): never read "stripe" as "no QR" or "send by text".
      tables,                                                // table count of the "Mesas" dining option
      cats: [names], items: [{id, cat, name, price}],        // the menu (owner's own words: stays in the local language)
      order: [ids]                                           // R4: the three dishes table 4 orders (main, side/second, drink)
@@ -31,7 +33,7 @@ window.RESTO = {
 
  MX: Object.assign({ name:"México", lang:"es", loc:"es-MX", cur:"MXN", dec:2,
    place:"Fonda Lupita", city:"Ciudad de México", owner:"Lupita",
-   pay:{card:null, qr:"bank", tips:false}, tables:12, order:["pastor","pozole","horchata"] },
+   pay:{card:"stripe", qr:"bank", tips:true}, tables:12, order:["pastor","pozole","horchata"] },
    M(["Platos fuertes","Antojitos","Bebidas","Postres"], [
     ["pastor","Platos fuertes","Tacos al pastor (orden)",95],
     ["pozole","Platos fuertes","Pozole rojo",150],

@@ -635,7 +635,7 @@ function table(st){
     ${sum(S("reports_discounts"), b.discounts>0 ? "-"+mm(b.discounts) : money(0), {tap:b.discounts>0, tag:"line-discounts"})}
     ${sum(F("refunds_with_count", b.refundCount), b.refunds>0 ? "-"+mm(b.refunds) : money(0), {tap:b.refunds>0, red:b.refunds>0, tag:"line-refunds"})}
     <hr>
-    ${head(S("reports_net_sales"), mm(b.net), `<small>${esc(S((R.country==="US"||R.country==="CA")?"reports_net_sales_note":"reports_net_sales_note_no_tips"))}</small>${cmp(b.net, pv.net, month)}`)}
+    ${head(S("reports_net_sales"), mm(b.net), `<small>${esc(S((R.country==="US"||R.country==="CA"||R.country==="MX")?"reports_net_sales_note":"reports_net_sales_note_no_tips"))}</small>${cmp(b.net, pv.net, month)}`)}
     ${b.service>0 ? sum(S("reports_service_charges"), "+"+mm(b.service), {tap:true, tag:"line-service"}) : ""}
     ${b.tax>0 ? sum(S("reports_taxes"), "+"+mm(b.tax), {tap:true, tag:"line-taxes"}) : ""}
     ${b.tips>0 ? sum(S("reports_tips"), "+"+mm(b.tips), {tap:true, tag:"line-tips"}) : ""}

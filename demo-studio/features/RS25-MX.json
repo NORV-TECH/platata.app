@@ -1,0 +1,61 @@
+{
+ "id": "RS25-MX",
+ "name": "Charge by link (restaurant, owner phone that cannot tap cards, Mexico)",
+ "business": "restaurante",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-charge",
+   "voice": {
+    "es": "Con la venta lista, toca Cobrar."
+   }
+  },
+  {
+   "id": "2-card",
+   "voice": {
+    "es": "Si tu teléfono no lee tarjetas al acercarlas, igual cobras con tarjeta, con un enlace. Toca Tarjeta."
+   }
+  },
+  {
+   "id": "3-notice",
+   "voice": {
+    "es": "Platata te explica por qué y cómo se cobra. Toca Continuar."
+   }
+  },
+  {
+   "id": "4-tip",
+   "voice": {
+    "es": "El cliente elige la propina."
+   }
+  },
+  {
+   "id": "5-qr",
+   "voice": {
+    "es": "Aparece un QR con el total. También puedes mandar el enlace por WhatsApp."
+   }
+  },
+  {
+   "id": "6-pay",
+   "voice": {
+    "es": "El cliente escanea el QR con su propio celular y paga ahí con su tarjeta."
+   }
+  },
+  {
+   "id": "7-done",
+   "voice": {
+    "es": "El pago llega y la venta se cierra sola."
+   }
+  },
+  {
+   "id": "8-end",
+   "voice": {
+    "es": "Así cobras con enlace, con Platata."
+   }
+  }
+ ]
+}

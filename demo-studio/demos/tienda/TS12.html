@@ -446,7 +446,7 @@ document.addEventListener("transitionend", e => { if(e.propertyName==="transform
 const MF = Math.pow(10, C.dec);                   // minor units
 const toM = v => Math.round(v * MF), fromM = m => m / MF;
 const x = k => ITEMS[k % ITEMS.length];
-const HAS_CARD = !!C.pay.card, HAS_QR = !(R.country==="US"||R.country==="CA");
+const HAS_CARD = !!C.pay.card && R.country!=="MX", HAS_QR = !(R.country==="US"||R.country==="CA");
 const PM_NAME = {cash:S("payment_method_cash"), qr:(R.country==="BR"?"Pix":S("payment_method_qr")), card:S("payment_method_card"), fiado:S("payment_method_fiado")};
 /* [hour, minute, item indexes, method, employee, {disc: index of the item with the 10% discount, refund: index refunded}] */
 const TPL = [
@@ -637,7 +637,7 @@ function table(st){
     ${sum(S("reports_discounts"), b.discounts>0 ? "-"+mm(b.discounts) : money(0), {tap:b.discounts>0, tag:"line-discounts"})}
     ${sum(F("refunds_with_count", b.refundCount), b.refunds>0 ? "-"+mm(b.refunds) : money(0), {tap:b.refunds>0, red:b.refunds>0, tag:"line-refunds"})}
     <hr>
-    ${head(S("reports_net_sales"), mm(b.net), `<small>${esc(S((R.country==="US"||R.country==="CA")?"reports_net_sales_note":"reports_net_sales_note_no_tips"))}</small>${cmp(b.net, pv.net, month)}`)}
+    ${head(S("reports_net_sales"), mm(b.net), `<small>${esc(S((R.country==="US"||R.country==="CA"||R.country==="MX")?"reports_net_sales_note":"reports_net_sales_note_no_tips"))}</small>${cmp(b.net, pv.net, month)}`)}
     ${b.service>0 ? sum(S("reports_service_charges"), "+"+mm(b.service), {tap:true, tag:"line-service"}) : ""}
     ${b.tax>0 ? sum(S("reports_taxes"), "+"+mm(b.tax), {tap:true, tag:"line-taxes"}) : ""}
     ${b.tips>0 ? sum(S("reports_tips"), "+"+mm(b.tips), {tap:true, tag:"line-tips"}) : ""}
@@ -760,7 +760,7 @@ const PAY = {CO:1300000,MX:9500,PE:1300,CL:650000,EC:520,AR:850000,PA:720,BR:180
 const INV = 14, UNREAD = 2, SEND_SCROLL = 240;
 const RG = RANGES.lastmonth, B = RG.b;
 const CASH = Math.round(((byMethod(ORDERS).find(x=>x.key==="cash")||{v:0}).v) * RG.f);
-const HAS_CARD_SALES = !!C.pay.card;
+const HAS_CARD_SALES = HAS_CARD;   /* MX: no card sales in this demo (no fee line on the accountant sheet) */
 const FIADO_M = B.tab;   // the month's sales put on a tab (collected(o) of the fiado orders)
 const longDate = d => new Intl.DateTimeFormat(LOCALE,{dateStyle:"long"}).format(d);
 const RANGE_LABEL = longDate(new Date(2026,8,1)) + " – " + longDate(new Date(2026,8,30));

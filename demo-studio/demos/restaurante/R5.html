@@ -92,6 +92,7 @@ const typedOf = v => C.dec===0 ? String(Math.round(v)) : String(v);             
 const prefill = v => C.dec===0 ? String(Math.round(v)) : v.toFixed(C.dec);                // formatAmountForInput(0) = "0" / "0.00"
 const EXAMPLE = R.money(C.dec===0 ? 5000 : 5.5);                                          // CurrencyUtils.exampleAmount
 const STRIPE = C.pay.card==="stripe", WOMPI = C.pay.card==="wompi", PIX = C.pay.qr==="pix";
+const NO_QR = R.country==="US" || R.country==="CA";   // sync/QrCountries.NO_QR: no QR, so no set-up link (Mexico: Stripe card AND its QR link)
 const DISH = C.items.find(x=>x.id===C.order[1]);
 const ALL_C = "#607D8B";
 const hexA = (hex, a) => { const n=parseInt(hex.slice(1),16); return `rgba(${n>>16},${(n>>8)&255},${n&255},${a})`; };
@@ -150,7 +151,7 @@ function pay(st){
   const up = st.pick==="deliv" ? st.opts.deliv.up : 0, tot = sub(st) + up;
   const zero = C.dec===0 ? "000" : (new Intl.NumberFormat(C.loc).format(1.5).replace(/\d/g,""));
   const k = ["1","2","3","4","5","6","7","8","9",zero,"0","⌫"];
-  const link = STRIPE ? "" : `<div class="plink"><u>${esc(T(PIX?"linkPix":WOMPI?"linkQrCard":"linkQr"))}</u><span>${esc(T("noThanks"))}</span></div>`;
+  const link = NO_QR ? "" : `<div class="plink"><u>${esc(T(PIX?"linkPix":WOMPI?"linkQrCard":"linkQr"))}</u><span>${esc(T("noThanks"))}</span></div>`;
   const row = STRIPE
     ? `<div class="prow"><div class="exact">${esc(T("exactShort"))}</div><div class="pcard"><b>+ ${esc(T("card"))}</b><small>${esc(T("setUp"))}</small></div></div>`
     : `<div class="prow"><div class="exact">${esc(T("exact", R.money(tot)))}</div></div>`;

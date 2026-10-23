@@ -367,7 +367,9 @@ const hexA = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${
 const ALL_C = "#607D8B";                                     // getCategoryBaseColor(null)
 const catColor = key => (C.catOf(key) || {color: ALL_C}).color;
 const catName = key => (C.catOf(key) || {name: ""}).name;
-const STRIPE = CC === "US" || CC === "CA";                   // sync/PayWaysVisibility: card = Tap to Pay, no set-up link
+const STRIPE = CC === "US" || CC === "CA" || CC === "MX";   // sync/CardCountryGate: Stripe card = Tap to Pay (MX since STRIPE-MX-1)
+const NO_QR = CC === "US" || CC === "CA";                    // sync/QrCountries.NO_QR: no QR, so no set-up link (Mexico keeps its QR)
+const TEXT_ROUTE = CC === "US" || CC === "CA";               // sync/ReceiptSendRoute: text + email (Mexico: WhatsApp)
 const WOMPI = CC === "CO";
 const PIX = C.cur === "BRL";
 /* utils/CurrencyUtils.kt decimalSeparatorFor(currency): the CURRENCY's locale (COP CLP ARS BRL comma; USD MXN PEN CAD dot) */
@@ -521,8 +523,8 @@ function cashDue(v){
 }
 function payScreen(total, nLines){
   const due = cashDue(total);
-  const cardOn = STRIPE;                                                 // US/CA: "+ Tarjeta / Configurar"; CO card is seeded off
-  const link = STRIPE ? null : WOMPI ? "pay_setup_link_qr_card" : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");
+  const cardOn = STRIPE;                                                 // US/CA/MX: "+ Tarjeta / Configurar" (owner, Stripe not connected); CO card is seeded off
+  const link = NO_QR ? null : WOMPI ? "pay_setup_link_qr_card" : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");
   const keys = ["1","2","3","4","5","6","7","8","9",DECKEY,"0","⌫"];
   let btns = `<div style="flex:1" class="exact" data-t="exact">${esc(cardOn ? t("cash_exact_short") : t("cash_exact", money(due)))}</div>`;
   if(cardOn) btns += `<div style="flex:1" class="nudge"><span>+ ${esc(t("pay_card_short"))}</span><small>${esc(t("pay_card_setup_hint"))}</small></div>`;
@@ -539,7 +541,7 @@ function payScreen(total, nLines){
 /* ---------- Sale complete (ReceiptOptionsScreen.kt SaleCompleteContent): an exact cash sale, no printer ---------- */
 function doneScreen(received){
   let b = `<img src="${IMG.celebrate}" alt=""><div class="ttl">${esc(t("receipt_opt_completed"))}</div><div class="sub">${esc(t("receipt_opt_received", money(received)))}</div><div class="q">${esc(t("receipt_opt_how_receipt"))}</div>`;
-  let f = STRIPE ? `<div class="b pri">${esc(t("receipt_text_receipt"))}</div><div class="b ol">${esc(t("receipt_email_receipt"))}</div>`
+  let f = TEXT_ROUTE ? `<div class="b pri">${esc(t("receipt_text_receipt"))}</div><div class="b ol">${esc(t("receipt_email_receipt"))}</div>`
                  : `<div class="b wa">${esc(t("receipt_opt_whatsapp_btn"))}</div>`;
   f += `<div class="b ol">${esc(t("receipt_opt_show_receipt"))}</div><div class="b pri">${esc(t("receipt_opt_new_sale_no_receipt"))}</div><div class="pv">${esc(t("receipt_opt_privacy"))}</div>`;
   return `<div class="x"><div class="x-sc-body">${b}</div><div class="x-sc-foot">${f}</div></div>`;
