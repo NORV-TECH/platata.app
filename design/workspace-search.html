@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
-<title>Workspace Search · Design v1</title>
+<title>Workspace Search Design</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap" rel="stylesheet">
 <style>
 /* ── page ── */
 :root{--pg:#eceef1;--pg-ink:#17181b;--pg-sub:#55595f;--pg-line:#d6d9de;--pg-card:#ffffff}
-@media (prefers-color-scheme:dark){:root{--pg:#0b0c0e;--pg-ink:#f1f2f4;--pg-sub:#a3a8ae;--pg-line:#2a2d31;--pg-card:#17191c}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--pg:#0b0c0e;--pg-ink:#f1f2f4;--pg-sub:#a3a8ae;--pg-line:#2a2d31;--pg-card:#17191c}}
+:root[data-theme="dark"]{--pg:#0b0c0e;--pg-ink:#f1f2f4;--pg-sub:#a3a8ae;--pg-line:#2a2d31;--pg-card:#17191c}
 *{box-sizing:border-box}
 body{margin:0;background:var(--pg);color:var(--pg-ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   -webkit-font-smoothing:antialiased;letter-spacing:-.005em}
