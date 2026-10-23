@@ -10893,5 +10893,100 @@
   "hash": "48230495d8add2c7dbe1d53ac174be43df3484ee",
   "file": "demo-studio/audio/VS19/pt/9-fin.mp3",
   "chars": 47
+ },
+ "RS25-MX/es/1-charge": {
+  "hash": "037693e0f865912cb2dd600beebeac54891618d2",
+  "file": "demo-studio/audio/RS25-MX/es/1-charge.mp3",
+  "chars": 32
+ },
+ "RS25-MX/es/2-card": {
+  "hash": "563b1909ef427695cf27bfffa678c39aa60453b2",
+  "file": "demo-studio/audio/RS25-MX/es/2-card.mp3",
+  "chars": 102
+ },
+ "RS25-MX/es/3-notice": {
+  "hash": "51fd08d90f012c638d5257752fefc9d542f6790f",
+  "file": "demo-studio/audio/RS25-MX/es/3-notice.mp3",
+  "chars": 59
+ },
+ "RS25-MX/es/4-tip": {
+  "hash": "7835a3bba7afb9d146b4b61be5c16777e686994f",
+  "file": "demo-studio/audio/RS25-MX/es/4-tip.mp3",
+  "chars": 42
+ },
+ "RS25-MX/es/5-qr": {
+  "hash": "2fa6aed6172e1d9ff8a6c65ef842bf940b8cc78f",
+  "file": "demo-studio/audio/RS25-MX/es/5-qr.mp3",
+  "chars": 73
+ },
+ "RS25-MX/es/6-pay": {
+  "hash": "304f60a86cf5bacfec129befd05536a774cce720",
+  "file": "demo-studio/audio/RS25-MX/es/6-pay.mp3",
+  "chars": 73
+ },
+ "RS25-MX/es/7-done": {
+  "hash": "52630f73342cb0626f1d04cb2c991884676299ac",
+  "file": "demo-studio/audio/RS25-MX/es/7-done.mp3",
+  "chars": 40
+ },
+ "RS25-MX/es/8-end": {
+  "hash": "11c0370accf12c39390b517d6cf03ae7e755a180",
+  "file": "demo-studio/audio/RS25-MX/es/8-end.mp3",
+  "chars": 35
+ },
+ "RS5-MX/es/1-charge": {
+  "hash": "037693e0f865912cb2dd600beebeac54891618d2",
+  "file": "demo-studio/audio/RS5-MX/es/1-charge.mp3",
+  "chars": 32
+ },
+ "RS5-MX/es/2-card": {
+  "hash": "beebdae1485b5a7e2bd0745351a578561380a731",
+  "file": "demo-studio/audio/RS5-MX/es/2-card.mp3",
+  "chars": 62
+ },
+ "RS5-MX/es/3-tip": {
+  "hash": "888ea839cb0504c7687a591255d75ddf39ae3112",
+  "file": "demo-studio/audio/RS5-MX/es/3-tip.mp3",
+  "chars": 66
+ },
+ "RS5-MX/es/4-tap": {
+  "hash": "c37978227b068e2b32fa0980aae122ab2fa41175",
+  "file": "demo-studio/audio/RS5-MX/es/4-tap.mp3",
+  "chars": 72
+ },
+ "RS5-MX/es/5-approved": {
+  "hash": "b9d353a049676e283ec47975fd717f26897c28dc",
+  "file": "demo-studio/audio/RS5-MX/es/5-approved.mp3",
+  "chars": 78
+ },
+ "RS5-MX/es/6-end": {
+  "hash": "d3a37937e5b3442e5fe7d06611a1b0193aadbeea",
+  "file": "demo-studio/audio/RS5-MX/es/6-end.mp3",
+  "chars": 36
+ },
+ "TS5-MX/es/1-charge": {
+  "hash": "50813489a71932c805d08bf3ce073854fb311f54",
+  "file": "demo-studio/audio/TS5-MX/es/1-charge.mp3",
+  "chars": 42
+ },
+ "TS5-MX/es/2-card": {
+  "hash": "bd9722119ef4fa3b506bbfd847006aa9aee7bf76",
+  "file": "demo-studio/audio/TS5-MX/es/2-card.mp3",
+  "chars": 75
+ },
+ "TS5-MX/es/3-tap": {
+  "hash": "c37978227b068e2b32fa0980aae122ab2fa41175",
+  "file": "demo-studio/audio/TS5-MX/es/3-tap.mp3",
+  "chars": 72
+ },
+ "TS5-MX/es/4-approved": {
+  "hash": "c76d9437e8f9a09d53beac321c3fa681be3df975",
+  "file": "demo-studio/audio/TS5-MX/es/4-approved.mp3",
+  "chars": 79
+ },
+ "TS5-MX/es/5-end": {
+  "hash": "d3a37937e5b3442e5fe7d06611a1b0193aadbeea",
+  "file": "demo-studio/audio/TS5-MX/es/5-end.mp3",
+  "chars": 36
  }
 }
