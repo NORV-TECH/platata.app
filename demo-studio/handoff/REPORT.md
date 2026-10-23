@@ -78,6 +78,7 @@ Built and checked at d30ffa1 (STRIPE-MX-1, LINK-1..3, LINKFIX-1). Brief `handoff
 - Not made: VS5-MX (services) is voiced but held with the services tile-price videos; a "card can't tap" variant of the shop/services pages (one link video is enough for now).
 
 ## On hold
+- **Paused (Monti, 23 Oct): everything that needs the coder waits until Monti says the coder is back.** No automatic checks of the app are running. Then: re-record the 45 tile-price videos (+ V5 Brazil, VS5-MX) as listed below.
 - V9, VS20 (online booking / sell online): coder Lane D fix + Monti's deploy.
 - All US/Canada work (services scripts carry es + pt only).
 - V5 Brazil video: waits for coder item 3 (pt WhatsApp text).
