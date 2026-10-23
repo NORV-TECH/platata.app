@@ -571,12 +571,13 @@ const stepsStripe = [
       E.after(3500,()=>{ st.sstage=null; st.screen="done"; }); }}
 ];
 /* Mexico: beat 1 shows the pay row (Exacto / QR / Tarjeta + "Cobrar con enlace") before Tarjeta is tapped; tips off = the Card tap
-   starts the charge itself (CheckoutSheetBody.kt:636-643, RetailRules.kt:32). wait = a video-only delay */
+   starts the charge itself (CheckoutSheetBody.kt:636-643, RetailRules.kt:32). wait = a video-only delay, set so each tap lands
+   as its button is named in TS5-MX.json (timed at 0.067 s per character) */
 const stepsMx = [
-  {beat:0, wait:1.2, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
-  {beat:1, wait:2.2, hint:TAP+t("pay_card_short"), target:'[data-t="card"]', tap(st,E){ st.sstage="idle"; E.after(1300,()=>{ st.sstage="collect"; }); }},
+  {beat:0, wait:1.6, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
+  {beat:1, hint:TAP+t("pay_card_short"), target:'[data-t="card"]', tap(st,E){ st.sstage="idle"; E.after(1300,()=>{ st.sstage="collect"; }); }},
   {beat:2, wait:1.2, hint:H("El cliente acerca su tarjeta","O cliente aproxima o cartão","The customer taps their card"), target:'[data-t="tapcard"]', tap(st,E){ st.sstage="proc";
-      E.after(2500,()=>{ st.sstage=null; st.screen="done"; }); }}
+      E.after(2800,()=>{ st.sstage=null; st.screen="done"; }); }}
 ];
 const stepsNone = [
   {beat:0, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},

@@ -291,11 +291,12 @@ const stepsStripe = [
   {beat:2, hint:H("El cliente acerca su tarjeta","O cliente aproxima o cartão","The customer taps their card"), target:'[data-t="tapcard"]', tap(st,E){ st.sstage="proc";
       E.after(2000,()=>{ st.sstage=null; st.screen="done"; }); }}
 ];
-/* Mexico: beat 1 shows the pay row (Exacto / QR / Tarjeta + "Cobrar con enlace") before Tarjeta is tapped; wait = a video-only delay */
+/* Mexico: beat 1 shows the pay row (Exacto / QR / Tarjeta + "Cobrar con enlace") before Tarjeta is tapped; wait = a video-only delay,
+   set so each tap lands as its button is named in RS5-MX.json (timed at 0.067 s per character) */
 const stepsMx = [
-  {beat:0, wait:0.6, hint:H("Toca Cobrar","Toque em Cobrar","Tap Charge"), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
-  {beat:1, wait:2.2, hint:H("Toca ","Toque em ","Tap ")+t("pay_card_short"), target:'[data-t="card"]', tap(st){ st.sstage="tip"; }},
-  {beat:2, wait:1.5, hint:H("Toca ","Toque em ","Tap ")+t("stripe_tip_preset", 18, money(TIP)), target:'[data-t="tip-18"]', tap(st,E){ st.sstage="idle"; E.after(1300,()=>{ st.sstage="collect"; }); }},
+  {beat:0, wait:0.9, hint:H("Toca Cobrar","Toque em Cobrar","Tap Charge"), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
+  {beat:1, wait:2.85, hint:H("Toca ","Toque em ","Tap ")+t("pay_card_short"), target:'[data-t="card"]', tap(st){ st.sstage="tip"; }},
+  {beat:2, wait:2.3, hint:H("Toca ","Toque em ","Tap ")+t("stripe_tip_preset", 18, money(TIP)), target:'[data-t="tip-18"]', tap(st,E){ st.sstage="idle"; E.after(1300,()=>{ st.sstage="collect"; }); }},
   {beat:3, wait:1.2, hint:H("El cliente acerca su tarjeta","O cliente aproxima o cartão","The customer taps their card"), target:'[data-t="tapcard"]', tap(st,E){ st.sstage="proc";
       E.after(2800,()=>{ st.sstage=null; st.screen="done"; }); }}
 ];
