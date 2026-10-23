@@ -1,10 +1,11 @@
 # Report (keep this up to date)
 
-Last update: 22 Oct 2026, 2:45 PM PT (21:45 UTC), by the services builder (took over from the architect at 11:00 AM PT).
-App commit the demos were built and checked at: 73c65f08 (sim/usa-canada, MERGE-23). Newest commit seen: d30ffa1 (MERGE-24, the online-booking fix "Arreglo 14"); it does not touch the tiles, so the tile-price fix is NOT in yet. Website work only on `demo-studio`, folder `demo-studio/`; nothing deployed, nothing published, main untouched.
+Last update: 23 Oct 2026, 1:50 PM PT (20:50 UTC), by the services builder (took over from the architect on 22 Oct, 11:00 AM PT).
+App commit the demos were built and checked at: 73c65f08 (sim/usa-canada, MERGE-23). Newest commit seen: d30ffa1 (MERGE-24, the online-booking fix "Arreglo 14"; re-checked 23 Oct); it does not touch the tiles, so the tile-price fix is NOT in yet. The Mexico card work was checked at d30ffa1. Website work only on `demo-studio`, folder `demo-studio/`; nothing deployed, nothing published, main untouched.
 
 ## Summary
 Services: 31 demos built (V1–V8, VS1–VS24 except VS20), every one independently reviewed against the app code and fixed. Voices made for all of them (es, pt, Mexico es where Mexico differs). 20 videos are final; 45 videos show the app's cut tile prices and wait for the coder's fix (architect, 22 Oct: wait for the fix, publish nothing); the Brazil V5 video waits for the Portuguese WhatsApp fix. Coder list round 2 is ready (10 blocking, 42 small).
+Mexico cards (HANDOFF item 6): 3 videos final (RS5-MX, TS5-MX, RS25-MX "Cobrar con enlace"), the store picture is made, Brazil Pix lines checked (nothing to change); a Mexico coder list is ready (`handoff/research/mexico/CODER-PROMPTS-MEXICO.md`).
 
 ## How each services demo was made
 Build (helper, verified in the app code at 73c65f08) → independent review by a fresh helper (`handoff/research/services/REVIEW-*.md`, 8 reviews, 48 MUSTs found, all fixed) → voice (GitHub job) → timing check with the real clip lengths (`tools/timing_frames.py`, frames looked at for every video) → record → decode check → commit.
@@ -55,12 +56,32 @@ Every page also plays for the other three businesses (`&biz=veterinaria|taller-m
 
 Demo tree (`index.html`, built by `tools/tree_restaurant.py`): services section for the four businesses (pages with `&biz=`), Spanish countries + Brazil; US/CA not offered for services (on hold). Not published: the architect publishes.
 
+## Mexico cards (HANDOFF item 6), 23 Oct
+Built and checked at d30ffa1 (STRIPE-MX-1, LINK-1..3, LINKFIX-1). Brief `handoff/research/mexico/_MEXICO-BRIEF.md`; independent review
+`handoff/research/mexico/REVIEW-MX1.md` (2 MUST, both fixed; the CO, BR, US, CA and PE paths of RS5/TS5 proven to play exactly as before).
+
+| Video | What it shows | Status |
+|---|---|---|
+| RS5-MX (restaurant) | Pay row Exacto / QR / Tarjeta + the small "Cobrar con enlace" link (the phone can tap), tip 15/18/20, "Acerca la tarjeta", "Procesando…", Sale complete "Pago aprobado", receipt by WhatsApp. No fee. | final `video/RS5-MX-es.mp4` |
+| TS5-MX (shop) | Same, no tip screen (shops don't ask by default; `&type=pharmacy` plays too). | final `video/TS5-MX-es.mp4` |
+| RS25-MX "Cobrar con enlace" (new feature S25, restaurant) | A phone on Android 12 can't tap: Card reads "Por enlace · QR o WhatsApp" + amber bar; the red notice; Continuar; tip; QR page with the total and the tip; the customer pays on his own phone (a plain card, Stripe's page is never drawn); "Pago recibido. Guardando la venta…"; Sale complete "Pago aprobado VISA ••4242". | final `video/RS25-MX-es.mp4` |
+| Store picture "Acepta tarjetas" (Mexico, tap) | Phone with the app's own "Total a cobrar · Acerca la tarjeta" screen next to a generic card (no brand); small print = the app's own condition (NFC, Android 13) and the link fallback. Colombia version held (camera scan not built). | `store/accept-cards-MX.png` (`tools/render_store.py`) |
+
+- Two honest demo-state choices: RS25 uses an Android 12 phone (a phone with NO NFC also gets a red "ESTE TELÉFONO NO PUEDE COBRAR CON TARJETA" strip on the
+  register, which contradicts the link: coder item 3) and a shop without bank QR (with QR on, the three-button row cuts the hint "Por enlace · QR o WhatsApp":
+  coder item 1).
+- Every restaurant/shop page now shows Mexico with the Stripe card (kits: MX `pay.card = "stripe"`); the pass over the other pay-screen pages is in
+  `handoff/research/mexico/build-notes/MX-SWEEP.md` (interactive pages only, no video changes).
+- Tree: S5 (cards) now offered in Mexico for every business; new feature S25 "Cobrar con enlace" (MX, US, CA); a Mexico card video never falls back to
+  Colombia's Wompi video (no Mexico video = no video).
+- Brazil: the only Brazil videos that open the Pix QR are RS4, TS4, VS4, VS6, VS7, and every one already says the QR carries the total. Nothing re-recorded.
+- Not made: VS5-MX (services) is voiced but held with the services tile-price videos; a "card can't tap" variant of the shop/services pages (one link video is enough for now).
+
 ## On hold
 - V9, VS20 (online booking / sell online): coder Lane D fix + Monti's deploy.
 - All US/Canada work (services scripts carry es + pt only).
 - V5 Brazil video: waits for coder item 3 (pt WhatsApp text).
 - Colombia card scan: not in the app.
-- Mexico card pieces (RS5/TS5 `-MX`, the "can't tap → Cobrar con enlace" video, store picture): next, after services. Note coder item 7: in Mexico "Configurar QR" hides "Cobrar con enlace" on the pay screen.
 
 ## Waiting for the tile-price fix (coder round 2, item 2: blocks a demo)
 The architect (22 Oct): wait for the fix, publish nothing, record now only videos with no cut tile price on screen. These 45 videos were recorded, found to show cut prices, and taken out of the repo; their voices are kept, so they are recorded again as soon as the fix is in the newest sim/usa-canada commit (then: `tools/timing_frames.py`, record, `tools/cut_price_scan.py`, commit):
@@ -73,8 +94,10 @@ Also re-record when those land: V7 after item 8 ("2 servicios"); V3, V4, V6 afte
 ## Questions for Monti
 - None open. Answered 22 Oct: the services videos wait for the tile fix (architect); the Mexico card surcharge is left as is (Monti).
 
-## For the architect (from Monti, 22 Oct)
-- **Mexico card surcharge:** the "Cargo por tarjeta de crédito" discount idea is offered in Mexico (Stripe country), where a card surcharge may not be allowed. Monti: leave it as is for now, no research; keep it as a point for when Mexico is looked at. (Coder round 2, "For Monti" 1.)
+## For the architect
+- **Tap to Pay is still the simulated reader** (`sync/TapToPayMode.kt:25` `REAL_TAP_TO_PAY = false`): the Mexico (and US) tap videos show the flow the app is built for; a real card can be taken only once that ships. Re-check the tap pages then (Stripe's own tap screen may cover "Acerca la tarjeta").
+- **"Cobrar así cuesta un poco más"** (link notice, `link_notice_cost`) is the app's text in Mexico too, where Platata takes no fee on either path; it rests on Stripe's Mexican rates and was never confirmed for Mexico (Mexico coder list, item 4). The voice never talks about cost.
+- **Mexico card surcharge (from Monti, 22 Oct):** the "Cargo por tarjeta de crédito" discount idea is offered in Mexico (Stripe country), where a card surcharge may not be allowed. Monti: leave it as is for now, no research; keep it as a point for when Mexico is looked at. (Coder round 2, "For Monti" 1.)
 - MERGE-24 (d30ffa1, online booking "Arreglo 14") is in sim/usa-canada; V9 and VS20 still wait for Monti's deploy and go.
 
 ## Notes

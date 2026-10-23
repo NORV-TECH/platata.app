@@ -37,11 +37,12 @@ App checked: `/home/user/suma-plus-android` at d30ffa1 (sim/usa-canada). Not tou
   gateway), so Mexico keeps the QR flow; its pay screen is Exacto · QR · "+ Tarjeta · Configurar" (Stripe not connected yet).
   `if(STRIPE) renderUS`, beats, steps, endText -> `NO_QR`; QR-flow pay `card:STRIPE?"setup":"none"` (CO/BR/PE.. still "none").
 - Block edited, no visible change (they carry the copy but never draw the pay screen / payment methods): `tienda/TS1, TS2,
-  TS8, T6, T7, T9, T10, T12`.
+  TS8, T6, T7, T9, T10, T12` (TS1/T12 do change, but only through the pay line below).
 
 **Own pay blocks**
 - `tienda/T1, T2, T3, T4, T5, T11`: same split (`STRIPE` incl. MX, `NO_QR`, `TEXT_ROUTE`): Mexico pay screen = Exacto +
-  "+ Tarjeta · Configurar" + "Configurar QR"; Sale complete keeps WhatsApp.
+  "+ Tarjeta · Configurar" + "Configurar QR"; Sale complete keeps WhatsApp. Visible only in T1 and T4 (T2, T3, T5, T11 carry
+  the block but never draw the pay screen).
 - `restaurante/R5`: the set-up link now keys on `NO_QR`, so Mexico shows the card set-up button AND "Configurar QR".
 
 **Other readers**
@@ -68,4 +69,17 @@ App checked: `/home/user/suma-plus-android` at d30ffa1 (sim/usa-canada). Not tou
 - `kit/pos.js` reads `pay.card`, but no page loads it.
 
 ## Checks
-(results below)
+- Regression proof for the other countries: DOM snapshots (every demo step + the video timeline every 1 s, scripts/styles
+  stripped) of all 68 restaurant + shop pages (not RS5/TS5) in CO:es, BR:pt, US:en, CA:en, PE:es, before (copy of the tree
+  before any edit) vs after: **the video DOM is identical**, apart from pre-existing timing noise that also shows between
+  two runs of the untouched tree (demo-mode typing carets / overlay timing, the touch marker on TS4's QR
+  terms page, a sub-pixel touch in R6).
+- Mexico: video DOM changed only where intended (R5, RS1, RS3, RS4, RS6, RS7, RS11, RS12 note, RS21, T1, T4, T8, T12, TS1,
+  TS3, TS4, TS6, TS7, TS11, TS12 note, TS21); RS20/TS20 and the RS12/TS12 accountant figures are unchanged for Mexico.
+- Mexico screenshots looked at: RS3, RS4, RS6, RS7, R5, RS1, RS11, RS21, T1, T8, TS4, TS11, TS21 pay / payment-methods / report
+  screens (Cash + QR + "+ Tarjeta · Configurar", "Configurar QR" link, QR row and Tarjeta row, WhatsApp receipt dd/MM, tips line).
+
+## Problems found in the app
+None that change what a page may draw. Only stale comments that still say "Stripe = US/CA": `ui/screens/home/CheckoutPayBlock.kt:80`,
+`ui/screens/home/CheckoutSheetBody.kt:202`, `sync/PayWaysVisibility.kt:50` (doc of `cardIsSetupButton`), `ui/pos/CardPaymentActions.kt:82`
+(the code itself already includes Mexico).
