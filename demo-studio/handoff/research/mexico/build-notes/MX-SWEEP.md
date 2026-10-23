@@ -33,9 +33,9 @@ App checked: `/home/user/suma-plus-android` at d30ffa1 (sim/usa-canada). Not tou
 (QR row, owner set-up link, the US "own method" flow), `TEXT_ROUTE` = US/CA (no longer `= STRIPE`).
 - Visible Mexico change (owner phone pay screen: Exacto + "+ Tarjeta · Configurar" + "Configurar QR · No, gracias";
   Payment methods: QR row AND Tarjeta row; receipt still WhatsApp): `restaurante/RS3, RS6, RS7`, `tienda/TS3, TS6, TS7, TS21, T8`.
-- `restaurante/RS4`, `tienda/TS4` (Cobrar con QR): Mexico now runs the QR flow (was wrongly the US "own method" flow would
-  have run once the kit said stripe); its pay screen is Exacto · QR · "+ Tarjeta · Configurar" (Stripe not connected yet).
-  `if(STRIPE) renderUS`, beats, steps, endText -> `NO_QR`; QR-flow pay `card:STRIPE?"setup":"none"`.
+- `restaurante/RS4`, `tienda/TS4` (Cobrar con QR): the US "own method" flow is now chosen by `NO_QR` (not by the card
+  gateway), so Mexico keeps the QR flow; its pay screen is Exacto · QR · "+ Tarjeta · Configurar" (Stripe not connected yet).
+  `if(STRIPE) renderUS`, beats, steps, endText -> `NO_QR`; QR-flow pay `card:STRIPE?"setup":"none"` (CO/BR/PE.. still "none").
 - Block edited, no visible change (they carry the copy but never draw the pay screen / payment methods): `tienda/TS1, TS2,
   TS8, T6, T7, T9, T10, T12`.
 

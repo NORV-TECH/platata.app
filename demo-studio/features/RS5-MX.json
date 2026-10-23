@@ -24,7 +24,7 @@
   {
    "id": "3-tip",
    "voice": {
-    "es": "Pásale tu celular: el cliente elige la propina y el cobro empieza."
+    "es": "Pásale tu celular al cliente: elige la propina y el cobro empieza."
    }
   },
   {
@@ -36,7 +36,7 @@
   {
    "id": "5-approved",
    "voice": {
-    "es": "Pago aprobado, con la propina incluida. El recibo lo mandas por WhatsApp."
+    "es": "Pago aprobado: la venta queda guardada sola. El recibo lo mandas por WhatsApp."
    }
   },
   {

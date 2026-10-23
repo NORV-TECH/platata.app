@@ -573,7 +573,7 @@ const stepsStripe = [
 /* Mexico: beat 1 shows the pay row (Exacto / QR / Tarjeta + "Cobrar con enlace") before Tarjeta is tapped; tips off = the Card tap
    starts the charge itself (CheckoutSheetBody.kt:636-643, RetailRules.kt:32). wait = a video-only delay */
 const stepsMx = [
-  {beat:0, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
+  {beat:0, wait:1.2, hint:TAP+t("common_charge", money(BASE)), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
   {beat:1, wait:2.2, hint:TAP+t("pay_card_short"), target:'[data-t="card"]', tap(st,E){ st.sstage="idle"; E.after(1300,()=>{ st.sstage="collect"; }); }},
   {beat:2, wait:1.2, hint:H("El cliente acerca su tarjeta","O cliente aproxima o cartão","The customer taps their card"), target:'[data-t="tapcard"]', tap(st,E){ st.sstage="proc";
       E.after(2500,()=>{ st.sstage=null; st.screen="done"; }); }}
