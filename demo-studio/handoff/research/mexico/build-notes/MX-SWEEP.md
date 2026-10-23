@@ -83,3 +83,7 @@ App checked: `/home/user/suma-plus-android` at d30ffa1 (sim/usa-canada). Not tou
 None that change what a page may draw. Only stale comments that still say "Stripe = US/CA": `ui/screens/home/CheckoutPayBlock.kt:80`,
 `ui/screens/home/CheckoutSheetBody.kt:202`, `sync/PayWaysVisibility.kt:50` (doc of `cardIsSetupButton`), `ui/pos/CardPaymentActions.kt:82`
 (the code itself already includes Mexico).
+
+## Checker
+`check_demo.py <page> MX:es CO:es BR:pt US:en` on all 33 changed pages: 132 runs OK (RS6 CO once said "demo never ended" while three
+checkers ran at once; alone it is OK). Beats unchanged on every page, so `T12-MX.json` still matches T12 for MX.

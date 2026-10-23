@@ -35,7 +35,8 @@ Items from the services list that are also about Mexico stay there (round 2 item
   checked it for Mexico. Confirm it, or word it per country. The demo draws the app's text as it is; the voice never talks about cost.
 
 ## Doc drift only (no behaviour)
-- `CheckoutPayBlock.kt:326-327` comment says Card 2.4 / Cash 0.6; the code is 2 / 1.2. `CardDeviceCopy.kt` comments still say "US / Canada" only.
+- `CheckoutPayBlock.kt:326-327` comment says Card 2.4 / Cash 0.6; the code is 2 / 1.2. `CardDeviceCopy.kt` comments still say "US / Canada" only; so do `CheckoutPayBlock.kt:80`, `CheckoutSheetBody.kt:202`, `sync/PayWaysVisibility.kt:50`,
+  `ui/pos/CardPaymentActions.kt:82` (Stripe is US/CA/MX now).
 
 ## Already on the services list (round 2), also true in Mexico
 - Item 7: in Mexico "Configurar QR" takes the slot of "Cobrar con enlace"; and a Tap to Pay sale has no card line ("VISA ••4242") on Sale complete

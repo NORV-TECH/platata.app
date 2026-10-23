@@ -103,4 +103,5 @@ Also re-record when those land: V7 after item 8 ("2 servicios"); V3, V4, V6 afte
 ## Notes
 - The checker needs Playwright 1.56.0 here (the container's Chromium is build 1194): `pip install playwright==1.56.0`.
 - `tools/timing_frames.py <ID> es:CO pt:BR` = frames inside every voice line with the real clip lengths, to check before recording.
+- For when US/CA resume: the restaurant/shop pages print the Canadian receipt date day-first, but the app writes month-first for Canada too (`utils/ReceiptFormatter.kt:186-187`, FIADO-STAFF-1). Left alone: US/CA are on hold.
 - Kit polish for later (not needed by the built pages, which carry their own data): a few no-shows in the history, history from the 1st of last month, clients on fewer sales, no QR sales for US/CA.
