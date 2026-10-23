@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<title>Platata · Acepta tarjetas (México)</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@400;500;700&display=swap">
+<!-- Store picture "we accept cards", Mexico tap version (HANDOFF item 6).
+     The phone shows the app's own tap screen at app commit d30ffa1:
+       ui/screens/home/StripePaymentSheet.kt  StripePaymentSheetContent (stripe_total_label "Total a cobrar", the total, headlineMedium)
+       + CollectingScreen (stripe_present_tap "Acerca la tarjeta", headlineSmall; stripe_cancel "Cancelar", Secondary = OutlinedButton, text = colorScheme.primary = PlatataPrimary #1C1C1E).
+     Mexico takes cards through Stripe Tap to Pay (sync/CardCountryGate.kt "MX" -> STRIPE). The small print is the app's own condition
+     (values-es link_notice_cost: NFC and Android 13 or newer) and its own fallback (pay_card_link_under "Cobrar con enlace").
+     The card is generic: no brand, no logo, no real number. No fee is mentioned (no Platata fee in Mexico). Light theme only.
+     Render: python3 demo-studio/tools/render_store.py (1080 x 1920 PNG next to this file). -->
+<style>
+  :root{--page:#F4EBDD;--potato:#3A2A1F;--brand:"Fredoka","Trebuchet MS",system-ui,sans-serif;--app:"Roboto",system-ui,sans-serif;--u:calc(560px/412)}
+  *{box-sizing:border-box}
+  html,body{margin:0;width:1080px;height:1920px;background:var(--page);overflow:hidden}
+  .wrap{position:relative;width:1080px;height:1920px;display:flex;flex-direction:column;align-items:center}
+  .logo{margin-top:96px;font:600 64px var(--brand);color:var(--potato);display:flex;align-items:center;gap:18px}
+  .logo svg{width:72px;height:72px}
+  h1{margin:36px 0 0;font:600 118px/1.05 var(--brand);color:var(--potato);text-align:center}
+  .sub{margin:28px 90px 0;font:500 46px/1.3 var(--app);color:var(--potato);text-align:center}
+  .stage{position:relative;width:1080px;height:1080px;margin-top:40px}
+  .phone{position:absolute;left:130px;top:30px;width:560px;height:1000px;border-radius:84px;background:#1C1C1E;padding:20px;
+         box-shadow:0 40px 80px rgba(58,42,31,.28)}
+  .screen{width:100%;height:100%;border-radius:66px;background:#fff;overflow:hidden;display:flex;flex-direction:column;font-family:var(--app);color:#1C1C1E}
+  .sbar{height:calc(var(--u)*32);padding:0 calc(var(--u)*24);display:flex;align-items:center;justify-content:space-between;font-size:calc(var(--u)*14);font-weight:500;margin-top:14px}
+  .sheet{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:calc(var(--u)*24);text-align:center}
+  .tm{font-size:calc(var(--u)*16);color:#6E6E73}
+  .hm{font-size:calc(var(--u)*28);margin-top:calc(var(--u)*4)}
+  .gap{height:calc(var(--u)*32)}
+  .hs{font-size:calc(var(--u)*24)}
+  .gap2{height:calc(var(--u)*40)}
+  .sb{align-self:stretch;min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);border:1.5px solid #C7C7CC;display:grid;place-items:center;
+      font-size:calc(var(--u)*18);font-weight:600;color:#1C1C1E}
+  .card{position:absolute;left:600px;top:110px;width:440px;height:278px;border-radius:30px;transform:rotate(-14deg);
+        background:linear-gradient(135deg,#2E5E6E 0%,#3F7A86 55%,#5B96A0 100%);box-shadow:0 30px 60px rgba(58,42,31,.30);color:#fff;
+        font-family:var(--app)}
+  .chip{position:absolute;left:42px;top:88px;width:72px;height:56px;border-radius:12px;background:linear-gradient(135deg,#E9D49A,#C9A75A);
+        box-shadow:inset 0 0 0 2px rgba(0,0,0,.08)}
+  .chip:before,.chip:after{content:"";position:absolute;left:0;right:0;height:2px;background:rgba(90,70,30,.35)}
+  .chip:before{top:20px}.chip:after{top:38px}
+  .cl{position:absolute;left:140px;top:88px;width:56px;height:56px}
+  .num{position:absolute;left:42px;bottom:40px;font-size:28px;letter-spacing:4px;font-weight:500;opacity:.92}
+  .waves{position:absolute;left:560px;top:340px;width:96px;height:96px;transform:scaleX(-1) rotate(14deg)}
+  .small{position:absolute;left:80px;right:80px;bottom:120px;font:400 34px/1.38 var(--app);color:var(--potato);text-align:center;opacity:.82}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="12.5" rx="8" ry="9" fill="#D9A66A"/><circle cx="9.2" cy="11" r="1.1" fill="#3A2A1F"/><circle cx="14.8" cy="11" r="1.1" fill="#3A2A1F"/><path d="M9.5 14.8q2.5 2 5 0" stroke="#3A2A1F" stroke-width="1.1" fill="none" stroke-linecap="round"/><circle cx="7" cy="16" r=".6" fill="#B07F48"/><circle cx="16.5" cy="7.5" r=".5" fill="#B07F48"/></svg>Platata</div>
+  <h1>Acepta tarjetas</h1>
+  <div class="sub">Tu cliente acerca su tarjeta o su celular a tu teléfono.</div>
+  <div class="stage">
+    <div class="phone"><div class="screen">
+      <div class="sbar"><span>12:41</span><span>●●●</span></div>
+      <div class="sheet">
+        <div class="tm">Total a cobrar</div>
+        <div class="hm">$250.00</div>
+        <div class="gap"></div>
+        <div class="hs">Acerca la tarjeta</div>
+        <div class="gap2"></div>
+        <div class="sb">Cancelar</div>
+      </div>
+    </div></div>
+    <svg class="waves" viewBox="0 0 120 120" fill="none" stroke="#3A2A1F" stroke-width="7" stroke-linecap="round" opacity=".55">
+      <path d="M30 30 a42 42 0 0 1 0 60"/><path d="M52 16 a62 62 0 0 1 0 88"/><path d="M74 4 a80 80 0 0 1 0 112"/>
+    </svg>
+    <div class="card">
+      <div class="chip"></div>
+      <svg class="cl" viewBox="0 0 56 56" fill="none" stroke="#fff" stroke-width="4.5" stroke-linecap="round">
+        <path d="M14 18 a14 14 0 0 1 0 20"/><path d="M24 12 a22 22 0 0 1 0 32"/><path d="M34 6 a30 30 0 0 1 0 44"/>
+      </svg>
+      <div class="num">•••• •••• •••• 4242</div>
+    </div>
+  </div>
+  <div class="small">Necesitas un teléfono con NFC y Android 13 o más nuevo. Si el tuyo no lee tarjetas, cobra con enlace: tu cliente paga desde su celular.</div>
+</div>
+</body>
+</html>
