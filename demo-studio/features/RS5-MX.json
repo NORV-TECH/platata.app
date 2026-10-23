@@ -1,0 +1,49 @@
+{
+ "id": "RS5-MX",
+ "name": "Take cards: Mexico in Spanish (Stripe Tap to Pay, tips asked)",
+ "business": "restaurante",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-charge",
+   "voice": {
+    "es": "Con la venta lista, toca Cobrar."
+   }
+  },
+  {
+   "id": "2-card",
+   "voice": {
+    "es": "Puedes cobrar en efectivo, con QR o con tarjeta. Toca Tarjeta."
+   }
+  },
+  {
+   "id": "3-tip",
+   "voice": {
+    "es": "Pásale tu celular: el cliente elige la propina y el cobro empieza."
+   }
+  },
+  {
+   "id": "4-tap",
+   "voice": {
+    "es": "El cliente acerca su tarjeta de crédito o débito, o su celular, al tuyo."
+   }
+  },
+  {
+   "id": "5-approved",
+   "voice": {
+    "es": "Pago aprobado, con la propina incluida. El recibo lo mandas por WhatsApp."
+   }
+  },
+  {
+   "id": "6-end",
+   "voice": {
+    "es": "Así cobras con tarjeta, con Platata."
+   }
+  }
+ ]
+}

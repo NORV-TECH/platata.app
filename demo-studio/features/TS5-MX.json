@@ -1,0 +1,43 @@
+{
+ "id": "TS5-MX",
+ "name": "Take cards: Mexico in Spanish (shop, Stripe Tap to Pay, no tip)",
+ "business": "tienda",
+ "voice_settings": {
+  "es": {
+   "stability": 0.5,
+   "similarity_boost": 0.75
+  }
+ },
+ "steps": [
+  {
+   "id": "1-charge",
+   "voice": {
+    "es": "Con los productos escaneados, toca Cobrar."
+   }
+  },
+  {
+   "id": "2-card",
+   "voice": {
+    "es": "Puedes cobrar en efectivo, con QR o con tarjeta. Toca Tarjeta: en una tienda no se pide propina, así que el cobro empieza de una vez."
+   }
+  },
+  {
+   "id": "3-tap",
+   "voice": {
+    "es": "El cliente acerca su tarjeta de crédito o débito, o su celular, al tuyo."
+   }
+  },
+  {
+   "id": "4-approved",
+   "voice": {
+    "es": "Pago aprobado: la venta queda guardada sola y el recibo lo mandas por WhatsApp."
+   }
+  },
+  {
+   "id": "5-end",
+   "voice": {
+    "es": "Así cobras con tarjeta, con Platata."
+   }
+  }
+ ]
+}
