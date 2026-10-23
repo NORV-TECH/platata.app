@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Workspace Search · Design v1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap" rel="stylesheet">
+<style>
+/* ── page ── */
+:root{--pg:#eceef1;--pg-ink:#17181b;--pg-sub:#55595f;--pg-line:#d6d9de;--pg-card:#ffffff}
+@media (prefers-color-scheme:dark){:root{--pg:#0b0c0e;--pg-ink:#f1f2f4;--pg-sub:#a3a8ae;--pg-line:#2a2d31;--pg-card:#17191c}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--pg);color:var(--pg-ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  -webkit-font-smoothing:antialiased;letter-spacing:-.005em}
+.wrap{max-width:2200px;margin:0 auto;padding:0 40px}
+header.top{padding:56px 0 8px;max-width:820px}
+header.top p.k{margin:0 0 10px;font-size:13px;font-weight:700;letter-spacing:.08em;color:var(--pg-sub)}
+header.top h1{margin:0;font-size:44px;line-height:1.1;font-weight:800;letter-spacing:-.03em}
+header.top p{margin:16px 0 0;font-size:17px;line-height:1.55;color:var(--pg-sub)}
+header.top p b{color:var(--pg-ink);font-weight:600}
+section.band{padding:48px 0 8px}
+section.band>h2{margin:0 0 28px;font-size:28px;line-height:1.2;font-weight:800;letter-spacing:-.02em}
+.boards{display:flex;flex-wrap:wrap;gap:48px 36px;align-items:flex-start}
+figure{margin:0;width:390px;max-width:100%}
+figcaption{padding:18px 6px 0}
+figcaption .n{display:block;font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--pg-sub)}
+figcaption .t{display:block;margin-top:4px;font-size:19px;font-weight:700;letter-spacing:-.01em}
+figcaption .d{display:block;margin-top:8px;font-size:15px;line-height:1.55;color:var(--pg-sub)}
+section.rules{padding:64px 0 96px;max-width:860px}
+section.rules h2{margin:0 0 8px;font-size:28px;font-weight:800;letter-spacing:-.02em}
+section.rules>p{margin:0 0 24px;font-size:16px;line-height:1.55;color:var(--pg-sub)}
+section.rules ol{margin:0;padding:0;list-style:none;counter-reset:r;display:flex;flex-direction:column;gap:12px}
+section.rules li{counter-increment:r;position:relative;padding:18px 20px 18px 60px;border-radius:16px;background:var(--pg-card);
+  border:1px solid var(--pg-line);font-size:15.5px;line-height:1.55;color:var(--pg-sub)}
+section.rules li::before{content:counter(r);position:absolute;left:20px;top:17px;width:26px;height:26px;border-radius:50%;
+  display:grid;place-items:center;background:var(--pg-ink);color:var(--pg);font-size:13px;font-weight:700}
+section.rules li b{display:block;margin-bottom:2px;font-size:16px;color:var(--pg-ink);font-weight:700}
+section.rules code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.92em;padding:1px 5px;border-radius:5px;
+  background:color-mix(in srgb,var(--pg-ink) 8%,transparent);color:var(--pg-ink)}
+@media (max-width:600px){.wrap{padding:0 16px}header.top{padding-top:32px}header.top h1{font-size:34px}
+  section.band>h2{font-size:23px}section.rules li{padding-left:56px}}
+
+/* ── the phone: Platata's own tokens (from the demo's --s-* set) ── */
+.phone{--bg:#ffffff;--row:#f1f1f2;--ink:#1f1f22;--sub:#5f6368;--line:#e8e8ea;--line2:#dadce0;--blue:#1a73e8;--blueText:#1967d2;
+  --blueTint:#e8f0fe;--onBlue:#ffffff;--icon:#ffffff;--ok:#137333;--okBg:#e6f4ea;--okBd:#a8d5b5;--warn:#985000;--warnBg:#fef7e0;
+  --roleBg:rgba(95,99,104,.14);--roleFg:#3c4043;--outline:#80868b;--inv:#1f1f22;--onInv:#ffffff;
+  --ham-bg:#fce8da;--ham-fg:#a04a14;--per-bg:#fce8e6;--per-fg:#b3261e;--aco-bg:#fef3c7;--aco-fg:#7a5600;--beb-bg:#e8f0fe;--beb-fg:#1967d2;
+  --pos-bg:#f3e8fd;--pos-fg:#7b2cbf;--com-bg:#e6f4ea;--com-fg:#137333;--des-bg:#e4f7fb;--des-fg:#00696f;
+  position:relative;width:390px;max-width:100%;height:844px;border-radius:40px;overflow:hidden;background:var(--bg);color:var(--ink);
+  box-shadow:0 0 0 1px rgba(0,0,0,.09),0 30px 60px -30px rgba(0,0,0,.4);font-family:Inter,system-ui,sans-serif;font-size:16px;
+  transition:background .2s,color .2s}
+.phone.dark{--bg:#111316;--row:#1e2125;--ink:#e8eaed;--sub:#9aa0a6;--line:#2a2d31;--line2:#3c4043;--blue:#8ab4f8;--blueText:#8ab4f8;
+  --blueTint:#1c2b44;--onBlue:#062e6f;--icon:#111316;--ok:#81c995;--okBg:#12301f;--okBd:#255c3a;--warn:#fdd663;--warnBg:#3a2f10;
+  --roleBg:rgba(154,160,166,.18);--roleFg:#bdc1c6;--outline:#8e9297;--inv:#e8eaed;--onInv:#1f1f22;
+  --ham-bg:#3a2418;--ham-fg:#f6ae7e;--per-bg:#3b1f1e;--per-fg:#f28b82;--aco-bg:#362c10;--aco-fg:#fdd663;--beb-bg:#1c2b44;--beb-fg:#8ab4f8;
+  --pos-bg:#2f2140;--pos-fg:#d7aefb;--com-bg:#12301f;--com-fg:#81c995;--des-bg:#0f3036;--des-fg:#78d9ec;
+  box-shadow:0 0 0 1px rgba(255,255,255,.12),0 30px 60px -30px rgba(0,0,0,.8)}
+.phone button{font-family:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.phone button:focus-visible,.phone input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.phone svg{fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column}
+.screen[hidden]{display:none}
+
+/* workspace */
+.ws-head{flex:0 0 auto;padding:28px 20px 12px}
+.ws-biz{display:flex;align-items:center;gap:10px}
+.ws-biz h3{margin:0;font-size:28px;line-height:1.2;font-weight:700;letter-spacing:-.02em;color:var(--blue)}
+.boss{font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--sub);border:1px solid var(--line2);border-radius:999px;padding:3px 8px}
+.ws-switch{margin:2px 0 0 -6px;padding:8px 6px;border:0;background:none;font-size:14px;font-weight:700;color:var(--sub)}
+.ws-search{flex:0 0 auto;margin:0 16px 14px;height:52px;display:flex;align-items:center;gap:12px;padding:0 18px;border:0;border-radius:26px;
+  background:var(--row);color:var(--sub);font-size:16px;font-weight:500;text-align:left}
+.ws-search svg{width:20px;height:20px;stroke-width:2}
+.ws-search span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ws-rows{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 16px 16px;display:flex;flex-direction:column;gap:6px}
+.wr{flex:0 0 auto;display:flex;align-items:center;gap:13px;width:100%;min-height:64px;padding:11px 14px;border:0;border-radius:18px;
+  background:var(--row);color:var(--ink);text-align:left}
+.wr-ic{width:38px;height:38px;flex:0 0 auto;border-radius:50%;background:var(--icon);color:var(--sub);display:grid;place-items:center}
+.wr-ic svg{width:20px;height:20px;stroke-width:1.7}
+.wr-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.wr-t b{font-size:16px;font-weight:700;letter-spacing:-.01em}
+.wr-t i{font-style:normal;font-size:14px;color:var(--sub)}
+.wr-t i.ok{color:var(--ok);font-weight:500}
+.wr .chev{width:18px;height:18px;stroke-width:2;color:var(--sub)}
+.wr.open{gap:10px;background:var(--okBg);box-shadow:inset 0 0 0 1px var(--okBd);color:var(--ok)}
+.wr.open .dot{width:22px;text-align:center;font-size:13px}
+.wr.open .wr-t i{color:var(--ok);font-weight:500}
+.wr.open .money{font-size:17px;font-weight:700;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.wds{display:flex;flex-direction:column;margin-top:6px}
+.wd{display:flex;align-items:center;gap:14px;width:100%;min-height:50px;padding:0 6px;border:0;border-bottom:1px solid var(--line);
+  background:none;color:var(--ink);font-size:16px;font-weight:500;text-align:left}
+.wd svg{width:20px;height:20px;stroke-width:1.7;color:var(--sub)}
+.wd span{flex:1}
+.wd .chev{width:16px;height:16px;stroke-width:2}
+.ws-bar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 18px 16px;border-top:1px solid var(--line)}
+.lang{display:flex;align-items:center;gap:10px;height:44px;padding:0 16px;border:0;border-radius:999px;background:var(--row);color:var(--ink);
+  font-size:14px;font-weight:700;letter-spacing:.04em}
+.lang svg{width:18px;height:18px;stroke-width:1.7;color:var(--sub)}
+.dollar{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--bg);font-size:18px;font-weight:800}
+
+/* search */
+.sbar{flex:0 0 auto;display:flex;align-items:center;gap:4px;padding:20px 12px 8px 6px}
+.ib{width:44px;height:44px;flex:0 0 auto;display:grid;place-items:center;border:0;border-radius:22px;background:none;color:var(--ink)}
+.ib svg{width:22px;height:22px;stroke-width:2}
+.field{flex:1;min-width:0;display:flex;align-items:center;gap:10px;height:52px;padding:0 4px 0 16px;border-radius:26px;
+  background:var(--row);border:2px solid var(--blue)}
+.field>svg{width:20px;height:20px;stroke-width:2;color:var(--sub)}
+.field input{flex:1;min-width:0;height:100%;border:0;outline:0;background:transparent;padding:0;font:500 17px Inter,system-ui,sans-serif;color:var(--ink)}
+.field input::placeholder{color:var(--sub);opacity:1}
+.field input:focus-visible{outline:0}
+.field .ib{color:var(--sub)}
+.field .ib svg{width:18px;height:18px;stroke-width:2.2}
+.chips{flex:0 0 auto;display:flex;gap:8px;padding:4px 16px 10px;overflow-x:auto;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:0 0 auto;height:40px;display:flex;align-items:center;gap:6px;padding:0 15px;border-radius:20px;border:1px solid var(--line2);
+  background:transparent;color:var(--ink);font-size:14px;font-weight:600;white-space:nowrap}
+.chip i{font-style:normal;font-weight:500;opacity:.75;font-variant-numeric:tabular-nums}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.body{flex:1 1 auto;min-height:0;overflow-y:auto;scrollbar-width:none;padding:0 16px 28px;border-top:1px solid var(--line)}
+.body::-webkit-scrollbar{display:none}
+.lbl{margin:20px 4px 10px;font-size:12px;font-weight:700;letter-spacing:.07em;color:var(--sub)}
+.recents{display:flex;flex-wrap:wrap;gap:8px}
+.recent{height:44px;display:flex;align-items:center;gap:8px;padding:0 16px 0 12px;border:0;border-radius:22px;background:var(--row);
+  color:var(--ink);font-size:15px;font-weight:500}
+.recent svg{width:18px;height:18px;stroke-width:1.8;color:var(--sub)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.tile{min-height:108px;display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 12px 12px;
+  border:0;border-radius:18px;background:var(--row);text-align:left;color:var(--ink)}
+.tile .ic{width:38px;height:38px;display:grid;place-items:center;border-radius:50%;background:var(--icon);color:var(--sub)}
+.tile .ic svg{width:20px;height:20px;stroke-width:1.8}
+.tile b{display:block;font-size:15px;font-weight:700}
+.tile i{display:block;margin-top:2px;font-style:normal;font-size:13px;font-weight:500;color:var(--sub)}
+.tile i.warn{color:var(--warn)}
+.hint{margin:26px 4px 0;font-size:15px;line-height:1.45;color:var(--sub)}
+.linkbtn{display:inline-flex;align-items:center;min-height:44px;margin:4px 0 0;padding:0 4px;border:0;background:none;
+  font-size:15px;font-weight:600;color:var(--blueText)}
+.sh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:20px 4px 8px;min-height:22px}
+.sh span{font-size:12px;font-weight:700;letter-spacing:.07em;color:var(--sub)}
+.sh button{margin:-12px -8px;padding:12px 8px;border:0;background:none;font-size:14px;font-weight:600;color:var(--blueText)}
+.list{display:flex;flex-direction:column;gap:6px}
+.row{display:flex;align-items:center;gap:14px;width:100%;min-height:62px;padding:11px 14px;border:0;border-radius:18px;
+  background:var(--row);color:var(--ink);text-align:left}
+.row.big{min-height:76px;padding:16px;border-radius:22px}
+.lead{width:40px;height:40px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;background:var(--icon);color:var(--sub);
+  font-size:15px;font-weight:700;letter-spacing:-.01em}
+.lead svg{width:20px;height:20px;stroke-width:1.8}
+.row.big .lead{width:48px;height:48px}
+.row.big .lead svg{width:24px;height:24px}
+.lead.accent{background:var(--blueTint);color:var(--blueText)}
+.lead.sq{border-radius:12px}
+.lead.txt{color:var(--ink)}
+.lead.inv{background:var(--inv);color:var(--onInv)}
+.lead.letter{font-size:19px}
+.cat-ham{background:var(--ham-bg);color:var(--ham-fg)}.cat-per{background:var(--per-bg);color:var(--per-fg)}
+.cat-aco{background:var(--aco-bg);color:var(--aco-fg)}.cat-beb{background:var(--beb-bg);color:var(--beb-fg)}
+.cat-pos{background:var(--pos-bg);color:var(--pos-fg)}.cat-com{background:var(--com-bg);color:var(--com-fg)}
+.cat-des{background:var(--des-bg);color:var(--des-fg)}
+.rt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rtt,.rts{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.rtt{font-size:16px;line-height:1.3;font-weight:500}
+.row.big .rtt{font-size:19px}
+.rtt b{font-weight:800}
+.rtt.act{font-weight:600;color:var(--blueText)}
+.rts{font-size:14px;line-height:1.35;color:var(--sub)}
+.rtn{font-size:13.5px;line-height:1.35;font-weight:500;color:var(--sub)}
+.badge{flex:0 0 auto;padding:4px 9px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.badge.ok{background:var(--okBg);color:var(--ok)}
+.badge.warn{background:var(--warnBg);color:var(--warn)}
+.badge.role{background:var(--roleBg);color:var(--roleFg)}
+.val{flex:0 0 auto;white-space:nowrap;font-variant-numeric:tabular-nums;font-size:14px;font-weight:500;color:var(--sub)}
+.val.strong{font-size:15px;font-weight:650;color:var(--ink)}
+.row .chev{width:18px;height:18px;margin-left:-6px;stroke-width:2;color:var(--sub)}
+.sw{position:relative;flex:0 0 auto;width:52px;height:32px;border-radius:16px;border:2px solid var(--outline);transition:background .15s,border-color .15s}
+.sw i{position:absolute;top:6px;left:6px;width:16px;height:16px;border-radius:50%;background:var(--outline);transition:all .15s}
+.sw.on{background:var(--blue);border-color:var(--blue)}
+.sw.on i{top:2px;left:22px;width:24px;height:24px;background:var(--onBlue)}
+.row.seg{flex-direction:column;align-items:stretch;gap:14px}
+.seg-top{display:flex;align-items:center;gap:14px}
+.segc{display:flex;gap:4px;padding:4px;border-radius:999px;background:var(--bg);border:1px solid var(--line2)}
+.segc button{flex:1 1 0;height:44px;border:0;border-radius:999px;background:transparent;color:var(--ink);font-size:15px;font-weight:600;
+  transition:background .15s,color .15s}
+.segc button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.nores{padding:32px 8px 4px;text-align:center}
+.nores b{display:block;font-size:19px;line-height:1.3}
+.nores span{display:block;margin-top:8px;font-size:15px;line-height:1.45;color:var(--sub)}
+.foot{display:flex;flex-direction:column;align-items:center;gap:2px;margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
+.foot span{font-size:14px;color:var(--sub)}
+.toast{position:absolute;left:16px;right:16px;bottom:24px;padding:14px 16px;border-radius:14px;background:var(--inv);color:var(--onInv);
+  font-size:15px;font-weight:500;line-height:1.35;box-shadow:0 8px 24px rgba(0,0,0,.22);opacity:0;transform:translateY(8px);
+  transition:opacity .18s,transform .18s;pointer-events:none}
+.toast.show{opacity:1;transform:none}
+.row:active,.wr:active,.wd:active,.tile:active,.recent:active{opacity:.7}
+@media (prefers-reduced-motion:reduce){.phone,.phone *{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <p class="k">PLATATA · DESIGN V1 · FOR DISCUSSION</p>
+    <h1>Workspace Search</h1>
+    <p>One box on the Workspace that finds <b>settings, menu, clients, team, sales and suppliers</b> as you type, grouped by kind,
+      and lets you change a setting right in the results. <b>Every phone below is live:</b> type, tap the chips, flip the switches.</p>
+    <p>Built on the Workspace screen and the Burger House demo data in this repo. Setting names, taxes and printers are
+      placeholders until we map them to the app's real settings.</p>
+  </header>
+
+  <section class="band">
+    <h2>Find any setting, change it right there</h2>
+    <div class="boards" id="band1"></div>
+  </section>
+
+  <section class="band">
+    <h2>Items, people and sales in the same box</h2>
+    <div class="boards" id="band2"></div>
+  </section>
+
+  <section class="rules">
+    <h2>How search decides</h2>
+    <p>The rules the prototype above runs on. They're simple on purpose, so they're easy to build and easy to predict.</p>
+    <ol>
+      <li><b>Every word you type must match the start of a word.</b> Case and accents don't matter: <code>andres</code> finds Andrés,
+        <code>ham pol</code> finds Hamburguesa de Pollo. With 3+ letters it also matches inside a word.</li>
+      <li><b>More than names are searched.</b> Each setting has aliases (<code>dark mode</code> → Theme, <code>receipt printer</code> →
+        Registers &amp; Printers, the Spanish and Portuguese names). Records match on secondary fields: a client's phone, an order number,
+        the employee, client and items on a sale, the options inside a modifier group.</li>
+      <li><b>Scores.</b> Exact name 100 · name starts with it 92 · words found 84 down to 76 (earlier is better) · alias 6 less than the same
+        on the name · keyword 55 · secondary field 45. Sales count ×0.85, suppliers ×0.9, reports ×0.8 so they never bury settings or people.
+        Frequently used things get up to +2.5.</li>
+      <li><b>Best match only when there's a clear winner:</b> the top result scores 85 or more and leads the next one by 6 or more.
+        Two clients called Andrés tie, so nothing is picked for you.</li>
+      <li><b>Sections.</b> Create actions come first (at most 2). Then sections by their best score, in steps of 10; ties use one fixed order:
+        taxes, payment methods, printers, modifier groups, settings, items, categories, combos, clients, team, sales, suppliers, reports.
+        Short configured lists (taxes, payment methods, printers) keep their own order. In All, 3 rows per section and "See all N".</li>
+      <li><b>Chips are scopes.</b> With a query they show only the kinds that have results, with counts. Tapping one shows everything of
+        that kind, with no 3-row cap.</li>
+      <li><b>Settings act in place.</b> Switches and choices change the setting from the result row. Every setting shows its path
+        (Workspace › Tax) so people learn where it lives, and "Browse all settings" is always one tap away.</li>
+      <li><b>Never a dead end.</b> With no results: the closest matches using the first 3 letters of each word, "New item …" with what
+        was typed, and the way back to browsing.</li>
+      <li><b>Speed (proposal).</b> Settings, menu, clients and team live on the device and update on every keystroke. Sales search the
+        server about 250 ms after typing stops, showing today's sales from the device first.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+(function () {
+'use strict';
+
+/* ───────── icons (24×24, stroke) ───────── */
+var IC = {
+  search: 'M10.5 4a6.5 6.5 0 1 0 0 13a6.5 6.5 0 1 0 0-13zM15.5 15.5L20 20',
+  back: 'M15 5l-7 7 7 7', x: 'M6 6l12 12M18 6L6 18', chev: 'M9 6l6 6-6 6',
+  clock: 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17zM12 7.5V12l3 2',
+  sun: 'M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8zM12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M18.4 5.6L17 7M7 17l-1.4 1.4',
+  menu: 'M6 3v8a2 2 0 0 0 4 0V3M8 11v10M17 3c-1.4 1.6-2 3.4-2 5.5 0 1.6.6 2.5 2 2.5v10',
+  client: 'M12 4.6a3.4 3.4 0 1 0 0 6.8a3.4 3.4 0 1 0 0-6.8zM5.5 20a6.5 6.5 0 0 1 13 0',
+  team: 'M9 5.5a3 3 0 1 0 0 6a3 3 0 1 0 0-6zM3.5 19a5.5 5.5 0 0 1 11 0M16.5 5.6a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM15 13.6a4.6 4.6 0 0 1 5.5 4.5',
+  camera: 'M4 7.5h3l1.5-2h7L17 7.5h3v11H4zM12 9.8a3.2 3.2 0 1 0 0 6.4a3.2 3.2 0 1 0 0-6.4z',
+  tax: 'M6 18.5L18 5.5M8 5.8a2.2 2.2 0 1 0 0 4.4a2.2 2.2 0 1 0 0-4.4zM16 13.8a2.2 2.2 0 1 0 0 4.4a2.2 2.2 0 1 0 0-4.4z',
+  pay: 'M11.5 3.5H20v8.5L11.5 20.5 3.5 12zM16 6.7a1.3 1.3 0 1 0 0 2.6a1.3 1.3 0 1 0 0-2.6z',
+  grid: 'M3.5 3.5h7v7h-7zM13.5 3.5h7v7h-7zM3.5 13.5h7v7h-7zM13.5 13.5h7v7h-7z',
+  mods: 'M4 7h9M17 7h3M4 17h3M11 17h9M15 5v4M9 15v4',
+  folder: 'M3.5 6.5h6l2 2h9v10h-17z',
+  combo: 'M4 9h16v4H4zM5.5 13v7h13v-7M12 9v11M12 9c-1.6-3.2-5.5-3.6-5.5-1.4C6.5 9 10 9 12 9zM12 9c1.6-3.2 5.5-3.6 5.5-1.4C17.5 9 14 9 12 9z',
+  moon: 'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z',
+  globe: 'M12 3.5a8.5 8.5 0 1 0 0 17a8.5 8.5 0 1 0 0-17zM3.5 12h17M12 3.5c2.5 2.6 3.5 5.4 3.5 8.5s-1 5.9-3.5 8.5c-2.5-2.6-3.5-5.4-3.5-8.5s1-5.9 3.5-8.5z',
+  receipt: 'M5.5 3.5h13v17l-2.2-1.6-2.1 1.6-2.2-1.6-2.2 1.6-2.1-1.6-2.2 1.6zM9 8h6M9 12h6',
+  star: 'M12 3.8l2.5 5.1 5.6.8-4.1 4 1 5.6-5-2.7-5 2.7 1-5.6-4.1-4 5.6-.8z',
+  share: 'M17 3.1a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM6.5 9.6a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM17 16.1a2.4 2.4 0 1 0 0 4.8a2.4 2.4 0 1 0 0-4.8zM8.7 10.8l6.1-3.6M8.7 13.2l6.1 3.6',
+  store: 'M4 10v10h16V10M3 10l1.8-5.5h14.4L21 10zM9.5 20v-5h5v5',
+  shield: 'M12 3.5l7 3v5.5c0 4.2-3 7.4-7 8.5-4-1.1-7-4.3-7-8.5V6.5z',
+  flame: 'M12 3c1 3 4.5 4.5 4.5 9a4.5 4.5 0 0 1-9 0c0-2 1-3.5 2-4.5.3 1.8 1.2 2.6 2.2 2.6C11 7.8 11 5.2 12 3z',
+  printer: 'M7 8V3.5h10V8M7 17H4.5V10a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v7H17M7 14h10v6.5H7z',
+  drawer: 'M3.5 10h17v9.5h-17zM6 10V5.5h12V10M9 14.5h6',
+  bag: 'M5 8h14l-1 12H6zM9 8V6.5a3 3 0 0 1 6 0V8',
+  cash: 'M3 7h18v10H3zM12 9.5a2.5 2.5 0 1 0 0 5a2.5 2.5 0 1 0 0-5z',
+  card: 'M3 6h18v12H3zM3 10h18M6.5 14.5h4',
+  transfer: 'M4 9h14l-3.5-3.5M20 15H6l3.5 3.5',
+  qr: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2.5v2.5H14zM17.5 17.5H20V20h-2.5zM14 20h1M20 14v1',
+  chart: 'M4 20h16M7 16v-5M12 16V6M17 16v-8',
+  truck: 'M2.5 7.5h10v9h-10zM12.5 11h4l3 3v2.5h-7zM6 16.4a1.6 1.6 0 1 0 0 3.2a1.6 1.6 0 1 0 0-3.2zM16.5 16.4a1.6 1.6 0 1 0 0 3.2a1.6 1.6 0 1 0 0-3.2z',
+  plus: 'M12 5v14M5 12h14',
+  doc: 'M5.5 3.5h13v17l-2.2-1.6-2.1 1.6-2.2-1.6-2.2 1.6-2.1-1.6-2.2 1.6zM9 8h6M9 12h6'
+};
+function svg(d, cls) { return '<svg viewBox="0 0 24 24" aria-hidden="true"' + (cls ? ' class="' + cls + '"' : '') + '><path d="' + d + '"/></svg>'; }
+function esc(s) { return String(s).replace(/[&<>"']/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]; }); }
+
+/* ───────── what search knows about ───────── */
+var SEC_ORDER = ['create', 'taxes', 'payments', 'printers', 'modifiers', 'settings', 'items', 'categories', 'combos', 'clients', 'team', 'sales', 'suppliers', 'reports'];
+var SEC_LABEL = { create: 'CREATE', taxes: 'YOUR TAXES', payments: 'PAYMENT METHODS', printers: 'PRINTERS', modifiers: 'MODIFIER GROUPS',
+  settings: 'SETTINGS', items: 'ITEMS', categories: 'CATEGORIES', combos: 'COMBOS', clients: 'CLIENTS', team: 'TEAM',
+  sales: 'SALES', suppliers: 'SUPPLIERS', reports: 'REPORTS' };
+var SEC_SCOPE = { taxes: 'settings', payments: 'settings', printers: 'settings', settings: 'settings', modifiers: 'menu', items: 'menu',
+  categories: 'menu', combos: 'menu', clients: 'clients', team: 'team', sales: 'sales', suppliers: 'suppliers', reports: 'reports' };
+var NATURAL = { taxes: 1, payments: 1, printers: 1 };
+var MULT = { sales: 0.85, reports: 0.8, suppliers: 0.9 };
+var CHIPS = [['all', 'All'], ['settings', 'Settings'], ['menu', 'Menu'], ['clients', 'Clients'], ['team', 'Team'], ['sales', 'Sales'], ['suppliers', 'Suppliers'], ['reports', 'Reports']];
+var PLACEHOLDER = { all: 'Search settings, menu, clients…', settings: 'Search any setting…', menu: 'Items, categories, modifiers…',
+  clients: 'Name or phone…', team: 'Name or job…', sales: 'Order #, client, item…', suppliers: 'Supplier name…', reports: 'Search reports…' };
+var THEMES = [['light', 'Light'], ['dark', 'Dark'], ['auto', 'Auto']];
+var THEME_SUM = { light: 'Always light', dark: 'Always dark', auto: 'Follows your phone' };
+
+function norm(s) { return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); }
+function money(n) { return '$' + String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
+function initials(n) { var p = n.split(' '); return (p[0].charAt(0) + p[p.length - 1].charAt(0)).toUpperCase(); }
+function wordPos(nt, k) {
+  var i = nt.indexOf(k);
+  while (i !== -1) { if (i === 0 || !/[a-z0-9]/.test(nt.charAt(i - 1))) return i; i = nt.indexOf(k, i + 1); }
+  return -1;
+}
+
+var INDEX = [], BY_ID = {};
+function add(o) {
+  o.ord = INDEX.length;
+  o.scope = o.scope || SEC_SCOPE[o.sec];
+  o.nTitle = norm(o.title);
+  o.nAlias = (o.alias || []).map(function (a) { return { a: a, n: norm(a) }; });
+  o.bag = norm([o.title].concat(o.alias || []).concat([o.kw || '']).join(' ')).split(/[^a-z0-9]+/).filter(Boolean);
+  o.nExtra = (o.extra || []).map(function (x) { return { n: norm(x.t), show: x.show }; });
+  INDEX.push(o); BY_ID[o.id] = o;
+}
+
+[
+  { id: 'p-tax', kind: 'page', sec: 'settings', icon: 'tax', title: 'Tax', path: 'Workspace › Tax', sum: '2 of 3 taxes on · prices include tax', val: '2 on', kw: 'taxes impuesto impuestos iva vat impoconsumo', pop: 5 },
+  { id: 'p-pay', kind: 'page', sec: 'settings', icon: 'pay', title: 'Payment Method', path: 'Workspace › Payment Method', sum: 'Cash, Card and Transfer on · QR off', val: '3 on', alias: ['Payment methods', 'Métodos de pago'], kw: 'payments pay pago cash card transfer qr efectivo tarjeta', pop: 4 },
+  { id: 'p-rp', kind: 'page', sec: 'settings', icon: 'grid', title: 'Registers & Printers', path: 'Workspace › Registers & Printers', sum: '5 active · the Barra printer is offline', val: '5 active', alias: ['Printers', 'Receipt printer', 'Ticket printer', 'Kitchen printer', 'Cash drawer', 'Impresora'], kw: 'register registers terminal terminals device devices bluetooth epson caja', pop: 4 },
+  { id: 'p-mod', kind: 'page', sec: 'settings', icon: 'mods', title: 'Modifiers', path: 'Menu › Modifiers', sum: '6 groups · on 41 items', val: '6 groups', alias: ['Modificadores', 'Extras', 'Add-ons'], kw: 'options toppings adiciones salsas sauces', pop: 4 },
+  { id: 'p-cat', kind: 'page', sec: 'settings', icon: 'folder', title: 'Categories', path: 'Menu › Categories', sum: '7 categories · 70 items', val: '7', alias: ['Categorías'], pop: 2 },
+  { id: 'p-combo', kind: 'page', sec: 'settings', icon: 'combo', title: 'Combos', path: 'Menu › Combos', sum: '1 live · Combo Burger House −15%', val: '1 live', kw: 'bundle deal promo promocion oferta', pop: 2 },
+  { id: 's-theme', kind: 'seg', sec: 'settings', icon: 'moon', title: 'Theme', path: 'Workspace › Appearance', alias: ['Dark mode', 'Light mode', 'Night mode', 'Appearance', 'Tema', 'Modo oscuro'], kw: 'colors display screen', pop: 3 },
+  { id: 'p-lang', kind: 'page', sec: 'settings', icon: 'globe', title: 'Language', path: 'Workspace › Appearance', val: 'English', alias: ['Idioma'], kw: 'english espanol spanish portugues portuguese', pop: 2 },
+  { id: 'p-rec', kind: 'page', sec: 'settings', icon: 'receipt', title: 'Receipt', path: 'Registers & Printers › Receipt', sum: 'Sent by WhatsApp · printed when asked', val: 'WhatsApp', alias: ['Recibo', 'Ticket'], kw: 'whatsapp print printer logo footer factura', pop: 3 },
+  { id: 's-pts', kind: 'switch', sec: 'settings', icon: 'star', title: 'Points', path: 'Clients › Points', sum: 'Clients earn points on every sale', on: true, alias: ['Loyalty', 'Puntos', 'Rewards'], kw: 'fidelidad', pop: 2 },
+  { id: 'p-acct', kind: 'page', sec: 'settings', icon: 'share', title: 'Share with accountant', path: 'Workspace', sum: 'Monthly export in Excel or PDF', alias: ['Contador', 'Accountant'], kw: 'export excel pdf dian', pop: 2 },
+  { id: 'p-biz', kind: 'page', sec: 'settings', icon: 'store', title: 'Businesses', path: 'Workspace', val: 'Burger House', alias: ['Negocios', 'Switch business'], kw: 'business store branch sede tienda local', pop: 1 },
+  { id: 'p-roles', kind: 'page', sec: 'settings', icon: 'shield', title: 'Roles & permissions', path: 'Team › Roles', val: '4 roles', alias: ['Permissions', 'Permisos'], kw: 'owner boss patron cashier role access pin', pop: 1 },
+  { id: 'p-kds', kind: 'page', sec: 'settings', icon: 'flame', title: 'Kitchen display', path: 'Registers & Printers › Kitchen', sum: 'Always dark, easy to read across the kitchen', val: '2 screens', kw: 'kds screen cocina dark comandas', pop: 1 },
+  { id: 't-incl', kind: 'switch', sec: 'settings', icon: 'tax', title: 'Prices include tax', path: 'Workspace › Tax', on: true, kw: 'iva impuesto incluido included', pop: 2 },
+  { id: 't-rec', kind: 'switch', sec: 'settings', icon: 'receipt', title: 'Show taxes on the receipt', path: 'Workspace › Tax', on: true, kw: 'iva recibo', pop: 1 },
+  { id: 'm-ask', kind: 'switch', sec: 'settings', icon: 'mods', title: 'Ask for modifiers when adding an item', path: 'Menu › Modifiers', on: true, pop: 1 },
+  { id: 'm-kit', kind: 'switch', sec: 'settings', icon: 'printer', title: 'Print modifiers on kitchen tickets', path: 'Registers & Printers › Kitchen', on: true, kw: 'comanda', pop: 1 },
+  { id: 'm-rec', kind: 'switch', sec: 'settings', icon: 'receipt', title: 'Show modifier prices on the receipt', path: 'Registers & Printers › Receipt', on: false, pop: 1 },
+  { id: 'r-auto', kind: 'switch', sec: 'settings', icon: 'printer', title: 'Print a receipt after every sale', path: 'Registers & Printers › Receipt', on: false, kw: 'printer automatic auto', pop: 1 },
+  { id: 'r-drw', kind: 'switch', sec: 'settings', icon: 'drawer', title: 'Open the cash drawer on cash sales', path: 'Registers & Printers', on: true, kw: 'cajon printer register', pop: 1 },
+
+  { id: 'x-ico', kind: 'switch', sec: 'taxes', icon: 'tax', title: 'Impoconsumo 8%', path: 'Applies to 61 items', on: true, kw: 'tax taxes impuesto inc consumo restaurant', pop: 2 },
+  { id: 'x-iva', kind: 'switch', sec: 'taxes', icon: 'tax', title: 'IVA 19%', path: 'Applies to 9 items', on: true, kw: 'tax taxes impuesto vat', pop: 2 },
+  { id: 'x-bag', kind: 'switch', sec: 'taxes', icon: 'bag', title: 'Bag tax $66', path: 'Per plastic bag · not charged', on: false, alias: ['Impuesto a la bolsa'], kw: 'taxes impuesto plastic', pop: 1 },
+
+  { id: 'y-cash', kind: 'switch', sec: 'payments', icon: 'cash', title: 'Cash', path: 'Payment Method', on: true, alias: ['Efectivo'], kw: 'payment payments pay pago' },
+  { id: 'y-card', kind: 'switch', sec: 'payments', icon: 'card', title: 'Card', path: 'Payment Method', on: true, alias: ['Tarjeta', 'Datáfono'], kw: 'payment payments pay pago credit debit' },
+  { id: 'y-tr', kind: 'switch', sec: 'payments', icon: 'transfer', title: 'Transfer', path: 'Payment Method', on: true, alias: ['Transferencia', 'Nequi', 'Daviplata'], kw: 'payment payments pay pago bank' },
+  { id: 'y-qr', kind: 'switch', sec: 'payments', icon: 'qr', title: 'QR', path: 'Payment Method', on: false, alias: ['Código QR'], kw: 'payment payments pay pago' },
+
+  { id: 'pr-1', kind: 'printer', sec: 'printers', icon: 'printer', title: 'Caja principal', path: 'Epson TM-T20III · receipts', badge: 'Connected', tone: 'ok', kw: 'printer printers receipt receipts ticket impresora' },
+  { id: 'pr-2', kind: 'printer', sec: 'printers', icon: 'printer', title: 'Cocina', path: 'Kitchen tickets', badge: 'Connected', tone: 'ok', kw: 'printer printers kitchen comanda impresora ticket' },
+  { id: 'pr-3', kind: 'printer', sec: 'printers', icon: 'printer', title: 'Barra', path: 'Bar · receipts and drink tickets', badge: 'Offline', tone: 'warn', kw: 'printer printers receipt receipts bar drinks bebidas impresora ticket' },
+
+  { id: 'a-tax', kind: 'action', sec: 'create', scope: 'settings', title: 'Create new tax', kw: 'taxes impuesto iva add' },
+  { id: 'a-prn', kind: 'action', sec: 'create', scope: 'settings', title: 'Add a printer', kw: 'printers impresora new' },
+  { id: 'a-pay', kind: 'action', sec: 'create', scope: 'settings', title: 'Add a payment method', kw: 'pay payments pago new' },
+  { id: 'a-mod', kind: 'action', sec: 'create', scope: 'menu', title: 'Create modifier group', kw: 'modifiers modificador adiciones add new' },
+  { id: 'a-item', kind: 'action', sec: 'create', scope: 'menu', title: 'New item', kw: 'items product producto plato add create' },
+  { id: 'a-combo', kind: 'action', sec: 'create', scope: 'menu', title: 'New combo', kw: 'combos add create promo' },
+  { id: 'a-cli', kind: 'action', sec: 'create', scope: 'clients', title: 'New client', kw: 'clients cliente customer add create' },
+  { id: 'a-emp', kind: 'action', sec: 'create', scope: 'team', title: 'Add employee', kw: 'employees team empleado staff new create' },
+  { id: 'a-inv', kind: 'action', sec: 'create', scope: 'suppliers', title: 'Add supplier invoice', alias: ['Take a photo, we do the rest'], kw: 'invoice factura supplier proveedor photo' }
+].forEach(add);
+
+/* The demo's restaurant menu (demo/demo.js), 70 items in 7 categories; a third number is "sold today". */
+var PRICE = {};
+[
+  ['ham', 'Hamburguesas', [['Hamburguesa Clásica', 18900, 18], ['Hamburguesa Doble Carne', 27900], ['Hamburguesa BBQ', 23900], ['Hamburguesa con Tocineta', 24900], ['Hamburguesa Criolla', 22900], ['Hamburguesa Ranchera', 25900], ['Hamburguesa Hawaiana', 24900], ['Hamburguesa Mexicana', 26900], ['Hamburguesa de Pollo', 19900, 11], ['Hamburguesa Vegetariana', 21900], ['Hamburguesa Tres Quesos', 26900], ['Hamburguesa Picante', 23900], ['Hamburguesa de la Casa', 29900], ['Mini Hamburguesa', 12900]]],
+  ['per', 'Perros y Sándwiches', [['Perro Caliente Sencillo', 11900], ['Perro Especial', 16900], ['Perro Ranchero', 18900], ['Choripán', 15900], ['Sándwich de Pollo', 17900, 6], ['Sándwich Cubano', 21900], ['Salchipapa Sencilla', 14900], ['Salchipapa Especial', 19900]]],
+  ['aco', 'Acompañamientos', [['Papas a la Francesa', 8900, 26], ['Papas Rústicas', 9900], ['Papas con Queso y Tocineta', 14900], ['Aros de Cebolla', 10900], ['Yuca Frita', 9900], ['Patacones', 9900], ['Ensalada de la Casa', 11900], ['Nuggets x6', 12900], ['Alitas BBQ x6', 19900], ['Chorizo Santarrosano', 10900]]],
+  ['beb', 'Bebidas', [['Gaseosa Personal', 4500], ['Gaseosa 1.5 L', 8900], ['Limonada Natural', 6900, 15], ['Limonada de Coco', 10900], ['Jugo de Mora', 7900], ['Jugo de Maracuyá', 7900], ['Jugo de Lulo', 7900], ['Malteada de Vainilla', 13900], ['Malteada de Chocolate', 13900], ['Malteada de Oreo', 15900], ['Agua en Botella', 3500], ['Cerveza Nacional', 7900], ['Café Americano', 4500], ['Té Frío', 5500]]],
+  ['pos', 'Postres', [['Brownie con Helado', 12900], ['Torta de Chocolate', 9900], ['Cheesecake de Mora', 13900], ['Helado 2 Bolas', 8900], ['Obleas con Arequipe', 7900], ['Flan de Caramelo', 8900], ['Postre de Natas', 9900]]],
+  ['com', 'Combos', [['Combo Clásico', 26900, 9], ['Combo Doble', 34900], ['Combo BBQ', 31900], ['Combo Pollo', 27900, 4], ['Combo Familiar', 72900], ['Combo Parejas', 54900], ['Combo Infantil', 19900], ['Combo Alitas', 29900], ['Combo Salchipapa', 24900]]],
+  ['des', 'Desayunos', [['Calentado Paisa', 15900], ['Huevos al Gusto', 11900], ['Caldo de Costilla', 12900], ['Arepa con Queso', 6900], ['Changua', 10900], ['Tamal Tolimense', 14900], ['Chocolate con Queso', 7900], ['Pan de Bono', 3500]]]
+].forEach(function (c) {
+  c[2].forEach(function (it) {
+    PRICE[it[0]] = it[1];
+    add({ id: 'i-' + it[0], kind: 'item', sec: 'items', cat: c[0], title: it[0], path: c[1] + (it[2] ? ' · ' + it[2] + ' sold today' : ''), val: money(it[1]), kw: c[1], pop: it[2] ? Math.min(5, it[2] / 5) : 0 });
+  });
+  add({ id: 'c-' + c[0], kind: 'cat', sec: 'categories', cat: c[0], title: c[1], path: c[2].length + ' items', kw: 'category categoria' });
+});
+add({ id: 'cb-1', kind: 'combo', sec: 'combos', icon: 'combo', title: 'Combo Burger House', path: '−15% · burger or hot dog + side + drink', badge: 'Live', tone: 'ok', kw: 'combo combos promo' });
+
+[
+  ['Término de la carne', 'Required · pick 1', 14, [['Medio'], ['Tres cuartos'], ['Bien asado']]],
+  ['Adiciones', 'Optional · up to 6', 22, [['Queso extra', 3000], ['Tocineta', 4000], ['Huevo', 2500], ['Pollo extra', 5000], ['Aguacate', 3500], ['Jalapeños', 2000]]],
+  ['Salsas', 'Optional', 31, [['Rosada'], ['BBQ'], ['Ajo'], ['Piña'], ['Mostaza miel']]],
+  ['Sin ingredientes', 'Optional', 22, [['Sin cebolla'], ['Sin tomate'], ['Sin lechuga'], ['Sin salsas']]],
+  ['Proteína', 'Required · pick 1', 9, [['Res'], ['Pollo'], ['Cerdo']]],
+  ['Tamaño de bebida', 'Required · pick 1', 4, [['Personal'], ['1.5 L']]]
+].forEach(function (g) {
+  add({ id: 'm-' + g[0], kind: 'mod', sec: 'modifiers', icon: 'mods', title: g[0], path: g[1] + ' · ' + g[3].length + ' options · on ' + g[2] + ' items',
+    kw: 'modifier modifiers modificador modificadores',
+    extra: g[3].map(function (o) { return { t: o[0], show: 'Has “' + o[0] + '”' + (o[1] ? ' +' + money(o[1]) : '') + ' · on ' + g[2] + ' items' }; }) });
+});
+
+[
+  ['Andrés Cárdenas', '310 441 2290', 12, 340], ['Andrés Restrepo', '315 208 7731', 3, 85], ['María Gómez', '300 512 0094', 31, 1120],
+  ['María José Quiñones', '318 774 1203', 9, 260], ['Ana Zapata', '301 655 4410', 5, 140], ['Carlos Ramírez', '312 390 8812', 18, 610],
+  ['Camila Herrera', '304 118 2276', 7, 205], ['Diana Ospina', '317 902 3345', 22, 790], ['Juan Salazar', '320 441 0098', 2, 40],
+  ['Laura Vargas', '311 276 5530', 14, 455], ['Paula Arango', '313 860 1172', 6, 180], ['Santiago Muñoz', '316 334 9021', 11, 395],
+  ['Natalia Jaramillo', '305 778 6604', 4, 95], ['Sebastián Londoño', '319 205 4487', 8, 230]
+].forEach(function (p) {
+  var line = p[1] + ' · ' + p[2] + ' visits';
+  add({ id: 'cl-' + p[0], kind: 'client', sec: 'clients', title: p[0], path: line, val: String(p[3]).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + ' pts',
+    kw: 'client clients cliente', pop: Math.min(5, p[2] / 6), extra: [{ t: p[1], show: line }, { t: p[1].replace(/ /g, ''), show: line }] });
+});
+
+[
+  ['Andrés Villalba', 'Cajero', '7:02'], ['Luisa Ospina', 'Cajera', '11:00'], ['Jhon Mosquera', 'Cocina', '6:45'],
+  ['Paola Gutiérrez', 'Mesera', ''], ['Wilmer Cárdenas', 'Domicilios', '10:30'], ['Yuliana Restrepo', 'Cajera', '']
+].forEach(function (p) {
+  add({ id: 'e-' + p[0], kind: 'emp', sec: 'team', title: p[0], path: p[1] + (p[2] ? ' · since ' + p[2] : ''), badge: p[2] ? 'On shift' : 'Off today', tone: p[2] ? 'ok' : 'role',
+    kw: 'employee employees team empleado ' + p[1], pop: p[2] ? 1 : 0 });
+});
+
+[
+  [1091, 'Today 13:40', 'Luisa Ospina', 'María Gómez', 'Card', ['Combo Doble', 'Malteada de Oreo']],
+  [1090, 'Today 13:31', 'Andrés Villalba', '', 'Cash', ['Hamburguesa Clásica', 'Gaseosa Personal']],
+  [1089, 'Today 13:18', 'Luisa Ospina', '', 'Cash', ['Salchipapa Especial', 'Cerveza Nacional', 'Cerveza Nacional']],
+  [1088, 'Today 13:12', 'Andrés Villalba', 'Andrés Cárdenas', 'Card', ['Hamburguesa de Pollo', 'Papas a la Francesa', 'Limonada Natural']],
+  [1085, 'Today 12:55', 'Andrés Villalba', '', 'Transfer', ['Combo Pollo', 'Combo Infantil']],
+  [1081, 'Today 12:40', 'Andrés Villalba', '', 'Cash', ['Hamburguesa BBQ']],
+  [1077, 'Today 12:21', 'Luisa Ospina', 'Camila Herrera', 'Card', ['Sándwich de Pollo', 'Jugo de Mora']],
+  [1069, 'Today 11:48', 'Wilmer Cárdenas', 'Diana Ospina', 'Transfer', ['Combo Familiar']],
+  [977, 'Sep 24', 'Andrés Villalba', 'Andrés Cárdenas', 'Card', ['Hamburguesa Doble Carne', 'Aros de Cebolla', 'Gaseosa 1.5 L']],
+  [954, 'Sep 23', 'Luisa Ospina', 'Andrés Restrepo', 'Cash', ['Hamburguesa de Pollo', 'Malteada de Vainilla']]
+].forEach(function (s, i) {
+  var id = (s[0] < 1000 ? '0' : '') + s[0];
+  var total = s[5].reduce(function (a, n) { return a + (PRICE[n] || 0); }, 0);
+  var extra = [{ t: s[2], show: 'Sold by ' + s[2] + ' · ' + s[1] }];
+  if (s[3]) extra.push({ t: s[3], show: 'Client: ' + s[3] + ' · ' + s[1] });
+  s[5].forEach(function (n) { extra.push({ t: n, show: n + (s[5].length > 1 ? ' + ' + (s[5].length - 1) + ' more' : '') + ' · ' + s[1] }); });
+  add({ id: 'o-' + id, kind: 'sale', sec: 'sales', icon: 'receipt', title: 'Order #' + id, alias: [id], path: s[1] + ' · ' + s[2] + ' · ' + s[4], val: money(total),
+    kw: 'sale sales venta ventas order orden', pop: 5 - i * 0.4, extra: extra });
+});
+
+[
+  ['Carnes La Ceja', 'Carnes y embutidos'], ['Distribuidora El Novillo', 'Carnes'], ['Panadería San Martín', 'Pan y bollería'],
+  ['Lácteos del Valle', 'Quesos y lácteos'], ['Verduras Doña Rosa', 'Frutas y verduras'], ['Gaseosas del Norte', 'Bebidas'],
+  ['Papa Criolla S.A.S.', 'Papa y tubérculos'], ['Salsas La Abuela', 'Salsas y aderezos'], ['Aceites Montería', 'Aceites'],
+  ['Desechables JR', 'Empaques'], ['Quesos Paipa', 'Quesos'], ['Café La Montaña', 'Café'], ['Hielo Polar', 'Hielo'], ['Cervecería Andina', 'Cerveza']
+].forEach(function (s) {
+  add({ id: 'su-' + s[0], kind: 'sup', sec: 'suppliers', icon: 'truck', title: s[0], path: s[1], kw: 'supplier suppliers proveedor ' + s[1] });
+});
+
+[
+  { id: 'rp-full', title: 'Full Reports', path: 'Workspace › Full Reports', val: 'Today', kw: 'reports analytics reportes informes sales ventas', pop: 3 },
+  { id: 'rp-emp', title: 'Sales by employee', path: 'Full Reports', kw: 'team empleado ventas' },
+  { id: 'rp-top', title: 'Top items by revenue', path: 'Full Reports', kw: 'best sellers mas vendidos' },
+  { id: 'rp-pay', title: 'Payment split', path: 'Full Reports', kw: 'cash card transfer efectivo tarjeta payment' },
+  { id: 'rp-din', title: 'Sales by dining option', path: 'Full Reports', kw: 'takeout delivery domicilio dine para llevar' },
+  { id: 'rp-tax', title: 'Taxes collected', path: 'Share with accountant', val: 'This month', kw: 'tax iva impuestos' }
+].forEach(function (r) { r.kind = 'page'; r.sec = 'reports'; r.icon = 'chart'; add(r); });
+
+/* ───────── matching and ranking (see "How search decides") ───────── */
+function scoreText(nt, toks, qn) {
+  if (nt === qn) return 100;
+  if (nt.indexOf(qn) === 0) return 92;
+  var first = -1;
+  for (var i = 0; i < toks.length; i++) {
+    var p = wordPos(nt, toks[i]);
+    if (p < 0) { first = -2; break; }
+    if (first < 0 || p < first) first = p;
+  }
+  if (first >= 0) {
+    var wi = nt.slice(0, first).split(/[^a-z0-9]+/).filter(Boolean).length;
+    return 84 - Math.min(8, wi * 2);
+  }
+  for (var j = 0; j < toks.length; j++) if (toks[j].length < 3 || nt.indexOf(toks[j]) < 0) return 0;
+  return 62;
+}
+
+function matchEntry(e, toks, qn) {
+  var ts = scoreText(e.nTitle, toks, qn);
+  var as = 0, alias = '';
+  for (var i = 0; i < e.nAlias.length; i++) {
+    var s = scoreText(e.nAlias[i].n, toks, qn) - 6;
+    if (s > as) { as = s; alias = e.nAlias[i].a; }
+  }
+  var bag = toks.every(function (k) { return e.bag.some(function (w) { return w.indexOf(k) === 0; }); }) ? 55 : 0;
+  var ex = 0, show = '';
+  for (var x = 0; x < e.nExtra.length && !ex; x++) {
+    var xn = e.nExtra[x].n;
+    if (xn.indexOf(qn) === 0) ex = 48;
+    else if (toks.every(function (k) { return wordPos(xn, k) >= 0; })) ex = 45;
+    if (ex) show = e.nExtra[x].show;
+  }
+  var best = Math.max(ts, as, bag, ex);
+  if (!best) return null;
+  var why = ts ? 'title' : as ? 'alias' : ex ? 'extra' : 'bag';
+  var title = esc(e.title);
+  if (why === 'title') {
+    var rs = [];
+    if (e.nTitle.indexOf(qn) === 0) rs.push([0, qn.length]);
+    toks.forEach(function (k) {
+      var p = wordPos(e.nTitle, k);
+      if (p < 0) p = e.nTitle.indexOf(k);
+      if (p >= 0) rs.push([p, p + k.length]);
+    });
+    rs.sort(function (a, b) { return a[0] - b[0]; });
+    title = ''; var at = 0;
+    rs.forEach(function (r) {
+      if (r[1] <= at) return;
+      var a = Math.max(r[0], at);
+      title += esc(e.title.slice(at, a)) + '<b>' + esc(e.title.slice(a, r[1])) + '</b>';
+      at = r[1];
+    });
+    title += esc(e.title.slice(at));
+  }
+  return { e: e, s: best, why: why, alias: alias, show: show, title: title };
+}
+
+function search(q, scope) {
+  var toks = norm(q).split(/[^a-z0-9]+/).filter(Boolean);
+  var qn = toks.join(' ');
+  var results = [];
+  if (toks.length) INDEX.forEach(function (e) {
+    var m = matchEntry(e, toks, qn);
+    if (!m) return;
+    m.w = m.s * (MULT[e.sec] || 1) + (e.pop || 0) * 0.5;
+    results.push(m);
+  });
+  var counts = {}, total = 0;
+  results.forEach(function (m) { if (m.e.kind !== 'action') { counts[m.e.scope] = (counts[m.e.scope] || 0) + 1; total++; } });
+  var scoped = scope === 'all' ? results : results.filter(function (m) { return m.e.scope === scope; });
+  scoped.sort(function (a, b) { return b.w - a.w || a.e.ord - b.e.ord; });
+
+  var cands = scoped.filter(function (m) { return m.e.kind !== 'action'; });
+  var top = cands.length && cands[0].w >= 85 && (cands.length < 2 || cands[0].w - cands[1].w >= 6) ? cands[0] : null;
+
+  var groups = {};
+  scoped.forEach(function (m) { if (m !== top) (groups[m.e.sec] = groups[m.e.sec] || []).push(m); });
+  var secs = Object.keys(groups).map(function (key) {
+    var list = groups[key];
+    if (NATURAL[key]) list.sort(function (a, b) { return a.e.ord - b.e.ord; });
+    var bw = 0; list.forEach(function (m) { if (m.w > bw) bw = m.w; });
+    return { key: key, list: list, bucket: key === 'create' ? 99 : Math.floor(bw / 10), oi: SEC_ORDER.indexOf(key) };
+  });
+  secs.sort(function (a, b) { return b.bucket - a.bucket || a.oi - b.oi; });
+
+  var near = [];
+  if (toks.length && !scoped.length) {
+    var loose = toks.map(function (k) { return k.length > 3 ? k.slice(0, 3) : k; });
+    INDEX.forEach(function (e) {
+      if (e.kind === 'action' || (scope !== 'all' && e.scope !== scope)) return;
+      var m = matchEntry(e, loose, loose.join(' '));
+      if (m) { m.w = m.s * (MULT[e.sec] || 1) + (e.pop || 0) * 0.5; near.push(m); }
+    });
+    near.sort(function (a, b) { return b.w - a.w; });
+  }
+  return { hasQ: toks.length > 0, counts: counts, total: total, top: top, secs: secs, empty: toks.length > 0 && !scoped.length, near: near.slice(0, 3) };
+}
+
+/* ───────── drawing a phone ───────── */
+var CHEV = svg(IC.chev, 'chev');
+
+function workspaceHTML() {
+  function wr(icon, t, sub, subOk) {
+    return '<button type="button" class="wr" data-act="open" data-v="' + esc(t) + '"><span class="wr-ic">' + svg(icon) + '</span>' +
+      '<span class="wr-t"><b>' + esc(t) + '</b><i' + (subOk ? ' class="ok"' : '') + '>' + esc(sub) + '</i></span>' + CHEV + '</button>';
+  }
+  function wd(icon, t) { return '<button type="button" class="wd" data-act="open" data-v="' + esc(t) + '">' + svg(icon) + '<span>' + esc(t) + '</span>' + CHEV + '</button>'; }
+  return '<div class="ws-head"><div class="ws-biz"><h3>Burger House</h3><span class="boss">BOSS</span></div>' +
+      '<button type="button" class="ws-switch" data-act="open" data-v="Businesses">Businesses ›</button></div>' +
+    '<button type="button" class="ws-search" data-act="open-search">' + svg(IC.search) + '<span>Search settings, menu, clients, sales…</span></button>' +
+    '<div class="ws-rows">' +
+      wr(IC.menu, 'Menu', '70 items') + wr(IC.truck, 'Suppliers', '14 suppliers') + wr(IC.client, 'Clients', '186 clients') +
+      wr(IC.team, 'Team', '6 employees') +
+      '<button type="button" class="wr open" data-act="open" data-v="Register"><span class="dot" aria-hidden="true">●</span>' +
+        '<span class="wr-t"><b>Register open</b><i>Sales</i></span><span class="money">$1.284.600</span></button>' +
+      wr(IC.camera, 'Add Supplier Invoice', 'Take a photo, we do the rest') + wr(IC.grid, 'Registers & Printers', '5 active', true) +
+      '<div class="wds">' + wd(IC.doc, 'Full Reports') + wd(IC.share, 'Share with accountant') + wd(IC.pay, 'Payment Method') + wd(IC.tax, 'Tax') + '</div>' +
+    '</div>' +
+    '<div class="ws-bar"><button type="button" class="lang" data-act="open" data-v="Language and theme">EN' + svg(IC.sun) + '</button>' +
+      '<span class="dollar" aria-hidden="true">$</span></div>';
+}
+
+function searchShellHTML() {
+  return '<div class="sbar"><button type="button" class="ib" data-act="back" aria-label="Back to Workspace">' + svg(IC.back) + '</button>' +
+    '<label class="field">' + svg(IC.search) + '<input class="q" type="text" aria-label="Search the workspace" autocomplete="off" spellcheck="false" enterkeyhint="search">' +
+    '<button type="button" class="ib clr" data-act="clear" aria-label="Clear search">' + svg(IC.x) + '</button></label></div>' +
+    '<div class="chips" role="toolbar" aria-label="What to search"></div><div class="body"></div>';
+}
+
+function leadHTML(e, big) {
+  var k = e.kind;
+  if (k === 'item') return '<span class="lead sq letter cat-' + e.cat + '" aria-hidden="true">' + esc(e.title.charAt(0)) + '</span>';
+  if (k === 'cat') return '<span class="lead sq cat-' + e.cat + '" aria-hidden="true">' + svg(IC.folder) + '</span>';
+  if (k === 'client') return '<span class="lead txt" aria-hidden="true">' + initials(e.title) + '</span>';
+  if (k === 'emp') return '<span class="lead sq inv" aria-hidden="true">' + initials(e.title) + '</span>';
+  if (k === 'action') return '<span class="lead accent" aria-hidden="true">' + svg(IC.plus) + '</span>';
+  return '<span class="lead' + (big ? ' accent' : '') + '" aria-hidden="true">' + svg(IC[e.icon] || IC.tax) + '</span>';
+}
+
+function rowHTML(m, big, S) {
+  var e = m.e, k = e.kind;
+  var on = S.ons[e.id] != null ? S.ons[e.id] : !!e.on;
+  var sub = m.why === 'extra' ? m.show : (e.path || '');
+  var note = m.why === 'alias' ? 'Also called “' + m.alias + '”' : k === 'seg' ? THEME_SUM[S.theme] : big && e.sum ? e.sum : '';
+  var texts = '<span class="rt"><span class="rtt' + (k === 'action' ? ' act' : '') + '">' + (m.title || esc(e.title)) + '</span>' +
+    (sub ? '<span class="rts">' + esc(sub) + '</span>' : '') + (note ? '<span class="rtn">' + esc(note) + '</span>' : '') + '</span>';
+  var cls = 'row' + (big ? ' big' : '');
+  var lead = leadHTML(e, big);
+  if (k === 'switch') {
+    return '<button type="button" class="' + cls + '" role="switch" aria-checked="' + on + '" data-act="toggle" data-v="' + esc(e.id) + '">' +
+      lead + texts + '<span class="sw' + (on ? ' on' : '') + '" aria-hidden="true"><i></i></span></button>';
+  }
+  if (k === 'seg') {
+    return '<div class="' + cls + ' seg"><div class="seg-top">' + lead + texts + '</div><div class="segc" role="group" aria-label="Theme">' +
+      THEMES.map(function (t) { return '<button type="button" aria-pressed="' + (S.theme === t[0]) + '" data-act="theme" data-v="' + t[0] + '">' + t[1] + '</button>'; }).join('') +
+      '</div></div>';
+  }
+  var strong = k === 'item' || k === 'sale' || k === 'client';
+  var trail = (e.badge ? '<span class="badge ' + e.tone + '">' + esc(e.badge) + '</span>' : '') +
+    (e.val ? '<span class="val' + (strong ? ' strong' : '') + '">' + esc(e.val) + '</span>' : '') +
+    (k !== 'action' && !(e.val && strong) ? CHEV : '');
+  return '<button type="button" class="' + cls + '" data-act="' + (e.act || 'open') + '" data-v="' + esc(e.actV || e.title) + '">' + lead + texts + trail + '</button>';
+}
+
+function sectionHTML(label, rows, more) {
+  return '<div class="sh"><span>' + label + '</span>' + (more ? '<button type="button" data-act="scope" data-v="' + more.scope + '">' + more.label + '</button>' : '') + '</div>' +
+    '<div class="list">' + rows.join('') + '</div>';
+}
+
+function bodyHTML(S, r) {
+  if (!r.hasQ) {
+    var themeLabel = THEMES.filter(function (t) { return t[0] === S.theme; })[0][1];
+    var tiles = [['Tax', '2 on', 'tax', 'tax'], ['Payments', '3 on', 'pay', 'payment'], ['Printers', '1 offline', 'printer', 'printer', 1],
+      ['Modifiers', '6 groups', 'mods', 'modif'], ['Theme', themeLabel, 'moon', 'dark'], ['Receipt', 'WhatsApp', 'receipt', 'receipt']];
+    return '<div class="lbl">RECENT</div><div class="recents">' +
+      ['IVA', 'andres', 'pollo', '#1088', 'receipt printer'].map(function (v) {
+        return '<button type="button" class="recent" data-act="q" data-v="' + esc(v) + '">' + svg(IC.clock) + '<span>' + esc(v) + '</span></button>';
+      }).join('') + '</div>' +
+      '<div class="lbl" style="margin-top:26px">SHORTCUTS</div><div class="tiles">' +
+      tiles.map(function (t) {
+        return '<button type="button" class="tile" data-act="q" data-v="' + t[3] + '"><span class="ic" aria-hidden="true">' + svg(IC[t[2]]) + '</span>' +
+          '<span><b>' + t[0] + '</b><i' + (t[4] ? ' class="warn"' : '') + '>' + esc(t[1]) + '</i></span></button>';
+      }).join('') + '</div>' +
+      '<p class="hint">Type anything: an item, a client\'s name or phone, an order number, an employee, or any setting.</p>' +
+      '<button type="button" class="linkbtn" data-act="back">Browse all settings ›</button>';
+  }
+  var out = '';
+  if (r.top) out += sectionHTML('BEST MATCH', [rowHTML(r.top, true, S)]);
+  r.secs.forEach(function (s) {
+    var cap = S.scope === 'all' ? (s.key === 'create' ? 2 : 3) : 99;
+    var more = s.key !== 'create' && s.list.length > cap ? { scope: SEC_SCOPE[s.key], label: 'See all ' + s.list.length } : null;
+    out += sectionHTML(SEC_LABEL[s.key], s.list.slice(0, cap).map(function (m) { return rowHTML(m, false, S); }), more);
+  });
+  if (r.empty) {
+    var typed = S.q.trim(); typed = typed.charAt(0).toUpperCase() + typed.slice(1);
+    out += '<div class="nores"><b>Nothing matches “' + esc(S.q.trim()) + '”</b><span>Check the spelling, or try fewer letters.</span></div>';
+    if (r.near.length) out += sectionHTML('CLOSEST MATCHES', r.near.map(function (m) { return rowHTML(m, false, S); }));
+    var make = [rowHTML({ e: { id: 'new-item', kind: 'action', title: 'New item “' + typed + '”' } }, false, S)];
+    if (S.scope !== 'all') make.push(rowHTML({ e: { id: 'all', kind: 'action', title: 'Search everything instead', act: 'scope', actV: 'all' } }, false, S));
+    out += sectionHTML('CREATE IT', make);
+  }
+  out += '<div class="foot"><span>Can\'t find it?</span><button type="button" class="linkbtn" data-act="back">Browse all settings ›</button></div>';
+  return out;
+}
+
+function chipsHTML(S, r) {
+  return CHIPS.filter(function (ch) { return !r.hasQ || ch[0] === 'all' || r.counts[ch[0]] || ch[0] === S.scope; }).map(function (ch) {
+    var n = ch[0] === 'all' ? r.total : (r.counts[ch[0]] || 0);
+    return '<button type="button" class="chip" aria-pressed="' + (S.scope === ch[0]) + '" data-act="scope" data-v="' + ch[0] + '">' + ch[1] +
+      (r.hasQ ? '<i>' + n + '</i>' : '') + '</button>';
+  }).join('');
+}
+
+function mount(host, cfg) {
+  var fig = document.createElement('figure');
+  fig.innerHTML = '<div class="phone"><div class="screen ws">' + workspaceHTML() + '</div><div class="screen search">' + searchShellHTML() + '</div>' +
+    '<div class="toast" role="status" aria-live="polite"></div></div>' +
+    '<figcaption><span class="n">' + cfg.n + '</span><span class="t">' + cfg.t + '</span><span class="d">' + cfg.d + '</span></figcaption>';
+  host.appendChild(fig);
+
+  var S = { screen: cfg.screen || 'search', q: cfg.q || '', scope: 'all', theme: 'auto', phoneDark: !!cfg.dark, ons: {}, timer: 0 };
+  var el = fig.querySelector('.phone');
+  var input = el.querySelector('input.q'), chips = el.querySelector('.chips'), body = el.querySelector('.body');
+  var clr = el.querySelector('.clr'), toastEl = el.querySelector('.toast');
+  var wsEl = el.querySelector('.screen.ws'), srEl = el.querySelector('.screen.search');
+
+  function render() {
+    el.classList.toggle('dark', S.theme === 'dark' || (S.theme === 'auto' && S.phoneDark));
+    wsEl.hidden = S.screen !== 'ws';
+    srEl.hidden = S.screen !== 'search';
+    if (input.value !== S.q) input.value = S.q;
+    input.placeholder = PLACEHOLDER[S.scope];
+    clr.hidden = !S.q;
+    var r = search(S.q, S.scope);
+    chips.innerHTML = chipsHTML(S, r);
+    body.innerHTML = bodyHTML(S, r);
+  }
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(S.timer);
+    S.timer = setTimeout(function () { toastEl.classList.remove('show'); }, 1800);
+  }
+
+  input.addEventListener('input', function () { S.q = input.value; render(); body.scrollTop = 0; });
+  el.addEventListener('click', function (ev) {
+    var b = ev.target.closest('[data-act]');
+    if (!b || !el.contains(b)) return;
+    var v = b.getAttribute('data-v');
+    switch (b.getAttribute('data-act')) {
+      case 'open-search': S.screen = 'search'; S.q = ''; S.scope = 'all'; render(); input.focus({ preventScroll: true }); break;
+      case 'back': S.screen = 'ws'; render(); break;
+      case 'clear': S.q = ''; render(); input.focus({ preventScroll: true }); break;
+      case 'scope': S.scope = v; render(); body.scrollTop = 0; break;
+      case 'q': S.q = v; render(); body.scrollTop = 0; break;
+      case 'toggle': var cur = S.ons[v] != null ? S.ons[v] : !!(BY_ID[v] && BY_ID[v].on); S.ons[v] = !cur; render(); break;
+      case 'theme': S.theme = v; render(); break;
+      case 'open': toast('Opens ' + v); break;
+    }
+  });
+  render();
+}
+
+var band1 = document.getElementById('band1'), band2 = document.getElementById('band2');
+[
+  { n: '1', screen: 'ws', t: 'Workspace, search on top',
+    d: 'Search goes first on the Workspace, right under the business name. The rows stay below as the map for people who would rather browse. Tap the bar to open search.' },
+  { n: '2', q: '', t: 'Before typing',
+    d: 'Recent searches and six shortcuts to the most-used settings, each showing its current state. Chips narrow the scope. The back arrow returns to the Workspace.' },
+  { n: '3', q: 'tax', t: '“tax”',
+    d: 'An exact name match becomes the Best match. “Create new tax” comes next, then every tax with a live switch. Each setting shows its path, so people learn where it lives.' },
+  { n: '4', q: 'modif', t: '“modif”',
+    d: 'Half a word is enough: the Modifiers page, every modifier setting with its switch, and the modifier groups with their item counts.' },
+  { n: '5', q: 'dark', t: '“dark”',
+    d: '“dark” isn\'t the setting\'s name. Aliases catch it. The control works in place: tap Dark and this phone goes dark.' }
+].forEach(function (c) { mount(band1, c); });
+[
+  { n: '6', q: 'receipt printer', t: '“receipt printer”',
+    d: 'Not what the app calls it either. Aliases send it to Registers & Printers, and the offline printer shows up as a problem right in the results.' },
+  { n: '7', q: 'andres', dark: true, t: '“andres”, phone in dark mode',
+    d: 'No Best match when results tie. Andrés the client and Andrés the cashier sit in separate sections with different avatar shapes. Accents don\'t matter.' },
+  { n: '8', q: 'pollo', t: '“pollo”',
+    d: 'Items with the word in their name, modifier groups with a matching option, and sales that included it. Chip counts show where the results are.' },
+  { n: '9', q: 'hamburguesa vegana', t: 'Nothing found',
+    d: 'Never a dead end: the closest match, an offer to create the item that wasn\'t found, and the way back to browsing.' }
+].forEach(function (c) { mount(band2, c); });
+})();
+</script>
+</body>
+</html>
