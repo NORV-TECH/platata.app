@@ -9,8 +9,19 @@ lines = []
 for n in list(range(1, 12)):
     fid, page, key = f"R{n}", f"R{n}", f"R{n}"
     lines.append((key, page, fid))
-for n in range(1, 25):
+for n in range(1, 26):
     lines.append((f"restaurante:S{n}", f"RS{n}", f"RS{n}"))
+# Mexico: a "-MX" video is shown for Mexico. The card pages (Colombia = Wompi typed form) and the pay-by-link page must never fall
+# back to the Colombian video in Mexico: no Mexico video yet = no video there (null).
+MX_OWN = {"RS5", "RS25", "TS5", "VS5"}
+def add_mx(v, page, countries=("MX",)):
+    if os.path.exists(os.path.join(ROOT, "video", f"{page}-MX-es.mp4")):
+        for c in countries: v[f"{c}-es"] = f"video/{page}-MX-es.mp4"
+    elif page in MX_OWN:
+        v["MX-es"] = None
+    return v
+def js(v):
+    return ",".join(f'"{k}":' + ("null" if p is None else f'"{p}"') for k, p in v.items())
 out = []
 for key, page, fid in lines:
     if not os.path.exists(os.path.join(ROOT, "demos", "restaurante", page + ".html")):
@@ -21,10 +32,9 @@ for key, page, fid in lines:
             vids[l] = f"video/{fid}-{l}.mp4"
     if os.path.exists(os.path.join(ROOT, "video", f"{fid}-US-es.mp4")):
         vids["US-es"] = f"video/{fid}-US-es.mp4"
-    if "es" not in vids:
-        vids.pop("US-es", None) if False else None
+    add_mx(vids, page)
     only = [cl for cl in ALL_CL if cl not in HOLD.get(fid, [])]
-    v = ",".join(f'"{k}":"{p}"' for k, p in vids.items())
+    v = js(vids)
     out.append(f' "{key}":{{ only:{only!r}, page:(c,l)=>`demos/restaurante/{page}.html?embed=1&country=${{c}}&lang=${{l}}`, video:{{{v}}} }},'.replace("'", '"'))
 # ---- retail: tienda pages (T1..T11 own, TS1..TS24 shared) and farmacia (same pages with &type=pharmacy; only T12 has videos) ----
 def vids_of(fid):
@@ -36,13 +46,13 @@ def vids_of(fid):
 RET_ALL = ALL_CL
 for biz, typ in (("tienda", ""), ("farmacia", "&type=pharmacy")):
     own = [f"T{n}" for n in range(1, 13 if biz == "farmacia" else 12)]
-    for fid in own + [f"S{n}" for n in range(1, 25)]:
+    for fid in own + [f"S{n}" for n in range(1, 26)]:
         page = fid if fid.startswith("T") else "T" + fid
         if not os.path.exists(os.path.join(ROOT, "demos", "tienda", page + ".html")): continue
         v = vids_of(page) if (biz == "tienda" or page == "T12") else {}
-        if page == "T12" and os.path.exists(os.path.join(ROOT, "video", "T12-MX-es.mp4")):
-            for c in ("MX", "PE", "CL", "EC", "AR", "PA"): v[f"{c}-es"] = "video/T12-MX-es.mp4"
-        vv = ",".join(f'"{k}":"{p}"' for k, p in v.items())
+        if page == "T12": add_mx(v, page, ("MX", "PE", "CL", "EC", "AR", "PA"))
+        elif biz == "tienda": add_mx(v, page)
+        vv = js(v)
         out.append(f' "{biz}:{fid}":{{ only:{RET_ALL!r}, page:(c,l)=>`demos/tienda/{page}.html?embed=1&country=${{c}}&lang=${{l}}{typ}`, video:{{{vv}}} }},'.replace("'", '"'))
 # ---- services: the four demo businesses share the pages demos/servicios/V<n>.html (own) and VS<n>.html (shared), with &biz=<trade>.
 #      Videos are made for CO es and BR pt with each page's own business (shown for all four); a "-MX" script's video is shown for the
@@ -53,13 +63,12 @@ SERV_HOLD = {"V9", "VS20"}
 NOT_CO = ["MX", "PE", "CL", "EC", "AR", "PA"]
 MX_SPEAKS_FOR = {"V1": NOT_CO, "V2": NOT_CO, "VS18": NOT_CO}   # no suggested prices / the cut has choices: true in every Spanish country but Colombia
 for tree_id, slug in SERV_BIZ.items():
-    for fid in [f"V{n}" for n in range(1, 10)] + [f"S{n}" for n in range(1, 25)]:
+    for fid in [f"V{n}" for n in range(1, 10)] + [f"S{n}" for n in range(1, 26)]:
         page = fid if fid.startswith("V") else "V" + fid
         if page in SERV_HOLD or not os.path.exists(os.path.join(ROOT, "demos", "servicios", page + ".html")): continue
         v = {l: p for l, p in vids_of(page).items() if l in ("es", "pt")}
-        if os.path.exists(os.path.join(ROOT, "video", f"{page}-MX-es.mp4")):
-            for c in MX_SPEAKS_FOR.get(page, ["MX"]): v[f"{c}-es"] = f"video/{page}-MX-es.mp4"
-        vv = ",".join(f'"{k}":"{p}"' for k, p in v.items())
+        add_mx(v, page, MX_SPEAKS_FOR.get(page, ["MX"]))
+        vv = js(v)
         out.append(f' "{tree_id}:{fid}":{{ only:{SERV_CL!r}, page:(c,l)=>`demos/servicios/{page}.html?embed=1&country=${{c}}&lang=${{l}}&biz={slug}`, video:{{{vv}}} }},'.replace("'", '"'))
 block = "/* RESTAURANT-BEGIN (written by tools/tree_restaurant.py) */\n" + "\n".join(out) + "\n /* RESTAURANT-END */"
 p = os.path.join(ROOT, "index.html"); s = open(p, encoding="utf-8").read()

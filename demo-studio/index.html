@@ -185,6 +185,7 @@ const F = {
  S22:["Copia en Google Drive","Backup no Google Drive","Backup to Google Drive","Sauvegarde Google Drive"],
  S23:["Huella para borrar o quitar cargos","Digital para apagar ou tirar taxas","Fingerprint to delete or remove charges","Empreinte pour supprimer ou retirer des frais"],
  S24:["Varios negocios y sucursales","Vários negócios e filiais","Several businesses and branches","Plusieurs commerces et succursales"],
+ S25:["Cobrar con enlace","Cobrar com link","Charge by link"],
  R1:["El menú con IA desde una foto","O cardápio com IA por foto","AI menu from a photo","Menu par IA à partir d'une photo"],
  R2:["Editar el menú","Editar o cardápio","Edit the menu","Modifier le menu"],
  R3:["Adiciones y opciones","Adicionais e opções","Add-ons and options","Suppléments et options"],
@@ -221,7 +222,7 @@ const F = {
  B6:["Reglamento y actas"],B7:["Fechas que exige la ley"],B8:["La asamblea"],B9:["El acta, redactada"],B10:["Reportes del edificio"]
 };
 const IDX = {es:0,pt:1,en:2,fr:3};
-const S_ALL = Array.from({length:24},(_,i)=>"S"+(i+1));
+const S_ALL = Array.from({length:25},(_,i)=>"S"+(i+1));
 const range = (p,n) => Array.from({length:n},(_,i)=>p+(i+1));
 const BIZ = [
  {id:"restaurante", color:"#EB5A2E", n:{es:"Restaurante",pt:"Restaurante",en:"Restaurant",fr:"Restaurant"}, sub:{es:"Comidas, cafés, bares",pt:"Lanchonetes, cafés, bares",en:"Food, cafés, bars",fr:"Restos, cafés, bars"}, own:range("R",11)},
@@ -234,7 +235,7 @@ const BIZ = [
  {id:"edificios", color:"#177E73", n:{es:"Edificios",pt:"Condomínios",en:"Buildings",fr:"Immeubles"}, sub:{es:"Solo Colombia",pt:"Só Colômbia",en:"Colombia only",fr:"Colombie seulement"}, own:range("B",10), countries:["CO"], langs:["es"], noShared:true}
 ];
 // where a feature exists at all
-const ONLY = { S4:["CO","MX","PE","CL","EC","AR","PA","BR"], S5:["CO","US","CA"], T2:["CO"] };   // no QR in the US and Canada (code: no QR method there)
+const ONLY = { S4:["CO","MX","PE","CL","EC","AR","PA","BR"], S5:["CO","MX","US","CA"], S25:["MX","US","CA"], T2:["CO"] };   // no QR in the US and Canada (code: no QR method there); cards: CO Wompi, MX/US/CA Stripe (STRIPE-MX-1); pay by link: MX/US/CA (LINK-1..3)
 // a business can have its own country list for a feature: services take cards in Mexico too (Stripe, STRIPE-MX-1)
 ["peluqueria","veterinaria","motos","unas"].forEach(b=>{ ONLY[b+":S5"] = ["CO","MX","US","CA"]; });
 // what is built: demo page per feature, and the languages that have a video
@@ -255,7 +256,7 @@ const BUILT = {
  "restaurante:S2":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS2.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS2-es.mp4","pt":"video/RS2-pt.mp4","en":"video/RS2-en.mp4"} },
  "restaurante:S3":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS3.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS3-es.mp4","pt":"video/RS3-pt.mp4","en":"video/RS3-en.mp4"} },
  "restaurante:S4":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS4.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS4-es.mp4","pt":"video/RS4-pt.mp4"} },
- "restaurante:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS5.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS5-es.mp4","en":"video/RS5-en.mp4","US-es":"video/RS5-US-es.mp4"} },
+ "restaurante:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS5.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS5-es.mp4","en":"video/RS5-en.mp4","US-es":"video/RS5-US-es.mp4","MX-es":null} },
  "restaurante:S6":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS6.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS6-es.mp4","pt":"video/RS6-pt.mp4","en":"video/RS6-en.mp4"} },
  "restaurante:S7":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS7.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS7-es.mp4","pt":"video/RS7-pt.mp4","en":"video/RS7-en.mp4","US-es":"video/RS7-US-es.mp4"} },
  "restaurante:S8":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/restaurante/RS8.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/RS8-es.mp4","pt":"video/RS8-pt.mp4","en":"video/RS8-en.mp4"} },
@@ -290,7 +291,7 @@ const BUILT = {
  "tienda:S2":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/tienda/TS2.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/TS2-es.mp4","pt":"video/TS2-pt.mp4","en":"video/TS2-en.mp4"} },
  "tienda:S3":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/tienda/TS3.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/TS3-es.mp4","pt":"video/TS3-pt.mp4","en":"video/TS3-en.mp4"} },
  "tienda:S4":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/tienda/TS4.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/TS4-es.mp4","pt":"video/TS4-pt.mp4"} },
- "tienda:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/tienda/TS5.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/TS5-es.mp4","en":"video/TS5-en.mp4","US-es":"video/TS5-US-es.mp4"} },
+ "tienda:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/tienda/TS5.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/TS5-es.mp4","en":"video/TS5-en.mp4","US-es":"video/TS5-US-es.mp4","MX-es":null} },
  "tienda:S6":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/tienda/TS6.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/TS6-es.mp4","pt":"video/TS6-pt.mp4","en":"video/TS6-en.mp4","US-es":"video/TS6-US-es.mp4"} },
  "tienda:S7":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/tienda/TS7.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/TS7-es.mp4","pt":"video/TS7-pt.mp4","en":"video/TS7-en.mp4","US-es":"video/TS7-US-es.mp4"} },
  "tienda:S8":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt", "US-en", "US-es", "CA-en"], page:(c,l)=>`demos/tienda/TS8.html?embed=1&country=${c}&lang=${l}`, video:{"es":"video/TS8-es.mp4","pt":"video/TS8-pt.mp4","en":"video/TS8-en.mp4"} },
@@ -356,7 +357,7 @@ const BUILT = {
  "peluqueria:S2":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS2.html?embed=1&country=${c}&lang=${l}&biz=peluqueria`, video:{} },
  "peluqueria:S3":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS3.html?embed=1&country=${c}&lang=${l}&biz=peluqueria`, video:{} },
  "peluqueria:S4":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS4.html?embed=1&country=${c}&lang=${l}&biz=peluqueria`, video:{} },
- "peluqueria:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS5.html?embed=1&country=${c}&lang=${l}&biz=peluqueria`, video:{} },
+ "peluqueria:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS5.html?embed=1&country=${c}&lang=${l}&biz=peluqueria`, video:{"MX-es":null} },
  "peluqueria:S6":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS6.html?embed=1&country=${c}&lang=${l}&biz=peluqueria`, video:{} },
  "peluqueria:S7":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS7.html?embed=1&country=${c}&lang=${l}&biz=peluqueria`, video:{} },
  "peluqueria:S8":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS8.html?embed=1&country=${c}&lang=${l}&biz=peluqueria`, video:{"es":"video/VS8-es.mp4","pt":"video/VS8-pt.mp4"} },
@@ -387,7 +388,7 @@ const BUILT = {
  "veterinaria:S2":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS2.html?embed=1&country=${c}&lang=${l}&biz=veterinaria`, video:{} },
  "veterinaria:S3":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS3.html?embed=1&country=${c}&lang=${l}&biz=veterinaria`, video:{} },
  "veterinaria:S4":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS4.html?embed=1&country=${c}&lang=${l}&biz=veterinaria`, video:{} },
- "veterinaria:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS5.html?embed=1&country=${c}&lang=${l}&biz=veterinaria`, video:{} },
+ "veterinaria:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS5.html?embed=1&country=${c}&lang=${l}&biz=veterinaria`, video:{"MX-es":null} },
  "veterinaria:S6":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS6.html?embed=1&country=${c}&lang=${l}&biz=veterinaria`, video:{} },
  "veterinaria:S7":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS7.html?embed=1&country=${c}&lang=${l}&biz=veterinaria`, video:{} },
  "veterinaria:S8":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS8.html?embed=1&country=${c}&lang=${l}&biz=veterinaria`, video:{"es":"video/VS8-es.mp4","pt":"video/VS8-pt.mp4"} },
@@ -418,7 +419,7 @@ const BUILT = {
  "motos:S2":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS2.html?embed=1&country=${c}&lang=${l}&biz=taller-motos`, video:{} },
  "motos:S3":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS3.html?embed=1&country=${c}&lang=${l}&biz=taller-motos`, video:{} },
  "motos:S4":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS4.html?embed=1&country=${c}&lang=${l}&biz=taller-motos`, video:{} },
- "motos:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS5.html?embed=1&country=${c}&lang=${l}&biz=taller-motos`, video:{} },
+ "motos:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS5.html?embed=1&country=${c}&lang=${l}&biz=taller-motos`, video:{"MX-es":null} },
  "motos:S6":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS6.html?embed=1&country=${c}&lang=${l}&biz=taller-motos`, video:{} },
  "motos:S7":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS7.html?embed=1&country=${c}&lang=${l}&biz=taller-motos`, video:{} },
  "motos:S8":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS8.html?embed=1&country=${c}&lang=${l}&biz=taller-motos`, video:{"es":"video/VS8-es.mp4","pt":"video/VS8-pt.mp4"} },
@@ -449,7 +450,7 @@ const BUILT = {
  "unas:S2":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS2.html?embed=1&country=${c}&lang=${l}&biz=unas`, video:{} },
  "unas:S3":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS3.html?embed=1&country=${c}&lang=${l}&biz=unas`, video:{} },
  "unas:S4":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS4.html?embed=1&country=${c}&lang=${l}&biz=unas`, video:{} },
- "unas:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS5.html?embed=1&country=${c}&lang=${l}&biz=unas`, video:{} },
+ "unas:S5":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS5.html?embed=1&country=${c}&lang=${l}&biz=unas`, video:{"MX-es":null} },
  "unas:S6":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS6.html?embed=1&country=${c}&lang=${l}&biz=unas`, video:{} },
  "unas:S7":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS7.html?embed=1&country=${c}&lang=${l}&biz=unas`, video:{} },
  "unas:S8":{ only:["CO-es", "MX-es", "PE-es", "CL-es", "EC-es", "AR-es", "PA-es", "BR-pt"], page:(c,l)=>`demos/servicios/VS8.html?embed=1&country=${c}&lang=${l}&biz=unas`, video:{"es":"video/VS8-es.mp4","pt":"video/VS8-pt.mp4"} },
@@ -503,7 +504,7 @@ function fix(){
 }
 const B = id => BUILT[st.biz+":"+id] || BUILT[id];   // a business can have its own version of a shared feature ("restaurante:S3")
 const isBuilt = id => !!B(id) && (!B(id).only || B(id).only.includes(st.c+"-"+st.l));
-const videoOf = id => isBuilt(id) && (B(id).video[st.c+"-"+st.l] || B(id).video[st.l]);
+const videoOf = id => { if(!isBuilt(id)) return false; const v=B(id).video, k=st.c+"-"+st.l; return (k in v) ? v[k] : v[st.l]; };   // a country key set to null = no video there (e.g. the Colombian card video is not Mexico's)
 
 /* ================= render ================= */
 const $ = id => document.getElementById(id);
