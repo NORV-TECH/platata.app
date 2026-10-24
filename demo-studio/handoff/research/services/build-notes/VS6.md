@@ -22,3 +22,13 @@
 ## 5. After REVIEW-VS4-7
 - The method tap waits 4.0 s into beat 4 (the sheet stays up while Cortesía is named).
 - pt line 3 now also says the Pix (its button is on screen) already carries the sale total (helper brief, Brazil rule).
+
+## Round 3 (37db6d6c)
+- Page changed: the service tiles (same block as VS5: "Desde" line, whole amount, minutes line), the pay screen link
+  "Servicios (1) ›" (item 14), the two-row link slot and the receipt rules (shared code; no link shows on this page: QR set up,
+  CO card connected, MX Stripe not connected). Payment methods, the add dialog, the "Otro método de pago" sheet and the custom
+  confirm are unchanged at 37db6d6c.
+- Script: unchanged (VS6.json, VS6-MX.json). check_demo CO/BR/MX OK. Timing VS6 es:CO, pt:BR, VS6-MX es:MX: lines over their
+  screens as before, no wait changed. No video exists (no cut_price_scan).
+- New app bugs: none.
+- Round-2 items seen: 2, 9, 17 (tile) fixed; 14 fixed; 31 fixed (no Stripe location warning in Colombia).

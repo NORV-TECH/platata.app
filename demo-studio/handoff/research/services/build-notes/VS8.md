@@ -55,3 +55,16 @@
   - The list's repeated client names: the common data now keeps a client on about 1 sale in 9, never twice in a day.
 - Note: VS8 line 1 says "la plata" (Colombian). If an MX VS8 video is ever made, say "el dinero" in a VS8-MX.json.
 - Re-checked: check_demo CO:es BR:pt MX:es OK.
+
+## Round 3 (37db6d6c)
+- Page changed: the panel's search bar is the first item of the list (PanelSearchBar.kt:34-60, HomeScreen.kt:1516; not tapped);
+  Agenda rows: hour only (item 24) and the phone read by formatWhatsappForReading (item 12); Ventas rows: a walk-in now reads the
+  same "mié 21 de oct · 12:01 p. m." shape as a booked sale (item 33, ServicesTransactionsScreen.kt:496-502); the sale screen of a
+  PAID booked sale keeps "Venta #N" with the appointment as subtitle (item 34, TransactionsScreen.kt:106-115, :1057-1059) — BR's
+  refunded sale is now "Venda #428 / qua 21/10 · 17:15"; the receipt has no "En el local" line (item 15). Shared Reports code:
+  "Servicios y productos con más ingresos" and the plural "1 vendido" (items 37, 38).
+- Script: unchanged. check_demo CO/BR/MX OK. Timing VS8 es:CO, pt:BR: every line over its screen. cut_price_scan VS8: OK (es, pt).
+- Assumption kept: the Equipo row says "0 en celular" and no "Conecta tu primera caja" card is drawn: the owner snoozed it
+  (ConnectNudgeActions, 7 days). Not a change since 73c65f08.
+- New app bugs: the Agenda "En el local" line (see VS7).
+- Round-2 items seen: 12, 15, 24, 33, 34 fixed; 35 fixed in code (the Monto box is not shown in this video).

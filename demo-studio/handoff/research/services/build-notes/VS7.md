@@ -39,3 +39,18 @@
     the suffix when the name already ends with it.
   - small: every in-shop services receipt prints a bare "En el local" line (whereModeLine returns a label for LOCAL too; item 43 was
     meant for an unpaid home visit). Fix if Monti agrees: null for WhereMode.LOCAL (then remove the line from this page).
+
+## Round 3 (37db6d6c)
+- Page changed: Agenda rows show only the hour (the day is the header's, R2-2 item 24, ServicesTransactionsScreen.kt:400-415) and the
+  phone READ ("+57 301 444 9911", item 12, :270-276); each row now also shows the booking's where line "En el local" / "No local"
+  (a one-way shop stores it on every booking, SavedTicketActions.kt:294 + CartActions.kt:726-737; the row prints it, :452-466; it
+  was missing on this page, VS8 already had it). Appointment page says "Agendado con: Carla Gómez" while unpaid (item 13,
+  AppointmentWording.kt:24-29, AppointmentDetailScreen.kt:271-281). Pay screen "Servicios (1) ›". Receipt: no "En el local" line
+  (item 15); "Lavado (Incluido)" stays (the name does not say "incluido"). The till after Nueva venta has the new tiles.
+  STR: + appt_performer_pending, ax_cancel_order pt "Cancelar ordem de serviço".
+- Script: unchanged (line 4 still true: the PAID receipt says "Atendió: Carla Gómez"). check_demo CO/BR/MX OK (also PE, US).
+  Timing VS7 es:CO, pt:BR: every line over its screen. No video exists (no cut_price_scan).
+- New app bug: small: every Agenda row of a one-way shop says "En el local" (ServicesTransactionsScreen.kt:452-454 whereText), the
+  same ordinary-case line item 15 removed from the receipt (ReceiptFormatter.kt:101). Fix: skip WhereMode.LOCAL in whereText.
+- Round-2 items seen: 12, 13, 15, 24 fixed; 26 (pt "ordem de serviço") fixed in the strings (shown only with ?biz=taller-motos);
+  29 fixed (not visible here).

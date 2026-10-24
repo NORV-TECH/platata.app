@@ -59,3 +59,7 @@ and re-checked by me before they go in. Status: IN PROGRESS (more items arrive a
 ### 10. Security: the services "delete data" line still says "categorías"
 - Where: string `security_protect_delete_data_desc_services` (shown by `ui/screens/settings/SecurityScreen.kt:182-191`). A services owner cannot create,
   rename or delete categories (choke point 23). Fix: "Servicios, adicionales y opciones" (and the pt/en/fr values).
+
+### 11. Every Agenda row of a shop with one way of working says "En el local" (the line round 2 item 15 removed from receipts)
+- Where: `ui/screens/transactions/ServicesTransactionsScreen.kt:452-454` (`whereText`). Fix: skip `WhereMode.LOCAL` there when the shop works only in the shop.
+- (The lower-case "visa ••4242" after a Tap to Pay sale, also seen in VS5-MX, is on the Mexico list, round 3 item 5.)

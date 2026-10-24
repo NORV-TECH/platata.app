@@ -16,3 +16,12 @@
 
 ## 4. The 52 items
 - None of the 52 touches cash in/out. FIX-3 item 2 (owner's name, not "Owner"): fixed, shown.
+
+## Round 3 (37db6d6c)
+- Page changed: the till's service tiles ("Desde" line, whole amount, minutes line; ProductCard.kt:295-422) and the panel's search
+  bar as its first item (PanelSearchBar.kt:34-60). The Register screen and Sacar efectivo have no change at 37db6d6c.
+  STR: + items_price_from_only, bridge_mode_ask, wsearch_bar.
+- Script: unchanged. check_demo CO/BR/MX OK (also PE, US). Timing VS9 es:CO, pt:BR: every line over its screen. No video exists
+  (no cut_price_scan); the till frames show whole prices.
+- New app bugs: none.
+- Round-2 items seen: 2, 9, 17 (tile) fixed.
