@@ -87,3 +87,26 @@ None that change what a page may draw. Only stale comments that still say "Strip
 ## Checker
 `check_demo.py <page> MX:es CO:es BR:pt US:en` on all 33 changed pages: 132 runs OK (RS6 CO once said "demo never ended" while three
 checkers ran at once; alone it is OK). Beats unchanged on every page, so `T12-MX.json` still matches T12 for MX.
+
+## Round 3 (37db6d6c)
+
+Re-checked every Mexico pay screen of the sweep pages against sim/usa-canada 37db6d6c. **No sweep page changed.**
+
+| Mexico state drawn | Pages | App at 37db6d6c |
+|---|---|---|
+| Stripe NOT connected, QR not set up: Exacto 1 : "+ Tarjeta · Configurar" 1, row "Configurar QR · No, gracias" | RS3, RS6, RS7, R5, TS3, TS6, TS7, TS21, T1, T4, T8 | same: `cardIsSetupButton` (`PayWaysVisibility.kt:59`), `cardConfigured = stripeConnected` false -> setup nudge (`CheckoutPayBlock.kt:462`), setupLink QR_ONLY (`PayWaysVisibility.kt:63-70`); setupLink2 none (`PayByLinkOffer.decide`: no account -> NONE) |
+| QR flow: Exacto 1.3 : QR 1 : "+ Tarjeta · Configurar" 1, no row | RS4, TS4 | same: QR set up -> no set-up link; no account -> no link row |
+| Stripe connected, offline: Exacto + "Tarjeta · Sin conexión" | RS21 | same text: `cardConfigured = stripeConnected` and offline -> `card_offline_btn` (`CheckoutPayBlock.kt:459`); offline -> no link row. At d30ffa1 a reader not connected offline would have read "+ Tarjeta · Configurar"; now it is "Sin conexión" in every case, so the page is right either way |
+
+- The set-up row moved into `SetupLinkRow` (`CheckoutPayBlock.kt:470-475`, `:496`): same 44 dp row, same words, same "No, gracias".
+- Other MX facts re-read, no diff since d30ffa1: `CardCountryGate`, `QrCountries`, `ReceiptSendRoute`, receipt date, `NetSalesWords`,
+  `BusinessTypeOptions` (pay line), `SellOnline`. `PaymentMethodsScreen.kt:441` now shows the card location warning only in Stripe countries
+  (Mexico keeps it; no sweep page shows Card switched on in Mexico, so nothing to draw).
+- Screens looked at: MX:es pay screens of all 14 pages (demo mode, one capture per pay step).
+
+Not changed, for the planner (none is a Mexico-card change, and touching them would move recorded CO/BR videos):
+- RS21: the pay row is drawn Exacto 1.3 : Tarjeta 1 in every card country; the app is 1 : 1 (CO; MX with no reader) or 1.2 : 2 (MX with a
+  connected reader, `CheckoutSheetBody.kt:265`). Small, page-only, pre-existing.
+- RS6: STR `comp_reason_title` says "¿Regalar este pedido?"; the app says "¿Regalar esta venta?" since `9e27e6b8` (before d30ffa1). All countries.
+- RS11 / TS11 / RS12 / TS12: `reports_sold_count` became a plural at 37db6d6c ("1 vendido"), and `accountant_card_fees_none_note` was reworded
+  (+ a Wompi-only note for Colombia, `accountant_card_fees_none_note_wompi`). The Mexico paths of RS12/TS12 show no card sale, so no fee note.

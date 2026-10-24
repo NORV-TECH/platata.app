@@ -26,8 +26,8 @@
       "es": "En la caja, toca Corte de dama.",
       "pt": "No caixa, toque em Corte feminino e escolha o estilo."}},
     {"id": "7-oferta", "voice": {
-      "es": "Toca Agregar oferta y elige el Cepillado.",
-      "pt": "Toque em Adicionar oferta e escolha a Escova."}},
+      "es": "Toca Agregar combo y elige el Cepillado.",
+      "pt": "Toque em Adicionar combo e escolha a Escova."}},
     {"id": "8-pregunta", "voice": {
       "es": "El cepillado te pide elegir uno: elige Medio y toca Agregar. Los dos salen con diez por ciento menos.",
       "pt": "A escova pede para escolher um: escolha Médio e toque em Adicionar. Os dois saem com dez por cento a menos."}},

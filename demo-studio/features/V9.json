@@ -1,0 +1,80 @@
+{
+  "id": "V9",
+  "name": "Reservas en línea",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-pagina",
+      "voice": {
+        "es": "Tu cliente abre tu página de reservas y elige un servicio.",
+        "pt": "O cliente abre sua página de reservas e escolhe um serviço."
+      }
+    },
+    {
+      "id": "2-hora",
+      "voice": {
+        "es": "Elige el día y una hora dentro de tu horario.",
+        "pt": "Escolhe o dia e um horário dentro do seu expediente."
+      }
+    },
+    {
+      "id": "3-nombre",
+      "voice": {
+        "es": "Escribe su nombre y su WhatsApp.",
+        "pt": "Escreve o nome e o WhatsApp."
+      }
+    },
+    {
+      "id": "4-reserva",
+      "voice": {
+        "es": "Reserva sin pagar nada en línea: paga en tu negocio.",
+        "pt": "Reserva sem pagar nada online: paga no seu negócio."
+      }
+    },
+    {
+      "id": "5-aviso",
+      "voice": {
+        "es": "Tu teléfono te avisa: nueva reserva en línea. Tócala.",
+        "pt": "Seu celular avisa: nova reserva online. Toque nela."
+      }
+    },
+    {
+      "id": "6-cita",
+      "voice": {
+        "es": "Ahí dice En línea: confirma la hora con el cliente.",
+        "pt": "Ali diz Online: confirme o horário com o cliente."
+      }
+    },
+    {
+      "id": "7-whatsapp",
+      "voice": {
+        "es": "WhatsApp abre su chat con el mensaje listo. Envíalo.",
+        "pt": "O WhatsApp abre a conversa com a mensagem pronta. Envie."
+      }
+    },
+    {
+      "id": "8-agenda",
+      "voice": {
+        "es": "Vuelve: la cita ya está en tu Agenda, marcada En línea.",
+        "pt": "Volte: o agendamento já está na sua Agenda, marcado Online."
+      }
+    },
+    {
+      "id": "9-fin",
+      "voice": {
+        "es": "Así recibes reservas en línea con Platata.",
+        "pt": "Assim você recebe reservas online com o Platata."
+      }
+    }
+  ]
+}

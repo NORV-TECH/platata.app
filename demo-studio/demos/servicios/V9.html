@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Reservas en línea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&family=Roboto+Mono:wght@700&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* V9 — two phones: the CUSTOMER's phone (a web browser showing Platata's booking page, public/store/*) and the OWNER's
+   phone (Platata, Material light). 1 dp = var(--u); on the web page 1 CSS px = 1 dp (a 412 dp wide phone browser). */
+.mat .app{font-family:"Roboto",system-ui,sans-serif}
+.mat .pg{flex:1;display:flex;flex-direction:column;min-height:0;background:#fff;color:#1C1C1E;position:relative;overflow:hidden}
+.mat .mi{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor;display:block;flex:0 0 auto}
+.mat .caret{display:inline-block;width:1.5px;height:1.05em;background:#1C1C1E;margin-left:1px;vertical-align:-0.15em}
+
+/* ===================== the customer's phone: a web browser ===================== */
+/* the browser's own address bar (not Platata): a generic, brand-free bar */
+.mat .wb{height:calc(var(--u)*56);flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*10);padding:0 calc(var(--u)*10);background:#fff;border-bottom:1px solid #ECECEC}
+.mat .wb .om{flex:1;min-width:0;height:calc(var(--u)*40);border-radius:calc(var(--u)*20);background:#EEF0F3;display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*14);font-size:calc(var(--u)*15);color:#1F1F1F}
+.mat .wb .om svg{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#5F6368;flex:0 0 auto}
+.mat .wb .om span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .wb .om span i{font-style:normal;color:#5F6368}
+.mat .wb .tabsq{width:calc(var(--u)*22);height:calc(var(--u)*22);border:calc(var(--u)*2) solid #3C4043;border-radius:calc(var(--u)*5);display:grid;place-items:center;font-size:calc(var(--u)*12);font-weight:700;color:#3C4043;flex:0 0 auto}
+.mat .wb>svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#3C4043;flex:0 0 auto}
+/* the page itself — public/store/store.css (light only; system font = Roboto on an Android phone) */
+.mat .wpg{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;color:#1C1C1E;position:relative;overflow:hidden;font-size:calc(var(--u)*15);line-height:1.5}
+.mat .wscr{flex:1;min-height:0;overflow:hidden;position:relative}
+.mat .wscr-in{will-change:transform}
+.mat .wpg p{margin:0}
+/* store.css:22-24 .head .shop .stat */
+.mat .w-head{padding:calc(var(--u)*18) calc(var(--u)*16) calc(var(--u)*10)}
+.mat .w-shop{font-weight:900;font-size:calc(var(--u)*24);line-height:1.2;color:#007AFF;letter-spacing:-.02em}
+.mat .w-stat{font-size:calc(var(--u)*12.5);line-height:1.4;color:#6E6E73;margin-top:calc(var(--u)*4)}
+/* store.css:28-31 .chips .chip; :129-130 a chosen tab / day is dark */
+.mat .w-chips{display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*12) calc(var(--u)*16);overflow:hidden}
+.mat .w-chips.w-tabs{padding-bottom:0}
+.mat .w-chip{flex:0 0 auto;padding:calc(var(--u)*8) calc(var(--u)*16);border-radius:calc(var(--u)*24);font-weight:600;font-size:calc(var(--u)*14);line-height:1;white-space:nowrap;border:1px solid #E5E5EA;background:#fff;color:#6E6E73}
+.mat .w-chip.sel{background:#1C1C1E;color:#F5F5F7;border:calc(var(--u)*1.5) solid #1C1C1E}
+.mat .w-chip.off{text-decoration:line-through;opacity:.45}
+/* store.css:32-39 .pgrid .pc (the card's colour = the service's own colour at 12 % / 35 %, app.js:367-370;
+   a service made by the setup keeps Product's default colour 0xFF2196F3, data/Product.kt:22) */
+.mat .w-grid{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*16)}
+.mat .w-pc{aspect-ratio:1;border-radius:calc(var(--u)*12);border:calc(var(--u)*1.5) solid rgba(33,150,243,.35);background:rgba(33,150,243,.12);padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:space-between;min-width:0}
+.mat .w-pn{display:block;font-weight:700;font-size:calc(var(--u)*16);line-height:1.25;color:#1C1C1E;overflow-wrap:anywhere}
+.mat .w-pd{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:calc(var(--u)*12);line-height:1.35;color:#6E6E73;margin-top:calc(var(--u)*4)}
+.mat .w-pp{display:block;font-weight:500;font-size:calc(var(--u)*16);line-height:1.2;color:#6E6E73}
+/* store.css:17-19 .tbar */
+.mat .w-tbar{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*12) calc(var(--u)*12) calc(var(--u)*10);background:#fff}
+.mat .w-tbar .bk{font-size:calc(var(--u)*26);line-height:1;color:#6E6E73;padding:0 calc(var(--u)*6)}
+.mat .w-tbar h1{font-weight:600;font-size:calc(var(--u)*19);line-height:1.2;margin:0;letter-spacing:-.01em;flex:1;min-width:0}
+/* store.css:109 .tnote (no side padding: it sits at the very edge of the page, see the notes) ; :86 .sect */
+.mat .w-tnote{font-size:calc(var(--u)*12.5);line-height:1.4;color:#6E6E73;margin:calc(var(--u)*6) 0 calc(var(--u)*12.5) !important}
+.mat .w-sect{padding:calc(var(--u)*22) calc(var(--u)*16) calc(var(--u)*8);font-weight:700;font-size:calc(var(--u)*12);line-height:1;letter-spacing:.06em;text-transform:uppercase;color:#6E6E73}
+/* store.css:62-69 .mchip (a time), :127 .slots */
+.mat .w-flow{display:flex;flex-wrap:wrap;gap:calc(var(--u)*8)}
+.mat .w-slots{padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*4)}
+.mat .w-mchip{min-height:calc(var(--u)*42);border-radius:calc(var(--u)*8);padding:calc(var(--u)*9) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*6);background:#E3E3E8;color:#1C1C1E}
+.mat .w-mchip .cl{font-weight:700;font-size:calc(var(--u)*14);line-height:1}
+.mat .w-mchip .ck{font-size:calc(var(--u)*15);line-height:1}
+.mat .w-mchip.sel{background:#1C1C1E;color:#F5F5F7}
+.mat .w-mchip.so{background:transparent;border:calc(var(--u)*1.5) dashed #E5E5EA}
+.mat .w-mchip.so .cl{color:#6E6E73;opacity:.55;text-decoration:line-through}
+/* store.css:99-103 .form .fld .fl .inp */
+.mat .w-form{padding:0 calc(var(--u)*16);display:grid;gap:calc(var(--u)*10)}
+.mat .w-fld{display:grid;gap:calc(var(--u)*4)}
+.mat .w-fl{font-weight:600;font-size:calc(var(--u)*12.5);line-height:1.2;color:#6E6E73}
+.mat .w-inp{border:calc(var(--u)*1.5) solid #E5E5EA;border-radius:calc(var(--u)*10);padding:calc(var(--u)*12);font-size:calc(var(--u)*16);line-height:1.3;min-height:calc(var(--u)*48);color:#1C1C1E;white-space:nowrap;overflow:hidden}
+.mat .w-inp.foc{border-color:#007AFF}
+.mat .w-inp.ta{min-height:calc(var(--u)*69)}
+.mat .w-inp .ph{color:#8A8A8E}
+/* store.css:105 .sum */
+.mat .w-sum{display:flex;justify-content:space-between;padding:calc(var(--u)*18) calc(var(--u)*16);font-weight:600;font-size:calc(var(--u)*17);line-height:1.2}
+/* store.css:41-45 .duo .pri .out (sticky at the bottom of the page) */
+.mat .w-duo{position:absolute;left:0;right:0;bottom:0;padding:calc(var(--u)*12) calc(var(--u)*16);background:#fff;display:flex;z-index:2}
+.mat .w-pri{flex:1;min-height:calc(var(--u)*52);border-radius:calc(var(--u)*28);font-weight:600;font-size:calc(var(--u)*16);line-height:1.2;padding:0 calc(var(--u)*18);background:#1C1C1E;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center}
+.mat .w-pri.dis{opacity:.55}
+/* store.css:111-124 .done .okc .done-t .done-s .ticket .tl .tref .ts .out */
+.mat .w-done{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(var(--u)*32) calc(var(--u)*24);gap:calc(var(--u)*10)}
+.mat .w-okc{width:calc(var(--u)*72);height:calc(var(--u)*72);border-radius:50%;background:#E5F8EC;color:#0D3320;display:grid;place-items:center;font-size:calc(var(--u)*36)}
+.mat .w-done h1{font-weight:800;font-size:calc(var(--u)*26);line-height:1.2;margin:calc(var(--u)*6) 0 0}
+.mat .w-done-s{font-size:calc(var(--u)*15);line-height:1.45;color:#6E6E73}
+.mat .w-ticket{margin:calc(var(--u)*14) 0;border:calc(var(--u)*1.5) dashed #C7C7CC;border-radius:calc(var(--u)*16);padding:calc(var(--u)*16) calc(var(--u)*28)}
+.mat .w-tl{font-weight:700;font-size:calc(var(--u)*12);line-height:1;letter-spacing:.1em;color:#6E6E73}
+.mat .w-tref{font:700 calc(var(--u)*40)/1.1 "Roboto Mono",ui-monospace,monospace;letter-spacing:.06em;margin:calc(var(--u)*6) 0}
+.mat .w-ts{font-size:calc(var(--u)*13);line-height:1.3;color:#6E6E73}
+.mat .w-out{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*28);font-weight:600;font-size:calc(var(--u)*16);padding:0 calc(var(--u)*18);border:calc(var(--u)*1.5) solid #C7C7CC;background:#fff;display:flex;align-items:center}
+
+/* ===================== the owner's phone: Platata ===================== */
+/* SumaTopBar (ui/components/SumaTopBar.kt): 64 dp, back arrow 48 dp, titleLarge 22 bold */
+.mat .tb{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff}
+.mat .tb .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:#1C1C1E}
+.mat .tb .tt{flex:1;min-width:0;padding-left:calc(var(--u)*4);font-size:calc(var(--u)*22);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* SumaButton (ui/components/SumaButton.kt): min 52 dp, shapes.medium 12, titleMedium 18 SemiBold; Secondary = outlined */
+.mat .sb{min-height:calc(var(--u)*52);border-radius:calc(var(--u)*12);display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*18);font-weight:600;padding:0 calc(var(--u)*16);text-align:center;flex:0 0 auto;line-height:1.2}
+.mat .sb.pri{background:#1C1C1E;color:#fff}
+.mat .sb.sec{background:#fff;color:#1C1C1E;border:1px solid #C7C7CC}
+.mat .sb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* bottom NavigationBar (ui/app/PlatataApp.kt; ui/navigation/NavLabels.kt:21-34: Caja / Agenda / Mi negocio for services) */
+.mat .mnav{height:calc(var(--u)*80);background:#fff;display:flex;flex:0 0 auto}
+.mat .mnav>div{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(var(--u)*4);font-size:calc(var(--u)*12);font-weight:500;color:#6E6E73}
+.mat .mnav .pill{width:calc(var(--u)*64);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);display:grid;place-items:center}
+.mat .mnav .on{color:#1C1C1E}.mat .mnav .on .pill{background:#E5E5EA}
+.mat .mnav .flagc{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:#F2F2F7;display:grid;place-items:center}
+.mat .mnav .flagc svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
+.mat .scr{flex:1;min-height:0;overflow:hidden;position:relative}
+/* Agenda — ui/screens/transactions/ServicesTransactionsScreen.kt */
+.mat .atop{display:flex;align-items:center;flex:0 0 auto}
+.mat .atop .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center}
+.mat .atabs{flex:1;display:flex;height:calc(var(--u)*48);border-bottom:1px solid #E5E5EA}
+.mat .atabs span{flex:1;display:flex;align-items:center;justify-content:center;gap:calc(var(--u)*5);font-size:calc(var(--u)*14);color:#6E6E73;position:relative}
+.mat .atabs span.on{color:#1C1C1E;font-weight:700}
+.mat .atabs span.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:calc(var(--u)*3);background:#1C1C1E}
+.mat .atabs em{font-style:normal;font-size:calc(var(--u)*11);font-weight:500;color:#1C1C1E}
+.mat .asrch{margin:calc(var(--u)*8) calc(var(--u)*16);height:calc(var(--u)*56);border-radius:calc(var(--u)*50);background:#F2F2F7;border:1px solid #6E6E73;display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);font-size:calc(var(--u)*16);flex:0 0 auto;color:#6E6E73}
+.mat .asrch>svg{fill:#6E6E73}
+.mat .adh{background:#F2F2F7;padding:calc(var(--u)*8) calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:700;color:#6E6E73}
+.mat .arow{display:flex;align-items:center;padding:calc(var(--u)*12) calc(var(--u)*16);gap:calc(var(--u)*10);border-bottom:calc(var(--u)*.5) solid #E5E5EA}
+.mat .arow.flash{animation:afl 1.8s ease}
+@keyframes afl{0%{background:#FFF3C4}100%{background:#fff}}
+.mat .arow .al{width:calc(var(--u)*96);flex:0 0 auto;display:flex;flex-direction:column}
+.mat .arow .al b{font-size:calc(var(--u)*12);font-weight:700;color:#1C1C1E;line-height:1.35}
+.mat .arow .al small{font-size:calc(var(--u)*11);font-weight:500;color:#6E6E73;line-height:1.4}
+.mat .arow .am{flex:1;min-width:0}
+.mat .arow .am .nm{display:flex;align-items:center;gap:calc(var(--u)*6);min-width:0}
+.mat .arow .am .nm b{font-size:calc(var(--u)*14);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.45;min-width:0}
+.mat .arow .am small{display:block;font-size:calc(var(--u)*11);font-weight:500;color:#6E6E73;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4}
+.mat .arow .ar{font-size:calc(var(--u)*14);font-weight:700;white-space:nowrap}
+/* OnlineTag (ui/screens/transactions/OnlineOrderUi.kt:53-68): r4, primaryContainer = #F2F2F7 (Color.kt:48), labelSmall bold */
+.mat .otag{flex:0 0 auto;border-radius:calc(var(--u)*4);background:#F2F2F7;color:#1C1C1E;font-size:calc(var(--u)*11);font-weight:700;line-height:1.45;padding:calc(var(--u)*1) calc(var(--u)*6);white-space:nowrap}
+/* the appointment page — ui/screens/transactions/AppointmentDetailScreen.kt */
+.mat .dt{padding:calc(var(--u)*16);display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .dlb{font-size:calc(var(--u)*12);font-weight:500;color:#6E6E73}
+.mat .dln{display:flex;gap:calc(var(--u)*8);font-size:calc(var(--u)*16);line-height:1.5}.mat .dln span:first-child{flex:1}
+.mat .dsm{font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+.mat .dbt{display:flex;flex-direction:column;gap:calc(var(--u)*8)}
+.mat .wlbl{font-size:calc(var(--u)*14);color:#6E6E73;margin-bottom:calc(var(--u)*6)}
+.mat .wsum{display:flex;align-items:center;gap:calc(var(--u)*8);background:#F2F2F7;border-radius:calc(var(--u)*10);padding:calc(var(--u)*10) calc(var(--u)*12)}
+.mat .wsum b{flex:1;font-size:calc(var(--u)*14);font-weight:600}
+.mat .wsum span{font-size:calc(var(--u)*12);color:#1C1C1E}
+.mat .obk{display:flex;align-items:center;gap:calc(var(--u)*6)}
+.mat .obk span:last-child{font-size:calc(var(--u)*12);line-height:1.35;color:#1C1C1E}
+/* TextButton: labelLarge 14 Medium in primary, 40 dp, 12 dp sides */
+.mat .tbtn{align-self:flex-start;min-height:calc(var(--u)*40);display:flex;align-items:center;padding:0 calc(var(--u)*12);margin-left:calc(var(--u)*-12);border-radius:calc(var(--u)*20);font-size:calc(var(--u)*14);font-weight:500;color:#1C1C1E}
+/* the support strip under a LEVEL_2 page (reports/ReportLevels.kt:41 appointment_detail; ui/screens/reports/SupportStrip.kt) */
+.mat .rs-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .rs-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .rs-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .rs-strip .h>div{flex:1;min-width:0}
+.mat .rs-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#7C55E0;display:grid;place-items:center;flex:0 0 auto}
+.mat .rs-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
+.mat .rs-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
+.mat .rs-strip small{display:block;font-size:calc(var(--u)*13);line-height:1.3;color:#737883}
+.mat .rs-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+/* the phone's own heads-up notification (Android, not Platata's screen): what Platata posts is the title and the text */
+.mat .nt{position:absolute;left:calc(var(--u)*8);right:calc(var(--u)*8);top:calc(var(--u)*6);z-index:30;background:#fff;border-radius:calc(var(--u)*24);box-shadow:0 calc(var(--u)*4) calc(var(--u)*18) rgba(0,0,0,.22);padding:calc(var(--u)*14) calc(var(--u)*16) calc(var(--u)*16);}
+@keyframes ntin{0%{transform:translateY(-120%)}100%{transform:none}}
+.mat .nt .nh{display:flex;align-items:center;gap:calc(var(--u)*8);font-size:calc(var(--u)*12);color:#444}
+.mat .nt .nh .ni{width:calc(var(--u)*20);height:calc(var(--u)*20);border-radius:50%;background:#FBEED3;display:grid;place-items:center;overflow:hidden}
+.mat .nt .nh .ni svg{width:calc(var(--u)*18);height:calc(var(--u)*18)}
+.mat .nt .nh em{font-style:normal;color:#777;flex:1}
+.mat .nt .nh svg.ch{width:calc(var(--u)*18);height:calc(var(--u)*18);fill:#666}
+.mat .nt b{display:block;margin-top:calc(var(--u)*8);font-size:calc(var(--u)*15);font-weight:600;line-height:1.3;color:#1B1B1F}
+.mat .nt span.bt{display:block;margin-top:calc(var(--u)*2);font-size:calc(var(--u)*14);line-height:1.35;color:#45464F}
+/* WhatsApp (the other app), opened on the client's own chat with the message already typed */
+.mat .wa{flex:1;min-height:0;display:flex;flex-direction:column;background:#EFEAE2}
+.mat .wahd{height:calc(var(--u)*56);background:#008069;color:#fff;display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*12);flex:0 0 auto}
+.mat .wahd svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#fff;display:block}
+.mat .waav{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#DFE5E7;color:#54656F;display:grid;place-items:center;font-weight:600;font-size:calc(var(--u)*16)}
+.mat .wahd b{flex:1;font-size:calc(var(--u)*17);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .wachat{flex:1;min-height:0;padding:calc(var(--u)*16);display:flex;flex-direction:column;justify-content:flex-end}
+.mat .wabub{align-self:flex-end;max-width:84%;background:#D9FDD3;border-radius:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*10);font-size:calc(var(--u)*15);line-height:1.35;box-shadow:0 1px 1px rgba(0,0,0,.1);white-space:pre-wrap;color:#111B21}
+.mat .wabub small{display:block;text-align:right;margin-top:calc(var(--u)*4);font-size:calc(var(--u)*11);color:#667781}
+.mat .wabub small i{font-style:normal;color:#53BDEB}
+.mat .wain{display:flex;align-items:flex-end;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*12);flex:0 0 auto}
+.mat .wabox{flex:1;min-height:calc(var(--u)*46);background:#fff;border-radius:calc(var(--u)*23);padding:calc(var(--u)*12) calc(var(--u)*18);font-size:calc(var(--u)*15);line-height:1.35;white-space:pre-wrap;color:#111B21}
+.mat .wasend{flex:0 0 auto;width:calc(var(--u)*48);height:calc(var(--u)*48);border-radius:50%;background:#00A884;display:grid;place-items:center}
+.mat .wasend svg{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/services-data.js"></script>
+<script src="../../kit/vkit.js"></script>
+<script>
+/* V9 "Reservas en línea" — a customer books a service on the shop's own web page; the booking lands on the owner's phone.
+   App sim/usa-canada 37db6d6c (paths under app/src/main/java/com/example/, web page under public/store/, server under functions*).
+   Story: the customer's phone (a web browser) opens the shop's booking page at OnlineStoreSlug.HOST/<slug>
+   (sync/OnlineStoreSlug.kt:22,86-107: the shop name + a word the owner typed, here the city) and sees the shop's SERVICES
+   (functions/storefront-projection.js:184-203,283-301: on a SERVICES shop every SERVICE item is bookable, "En la caja" too
+   since REVFIX-14; priceMode, the service's minutes from settings.serviceMinutes, the included items as text). A tap on a
+   service with no add-ons goes straight to "¿Cuándo?" (app.js:383-396), a day and a time (app.js:397-458: one day at a time,
+   21 days, closed days struck, times sooner than one hour dashed), the name and WhatsApp number (the country code already
+   written, logic.js:278-281) -> "Reservar <day> <time>" -> "Reserva solicitada" with the 6-letter code (app.js:968-977;
+   the code = the order id's first 6 hex, functions-public/index.js:329 = OnlineOrder.shortCode, sync/OnlineOrder.kt:28).
+   NOTHING is charged online, in any country: a SERVICES shop's page pays at the shop only (functions/online-store-rules.js:51,
+   sync/OnlineStoreRules.kt:47-50; the server refuses a card on a booking, functions-public/index.js:212). So no card online in
+   Colombia (Wompi) or Brazil, and none in Mexico either (CardCountryGate.forOnlineStore, sync/CardCountryGate.kt:44-45).
+   The booking is a PENDING open ticket with scheduledFor (functions-public/index.js:282-326). The owner's phone (Platata open)
+   rings "Nueva reserva en línea · <day> · <time>" / "<name> · 1 servicio · #<code>" (ui/pos/OnlineOrderAlerts.kt:139-176,
+   R2-4 L4 the services plural), a tap opens the appointment page (ui/app/NavigationEventEffects.kt:59-68), which stops the
+   alert (AppointmentDetailScreen.kt:97-102, SVC-3 item 44) and shows "EN LÍNEA · Reservada en línea: confirma la hora con
+   el cliente" + a WhatsApp button that opens the client's own chat with the message written (:337-370, SVC-2 item 25,
+   utils/AppointmentText.kt:84-99). Back: the Agenda row carries the EN LÍNEA tag (ServicesTransactionsScreen.kt:430-437).
+   Business: Peluquería (?biz= works for the other three). Unlock (sync/StoreLockRule.kt, values conn_store_lock_body_services):
+   outside US/Canada the booking page opens when a tablet or an employee phone uses an extra connection; the peluquería's two
+   stylists have their phones connected, so one of them uses it. Said in the small print of the hop card, never in the voice. */
+const V = VKIT.ctx({biz:"peluqueria"});
+const C = V.C, esc = V.esc, LG = V.lang, CC = V.country;
+
+/* app strings (values / values-es / values-pt-rBR at 37db6d6c) */
+const STR = {"booking_when_arrive":{"en":"When are they coming?","es":"¿Cuándo viene?","pt":"Quando vem?"},"booking_for_who":{"en":"For who?","es":"¿Para quién?","pt":"Para quem?"},"booking_save":{"en":"Save","es":"Guardar","pt":"Salvar"},"sx_agenda":{"en":"Agenda","es":"Agenda","pt":"Agenda"},"sx_search":{"en":"By name or phone…","es":"Por nombre o teléfono…","pt":"Por nome ou telefone…"},"sx_comes":{"en":"Coming","es":"Viene","pt":"Vem"},"ax_cobrar":{"en":"Charge","es":"Cobrar","pt":"Cobrar"},"ax_no_show":{"en":"No-show","es":"No asistió","pt":"Não compareceu"},"ax_resched":{"en":"Reschedule","es":"Reprogramar","pt":"Reagendar"},"ax_cancel":{"en":"Cancel booking","es":"Cancelar cita","pt":"Cancelar agendamento"},"appt_wa_when":{"en":"on %1$s at %2$s","es":"el %1$s a las %2$s","pt":"%1$s, às %2$s"},"appt_wa_booked":{"en":"Hi %1$s, your %2$s at %3$s is %4$s (%5$s).","es":"Hola %1$s, tu %2$s en %3$s es %4$s (%5$s).","pt":"Olá %1$s, %3$s: %2$s é %4$s (%5$s)."},"appt_wa_appointment":{"en":"appointment","es":"cita","pt":"seu agendamento"},"tp_change":{"en":"Change","es":"Cambiar","pt":"Alterar"},"cal_today":{"en":"Today","es":"Hoy","pt":"Hoje"},"cal_tomorrow":{"en":"Tomorrow","es":"Mañana","pt":"Amanhã"},"agenda_service_with_dur":{"en":"%1$s · Takes %2$d min","es":"%1$s · Dura %2$d min","pt":"%1$s · Dura %2$d min"},"agenda_end_hint":{"en":"%1$s → %2$s · Takes %3$d min","es":"%1$s → %2$s · Dura %3$d min","pt":"%1$s → %2$s · Dura %3$d min"},"home_tab_services":{"en":"Services","es":"Servicios","pt":"Serviços"},"mamaship_tab_register":{"en":"Register","es":"Caja","pt":"Caixa"},"home_tab_my_business":{"en":"My business","es":"Mi negocio","pt":"Meu negócio"},"tx_tab_all":{"en":"Sales","es":"Ventas","pt":"Vendas"},"whatsapp_signature":{"en":"Made with Platata · platata.app","es":"Hecho con Platata · platata.app","pt":"Feito com Platata · platata.app"},"online_tag":{"en":"ONLINE","es":"EN LÍNEA","pt":"ONLINE"},"online_order_whatsapp":{"en":"WhatsApp","es":"WhatsApp","pt":"WhatsApp"},"online_alert_items_services":{"en":{"one":"%1$d service","other":"%1$d services"},"es":{"one":"%1$d servicio","other":"%1$d servicios"},"pt":{"one":"%1$d serviço","other":"%1$d serviços"}},"online_alert_booking_title":{"en":"New online booking · %1$s","es":"Nueva reserva en línea · %1$s","pt":"Nova reserva online · %1$s"},"online_booking_confirm":{"en":"Booked online: confirm the time with the customer","es":"Reservada en línea: confirma la hora con el cliente","pt":"Reservada online: confirme o horário com o cliente"},"conn_slot_phone":{"en":"Your phone","es":"Tu teléfono","pt":"Seu celular"},"conn_store_title_services":{"en":"Booking page","es":"Página de reservas","pt":"Página de reservas"},"conn_store_lock_body_services":{"en":"Your booking page opens when a tablet or an employee phone uses an extra connection. Customers book from a link you share.","es":"Tu página de reservas se abre cuando una tablet o un teléfono de empleado usa una conexión adicional. Tus clientes reservan desde un enlace que compartes.","pt":"Sua página de reservas abre quando um tablet ou um celular de funcionário usa uma conexão adicional. Seus clientes reservam por um link que você compartilha."},"conn_store_usa_body_services":{"en":"The booking page is included in your country. Share your link and take bookings.","es":"La página de reservas está incluida en tu país. Comparte tu enlace y reciben reservas.","pt":"A página de reservas está incluída no seu país. Compartilhe seu link e receba reservas."},"rp_strip_support":{"en":"Support","es":"Soporte","pt":"Suporte"},"rp_strip_support_sub":{"en":"Report a problem here","es":"Reporta un problema aquí","pt":"Relatar um problema aqui"},"rp_sheet_my_reports_none":{"en":"No reports yet","es":"Aún no hay reportes","pt":"Ainda não há relatos"},"rp_my_title":{"en":"My reports","es":"Mis reportes","pt":"Meus relatos"}};
+/* the web page's words (public/store/strings.js at 37db6d6c), in the SHOP's language (logic.js:486-492) */
+const WS = {"tab_services":{"es":"Servicios","pt":"Serviços","en":"Services"},"tab_products":{"es":"Productos","pt":"Produtos","en":"Products"},"shop_confirms":{"es":"El negocio te confirmará la hora.","pt":"O estabelecimento vai confirmar o horário.","en":"The shop will confirm your time."},"service_from":{"es":"Desde {amt}","pt":"A partir de {amt}","en":"From {amt}"},"service_ask":{"es":"Precio en el local","pt":"Preço no local","en":"Price at the shop"},"service_includes":{"es":"Incluye: {list}","pt":"Inclui: {list}","en":"Includes: {list}"},"when_title":{"es":"¿Cuándo?","pt":"Quando?","en":"When?"},"no_times":{"es":"No hay horas este día","pt":"Não há horários neste dia","en":"No times this day"},"who_books":{"es":"¿A nombre de quién?","pt":"Em nome de quem?","en":"Whose name is it under?"},"name":{"es":"Nombre","pt":"Nome","en":"Name"},"mobile":{"es":"Celular (con código de país)","pt":"Celular (com código do país)","en":"Mobile number (with country code)"},"note":{"es":"Nota","pt":"Observação","en":"Note"},"note_ph":{"es":"Algo que debamos saber","pt":"Algo que devemos saber","en":"Anything we should know"},"pay_at_shop":{"es":"Pagas en el negocio · {amt}","pt":"Você paga no estabelecimento · {amt}","en":"You pay at the shop · {amt}"},"pay_at_shop_ask":{"es":"Pago en el local","pt":"Pagamento no local","en":"Pay at the shop"},"pick_time":{"es":"Elige una hora","pt":"Escolha um horário","en":"Choose a time"},"book_at":{"es":"Reservar {d} {t}","pt":"Reservar {d} {t}","en":"Book {d} {t}"},"sending":{"es":"Enviando…","pt":"Enviando…","en":"Sending…"},"booking_requested":{"es":"Reserva solicitada","pt":"Reserva solicitada","en":"Booking requested"},"booking_label":{"es":"RESERVA","pt":"RESERVA","en":"BOOKING"},"new_booking":{"es":"Hacer otra reserva","pt":"Fazer outra reserva","en":"Book something else"},"back":{"es":"Volver","pt":"Voltar","en":"Back"}};
+/* public/store/money.js:14-52 (generated from the till's formatCurrency): the page formats money by hand per country */
+const MT = {"CO":{"digits":0,"decimalSep":",","groupSep":".","prefix":"$ ","suffix":""},"MX":{"digits":2,"decimalSep":".","groupSep":",","prefix":"$","suffix":""},"PE":{"digits":2,"decimalSep":".","groupSep":",","prefix":"S/ ","suffix":""},"CL":{"digits":0,"decimalSep":",","groupSep":".","prefix":"$","suffix":""},"EC":{"digits":2,"decimalSep":",","groupSep":".","prefix":"$","suffix":""},"AR":{"digits":2,"decimalSep":",","groupSep":".","prefix":"$ ","suffix":""},"PA":{"digits":2,"decimalSep":".","groupSep":",","prefix":"$","suffix":""},"BR":{"digits":2,"decimalSep":",","groupSep":".","prefix":"R$ ","suffix":""},"US":{"digits":2,"decimalSep":".","groupSep":",","prefix":"$","suffix":""},"CA":{"digits":2,"decimalSep":".","groupSep":",","prefix":"$","suffix":""}};
+
+const fmtS = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : v; }); };
+const t = (k, ...a) => { const o = STR[k]; if(!o) return "??"+k; return fmtS(o[LG] ?? o.es, a); };
+const plCat = n => LG==="pt" ? ((n===0||n===1)?"one":"other") : (n===1?"one":"other");
+const tp = (k, n, ...a) => { const p = STR[k][LG] || STR[k].es; return fmtS(p[plCat(n)] || p.other, a.length ? a : [n]); };
+const w = (k, v) => { let s = (WS[k] && (WS[k][LG] ?? WS[k].es)) || k; if(v) for(const x of Object.keys(v)) s = s.split("{"+x+"}").join(String(v[x])); return s; };
+const H = (es, pt, en) => V.pick({es, pt, en});
+const money = v => V.money(v);
+/* money.js format(): HALF_EVEN rounding is moot here (the prices are whole minor units) */
+function webMoney(v){ const e = MT[CC] || MT.CO; const f = Number(v||0).toFixed(e.digits); let [i, d] = f.split(".");
+  if(i.length >= 4) i = i.replace(/\B(?=(\d{3})+(?!\d))/g, e.groupSep);
+  return e.prefix + i + (e.digits ? e.decimalSep + d : "") + e.suffix; }
+const pad2 = n => n<10 ? "0"+n : ""+n;
+
+/* ---------- days and times ---------- */
+/* the demos' today: Thursday 22 Oct 2026, 12:41 (V.today) */
+const [TY, TM, TD] = V.today.split("-").map(Number);
+const dayUTC = off => new Date(Date.UTC(TY, TM-1, TD+off, 12));
+const dow7 = off => { const d = dayUTC(off).getUTCDay(); return d===0 ? 7 : d; };          /* ISO weekday, 7 = Sunday */
+const PL = LG === "pt" ? "pt" : LG;                                                       /* the page's own tag (pageLanguage slices to 2 letters) */
+/* app.js:409-412 dayLabel: Intl short weekday + day, in the shop's language ("vie 23", "sex., 23") */
+const webDay = off => new Intl.DateTimeFormat(PL, {weekday:"short", day:"numeric", timeZone:"UTC"}).format(dayUTC(off));
+/* logic.js:393-397 formatClock: "14:00" (es/pt, two-digit hour), "2:00 PM" (en) */
+const webClock = m => { const h = Math.floor(m/60), mm = pad2(m%60); return LG==="en" ? `${((h+11)%12)+1}:${mm} ${h<12?"AM":"PM"}` : `${pad2(h)}:${mm}`; };
+/* the owner's phone: ui/screens/services/WhenPicker.kt:76-93 fmtTimeCO (es "2:00 p. m.", en "2:00 PM", pt "14:00") */
+const fmtTime = m => { const h = Math.floor(m/60), mm = pad2(m%60);
+  if(LG==="es") return `${h%12===0?12:h%12}:${mm} ${h<12?"a. m.":"p. m."}`;
+  if(LG==="en") return `${h%12===0?12:h%12}:${mm} ${h<12?"AM":"PM"}`;
+  return `${h}:${mm}`; };
+/* WhenPicker.kt:183-200 dayLabelText: Hoy / Mañana, else es "sáb 24 de oct", en "Sat 24 Oct", pt "sáb 24/10" */
+const DOW = {es:["dom","lun","mar","mié","jue","vie","sáb"], en:["Sun","Mon","Tue","Wed","Thu","Fri","Sat"], pt:["dom","seg","ter","qua","qui","sex","sáb"]}[LG];
+const MON = {es:["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"], en:["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"], pt:["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]}[LG];
+function dayLabel(off){ if(off===0) return t("cal_today"); if(off===1) return t("cal_tomorrow");
+  const d = dayUTC(off), dw = DOW[d.getUTCDay()], mon = MON[d.getUTCMonth()], dd = d.getUTCDate();
+  if(LG==="es") return `${dw} ${dd} de ${mon}`; if(LG==="en") return `${dw} ${dd} ${mon}`; return `${dw} ${pad2(dd)}/${pad2(d.getUTCMonth()+1)}`; }
+/* the alert's day: OnlineOrderAlerts.kt:131-136 SimpleDateFormat("EEE d", the phone's locale) · the phone's clock */
+const ALOC = LG==="pt" ? "pt-BR" : LG;
+const alertWhen = (off, m) => new Intl.DateTimeFormat(ALOC, {weekday:"short", timeZone:"UTC"}).format(dayUTC(off)) + " " + dayUTC(off).getUTCDate() + " · " + fmtTime(m);
+/* utils/AppointmentText.kt:30-62: dayText = SimpleDateFormat("EEEE d", the SHOP's language), timeText "14:00" */
+const waDay = off => new Intl.DateTimeFormat(ALOC, {weekday:"long", timeZone:"UTC"}).format(dayUTC(off)) + " " + dayUTC(off).getUTCDate();
+const waTime = m => `${Math.floor(m/60)}:${pad2(m%60)}`;
+const NOW = 12*60 + 41;
+
+/* ---------- the shop's booking page (what the owner set in Vender en línea) ----------
+   hours: the owner's own, Mon–Sat 9:00–18:00, Sunday closed (SellOnline.kt:156-158 starts at 9:00–18:00 every day; he closed Sunday).
+   "Duración de la cita" (values sell_online_slot_title, chips 10/15/20/30/45/60, SellOnline.kt:121): 30 min = doc.slotMinutes. */
+const OPEN = 540, CLOSE = 1080, SHOP_SLOT = 30;
+const closedDay = off => dow7(off) === 7;
+/* the services on the page, in the shop's own order (snapshot.products order = the order the setup saved them, the trade's
+   catalogue order, ui/pos/GuideActions.kt:549-551); a FROM service shows its FIRST stored choice ("Desde", see the notes) */
+const CAT = window.SERV.CATALOG[V.biz].services.map(s => s.id);
+const PAGE_SVCS = V.services.slice().sort((a, b) => CAT.indexOf(a.id) - CAT.indexOf(b.id));
+const pagePrice = s => s.mode==="ask" ? null : s.mode==="from" ? (s.choices[0] && s.choices[0].price) : s.price;
+/* app.js:357-359 priceText ; :360-361 includesText */
+const priceText = s => s.mode==="ask" ? w("service_ask") : s.mode==="from" ? w("service_from", {amt: webMoney(pagePrice(s))}) : webMoney(s.price);
+const incText = s => s.included.length ? w("service_includes", {list: s.included.map(x => x.name).join(", ")}) : null;
+/* the service this customer books: one with a single fixed price (peluquería: "Corte de caballero / hombre"); per business */
+const PREF = {peluqueria:"corte-caballero", unas:"manicure-tradicional", veterinaria:"vacunacion", "taller-motos":"revision-gases"}[V.biz];
+const SVC = PAGE_SVCS.find(s => s.id===PREF) || PAGE_SVCS.find(s => s.mode==="fixed") || PAGE_SVCS[0];
+const SVC_PRICE = pagePrice(SVC) || 0;
+/* the service's minutes: Product.durationMin seeded from the research (DBSVC-1), published as durationMin (REVFIX-14) */
+const DUR = SVC.min || SHOP_SLOT;
+/* app.js:397-408 daySlots: the grid of THIS service's minutes (online-store-hours.js slotFits: on the window's grid, ends by close) */
+const slotsOf = off => { if(closedDay(off)) return []; const out = []; for(let s = OPEN; s + DUR <= CLOSE; s += DUR) out.push({start:s, soon: off===0 && s < NOW + 60}); return out; };
+const DAY = 1;                                                  /* tomorrow, Friday 23 */
+/* the time picked: 14:00 when the service's grid has it (it also sits on the shop's 30-min grid the server checks) */
+const SLOT = (slotsOf(DAY).find(s => s.start===840) || slotsOf(DAY).find(s => s.start>=840 && (s.start-OPEN)%SHOP_SLOT===0) || slotsOf(DAY)[0]).start;
+/* the customer: a client of the kit; she or he types the name and the WhatsApp number after the country code */
+const CUST = C.clients[3];
+const DIAL = {CO:"57",MX:"52",PE:"51",CL:"56",EC:"593",AR:"54",PA:"507",BR:"55",US:"1",CA:"1"}[CC];
+const PREFILL = "+" + DIAL + " ";                                 /* logic.js:278-281 phonePrefill: "+57 " */
+const custNational = (() => { let n = CUST.phone.replace(/\D/g, ""); if(CC==="EC") n = n.replace(/^0/, ""); if(CC==="AR") n = "9" + n; return n; })();
+const TYPED_PHONE = CC==="AR" ? "9 " + CUST.phone : CC==="EC" ? CUST.phone.replace(/^0/, "") : CUST.phone;
+const CANON = DIAL + custNational;
+/* utils/WhatsappUtils.kt:132-162 formatWhatsappForReading (the Agenda row and the appointment page, R2-2 item 12) */
+function waRead(canon){ const nat = canon.slice(DIAL.length); let body;
+  if(DIAL==="1" && nat.length===10) body = `(${nat.slice(0,3)}) ${nat.slice(3,6)}-${nat.slice(6)}`;
+  else if(DIAL==="55" && nat.length>=10 && nat.length<=11) body = nat.slice(0,2)+" "+nat.slice(2,nat.length-4)+"-"+nat.slice(-4);
+  else if(DIAL==="54" && nat.length===11 && nat.startsWith("911")) body = "9 11 "+nat.slice(3,7)+"-"+nat.slice(7);
+  else { const sizes = {10:[3,3,4],9:[3,3,3],8:[4,4]}[nat.length]; const g = []; let r = nat;
+    if(sizes) sizes.forEach(k=>{ g.push(r.slice(0,k)); r = r.slice(k); }); else { while(r.length>4){ g.push(r.slice(0,3)); r = r.slice(3); } if(r) g.push(r); }
+    body = g.join(" "); }
+  return `+${DIAL} ${body}`; }
+const REF = "3FA9C1";
+/* the slug: OnlineStoreSlug.normalize + base(shop name) + "-" + the word he typed (his city) */
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[\s_]+/g, "-").replace(/[^a-z0-9-]/g, "").replace(/-{2,}/g, "-").replace(/^-+|-+$/g, "");
+const SLUG = norm(C.place) + "-" + norm(C.city);
+
+/* ---------- the owner's Agenda: the kit's bookings (as in V4) + the one V3 made + the online one ---------- */
+const hm = s => { const [h, m] = s.split(":").map(Number); return h*60 + m; };
+const lineName = (s, choice) => (choice!=null && s.choices[choice]) ? `${s.name} (${s.choices[choice].name})` : s.name;
+const CL = C.clients.map((c, i) => { let n = c.phone.replace(/\D/g, ""); if(CC==="EC") n = n.replace(/^0/, ""); if(CC==="AR") n = "9" + n;
+  return { i, name: c.name, first: c.name.split(" ")[0], wa: DIAL + n }; });
+const clientIdx = name => Math.max(0, CL.findIndex(c => c.name === name));
+const BOOKINGS = C.bookings.map(b => { const s = V.service(b.sid);
+  return { id: b.id, day: b.day, t: hm(b.t), client: clientIdx(b.client), name: lineName(s, b.choice), price: b.price || 0 }; });
+const V3S = V.services.find(s => s.id==="corte-caballero" && !s.choices.length && s.price!=null) || V.services.find(s => !s.choices.length && s.price!=null) || V.services[0];
+const V3_BOOKING = { id: 10, day: 2, t: 600, client: 1, name: V3S.name, price: V3S.price || 0 };
+const ONLINE = { id: 11, day: DAY, t: SLOT, client: 3, name: SVC.name, price: SVC_PRICE, online: true };
+const sortB = list => list.slice().sort((a,b) => (a.day-b.day) || (a.t-b.t) || (a.id-b.id));
+const AGENDA = sortB(BOOKINGS.concat([V3_BOOKING, ONLINE]));
+
+/* ---------- icons ---------- */
+const svg = (d, cls) => `<svg class="${cls||"mi"}" viewBox="0 0 24 24"><path d="${d}"/></svg>`;
+const I = {
+  back: svg("M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"),
+  cart: svg("M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"),
+  receipt: svg("M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z"),
+  search: svg("M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"),
+  chevR: svg("M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"),
+  chevD: svg("M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z", "ch"),
+  send: svg("M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"),
+  more: svg("M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"),
+  tune: svg("M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"),
+  support: svg("M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z")
+};
+
+/* ---------- demo plumbing: keep an element on screen in a page that scrolls (measured on the real layout) ---------- */
+function scrolled(html, sel, o){
+  o = o || {};
+  const app = document.getElementById("app"); if(!app || !sel) return html;
+  app.innerHTML = html;
+  const box = app.querySelector(o.box||".wscr"), inn = app.querySelector(o.inner||".wscr-in"), el = app.querySelector(sel);
+  if(!box || !inn || !el) return html;
+  const u = document.getElementById("screen").getBoundingClientRect().width / 412;
+  const b = box.getBoundingClientRect(), e = el.getBoundingClientRect();
+  let dy = e.bottom - b.bottom + (o.pad==null ? 16 : o.pad) * u;
+  dy = Math.max(0, Math.min(dy, inn.getBoundingClientRect().height - b.height));
+  if(dy <= 0) return html;
+  return html.replace(`class="${(o.inner||".wscr-in").slice(1)}`, `style="transform:translateY(calc(var(--u)*-${(dy/u).toFixed(1)}))" class="${(o.inner||".wscr-in").slice(1)}`);
+}
+
+/* ===================== the customer's phone ===================== */
+/* the browser's address bar (the phone's browser, not Platata): the shop's link */
+const browserBar = () => `<div class="wb"><div class="om">${I.tune}<span>platata-app.web.app<i>/${esc(SLUG)}</i></span></div><span class="tabsq">1</span>${I.more}</div>`;
+/* A. the services tab — app.js:352-380 (head = shop name + "El negocio te confirmará la hora.", :374); tabs only when the
+   shop also sells products (:324-351; the setup seeds the trade's products and every shop has a To Go option, so they show) */
+function webMenu(){
+  const cards = PAGE_SVCS.map(s => { const inc = incText(s);
+    return `<div class="w-pc" data-t="w-svc-${s.id}"><span><span class="w-pn">${esc(s.name)}</span>${inc?`<span class="w-pd">${esc(inc)}</span>`:""}</span><span class="w-pp">${esc(priceText(s))}</span></div>`; }).join("");
+  return `<div class="wpg"><div class="wscr"><div class="wscr-in">
+    <div class="w-head"><div class="w-shop">${esc(C.place)}</div><div class="w-stat">${esc(w("shop_confirms"))}</div></div>
+    ${C.products.length ? `<div class="w-chips w-tabs"><span class="w-chip sel">${esc(w("tab_services"))}</span><span class="w-chip">${esc(w("tab_products"))}</span></div>` : ""}
+    <div class="w-grid">${cards}</div></div></div></div>`;
+}
+/* B. "¿Cuándo?" — app.js:413-493: top bar "‹ <service>", the included items as a note (:463-471), "¿CUÁNDO?", the day strip
+   (:441-450), the day's times (:451-458), "El negocio te confirmará la hora." (:475), "¿A NOMBRE DE QUIÉN?" with Nombre /
+   Celular / Nota (:476-480, field :665-668), "Pagas en el negocio · $X" (:481-484), the sticky button (:485-490) */
+function webWhen(st){
+  const day = st.day, slots = slotsOf(day), inc = incText(SVC);
+  const strip = Array.from({length:21}, (_, i) => `<span class="w-chip${i===day?" sel":""}${closedDay(i)?" off":""}" data-t="w-day-${i}">${esc(webDay(i))}</span>`).join("");
+  const times = slots.length ? slots.map(s => { const sel = st.slot===s.start;
+      return `<span class="w-mchip${sel?" sel":""}${s.soon?" so":""}" data-t="w-slot-${s.start}">${sel?`<span class="ck">✓</span>`:""}<span class="cl">${esc(webClock(s.start))}</span></span>`; }).join("")
+    : `<p style="font-size:calc(var(--u)*13.5);color:#6E6E73;margin:0 0 calc(var(--u)*8)">${esc(w("no_times"))}</p>`;
+  const fld = (k, val, o) => `<label class="w-fld"><span class="w-fl">${esc(w(k))}</span><div class="w-inp${o.foc?" foc":""}${o.ta?" ta":""}" data-t="${o.tag}">${val?esc(val):(o.ph?`<span class="ph">${esc(o.ph)}</span>`:"")}${o.foc?'<i class="caret"></i>':""}</div></label>`;
+  const chosen = st.slot != null;
+  const btnText = st.sending ? w("sending") : chosen ? w("book_at", {d: webDay(day), t: webClock(st.slot)}) : w("pick_time");
+  const sum = SVC.mode==="ask" ? w("pay_at_shop_ask") : w("pay_at_shop", {amt: webMoney(SVC_PRICE)});
+  return `<div class="wpg"><div class="w-tbar"><span class="bk">‹</span><h1>${esc(SVC.name)}</h1></div>
+    <div class="wscr"><div class="wscr-in">
+      ${inc ? `<p class="w-tnote">${esc(inc)}</p>` : ""}
+      <div class="w-sect">${esc(w("when_title"))}</div>
+      <div class="w-chips">${strip}</div>
+      <div class="w-flow w-slots">${times}</div>
+      <p class="w-tnote">${esc(w("shop_confirms"))}</p>
+      <div class="w-sect">${esc(w("who_books"))}</div>
+      <div class="w-form">${fld("name", st.name, {foc: st.focus==="name", tag:"w-name"})}${fld("mobile", PREFILL + st.phone, {foc: st.focus==="phone", tag:"w-phone"})}${fld("note", "", {ph: w("note_ph"), ta:true, tag:"w-note"})}</div>
+      <div class="w-sum" data-t="w-sum"><span>${esc(sum)}</span></div>
+      <div style="height:calc(var(--u)*96)"></div>
+    </div></div>
+    <div class="w-duo"><span class="w-pri${chosen && !st.sending ? "" : " dis"}" data-t="w-book">${esc(btnText)}</span></div></div>`;
+}
+/* C. done — app.js:968-977: green check, "Reserva solicitada", the day and time (logic.js:480-484 dayTimeIn), the ticket */
+function webDone(){
+  return `<div class="wpg"><div class="w-done"><div class="w-okc">✓</div><h1>${esc(w("booking_requested"))}</h1>
+    <p class="w-done-s">${esc(webDay(DAY) + " · " + webClock(SLOT))}</p>
+    <div class="w-ticket"><div class="w-tl">${esc(w("booking_label"))}</div><div class="w-tref">#${REF}</div><div class="w-ts">${esc(w("shop_confirms"))}</div></div>
+    <span class="w-out">${esc(w("new_booking"))}</span></div></div>`;
+}
+
+/* ===================== the owner's phone ===================== */
+const nav = on => `<div class="mnav">
+  <div class="${on==="caja"?"on":""}"><span class="pill">${I.cart}</span>${esc(t("mamaship_tab_register"))}</div>
+  <div class="${on==="agenda"?"on":""}"><span class="pill">${I.receipt}</span>${esc(t("sx_agenda"))}</div>
+  <div><span class="flagc">${V.flag()}</span>${esc(t("home_tab_my_business"))}</div></div>`;
+const otag = () => `<span class="otag">${esc(t("online_tag"))}</span>`;
+/* the Agenda — ServicesTransactionsScreen.kt: back arrow + TabRow "Ventas | Agenda N" (:126-185), the search (:192-216),
+   one header per day (:245-264), BookingRow (:369-476): "Viene" + the hour only (R2-2 item 24, :398-410), the name (an online
+   booking: the name the customer TYPED, OnlineOrderUi.kt:71-73) + EN LÍNEA (:430-437), "service · +57 …" read (item 12, :262-270) */
+function agendaScreen(o){
+  let body = "", last = null;
+  AGENDA.forEach(b => { if(b.day!==last){ body += `<div class="adh">${esc(dayLabel(b.day))}</div>`; last = b.day; }
+    const c = CL[b.client], name = b.online ? CUST.name : c.first;
+    body += `<div class="arow${o.flash && b.online ? " flash" : ""}" data-t="row-${b.id}"><div class="al"><b>${esc(t("sx_comes"))}</b><small>${esc(fmtTime(b.t))}</small></div>
+      <div class="am"><div class="nm"><b>${esc(name)}</b>${b.online ? otag() : ""}</div><small>${esc(b.name)} · ${esc(waRead(c.wa))}</small></div><b class="ar">${b.price>0 ? money(b.price) : "—"}</b></div>`; });
+  const top = `<div class="atop"><span class="ib">${I.back}</span><div class="atabs"><span>${esc(t("tx_tab_all"))}</span><span class="on">${esc(t("sx_agenda"))}<em>${AGENDA.length}</em></span></div></div>`;
+  const search = `<div class="asrch">${I.search}<span>${esc(t("sx_search"))}</span></div>`;
+  return `<div class="pg">${top}${search}<div class="scr"><div class="scr-in">${body}</div></div>${nav("agenda")}${o.noti ? notification() : ""}</div>`;
+}
+/* the phone's heads-up notification: OnlineOrderAlerts.kt:153-176 title online_alert_booking_title(bookedWhen), text
+   "<typed name> · 1 servicio · #<code>" (online_alert_items_services, R2-4 L4); small icon = the app's launcher icon */
+function notification(){
+  const body = [CUST.name, tp("online_alert_items_services", 1, 1), "#" + REF].join(" · ");
+  return `<div class="nt" data-t="noti"><div class="nh"><span class="ni">${window.Demo.K.icons.potato}</span><span>Platata</span><em>· ${esc(H("ahora","agora","now"))}</em>${I.chevD}</div>
+    <b>${esc(t("online_alert_booking_title", alertWhen(DAY, SLOT)))}</b><span class="bt">${esc(body)}</span></div>`;
+}
+/* the support strip (SupportStrip.kt:140-200): Soporte | Mis reportes "Aún no hay reportes" */
+const strip = () => `<div class="rs-strip"><div class="h"><span class="bd">${I.support}</span><div><b>${esc(t("rp_strip_support"))}</b><small>${esc(t("rp_strip_support_sub"))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(t("rp_my_title"))}</b><small>${esc(t("rp_sheet_my_reports_none"))}</small></div>${I.chevR}</div></div>`;
+/* the appointment page — AppointmentDetailScreen.kt:200-466: SumaTopBar = the typed name (:83-89, :202-206); "Servicios" + every
+   line with its money (:217-241); "<service> · Dura N min" (:242-248, DBSVC-1); Cobrar / Reprogramar / Cancelar cita (:282-312;
+   "No asistió" only once the hour is here, :146-152); WhenPicker "¿Cuándo viene?" closed = "Mañana · 2:00 p. m. | Cambiar"
+   (:314-327, WhenPicker.kt:236-268); the end (:329-341); for an online booking EN LÍNEA + online_booking_confirm, "⚠ N más"
+   only when others share the hour (none here), and TextButton "WhatsApp · +57 …" (:343-372); "¿Para quién?" + name · phone
+   (:404-414); Guardar (:461-466). Under it the Support strip (a LEVEL_2 page). */
+function detailScreen(){
+  const tel = waRead(CL[3].wa);
+  let h = `<div class="dlb">${esc(t("home_tab_services"))}</div>`;
+  h += `<div class="dln"><span>${esc(SVC.name)}</span><span>${money(SVC_PRICE)}</span></div>`;
+  h += `<div class="dsm">${esc(t("agenda_service_with_dur", SVC.name, DUR))}</div>`;
+  h += `<div class="dbt"><div class="sb pri"><span>${esc(t("ax_cobrar"))}</span></div><div class="sb sec"><span>${esc(t("ax_resched"))}</span></div><div class="sb sec"><span>${esc(t("ax_cancel"))}</span></div></div>`;
+  h += `<div><div class="wlbl">${esc(t("booking_when_arrive"))}</div><div class="wsum"><b>${esc(dayLabel(DAY))} · ${esc(fmtTime(SLOT))}</b><span>${esc(t("tp_change"))}</span></div></div>`;
+  h += `<div class="dsm">${esc(t("agenda_end_hint", fmtTime(SLOT), fmtTime(SLOT + DUR), DUR))}</div>`;
+  h += `<div class="obk" data-t="online-head">${otag()}<span>${esc(t("online_booking_confirm"))}</span></div>`;
+  h += `<span class="tbtn" data-t="appt-wa">${esc(t("online_order_whatsapp"))} · ${esc(tel)}</span>`;
+  h += `<div class="dlb">${esc(t("booking_for_who"))}</div><div class="dln"><span>${esc(CUST.name)} · ${esc(tel)}</span></div><div style="height:calc(var(--u)*4)"></div>`;
+  h += `<div class="sb pri"><span>${esc(t("booking_save"))}</span></div>`;
+  return `<div class="pg"><div class="tb"><span class="ib" data-t="dt-back">${I.back}</span><div class="tt">${esc(CUST.name)}</div></div>
+    <div class="scr"><div class="dt">${h}</div></div>${strip()}</div>`;
+}
+/* WhatsApp: utils/AppointmentText.kt:84-99 booked() -> appt_wa_booked(who, appt_wa_appointment, shop, appt_wa_when(day, time),
+   service), in the SHOP's language, signed once (WASIG-1: a blank line, then whatsapp_signature); opened on the client's chat */
+const WA_TEXT = t("appt_wa_booked", CUST.name, t("appt_wa_appointment"), C.place, t("appt_wa_when", waDay(DAY), waTime(SLOT)), SVC.name) + "\n\n" + t("whatsapp_signature");
+function waChat(sent){
+  return `<div class="wa"><div class="wahd"><span data-t="wa-back">${I.back}</span><span class="waav">${esc(CUST.name.charAt(0))}</span><b>${esc(waRead(CL[3].wa))}</b><span>${I.more}</span></div>
+    <div class="wachat">${sent?`<div class="wabub">${esc(WA_TEXT)}<small>12:42 <i>✓✓</i></small></div>`:""}</div>
+    <div class="wain"><div class="wabox">${sent?"":esc(WA_TEXT)}</div><span class="wasend" data-t="wa-send">${I.send}</span></div></div>`;
+}
+
+/* the trip between the two phones (a demo card, not an app screen): the honest small print */
+const WHO_CUST = H("Celular de tu cliente", "Celular do seu cliente", "Your customer's phone");
+const WHO_OWN = t("conn_slot_phone");
+const firstSentence = s => { const i = s.indexOf(". "); return i > 0 ? s.slice(0, i + 1) : s; };
+const HOP_NOTE = H("Tu teléfono te avisa mientras Platata está abierta.", "Seu celular avisa enquanto o Platata está aberto.", "Your phone tells you while Platata is open.")
+  + " " + firstSentence(t(CC==="US" || CC==="CA" ? "conn_store_usa_body_services" : "conn_store_lock_body_services"));
+const hop = () => `<div class="rhop"><div class="rhop-in"><div class="rhop-dev">${esc(WHO_CUST)}</div>
+  <div class="rhop-line"><span>${esc(H("La reserva llega a tu negocio", "A reserva chega ao seu negócio", "The booking reaches your shop"))}</span><i></i></div>
+  <div class="rhop-dev on" data-t="hop-go">${esc(WHO_OWN)}</div><div class="rhop-note">${esc(HOP_NOTE)}</div></div></div>`;
+
+/* demo plumbing: load every Roboto weight up front; re-place the hint ring when a font lands late */
+(function(){ const d = document.createElement("div"); d.setAttribute("aria-hidden","true");
+  d.style.cssText = "position:absolute;left:-9999px;top:0;font-family:Roboto";
+  d.innerHTML = [400,500,600,700,800,900].map(x=>`<span style="font-weight:${x}">Aa 0 ✓</span>`).join("") + `<span style="font:700 12px 'Roboto Mono'">#3FA9C1</span>`;
+  document.body.appendChild(d);
+  if(document.fonts && document.fonts.addEventListener) document.fonts.addEventListener("loadingdone", ()=>window.dispatchEvent(new Event("resize")));
+})();
+
+function render(st){
+  if(st.dev === "cust"){
+    let h;
+    if(st.w === "menu") h = webMenu();
+    else if(st.w === "when") h = webWhen(st);
+    else h = webDone();
+    h = `<div class="pg">${browserBar()}${h}${st.hop ? hop() : ""}</div>`;
+    if(st.w === "when" && st.scrollTo) return scrolled(h, st.scrollTo, {pad: 76 + 12});
+    return h;
+  }
+  if(st.o === "agenda") return agendaScreen({noti: st.noti, flash: st.flash});
+  if(st.o === "detail") return detailScreen();
+  return `<div class="pg">${waChat(st.sent)}</div>`;
+}
+const VOICE = {"es": ["Tu cliente abre tu página de reservas y elige un servicio.", "Elige el día y una hora dentro de tu horario.", "Escribe su nombre y su WhatsApp.", "Reserva sin pagar nada en línea: paga en tu negocio.", "Tu teléfono te avisa: nueva reserva en línea. Tócala.", "Ahí dice En línea: confirma la hora con el cliente.", "WhatsApp abre su chat con el mensaje listo. Envíalo.", "Vuelve: la cita ya está en tu Agenda, marcada En línea.", "Así recibes reservas en línea con Platata."], "pt": ["O cliente abre sua página de reservas e escolhe um serviço.", "Escolhe o dia e um horário dentro do seu expediente.", "Escreve o nome e o WhatsApp.", "Reserva sem pagar nada online: paga no seu negócio.", "Seu celular avisa: nova reserva online. Toque nela.", "Ali diz Online: confirme o horário com o cliente.", "O WhatsApp abre a conversa com a mensagem pronta. Envie.", "Volte: o agendamento já está na sua Agenda, marcado Online.", "Assim você recebe reservas online com o Platata."]};
+VKIT.start(V, {
+  id:"V9", tallVideo:true, clock:"12:41",
+  endText: H("Así recibes reservas en línea con Platata.", "Assim você recebe reservas online com o Platata.", "That's how you take bookings online with Platata."),
+  beats: V.pick({es: VOICE.es, pt: VOICE.pt,
+    en: ["Your customer opens your booking page and picks a service.", "Picks the day and a time within your hours.", "Types their name and WhatsApp number.",
+         "Books without paying anything online: pays at your shop.", "Your phone tells you: new online booking. Tap it.", "It says Online: confirm the time with the customer.",
+         "WhatsApp opens their chat with the message ready. Send it.", "Go back: it is already in your Agenda, marked Online.", "That's how you take bookings online with Platata."]}),
+  state: {dev:"cust", w:"menu", o:"agenda", day:0, slot:null, name:"", phone:"", focus:null, scrollTo:null, sending:false, hop:false, noti:false, sent:false, flash:false},
+  render,
+  device: () => "phone",
+  who: st => st.dev === "cust" ? WHO_CUST : WHO_OWN,
+  steps: [
+    {beat:0, wait:1.6, hint:H("Toca "+SVC.name, "Toque em "+SVC.name, "Tap "+SVC.name), target:`[data-t="w-svc-${SVC.id}"]`, tap(st){ st.w = "when"; }},
+    {beat:1, hint:H("Toca "+webDay(DAY), "Toque em "+webDay(DAY), "Tap "+webDay(DAY)), target:`[data-t="w-day-${DAY}"]`, tap(st){ st.day = DAY; st.slot = null; }},
+    {beat:1, hint:H("Toca "+webClock(SLOT), "Toque em "+webClock(SLOT), "Tap "+webClock(SLOT)), target:`[data-t="w-slot-${SLOT}"]`, tap(st){ st.slot = SLOT; }},
+    {beat:2, hint:H("Toca "+w("name"), "Toque em "+w("name"), "Tap "+w("name")), target:'[data-t="w-name"]',
+      tap(st, E){ st.focus = "name"; st.scrollTo = '[data-t="w-phone"]';
+        E.type("name", CUST.name, () => { E.after(250, () => { st.focus = "phone";
+          E.type("phone", TYPED_PHONE, () => { E.after(350, () => { st.focus = null; st.scrollTo = '[data-t="w-sum"]'; }); }, 60); }); }, 60); }},
+    {beat:3, wait:0.3, hint:H("Toca "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)}), "Toque em "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)}), "Tap "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)})), target:'[data-t="w-book"]',
+      tap(st, E){ st.sending = true; E.after(900, () => { st.sending = false; st.w = "done"; E.after(1800, () => { st.hop = true; }); }); }},
+    {beat:4, hint:H("Toca "+WHO_OWN, "Toque em "+WHO_OWN, "Tap "+WHO_OWN), target:'[data-t="hop-go"]',
+      tap(st, E){ st.hop = false; st.dev = "own"; st.o = "agenda"; E.after(700, () => { st.noti = true; }); }},
+    {beat:4, wait:1.4, hint:H("Toca el aviso", "Toque no aviso", "Tap the notification"), target:'[data-t="noti"]', tap(st){ st.noti = false; st.o = "detail"; }},
+    {beat:5, wait:2.0, hint:H("Toca "+t("online_order_whatsapp"), "Toque em "+t("online_order_whatsapp"), "Tap "+t("online_order_whatsapp")), target:'[data-t="appt-wa"]', tap(st){ st.o = "wa"; }},
+    {beat:6, wait:1.6, hint:H("Envía el mensaje", "Envie a mensagem", "Send the message"), target:'[data-t="wa-send"]', tap(st){ st.sent = true; }},
+    {beat:7, hint:H("Toca la flecha de atrás", "Toque na seta de voltar", "Tap the back arrow"), target:'[data-t="wa-back"]', tap(st){ st.o = "detail"; }},
+    {beat:7, hint:H("Toca la flecha de atrás", "Toque na seta de voltar", "Tap the back arrow"), target:'[data-t="dt-back"]', tap(st, E){ st.o = "agenda"; st.flash = true; E.after(1800, () => { st.flash = false; }); }}
+  ]
+});
+</script>
+</body>
+</html>

@@ -39,3 +39,39 @@ Script: `features/RS5-MX.json` (6 steps = 6 beats for `?country=MX`). Device: ow
 - `CheckoutSheetBody.kt:231` + `CheckoutPayBlock.kt:451`: connected Stripe account but reader not ready yet -> Card draws as
   "+ Tarjeta · Configurar" while the tap goes to the charge (contradicts `PayWaysVisibility.kt:13-14`). Small, not proven on a device.
 - Page-only (not the app): the US/CA pages lack the "Charge by link" slot the app now draws there; left as is (US on hold).
+
+## Round 3 (37db6d6c)
+
+App re-read at sim/usa-canada 37db6d6c (diff since d30ffa1: `d4967d3a` México 1/2/3, `a5356517` Arreglo 15 F8, `328cd4c3` LINKCOST-1).
+Page `demos/restaurante/RS5.html`; script `features/RS5-MX.json` UNCHANGED (byte-identical, 6 steps = 6 beats, 346 chars).
+
+### What changed in the page (Mexico only)
+- Sale complete now shows the card line: R2-1 item 7 reads brand + last four off the reader's PaymentIntent
+  (`utils/TerminalReaderManager.kt:600` + `:646-651` readCardIdentity -> `ui/pos/StripePaymentActions.kt:104-106`), printed by
+  `ReceiptFormatter.cardTenderLine` (`ReceiptOptionsScreen.kt:215`, `:569-587`). The Tap to Pay path does NOT upper-case the brand
+  (the link path does, `sync/PosLinkRules.kt:149-150 brandForReceipt`) and Stripe's `card_present.brand` is the lower-case API word
+  (the app's own notes: `StripePaymentActions.kt:41` "visa", `utils/StripeGatewayAdapter.kt:51` "visa"), so the page draws
+  **"visa ••4242"** (`TTP_LINE`). Honest choice, not proven on a device; if the coder upper-cases it, set `TTP_LINE = LINE` (one line).
+- Pay screen: no visible change. The shared `payScreen` now follows the app's two-row rule (set-up link row, then the
+  "Cobrar con enlace" row, `CheckoutSheetBody.kt:492-517` setupLink2, `CheckoutPayBlock.kt:470-475`, `SetupLinkRow :496`). In this demo
+  QR is set up, so only the "Cobrar con enlace" row shows, exactly as before. Card is still primary: `cardIsPrimary = stripeOn &&
+  stripeChargeable` (`CheckoutSheetBody.kt:265`), Exacto 1.2 : QR 1 : Tarjeta 2 (`CheckoutPayBlock.kt:341/378/424`).
+- Header comments: new file:line references. STR: no string used here changed (checked all three languages).
+
+### Checks
+- Other countries byte-for-byte: video timeline DOM every 0.2 s + demo first screen for CO:es BR:pt US:en US:es CA:en CA:es PE:es,
+  before vs after: SAME. MX:es / MX:en differ only from the Sale complete screen on (t = 21.6 s).
+- `check_demo.py restaurante/RS5 MX:es CO:es BR:pt US:en`: 4 x OK. Screenshots looked at (pay screen, Sale complete).
+- `timing_frames.py RS5-MX es:MX` (real clips): taps at +1.7 / +3.7 / +3.2 / +2.1 s as in round 2; each line over its screen; line 5 over
+  Sale complete with "Pago aprobado · visa ••4242". No wait change needed.
+- `cut_price_scan.py` reads services videos only (`demos/servicios`, `video/V*.mp4`): not applicable. Dish tiles checked by eye: whole.
+
+### Round-2 / Mexico items seen at 37db6d6c
+- Item 7 (both links): FIXED, two rows, set-up first (`CheckoutSheetBody.kt:492-517`). Item 7b (card line on a Tap to Pay sale): FIXED,
+  but lower-case brand (new bug below). Mexico card 2 (linked account = plain Card): FIXED (`CheckoutSheetBody.kt:235`, `:265`).
+
+### New app problems
+- small (visible in this video): Tap to Pay prints "visa ••4242" while a link sale prints "VISA ••4242". `utils/TerminalReaderManager.kt:646-651`
+  returns the raw `cardPresentDetails.brand`. Fix: return `PosLinkResult.brandForReceipt(details.brand)` there (as `sync/PosLinkRules.kt:160`).
+- doc drift only: `ui/pos/StripePaymentActions.kt:41` still says "null in v1; see notes"; `:107` says "US/Canada card-present" (Mexico too).
+- Still open (US on hold, page not changed): the US/CA paths draw "VISA ••4242" and no "Cobrar con enlace" row; the app now draws "visa" and the row.

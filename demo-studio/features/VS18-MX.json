@@ -12,7 +12,7 @@
     {"id": "4-descuento", "voice": {"es": "Toca Siguiente y activa el descuento: diez por ciento."}},
     {"id": "5-guardar", "voice": {"es": "Toca Guardar. El combo queda activo."}},
     {"id": "6-caja", "voice": {"es": "En la caja, toca Corte de dama y elige el estilo."}},
-    {"id": "7-oferta", "voice": {"es": "Toca Agregar oferta y elige el Cepillado."}},
+    {"id": "7-oferta", "voice": {"es": "Toca Agregar combo y elige el Cepillado."}},
     {"id": "8-pregunta", "voice": {"es": "El cepillado te pide elegir uno: elige Medio y toca Agregar. Los dos salen con diez por ciento menos."}},
     {"id": "9-fin", "voice": {"es": "Así cobras menos por los dos con Platata."}}
   ]

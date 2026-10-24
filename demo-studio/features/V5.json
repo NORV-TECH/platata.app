@@ -38,14 +38,14 @@
       "id": "4-guardar",
       "voice": {
         "es": "Toca Guardar y avisar por WhatsApp.",
-        "pt": "Toque em Salvar."
+        "pt": "Toque em Salvar e avisar pelo WhatsApp."
       }
     },
     {
       "id": "5-aviso",
       "voice": {
         "es": "El mensaje ya va escrito. Envíalo.",
-        "pt": "Pronto: ele passa para amanhã."
+        "pt": "A mensagem já vai escrita. Envie."
       }
     },
     {
@@ -66,7 +66,7 @@
       "id": "8-whatsapp",
       "voice": {
         "es": "Y le escribes por WhatsApp. Envíalo.",
-        "pt": "O horário fica livre na sua agenda."
+        "pt": "E você escreve pelo WhatsApp. Envie."
       }
     },
     {

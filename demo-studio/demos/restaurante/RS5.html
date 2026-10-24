@@ -107,11 +107,11 @@ function payScreen(o){
   /* PayWaysVisibility.kt:63-70 link: owner, not dismissed, a QR country (QrCountries), something not set up yet; Colombia asks only for what is missing: QR or card / card / QR (MKT3-2) */
   const qrNotSetUp = !qr, cardNotSetUp = WOMPI && !cardReady;
   let link = (NO_QR || !(qrNotSetUp || cardNotSetUp)) ? null : WOMPI ? (qrNotSetUp && cardNotSetUp ? "pay_setup_link_qr_card" : cardNotSetUp ? "pay_setup_link_card" : "pay_setup_link_qr") : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");   /* MKT3-2 (16): only what is missing; CARD_ONLY = "Configurar tarjeta" */
-  /* LINK-3 UNDER_TAP (CheckoutSheetBody.kt:494-506, sync/PayByLinkOffer.kt): the set-up link wins the slot; otherwise, with Card drawn
-     on a phone that CAN tap, the slot reads "Cobrar con enlace" (pay_card_link_under), no "No, gracias" (onDismiss = null). */
-  let linkUnder = false;
-  if(!link && o.linkUnder && cardOn && cardReady){ link = "pay_card_link_under"; linkUnder = true; }
-  if(o.noLink) link = null;
+  /* LINK-3 UNDER_TAP (CheckoutSheetBody.kt:504-517 setupLink2, sync/PayByLinkOffer.kt): with Card drawn on a phone that CAN tap, a SECOND
+     small row "Cobrar con enlace" (pay_card_link_under, no "No, gracias": onDismiss = null) sits under the set-up link (R2-1 item 7 + REVFIX-15 F8,
+     app 37db6d6c: both rows can show, set-up first, each its own 44 dp row, CheckoutPayBlock.kt:470-475 SetupLinkRow :496). */
+  let link2 = (o.linkUnder && cardOn && cardReady) ? "pay_card_link_under" : null;
+  if(o.noLink){ link = null; link2 = null; }
   let rc = "";
   if(typed){ const v = typedValue(typed); const ch = v - due;
     rc = `<div class="ln"><small>${esc(t("checkout_received_label"))}</small><b>${money(v)}</b></div>` +
@@ -134,7 +134,7 @@ function payScreen(o){
     <div class="x-amt"><div class="x-links">${links}</div><div class="x-rc">${rc}</div></div>
     <div class="x-kp">${keys.map(k=>`<span class="${k===DECKEY||k==="⌫"?"s":""}" data-t="key-${k}">${esc(k)}</span>`).join("")}</div>
     <div class="x-btns">${btns}</div>
-    ${link?`<div class="x-slink"><span${linkUnder?' data-t="card-link"':""}>${esc(t(link))}</span>${linkUnder?"":`<span>${esc(t("pay_setup_link_dismiss"))}</span>`}</div>`:`<div style="height:calc(var(--u)*14)"></div>`}</div>
+    ${(link||link2)?(link?`<div class="x-slink"><span>${esc(t(link))}</span><span>${esc(t("pay_setup_link_dismiss"))}</span></div>`:"")+(link2?`<div class="x-slink"><span data-t="card-link">${esc(t(link2))}</span></div>`:""):`<div style="height:calc(var(--u)*14)"></div>`}</div>
     <div class="x-sec"><div class="x-cust">${I.person}${esc(t("checkout_add_customer_cta"))}</div></div>`;
 }
 function tableGate(){ return `<div class="x-scrim"><div class="x-gate"><h3>${esc(t("checkout_dining_gate_table_title"))}</h3><div class="g">${Array.from({length:C.tables},(_,i)=>`<span data-t="table-${i+1}">${i+1}</span>`).join("")}</div></div></div>`; }
@@ -219,10 +219,14 @@ function qrOverlay(total){ return `<div class="x-qro"><span class="bk">${I.back}
    US / Canada / Mexico = Stripe Tap to Pay (StripePaymentSheet.kt: StripeTipScreen, a tap on a tip starts the charge; "Tap the card";
      "Processing…") -> Sale complete. NOTE: TapToPayMode.REAL_TAP_TO_PAY = false today (sync/TapToPayMode.kt:25, simulated reader).
    MEXICO (STRIPE-MX-1) plays the same Stripe flow in pesos, with what stays Mexican: the shop keeps its QR (QrCountries), the pay
-     row is Exacto 1.2 : QR 1 : Tarjeta 2 (CheckoutPayBlock.kt:330/431, cardIsPrimary = stripeOn && cardConfigured, CheckoutSheetBody.kt:260),
-     the slot under it reads "Cobrar con enlace" (LINK-3 UNDER_TAP, drawn, never tapped here), the receipt goes by WhatsApp (ReceiptSendRoute)
-     and Sale complete shows "Pago aprobado" with NO "VISA ••4242" line: the Tap to Pay charge context never carries a brand or last four
-     (utils/TerminalReaderManager.kt:445 StripeChargeContext without brand/lastFour -> ReceiptFormatter.cardTenderLine returns null).
+     row is Exacto 1.2 : QR 1 : Tarjeta 2 (CheckoutPayBlock.kt:341/378/424, cardIsPrimary = stripeOn && stripeChargeable, CheckoutSheetBody.kt:265),
+     QR is set up so there is no "Configurar QR" row, and the one small row under the buttons reads "Cobrar con enlace" (LINK-3 UNDER_TAP,
+     setupLink2, CheckoutSheetBody.kt:504-517; drawn, never tapped here); the receipt goes by WhatsApp (ReceiptSendRoute).
+     Sale complete (app 37db6d6c, R2-1 item 7): "Pago aprobado" + the card line. The reader's card is read off the PaymentIntent
+     (utils/TerminalReaderManager.kt:600 + :646 readCardIdentity, cardPresentDetails.brand / last4 -> ui/pos/StripePaymentActions.kt:104-106)
+     and printed by ReceiptFormatter.cardTenderLine (ReceiptOptionsScreen.kt:215, :569-587). Stripe's card_present brand is the lower-case
+     API word ("visa": the app's own notes, StripePaymentActions.kt:41, utils/StripeGatewayAdapter.kt:51) and this path does NOT upper-case it
+     (the link path does, sync/PosLinkRules.kt:149-150 brandForReceipt), so the screen reads "visa ••4242" (TTP_LINE). One installment = no count.
      No Platata fee in Mexico, and nothing on screen talks about one. The US/CA pages keep their old look (US on hold).
    Everywhere else (PE CL EC AR PA BR) the pay screen has NO card button and Payment methods has NO Card row
    (PayWaysVisibility.kt, PaymentMethodsScreen.kt visibleMethods): the honest page shows that. The tree should hide RS5 there.
@@ -234,6 +238,7 @@ const CARD = WOMPI || STRIPE;
 const BASE = saleTotal(SALE);
 const TIP = STRIPE ? Math.round(BASE*0.18*100)/100 : 0;          // StripeTip.presetTip(base, 18): rounded to the currency's minor unit
 const LINE = "VISA ••4242";   // ReceiptFormatter.cardTenderLine(brand, lastFour, null): one installment prints no count
+const TTP_LINE = "visa ••4242";   // Mexico Tap to Pay: the raw Stripe brand, not upper-cased (see the header); flip to LINE when the app upper-cases it
 /* WompiPaymentOverlay.kt EntryScreen / Sending */
 function wompi(st){
   if(st.wstage==="send") return `<div class="x-wo" style="align-items:center;justify-content:center;text-align:center;gap:calc(var(--u)*14)">
@@ -271,7 +276,7 @@ function render(st){
   if(st.screen==="reg") return X(regScreen(st.lines));
   if(st.screen==="pay") return X(payScreen({lines:SALE, others:1, qr:MX, card:CARD?"ready":"none", linkUnder:MX}) +
       (st.wstage ? wompi(st) : "") + (st.sstage ? stripe(st) : ""));
-  if(st.screen==="done") return X(doneScreen(CARD ? {kind:"card", line:MX ? null : LINE} : {kind:"exact", received:cashDue(BASE)}));
+  if(st.screen==="done") return X(doneScreen(CARD ? {kind:"card", line:MX ? TTP_LINE : LINE} : {kind:"exact", received:cashDue(BASE)}));
   if(st.screen==="pm") return X(pmScreen({customs:[]}));
   return "";
 }

@@ -35,10 +35,10 @@
       }
     },
     {
-      "id": "4-otra-vez",
+      "id": "4-al-abrir",
       "voice": {
-        "es": "Vuelves a la cita. Toca Cobrar otra vez.",
-        "pt": "Você volta ao agendamento. Toque em Cobrar de novo."
+        "es": "Al abrirla, Platata pasa directo al cobro.",
+        "pt": "Ao abrir, o Platata passa direto para o pagamento."
       }
     },
     {

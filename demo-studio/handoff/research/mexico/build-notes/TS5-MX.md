@@ -34,3 +34,31 @@ Script: `features/TS5-MX.json` (5 steps = 5 beats for `?country=MX`). Device: ow
 - `utils/TerminalReaderManager.kt:445`: Tap to Pay sales carry no brand/last four, so no "VISA ••4242" on Sale complete or the receipt. Small.
 - `sync/TapToPayMode.kt:25` `REAL_TAP_TO_PAY = false`: still the simulated reader.
 - `CheckoutSheetBody.kt:231` + `CheckoutPayBlock.kt:451`: reader not ready yet -> Card shows "+ Tarjeta · Configurar" though the tap charges. Small.
+
+## Round 3 (37db6d6c)
+
+App re-read at sim/usa-canada 37db6d6c. Page `demos/tienda/TS5.html` (also `&type=pharmacy`); script `features/TS5-MX.json` UNCHANGED
+(byte-identical, 5 steps = 5 beats, 304 chars).
+
+### What changed in the page (Mexico only)
+- Sale complete shows the card line **"visa ••4242"** (`TTP_LINE`): same evidence as RS5-MX round 3 (`utils/TerminalReaderManager.kt:600`,
+  `:646-651` readCardIdentity -> `ui/pos/StripePaymentActions.kt:104-106`; printed by `ReceiptFormatter.cardTenderLine`,
+  `ReceiptOptionsScreen.kt:215`, `:569-587`; the raw lower-case Stripe brand, not upper-cased on this path, unlike `sync/PosLinkRules.kt:149-150`).
+  Set `TTP_LINE = LINE` if the coder upper-cases it.
+- Pay screen: no visible change; `payScreen` follows the two-row rule (`CheckoutSheetBody.kt:492-517`, `CheckoutPayBlock.kt:470-475`); QR is
+  set up, so only "Cobrar con enlace" shows. `cardIsPrimary = stripeOn && stripeChargeable` (`CheckoutSheetBody.kt:265`). Tips off for
+  shops/pharmacies: the Card tap still sets a zero tip and starts the charge (`CheckoutSheetBody.kt:645-656`).
+- Scan register (`ScanCheckoutTab.kt`, no diff since d30ffa1), Fiar button: unchanged. STR: no used string changed.
+
+### Checks
+- Byte-for-byte: CO:es BR:pt US:en US:es CA:en CA:es PE:es and pharmacy CO:es / US:en: SAME. MX (shop and pharmacy) differ only from
+  Sale complete on (t = 16.2 s).
+- `check_demo.py tienda/TS5 MX:es CO:es BR:pt US:en`: 4 x OK; screenshots looked at.
+- `timing_frames.py TS5-MX es:MX`: taps +2.4 / +0.9 / +2.1 s as in round 2; each line over its screen; no wait change.
+- `cut_price_scan.py`: services videos only, not applicable (no tiles on this register).
+
+### Round-2 / Mexico items seen
+- Item 7 (both links, card line on a Tap to Pay sale): FIXED (card line lower-case, see RS5-MX round 3). Mexico card 2: FIXED.
+
+### New app problems
+- small (visible in this video): "visa ••4242" lower-case on a Tap to Pay sale, `utils/TerminalReaderManager.kt:646-651` (fix in RS5-MX round 3).

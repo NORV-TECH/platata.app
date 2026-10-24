@@ -17,15 +17,16 @@
 <script src="../../kit/vkit.js"></script>
 <script>
 window.PAGE_BIZ = "peluqueria";
-const STR = {"disc_title_with_combos":{"en":"Discounts and combos","es":"Descuentos y combos","pt":"Descontos e combos"},"disc_hub_tab_discounts":{"en":"Discounts","es":"Descuentos","pt":"Descontos"},"disc_hub_tab_combos":{"en":"Combos","es":"Combos","pt":"Combos"},"disc_hub_tab_charges":{"en":"Extra charges","es":"Cargos","pt":"Acréscimos"},"common_new_short":{"en":"+ New","es":"+ Nuevo","pt":"+ Novo"},"combo_tab_empty_title":{"en":"No combos yet","es":"Aún no tienes combos","pt":"Você ainda não tem combos"},"combo_tab_empty_line":{"en":"Sell a few items together with a discount.","es":"Vende varios productos juntos con descuento.","pt":"Venda vários itens juntos com desconto."},"combo_tab_empty_button":{"en":"Create combo","es":"Crear combo","pt":"Criar combo"},"deal_new_title":{"en":"New Deal","es":"Nueva oferta","pt":"Nova oferta"},"deal_pick_lede":{"en":"Put two things together and charge less for the pair.","es":"Junta dos cosas y cobra menos por el par.","pt":"Junte duas coisas e cobre menos pelo par."},"deal_slot_overline_main":{"en":"1 · Main","es":"1 · Principal","pt":"1 · Principal"},"deal_slot_overline_linked":{"en":"2 · Goes with it","es":"2 · Acompañante","pt":"2 · Acompanhamento"},"deal_slot_overline_optional":{"en":"THIRD THING (OPTIONAL)","es":"TERCERA COSA (OPCIONAL)","pt":"TERCEIRA COISA (OPCIONAL)"},"deal_pick_item":{"en":"Choose one of yours","es":"Escoge una de las tuyas","pt":"Escolha uma das suas"},"deal_slot_clear":{"en":"Remove","es":"Quitar","pt":"Remover"},"deal_next_button":{"en":"Next","es":"Siguiente","pt":"Avançar"},"deal_pick_first":{"en":"What is the first thing?","es":"¿Cuál es la primera cosa?","pt":"Qual é a primeira coisa?"},"deal_pick_second":{"en":"And what goes with it?","es":"¿Y qué va con eso?","pt":"E o que vai com ela?"},"deal_summary_title":{"en":"Your combo","es":"Tu combo","pt":"Seu combo"},"deal_name_label":{"en":"Deal name","es":"Nombre de la oferta","pt":"Nome da oferta"},"deal_slot_not_set_summary":{"en":"Not set","es":"Sin configurar","pt":"Não definido"},"deal_discount_on_title":{"en":"Deal discount is on","es":"El descuento de la oferta está activado","pt":"O desconto da oferta está ativado"},"deal_discount_off_title":{"en":"Deal discount is off","es":"El descuento de la oferta está desactivado","pt":"O desconto da oferta está desativado"},"deal_discount_on_subtitle":{"en":"Clients get %1$s%% off when they order this deal.","es":"Los clientes obtienen %1$s%% de descuento al pedir esta oferta.","pt":"Os clientes recebem %1$s%% de desconto ao pedir esta oferta."},"deal_discount_off_subtitle":{"en":"Turn on to give this deal a percentage discount.","es":"Actívalo para darle a esta oferta un descuento porcentual.","pt":"Ative para dar a esta oferta um desconto percentual."},"deal_discount_label":{"en":"Discount","es":"Descuento","pt":"Desconto"},"deal_discount_caption":{"en":"The math on your prices is up to you — we apply the %1$s%% at checkout, print it on every receipt, and track it in your reports so you can see exactly how this deal is performing.","es":"Las cuentas de tus precios dependen de ti — aplicamos el %1$s%% al cobrar, lo imprimimos en cada recibo y lo registramos en tus reportes para que veas exactamente cómo está funcionando esta oferta.","pt":"A conta dos seus preços é com você — aplicamos os %1$s%% no checkout, imprimimos em cada recibo e registramos nos seus relatórios para você ver exatamente como esta oferta está performando."},"deal_free_category_hint":{"en":"≈ %2$d%% off is about the same as making %1$s free","es":"≈ %2$d%% de descuento equivale más o menos a hacer %1$s gratis","pt":"≈ %2$d%% de desconto é mais ou menos o mesmo que dar %1$s de graça"},"deal_save_button":{"en":"Save","es":"Guardar","pt":"Salvar"},"deal_discount_badge":{"en":"%1$d%% OFF","es":"%1$d%% DESCUENTO","pt":"%1$d%% DESC"},"deal_live_badge":{"en":"LIVE","es":"ACTIVO","pt":"ATIVO"},"deal_paused_badge":{"en":"PAUSED","es":"PAUSADO","pt":"PAUSADO"},"deal_picker_title":{"en":"Complete your %1$s","es":"Completa tu %1$s","pt":"Complete seu %1$s"},"common_back":{"en":"Back","es":"Atrás","pt":"Voltar"},"common_add":{"en":"Add","es":"Agregar","pt":"Adicionar"},"mamaship_tab_register":{"en":"Register","es":"Caja","pt":"Caixa"},"sx_agenda":{"en":"Agenda","es":"Agenda","pt":"Agenda"},"home_tab_my_business":{"en":"My business","es":"Mi negocio","pt":"Meu negócio"},"rp_strip_support":{"en":"Support","es":"Soporte","pt":"Suporte"},"rp_strip_support_sub":{"en":"Report a problem here","es":"Reporta un problema aquí","pt":"Relatar um problema aqui"},"rp_my_title":{"en":"My reports","es":"Mis reportes","pt":"Meus relatos"},"rp_sheet_my_reports_none":{"en":"No reports yet","es":"Aún no hay reportes","pt":"Ainda não há relatos"},"workspace_register_open":{"en":"Register open","es":"Caja abierta","pt":"Caixa aberto"},"workspace_register_sales":{"en":"Sales","es":"Ventas","pt":"Vendas"},"sell_online_title":{"en":"Sell online","es":"Vender en línea","pt":"Vender online"},"sell_online_row_off":{"en":"Off","es":"Apagado","pt":"Desligado"},"sell_online_pill_off":{"en":"OFF","es":"APAGADO","pt":"DESLIGADO"},"panel_heading_every_day":{"en":"Every day","es":"Día a día","pt":"Dia a dia"},"more_customers_title":{"en":"Clients","es":"Clientes","pt":"Clientes"},"invoices_title":{"en":"Invoices","es":"Facturas","pt":"Notas"},"invoices_row_first":{"en":"Scan your first invoice","es":"Escanea tu primera factura","pt":"Escaneie sua primeira nota"},"more_team_title":{"en":"Team","es":"Equipo","pt":"Equipe"},"workspace_full_reports":{"en":"Reports","es":"Reportes","pt":"Relatórios"},"scan_row_reports_today_net":{"en":"Net sales today · %s","es":"Ventas netas hoy · %s","pt":"Vendas hoje · %s"},"scan_row_reports_today":{"en":"Today · %s","es":"Hoy · %s","pt":"Hoje · %s"},"settings_title":{"en":"Settings","es":"Configuración","pt":"Configurações"},"panel_settings_row_sub":{"en":"Payments, taxes, receipts","es":"Cobros, impuestos, recibos","pt":"Cobranças, impostos, recibos"},"settings_hub_group_getting_paid":{"en":"Getting paid","es":"Cobros","pt":"Cobranças"},"settings_hub_payment_methods":{"en":"Payment methods","es":"Métodos de pago","pt":"Formas de pagamento"},"settings_hub_taxes":{"en":"Taxes","es":"Impuestos","pt":"Impostos"},"settings_hub_receipts":{"en":"Receipts","es":"Recibos","pt":"Recibos"},"settings_hub_receipts_sub":{"en":"%1$s · %2$s","es":"%1$s · %2$s","pt":"%1$s · %2$s"},"receipt_layout_detailed":{"en":"Detailed","es":"Detallado","pt":"Detalhado"},"settings_hub_receipts_num_auto":{"en":"numbered automatically","es":"numeración automática","pt":"numeração automática"},"settings_hub_group_your_business":{"en":"Your business","es":"Tu negocio","pt":"Seu negócio"},"settings_hub_business_info":{"en":"Business info","es":"Datos del negocio","pt":"Dados do negócio"},"settings_where_you_work":{"en":"Where you work","es":"Dónde atiendes","pt":"Onde você atende"},"more_where_subtitle":{"en":"Store, home, pick-up","es":"Local, domicilio, recogida","pt":"Local, domicílio, coleta"},"workspace_registers_and_printers":{"en":"Connections","es":"Conexiones","pt":"Conexões"},"settings_hub_group_this_phone":{"en":"This phone","es":"Este teléfono","pt":"Este celular"},"settings_security_title":{"en":"Security","es":"Seguridad","pt":"Segurança"},"settings_hub_security_on_delete":{"en":"Asks for your fingerprint before deleting","es":"Pide huella antes de borrar","pt":"Pede a digital antes de apagar"},"settings_hub_backup":{"en":"Backup","es":"Respaldo","pt":"Backup"},"settings_hub_backup_last":{"en":"Last copy: %1$s","es":"Último respaldo: %1$s","pt":"Último backup: %1$s"},"notif_title":{"en":"Notifications","es":"Notificaciones","pt":"Notificações"},"notif_hub_sub":{"en":"Orders, payments and your register","es":"Pedidos, pagos y tu caja","pt":"Pedidos, pagamentos e seu caixa"},"settings_hub_language_appearance":{"en":"Language & appearance","es":"Idioma y apariencia","pt":"Idioma e aparência"},"settings_hub_language_sub":{"en":"%1$s · %2$s","es":"%1$s · %2$s","pt":"%1$s · %2$s"},"theme_light":{"en":"Light","es":"Claro","pt":"Claro"},"settings_section_account":{"en":"Account","es":"Cuenta","pt":"Conta"},"my_account_title":{"en":"My Account","es":"Mi cuenta","pt":"Minha conta"},"rp_my_row_sub":{"en":"What you told us and what we answered","es":"Lo que nos contaste y lo que respondimos","pt":"O que você nos contou e o que respondemos"},"home_tab_services":{"en":"Services","es":"Servicios","pt":"Serviços"},"home_tab_products":{"en":"Products","es":"Productos","pt":"Produtos"},"common_edit":{"en":"Edit","es":"Editar","pt":"Editar"},"items_filter_all":{"en":"All","es":"Todos","pt":"Todos"},"items_price_from":{"en":"From %1$s","es":"Desde %1$s","pt":"A partir de %1$s"},"items_price_unset":{"en":"No price","es":"Sin precio","pt":"Sem preço"},"opt_min":{"en":"min","es":"min","pt":"min"},"scan_row_manual":{"en":"Keypad","es":"Teclado","pt":"Teclado"},"services_action_agendar":{"en":"Book","es":"Agendar","pt":"Agendar"},"services_action_crear_orden":{"en":"Create order","es":"Crear orden","pt":"Criar ordem"},"common_charge":{"en":"Charge %s","es":"Cobrar %s","pt":"Cobrar %s"},"combo_label_offer_percent":{"en":"Combo Offer −%1$d%%","es":"Oferta de Combo −%1$d%%","pt":"Oferta de Combo −%1$d%%"},"opt_add_to_sale":{"en":"Add to sale · %1$s","es":"Agregar a la venta · %1$s","pt":"Adicionar à venda · %1$s"},"deal_choice_add_deal":{"en":"Add deal","es":"Agregar oferta","pt":"Adicionar oferta"},"opt_ask_at_till_row":{"en":"ask at the till","es":"se pregunta en la caja","pt":"perguntar no caixa"},"opt_per_unit_each":{"en":"%1$s per %2$s","es":"%1$s por %2$s","pt":"%1$s por %2$s"},"home_variation_choose_one":{"en":"Choose one","es":"Elige uno","pt":"Escolha um"},"common_ok":{"en":"OK","es":"OK","pt":"OK"},"common_save":{"en":"Save","es":"Guardar","pt":"Salvar"},"common_cancel":{"en":"Cancel","es":"Cancelar","pt":"Cancelar"}};
-const PLU = {"home_clientes_count":{"en":{"one":"%1$d client","other":"%1$d clients"},"es":{"one":"%1$d cliente","other":"%1$d clientes"},"pt":{"one":"%1$d cliente","other":"%1$d clientes"}},"home_equipo_count_phones":{"en":{"one":"%1$d employee · %2$s","other":"%1$d employees · %2$s"},"es":{"one":"%1$d empleado · %2$s","other":"%1$d empleados · %2$s"},"pt":{"one":"%1$d funcionário · %2$s","other":"%1$d funcionários · %2$s"}},"home_equipo_on_phones":{"en":{"one":"%1$d on a phone","other":"%1$d on phones"},"es":{"one":"%1$d en celular","other":"%1$d en celular"},"pt":{"one":"%1$d no celular","other":"%1$d no celular"}},"home_current_sale_services":{"en":{"one":"Current sale · %d service","other":"Current sale · %d services"},"es":{"one":"Venta actual · %d servicio","other":"Venta actual · %d servicios"},"pt":{"one":"Venda atual · %d serviço","other":"Venda atual · %d serviços"}}};
+const STR={"disc_title_with_combos": {"en": "Discounts and combos", "es": "Descuentos y combos", "pt": "Descontos e combos"}, "disc_hub_tab_discounts": {"en": "Discounts", "es": "Descuentos", "pt": "Descontos"}, "disc_hub_tab_combos": {"en": "Combos", "es": "Combos", "pt": "Combos"}, "disc_hub_tab_charges": {"en": "Extra charges", "es": "Cargos", "pt": "Acréscimos"}, "common_new_short": {"en": "+ New", "es": "+ Nuevo", "pt": "+ Novo"}, "combo_tab_empty_title": {"en": "No combos yet", "es": "Aún no tienes combos", "pt": "Você ainda não tem combos"}, "combo_tab_empty_line": {"en": "Sell a few items together with a discount.", "es": "Vende varios productos juntos con descuento.", "pt": "Venda vários itens juntos com desconto."}, "combo_tab_empty_button": {"en": "Create combo", "es": "Crear combo", "pt": "Criar combo"}, "deal_new_title": {"en": "New combo", "es": "Nuevo combo", "pt": "Novo combo"}, "deal_pick_lede": {"en": "Put two things together and charge less for the pair.", "es": "Junta dos cosas y cobra menos por el par.", "pt": "Junte duas coisas e cobre menos pelo par."}, "deal_slot_overline_main": {"en": "1 · Main", "es": "1 · Principal", "pt": "1 · Principal"}, "deal_slot_overline_linked": {"en": "2 · Goes with it", "es": "2 · Acompañante", "pt": "2 · Acompanhamento"}, "deal_slot_overline_optional": {"en": "Third item (optional)", "es": "Tercer artículo (opcional)", "pt": "Terceiro item (opcional)"}, "deal_pick_item": {"en": "Choose one of yours", "es": "Elige uno de los tuyos", "pt": "Escolha um dos seus"}, "deal_slot_clear": {"en": "Remove", "es": "Quitar", "pt": "Remover"}, "deal_next_button": {"en": "Next", "es": "Siguiente", "pt": "Avançar"}, "deal_pick_first": {"en": "What is the first thing?", "es": "¿Cuál es la primera cosa?", "pt": "Qual é a primeira coisa?"}, "deal_pick_second": {"en": "And what goes with it?", "es": "¿Y qué va con eso?", "pt": "E o que vai com ela?"}, "deal_summary_title": {"en": "Your combo", "es": "Tu combo", "pt": "Seu combo"}, "deal_name_label": {"en": "Combo name", "es": "Nombre del combo", "pt": "Nome do combo"}, "deal_slot_not_set_summary": {"en": "Not set", "es": "Sin configurar", "pt": "Não definido"}, "deal_discount_on_title": {"en": "Combo discount is on", "es": "El descuento del combo está activado", "pt": "O desconto do combo está ativado"}, "deal_discount_off_title": {"en": "Combo discount is off", "es": "El descuento del combo está desactivado", "pt": "O desconto do combo está desativado"}, "deal_discount_on_subtitle": {"en": "Clients get %1$s%% off when they order this combo.", "es": "Los clientes obtienen %1$s%% de descuento al pedir este combo.", "pt": "Os clientes recebem %1$s%% de desconto ao pedir este combo."}, "deal_discount_off_subtitle": {"en": "Turn on to give this combo a percentage discount.", "es": "Actívalo para darle a este combo un descuento porcentual.", "pt": "Ative para dar a este combo um desconto percentual."}, "deal_discount_label": {"en": "Discount", "es": "Descuento", "pt": "Desconto"}, "deal_discount_caption": {"en": "The math on your prices is up to you: we apply the %1$s%% at checkout, print it on every receipt, and track it in your reports so you can see exactly how this combo is performing.", "es": "Las cuentas de tus precios dependen de ti: aplicamos el %1$s%% al cobrar, lo imprimimos en cada recibo y lo registramos en tus reportes para que veas exactamente cómo está funcionando este combo.", "pt": "A conta dos seus preços é com você: aplicamos os %1$s%% no checkout, imprimimos em cada recibo e registramos nos seus relatórios para você ver exatamente como este combo está performando."}, "deal_free_category_hint": {"en": "≈ %2$d%% off is about the same as making %1$s free", "es": "≈ %2$d%% de descuento equivale más o menos a hacer %1$s gratis", "pt": "≈ %2$d%% de desconto é mais ou menos o mesmo que dar %1$s de graça"}, "deal_save_button": {"en": "Save", "es": "Guardar", "pt": "Salvar"}, "deal_discount_badge": {"en": "%1$d%% OFF", "es": "%1$d%% DESCUENTO", "pt": "%1$d%% DESC"}, "deal_live_badge": {"en": "LIVE", "es": "ACTIVO", "pt": "ATIVO"}, "deal_paused_badge": {"en": "PAUSED", "es": "PAUSADO", "pt": "PAUSADO"}, "deal_picker_title": {"en": "Complete your %1$s", "es": "Completa tu %1$s", "pt": "Complete seu %1$s"}, "common_back": {"en": "Back", "es": "Atrás", "pt": "Voltar"}, "common_add": {"en": "Add", "es": "Agregar", "pt": "Adicionar"}, "mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "sx_agenda": {"en": "Agenda", "es": "Agenda", "pt": "Agenda"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "rp_strip_support": {"en": "Support", "es": "Soporte", "pt": "Suporte"}, "rp_strip_support_sub": {"en": "Report a problem here", "es": "Reporta un problema aquí", "pt": "Relatar um problema aqui"}, "rp_my_title": {"en": "My reports", "es": "Mis reportes", "pt": "Meus relatos"}, "rp_sheet_my_reports_none": {"en": "No reports yet", "es": "Aún no hay reportes", "pt": "Ainda não há relatos"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "invoices_row_first": {"en": "Scan your first invoice", "es": "Escanea tu primera factura", "pt": "Escaneie sua primeira nota"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Vendas hoje · %s"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "settings_hub_group_getting_paid": {"en": "Getting paid", "es": "Cobros", "pt": "Cobranças"}, "settings_hub_payment_methods": {"en": "Payment methods", "es": "Métodos de pago", "pt": "Formas de pagamento"}, "settings_hub_taxes": {"en": "Taxes", "es": "Impuestos", "pt": "Impostos"}, "settings_hub_receipts": {"en": "Receipts", "es": "Recibos", "pt": "Recibos"}, "settings_hub_receipts_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "receipt_layout_detailed": {"en": "Detailed", "es": "Detallado", "pt": "Detalhado"}, "settings_hub_receipts_num_auto": {"en": "numbered automatically", "es": "numeración automática", "pt": "numeração automática"}, "settings_hub_group_your_business": {"en": "Your business", "es": "Tu negocio", "pt": "Seu negócio"}, "settings_hub_business_info": {"en": "Business info", "es": "Datos del negocio", "pt": "Dados do negócio"}, "settings_where_you_work": {"en": "Where you work", "es": "Dónde atiendes", "pt": "Onde você atende"}, "more_where_subtitle": {"en": "Store, home, pick-up", "es": "Local, domicilio, recogida", "pt": "Local, domicílio, coleta"}, "workspace_registers_and_printers": {"en": "Connections", "es": "Conexiones", "pt": "Conexões"}, "settings_hub_group_this_phone": {"en": "This phone", "es": "Este teléfono", "pt": "Este celular"}, "settings_security_title": {"en": "Security", "es": "Seguridad", "pt": "Segurança"}, "settings_hub_security_on_delete": {"en": "Asks for your fingerprint before deleting", "es": "Pide huella antes de borrar", "pt": "Pede a digital antes de apagar"}, "settings_hub_backup": {"en": "Backup", "es": "Respaldo", "pt": "Backup"}, "settings_hub_backup_last": {"en": "Last copy: %1$s", "es": "Último respaldo: %1$s", "pt": "Último backup: %1$s"}, "notif_title": {"en": "Notifications", "es": "Notificaciones", "pt": "Notificações"}, "notif_hub_sub": {"en": "Orders, payments and your register", "es": "Pedidos, pagos y tu caja", "pt": "Pedidos, pagamentos e seu caixa"}, "settings_hub_language_appearance": {"en": "Language & appearance", "es": "Idioma y apariencia", "pt": "Idioma e aparência"}, "settings_hub_language_sub": {"en": "%1$s · %2$s", "es": "%1$s · %2$s", "pt": "%1$s · %2$s"}, "theme_light": {"en": "Light", "es": "Claro", "pt": "Claro"}, "settings_section_account": {"en": "Account", "es": "Cuenta", "pt": "Conta"}, "my_account_title": {"en": "My Account", "es": "Mi cuenta", "pt": "Minha conta"}, "rp_my_row_sub": {"en": "What you told us and what we answered", "es": "Lo que nos contaste y lo que respondimos", "pt": "O que você nos contou e o que respondemos"}, "home_tab_services": {"en": "Services", "es": "Servicios", "pt": "Serviços"}, "home_tab_products": {"en": "Products", "es": "Productos", "pt": "Produtos"}, "common_edit": {"en": "Edit", "es": "Editar", "pt": "Editar"}, "items_filter_all": {"en": "All", "es": "Todos", "pt": "Todos"}, "items_price_from": {"en": "From %1$s", "es": "Desde %1$s", "pt": "A partir de %1$s"}, "items_price_unset": {"en": "No price", "es": "Sin precio", "pt": "Sem preço"}, "opt_min": {"en": "min", "es": "min", "pt": "min"}, "scan_row_manual": {"en": "Keypad", "es": "Teclado", "pt": "Teclado"}, "services_action_agendar": {"en": "Book", "es": "Agendar", "pt": "Agendar"}, "services_action_crear_orden": {"en": "Create order", "es": "Crear orden", "pt": "Criar ordem"}, "common_charge": {"en": "Charge %s", "es": "Cobrar %s", "pt": "Cobrar %s"}, "combo_label_offer_percent": {"en": "Combo −%1$d%%", "es": "En combo −%1$d%%", "pt": "Em combo −%1$d%%"}, "opt_add_to_sale": {"en": "Add to sale · %1$s", "es": "Agregar a la venta · %1$s", "pt": "Adicionar à venda · %1$s"}, "deal_choice_add_deal": {"en": "Add combo", "es": "Agregar combo", "pt": "Adicionar combo"}, "opt_ask_at_till_row": {"en": "ask at the till", "es": "se pregunta en la caja", "pt": "perguntar no caixa"}, "opt_per_unit_each": {"en": "%1$s per %2$s", "es": "%1$s por %2$s", "pt": "%1$s por %2$s"}, "home_variation_choose_one": {"en": "Choose one", "es": "Elige uno", "pt": "Escolha um"}, "common_ok": {"en": "OK", "es": "OK", "pt": "OK"}, "common_save": {"en": "Save", "es": "Guardar", "pt": "Salvar"}, "common_cancel": {"en": "Cancel", "es": "Cancelar", "pt": "Cancelar"}, "wsearch_bar": {"en": "Search settings, items, clients…", "es": "Busca ajustes, productos, clientes…", "pt": "Buscar ajustes, itens, clientes…"}, "items_price_from_only": {"en": "From", "es": "Desde", "pt": "A partir de"}, "bridge_mode_ask": {"en": "At the till", "es": "En la caja", "pt": "No caixa"}, "notif_hub_sub_services": {"en": "Bookings, payments and your register", "es": "Reservas, pagos y tu caja", "pt": "Reservas, pagamentos e seu caixa"}, "team_business_code_sub": {"en": "Your employees type it with their PIN. Their phone must also be switched on in Connections.", "es": "Tus empleados lo escriben junto con su PIN. El teléfono también debe estar activado en Conexiones.", "pt": "Seus funcionários digitam junto com o PIN. O celular também precisa estar ativado em Conexões."}, "team_new_pin_notice": {"en": "%1$s's PIN: %2$s. Write it down, give it to them and switch on their phone in Connections. You can see it again on their form with Show.", "es": "PIN de %1$s: %2$s. Anótalo, dáselo y activa su teléfono en Conexiones. Lo ves de nuevo en su ficha con Mostrar.", "pt": "PIN de %1$s: %2$s. Anote e repasse, e ative o celular em Conexões. Você vê de novo na ficha com Mostrar."}, "team_code_show": {"en": "Show", "es": "Mostrar", "pt": "Mostrar"}, "deal_slot_overline_optional_services": {"en": "Third service (optional)", "es": "Tercer servicio (opcional)", "pt": "Terceiro serviço (opcional)"}, "deal_pick_item_services": {"en": "Choose a service", "es": "Elige un servicio", "pt": "Escolha um serviço"}};
+const PLU={"home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_equipo_count_phones": {"en": {"one": "%1$d employee · %2$s", "other": "%1$d employees · %2$s"}, "es": {"one": "%1$d empleado · %2$s", "other": "%1$d empleados · %2$s"}, "pt": {"one": "%1$d funcionário · %2$s", "other": "%1$d funcionários · %2$s"}}, "home_equipo_on_phones": {"en": {"one": "%1$d on a phone", "other": "%1$d on phones"}, "es": {"one": "%1$d en celular", "other": "%1$d en celular"}, "pt": {"one": "%1$d no celular", "other": "%1$d no celular"}}, "home_current_sale_services": {"en": {"one": "Current sale · %d service", "other": "Current sale · %d services"}, "es": {"one": "Venta actual · %d servicio", "other": "Venta actual · %d servicios"}, "pt": {"one": "Venda atual · %d serviço", "other": "Venda atual · %d serviços"}}};
 /* ===== VS14..VS19 common (services; inlined into each page by the builder from the helper's scratch file; not a kit file) =====
-   App at sim/usa-canada 73c65f08, paths under app/src/main/java/com/example/. Words come from STR / PLU (values / values-es /
+   App at sim/usa-canada 73c65f08, re-checked at 37db6d6c (round 3), paths under app/src/main/java/com/example/. Words come from STR / PLU (values / values-es /
    values-pt-rBR, injected by the builder). Material light = ui/theme/Theme.kt LightColorScheme (#1C1C1E #6E6E73 #F2F2F7 #E5E5EA
    #C7C7CC); paper = ui/theme/PaperColor.kt with the services accent (ServiciosMain/Btn #7C55E0, Soft #EEEAF5, Ink #6A45CC).
    navOwner()  ui/app/PlatataApp.kt:305-327 + navigation/NavLabels.kt: a services owner has Caja (ShoppingCart) · Agenda (Receipt,
                sx_agenda, SVC-2 item 23) · flag "Mi negocio"; the staff phone (Mini POS) has Caja · flag only (:313).
-   panel()     ui/screens/home/HomeScreen.kt:1420-1830: services = register card, Vender en línea, "Día a día", Clientes (plain count:
+   panel()     ui/screens/home/HomeScreen.kt:1420-1830: services = the search bar FIRST (WSEARCH-1, PanelSearchBar.kt:33-60,
+               HomeScreen.kt:1516), register card, Vender en línea, "Día a día", Clientes (plain count:
                no fiado, ServicesRules.fiadoEnabled=false), Facturas (hasSupplierInvoiceRow), Equipo, Reportes, divider, Configuración.
                No Artículos row (workspaceHasItemsRow=false) and no Inventario (retail only).
    hub()       ui/screens/settings/SettingsHubScreen.kt:170-330 + sync/SettingsHubRules.kt (services: + "Dónde atiendes";
@@ -35,10 +36,11 @@ const PLU = {"home_clientes_count":{"en":{"one":"%1$d client","other":"%1$d clie
                discounts_workspace ...; never on register_home / the panel / a staff phone / employee_join).
    caja()      HomeScreen.kt:592-1110 (services: TabRow "Servicios · N" | "Productos · N" HomeTabLabels.kt, ItemEditModeBar "Editar"
                :2018, ProductLibraryView chips "Todos" + the trade category (the system "Otros servicios" filtered out, :942),
-               service tiles ProductCard.kt ServiceTileBody, footer :782-826 "Teclado" link + CurrentSaleStrip + FooterButtonPair
+               service tiles ProductCard.kt ServiceTileBody + ServicePriceBlock :302-333, footer :782-826 "Teclado" link + CurrentSaleStrip + FooterButtonPair
                "Agendar" | "Cobrar $X").
-   optSheet()  ui/screens/home/OptionSelectionSheet.kt (ModalBottomSheet; one header + one switch row per researched option set;
-               "Agregar a la venta · $X" (SVC-1 item 1), "Agregar oferta" when the service starts a combo)
+   optSheet()  ui/screens/home/OptionSelectionSheet.kt (ModalBottomSheet; one switch row per researched option set: no header when the
+               set's one value carries its name, optionHeaderShown :449-451, R2-1 item 27;
+               "Agregar a la venta · $X" (SVC-1 item 1), "Agregar combo" (deal_choice_add_deal) when the service starts a combo)
    varSheet()  ui/screens/home/VariationSelectionSheet.kt ("Elige uno", the service name, one row per choice with its price)
    Data: kit/services-data.js only (V.C). */
 const V = VKIT.ctx({biz: (window.PAGE_BIZ || "peluqueria")});
@@ -139,7 +141,7 @@ const navMini = () => `<div class="mnav">
 const timeCard = (big, small, tag) => `<div class="sv-time"${tag?` data-t="${tag}"`:""}><div><b>${esc(big)}</b>${small?`<small>${esc(small)}</small>`:""}</div></div>`;
 
 /* ---------- the business panel of a SERVICES shop (HomeScreen.kt:1420-1830) ---------- */
-// KEYS: workspace_register_open,workspace_register_sales,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,more_customers_title,invoices_title,invoices_row_first,more_team_title,workspace_full_reports,scan_row_reports_today_net,scan_row_reports_today,settings_title,panel_settings_row_sub
+// KEYS: wsearch_bar,workspace_register_open,workspace_register_sales,sell_online_title,sell_online_row_off,sell_online_pill_off,panel_heading_every_day,more_customers_title,invoices_title,invoices_row_first,more_team_title,workspace_full_reports,scan_row_reports_today_net,scan_row_reports_today,settings_title,panel_settings_row_sub
 // PLURALS: home_clientes_count,home_equipo_count_phones,home_equipo_on_phones
 /* the money the register card and Reportes show: this morning's sales of the demo business (kit: C.sales of V.today) */
 const TODAY_SALES = C.sales.filter(s => s.d === V.today).reduce((a, s) => a + s.total, 0);
@@ -149,7 +151,11 @@ function panelRow(tag, icon, title, sub, o){ o = o || {};
 function panel(p){ p = p || {};
   const team = p.team != null ? p.team : C.staff.length, phones = p.phones || 0;
   const reg = `<div class="sv-wr reg" data-t="reg-card" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(S("workspace_register_open"))}</b><small style="color:rgba(46,125,50,.7)">${esc(S("workspace_register_sales"))}</small></div><b class="amt">${money(TODAY_SALES)}</b></div>`;
+  /* WSEARCH-1 PanelSearchBar.kt:33-60: Surface shape extraLarge (a pill), surfaceVariant, 16 dp sides, 8 dp under, min 48 dp;
+     Search icon 24 dp onSurfaceVariant, 12 dp, wsearch_bar bodyLarge onSurfaceVariant, one line. It only opens the search page. */
+  const search = `<div class="sv-psb" data-t="panel-search">${I("search")}<span>${esc(S("wsearch_bar"))}</span></div>`;
   return `<div class="sv-panel"><div class="ph"><b>${esc(V.place)}</b>${I("down")}</div><div class="pl"><div class="pin" style="transform:translateY(calc(var(--u)*${-(p.scroll||0)}))">
+    ${search}
     ${reg}
     ${panelRow("row-online", I("cart"), S("sell_online_title"), S("sell_online_row_off"), {trail:`<span class="pill0">${esc(S("sell_online_pill_off"))}</span>`})}
     <div class="eh">${esc(S("panel_heading_every_day"))}</div>
@@ -182,12 +188,12 @@ function hub(o){ o = o || {};
     ${g(S("settings_hub_group_this_phone"))}
     ${row("hub-sec","lock",S("settings_security_title"),S("settings_hub_security_on_delete"))}
     ${row("hub-backup","backup",S("settings_hub_backup"),F("settings_hub_backup_last",backupWhen()))}
-    ${row("hub-notif","bell",S("notif_title"),S("notif_hub_sub"))}
+    ${row("hub-notif","bell",S("notif_title"),S("notif_hub_sub_services"))}
     ${row("hub-lang","globe",S("settings_hub_language_appearance"),F("settings_hub_language_sub",LANGNAME[L],S("theme_light")))}
   </div></div>` + strip(); }
 
 /* ---------- the services owner's Caja (HomeScreen.kt) ---------- */
-// KEYS: home_tab_services,home_tab_products,common_edit,items_filter_all,items_price_from,items_price_unset,opt_min,scan_row_manual,services_action_agendar,services_action_crear_orden,common_charge,combo_label_offer_percent
+// KEYS: home_tab_services,home_tab_products,common_edit,items_filter_all,items_price_from,items_price_from_only,bridge_mode_ask,items_price_unset,opt_min,scan_row_manual,services_action_agendar,services_action_crear_orden,common_charge,combo_label_offer_percent
 // PLURALS: home_current_sale_services
 /* the library lists viewModel.products = ProductDao.getAllProducts "ORDER BY name ASC" (PosDao.kt:334; SQLite BINARY), split by
    type (sync/ServicesLibrarySplit.kt): with "Todos" picked the grid is A-Z, not the setup's order */
@@ -195,26 +201,32 @@ const byName = (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0;
 const SERVICES = C.services.slice().sort(byName), PRODUCTS = C.products.slice().sort(byName);
 /* ServiceActionLabel.secondActionLabel: "Agendar" for beauty / pets, "Crear orden" for a workshop (TradeFamily ORDEN) */
 const BOOK_WORD = () => S(V.isOrder ? "services_action_crear_orden" : "services_action_agendar");
-/* the price a tile prints (ProductCard.kt:96-107): FIXED -> the price; FROM -> "Desde" + the price of the FIRST stored variation
-   (ProductLibraryView.kt:331 takes variations.find{}, ORDER BY id = the catalogue's choice order, not the lowest); no price ->
-   "Sin precio" */
+/* the price a tile prints (ProductCard.kt:103-123 at 37db6d6c): ASK -> "En la caja" (bridge_mode_ask); no price -> "Sin precio";
+   FROM -> "Desde" (items_price_from_only) on its OWN small line + the amount of the LOWEST priced choice (R2-1 item 9,
+   ProductLibraryView.kt:341-346 ServicesMenuRule.shownPrice; the kit's s.price is that lowest); FIXED -> the price.
+   Returns {from, amt}. */
 function tilePrice(s){
-  if(!s.choices.length) return s.price != null ? money(s.price) : S("items_price_unset");
-  const first = s.choices[0].price;
-  return first ? F("items_price_from", money(first)) : S("items_price_unset");
+  if(s.mode === "ask") return {from:false, amt:S("bridge_mode_ask")};
+  if(s.price == null || !(s.price > 0)) return {from:false, amt:S("items_price_unset")};
+  return {from: s.mode === "from", amt: money(s.price)};
 }
-/* CU-21 ServiceTileBody: icon box 40 r12 in the trade family's tile, name bodyLarge 500 (2 lines), price bold + "N min";
-   the combo pill (SVC-4 item 48) in the free TOP-RIGHT corner, SumaComboGreen #10B981 */
+/* CU-21 ServiceTileBody (ProductCard.kt:341-420): icon box 40 r12 in the trade family's tile, name bodyLarge 500 (2 lines), then
+   ServicePriceBlock (:302-333, R2-1 item 2 / REVIEW-16 F1): "Desde" bodySmall onSurfaceVariant on its own line, the amount
+   bodyLarge Bold with the tile's WHOLE width (ShrinkToFitText, floor 8 sp for a FROM price, else 12 sp), then the minutes on
+   their own line (bodySmall; the stored Duración first, ServiceTileFacts.kt ServiceDuration.minutes, item 17 = the kit's s.min);
+   the combo pill in the free TOP-RIGHT corner, SumaComboGreen #10B981, on a service tile only the number "−10%" (R2-1 item 46,
+   ProductCard.kt:241-249) */
 function svcTile(s, o){ o = o || {};
-  const pillTxt = o.combo ? F("combo_label_offer_percent", o.combo) : "";
+  const pillTxt = o.combo ? `−${o.combo}%` : "", tp = tilePrice(s);
   return `<div class="sv-tile${o.hl?" hl":""}" data-t="tile-${s.id}"><span class="icb" style="background:${TRADE_TILE[V.biz]}">${TRADE_SVG[V.biz]}</span>
-    <b>${esc(s.name)}</b><div class="pr"><span data-fit="16">${esc(tilePrice(s))}</span>${s.min?`<small>${s.min} ${esc(S("opt_min"))}</small>`:""}</div>
+    <b>${esc(s.name)}</b><div class="pr">${tp.from?`<small class="fr">${esc(S("items_price_from_only"))}</small>`:""}<span data-fit="16" data-min="${tp.from?8:12}">${esc(tp.amt)}</span>${s.min?`<small>${s.min} ${esc(S("opt_min"))}</small>`:""}</div>
     ${o.combo?`<span class="cpill">${esc(pillTxt)}</span>`:""}</div>`; }
 /* the Mini POS / plain tile (ProductCard.kt:164-200 plain branch: square, category tint 12 %, border 35 %, name titleMedium 18 bold,
    price ShrinkToFitText bodyLarge 16 Medium onSurfaceVariant) —
    the staff phone passes no serviceFacts (MiniPosSellScreen.kt:647-657), so its services wear the plain tile */
 function plainTile(s){
-  return `<div class="sv-ptile" data-t="tile-${s.id}" style="border-color:${hexA(CAT_COLOR,.35)}"><div class="in" style="background:${hexA(CAT_COLOR,.12)}"><b>${esc(s.name)}</b><span data-fit="16">${esc(tilePrice(s))}</span></div></div>`; }
+  const tp = tilePrice(s);   // the same ServicePriceBlock (REVIEW-16 F1): "Desde" on its own line above the amount
+  return `<div class="sv-ptile" data-t="tile-${s.id}" style="border-color:${hexA(CAT_COLOR,.35)}"><div class="in" style="background:${hexA(CAT_COLOR,.12)}"><b>${esc(s.name)}</b><div>${tp.from?`<small class="fr">${esc(S("items_price_from_only"))}</small>`:""}<span data-fit="16" data-min="${tp.from?8:12}">${esc(tp.amt)}</span></div></div></div>`; }
 const chips = (cats) => `<div class="sv-chips">${cats.map((c,i)=>{
   const col = i===0 ? ALL_COLOR : CAT_COLOR, on = i===0;
   const st = on ? `background:${hexA(col,.22)};border:calc(var(--u)*1.5) solid ${col};color:${col}` : `background:${hexA(col,.05)};border:1px solid ${hexA(col,.3)};color:var(--m-onv)`;
@@ -245,10 +257,12 @@ function optRowText(set){
   if(set.per) return `${set.name} · ` + F("opt_per_unit_each", money(set.price), set.per);
   return `${set.name} · +${money(set.price)}`;
 }
-/* o = {base (the line price), deal (show "Agregar oferta"), scroll, addTag, dealTag} */
+/* o = {base (the line price), deal (show "Agregar combo"), scroll, addTag, dealTag} */
 function optSheet(s, o){ o = o || {};
   const sets = optionSets(s);
-  const body = sets.map(set => `<div class="os-h">${esc(set.name)}</div><div class="os-r"><span>${esc(optRowText(set))}</span>${sw(!!set.inc)}</div><hr>`).join("");
+  // R2-1 item 27 (OptionSelectionSheet.kt:219-229, optionHeaderShown :449-451): each researched set holds ONE value named like
+  // the set, so no header is drawn above its switch row
+  const body = sets.map(set => `<div class="os-r"><span>${esc(optRowText(set))}</span>${sw(!!set.inc)}</div><hr>`).join("");
   const total = o.base;
   const add = `<div class="sv-btn pri" data-t="${o.addTag||"opt-add"}">${esc(total ? F("opt_add_to_sale", money(total)) : S("common_add"))}</div>`;
   const deal = o.deal ? `<div class="sv-btn sec" data-t="${o.dealTag||"opt-deal"}">${esc(S("deal_choice_add_deal"))}</div>` : "";
@@ -315,6 +329,9 @@ const SV_CSS = `
 .mat .sv-wr .ch svg{fill:var(--m-onv)}
 .mat .sv-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
 .mat .sv-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .sv-psb{margin:0 calc(var(--u)*16) calc(var(--u)*8);min-height:calc(var(--u)*48);border-radius:calc(var(--u)*50);background:var(--m-sv);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*16);color:var(--m-onv);flex:0 0 auto}
+.mat .sv-psb svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:currentColor;flex:0 0 auto}
+.mat .sv-psb span{flex:1;min-width:0;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mat .sv-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8)}
 /* settings hub */
 .mat .sv-hub{padding:0 calc(var(--u)*16) calc(var(--u)*24);display:flex;flex-direction:column;gap:calc(var(--u)*8)}
@@ -344,14 +361,15 @@ const SV_CSS = `
 .mat .sv-tile .icb{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center}
 .mat .sv-tile .icb svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
 .mat .sv-tile>b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:500;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
-.mat .sv-tile .pr{display:flex;justify-content:space-between;align-items:flex-end;gap:calc(var(--u)*6)}
-.mat .sv-tile .pr span{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:0 1 auto}
-.mat .sv-tile .pr small{font-size:calc(var(--u)*12);color:var(--m-onv);white-space:nowrap;flex:0 0 auto}
+.mat .sv-tile .pr{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.mat .sv-tile .pr span{display:block;width:100%;font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mat .sv-tile .pr small{font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap}
 .mat .sv-tile .cpill{position:absolute;top:calc(var(--u)*6);right:calc(var(--u)*6);max-width:calc(100% - var(--u)*12);background:#10B981;color:#fff;border-radius:calc(var(--u)*6);padding:calc(var(--u)*4) calc(var(--u)*8);font-size:calc(var(--u)*11);line-height:calc(var(--u)*14);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mat .sv-ptile{aspect-ratio:1;border-radius:calc(var(--u)*12);border:calc(var(--u)*1.5) solid;overflow:hidden;background:#fff}
 .mat .sv-ptile .in{height:100%;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:space-between}
 .mat .sv-ptile b{font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
-.mat .sv-ptile span{font-size:calc(var(--u)*16);font-weight:500;color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-ptile span{display:block;font-size:calc(var(--u)*16);font-weight:500;color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-ptile small.fr{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv)}
 .mat .sv-foot{flex:0 0 auto;padding:calc(var(--u)*12) calc(var(--u)*16);background:#fff}
 .mat .sv-foot .lk{display:flex}.mat .sv-foot .lk span{height:calc(var(--u)*40);display:flex;align-items:center;padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
 .mat .sv-foot .cur{min-height:calc(var(--u)*44);display:flex;align-items:center;justify-content:space-between;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*14);font-weight:600;color:var(--m-on)}
@@ -399,11 +417,12 @@ const SV_CSS = `
 const svStyle_ = document.createElement("style"); svStyle_.textContent = SV_CSS; document.head.appendChild(svStyle_);
 /* a slid list (transform .5s): once it stops, ask the engine to put the ring on the target again (it listens to resize) */
 document.addEventListener("transitionend", e => { if(e.propertyName === "transform") window.dispatchEvent(new Event("resize")); });
-/* ShrinkToFitText (ui/components/ShrinkToFitText.kt): one line, the font steps down 1 sp at a time to 12 sp, then "…" */
+/* ShrinkToFitText (ui/components/ShrinkToFitText.kt): one line, the font steps down 1 sp at a time to its floor (12 sp, or the
+   caller's minSizeSp: 8 for a FROM tile price, ProductCard.kt:330), then "…" */
 function fitShrink(){
   document.querySelectorAll('#app [data-fit]').forEach(el => {
-    let s = +el.dataset.fit; el.style.fontSize = `calc(var(--u)*${s})`;
-    while(el.scrollWidth > el.clientWidth + 0.5 && s > 12){ s--; el.style.fontSize = `calc(var(--u)*${s})`; }
+    let s = +el.dataset.fit; const floor = +(el.dataset.min || 12); el.style.fontSize = `calc(var(--u)*${s})`;
+    while(el.scrollWidth > el.clientWidth + 0.5 && s > floor){ s--; el.style.fontSize = `calc(var(--u)*${s})`; }
   });
 }
 setTimeout(() => { const app = document.getElementById("app"); if(app) new MutationObserver(fitShrink).observe(app, {childList:true, subtree:true}); fitShrink(); }, 0);
@@ -437,30 +456,33 @@ function scrollNeed(sel, box, margin){
                    = three tabs Descuentos · Combos · Cargos; the Combos tab = DealListBody, empty layout combo_tab_empty_* with
                    SumaButton "Crear combo"). Reached from Mis servicios › "Combos" (opens on this tab, startOnCombos) or
                    Configuración › "Descuentos y combos". LEVEL_2 route: the support strip shows.
-   builder         ui/screens/combos/NewDealScreen.kt:225-330 (SumaTopBar deal_new_title; lede deal_pick_lede; three SumaCards:
-                   overline labelSmall bold "1 · Principal" / "2 · Acompañante" / "TERCERA COSA (OPCIONAL)", body titleMedium
-                   "Escoge una de las tuyas" or the name bold + "Quitar"; picked = ModifierActiveBg #EEF4EC / border #CFE3D2;
+   builder         ui/screens/combos/NewDealScreen.kt:227-355 (SumaTopBar deal_new_title "Nuevo combo"; lede deal_pick_lede; three SumaCards:
+                   overline labelSmall bold "1 · Principal" / "2 · Acompañante" / "Tercer servicio (opcional)" (a services shop,
+                   R2-4 item 47, :316-320), body titleMedium "Elige un servicio" (deal_pick_item_services, :338) or the name bold + "Quitar"; picked = ModifierActiveBg #EEF4EC / border #CFE3D2;
                    ComboBottomButton "Siguiente", off until slots 1 and 2 are filled)
-   pick            NewDealScreen.kt:337-398 (title deal_pick_first / deal_pick_second; SumaListItem per product A-Z (services AND
+   pick            NewDealScreen.kt:362-420 (title deal_pick_first / deal_pick_second; SumaListItem per product A-Z (services AND
                    products, used ones hidden); subtitle comboPickPriceText = the price, "Desde" the lowest when choices differ (SVC-4
                    item 48))
-   summary         NewDealScreen.kt:400-480 + ComboSummaryParts.kt (title deal_summary_title "Tu combo"; "Nombre de la oferta" = the
+   summary         NewDealScreen.kt:430-500 + ComboSummaryParts.kt (title deal_summary_title "Tu combo"; "Nombre del combo" = the
                    names joined " + "; green card of slots (name + lowest price, "Sin configurar"); ComboDiscountCard: switch,
                    discountPercent starts "10" (:182), chips 5/10/15 % + an 80 dp box, caption; ComboFreeOptionsHint; "Guardar")
-   list row        DealListScreen.kt:110-130 + ComboRowCard.kt (name bold; description = ComboSummaryLine "2 Peluquería" (counts per
-                   category); amber "10% DESCUENTO"; "ACTIVO"; pause switch; red trash)
-   till            HomeScreen.kt services Caja; tile pill combo_label_offer_percent (ProductCard.kt:201-240, top-right on a
-                   service tile, SumaComboGreen); a service with choices opens VariationSelectionSheet first (HomeScreen.kt:950-956),
+   list row        DealListScreen.kt:153-175 + ComboRowCard.kt (name bold; description = ComboSlotLabel.of per slot (R2-1 item 46 /
+                   REVFIX-15 F2: a slot that names its service says that name) through ComboSummaryLine.describe, which still puts
+                   the count in front: "1 Corte de dama + 1 Cepillado"; amber "10% DESCUENTO"; "ACTIVO"; pause switch; red trash)
+   till            HomeScreen.kt services Caja; tile pill (ProductCard.kt:241-249, top-right; on a service tile only "−10%",
+                   R2-1 item 46; SumaComboGreen); a service with choices opens VariationSelectionSheet first (HomeScreen.kt:950-956),
                    then OptionSelectionSheet (CartActions.handleVariationPicked :556 / handleProductClick :495: option sets come
-                   before deals) with "Agregar oferta" (deal_choice_add_deal, ProductSheetHost.kt:186-201)
+                   before deals) with "Agregar combo" (deal_choice_add_deal, ProductSheetHost.kt:186-201; Arreglo 15 F7)
    second service  ComboLinkedItemPickerSheet.kt (deal_picker_title "Completa tu …"; a row per eligible item with its first
-                   price; tap -> ComboPickQuestions: "Atrás", the name, "Elige uno" + FilterChips "Corto · $ 18.000", the price box
-                   when it is charged at the till, the owner's LIST add-ons; "Agregar" waits for a choice) — SVC-1 item 3
+                   price (ProductSheetHost.kt:245); tap -> ComboPickQuestions :228-405: "Atrás", the name, "Elige uno" + FilterChips
+                   "Corto · $ 18.000", the price box when it is charged at the till, then (R2-1 item 10) the item's option sets like
+                   the till's sheet: no header for a one-value set, "Lavado profundo" switch ON (included), "Planchado / ondas" switch
+                   OFF (asked at the till: turning it on asks the amount), the owner's LIST add-ons; "Agregar" waits for a choice)
    money           CatalogActions.completeComboSelection :658 (both lines share a comboGroupId) + data/ComboDiscount.kt (10 % of
                    the two lines' unit prices); the footer shows grandTotal (PosViewModelTypes.kt:815-841)
    The "En la caja" card between building and selling is the demo's, not the app's. No tax is set up in the demo salon. */
 // KEYS: disc_title_with_combos,disc_hub_tab_discounts,disc_hub_tab_combos,disc_hub_tab_charges,common_new_short,combo_tab_empty_title,combo_tab_empty_line,combo_tab_empty_button
-// KEYS: deal_new_title,deal_pick_lede,deal_slot_overline_main,deal_slot_overline_linked,deal_slot_overline_optional,deal_pick_item,deal_slot_clear,deal_next_button,deal_pick_first,deal_pick_second
+// KEYS: deal_new_title,deal_pick_lede,deal_slot_overline_main,deal_slot_overline_linked,deal_slot_overline_optional_services,deal_pick_item_services,deal_slot_clear,deal_next_button,deal_pick_first,deal_pick_second
 // KEYS: deal_summary_title,deal_name_label,deal_slot_not_set_summary,deal_discount_on_title,deal_discount_off_title,deal_discount_on_subtitle,deal_discount_off_subtitle,deal_discount_label,deal_discount_caption,deal_free_category_hint,deal_save_button
 // KEYS: deal_discount_badge,deal_live_badge,deal_paused_badge,deal_picker_title,common_back,common_add
 /* the pair per trade: a first service and a second one WITH choices, so the second is asked its choice (item 3) */
@@ -486,15 +508,15 @@ const ALL_ITEMS = C.services.concat(C.products.map(p => ({id:p.id, name:p.name, 
 
 function discounts(st){
   const tabs = [S("disc_hub_tab_discounts"), S("disc_hub_tab_combos"), S("disc_hub_tab_charges")];
-  const body = st.saved ? `<div class="dl"><div class="crc${st.flash?" sv-hl":""}"><b>${esc(COMBO_NAME)}</b><div class="r"><span class="ds">${esc("2 " + V.tradeName)}</span>
+  const body = st.saved ? `<div class="dl"><div class="crc${st.flash?" sv-hl":""}"><b>${esc(COMBO_NAME)}</b><div class="r"><span class="ds">${esc("1 " + MAIN.name + " + 1 " + SECOND.name)}</span>
       <span class="amb">${esc(F("deal_discount_badge", PCT))}</span><span class="liv">${esc(S("deal_live_badge"))}</span>${sw(true)}<span class="tr">${I("trash")}</span></div></div></div>`
     : `<div class="emp"><h3>${esc(S("combo_tab_empty_title"))}</h3><p>${esc(S("combo_tab_empty_line"))}</p><div class="sv-btn pri" data-t="create">${esc(S("combo_tab_empty_button"))}</div></div>`;
   return topbar(S("disc_title_with_combos"), {action:`<span class="act">${esc(S("common_new_short"))}</span>`}) +
     `<div class="mtab">${tabs.map((t, i) => `<span class="${i===1?"on":""}">${esc(t)}</span>`).join("")}</div>` + body + strip();
 }
 function slotCard(n, svc, tag){
-  const over = S(n === 1 ? "deal_slot_overline_main" : n === 2 ? "deal_slot_overline_linked" : "deal_slot_overline_optional");
-  return `<div class="slot${svc?" on":""}" data-t="${tag}"><small>${esc(over)}</small><div>${svc ? `<b>${esc(svc.name)}</b><span>${esc(S("deal_slot_clear"))}</span>` : `<em>${esc(S("deal_pick_item"))}</em>`}</div></div>`;
+  const over = S(n === 1 ? "deal_slot_overline_main" : n === 2 ? "deal_slot_overline_linked" : "deal_slot_overline_optional_services");
+  return `<div class="slot${svc?" on":""}" data-t="${tag}"><small>${esc(over)}</small><div>${svc ? `<b>${esc(svc.name)}</b><span>${esc(S("deal_slot_clear"))}</span>` : `<em>${esc(S("deal_pick_item_services"))}</em>`}</div></div>`;
 }
 function overview(st){
   const ok = st.s1 && st.s2;
@@ -531,9 +553,13 @@ function comboSheet(st){
       <div class="cr" data-t="cp-${SECOND.id}"><span>${esc(SECOND.name)}</span>${first?`<small>${money(first)}</small>`:""}${I("chev")}</div></div></div>`;
   }
   const chips = SECOND.choices.map((c, i) => `<span class="fc${st.ch===i?" on":""}" data-t="ch-${i}">${st.ch===i?I("check"):""}${esc(c.name + " · " + (c.price ? money(c.price) : S("opt_ask_at_till_row")))}</span>`).join("");
+  /* R2-1 item 10: the option sets, ComboLinkedItemPickerSheet.kt:311-371 (a one-value set has no header; bodyMedium name,
+     "+$X" only for a priced one that is not asked at the till, a Switch: included ON, priced / asked OFF) */
+  const opts = optionSets(SECOND).map(set => `<div class="co"><span>${esc(set.name)}</span>${(!set.inc && !set.ask && set.price) ? `<small>+${money(set.price)}</small>` : ""}${sw(!!set.inc)}</div>`).join("");
   return `<div class="sv-scrim"></div><div class="sv-sheet"><i class="hd"></i><div class="cp">${title}
     <span class="tb">${esc(S("common_back"))}</span><b class="qn">${esc(SECOND.name)}</b>
     ${SECOND.choices.length > 1 ? `<small class="q">${esc(S("home_variation_choose_one"))}</small><div class="fl">${chips}</div>` : ""}
+    ${opts}
     <div class="sv-btn ${st.ch!=null?"pri":"off"}" data-t="cp-add">${esc(S("common_add"))}</div></div></div>`;
 }
 function render(st){
@@ -557,18 +583,18 @@ VKIT.start(V, {
   id:"VS18", tallVideo:true, clock:"12:41",
   endText:pick({es:"Así cobras menos por los dos con Platata.", pt:"Assim você cobra menos pelos dois com o Platata.", en:"That's how you charge less for the two with Platata."}),
   beats:pick({
-    es:["Descuentos y combos: toca Crear combo","Elige el primer servicio: " + MAIN.name,"Y el que va con él: " + SECOND.name,"Toca Siguiente y activa el descuento","Toca Guardar: el combo queda activo","En la caja, toca " + MAIN.name + PICKS.es,"Toca Agregar oferta y elige " + SECOND.name,"Te pregunta cuál: elige y toca Agregar","Así cobras menos por los dos con Platata."],
-    pt:["Descontos e combos: toque em Criar combo","Escolha o primeiro serviço: " + MAIN.name,"E o que vai junto: " + SECOND.name,"Toque em Avançar e ative o desconto","Toque em Salvar: o combo fica ativo","No caixa, toque em " + MAIN.name + PICKS.pt,"Toque em Adicionar oferta e escolha " + SECOND.name,"Ele pergunta qual: escolha e toque em Adicionar","Assim você cobra menos pelos dois com o Platata."],
-    en:["Discounts and combos: tap Create combo","Pick the first service: " + MAIN.name,"And what goes with it: " + SECOND.name,"Tap Next and turn on the discount","Tap Save: the combo is live","At the register, tap " + MAIN.name + PICKS.en,"Tap Add deal and pick " + SECOND.name,"It asks which one: pick and tap Add","That's how you charge less for the two with Platata."]}),
+    es:["Descuentos y combos: toca Crear combo","Elige el primer servicio: " + MAIN.name,"Y el que va con él: " + SECOND.name,"Toca Siguiente y activa el descuento","Toca Guardar: el combo queda activo","En la caja, toca " + MAIN.name + PICKS.es,"Toca Agregar combo y elige " + SECOND.name,"Te pregunta cuál: elige y toca Agregar","Así cobras menos por los dos con Platata."],
+    pt:["Descontos e combos: toque em Criar combo","Escolha o primeiro serviço: " + MAIN.name,"E o que vai junto: " + SECOND.name,"Toque em Avançar e ative o desconto","Toque em Salvar: o combo fica ativo","No caixa, toque em " + MAIN.name + PICKS.pt,"Toque em Adicionar combo e escolha " + SECOND.name,"Ele pergunta qual: escolha e toque em Adicionar","Assim você cobra menos pelos dois com o Platata."],
+    en:["Discounts and combos: tap Create combo","Pick the first service: " + MAIN.name,"And what goes with it: " + SECOND.name,"Tap Next and turn on the discount","Tap Save: the combo is live","At the register, tap " + MAIN.name + PICKS.en,"Tap Add combo and pick " + SECOND.name,"It asks which one: pick and tap Add","That's how you charge less for the two with Platata."]}),
   state:{screen:"disc", s1:false, s2:false, pick:1, psc:0, disc:false, ssc:0, saved:false, flash:false, cut:false, sheet:null, osc:0, gsc:0, q:false, ch:null, added:false},
   render,
   device: () => "phone",
   who: () => DEV_OWNER,
   steps: settled([
     {beat:0, hint:H1("combo_tab_empty_button"), target:'[data-t="create"]', wait:3, tap(st){ st.screen = "ov"; }},
-    {beat:1, hint:H1("deal_pick_item"), target:'[data-t="slot-1"]', tap(st,E){ st.screen = "pick"; st.pick = 1; st.psc = 0; E.after(400, () => { st.psc = scrollNeed(`[data-t="pick-${MAIN.id}"]`, '.dbg .sv-scroll', 24); }); }},
+    {beat:1, hint:H1("deal_pick_item_services"), target:'[data-t="slot-1"]', tap(st,E){ st.screen = "pick"; st.pick = 1; st.psc = 0; E.after(400, () => { st.psc = scrollNeed(`[data-t="pick-${MAIN.id}"]`, '.dbg .sv-scroll', 24); }); }},
     {beat:1, hint:TAPN(MAIN.name), target:`[data-t="pick-${MAIN.id}"]`, tap(st){ st.s1 = true; st.screen = "ov"; }},
-    {beat:2, hint:H1("deal_pick_item"), target:'[data-t="slot-2"]', tap(st,E){ st.screen = "pick"; st.pick = 2; st.psc = 0; E.after(400, () => { st.psc = scrollNeed(`[data-t="pick-${SECOND.id}"]`, '.dbg .sv-scroll', 24); }); }},
+    {beat:2, hint:H1("deal_pick_item_services"), target:'[data-t="slot-2"]', tap(st,E){ st.screen = "pick"; st.pick = 2; st.psc = 0; E.after(400, () => { st.psc = scrollNeed(`[data-t="pick-${SECOND.id}"]`, '.dbg .sv-scroll', 24); }); }},
     {beat:2, hint:TAPN(SECOND.name), target:`[data-t="pick-${SECOND.id}"]`, tap(st){ st.s2 = true; st.screen = "ov"; }},
     {beat:3, hint:H1("deal_next_button"), target:'[data-t="next"]', tap(st){ st.screen = "sum"; }},
     {beat:3, hint:pick({es:"Toca el interruptor", pt:"Toque no botão", en:"Tap the switch"}), target:'[data-t="disc"]', tap(st,E){ st.disc = true; E.after(500, () => { st.ssc = scrollNeed('.fh', '.dbg .sv-scroll', 12); }); }},
@@ -652,6 +678,9 @@ const cssVS18 = document.createElement("style"); cssVS18.textContent = `
 .mat .sv-sheet .qn{display:block;font-size:calc(var(--u)*18);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on);margin-bottom:calc(var(--u)*8)}
 .mat .sv-sheet .q{display:block;font-size:calc(var(--u)*14);font-weight:500;color:var(--m-onv);margin-bottom:calc(var(--u)*4)}
 .mat .sv-sheet .fl{display:flex;flex-wrap:wrap;gap:calc(var(--u)*4) calc(var(--u)*8);margin-bottom:calc(var(--u)*8)}
+.mat .sv-sheet .co{display:flex;align-items:center;gap:calc(var(--u)*8);min-height:calc(var(--u)*40);margin:calc(var(--u)*2) 0 calc(var(--u)*8)}
+.mat .sv-sheet .co>span:first-child{flex:1;min-width:0;font-size:calc(var(--u)*14);line-height:calc(var(--u)*20);color:var(--m-on)}
+.mat .sv-sheet .co small{font-size:calc(var(--u)*14);color:var(--m-onv);white-space:nowrap}
 `; document.head.appendChild(cssVS18);
 </script>
 </body>

@@ -71,9 +71,9 @@ const I2 = {
 };
 
 /* ======== shared by the services pay pages VS4..VS7 (one source, copied into each page at build time; strings from the
-   app's values / values-es / values-pt-rBR at 73c65f08). Every screen names its composable (file:line). ======== */
+   app's values / values-es / values-pt-rBR at 73c65f08, re-checked at 37db6d6c in round 3). Every screen names its composable (file:line). ======== */
 // KEYS: common_charge,common_total,common_cancel,common_add,common_send,common_edit,common_new_short,common_included
-// KEYS: home_tab_services,home_tab_products,items_filter_all,items_price_from,items_price_unset,opt_min,scan_row_manual,services_action_agendar,services_action_crear_orden
+// KEYS: home_tab_services,home_tab_products,items_filter_all,items_price_from,items_price_from_only,items_price_unset,opt_min,scan_row_manual,services_action_agendar,services_action_crear_orden
 // KEYS: mamaship_tab_register,sx_agenda,home_tab_my_business,conn_slot_phone
 // KEYS: checkout_clear,checkout_items_link,checkout_other_method,checkout_other_method_title,checkout_other_method_subtitle,checkout_add_customer_cta
 // KEYS: checkout_received_label,checkout_change_row_label,cash_shortfall,checkout_cash_label,cash_exact,cash_exact_short,cash_rounding_line
@@ -90,7 +90,7 @@ const I2 = {
 // KEYS: card_overlay_total_label,card_entry_title,card_field_number,card_field_expiry,card_field_expiry_hint,card_field_cvc,card_field_holder
 // KEYS: card_consent_terms_full,card_consent_terms_link,card_consent_data_full,card_consent_data_link,card_charge_button,card_sending_label,card_sending_title,card_sending_subtitle
 // KEYS: stripe_tip_title,stripe_tip_preset,stripe_tip_none,stripe_tip_custom,stripe_total_label,stripe_starting_title,stripe_present_tap,stripe_cancel,stripe_processing_title,stripe_processing_hint
-// PLURALS: home_current_sale_services,card_installments
+// PLURALS: home_current_sale_services,home_current_sale_items,card_installments
 const V = VKIT.ctx({biz: PAGE.biz});
 const C = V.C, LG = V.lang, CC = V.country, KC = V.K, esc = VKIT.esc;
 const fmtS = (s, a) => { let i = 0; return s.replace(/%(\d+)\$[sd]|%[sd]/g, (m, n) => { const v = n ? a[n-1] : a[i++]; return v == null ? "" : v; }).replace(/%%/g, "%"); };
@@ -143,6 +143,8 @@ function svcLine(l){
   return {s, ch, unit, qty:l.qty||1, name, paid:paid.map(e=>e.name), incl:s.included.map(i=>i.name), min:(ch&&ch.min)||s.min};
 }
 const saleTotal = lines => lines.reduce((a,l)=>{ const x = svcLine(l); return a + x.unit*x.qty; }, 0);
+/* sync/SaleNoun.kt (R2-1 items 8/14): "services" only while every unit is a service; these pages' lines are all services */
+const allSvc = lines => lines.length > 0 && lines.every(l => l.sid);
 const unitCount = lines => lines.reduce((a,l)=>a+(l.qty||1), 0);
 
 /* ---- trade family colours: ui/theme/PaperColor.kt:66-79 (tile = soft in light), TradeCatalogue.kt:140-157 icons ---- */
@@ -159,23 +161,27 @@ const nav = on => `<div class="mnav">
 
 /* ======== the services till: HomeScreen.kt:600-660 (TabRow "Servicios · N | Productos · N", HomeTabLabels.kt:28-31),
    ItemEditModeBar :2080-2097 (owner "Editar"), ProductLibraryView.kt:209-286 chips ("Todos" + the trade, the system
-   bucket hidden, HomeScreen.kt:942), the service tiles ProductCard.kt:262-341 (ServiceTileBody: trade icon 40/r12 on the
-   trade tile colour, name 16/500, price bold "Desde $X" for a FROM service, minutes), and the services footer
-   HomeScreen.kt:780-830 ("Teclado", CurrentSaleStrip.kt:26-61 "Venta actual · 1 servicio", FooterButtonPair "Agendar" |
+   bucket hidden, HomeScreen.kt:942), the service tiles ProductCard.kt:341-410 (ServiceTileBody: trade icon 40/r12 on the
+   trade tile colour, name 16/500) + ServicePriceBlock :303-333 (round 3, R2-1 item 2 / REVIEW-16 F1: "Desde" on its OWN small
+   grey line, the amount bold with the tile's whole width (floor 8 sp for a FROM price), the minutes on their own line; a
+   "Desde" price is the LOWEST choice, ProductLibraryView.kt:343, item 9), and the services footer
+   HomeScreen.kt:780-830 ("Teclado", CurrentSaleStrip.kt:26-61 "Venta actual · 1 servicio": services words only while the
+   cart holds only services, HomeScreen.kt:805-809 saleNounOf, R2-1 items 8/14; FooterButtonPair "Agendar" |
    "Cobrar $X"; a work-order trade says "Crear orden", ServiceActionLabel + TradeFamily). ======== */
 /* ShrinkToFitText.kt:23-45: one line, 16 sp stepping down to 12 sp, then "…". Measured here with a canvas (dp at 1:1). */
 const MEAS = document.createElement("canvas").getContext("2d");
 function textDp(text, weight, sp){ MEAS.font = `${weight} 100px Roboto, system-ui, sans-serif`; return MEAS.measureText(text).width * sp / 100; }
 function fitSp(text, weight, startSp, minSp, availDp){ for(let sp = startSp; sp > minSp; sp--) if(textDp(text, weight, sp) <= availDp) return sp; return minSp; }
-/* the tile on a 412 dp phone: Adaptive(120 dp) -> 3 columns of 121 dp (ProductLibraryView.kt:322-330), padding 12 -> 97 dp inside */
+/* the tile on a 412 dp phone: Adaptive(120 dp) -> 3 columns of 121 dp (ProductLibraryView.kt:322-330), padding 12 -> 97 dp inside.
+   ServicePriceBlock (ProductCard.kt:303-333): "Desde" (items_price_from_only) bodySmall on its own line, then the amount with the whole
+   97 dp (ShrinkToFitText from 16 sp, floor 8 sp for a FROM price, 12 sp otherwise), then the minutes on their own line */
 function svcTile(s){
-  const price = s.mode==="ask" ? null : s.price;
-  const label = price==null ? t("items_price_unset") : s.mode==="from" ? t("items_price_from", money(price)) : money(price);   // ProductCard.kt:96-107
+  const price = s.mode==="ask" ? null : s.price, from = s.mode==="from" && price!=null;
+  const amount = price==null ? t("items_price_unset") : money(price);
   const mins = s.min ? `${s.min} ${t("opt_min")}` : "";
-  const avail = 97 - (mins ? 8 + textDp(mins, 400, 12) : 0);
-  const sp = fitSp(label, 700, 16, 12, avail);
+  const sp = fitSp(amount, 700, 16, from ? 8 : 12, 97);
   return `<div class="vtile" data-t="svc-${s.id}"><span class="vic" style="background:${FAMILY[V.biz]}">${DRAWN[TRADE_ICON[V.biz]]}</span>
-    <b>${esc(s.name)}</b><div class="vpr"><span style="font-size:calc(var(--u)*${sp})">${esc(label)}</span>${mins?`<small>${esc(mins)}</small>`:""}</div></div>`;
+    <b>${esc(s.name)}</b><div class="vpr">${from?`<small>${esc(t("items_price_from_only"))}</small>`:""}<span style="font-size:calc(var(--u)*${sp})">${esc(amount)}</span>${mins?`<small>${esc(mins)}</small>`:""}</div></div>`;
 }
 function svcHome(lines){
   const n = unitCount(lines), tot = saleTotal(lines);
@@ -185,7 +191,7 @@ function svcHome(lines){
     `<span style="background:${hexA("#81C784",.05)};border:1px solid ${hexA("#81C784",.3)}">${esc(V.tradeName)}</span></div>`;
   const grid = `<div class="vgrid">${V.services.map(svcTile).join("")}</div>`;
   const foot = `<div class="vfoot"><div class="vkey"><span>${esc(t("scan_row_manual"))}</span></div>
-    ${n?`<div class="cstrip"><span>${esc(tp("home_current_sale_services", n, n))}</span><i>›</i></div>`:""}
+    ${n?`<div class="cstrip"><span>${esc(tp(allSvc(lines) ? "home_current_sale_services" : "home_current_sale_items", n, n))}</span><i>›</i></div>`:""}
     <div class="vpair"><div class="sb sec pill${n?"":" off"}" data-t="book"><span>${esc(t(V.isOrder ? "services_action_crear_orden" : "services_action_agendar"))}</span></div>
     <div class="sb pri pill${n?"":" off"}" data-t="charge"><span>${esc(t("common_charge", money(tot)))}</span></div></div></div>`;
   return tabs + edit + chips + grid + foot + nav("caja");
@@ -196,18 +202,21 @@ function svcHome(lines){
    section holds only the client field. A booking being charged shows the amber open-ticket bar (OpenTicketBanner.kt:36-110,
    label = the client's name, "Salir") in that section (CheckoutSheetBody.kt:438-455) and no "Borrar" link (:1084).
    Ways to pay drawn by sync/PayWaysVisibility.kt:54-83: QR when switched on and its photo saved; Card when on and
-   connected (Stripe: the big button, weights Exacto 1.2 · QR 1 · Tarjeta 2, CheckoutPayBlock.kt:302-311); the owner's one
-   set-up link only for what is missing, else (Stripe, a phone that can tap) "Cobrar con enlace" (CheckoutSheetBody.kt:487-505).
+   connected (Stripe: the big button, weights Exacto 1.2 · QR 1 · Tarjeta 2, CheckoutPayBlock.kt:302-311); the owner's
+   set-up link only for what is missing, and (Stripe connected, a phone that can tap) "Cobrar con enlace": round 3 (R2-1 item 7,
+   Arreglo 15 F8, CheckoutSheetBody.kt:490-518 setupLink2 + CheckoutPayBlock.kt:467-476 SetupLinkRow) both can show, each on its
+   own 44 dp row, the set-up link first. The items link says "Servicios (N)" for a sale of services only (:245-250, item 14).
    o = {lines, qr, card:"none"|"ready"|"setup", others, customer, banner, typed, cardLink} ======== */
 function payScreen(o){
   const total = saleTotal(o.lines), due = cashDue(total), typed = o.typed||"";
   const qrOn = QRC && !!o.qr, cardOn = o.card==="ready" || o.card==="setup", cardReady = o.card==="ready";
   const cardPrimary = STRIPE && cardReady;
   const qrNotSetUp = !o.qr, cardNotSetUp = WOMPI && !cardReady;
-  let link = null, dismiss = true;
+  let link = null;
   if(QRC && (qrNotSetUp || cardNotSetUp)){
     link = WOMPI ? (qrNotSetUp && cardNotSetUp ? "pay_setup_link_qr_card" : cardNotSetUp ? "pay_setup_link_card" : "pay_setup_link_qr") : (PIX ? "pay_setup_link_pix" : "pay_setup_link_qr");
-  } else if(cardReady && STRIPE && o.cardLink){ link = "pay_card_link_under"; dismiss = false; }
+  }
+  const link2 = cardReady && STRIPE && o.cardLink ? "pay_card_link_under" : null;   // its own row, no "No, gracias"
   let rc = "";
   if(typed){ const v = Number(typed); const ch = v - due;
     rc = `<div class="ln"><small>${esc(t("checkout_received_label"))}</small><b>${money(v)}</b></div>` +
@@ -222,7 +231,8 @@ function payScreen(o){
   if(cardOn) btns += cardReady ? `<div style="flex:${cardPrimary?2:1}" class="ob" data-t="card">${J.card}${esc(t("pay_card_short"))}</div>`
                                : `<div style="flex:1" class="nudge" data-t="card-setup"><span>+ ${esc(t("pay_card_short"))}</span><small>${esc(t("pay_card_setup_hint"))}</small></div>`;
   const rounding = Math.abs(due-total) > 1e-9 ? `<div class="x-round">${esc(t("cash_rounding_line", (due-total<0?"-":"+")+money(Math.abs(due-total))))}</div>` : "";
-  const links = `<span>${esc(t("checkout_items_link", unitCount(o.lines)))} ›</span>` +
+  const itemsWord = allSvc(o.lines) ? `${t("home_tab_services")} (${unitCount(o.lines)})` : t("checkout_items_link", unitCount(o.lines));
+  const links = `<span>${esc(itemsWord)} ›</span>` +
     (o.others ? `<span class="oth" data-t="other">${J.more}<span>${esc(t("checkout_other_method", o.others))}</span></span>` : "");
   const banner = o.banner ? `<div class="v-otb"><b>${esc(o.banner)}</b><span>${esc(t("open_ticket_exit"))}</span></div>` : "";
   return `<div class="x-phd"><span class="chev">‹</span><span class="wm">Platata</span>${o.banner?"":`<span class="clr">${esc(t("checkout_clear"))}</span>`}</div><div class="grow"></div>
@@ -230,7 +240,7 @@ function payScreen(o){
     <div class="x-amt"><div class="x-links">${links}</div><div class="x-rc">${rc}</div></div>
     <div class="x-kp">${keys.map(k=>`<span class="${k===DECKEY||k==="⌫"?"s":""}" data-t="key-${k}">${esc(k)}</span>`).join("")}</div>
     <div class="x-btns">${btns}</div>
-    ${link?`<div class="x-slink"><span data-t="slink">${esc(t(link))}</span>${dismiss?`<span>${esc(t("pay_setup_link_dismiss"))}</span>`:""}</div>`:`<div style="height:calc(var(--u)*14)"></div>`}</div>
+    ${link?`<div class="x-slink"><span data-t="slink">${esc(t(link))}</span><span>${esc(t("pay_setup_link_dismiss"))}</span></div>`:""}${link2?`<div class="x-slink"><span data-t="slink2">${esc(t(link2))}</span></div>`:""}${!link && !link2?`<div style="height:calc(var(--u)*14)"></div>`:""}</div>
     <div class="x-sec">${banner}${custField(o.customer)}</div>`;
 }
 /* the client field on the phone pay screen: CheckoutCustomerField.kt CustomerOnlyRow: 62 dp, surfaceVariant r14, person
@@ -242,9 +252,9 @@ function otherSheet(total, names){ return `<div class="x-sheet-scrim"><div class
   <div class="rows">${names.map((n,i)=>`<div class="row" data-t="om-${i}"><span>${esc(n)}</span>${J.chev}</div>`).join("")}</div></div></div>`; }
 
 /* ======== Sale complete: ReceiptOptionsScreen.kt:185-470. hero: {kind:"exact",received} | {kind:"change",change,received} |
-   {kind:"title"} | {kind:"card",line}; the card line (brand ••last four) only when the gateway gave one: Wompi does,
-   Stripe card-present gives neither in this build (TerminalReaderManager.kt:445, StripePaymentActions.kt:41), so
-   ReceiptFormatter.cardTenderLine returns null and only "Pago aprobado" shows. ======== */
+   {kind:"title"} | {kind:"card",line}; the card line (brand ••last four) when the gateway gave one: Wompi does, and since
+   round 3 (37db6d6c, R2-1 item 7) a Stripe Tap to Pay sale does too (StripePaymentActions.kt reads card_present's brand and
+   last four, TerminalReaderManager.kt), so "VISA ••4242" shows under "Pago aprobado". ======== */
 function doneScreen(hero, o){ o=o||{};
   let b = `<img src="${ASSET.pot.celebrating}" alt="">`;
   if(hero.kind==="change") b += `<div class="lbl">${esc(t("receipt_opt_change_label"))}</div><div class="big">${money(hero.change)}</div><div class="sub">${esc(t("receipt_opt_tendered", money(hero.received)))}</div>`;
@@ -261,8 +271,9 @@ function doneScreen(hero, o){ o=o||{};
 /* ======== the receipt the client gets: utils/ReceiptFormatter.kt:343-470 generatePastPlainTextReceipt, built from the
    STORED sale (CheckoutActions.kt:667-669): store name = the business (SeedStore.kt:78), "Venta #N", the date
    (dd/MM/yyyy HH:mm, US/CA month first :186), each line "1x Cepillado (Largo)" with its option (item 13), "@ $x c/u",
-   the paid options with "+", the included ones as "Lavado profundo (Incluido)" (ModifierLines.split, item 45), Subtotal,
-   "En el local" (the where line, item 43), the tip (card), TOTAL, the card line, "Atendió: Carla" when the sale settles a booking that named someone
+   the paid options with "+", the included ones as "Lavado profundo (Incluido)" (ModifierLines.split, item 45; MoneyLines.kt:113
+   includedLine: no suffix when the name already says "incluido", R2-3 item 29), Subtotal, NO "En el local" line any more
+   (whereModeLine :90-104 returns null for LOCAL, R2-4 item 15), the tip (card), TOTAL, the card line, "Atendió: Carla" when the sale settles a booking that named someone
    (ReceiptBuilder.kt:84-85, item 21), the change, the method, the shop's footer ("¡Gracias por tu visita!",
    receipt_footer_default seeded by ReceiptFooterSeed.kt). o = {method, performer, tip, cardLine, received, no} ======== */
 const DATE = (CC==="US"||CC==="CA") ? "10/22/2026 12:41" : "22/10/2026 12:41";
@@ -272,12 +283,9 @@ function receiptText(lines, o){ o=o||{};
   lines.forEach(l=>{ const x = svcLine(l);
     s += `${x.qty}x ${x.name}\n   @ ${money(x.unit)} ${each} ... ${money(x.unit*x.qty)}\n`;
     x.paid.forEach(m => { s += `   + ${m}\n`; });
-    x.incl.forEach(m => { s += `   ${m} (${t("common_included")})\n`; }); });
+    x.incl.forEach(m => { s += `   ${/inclu/i.test(m) ? m : `${m} (${t("common_included")})`}\n`; }); });
   s += `-------------------------------\n${t("receipt_label_subtotal")}: ${money(total)}\n`;
-  /* the where line: a services sale stores its way of working even when the shop has only one (CartActions.kt:726-737,
-     gateSelection), and the past receipt prints it when it cost nothing (ReceiptFormatter.kt:90-102, whereModeLine; item 43):
-     "En el local" / "No local" */
-  s += `${t("where_mode_local")}\n`;
+  /* the where line: R2-4 item 15 (ReceiptFormatter.kt:98-101): "En el local" is never printed; only a free home visit or pickup would be */
   if(tip) s += `${t("receipt_label_tip")}: ${money(tip)}\n`;
   s += `===============================\n${t("receipt_label_total")}: ${money(total + tip)}\n`;
   const due = cashDue(total);
@@ -761,9 +769,9 @@ VKIT.start(V, {
 .mat .vtile .vic{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center}
 .mat .vtile .vic svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
 .mat .vtile b{font-size:calc(var(--u)*16);line-height:calc(var(--u)*22);font-weight:500;color:var(--m-on);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:calc(var(--u)*44);overflow-wrap:anywhere}
-.mat .vtile .vpr{display:flex;align-items:flex-end;justify-content:space-between;gap:calc(var(--u)*6)}
-.mat .vtile .vpr span{font-size:calc(var(--u)*16);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
-.mat .vtile .vpr small{font-size:calc(var(--u)*12);color:var(--m-onv);white-space:nowrap;flex:0 0 auto}
+.mat .vtile .vpr{display:flex;flex-direction:column;align-items:flex-start;min-width:0}
+.mat .vtile .vpr span{display:block;width:100%;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.mat .vtile .vpr small{font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap}
 .mat .vfoot{flex:0 0 auto;background:#fff;padding:calc(var(--u)*12) calc(var(--u)*16)}
 .mat .vkey{height:calc(var(--u)*40);display:flex;align-items:center}
 .mat .vkey span{padding:0 calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
