@@ -183,12 +183,20 @@ function home(o){
   /* ProductLibraryView.kt:212-286: "Todos" (CategoryChipNeutral #607D8B, picked: 22 % fill, 1.5 dp border, check) + the trade's one category
      (CategoryChipPalette by category id: the system "Otros servicios" bucket is hidden, the trade category is the second row -> #81C784) */
   const chips = `<div class="mcats"><span style="background:rgba(96,125,139,.22);border:calc(var(--u)*1.5) solid #607D8B;color:#607D8B">${I.check}${esc(t("items_filter_all"))}</span><span style="background:rgba(129,199,132,.05);border:1px solid rgba(129,199,132,.3)">${esc(V.tradeName)}</span></div>`;
-  const body = `<div class="hedit"><span>${I.edit}${esc(t("common_edit"))}</span></div>${chips}<div class="vgrid">${SERVICES.map(tile).join("")}</div>`;
+  const body = `<div class="hedit"><span>${I.edit}${esc(t("common_edit"))}</span></div>${chips}<div class="vgrid" data-scrollto="svc-${RING.id}">${SERVICES.map(tile).join("")}</div>`;
   const foot = `<div class="vfoot"><div class="klink"><span>${esc(t("scan_row_manual"))}</span></div>
     ${n?`<div class="cstrip"><span>${esc(tp("home_current_sale_services", n, n))}</span><i>›</i></div>`:""}
     <div class="fpair">${btn(ACTION_WORD,"sec","book",{pill:true,off:!n})}${btn(t("common_charge", money(tot)),"pri","charge",{pill:true,off:!n})}</div></div>`;
   return `<div class="pg">${tabs}${o.closed?closedBar():""}${body}${foot}${nav("caja",{locked:o.locked!==false})}${o.overlay||""}</div>`;
 }
+/* A-Z can put the page's service below the fold (English: "Men's haircut" is on the third row): the owner scrolls the grid
+   (LazyVerticalGrid) until it shows. After every draw the grid is scrolled just enough, then the engine places the ring again. */
+const scrollToTarget = () => { let moved = false; document.querySelectorAll("#app [data-scrollto]").forEach(g => {
+  const el = g.querySelector(`[data-t="${g.dataset.scrollto}"]`); if(!el) return;
+  const over = el.getBoundingClientRect().bottom - g.getBoundingClientRect().bottom + 8;
+  if(over > 0.5){ g.scrollTop += over; moved = true; } }); if(moved) window.dispatchEvent(new Event("resize")); };
+new MutationObserver(scrollToTarget).observe(document.getElementById("root"), {childList:true, subtree:true});
+if(document.fonts) document.fonts.ready.then(scrollToTarget);
 /* the M3 Switch (Material3 defaults over the light scheme): checked = primary track + white 24 dp thumb */
 const sw = (on, tag) => `<div class="rsw${on?" on":""}"${tag?` data-t="${tag}"`:""}><i></i></div>`;
 /* OptionSelectionSheet.kt:186-340: ModalBottomSheet, 16 dp sides; title = the service (titleLarge bold); one block per option set: the row

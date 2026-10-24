@@ -63,3 +63,19 @@ and re-checked by me before they go in. Status: IN PROGRESS (more items arrive a
 ### 11. Every Agenda row of a shop with one way of working says "En el local" (the line round 2 item 15 removed from receipts)
 - Where: `ui/screens/transactions/ServicesTransactionsScreen.kt:452-454` (`whereText`). Fix: skip `WhereMode.LOCAL` there when the shop works only in the shop.
 - (The lower-case "visa ••4242" after a Tap to Pay sale, also seen in VS5-MX, is on the Mexico list, round 3 item 5.)
+
+### 12. MONEY DISPLAY. The combo sheet's "Completa tu…" shows the first choice's price, not the lowest
+- Where: `ui/screens/home/ProductSheetHost.kt:245`. Round 2 item 9 made the tile show the cheapest choice; this line still reads the first.
+- Fix (one line): use the same lowest-priced choice as the tile.
+
+### 13. A client's purchase row labels the person who did the work "Vendido por:"
+- Where: `ui/screens/customers/CustomerPage.kt:268-273`. The receipt and the Agenda say "Atendió". Fix: "Atendió: <name>" for a services sale.
+
+### 14. The combo list row reads "1 Corte de dama + 1 Cepillado"
+- Where: `ui/screens/combos/DealListScreen.kt:159-163`. Fix: join the service names with no count, as `ComboListScreen` does.
+
+### 15. "productos" / "cosa" in the combo screens of a services shop (round 2 item 47, half fixed)
+- Where: `DealListScreen.kt:133`, `NewDealScreen.kt:383`. Fix: the services words.
+
+### 16. The card-surcharge idea's note still reads machine-translated (es / pt)
+- Where: `values-es/strings.xml:838`, `values-pt-rBR/strings.xml:837`. Fix: rewrite in plain Spanish / Portuguese.
