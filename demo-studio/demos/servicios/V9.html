@@ -194,7 +194,7 @@
    (functions/storefront-projection.js:184-203,283-301: on a SERVICES shop every SERVICE item is bookable, "En la caja" too
    since REVFIX-14; priceMode, the service's minutes from settings.serviceMinutes, the included items as text). A tap on a
    service with no add-ons goes straight to "¿Cuándo?" (app.js:383-396), a day and a time (app.js:397-458: one day at a time,
-   21 days, closed days struck, times sooner than one hour dashed), the name and WhatsApp number (the country code already
+   21 days, times sooner than one hour dashed), the name and the mobile (WhatsApp) number (the country code already
    written, logic.js:278-281) -> "Reservar <day> <time>" -> "Reserva solicitada" with the 6-letter code (app.js:968-977;
    the code = the order id's first 6 hex, functions-public/index.js:329 = OnlineOrder.shortCode, sync/OnlineOrder.kt:28).
    NOTHING is charged online, in any country: a SERVICES shop's page pays at the shop only (functions/online-store-rules.js:51,
@@ -261,15 +261,19 @@ const waDay = off => new Intl.DateTimeFormat(ALOC, {weekday:"long", timeZone:"UT
 const waTime = m => `${Math.floor(m/60)}:${pad2(m%60)}`;
 const NOW = 12*60 + 41;
 
-/* ---------- the shop's booking page (what the owner set in Vender en línea) ----------
-   hours: the owner's own, Mon–Sat 9:00–18:00, Sunday closed (SellOnline.kt:156-158 starts at 9:00–18:00 every day; he closed Sunday).
-   "Duración de la cita" (values sell_online_slot_title, chips 10/15/20/30/45/60, SellOnline.kt:121): 30 min = doc.slotMinutes. */
-const OPEN = 540, CLOSE = 1080, SHOP_SLOT = 30;
-const closedDay = off => dow7(off) === 7;
-/* the services on the page, in the shop's own order (snapshot.products order = the order the setup saved them, the trade's
-   catalogue order, ui/pos/GuideActions.kt:549-551); a FROM service shows its FIRST stored choice ("Desde", see the notes) */
-const CAT = window.SERV.CATALOG[V.biz].services.map(s => s.id);
-const PAGE_SVCS = V.services.slice().sort((a, b) => CAT.indexOf(a.id) - CAT.indexOf(b.id));
+/* ---------- the shop's booking page (what the owner set in Vender en línea, the same set-up VS20 shows) ----------
+   hours: every day 9:00–18:00 (SellOnline.kt:156-158 default, VS20 "Todos los días 9:00 – 18:00 · 20 min por cita").
+   "Duración de la cita" (values sell_online_slot_title, OnlineStoreSettings.prepMinutes default 20) = doc.slotMinutes, the
+   grid the SERVER checks (functions-public/index.js:231-238); the page's grid uses the service's own minutes (app.js:400-405). */
+const OPEN = 540, CLOSE = 1080, SHOP_SLOT = 20;
+const closedDay = off => false;
+/* the services on the page, A-Z by name: the reference reads productDao.getAllProductsSync() (BranchSnapshotStore.kt:99) =
+   "SELECT * FROM products ORDER BY name ASC" (PosDao.kt:353, SQLite BINARY), project() keeps that order into doc.services
+   (storefront-projection.js:269-301) and viewServices draws it in order (app.js:379). Same order as VS20.
+   A FROM service shows its FIRST stored choice ("Desde", storefront-projection.js:145-149,291): an app bug on the coder list,
+   drawn as the app shows it today (the Brazil video waits for its fix). */
+const byName = (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0;      // ORDER BY name (SQLite BINARY)
+const PAGE_SVCS = V.services.slice().sort(byName);
 const pagePrice = s => s.mode==="ask" ? null : s.mode==="from" ? (s.choices[0] && s.choices[0].price) : s.price;
 /* app.js:357-359 priceText ; :360-361 includesText */
 const priceText = s => s.mode==="ask" ? w("service_ask") : s.mode==="from" ? w("service_from", {amt: webMoney(pagePrice(s))}) : webMoney(s.price);
@@ -283,7 +287,7 @@ const DUR = SVC.min || SHOP_SLOT;
 /* app.js:397-408 daySlots: the grid of THIS service's minutes (online-store-hours.js slotFits: on the window's grid, ends by close) */
 const slotsOf = off => { if(closedDay(off)) return []; const out = []; for(let s = OPEN; s + DUR <= CLOSE; s += DUR) out.push({start:s, soon: off===0 && s < NOW + 60}); return out; };
 const DAY = 1;                                                  /* tomorrow, Friday 23 */
-/* the time picked: 14:00 when the service's grid has it (it also sits on the shop's 30-min grid the server checks) */
+/* the time picked: 14:00 when the service's grid has it (it also sits on the shop's 20-min grid the server checks) */
 const SLOT = (slotsOf(DAY).find(s => s.start===840) || slotsOf(DAY).find(s => s.start>=840 && (s.start-OPEN)%SHOP_SLOT===0) || slotsOf(DAY)[0]).start;
 /* the customer: a client of the kit; she or he types the name and the WhatsApp number after the country code */
 const CUST = C.clients[3];
@@ -482,6 +486,7 @@ function render(st){
     else if(st.w === "when") h = webWhen(st);
     else h = webDone();
     h = `<div class="pg">${browserBar()}${h}${st.hop ? hop() : ""}</div>`;
+    if(st.w === "menu") return scrolled(h, `[data-t="w-svc-${SVC.id}"]`);      /* the booked card in view (it is A-Z, may sit low) */
     if(st.w === "when" && st.scrollTo) return scrolled(h, st.scrollTo, {pad: 76 + 12});
     return h;
   }
@@ -489,12 +494,12 @@ function render(st){
   if(st.o === "detail") return detailScreen();
   return `<div class="pg">${waChat(st.sent)}</div>`;
 }
-const VOICE = {"es": ["Tu cliente abre tu página de reservas y elige un servicio.", "Elige el día y una hora dentro de tu horario.", "Escribe su nombre y su WhatsApp.", "Reserva sin pagar nada en línea: paga en tu negocio.", "Tu teléfono te avisa: nueva reserva en línea. Tócala.", "Ahí dice En línea: confirma la hora con el cliente.", "WhatsApp abre su chat con el mensaje listo. Envíalo.", "Vuelve: la cita ya está en tu Agenda, marcada En línea.", "Así recibes reservas en línea con Platata."], "pt": ["O cliente abre sua página de reservas e escolhe um serviço.", "Escolhe o dia e um horário dentro do seu expediente.", "Escreve o nome e o WhatsApp.", "Reserva sem pagar nada online: paga no seu negócio.", "Seu celular avisa: nova reserva online. Toque nela.", "Ali diz Online: confirme o horário com o cliente.", "O WhatsApp abre a conversa com a mensagem pronta. Envie.", "Volte: o agendamento já está na sua Agenda, marcado Online.", "Assim você recebe reservas online com o Platata."]};
+const VOICE = {"es": ["Tu cliente abre tu página de reservas y elige un servicio.", "Elige el día y una hora dentro de tu horario.", "Escribe su nombre y su celular.", "Reserva sin pagar nada en línea: paga en tu negocio.", "Tu teléfono te avisa: nueva reserva en línea. Tócala.", "Ahí dice En línea: confirma la hora con el cliente.", "WhatsApp abre su chat con el mensaje listo. Envíalo.", "Vuelve: la cita ya está en tu Agenda, marcada En línea.", "Así recibes reservas en línea con Platata."], "pt": ["O cliente abre sua página de reservas e escolhe um serviço.", "Escolhe o dia e um horário dentro do seu expediente.", "Escreve o nome e o celular.", "Reserva sem pagar nada online: paga no seu negócio.", "Seu celular avisa: nova reserva online. Toque nela.", "Ali diz Online: confirme o horário com o cliente.", "O WhatsApp abre a conversa com a mensagem pronta. Envie.", "Volte: o agendamento já está na sua Agenda, marcado Online.", "Assim você recebe reservas online com o Platata."]};
 VKIT.start(V, {
   id:"V9", tallVideo:true, clock:"12:41",
   endText: H("Así recibes reservas en línea con Platata.", "Assim você recebe reservas online com o Platata.", "That's how you take bookings online with Platata."),
   beats: V.pick({es: VOICE.es, pt: VOICE.pt,
-    en: ["Your customer opens your booking page and picks a service.", "Picks the day and a time within your hours.", "Types their name and WhatsApp number.",
+    en: ["Your customer opens your booking page and picks a service.", "Picks the day and a time within your hours.", "Types their name and mobile number.",
          "Books without paying anything online: pays at your shop.", "Your phone tells you: new online booking. Tap it.", "It says Online: confirm the time with the customer.",
          "WhatsApp opens their chat with the message ready. Send it.", "Go back: it is already in your Agenda, marked Online.", "That's how you take bookings online with Platata."]}),
   state: {dev:"cust", w:"menu", o:"agenda", day:0, slot:null, name:"", phone:"", focus:null, scrollTo:null, sending:false, hop:false, noti:false, sent:false, flash:false},
@@ -507,15 +512,15 @@ VKIT.start(V, {
     {beat:1, hint:H("Toca "+webClock(SLOT), "Toque em "+webClock(SLOT), "Tap "+webClock(SLOT)), target:`[data-t="w-slot-${SLOT}"]`, tap(st){ st.slot = SLOT; }},
     {beat:2, hint:H("Toca "+w("name"), "Toque em "+w("name"), "Tap "+w("name")), target:'[data-t="w-name"]',
       tap(st, E){ st.focus = "name"; st.scrollTo = '[data-t="w-phone"]';
-        E.type("name", CUST.name, () => { E.after(250, () => { st.focus = "phone";
-          E.type("phone", TYPED_PHONE, () => { E.after(350, () => { st.focus = null; st.scrollTo = '[data-t="w-sum"]'; }); }, 60); }); }, 60); }},
-    {beat:3, wait:0.3, hint:H("Toca "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)}), "Toque em "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)}), "Tap "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)})), target:'[data-t="w-book"]',
-      tap(st, E){ st.sending = true; E.after(900, () => { st.sending = false; st.w = "done"; E.after(1800, () => { st.hop = true; }); }); }},
+        E.type("name", CUST.name, () => { E.after(120, () => { st.focus = "phone";
+          E.type("phone", TYPED_PHONE, () => { E.after(350, () => { st.focus = null; st.scrollTo = '[data-t="w-sum"]'; }); }, 35); }); }, 35); }},
+    {beat:3, wait:1.5, hint:H("Toca "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)}), "Toque em "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)}), "Tap "+w("book_at",{d:webDay(DAY),t:webClock(SLOT)})), target:'[data-t="w-book"]',
+      tap(st, E){ st.sending = true; E.after(900, () => { st.sending = false; st.w = "done"; E.after(1000, () => { st.hop = true; }); }); }},
     {beat:4, hint:H("Toca "+WHO_OWN, "Toque em "+WHO_OWN, "Tap "+WHO_OWN), target:'[data-t="hop-go"]',
       tap(st, E){ st.hop = false; st.dev = "own"; st.o = "agenda"; E.after(700, () => { st.noti = true; }); }},
     {beat:4, wait:1.4, hint:H("Toca el aviso", "Toque no aviso", "Tap the notification"), target:'[data-t="noti"]', tap(st){ st.noti = false; st.o = "detail"; }},
-    {beat:5, wait:2.0, hint:H("Toca "+t("online_order_whatsapp"), "Toque em "+t("online_order_whatsapp"), "Tap "+t("online_order_whatsapp")), target:'[data-t="appt-wa"]', tap(st){ st.o = "wa"; }},
-    {beat:6, wait:1.6, hint:H("Envía el mensaje", "Envie a mensagem", "Send the message"), target:'[data-t="wa-send"]', tap(st){ st.sent = true; }},
+    {beat:5, wait:2.4, hint:H("Toca "+t("online_order_whatsapp"), "Toque em "+t("online_order_whatsapp"), "Tap "+t("online_order_whatsapp")), target:'[data-t="appt-wa"]', tap(st){ st.o = "wa"; }},
+    {beat:6, wait:2.2, hint:H("Envía el mensaje", "Envie a mensagem", "Send the message"), target:'[data-t="wa-send"]', tap(st){ st.sent = true; }},
     {beat:7, hint:H("Toca la flecha de atrás", "Toque na seta de voltar", "Tap the back arrow"), target:'[data-t="wa-back"]', tap(st){ st.o = "detail"; }},
     {beat:7, hint:H("Toca la flecha de atrás", "Toque na seta de voltar", "Tap the back arrow"), target:'[data-t="dt-back"]', tap(st, E){ st.o = "agenda"; st.flash = true; E.after(1800, () => { st.flash = false; }); }}
   ]

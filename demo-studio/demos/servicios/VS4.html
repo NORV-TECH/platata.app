@@ -421,7 +421,7 @@ const CARD_HERE = WOMPI ? "ready" : STRIPE ? "setup" : "none";   // see the setu
 function termsPage(st){
   const tip = (ic, b, r) => `<div class="x-tip"><span class="tile">${DRAWN[ic]}</span><span><b>${esc(b)}</b> ${esc(r)}</span></div>`;
   return `<div class="x paper"><div class="x-ptop"><span class="rb">${J.back}</span><b>${esc(qrS("qr_terms_bar_title"))}</b></div>
-    <div class="x-pscroll"><div class="x-pinner${st.scrolled?" end":""}">
+    <div class="x-pscroll"><div class="x-pinner${st.scrolled?" x-atend":""}">
       <img class="pot" src="${ASSET.pot.pointing}" alt="">
       <div><h1>${esc(t("qr_terms_title"))}</h1><div class="sub">${esc(qrS("qr_terms_subtitle"))}</div></div>
       <div class="x-bad"><i>!</i><div><b>${esc(t("qr_terms_alert_title"))}</b><p>${esc(t("qr_terms_alert_body"))}</p></div></div>
@@ -663,7 +663,7 @@ VKIT.start(V, {
 /* Round 3: the support strip now sits under this page's footer (a level-2 page, SupportStrip.kt), so the body is shorter and the old fixed
    100-unit scroll left the tick card half hidden in Portuguese. Scrolled = the END of the body sits at the bottom, as the owner would scroll;
    min-height keeps a short body at the top. Pure CSS, so the tap target's place is known when the frame is drawn. */
-.x-pinner.end{position:absolute;left:0;right:0;bottom:0;min-height:100%;box-sizing:border-box}
+.x-pinner.x-atend{position:absolute;left:0;right:0;bottom:0;min-height:100%;box-sizing:border-box}
 .x-pinner .pot{width:calc(var(--u)*92);height:calc(var(--u)*92);object-fit:contain;margin-left:calc(var(--u)*-8)}
 .x-pinner h1{margin:0;font:600 calc(var(--u)*27)/1.14 "Fredoka",sans-serif;letter-spacing:-.2px}
 .x-pinner .sub{margin-top:calc(var(--u)*6);font-size:calc(var(--u)*15);line-height:1.45;color:#464A52}

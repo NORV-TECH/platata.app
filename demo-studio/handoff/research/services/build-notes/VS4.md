@@ -36,7 +36,8 @@ What changed on the page:
 - Strip word by cart (sync/SaleNoun.kt:15); pay link "Servicios (N) ›" (CheckoutPayBlock.kt:248); the two link rows (CheckoutSheetBody.kt:492-512).
 - Receipt: no "En el local" line (ReceiptFormatter.kt:101); "(Incluido)" line (ReceiptFormatter.kt:293/404).
 - The Payment methods page and the QR terms page are level-2 pages, so they carry the support strip: it is now drawn, with the services purple badge
-  #7C55E0 (SupportStrip.kt:154). It was missing.
+  #7C55E0 (SupportStrip.kt:154). It was missing. With the strip the terms page body is shorter, so its scroll now goes to the END of the body
+  (CSS, `.x-pinner.x-atend`) instead of a fixed 100 units, which left the tick card half hidden in Portuguese.
 - Timing: beat 1 tap wait 3.0 s (pt 3.6), beat 4 wait 3.9 s (pt 4.6), so each tap lands in its line.
 Script: unchanged. Checker OK CO/BR/MX. Timing (real clips) OK (tick +3.9 / +4.5 s, Pagó +4.7 / +5.4 s).
 New app bugs: none new on these screens.

@@ -30,8 +30,8 @@
     {
       "id": "3-nombre",
       "voice": {
-        "es": "Escribe su nombre y su WhatsApp.",
-        "pt": "Escreve o nome e o WhatsApp."
+        "es": "Escribe su nombre y su celular.",
+        "pt": "Escreve o nome e o celular."
       }
     },
     {

@@ -61,7 +61,8 @@ and re-checked by me before they go in. Status: IN PROGRESS (more items arrive a
   rename or delete categories (choke point 23). Fix: "Servicios, adicionales y opciones" (and the pt/en/fr values).
 
 ### 11. Every Agenda row of a shop with one way of working says "En el local" (the line round 2 item 15 removed from receipts)
-- Where: `ui/screens/transactions/ServicesTransactionsScreen.kt:452-454` (`whereText`). Fix: skip `WhereMode.LOCAL` there when the shop works only in the shop.
+- Where: `ui/screens/transactions/ServicesTransactionsScreen.kt:452-456` (`whereText`) and the appointment page `AppointmentDetailScreen.kt:252-259`.
+  Fix: skip `WhereMode.LOCAL` in both when the shop works only in the shop.
 - (The lower-case "visa ••4242" after a Tap to Pay sale, also seen in VS5-MX, is on the Mexico list, round 3 item 5.)
 
 ### 12. MONEY DISPLAY. The combo sheet's "Completa tu…" shows the first choice's price, not the lowest
@@ -105,3 +106,6 @@ and re-checked by me before they go in. Status: IN PROGRESS (more items arrive a
 
 ### 23. Portuguese "Reserva solicitada" date reads "sex., 23 · 14:00"
 - Where: `public/store/logic.js:480-484` (`dayTimeIn`, the same Intl short form as item 6). Fix with item 6: one pt-safe day label.
+
+### 24. The panel's search bar says "productos" in a services shop
+- Where: `ui/screens/home/PanelSearchBar.kt:34` (string `wsearch_bar`, "Busca ajustes, productos, clientes…"). Fix: a services wording ("servicios").
