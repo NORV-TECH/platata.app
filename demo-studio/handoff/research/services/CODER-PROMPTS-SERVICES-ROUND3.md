@@ -90,3 +90,18 @@ and re-checked by me before they go in. Status: IN PROGRESS (more items arrive a
 ### 19. Right after turning the store on, a new owner briefly reads "Tu página dice Cerrado"
 - Where: `SellOnlineText.kt:64` (the status listener started when Sell online opened, `SellOnlineScreen.kt:125-128`, before the store was on). Fix: say
   "Abriendo tu página…" until the first status after the switch.
+
+### 20. Every notification's small icon is the full-colour launcher icon, so Android draws a grey blob
+- Where: `setSmallIcon(R.mipmap.ic_launcher)` in `ui/pos/OnlineOrderAlerts.kt:168,172`, `work/AlertNotifier.kt:114,181`, `work/HostStoppedAlert.kt:44`,
+  `work/AgendaEdificioWorker.kt:232`, `sync/SyncHostService.kt:925`, `MenuImportService.kt:202`. Fix: one monochrome `ic_stat_platata` vector for all eight.
+
+### 21. The booking alert's time follows the phone's 12/24-hour setting; every other booking screen uses the app's format
+- Where: `ui/pos/OnlineOrderAlerts.kt:134-137` (`bookedWhen`) vs `fmtTimeCO` (`WhenPicker.kt:76-93`): a default phone shows "14:00" in the alert and
+  "2:00 p. m." on the page it opens. Fix: use `fmtTimeCO(minsOf(millis))` in `bookedWhen`.
+
+### 22. The booking page asks for "Celular (con código de país)" but the number is used only for WhatsApp
+- Where: `public/store/strings.js:49, 176, 303`; the number is the client's WhatsApp (`functions-public/index.js:279, 299`). A client who types a
+  non-WhatsApp number never gets the shop's confirmation. Fix: "WhatsApp (con código de país)" / "WhatsApp (com código do país)".
+
+### 23. Portuguese "Reserva solicitada" date reads "sex., 23 · 14:00"
+- Where: `public/store/logic.js:480-484` (`dayTimeIn`, the same Intl short form as item 6). Fix with item 6: one pt-safe day label.

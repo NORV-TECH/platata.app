@@ -118,7 +118,7 @@ Every line is said over the screen it describes; the four timing items below are
   change page line 273 FROM branch to `s.price` (the kit's `price` for "from" is already the lowest choice) and update the comment.
 
 ### nice 1 — beat 3 says "WhatsApp", the field says "Celular (con código de país)"
-- `strings.js:49` / `:176`; page line 386. The number IS the client's WhatsApp (stored as `customerWhatsapp`, `index.js:303`; the shop's
+- `strings.js:49` / `:176`; page line 387. The number IS the client's WhatsApp (stored as `customerWhatsapp`, `index.js:279, 299`; the shop's
   only reply road is the WhatsApp button), so the line is true, but the word is not on screen. Keep, or ask the coder (app bug A3) to label
   the field "WhatsApp (con código de país)". No re-voice needed if the app changes.
 
@@ -145,13 +145,13 @@ Every line is said over the screen it describes; the four timing items below are
 ### nice 7 — the alert's time may read "14:00" on a real Colombian phone
 - `OnlineOrderAlerts.kt:134-137` uses `DateFormat.getTimeFormat(context)` (the phone's 12/24 setting); the app's locale is the bare tag "es"
   (`AppLanguage.kt:41`), whose Android locale default is 24-hour, so with "Usar el formato local" the title reads "Nueva reserva en línea ·
-  vie 23 · 14:00". The page prints "2:00 p. m." (`fmtTime`, line 247), which is what a phone set to 12-hour shows. Device-setting dependent:
+  vie 23 · 14:00". The page prints "2:00 p. m." (`fmtTime`, line 246), which is what a phone set to 12-hour shows. Device-setting dependent:
   either is true; "14:00" would also match the web page and the WhatsApp text. App inconsistency listed as A2.
 
 ### nice 8 — small honesty polish
 - The notification's small icon is drawn as the coloured potato; the app posts the full-colour launcher mipmap as small icon
   (`OnlineOrderAlerts.kt:168,172`), which Android draws as a plain grey shape (A1).
-- "Toca la flecha de atrás" targets WhatsApp's own header arrow (line 519); in WhatsApp that arrow goes to its chat list, the way back to
+- "Toca la flecha de atrás" targets WhatsApp's own header arrow (line 519, `wa-back`); in WhatsApp that arrow goes to its chat list, the way back to
   Platata is the phone's Back (same in V3/V4). Optional hint "Vuelve a Platata".
 - The Agenda shows the online client twice: "Luis · Corte de caballero" today 6:30 p. m. (a kit booking, after the 18:00 close the page
   offers) and "Luis Torres EN LÍNEA" tomorrow. Reads odd but not false.
@@ -186,7 +186,7 @@ Every line is said over the screen it describes; the four timing items below are
   prints `fmtTimeCO` (12-hour in es, `WhenPicker.kt:76-93`); with the app tag "es" a default phone gets "14:00" in the alert and "2:00 p. m."
   on the page it opens. Fix: use the same `fmtTimeCO(minsOf(millis))` in `bookedWhen`.
 - **A3 (small)** — The booking page asks for a "Celular (con código de país)" (`public/store/strings.js:49, 176, 303`) but the number is used
-  only as the client's WhatsApp (`functions-public/index.js:294-296, 303`; the shop answers with the WhatsApp button). A client who types a
+  only as the client's WhatsApp (`functions-public/index.js:279, 299`; the shop answers with the WhatsApp button). A client who types a
   non-WhatsApp number never gets the confirmation. Fix: "WhatsApp (con código de país)" / "WhatsApp (com código do país)".
 - **A4 (small)** — `logic.js:480-484` `dayTimeIn` prints pt "sex., 23 · 14:00" on "Reserva solicitada" (same Intl short form as round-3
   item 6). Fix both with one pt-safe day label.
