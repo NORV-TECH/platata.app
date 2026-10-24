@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Platata · Vender en línea</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Roboto:wght@300;400;500;600;700;800;900&display=swap">
+<link rel="stylesheet" href="../../kit/edif.css">
+<link rel="stylesheet" href="../../kit/material.css">
+<style>
+/* ---- Material light pieces (ui/theme/Color.kt LightColorScheme: #1C1C1E #6E6E73 #F2F2F7 #E5E5EA #C7C7CC) ---- */
+.mat .sv-top{height:calc(var(--u)*64);display:flex;align-items:center;padding:0 calc(var(--u)*4);flex:0 0 auto;background:#fff;gap:calc(var(--u)*4)}
+.mat .sv-top .ib{width:calc(var(--u)*48);height:calc(var(--u)*48);display:grid;place-items:center;color:var(--m-on);flex:0 0 auto}
+.mat .sv-top>b{flex:1;min-width:0;font-size:calc(var(--u)*22);line-height:calc(var(--u)*28);font-weight:700;color:var(--m-on);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-left:calc(var(--u)*4)}
+/* SupportStrip.kt: two equal halves, the Support badge in the services accent (#7C55E0) */
+.mat .sv-strip{flex:0 0 auto;min-height:calc(var(--u)*57);border-top:1px solid #E6E2D9;background:#fff;display:flex;align-items:stretch;position:relative}
+.mat .sv-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
+.mat .sv-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
+.mat .sv-strip .h>div{flex:1;min-width:0}
+.mat .sv-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#7C55E0;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .sv-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+.mat .sv-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
+/* M3 Switch (52 x 32) */
+.mat .sv-sw{display:inline-block;width:calc(var(--u)*52);height:calc(var(--u)*32);border-radius:calc(var(--u)*16);border:calc(var(--u)*2) solid #79747E;background:#E5E5EA;position:relative;flex:0 0 auto;box-sizing:border-box}
+.mat .sv-sw i{position:absolute;left:calc(var(--u)*6);top:calc(var(--u)*6);width:calc(var(--u)*16);height:calc(var(--u)*16);border-radius:50%;background:#79747E}
+.mat .sv-sw.on{background:var(--m-on);border-color:var(--m-on)}
+.mat .sv-sw.on i{left:calc(var(--u)*22);top:calc(var(--u)*2);width:calc(var(--u)*24);height:calc(var(--u)*24);background:#fff}
+.mat .sv-sw.dis{opacity:.38}
+.mat .mnav .flagc{width:calc(var(--u)*32);height:calc(var(--u)*32);border-radius:50%;background:var(--m-sv);display:grid;place-items:center;overflow:hidden}
+.mat .mnav .flagc.lit{background:var(--m-sv);box-shadow:inset 0 calc(var(--u)*3) calc(var(--u)*6) rgba(0,0,0,.18)}
+.mat .mnav .flagc svg{width:calc(var(--u)*20);height:calc(var(--u)*14);border-radius:calc(var(--u)*2)}
+.mat .mnav>div:last-child .pill{background:none!important}
+/* the owner's panel (HomeScreen.kt:1480-1830) */
+.mat .sv-panel{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;overflow:hidden}
+.mat .sv-panel .ph{padding:calc(var(--u)*20) calc(var(--u)*24) calc(var(--u)*12);display:flex;align-items:center;gap:calc(var(--u)*2);color:#007AFF;flex:0 0 auto}
+.mat .sv-panel .ph b{font-size:calc(var(--u)*28);line-height:calc(var(--u)*36);font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-panel .ph svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#007AFF;flex:0 0 auto}
+.mat .sv-panel .pl{flex:1;min-height:0;overflow:hidden}
+.mat .sv-panel .pin{display:flex;flex-direction:column;gap:calc(var(--u)*8);padding-bottom:calc(var(--u)*16)}
+.mat .sv-panel hr{border:0;border-top:1px solid var(--m-ovar);margin:calc(var(--u)*8) calc(var(--u)*24) 0;flex:0 0 auto}
+.mat .sv-panel .eh{padding:calc(var(--u)*8) calc(var(--u)*28) 0;font-size:calc(var(--u)*12);font-weight:600;color:var(--m-onv);letter-spacing:.5px}
+/* WSEARCH-1 PanelSearchBar.kt: Surface shapes.extraLarge (50 dp), surfaceVariant, 16 dp side padding, min 48 dp, Search 24 dp, 12 dp gap, bodyLarge onSurfaceVariant */
+.mat .sv-search{margin:0 calc(var(--u)*16);min-height:calc(var(--u)*48);border-radius:calc(var(--u)*50);background:var(--m-sv);display:flex;align-items:center;gap:calc(var(--u)*12);padding:0 calc(var(--u)*16);color:var(--m-onv);flex:0 0 auto}
+.mat .sv-search svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-onv);flex:0 0 auto}
+.mat .sv-search span{flex:1;min-width:0;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-wr{margin:0 calc(var(--u)*24);border-radius:calc(var(--u)*16);background:var(--m-sv);padding:calc(var(--u)*14) calc(var(--u)*15);display:flex;align-items:center;gap:calc(var(--u)*12);color:var(--m-on);flex:0 0 auto}
+.mat .sv-wr .ic{width:calc(var(--u)*42);height:calc(var(--u)*42);border-radius:50%;background:#fff;display:grid;place-items:center;color:var(--m-onv);position:relative;flex:0 0 auto}
+.mat .sv-wr .tx{flex:1;min-width:0}
+.mat .sv-wr .tx b{display:block;font-size:calc(var(--u)*16);line-height:calc(var(--u)*24);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mat .sv-wr .tx small{display:block;font-size:calc(var(--u)*12);line-height:calc(var(--u)*16);color:var(--m-onv);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:calc(var(--u)*16)}
+.mat .sv-wr .ch svg{fill:var(--m-onv)}
+.mat .sv-wr.reg .dot{font-size:calc(var(--u)*16);width:calc(var(--u)*14)}
+.mat .sv-wr .amt{font-size:calc(var(--u)*18);font-weight:700}
+.mat .sv-wr .pill0{border-radius:99px;background:#fff;color:var(--m-onv);font-size:calc(var(--u)*11);font-weight:700;padding:calc(var(--u)*2) calc(var(--u)*8);white-space:nowrap}
+.mat .sv-wr .pill0.on{background:var(--m-sv);color:var(--m-on)}
+/* SumaDialog in PaperThemeOnSurface (ConnectionDialogs.kt StoreLockedDialog): M3 AlertDialog (24 dp from the screen edge), shapes.medium,
+   potato accent; its buttons stay on one line (the M3 button row wraps whole buttons, never their words) */
+.mat .dscrim{position:absolute;inset:0;background:rgba(0,0,0,.32);display:grid;place-items:center;z-index:15;padding:0 calc(var(--u)*24)}
+.mat .dbox{width:100%;background:#fff;border-radius:calc(var(--u)*12);padding:calc(var(--u)*24)}
+.mat .dtt{font-size:calc(var(--u)*24);line-height:1.3;color:var(--m-on);margin-bottom:calc(var(--u)*16)}
+.mat .dbody{font-size:calc(var(--u)*15);line-height:1.4;color:#17181B}
+.mat .dbtn{display:flex;justify-content:flex-end;align-items:center;gap:calc(var(--u)*8);margin-top:calc(var(--u)*24)}
+.mat .dno{white-space:nowrap;padding:calc(var(--u)*10) calc(var(--u)*12);font-size:calc(var(--u)*14);font-weight:500;color:#3A2A1F}
+.mat .dyes{white-space:nowrap;padding:calc(var(--u)*10) calc(var(--u)*24);border-radius:calc(var(--u)*20);background:#3A2A1F;color:#fff;font-size:calc(var(--u)*14);font-weight:500}
+/* SellOnlineScreen.kt PageScaffold (padding 16, spacing 12, scroll) + SectionCard (Card, 1 dp, padding 16) */
+.mat .spage{flex:1;min-height:0;overflow:hidden;background:var(--m-bg);padding:calc(var(--u)*16)}
+.mat .cin{display:flex;flex-direction:column;gap:calc(var(--u)*12)}
+.mat .scard{background:#F2F2F7;border-radius:calc(var(--u)*12);padding:calc(var(--u)*16);box-shadow:0 calc(var(--u)*1) calc(var(--u)*2) rgba(0,0,0,.15);display:flex;flex-direction:column}
+.mat .srow{display:flex;align-items:center;gap:calc(var(--u)*12)}
+.mat .srow .tx{flex:1;min-width:0;display:flex;flex-direction:column}
+.mat .tm{font-size:calc(var(--u)*18);font-weight:500;color:var(--m-on);line-height:1.3}
+.mat .ts{font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on);line-height:1.35}
+.mat .bs{font-size:calc(var(--u)*12);color:#6E6E73;line-height:1.35}
+.mat .bm{font-size:calc(var(--u)*14);color:#6E6E73;line-height:1.45}
+.mat .lab{font-size:calc(var(--u)*12);font-weight:500;color:#1C1C1E;letter-spacing:.3px}
+.mat .hd{font-size:calc(var(--u)*14);font-weight:700;color:var(--m-on);padding-top:calc(var(--u)*8)}
+.mat .cico{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:#1C1C1E;margin-bottom:calc(var(--u)*8)}
+.mat .host{font-size:calc(var(--u)*14);color:#6E6E73;word-break:break-all}
+.mat .ofld{margin-top:calc(var(--u)*8);height:calc(var(--u)*56);border:1px solid #79747E;border-radius:calc(var(--u)*4);display:flex;align-items:center;padding:0 calc(var(--u)*16);font-size:calc(var(--u)*16);color:var(--m-on);background:#fff}
+.mat .ofld .ph{color:#6E6E73}.mat .ofld.f{border:calc(var(--u)*2) solid #1C1C1E}
+.mat .caret{display:inline-block;width:calc(var(--u)*2);height:calc(var(--u)*20);background:#1C1C1E;margin-left:1px;vertical-align:middle}
+.mat .okl{font-size:calc(var(--u)*12);color:#1C1C1E;margin-top:calc(var(--u)*4)}.mat .okl.err{color:#FF3B30}
+.mat .tbtn{align-self:flex-start;font-size:calc(var(--u)*14);font-weight:500;color:#1C1C1E;padding:calc(var(--u)*10) calc(var(--u)*12)}
+.mat .warn{font-size:calc(var(--u)*14);font-weight:700;color:var(--m-on);line-height:1.45}
+.mat .mbtn{height:calc(var(--u)*40);border-radius:calc(var(--u)*20);background:#1C1C1E;color:#fff;display:flex;align-items:center;justify-content:center;font-size:calc(var(--u)*14);font-weight:500;flex:0 0 auto}
+.mat .mbtn.dis{background:rgba(28,28,30,.12);color:rgba(28,28,30,.38)}
+.mat .vrow{display:flex;align-items:center;padding:calc(var(--u)*10) 0;font-size:calc(var(--u)*14);font-weight:500;color:var(--m-on)}
+.mat .vrow span{flex:1}.mat .vrow b{font-weight:700}.mat .vrow svg{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-on)}
+.mat .chv{width:calc(var(--u)*24);height:calc(var(--u)*24);fill:var(--m-on);flex:0 0 auto}
+.mat .lockic{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:#C7C7CC;flex:0 0 auto;margin-right:calc(var(--u)*-4)}
+.mat .link{font-size:calc(var(--u)*18);font-weight:700;color:var(--m-on);word-break:break-all;line-height:1.3}
+.mat .lacts{display:flex;justify-content:space-between;padding-top:calc(var(--u)*8)}
+.mat .lact{display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*2);padding:calc(var(--u)*8) calc(var(--u)*12);font-size:calc(var(--u)*11);font-weight:500;color:#1C1C1E}
+.mat .lact svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#1C1C1E}
+.mat .emo{font-family:"Noto Color Emoji","Apple Color Emoji","Segoe UI Emoji",sans-serif}
+.mat .catrow .tx .ts{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* the phone's keyboard while the address field has focus (Android's, not Platata's); Next is on as soon as
+   OnlineStoreSlug.canGoNext (SellOnlineScreen.kt:608-614) */
+.mat .vs-kbd{flex:0 0 auto;background:#E8EAED;padding:calc(var(--u)*8) calc(var(--u)*4) calc(var(--u)*10);display:flex;flex-direction:column;gap:calc(var(--u)*10)}
+.mat .vs-kbd .r{display:flex;gap:calc(var(--u)*5);justify-content:center}
+.mat .vs-kbd span{flex:1;max-width:calc(var(--u)*38);height:calc(var(--u)*44);border-radius:calc(var(--u)*6);background:#fff;box-shadow:0 1px 0 #B5B9BE;display:grid;place-items:center;font-size:calc(var(--u)*20);color:#202124}
+.mat .vs-kbd span.w{max-width:none;flex:1.6;background:#D3D6DB;font-size:calc(var(--u)*15)}
+.mat .vs-kbd .r span:nth-child(3).w{flex:5;background:#fff}
+/* the customer's browser: public/store/store.css (1 css px = 1 dp here) */
+.brw{flex:1;min-height:0;display:flex;flex-direction:column;background:#fff;color:#1C1C1E;font-family:Roboto,system-ui,sans-serif;position:relative;overflow:hidden}
+.url{flex:0 0 auto;margin:calc(var(--u)*6) calc(var(--u)*10);height:calc(var(--u)*40);border-radius:calc(var(--u)*20);background:#F1F3F4;display:flex;align-items:center;gap:calc(var(--u)*8);padding:0 calc(var(--u)*14);font-size:calc(var(--u)*14);color:#3C4043;white-space:nowrap;overflow:hidden}
+.url svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:#5F6368;flex:0 0 auto}
+.url span{overflow:hidden;text-overflow:ellipsis}
+.wscr{flex:1;min-height:0;overflow:hidden}
+.whead{padding:calc(var(--u)*18) calc(var(--u)*16) calc(var(--u)*10)}
+.wshop{font-weight:900;font-size:calc(var(--u)*24);line-height:1.2;color:#007AFF;letter-spacing:-.02em}
+.wstat{font-size:calc(var(--u)*12.5);line-height:1.4;color:#6E6E73;margin-top:calc(var(--u)*4)}
+.wtabs{display:flex;gap:calc(var(--u)*8);padding:calc(var(--u)*12) calc(var(--u)*16) 0}
+.wchip{padding:calc(var(--u)*8) calc(var(--u)*16);border-radius:calc(var(--u)*24);font-weight:600;font-size:calc(var(--u)*14);line-height:1;white-space:nowrap;border:1px solid #E5E5EA;background:#fff;color:#6E6E73}
+.wchip.sel{background:#1C1C1E;color:#F5F5F7;border:1.5px solid #1C1C1E}
+.wgrid{display:grid;grid-template-columns:1fr 1fr;gap:calc(var(--u)*8);padding:calc(var(--u)*8) calc(var(--u)*16) calc(var(--u)*16)}
+.wpc{aspect-ratio:1;border-radius:calc(var(--u)*12);border:1.5px solid #E5E5EA;padding:calc(var(--u)*12);display:flex;flex-direction:column;justify-content:space-between;text-align:left}
+.wpc .pn{display:block;font-weight:700;font-size:calc(var(--u)*16);line-height:1.25;color:#1C1C1E;word-break:break-word}
+.wpc .pd{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;font-size:calc(var(--u)*12);line-height:1.35;color:#6E6E73;margin-top:calc(var(--u)*4)}
+.wpc .pp{display:block;font-weight:500;font-size:calc(var(--u)*16);line-height:1.2;color:#6E6E73}
+/* demo plumbing: the ring jumps straight to the next target */
+#ring{transition:none}
+</style>
+</head>
+<body class="mat">
+<div id="root"></div>
+<script src="../../kit/engine.js"></script>
+<script src="../../kit/services-data.js"></script>
+<script src="../../kit/vkit.js"></script>
+<script>
+/* Words: STR / PLU = the app's values / values-es / values-pt-rBR at sim/usa-canada 37db6d6c; WEB = public/store/strings.js
+   (the customer page, in the SHOP's language). Injected by the builder from the keys named in the @S / @P comments. */
+const STR = {"conn_add": {"en": "Add a connection", "es": "Agregar una conexión", "pt": "Adicionar uma conexão"}, "conn_dlg_store": {"en": "Your online store opens once a tablet or employee phone uses your third connection.", "es": "Tu tienda online se abre cuando una tablet o un teléfono de empleado usa tu tercera conexión.", "pt": "Sua loja online abre quando um tablet ou celular de funcionário usa sua terceira conexão."}, "conn_not_now": {"en": "Not now", "es": "Ahora no", "pt": "Agora não"}, "conn_store_dlg_body_add": {"en": "It opens when a tablet or an employee phone uses an extra connection. Add one first, then connect the device.", "es": "Se abre cuando una tablet o un teléfono de empleado usa una conexión adicional. Agrega una primero y luego conecta el dispositivo.", "pt": "Ela abre quando um tablet ou um celular de funcionário usa uma conexão adicional. Adicione uma primeiro e depois conecte o dispositivo."}, "conn_store_dlg_title": {"en": "Your online store is not open yet", "es": "Tu tienda online aún no está abierta", "pt": "Sua loja online ainda não está aberta"}, "home_tab_my_business": {"en": "My business", "es": "Mi negocio", "pt": "Meu negócio"}, "invoices_row_first": {"en": "Scan your first invoice", "es": "Escanea tu primera factura", "pt": "Escaneie sua primeira nota"}, "invoices_title": {"en": "Invoices", "es": "Facturas", "pt": "Notas"}, "mamaship_tab_register": {"en": "Register", "es": "Caja", "pt": "Caixa"}, "more_customers_title": {"en": "Clients", "es": "Clientes", "pt": "Clientes"}, "more_team_title": {"en": "Team", "es": "Equipo", "pt": "Equipe"}, "panel_heading_every_day": {"en": "Every day", "es": "Día a día", "pt": "Dia a dia"}, "panel_settings_row_sub": {"en": "Payments, taxes, receipts", "es": "Cobros, impuestos, recibos", "pt": "Cobranças, impostos, recibos"}, "rp_my_title": {"en": "My reports", "es": "Mis reportes", "pt": "Meus relatos"}, "rp_sheet_my_reports_none": {"en": "No reports yet", "es": "Aún no hay reportes", "pt": "Ainda não há relatos"}, "rp_strip_support": {"en": "Support", "es": "Soporte", "pt": "Suporte"}, "rp_strip_support_sub": {"en": "Report a problem here", "es": "Reporta un problema aquí", "pt": "Relatar um problema aqui"}, "scan_row_reports_today": {"en": "Today · %s", "es": "Hoy · %s", "pt": "Hoje · %s"}, "scan_row_reports_today_net": {"en": "Net sales today · %s", "es": "Ventas netas hoy · %s", "pt": "Vendas hoje · %s"}, "sell_online_address_clear": {"en": "Clear", "es": "Borrar", "pt": "Limpar"}, "sell_online_address_heading": {"en": "This is where your customers order", "es": "Aquí es donde piden tus clientes", "pt": "É aqui que seus clientes pedem"}, "sell_online_address_help": {"en": "Someone else may already have this name. Add your street, your neighborhood, or your city so yours is yours.", "es": "Puede que otro negocio ya tenga este nombre. Agrega tu calle, tu barrio o tu ciudad para que el tuyo sea solo tuyo.", "pt": "Outro negócio pode já ter este nome. Acrescente sua rua, seu bairro ou sua cidade para que o seu seja só seu."}, "sell_online_address_hint": {"en": "street, neighborhood or city", "es": "calle, barrio o ciudad", "pt": "rua, bairro ou cidade"}, "sell_online_address_need_suffix": {"en": "Add something after the dash", "es": "Agrega algo después del guion", "pt": "Acrescente algo depois do hífen"}, "sell_online_address_next": {"en": "Next · your hours", "es": "Siguiente · tu horario", "pt": "Próximo · seu horário"}, "sell_online_address_ok": {"en": "Looks good", "es": "Se ve bien", "pt": "Parece bom"}, "sell_online_address_title": {"en": "Your address", "es": "Tu dirección", "pt": "Seu endereço"}, "sell_online_address_warning": {"en": "You can't change this later. Renaming your shop won't move it.", "es": "No podrás cambiarla después. Si le cambias el nombre al negocio, la dirección no se mueve.", "pt": "Você não poderá mudar depois. Mudar o nome da loja não muda o endereço."}, "sell_online_checking": {"en": "Checking your page…", "es": "Revisando tu página…", "pt": "Verificando sua página…"}, "sell_online_close": {"en": "Close", "es": "Cierra", "pt": "Fecha"}, "sell_online_copy": {"en": "Copy", "es": "Copiar", "pt": "Copiar"}, "sell_online_hours_every_day_services": {"en": "Every day %1$s – %2$s · %3$d min per appointment", "es": "Todos los días %1$s – %2$s · %3$d min por cita", "pt": "Todos os dias %1$s – %2$s · %3$d min por atendimento"}, "sell_online_hours_heading_services": {"en": "When clients can book", "es": "Cuándo pueden reservar", "pt": "Quando seus clientes podem reservar"}, "sell_online_hours_outside_services": {"en": "Outside these hours your page takes no bookings and shows when you open again. The link never breaks.", "es": "Fuera de este horario tu página no toma reservas y muestra cuándo vuelves a abrir. El enlace nunca se rompe.", "pt": "Fora desse horário sua página não recebe reservas e mostra quando você abre de novo. O link nunca quebra."}, "sell_online_hours_row": {"en": "Online orders", "es": "Pedidos en línea", "pt": "Pedidos online"}, "sell_online_hours_short": {"en": "Hours", "es": "Horario", "pt": "Horário"}, "sell_online_hours_title": {"en": "Your hours", "es": "Tu horario", "pt": "Seu horário"}, "sell_online_intro_body_services": {"en": "Your services, online. Clients book and pay at the appointment.", "es": "Tus servicios, en línea. Tus clientes reservan y pagan en la cita.", "pt": "Seus serviços, online. Seus clientes reservam e pagam no atendimento."}, "sell_online_intro_title_services": {"en": "Take bookings from a link", "es": "Recibe reservas desde un enlace", "pt": "Receba agendamentos por um link"}, "sell_online_keep_open": {"en": "Keep Platata open to hear new orders", "es": "Deja Platata abierta para oír los pedidos nuevos", "pt": "Deixe a Platata aberta para ouvir os pedidos novos"}, "sell_online_n_of_m": {"en": "%1$d of %2$d online", "es": "%1$d de %2$d en línea", "pt": "%1$d de %2$d online"}, "sell_online_open": {"en": "Open", "es": "Abre", "pt": "Abre"}, "sell_online_pay_heading": {"en": "Payment at online checkout", "es": "Pago al pedir en línea", "pt": "Pagamento no pedido online"}, "sell_online_pay_shop": {"en": "Pay at the shop", "es": "Paga en el negocio", "pt": "Paga na loja"}, "sell_online_pay_shop_sub": {"en": "Nothing is charged when they book", "es": "No se cobra nada al reservar", "pt": "Nada é cobrado na reserva"}, "sell_online_pill_off": {"en": "OFF", "es": "APAGADO", "pt": "DESLIGADO"}, "sell_online_pill_on": {"en": "ON", "es": "ACTIVO", "pt": "LIGADO"}, "sell_online_prep_value": {"en": "%1$d min", "es": "%1$d min", "pt": "%1$d min"}, "sell_online_preview": {"en": "Preview", "es": "Ver", "pt": "Ver"}, "sell_online_qr": {"en": "QR", "es": "QR", "pt": "QR"}, "sell_online_row_off": {"en": "Off", "es": "Apagado", "pt": "Desligado"}, "sell_online_row_on": {"en": "On", "es": "Activo", "pt": "Ligado"}, "sell_online_same_every_day": {"en": "Same every day", "es": "Igual todos los días", "pt": "Igual todos os dias"}, "sell_online_same_on": {"en": "On", "es": "Sí", "pt": "Sim"}, "sell_online_sell_heading": {"en": "What you sell online", "es": "Lo que vendes en línea", "pt": "O que você vende online"}, "sell_online_share": {"en": "Share", "es": "Compartir", "pt": "Compartilhar"}, "sell_online_share_text_services": {"en": "Book here: %1$s", "es": "Reserva aquí: %1$s", "pt": "Agende aqui: %1$s"}, "sell_online_slot_heading": {"en": "How long each appointment takes", "es": "Cuánto dura cada cita", "pt": "Quanto dura cada atendimento"}, "sell_online_slot_title": {"en": "Appointment length", "es": "Duración de la cita", "pt": "Duração do atendimento"}, "sell_online_status_open": {"en": "Open, taking orders", "es": "Abierta, recibiendo pedidos", "pt": "Aberta, recebendo pedidos"}, "sell_online_step1": {"en": "Step 1 of 2", "es": "Paso 1 de 2", "pt": "Passo 1 de 2"}, "sell_online_step2": {"en": "Step 2 of 2", "es": "Paso 2 de 2", "pt": "Passo 2 de 2"}, "sell_online_timezone": {"en": "Times are in %1$s", "es": "Horas en %1$s", "pt": "Horários em %1$s"}, "sell_online_title": {"en": "Sell online", "es": "Vender en línea", "pt": "Vender online"}, "sell_online_turn_on": {"en": "Turn on the store", "es": "Encender la tienda", "pt": "Ligar a loja"}, "settings_title": {"en": "Settings", "es": "Configuración", "pt": "Configurações"}, "sx_agenda": {"en": "Agenda", "es": "Agenda", "pt": "Agenda"}, "workspace_full_reports": {"en": "Reports", "es": "Reportes", "pt": "Relatórios"}, "workspace_register_open": {"en": "Register open", "es": "Caja abierta", "pt": "Caixa aberto"}, "workspace_register_sales": {"en": "Sales", "es": "Ventas", "pt": "Vendas"}, "wsearch_bar": {"en": "Search settings, items, clients…", "es": "Busca ajustes, productos, clientes…", "pt": "Buscar ajustes, itens, clientes…"}};
+const PLU = {"home_clientes_count": {"en": {"one": "%1$d client", "other": "%1$d clients"}, "es": {"one": "%1$d cliente", "other": "%1$d clientes"}, "pt": {"one": "%1$d cliente", "other": "%1$d clientes"}}, "home_equipo_count_phones": {"en": {"one": "%1$d employee · %2$s", "other": "%1$d employees · %2$s"}, "es": {"one": "%1$d empleado · %2$s", "other": "%1$d empleados · %2$s"}, "pt": {"one": "%1$d funcionário · %2$s", "other": "%1$d funcionários · %2$s"}}, "home_equipo_on_phones": {"en": {"one": "%1$d on a phone", "other": "%1$d on phones"}, "es": {"one": "%1$d en celular", "other": "%1$d en celular"}, "pt": {"one": "%1$d no celular", "other": "%1$d no celular"}}};
+const WEB = {"shop_confirms": {"es": "El negocio te confirmará la hora.", "pt": "O estabelecimento vai confirmar o horário.", "en": "The shop will confirm your time."}, "tab_services": {"es": "Servicios", "pt": "Serviços", "en": "Services"}, "tab_products": {"es": "Productos", "pt": "Produtos", "en": "Products"}, "service_from": {"es": "Desde {amt}", "pt": "A partir de {amt}", "en": "From {amt}"}, "service_ask": {"es": "Precio en el local", "pt": "Preço no local", "en": "Price at the shop"}, "service_includes": {"es": "Incluye: {list}", "pt": "Inclui: {list}", "en": "Includes: {list}"}};
+/*TITLE: Vender en línea*/
+/* VS20 "Vender en línea" (SERVICES): the owner turns the booking page on, shares its link, and the client sees the services.
+   App at sim/usa-canada 37db6d6c, paths under app/src/main/java/com/example/.
+   panel()      ui/screens/home/HomeScreen.kt:1480-1830: shop name + arrow (:1490-1506), then the LazyColumn: PanelSearchBar FIRST
+                (:1516, ui/screens/home/PanelSearchBar.kt, WSEARCH-1), the connect nudge (hidden: devices are connected), the register
+                card (:1552-1599), "Vender en línea" (:1610-1653: SellOnlineGate.showRow; subtitle = the minted link or Apagado / Activo,
+                pill APAGADO / ACTIVO), "Día a día", Clientes (plain count: services have no fiado), Facturas, Equipo, Reportes
+                ("Ventas netas hoy", NetSalesWords.outsideUsCa), divider, Configuración. Services have no Items/Inventory row.
+   door         PosViewModel.kt:3417 openSellOnlineDoor -> ConnectionsGate.storeOpen(): free in US/CA (Entitlement.FREE_COUNTRIES);
+                elsewhere only when a tablet or an employee phone USES an extra connection (sync/ConnectionAllocator storeOpen). Refused =
+                ui/app/ConnectionEventsHost.kt:52-67 StoreLockedDialog (ConnectionDialogs.kt:102-124) drawn OVER THE PANEL (the door never
+                navigated): conn_store_dlg_title / conn_store_dlg_body_add / "Agregar una conexión" (StoreLockRule ADD: no paid connection yet).
+                The time-skip card stands for buying the connection in Google Play + the employee phone joining (VS19); its note is the
+                app's own conn_dlg_store.
+   sell page    ui/screens/online/SellOnlineScreen.kt MainPage (:244-408) with SellOnlineWords.SERVICES (data/business/SellOnlineWords.kt):
+                OFF = switch card + sell_online_intro_title_services / sell_online_intro_body_services (:297-307);
+                ON = status (SellOnlineText.statusLine: Revisando… then sell_online_status_open), keep-open line (:313), LinkCard (:320,
+                :439-481; Share sends sell_online_share_text_services "Reserva aquí: <link>"), NO pickup block for services (:322
+                showsPickupBlock), "Pago al pedir en línea" + PayRow(services) = locked "Paga en el negocio / No se cobra nada al
+                reservar" (:329-331, :498-515) with NO card row (sync/SellOnline.kt:41-50 cardOnlineRow -> HIDDEN for services in every
+                country: rules.cardOnlineAllowed = false), Horario (:372-382, hoursSummary = sell_online_hours_every_day_services),
+                "Lo que vendes en línea": one row per category that holds a product (sync/OnlineStoreSellable.kt:107-119) = the trade
+                category, whose emoji is categoryEmojiFor(name) = "🍽️" (data/CategoryEmoji.kt:24, CatalogDaoStore.kt:242); services AND
+                products count (REVFIX-14: a booked service is sellable even "En la caja"); no HiddenItemsCard (nothing left out).
+   address      SellOnlineScreen.kt:528-616 AddressPage (Paso 1 de 2), sync/OnlineStoreSlug.kt (base from the shop name, HOST).
+   hours        SellOnlineScreen.kt:620-738 HoursPage (Paso 2 de 2): sell_online_hours_heading_services, Abre / Cierra 9:00-18:00
+                (SellOnlineEdits.startingHours), "Igual todos los días", "Cuánto dura cada cita" / "Duración de la cita" 20 min with NO
+                sub-line (:697-712), no half-hour tip (:714), sell_online_hours_outside_services (:723-730), time zone (:732), button.
+   strip        ui/screens/reports/SupportStrip.kt (sell_online is LEVEL_2_PLUS, reports/ReportLevels.kt:41).
+   client page  public/store/app.js viewServices (:352-381): shop name, shop_confirms, the tabs Servicios | Productos (tabsEl :324-351:
+                both halves exist), one card per service in snapshot order = ProductDao.getAllProductsSync ORDER BY name
+                (BranchSnapshotStore.kt:99): name, "Incluye: …" (functions/storefront-projection.js:214-234 includedOptionNames = the free
+                "Lo que trae" sets), price by priceMode (app.js:356-359: FIXED money / FROM "Desde" + the FIRST variation's price, projection :285-299 / ASK "Precio
+                en el local"); card colours = the product colour (default 0xFF2196F3, CatalogoInvestigadoATienda.kt:22) at 12 % / 35 %. */
+/*@S mamaship_tab_register sx_agenda home_tab_my_business rp_strip_support rp_strip_support_sub rp_my_title rp_sheet_my_reports_none
+  wsearch_bar workspace_register_open workspace_register_sales sell_online_title sell_online_row_off sell_online_row_on
+  sell_online_pill_off sell_online_pill_on panel_heading_every_day more_customers_title invoices_title invoices_row_first
+  more_team_title workspace_full_reports scan_row_reports_today_net scan_row_reports_today settings_title panel_settings_row_sub
+  conn_store_dlg_title conn_store_dlg_body_add conn_add conn_not_now conn_dlg_store
+  sell_online_checking sell_online_status_open sell_online_intro_title_services sell_online_intro_body_services sell_online_keep_open
+  sell_online_copy sell_online_share sell_online_qr sell_online_preview sell_online_pay_heading sell_online_pay_shop
+  sell_online_pay_shop_sub sell_online_hours_short sell_online_hours_row sell_online_hours_every_day_services sell_online_sell_heading
+  sell_online_n_of_m sell_online_share_text_services
+  sell_online_address_title sell_online_step1 sell_online_address_heading sell_online_address_hint sell_online_address_ok
+  sell_online_address_need_suffix sell_online_address_help sell_online_address_clear sell_online_address_warning sell_online_address_next
+  sell_online_hours_title sell_online_step2 sell_online_hours_heading_services sell_online_open sell_online_close
+  sell_online_same_every_day sell_online_same_on sell_online_slot_heading sell_online_slot_title sell_online_prep_value
+  sell_online_hours_outside_services sell_online_timezone sell_online_turn_on*/
+/*@P home_clientes_count home_equipo_count_phones home_equipo_on_phones*/
+const V = VKIT.ctx({biz:"peluqueria"});
+const C = V.C, L = V.lang, esc = VKIT.esc, pick = V.pick, money = V.money;
+const SH = V.K.lang;                                                        // the shop's language (business_language): the customer page speaks it
+const FREE = (V.country === "US" || V.country === "CA");                     // sync/Entitlement.FREE_COUNTRIES
+const S = k => { const o = STR[k]; if(!o) throw new Error("missing string " + k); return o[L] != null ? o[L] : o.en; };
+const fmtA = (s, a) => { let i = 0; return String(s).replace(/%%|%(\d+)\$[sd]|%[sd]/g, (m, n) => { if(m === "%%") return "%"; const v = n ? a[n-1] : a[i++]; return v == null ? "" : String(v); }); };
+const F = (k, ...a) => fmtA(S(k), a);
+/* Android plurals: pt-BR (CLDR) "one" for 0 and 1; es / en "one" for 1 */
+const PL = (k, n, ...a) => { const p = PLU[k][L] || PLU[k].en; const cat = L === "pt" ? ((n === 0 || n === 1) ? "one" : "other") : (n === 1 ? "one" : "other"); return fmtA(p[cat] || p.other, a.length ? a : [n]); };
+const WT = (k, o) => { let s = WEB[k][SH] || WEB[k].es; Object.keys(o||{}).forEach(x => { s = s.split("{"+x+"}").join(o[x]); }); return s; };
+const LOCALE = {es:"es", pt:"pt-BR", en:"en-US"}[L];                      // AppLanguage.kt: the app sets "es" / "pt-BR" / "en"
+const HINT = (es, pt, en) => pick({es:"Toca " + es, pt:"Toque em " + pt, en:"Tap " + en});
+const H1 = k => HINT(S(k), S(k), S(k));
+const DEV_OWNER = pick({es:"Tu teléfono", pt:"Seu celular", en:"Your phone"});
+const DEV_CLIENT = pick({es:"Celular del cliente", pt:"Celular do cliente", en:"Customer's phone"});
+
+/* ---------- icons (Material Icons paths) ---------- */
+const P = (path, cls) => `<svg class="${cls||"mi"}" viewBox="0 0 24 24"><path d="${path}"/></svg>`;
+const IP = {
+  back:"M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z",
+  chev:"M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z",
+  down:"M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z",
+  search:"M15.5 14h-.79l-.28-.27A6.471 6.471 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z",
+  person:"M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z",
+  group:"M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z",
+  rlong:"M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14zM9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z",
+  gear:"M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z",
+  cart:"M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0020 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z",
+  receipt:"M18 17H6v-2h12v2zm0-4H6v-2h12v2zm0-4H6V7h12v2zM3 22l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20z",
+  lock:"M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z",
+  copy:"M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z",
+  share:"M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z",
+  qr:"M3 11h8V3H3v8zm2-6h4v4H5V5zM3 21h8v-8H3v8zm2-6h4v4H5v-4zM13 3v8h8V3h-8zm6 6h-4V5h4v4zM19 19h2v2h-2zM13 13h2v2h-2zM15 15h2v2h-2zM13 17h2v2h-2zM15 19h2v2h-2zM17 17h2v2h-2zM17 13h2v2h-2zM19 15h2v2h-2z",
+  open:"M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z",
+  buoy:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm7.46 7.12l-2.78 1.15c-.51-1.36-1.58-2.44-2.95-2.94l1.15-2.78c2.1.8 3.77 2.47 4.58 4.57zM12 15c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zM9.13 4.54l1.17 2.78c-1.38.5-2.47 1.59-2.98 2.97L4.54 9.13c.81-2.11 2.48-3.78 4.59-4.59zM4.54 14.87l2.78-1.15c.51 1.38 1.59 2.46 2.97 2.96l-1.17 2.78c-2.1-.81-3.77-2.48-4.58-4.59zm10.34 4.59l-1.15-2.78c1.37-.51 2.45-1.59 2.95-2.97l2.78 1.17c-.81 2.1-2.48 3.77-4.58 4.58z",
+  bksp:"M22 3H7c-.69 0-1.23.35-1.59.88L0 12l5.41 8.11c.36.53.9.89 1.59.89h15c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-3 12.59L17.59 17 14 13.41 10.41 17 9 15.59 12.59 12 9 8.41 10.41 7 14 10.59 17.59 7 19 8.41 15.41 12 19 15.59z"
+};
+const I = k => P(IP[k]);
+
+/* ---------- shared pieces ---------- */
+/* SumaTopBar (ui/components/SumaTopBar.kt): Material 64 dp, back arrow, titleLarge 22 bold */
+const topbar = (title, o) => { o = o || {};
+  return `<div class="sv-top"><span class="ib" data-t="${o.backT||"back"}">${I("back")}</span><b>${esc(title)}</b></div>`; };
+const strip = () => `<div class="sv-strip"><div class="h"><span class="bd">${I("buoy")}</span><div><b>${esc(S("rp_strip_support"))}</b><small>${esc(S("rp_strip_support_sub"))}</small></div></div><i></i>
+  <div class="h"><div><b>${esc(S("rp_my_title"))}</b><small>${esc(S("rp_sheet_my_reports_none"))}</small></div>${I("chev")}</div></div>`;
+const sw = (on, tag, dis) => `<span class="sv-sw${on?" on":""}${dis?" dis":""}"${tag?` data-t="${tag}"`:""}><i></i></span>`;
+/* the bottom NavigationBar of a services owner (PlatataApp.kt + navigation/NavLabels.kt): Caja · Agenda (sx_agenda) · flag;
+   with the panel open only the flag is lit (sync/PanelBarTap.tabLit) */
+const navOwner = () => `<div class="mnav">
+  <div><span class="pill">${I("cart")}</span>${esc(S("mamaship_tab_register"))}</div>
+  <div><span class="pill">${I("receipt")}</span>${esc(S("sx_agenda"))}</div>
+  <div class="on"><span class="pill"><span class="flagc lit">${V.flag()}</span></span>${esc(S("home_tab_my_business"))}</div></div>`;
+
+/* ---------- the business panel of a SERVICES shop ---------- */
+/* this morning's sales of the demo business (the register card and Reportes; kit: C.sales of V.today) */
+const TODAY_SALES = C.sales.filter(s => s.d === V.today).reduce((a, s) => a + s.total, 0);
+/* who is on a phone: the shop's stylists; the 3rd connection is an employee phone when there are two of them, else a tablet */
+const PHONES = Math.min(C.staff.length, 2);
+const THIRD_IS_PHONE = C.staff.length >= 2;
+function panelRow(tag, icon, title, sub, o){ o = o || {};
+  return `<div class="sv-wr"${tag?` data-t="${tag}"`:""}><span class="ic">${icon}</span><div class="tx"><b>${esc(title)}</b><small>${esc(sub||"")}</small></div>${o.trail||`<span class="ch">${I("chev")}</span>`}</div>`; }
+function panel(p){ p = p || {};
+  const team = C.staff.length;
+  const reg = `<div class="sv-wr reg" style="background:#E8F5E9;color:#2E7D32"><span class="dot">●</span><div class="tx"><b>${esc(S("workspace_register_open"))}</b><small style="color:rgba(46,125,50,.7)">${esc(S("workspace_register_sales"))}</small></div><b class="amt">${money(TODAY_SALES)}</b></div>`;
+  const on = !!p.storeOn;
+  const online = panelRow("sellonline", I("cart"), S("sell_online_title"), on ? LINK : S("sell_online_row_off"),
+    {trail:`<span class="pill0${on?" on":""}">${esc(S(on ? "sell_online_pill_on" : "sell_online_pill_off"))}</span>`});
+  return `<div class="sv-panel"><div class="ph"><b>${esc(V.place)}</b>${I("down")}</div><div class="pl"><div class="pin">
+    <div class="sv-search">${I("search")}<span>${esc(S("wsearch_bar"))}</span></div>
+    ${reg}
+    ${online}
+    <div class="eh">${esc(S("panel_heading_every_day"))}</div>
+    ${panelRow("", I("person"), S("more_customers_title"), PL("home_clientes_count", C.clients.length))}
+    ${panelRow("", I("rlong"), S("invoices_title"), S("invoices_row_first"))}
+    ${panelRow("", I("group"), S("more_team_title"), PL("home_equipo_count_phones", team, team, PL("home_equipo_on_phones", p.phones != null ? p.phones : PHONES)))}
+    ${panelRow("", I("rlong"), S("workspace_full_reports"), F(FREE ? "scan_row_reports_today" : "scan_row_reports_today_net", money(TODAY_SALES)))}
+    <hr>
+    ${panelRow("", I("gear"), S("settings_title"), S("panel_settings_row_sub"))}
+  </div></div></div>` + navOwner(); }
+/* StoreLockedDialog (ConnectionDialogs.kt:102-124) over the panel */
+const lockDialog = () => `<div class="dscrim"><div class="dbox"><div class="dtt">${esc(S("conn_store_dlg_title"))}</div>
+  <div class="dbody">${esc(S("conn_store_dlg_body_add"))}</div>
+  <div class="dbtn"><span class="dno">${esc(S("conn_not_now"))}</span><span class="dyes" data-t="dlg-add">${esc(S("conn_add"))}</span></div></div></div>`;
+
+/* ---------- the store address (sync/OnlineStoreSlug.kt normalize / base / link) ---------- */
+const slugN = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[\s_]+/g,"-").replace(/[^a-z0-9-]/g,"").replace(/-+/g,"-").replace(/^-+|-+$/g,"");
+const BASE = slugN(V.place), SUFFIX = slugN(C.city), SLUG = BASE + "-" + SUFFIX;
+const LINK = "platata-app.web.app/" + SLUG;
+/* the phone's own zone (ZoneId.systemDefault), stamped on the hours save */
+const ZONE = {CO:"America/Bogota",MX:"America/Mexico_City",PE:"America/Lima",CL:"America/Santiago",EC:"America/Guayaquil",AR:"America/Argentina/Cordoba",PA:"America/Panama",BR:"America/Sao_Paulo",US:"America/Chicago",CA:"America/Toronto"}[V.country];
+/* timeText: DateTimeFormatter.ofLocalizedTime(SHORT) in the app's language (SellOnlineScreen.kt:874-879) */
+const appTime = h => new Intl.DateTimeFormat(LOCALE, {timeStyle:"short"}).format(new Date(2026, 9, 22, h, 0));
+const SLOT_MIN = 20;                                       // OnlineStoreSettings.prepMinutes default (data/OnlineStoreSettings.kt:25)
+
+/* ---------- what the page publishes (OnlineStoreSellable.categories / storefront-projection.js) ---------- */
+const byName = (a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0;      // ORDER BY name (SQLite BINARY)
+const SERVICES = C.services.slice().sort(byName);
+const PRODUCTS = C.products.slice().sort(byName);
+const CAT_LINE = {emoji: "🍽️", name: V.tradeName, total: SERVICES.length + PRODUCTS.length, sellable: SERVICES.length + PRODUCTS.length};
+/* the service card's price (public/store/app.js:356-359): ASK -> service_ask; FROM -> "Desde" + svc.price = the FIRST stored choice
+   (storefront-projection.js:291 price: v.price of the first variation); FIXED -> the price */
+function webPrice(s){
+  if(s.mode === "ask") return WT("service_ask");
+  if(s.mode === "from"){ const first = s.choices[0] ? s.choices[0].price : null;
+    return first != null ? WT("service_from", {amt: money(first)}) : WT("service_ask"); }
+  return money(s.price);
+}
+
+/* ---------- the owner's "Vender en línea" pages ---------- */
+function sellPage(st){
+  let b = `<div class="scard"><div class="srow"><span class="tx"><span class="tm">${esc(S("sell_online_title"))}</span><span class="bs">${esc(st.on ? (st.checked ? S("sell_online_status_open") : S("sell_online_checking")) : S("sell_online_row_off"))}</span></span>${sw(st.on, "so-switch")}</div></div>`;
+  if(!st.on){
+    b += `<div class="scard">${P(IP.cart, "cico")}<span class="tm" style="font-weight:700">${esc(S("sell_online_intro_title_services"))}</span><span class="bm">${esc(S("sell_online_intro_body_services"))}</span></div>`;
+  } else {
+    b += `<div class="bs">${esc(S("sell_online_keep_open"))}</div>`;
+    if(st.checked) b += `<div class="scard"><span class="link">${esc(LINK)}</span><div class="lacts">
+       <span class="lact">${I("copy")}${esc(S("sell_online_copy"))}</span><span class="lact" data-t="so-share">${I("share")}${esc(S("sell_online_share"))}</span><span class="lact">${I("qr")}${esc(S("sell_online_qr"))}</span><span class="lact">${I("open")}${esc(S("sell_online_preview"))}</span></div></div>`;
+    b += `<div class="hd">${esc(S("sell_online_pay_heading"))}</div><div class="scard" data-t="so-pay"><div class="srow"><span class="tx"><span class="ts">${esc(S("sell_online_pay_shop"))}</span><span class="bs">${esc(S("sell_online_pay_shop_sub"))}</span></span>${P(IP.lock, "lockic")}${sw(true, "", true)}</div></div>`;
+    b += `<div class="hd">${esc(S("sell_online_hours_short"))}</div><div class="scard"><div class="srow"><span class="tx"><span class="ts">${esc(S("sell_online_hours_row"))}</span><span class="bs">${esc(F("sell_online_hours_every_day_services", appTime(9), appTime(18), SLOT_MIN))}</span></span>${P(IP.chev, "chv")}</div></div>`;
+    b += `<div class="hd">${esc(S("sell_online_sell_heading"))}</div>`;
+    b += `<div class="scard catrow"><div class="srow"><span class="tx"><span class="ts"><span class="emo">${CAT_LINE.emoji}</span> ${esc(CAT_LINE.name)}</span><span class="bs">${esc(F("sell_online_n_of_m", CAT_LINE.sellable, CAT_LINE.total))}</span></span>${sw(true)}</div></div>`;
+  }
+  return topbar(S("sell_online_title")) + `<div class="spage"><div class="cin">${b}</div></div>` + strip();
+}
+function kbd(){
+  const row = keys => `<div class="r">${keys.map(k => `<span class="${k.length>1?"w":""}">${k==="⌫"?P(IP.bksp):esc(k)}</span>`).join("")}</div>`;
+  const second = L === "es" ? "asdfghjklñ" : "asdfghjkl";
+  return `<div class="vs-kbd">${row("qwertyuiop".split(""))}${row(second.split(""))}${row(["⇧"].concat("zxcvbnm".split("")).concat(["⌫"]))}${row(["?123", "/", "          ", ".", "↵"])}</div>`;
+}
+function addrPage(st){
+  const typed = st.typed || "", ok = typed.length > 0, focus = !st.typedDone;
+  return topbar(S("sell_online_address_title")) + `<div class="spage"><div class="cin">
+    <span class="lab">${esc(S("sell_online_step1"))}</span><span class="tm" style="font-weight:700">${esc(S("sell_online_address_heading"))}</span>
+    <div class="scard"><span class="host">platata-app.web.app/${esc(BASE)}-</span>
+      <div class="ofld${focus?" f":""}">${typed?esc(typed)+(focus?'<span class="caret"></span>':""):`${focus?'<span class="caret"></span>':""}<span class="ph">${esc(S("sell_online_address_hint"))}</span>`}</div>
+      <span class="okl${ok?"":" err"}">${esc(ok ? S("sell_online_address_ok") : S("sell_online_address_need_suffix"))}</span></div>
+    <span class="bs">${esc(S("sell_online_address_help"))}</span><span class="tbtn">${esc(S("sell_online_address_clear"))}</span>
+    <span class="warn">${esc(S("sell_online_address_warning"))}</span>
+    <div class="mbtn${ok?"":" dis"}" data-t="so-next">${esc(ok ? S("sell_online_address_next") : S("sell_online_address_need_suffix"))}</div></div></div>` + (focus ? kbd() : strip());
+}
+function hoursPage(){
+  return topbar(S("sell_online_hours_title")) + `<div class="spage"><div class="cin">
+    <span class="lab">${esc(S("sell_online_step2"))}</span><span class="tm" style="font-weight:700">${esc(S("sell_online_hours_heading_services"))}</span>
+    <div class="scard"><div class="vrow"><span>${esc(S("sell_online_open"))}</span><b>${esc(appTime(9))}</b>${I("chev")}</div>
+      <div class="vrow"><span>${esc(S("sell_online_close"))}</span><b>${esc(appTime(18))}</b>${I("chev")}</div>
+      <div class="srow"><span class="tx"><span class="ts">${esc(S("sell_online_same_every_day"))}</span><span class="bs">${esc(S("sell_online_same_on"))}</span></span>${sw(true)}</div></div>
+    <div class="hd">${esc(S("sell_online_slot_heading"))}</div>
+    <div class="scard"><div class="srow"><span class="tx"><span class="ts">${esc(S("sell_online_slot_title"))}</span></span><b class="ts" style="font-weight:700">${esc(F("sell_online_prep_value", SLOT_MIN))}</b></div></div>
+    <span class="bs">${esc(S("sell_online_hours_outside_services"))}</span><span class="bs">${esc(F("sell_online_timezone", ZONE))}</span>
+    <div class="mbtn" data-t="so-on">${esc(S("sell_online_turn_on"))}</div></div></div>` + strip();
+}
+/* ---------- the client's phone: the booking page (public/store/app.js viewServices, store.css) ---------- */
+function webServices(){
+  const hex = "#2196F3";
+  const card = s => { const inc = s.included.length ? WT("service_includes", {list: s.included.map(x => x.name).join(", ")}) : "";
+    return `<div class="wpc" style="background:rgba(33,150,243,.12);border-color:rgba(33,150,243,.35)"><span><span class="pn">${esc(s.name)}</span>${inc?`<span class="pd">${esc(inc)}</span>`:""}</span><span class="pp">${esc(webPrice(s))}</span></div>`; };
+  return `<div class="brw"><div class="url">${I("lock")}<span>${esc(LINK)}</span></div><div class="wscr">
+    <div class="whead"><div class="wshop">${esc(V.place)}</div><div class="wstat">${esc(WT("shop_confirms"))}</div></div>
+    <div class="wtabs"><span class="wchip sel">${esc(WT("tab_services"))}</span><span class="wchip">${esc(WT("tab_products"))}</span></div>
+    <div class="wgrid">${SERVICES.map(card).join("")}</div></div></div>`;
+}
+function render(st){
+  if(st.screen === "panel") return panel({storeOn: st.on}) + (st.dlg ? lockDialog() : "") +
+    (st.skip ? VKIT.hop(V, {from: DEV_OWNER, to: S("sell_online_title"), line: pick(THIRD_IS_PHONE
+        ? {es:"+1 conexión · un teléfono de empleado conectado", pt:"+1 conexão · um celular de funcionário conectado", en:"+1 connection · an employee phone connected"}
+        : {es:"+1 conexión · una tablet conectada", pt:"+1 conexão · um tablet conectado", en:"+1 connection · a tablet connected"}), note: S("conn_dlg_store")}) : "");
+  if(st.screen === "sell") return sellPage(st) + (st.hop ? VKIT.hop(V, {from: DEV_OWNER, to: DEV_CLIENT, line: F("sell_online_share_text_services", "https://" + LINK)}) : "");
+  if(st.screen === "addr") return addrPage(st);
+  if(st.screen === "hours") return hoursPage(st);
+  if(st.screen === "web") return webServices(st);
+  return "";
+}
+VKIT.start(V, {
+  id:"VS20", tallVideo:true, clock:"12:41",
+  endText: pick({es:"Así vendes en línea con Platata.", pt:"Assim você vende online com o Platata.", en:"That's how you sell online with Platata."}),
+  beats: pick({
+    es:["Abre tu negocio y toca Vender en línea", FREE ? "En EE. UU. y Canadá ya viene incluida" : "Se abre cuando usas tu tercera conexión",
+        "Enciéndela: tu dirección y tu horario", "No se cobra nada al reservar", "Comparte tu enlace",
+        "Tu cliente ve tus servicios y sus precios", "Así vendes en línea con Platata."],
+    pt:["Abra seu negócio e toque em Vender online", FREE ? "Nos EUA e no Canadá já vem incluída" : "Ela abre quando você usa sua terceira conexão",
+        "Ligue a loja: seu endereço e seu horário", "Nada é cobrado na reserva", "Compartilhe seu link",
+        "Seu cliente vê seus serviços e preços", "Assim você vende online com o Platata."],
+    en:["Open your business and tap Sell online", FREE ? "In the US and Canada it's already included" : "It opens once you use your third connection",
+        "Turn it on: your address and your hours", "Nothing is charged when they book", "Share your link",
+        "Your client sees your services and prices", "That's how you sell online with Platata."]}),
+  state:{screen:"panel", dlg:false, skip:false, on:false, checked:false, typed:"", typedDone:false, hop:false},
+  render,
+  who: st => st.screen === "web" ? DEV_CLIENT : DEV_OWNER,
+  steps: settled([
+    {beat:0, hint:H1("sell_online_title"), target:'[data-t="sellonline"]', tap(st){ if(FREE) st.screen = "sell"; else st.dlg = true; }},
+  ].concat(FREE ? [] : [
+    {beat:1, hint:H1("conn_add"), target:'[data-t="dlg-add"]', tap(st, E){ st.dlg = false; st.skip = true; E.after(4200, () => { st.skip = false; }); }},
+    {beat:1, hint:H1("sell_online_title"), target:'[data-t="sellonline"]', tap(st){ st.screen = "sell"; }},
+  ]).concat([
+    {beat:2, hint:pick({es:"Toca el interruptor", pt:"Toque no interruptor", en:"Tap the switch"}), target:'[data-t="so-switch"]', tap(st, E){ st.screen = "addr";
+        E.after(700, () => E.type("typed", SUFFIX, () => { E.after(400, () => { st.typedDone = true; }); }, 90)); }},
+    {beat:2, hint:pick({es:"Toca Siguiente", pt:"Toque em Próximo", en:"Tap Next"}), target:'[data-t="so-next"]', tap(st){ st.screen = "hours"; }},
+    {beat:3, hint:H1("sell_online_turn_on"), target:'[data-t="so-on"]', tap(st, E){ st.screen = "sell"; st.on = true; st.checked = false;
+        E.after(1500, () => { st.checked = true; }); }},
+    {beat:4, hint:H1("sell_online_share"), target:'[data-t="so-share"]', tap(st, E){ st.hop = true;
+        E.after(2600, () => { st.hop = false; st.screen = "web"; });
+        if(Demo.MODE !== "video") E.after(5500, () => {});       /* demo mode: let the page be read before the end card */ }}
+  ]))
+});
+/* demo plumbing only (not an app screen): each tap keeps the engine busy until its last scheduled change has settled */
+function settled(steps){
+  return steps.map(s => Object.assign({}, s, {tap(st, E){
+    let last = 0;
+    const E2 = Object.create(E);
+    E2.after = (ms, fn) => { last = Math.max(last, ms); return E.after(ms, fn); };
+    E2.type = (key, text, done, ms) => { last = Math.max(last, (String(text).length + 1) * (ms || 45)); return E.type(key, text, done, ms); };
+    s.tap(st, E2);
+    E.after(last + 450, () => {});
+  }}));
+}
+</script>
+</body>
+</html>

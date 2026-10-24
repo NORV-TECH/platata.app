@@ -1,0 +1,66 @@
+{
+  "id": "VS20",
+  "name": "Vender en línea",
+  "business": "servicios",
+  "voice_settings": {
+    "es": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    },
+    "pt": {
+      "stability": 0.5,
+      "similarity_boost": 0.75
+    }
+  },
+  "steps": [
+    {
+      "id": "1-abrir",
+      "voice": {
+        "es": "Abre tu negocio y toca Vender en línea.",
+        "pt": "Abra seu negócio e toque em Vender online."
+      }
+    },
+    {
+      "id": "2-conexion",
+      "voice": {
+        "es": "Se abre cuando una tablet o un teléfono de empleado usa tu tercera conexión.",
+        "pt": "Ela abre quando um tablet ou um celular de funcionário usa sua terceira conexão."
+      }
+    },
+    {
+      "id": "3-encender",
+      "voice": {
+        "es": "Enciéndela: eliges tu dirección y las horas en que pueden reservar.",
+        "pt": "Ligue a loja: você escolhe seu endereço e os horários em que podem agendar."
+      }
+    },
+    {
+      "id": "4-pago",
+      "voice": {
+        "es": "Toca Encender la tienda. No se cobra nada al reservar: te pagan en tu negocio.",
+        "pt": "Toque em Ligar a loja. Nada é cobrado na reserva: o cliente paga no seu negócio."
+      }
+    },
+    {
+      "id": "5-compartir",
+      "voice": {
+        "es": "Comparte tu enlace por WhatsApp o Instagram.",
+        "pt": "Compartilhe seu link pelo WhatsApp ou Instagram."
+      }
+    },
+    {
+      "id": "6-cliente",
+      "voice": {
+        "es": "Tu cliente ve tus servicios con sus precios, y tus productos en otra pestaña.",
+        "pt": "Seu cliente vê seus serviços com os preços, e seus produtos em outra aba."
+      }
+    },
+    {
+      "id": "7-fin",
+      "voice": {
+        "es": "Así vendes en línea con Platata.",
+        "pt": "Assim você vende online com o Platata."
+      }
+    }
+  ]
+}
