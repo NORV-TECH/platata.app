@@ -27,3 +27,14 @@
 - 1 option-sheet CTA: FIXED. 46 "Elige uno" $0 / cart icon: FIXED (VariationSelectionSheet.kt:100-118). ROUND3 #20 "Tienda Local" seller: FIXED
   (CheckoutActions.kt:286-291 saves the owner's name). 2 Agenda › Cobrar with the register closed: FIXED (SavedTicketActions.kt:678 REGISTER_CLOSED,
   ReportsNavGraph.kt:141; CheckoutActions.kt:194 refuses a cash sale on a closed register).
+
+## Round 3 (37db6d6c)
+What changed on the page (shared block with VS2):
+- Service tiles whole (ProductCard.kt:303), option sheet without a repeated header (OptionSelectionSheet.kt:449-451), "Todos" grid A-Z
+  (PosDao.kt:334), scroll to the tapped tile in the US run.
+- Pay screen: the link reads "Servicios (1) ›" (CheckoutPayBlock.kt:248). The set-up link and "Cobrar con enlace" can both show, each on its own row,
+  set-up first (CheckoutSheetBody.kt:492-512, :1042): Mexico with Stripe connected now shows "Cobrar con enlace" under the card button.
+- Timing: the option add tap waits 1.0 s (was 2.2) so it lands inside its line.
+Script: unchanged. Checker OK CO/BR/MX (+US). Timing (real clips) OK after the wait fix (tap +1.9 s into the line).
+New app bugs: none new on these screens.
+Round-2 items: 7 (Mexico: setup link hid "Cobrar con enlace") FIXED; 8/14 ("Artículos (1)" for a haircut) FIXED; cut tile prices FIXED.

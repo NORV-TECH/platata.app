@@ -29,3 +29,15 @@
 
 ## 5. After REVIEW-VS4-7
 - "Pagó · Sin foto" now waits 4.5 s into beat 5, so the line is heard over the QR screen.
+
+## Round 3 (37db6d6c)
+What changed on the page:
+- Service tiles whole, "Desde" and minutes on their own lines (ProductCard.kt:303); "Todos" grid A-Z (PosDao.kt:334).
+- Strip word by cart (sync/SaleNoun.kt:15); pay link "Servicios (N) ›" (CheckoutPayBlock.kt:248); the two link rows (CheckoutSheetBody.kt:492-512).
+- Receipt: no "En el local" line (ReceiptFormatter.kt:101); "(Incluido)" line (ReceiptFormatter.kt:293/404).
+- The Payment methods page and the QR terms page are level-2 pages, so they carry the support strip: it is now drawn, with the services purple badge
+  #7C55E0 (SupportStrip.kt:154). It was missing.
+- Timing: beat 1 tap wait 3.0 s (pt 3.6), beat 4 wait 3.9 s (pt 4.6), so each tap lands in its line.
+Script: unchanged. Checker OK CO/BR/MX. Timing (real clips) OK (tick +3.9 / +4.5 s, Pagó +4.7 / +5.4 s).
+New app bugs: none new on these screens.
+Round-2 items: cut "Desde" prices (money, display) FIXED; "Artículos (1)" on the pay screen FIXED ("Servicios (1)").

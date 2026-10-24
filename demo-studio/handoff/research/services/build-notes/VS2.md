@@ -25,3 +25,15 @@
 - 50 (amber bar above the unfinished setup picker): FIXED (HomeScreen.kt:455-458 ServicesSetupSurface.hidesRegisterClosedBar).
 - 1 (option sheet CTA leaves out the service price): FIXED (OptionSelectionSheet.kt:319-331 falls back to basePrice) — shown "Agregar a la venta · $ 25.000".
 - 42 (part): "Venta actual · 1 servicio" FIXED (CurrentSaleStrip.kt services plural).
+
+## Round 3 (37db6d6c)
+What changed on the page (shared block with VS3):
+- Service tiles: whole price, "Desde" and the minutes on their own lines (ProductCard.kt:303 ServicePriceBlock). The tile is no longer cut.
+- Options sheet: no repeated header for a one-value set (OptionSelectionSheet.kt:449-451).
+- The till's "Todos" grid is A-Z, as the app lists it (PosDao.kt:334 ORDER BY name ASC); the page used the menu order. In the US run the tapped
+  service sits on the third row, so the page scrolls the grid to it (as the owner would).
+- Cobrar with the register closed is remembered (RegisterNavGraph.kt:245, HomeScreen.kt:708/762): not on this page's path.
+Script: unchanged. Checker OK CO/BR/MX (+US). Timing (real clips) OK.
+New app bugs: none new on these screens.
+Round-2 items: 16 (Abrir caja then Cobrar again) FIXED; tile prices cut on a 412 dp phone FIXED.
+Note for the lead: VS9/VS10 share this block and need the same A-Z order.
