@@ -8874,16 +8874,6 @@
   "file": "demo-studio/audio/V6/pt/3-caja.mp3",
   "chars": 75
  },
- "V6/es/4-otra-vez": {
-  "hash": "68cc144c70e70b740ef823b6689380f6bde26ddd",
-  "file": "demo-studio/audio/V6/es/4-otra-vez.mp3",
-  "chars": 40
- },
- "V6/pt/4-otra-vez": {
-  "hash": "b105b06525b71efa18a5b4eaafddad53ff5bf025",
-  "file": "demo-studio/audio/V6/pt/4-otra-vez.mp3",
-  "chars": 51
- },
  "V6/es/5-exacto": {
   "hash": "968f5babf1d2707b7e4eee40e05b700c42b08401",
   "file": "demo-studio/audio/V6/es/5-exacto.mp3",
@@ -10055,9 +10045,9 @@
   "chars": 35
  },
  "V5/pt/4-guardar": {
-  "hash": "ba6372d257672a0a81ad57c04dc8c28c75b46526",
+  "hash": "1c75539c8491f101f07bd4d6a1459ad00b9a7e99",
   "file": "demo-studio/audio/V5/pt/4-guardar.mp3",
-  "chars": 16
+  "chars": 39
  },
  "V5/es/5-aviso": {
   "hash": "b74fde8e38c3adfd9c9ebe53757727c4ae5e5ed0",
@@ -10065,9 +10055,9 @@
   "chars": 34
  },
  "V5/pt/5-aviso": {
-  "hash": "43a1f8caf0c1faa33cbbd6a081427f8e750f60ec",
+  "hash": "ab776f02581ee303480b7f1d6f106e41f25b3d6a",
   "file": "demo-studio/audio/V5/pt/5-aviso.mp3",
-  "chars": 30
+  "chars": 33
  },
  "V5/es/6-no-asistio": {
   "hash": "dfb977326e2cd32875ac1f0da4523a214b90a481",
@@ -10095,9 +10085,9 @@
   "chars": 36
  },
  "V5/pt/8-whatsapp": {
-  "hash": "cd6c71289b126096e86d28f7aa74c151ae10ca9b",
+  "hash": "3991caa6cb200bc52127fc3439550360060dabd2",
   "file": "demo-studio/audio/V5/pt/8-whatsapp.mp3",
-  "chars": 35
+  "chars": 36
  },
  "V5/es/9-fin": {
   "hash": "043bcbdbe84fbe6fa0edf936aa00cdd68ab3a2eb",
@@ -10700,9 +10690,9 @@
   "chars": 49
  },
  "VS18-MX/es/7-oferta": {
-  "hash": "e7da5294e5b4a1d8eaca0c84c90a8a344199cfca",
+  "hash": "746887f304e4be9d09edc2a1bf55dae0d201a37b",
   "file": "demo-studio/audio/VS18-MX/es/7-oferta.mp3",
-  "chars": 41
+  "chars": 40
  },
  "VS18-MX/es/8-pregunta": {
   "hash": "79a1fc547da1e88199b82e3bfad37e427120cc58",
@@ -10775,14 +10765,14 @@
   "chars": 53
  },
  "VS18/es/7-oferta": {
-  "hash": "e7da5294e5b4a1d8eaca0c84c90a8a344199cfca",
+  "hash": "746887f304e4be9d09edc2a1bf55dae0d201a37b",
   "file": "demo-studio/audio/VS18/es/7-oferta.mp3",
-  "chars": 41
+  "chars": 40
  },
  "VS18/pt/7-oferta": {
-  "hash": "281b8f5039681c08496683c2eee417ee8395057f",
+  "hash": "a5158e40d5ca62348f60898949726cbf751cb8c0",
   "file": "demo-studio/audio/VS18/pt/7-oferta.mp3",
-  "chars": 45
+  "chars": 44
  },
  "VS18/es/8-pregunta": {
   "hash": "79a1fc547da1e88199b82e3bfad37e427120cc58",
@@ -10988,5 +10978,175 @@
   "hash": "d3a37937e5b3442e5fe7d06611a1b0193aadbeea",
   "file": "demo-studio/audio/TS5-MX/es/5-end.mp3",
   "chars": 36
+ },
+ "V6/es/4-al-abrir": {
+  "hash": "aae0ebb762acefc9c99e0a022606b45fc4e62b51",
+  "file": "demo-studio/audio/V6/es/4-al-abrir.mp3",
+  "chars": 42
+ },
+ "V6/pt/4-al-abrir": {
+  "hash": "e6108e99ae06e4b31a4cce550b05619faf94a7d9",
+  "file": "demo-studio/audio/V6/pt/4-al-abrir.mp3",
+  "chars": 50
+ },
+ "V9/es/1-pagina": {
+  "hash": "c1aeffae3230fe588465345defc8568a9fd5797e",
+  "file": "demo-studio/audio/V9/es/1-pagina.mp3",
+  "chars": 58
+ },
+ "V9/pt/1-pagina": {
+  "hash": "6ec08828e5904a68c670dc8c19e4aa578f8d108c",
+  "file": "demo-studio/audio/V9/pt/1-pagina.mp3",
+  "chars": 59
+ },
+ "V9/es/2-hora": {
+  "hash": "0dfd8b5c7507e0a1e7be464442835fbf47668d5c",
+  "file": "demo-studio/audio/V9/es/2-hora.mp3",
+  "chars": 45
+ },
+ "V9/pt/2-hora": {
+  "hash": "a38c7b17ce53f39459ed1cce3dab48b13c1b1ebc",
+  "file": "demo-studio/audio/V9/pt/2-hora.mp3",
+  "chars": 52
+ },
+ "V9/es/3-nombre": {
+  "hash": "77c0a83c9e701de674e9b543e71cc3c073f80939",
+  "file": "demo-studio/audio/V9/es/3-nombre.mp3",
+  "chars": 31
+ },
+ "V9/pt/3-nombre": {
+  "hash": "a5ae6ea00d5918db5722e388e7f0609f78373484",
+  "file": "demo-studio/audio/V9/pt/3-nombre.mp3",
+  "chars": 27
+ },
+ "V9/es/4-reserva": {
+  "hash": "056be50904598c0f1efafb778c9c4abb9fe318af",
+  "file": "demo-studio/audio/V9/es/4-reserva.mp3",
+  "chars": 52
+ },
+ "V9/pt/4-reserva": {
+  "hash": "fa213de596fdef47878f18868713af20721f6fd8",
+  "file": "demo-studio/audio/V9/pt/4-reserva.mp3",
+  "chars": 51
+ },
+ "V9/es/5-aviso": {
+  "hash": "c30a900efc1379f99732387a1f0efdf19daac8a2",
+  "file": "demo-studio/audio/V9/es/5-aviso.mp3",
+  "chars": 53
+ },
+ "V9/pt/5-aviso": {
+  "hash": "62a9cfe1030a66ab000748b9be0d86804fda2d41",
+  "file": "demo-studio/audio/V9/pt/5-aviso.mp3",
+  "chars": 51
+ },
+ "V9/es/6-cita": {
+  "hash": "6a0e0f4055f01fea39854af200f086a523fa648d",
+  "file": "demo-studio/audio/V9/es/6-cita.mp3",
+  "chars": 51
+ },
+ "V9/pt/6-cita": {
+  "hash": "ce99caacd2172d3643d7b616efda1f43c61efcad",
+  "file": "demo-studio/audio/V9/pt/6-cita.mp3",
+  "chars": 49
+ },
+ "V9/es/7-whatsapp": {
+  "hash": "7de48f3d0c1eacce79f044156798c3cd70b2b0e0",
+  "file": "demo-studio/audio/V9/es/7-whatsapp.mp3",
+  "chars": 52
+ },
+ "V9/pt/7-whatsapp": {
+  "hash": "4e826687afcbd4c1fe0794a69fb7c0c1548755fd",
+  "file": "demo-studio/audio/V9/pt/7-whatsapp.mp3",
+  "chars": 56
+ },
+ "V9/es/8-agenda": {
+  "hash": "1cb977952d460758930e74db9c8b739dd5bd2d6a",
+  "file": "demo-studio/audio/V9/es/8-agenda.mp3",
+  "chars": 55
+ },
+ "V9/pt/8-agenda": {
+  "hash": "4f34ce4199de04cfe0bd4f91d4f18e743d23331a",
+  "file": "demo-studio/audio/V9/pt/8-agenda.mp3",
+  "chars": 59
+ },
+ "V9/es/9-fin": {
+  "hash": "9277d938ce8864e8972308db39a6352864307d60",
+  "file": "demo-studio/audio/V9/es/9-fin.mp3",
+  "chars": 42
+ },
+ "V9/pt/9-fin": {
+  "hash": "3f8769934cffe94795a85ef7ab3822a58cab0202",
+  "file": "demo-studio/audio/V9/pt/9-fin.mp3",
+  "chars": 48
+ },
+ "VS20/es/1-abrir": {
+  "hash": "e7ba7b3cbfee96a03baa814fd1d08363ad321e89",
+  "file": "demo-studio/audio/VS20/es/1-abrir.mp3",
+  "chars": 39
+ },
+ "VS20/pt/1-abrir": {
+  "hash": "ec7ca2c0347c799b94d1fdd97056632f19a18253",
+  "file": "demo-studio/audio/VS20/pt/1-abrir.mp3",
+  "chars": 42
+ },
+ "VS20/es/2-conexion": {
+  "hash": "ebaff1bac947a8d4118d90468304de64671d190e",
+  "file": "demo-studio/audio/VS20/es/2-conexion.mp3",
+  "chars": 76
+ },
+ "VS20/pt/2-conexion": {
+  "hash": "fd649cbad1ab8bcb32ac96247b2c6247769919eb",
+  "file": "demo-studio/audio/VS20/pt/2-conexion.mp3",
+  "chars": 80
+ },
+ "VS20/es/3-encender": {
+  "hash": "d364b02225bc078b2e6384631b134e413939a3ed",
+  "file": "demo-studio/audio/VS20/es/3-encender.mp3",
+  "chars": 67
+ },
+ "VS20/pt/3-encender": {
+  "hash": "fdba1d56fdf66b4e31cbebc04453b6b968583167",
+  "file": "demo-studio/audio/VS20/pt/3-encender.mp3",
+  "chars": 75
+ },
+ "VS20/es/4-pago": {
+  "hash": "2ab2d2f9116de9b54091032c1ac90bb481062990",
+  "file": "demo-studio/audio/VS20/es/4-pago.mp3",
+  "chars": 78
+ },
+ "VS20/pt/4-pago": {
+  "hash": "db0fbc33f6436821ccdd603494d93c9a025ed029",
+  "file": "demo-studio/audio/VS20/pt/4-pago.mp3",
+  "chars": 80
+ },
+ "VS20/es/5-compartir": {
+  "hash": "d7c86c53e6b12c9e2d75c0b134e7a68578b2dad0",
+  "file": "demo-studio/audio/VS20/es/5-compartir.mp3",
+  "chars": 44
+ },
+ "VS20/pt/5-compartir": {
+  "hash": "635bcc41d3020ab78363372231c24b351ac47b64",
+  "file": "demo-studio/audio/VS20/pt/5-compartir.mp3",
+  "chars": 48
+ },
+ "VS20/es/6-cliente": {
+  "hash": "35c83a9cd6952876e609342f3e92b7f019b8c7ba",
+  "file": "demo-studio/audio/VS20/es/6-cliente.mp3",
+  "chars": 77
+ },
+ "VS20/pt/6-cliente": {
+  "hash": "fb8be362a86f1e40c6ec6aef377be9196aa038b2",
+  "file": "demo-studio/audio/VS20/pt/6-cliente.mp3",
+  "chars": 73
+ },
+ "VS20/es/7-fin": {
+  "hash": "e7d43b26aa50823a6a7147df44dbca658e916079",
+  "file": "demo-studio/audio/VS20/es/7-fin.mp3",
+  "chars": 32
+ },
+ "VS20/pt/7-fin": {
+  "hash": "fcdf4d8fde983a4729763f6564804183e2d9c0b7",
+  "file": "demo-studio/audio/VS20/pt/7-fin.mp3",
+  "chars": 38
  }
 }
