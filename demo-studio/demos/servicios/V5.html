@@ -590,7 +590,7 @@ function agendaScreen(o){
    SumaButtons (:284-316): Cobrar (filled), No asistió (Secondary, only when the hour is here or past, the person may cancel and
    it is not a work order, :144-154 items 17/29/11), Reprogramar (Secondary), Cancelar cita / Cancelar orden (Secondary, not
    when a cita's day is past);
-   WhenPicker "¿Cuándo viene?" (:314-327, opened by Reprogramar = forceOpen); "2:00 p. m. → 2:40 p. m. · Dura 40 min"
+   WhenPicker "¿Cuándo viene?" ("¿Cuándo está listo?" + "Sin hora" for a work order; :318-331, opened by Reprogramar = forceOpen); "2:00 p. m. → 2:40 p. m. · Dura 40 min"
    (:333-345); the clash box when the new slot is taken (:381-407); "¿Para quién?" + "Ana · +57 300 123 4567" (:409-418, readable);
    footer (:422-467): time unchanged → Guardar; moved → "Movida de … a …" bodySmall + Guardar + "Guardar y avisar por WhatsApp". */
 function detailScreen(o){
@@ -606,7 +606,7 @@ function detailScreen(o){
   if(b.who) h += `<div class="dbm">${esc(t("appt_performer_pending"))}: ${esc(b.who)}</div>`;
   h += `<div class="dbt">${btn(t("ax_cobrar"),"pri","ax-charge")}${reached && !V.isOrder ? btn(t("ax_no_show"),"sec","ax-noshow") : ""}${btn(t("ax_resched"),"sec","ax-resched")}${V.isOrder || b.day>=0 ? btn(t(V.isOrder ? "ax_cancel_order" : "ax_cancel"),"sec","ax-cancel") : ""}</div>`;
   const taken = takenOn(o.list, day, b.id);
-  h += whenPicker({label:t("booking_when_arrive"), pre:"dt", day, mins, open:!!o.resching, period:o.period!=null?o.period:[[480,720],[720,1080],[1080,1200]].findIndex(p=>mins>=p[0]&&mins<p[1]),
+  h += whenPicker({label:t(V.isOrder ? "booking_when_ready" : "booking_when_arrive"), allowNone:V.isOrder, pre:"dt", day, mins, open:!!o.resching, period:o.period!=null?o.period:[[480,720],[720,1080],[1080,1200]].findIndex(p=>mins>=p[0]&&mins<p[1]),
     taken, nowMins: day===0 ? o.now : null});
   if(dur) h += `<div class="dsm">${esc(t("agenda_end_hint", fmtTime(mins), fmtTime(mins+dur), dur))}</div>`;
   if(moved && taken[mins]) h += `<div class="clash"><b>⚠ ${esc(t("sx_overbook"))}</b><span>${esc(t("sx_overbook_body", taken[mins], fmtTime(mins)))}</span></div>`;
@@ -641,12 +641,16 @@ const MB = bOf(MOVE_ID), NB = bOf(NOSHOW_ID);
    service = every line's name joined, the day as "EEEE d" and the hour as "18:00" in the shop's language, signed */
 const WA_MOVE = signed(t("appt_wa_rescheduled", CL[MB.client].first, t("appt_wa_appointment"), C.place, waWhen(MOVE_DAY, MOVE_MIN), MB.name));
 const WA_NOSHOW = signed(t("appt_wa_no_show", CL[NB.client].first, C.place, waWhen(NB.day, NB.t)));
+/* a work order (?biz=taller-motos) has no "No asistió" (AppointmentDetailScreen.kt:152 showNoShow = … && !isOrder): its second
+   half is "Cancelar orden" (CancelDialog :519-547, title dlg_cancel_order_t) and AppointmentText.cancelled (:105-117) */
+const WA_CANCEL = signed(t("appt_wa_cancelled", CL[NB.client].first, C.place, t("appt_wa_order"), waWhen(NB.day, NB.t)));
 function render(st){
   const list = listOf(st);
   if(st.screen==="agenda") return scrolled(agendaScreen({list, flash:st.flash}), st.scrollTo);
   if(st.screen==="detail"){ const b = list.find(x => x.id===st.open);
     return scrolled(detailScreen({b, list, now:NOW, resching:st.resching, day:st.day, mins:st.mins,
-      overlay: st.dlg ? alertDlg(t("dlg_noshow_t"), t("dlg_noshow_b"), t("dlg_noshow_ok"), t("dlg_keep"), {red:true}) : ""}), st.scrollTo); }
+      overlay: !st.dlg ? "" : V.isOrder ? alertDlg(t("dlg_cancel_order_t"), t("dlg_cancel_b"), t("ax_cancel_order"), t("dlg_cancel_keep"), {red:true})
+        : alertDlg(t("dlg_noshow_t"), t("dlg_noshow_b"), t("dlg_noshow_ok"), t("dlg_keep"), {red:true})}), st.scrollTo); }
   if(st.screen==="wa") return waChat({client:st.waClient, text:st.waText, sent:st.sent, clock:fmtTime(NOW)});
   return "";
 }
@@ -672,15 +676,19 @@ steps.push({beat:4, hint:H("Toca enviar","Toque em enviar","Tap send"), target:'
   tap(st, E){ st.sent = true; E.after(1500, ()=>{ back(st); }); }});
 steps.push({beat:5, hint:tapHint(CL[NB.client].first, CL[NB.client].first, CL[NB.client].first), target:`[data-t="row-${NOSHOW_ID}"]`,
   tap(st){ st.flash = null; st.screen = "detail"; st.open = NOSHOW_ID; }});
-steps.push({beat:5, hint:tapHint(t("ax_no_show"), t("ax_no_show"), t("ax_no_show")), target:'[data-t="ax-noshow"]', tap(st){ st.dlg = true; }});
-steps.push({beat:6, hint:tapHint(t("dlg_noshow_ok"), t("dlg_noshow_ok"), t("dlg_noshow_ok")), target:'[data-t="dlg-yes"]', wait:2.8,
-  tap(st){ st.gone.push(NOSHOW_ID); st.dlg = false; st.screen = "wa"; st.waClient = NB.client; st.waText = WA_NOSHOW; st.sent = false; }});
+const EXIT = V.isOrder ? {btn:"ax_cancel_order", tag:"ax-cancel", ok:"ax_cancel_order", wa:WA_CANCEL} : {btn:"ax_no_show", tag:"ax-noshow", ok:"dlg_noshow_ok", wa:WA_NOSHOW};
+steps.push({beat:5, hint:tapHint(t(EXIT.btn), t(EXIT.btn), t(EXIT.btn)), target:`[data-t="${EXIT.tag}"]`, tap(st){ st.dlg = true; }});
+steps.push({beat:6, hint:tapHint(t(EXIT.ok), t(EXIT.ok), t(EXIT.ok)), target:'[data-t="dlg-yes"]', wait:2.8,
+  tap(st){ st.gone.push(NOSHOW_ID); st.dlg = false; st.screen = "wa"; st.waClient = NB.client; st.waText = EXIT.wa; st.sent = false; }});
 steps.push({beat:7, hint:H("Toca enviar","Toque em enviar","Tap send"), target:'[data-t="wa-send"]',
   tap(st, E){ st.sent = true; E.after(1500, ()=>{ back(st); }); }});
 VKIT.start(V, {
   id:"V5", tallVideo:true, clock:CLOCK,
   endText: H("Así mueves tus citas con Platata.", "Assim você muda seus horários com o Platata.", "That's how you move your bookings with Platata."),
-  beats: V.pick({es: VOICE.es, pt: VOICE.pt,
+  beats: V.isOrder ? V.pick({
+    es: VOICE.es.map((v,i) => i===5 ? "¿No viene? Toca la orden y Cancelar orden." : i===6 ? "Confírmalo: sale de la agenda, sin cobrar nada." : v),
+    pt: VOICE.pt.map((v,i) => i===5 ? "Não vem? Toque na ordem e em Cancelar ordem de serviço." : v),
+    en:["The client can't come? Tap their order.","Tap Reschedule and pick tomorrow.","Tap the new time. You see where it moves from and to.","Tap Save and tell them on WhatsApp.","The message is already written. Send it.","Not coming? Tap the order and Cancel order.","Confirm: it leaves the agenda, nothing charged.","And you write to them on WhatsApp. Send it.","That's how you move your bookings with Platata."]}) : V.pick({es: VOICE.es, pt: VOICE.pt,
     en:["The client can't come? Tap their booking.","Tap Reschedule and pick tomorrow.","Tap the new time. You see where it moves from and to.","Tap Save and tell them on WhatsApp.","The message is already written. Send it.","They didn't come? Tap the booking and No-show.","Confirm: it leaves the agenda, nothing charged.","And you write to them on WhatsApp. Send it.","That's how you move your bookings with Platata."]}),
   state:{screen:"agenda", open:null, resching:false, day:null, mins:null, dlg:false, moved:{}, gone:[], flash:null, scrollTo:null,
     waClient:0, waText:"", sent:false},

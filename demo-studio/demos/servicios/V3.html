@@ -585,7 +585,7 @@ function agendaScreen(o){
    SumaButtons (:284-316): Cobrar (filled), No asistió (Secondary, only when the hour is here or past, the person may cancel and
    it is not a work order, :144-154 items 17/29/11), Reprogramar (Secondary), Cancelar cita / Cancelar orden (Secondary, not
    when a cita's day is past);
-   WhenPicker "¿Cuándo viene?" (:314-327, opened by Reprogramar = forceOpen); "2:00 p. m. → 2:40 p. m. · Dura 40 min"
+   WhenPicker "¿Cuándo viene?" ("¿Cuándo está listo?" + "Sin hora" for a work order; :318-331, opened by Reprogramar = forceOpen); "2:00 p. m. → 2:40 p. m. · Dura 40 min"
    (:333-345); the clash box when the new slot is taken (:381-407); "¿Para quién?" + "Ana · +57 300 123 4567" (:409-418, readable);
    footer (:422-467): time unchanged → Guardar; moved → "Movida de … a …" bodySmall + Guardar + "Guardar y avisar por WhatsApp". */
 function detailScreen(o){
@@ -601,7 +601,7 @@ function detailScreen(o){
   if(b.who) h += `<div class="dbm">${esc(t("appt_performer_pending"))}: ${esc(b.who)}</div>`;
   h += `<div class="dbt">${btn(t("ax_cobrar"),"pri","ax-charge")}${reached && !V.isOrder ? btn(t("ax_no_show"),"sec","ax-noshow") : ""}${btn(t("ax_resched"),"sec","ax-resched")}${V.isOrder || b.day>=0 ? btn(t(V.isOrder ? "ax_cancel_order" : "ax_cancel"),"sec","ax-cancel") : ""}</div>`;
   const taken = takenOn(o.list, day, b.id);
-  h += whenPicker({label:t("booking_when_arrive"), pre:"dt", day, mins, open:!!o.resching, period:o.period!=null?o.period:[[480,720],[720,1080],[1080,1200]].findIndex(p=>mins>=p[0]&&mins<p[1]),
+  h += whenPicker({label:t(V.isOrder ? "booking_when_ready" : "booking_when_arrive"), allowNone:V.isOrder, pre:"dt", day, mins, open:!!o.resching, period:o.period!=null?o.period:[[480,720],[720,1080],[1080,1200]].findIndex(p=>mins>=p[0]&&mins<p[1]),
     taken, nowMins: day===0 ? o.now : null});
   if(dur) h += `<div class="dsm">${esc(t("agenda_end_hint", fmtTime(mins), fmtTime(mins+dur), dur))}</div>`;
   if(moved && taken[mins]) h += `<div class="clash"><b>⚠ ${esc(t("sx_overbook"))}</b><span>${esc(t("sx_overbook_body", taken[mins], fmtTime(mins)))}</span></div>`;
