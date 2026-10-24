@@ -1,7 +1,21 @@
 # Report (keep this up to date)
 
-Last update: 23 Oct 2026, 1:50 PM PT (20:50 UTC), by the services builder (took over from the architect on 22 Oct, 11:00 AM PT).
-App commit the demos were built and checked at: 73c65f08 (sim/usa-canada, MERGE-23). Newest commit seen: d30ffa1 (MERGE-24, the online-booking fix "Arreglo 14"; re-checked 23 Oct); it does not touch the tiles, so the tile-price fix is NOT in yet. The Mexico card work was checked at d30ffa1. Website work only on `demo-studio`, folder `demo-studio/`; nothing deployed, nothing published, main untouched.
+Last update: 24 Oct 2026, by the services builder. **Round 3 in progress** (Monti, 24 Oct: the coder is back; app sim/usa-canada **37db6d6c**).
+App commit the demos were built and checked at: 73c65f08 (sim/usa-canada, MERGE-23). Newest commit: 37db6d6c (Fusion 28, 24 Oct): the tile-price fix and services round 2 are in; round 3 re-checks every page at it. The Mexico card work was first checked at d30ffa1. Website work only on `demo-studio`, folder `demo-studio/`; nothing deployed, nothing published, main untouched.
+
+## Round 3 (24 Oct, app 37db6d6c) — in progress
+Asked by Monti / the architect: (1) re-record everything held (45 tile-price videos, V5 Brazil, VS5-MX), each re-checked in the code first;
+(2) RS25-MX: the "cuesta un poco más" sentence left the app (LINKCOST-1); (3) build V9 (online booking) and VS20 (sell online), es + pt;
+(4) regenerate the tree, publish nothing; new app bugs in `handoff/research/services/CODER-PROMPTS-SERVICES-ROUND3.md`.
+- The app moved 39 commits (d30ffa1 → 37db6d6c): services round 2 fixes, Arreglo 15/16, the workspace search (WSEARCH-1), LINKCOST-1. Because the
+  services screens changed (tiles, owner panel search bar, pay screen rows, combos, Agenda, words), ALL 31 services pages are being re-checked, not only
+  the held ones; a final video whose screens changed is re-recorded too. Brief: `handoff/research/services/_ROUND3-BRIEF.md`.
+- The Mexico card changed as well (Tap to Pay sales now show the card brand and last four; both pay links on labelled rows; no "can't take cards"
+  strip on a link phone; no cost sentence): RS5-MX, TS5-MX, RS25-MX and the Mexico pay screens are being re-checked.
+- Services catalogue in the kit regenerated from 37db6d6c: no change for the four demo trades (the coder's brand removals touch products and motorbike
+  models, which the kit does not use).
+- **For the architect:** about 47 restaurant and retail pages draw the owner's "Mi negocio" panel; their videos were recorded before the panel's new
+  search bar (WSEARCH-1, the first row of the panel). Whether to re-record those is your call; this round does services and Mexico only.
 
 ## Summary
 Services: 31 demos built (V1–V8, VS1–VS24 except VS20), every one independently reviewed against the app code and fixed. Voices made for all of them (es, pt, Mexico es where Mexico differs). 20 videos are final; 45 videos show the app's cut tile prices and wait for the coder's fix (architect, 22 Oct: wait for the fix, publish nothing); the Brazil V5 video waits for the Portuguese WhatsApp fix. Coder list round 2 is ready (10 blocking, 42 small).
