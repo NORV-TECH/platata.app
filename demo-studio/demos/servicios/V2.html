@@ -37,7 +37,10 @@ const H = (es, pt, en) => pick({es, pt, en});
 const TAP = H("Toca ", "Toque em ", "Tap ");
 const CO = CC==="CO", BR = CC==="BR", MX = CC==="MX", USCA = CC==="US" || CC==="CA";
 const K = window.SERV.countries[CC];
-const cmp = new Intl.Collator(AL).compare;
+/* lists that come from the products table are in SQLite BINARY order (data/PosDao.kt:334 getAllProducts "ORDER BY name ASC"):
+   the till grid with "Todos" picked (ProductLibraryView.kt:216-220; the owner's menu order applies only inside a category chip)
+   and Mis servicios (ServicesMenuRule.rows keeps that order). JS "<" compares UTF-16 code units = the same order for these names. */
+const cmp = (a, b) => a < b ? -1 : a > b ? 1 : 0;
 
 /* Material icons (filled, 24 viewBox) */
 const P = d => `<svg class="mi" viewBox="0 0 24 24"><path d="${d}"/></svg>`;
@@ -241,7 +244,19 @@ function fitAll(){
     while(el.scrollWidth > el.clientWidth + 0.5 && sp > floor){ sp -= 1; el.style.fontSize = `calc(var(--u)*${sp})`; }
   });
 }
-new MutationObserver(() => fitAll()).observe(document.getElementById("root"), {childList:true, subtree:true});
+/* demo plumbing: when the next step's target sits below the bottom of its scrolling box (a long name in another trade or
+   language), that box is scrolled just enough, the way the owner's finger would; the engine then places the ring again */
+function keepTargetInView(){
+  let s; try { const ds = window.__demoState && window.__demoState(); if(!ds || ds.ended) return; s = steps[ds.si]; } catch(e){ return; }
+  if(!s) return;
+  const el = document.querySelector("#app " + s.target); if(!el) return;
+  let box = el.parentElement;
+  while(box && box.id !== "app"){ const cs = getComputedStyle(box); if(cs.overflowY === "hidden" && box.scrollHeight > box.clientHeight + 1) break; box = box.parentElement; }
+  if(!box || box.id === "app") return;
+  const over = el.getBoundingClientRect().bottom - box.getBoundingClientRect().bottom + 8;
+  if(over > 0.5){ box.scrollTop += over; window.dispatchEvent(new Event("resize")); }
+}
+new MutationObserver(() => { fitAll(); keepTargetInView(); }).observe(document.getElementById("root"), {childList:true, subtree:true});
 
 /* scrolled lists slide with a transform; when it stops, ask the engine to place the ring again */
 document.addEventListener("transitionend", e => { if(e.propertyName==="transform") window.dispatchEvent(new Event("resize")); });
