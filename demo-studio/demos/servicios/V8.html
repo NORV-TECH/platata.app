@@ -427,8 +427,9 @@ const SV_CSS = `
 .mat .sv-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
 .mat .sv-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
 .mat .sv-strip .h>div{flex:1;min-width:0}
-.mat .sv-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;color:#fff;display:grid;place-items:center;flex:0 0 auto}
-.mat .sv-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
+/* SupportStrip.kt:154: the badge is the business accent (c.accentBtn = ServiciosBtn #7C55E0, PaperColor.kt:57), its icon white (accentBtnInk) */
+.mat .sv-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#7C55E0;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .sv-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22);fill:#fff}
 .mat .sv-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
 .mat .sv-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mat .sv-strip .h>svg{width:calc(var(--u)*20);height:calc(var(--u)*20);fill:#737883;flex:0 0 auto}
@@ -720,7 +721,7 @@ VKIT.start(V, {
     {beat:3, hint:T1("where_done"), target:'[data-t="where-done"]', tap(st,E){ st.screen="hub"; E.after(900, () => { st.time=true; }); }},
     {beat:4, hint:pick({es:"Toca para seguir",pt:"Toque para continuar",en:"Tap to go on"}), target:'[data-t="time"]', tap(st){ st.time=false; st.screen="till"; }},
     {beat:4, hint:T(S("ax_cobrar"), S("ax_cobrar"), S("ax_cobrar")), target:'[data-t="charge"]', tap(st){ st.screen="pay"; }},
-    {beat:5, wait:1.2, hint:T1("where_mode_domicilio"),   /* video-only: the unanswered chooser shows while the line says Platata asks */ target:'[data-t="where-domicilio"]', tap(st){ st.picked="domicilio"; }},
+    {beat:5, wait:1.9, hint:T1("where_mode_domicilio"),   /* video-only: the unanswered chooser shows while the line says Platata asks; round 3, real clips (es 7.0 s / pt 6.1 s): "Toca A domicilio" starts at about 2.7 s */ target:'[data-t="where-domicilio"]', tap(st){ st.picked="domicilio"; }},
     {beat:6, hint:T1("cash_exact_short"), target:'[data-t="exact"]', tap(st){ st.screen="done"; }},
     {beat:7, hint:T1("receipt_opt_show_receipt"), target:'[data-t="view"]', tap(st){ st.receipt=true; }}
   ]

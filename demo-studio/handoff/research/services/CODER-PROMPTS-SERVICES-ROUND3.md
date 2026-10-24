@@ -79,3 +79,14 @@ and re-checked by me before they go in. Status: IN PROGRESS (more items arrive a
 
 ### 16. The card-surcharge idea's note still reads machine-translated (es / pt)
 - Where: `values-es/strings.xml:838`, `values-pt-rBR/strings.xml:837`. Fix: rewrite in plain Spanish / Portuguese.
+
+### 17. MONEY DISPLAY. A "Desde" service whose first choice has no price shows "Desde $ 0" on the booking page
+- Where: `functions/storefront-projection.js:197` (with item 1's first-variation price), seeded catalogue `CatalogoInvestigadoATienda.kt:122`
+  (e.g. Colombian "Retoque de raíz"). Fix: with item 1, take the lowest PRICED choice; a service with no priced choice says "Precio en el local".
+
+### 18. The owner's own Sell online category page shows the first choice's price with no "Desde"
+- Where: `sync/OnlineStoreSellable.kt:115` → `SellOnlineScreen.kt:777`. Fix: show "Desde" + the lowest priced choice, like the till.
+
+### 19. Right after turning the store on, a new owner briefly reads "Tu página dice Cerrado"
+- Where: `SellOnlineText.kt:64` (the status listener started when Sell online opened, `SellOnlineScreen.kt:125-128`, before the store was on). Fix: say
+  "Abriendo tu página…" until the first status after the switch.
