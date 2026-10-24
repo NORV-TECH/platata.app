@@ -54,3 +54,6 @@
   same ordinary-case line item 15 removed from the receipt (ReceiptFormatter.kt:101). Fix: skip WhereMode.LOCAL in whereText.
 - Round-2 items seen: 12, 13, 15, 24 fixed; 26 (pt "ordem de serviço") fixed in the strings (shown only with ?biz=taller-motos);
   29 fixed (not visible here).
+- Batch az (A-Z): the home grid after "Nueva venta" (Todos picked) now lists the services A-Z (PosDao.kt:334 getAllProducts
+  "ORDER BY name ASC", SQLite binary order; MenuOrder.inCategory only for the trade chip, ProductLibraryView.kt:216-220); it used the
+  menu order. No tile is ringed. Script unchanged; timing unchanged (real clips); checker OK CO/BR/MX; cut_price_scan OK.

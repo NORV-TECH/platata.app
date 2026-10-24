@@ -32,3 +32,6 @@
   screens as before, no wait changed. No video exists (no cut_price_scan).
 - New app bugs: none.
 - Round-2 items seen: 2, 9, 17 (tile) fixed; 14 fixed; 31 fixed (no Stripe location warning in Colombia).
+- Batch az (A-Z): the home grid with "Todos" picked now lists the services A-Z (PosDao.kt:334 getAllProducts "ORDER BY name ASC",
+  SQLite binary order; MenuOrder.inCategory only for the trade chip, ProductLibraryView.kt:216-220); it used the menu order. No tile is
+  ringed or named, so no scroll. Script unchanged; timing unchanged (real clips); checker OK CO/BR/MX; cut_price_scan OK.

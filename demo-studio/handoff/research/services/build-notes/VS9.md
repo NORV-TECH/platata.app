@@ -25,3 +25,7 @@
   (no cut_price_scan); the till frames show whole prices.
 - New app bugs: none.
 - Round-2 items seen: 2, 9, 17 (tile) fixed.
+- Batch az (A-Z): the home grid (Todos picked) now lists the services A-Z (PosDao.kt:334 getAllProducts "ORDER BY name ASC", SQLite
+  binary order; MenuOrder.inCategory only for the trade chip, ProductLibraryView.kt:216-220); it used the menu order. RING is found by
+  id, so the morning-sale data is unchanged; no tile is ringed. Script unchanged; timing unchanged (real clips); checker OK CO/BR/MX;
+  cut_price_scan OK.

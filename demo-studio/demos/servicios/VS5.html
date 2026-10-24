@@ -196,7 +196,9 @@ function svcHome(lines){
     `<span style="background:${hexA("#81C784",.05)};border:1px solid ${hexA("#81C784",.3)}">${esc(V.tradeName)}</span></div>`;
   /* "Todos" picked = PosDao.kt:334 getAllProducts "ORDER BY name ASC" (binary), split by ServicesLibrarySplit.kt; the owner's menu
      order (MenuOrder.inCategory) only when the trade chip is picked (ProductLibraryView.kt:216-220). Round 3 fix: the page used the menu order. */
-  const grid = `<div class="vgrid">${V.services.slice().sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0).map(svcTile).join("")}</div>`;
+  /* A-Z puts the sold service (Vacunación) on the last row, below the fold: he scrolled the grid (LazyVerticalGrid) to tap it, and the
+     grid keeps its place while the pay screen is over Home. The grid is scrolled just enough to show it (scrollToTarget, as VS2). */
+  const grid = `<div class="vgrid" data-scrollto="svc-${SALE[0].sid}">${V.services.slice().sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0).map(svcTile).join("")}</div>`;
   const foot = `<div class="vfoot"><div class="vkey"><span>${esc(t("scan_row_manual"))}</span></div>
     ${n?`<div class="cstrip"><span>${esc(tp("home_current_sale_services", n, n))}</span><i>›</i></div>`:""}
     <div class="vpair"><div class="sb sec pill${n?"":" off"}" data-t="book"><span>${esc(t(V.isOrder ? "services_action_crear_orden" : "services_action_agendar"))}</span></div>
@@ -425,6 +427,13 @@ const LINE = WOMPI ? "VISA ••4242" : STRIPE ? "visa ••4242" : null;   //
 const ONSALE = V.biz==="veterinaria" ? {es:"Con la vacuna en la venta", pt:"Com a vacina na venda", en:"With the vaccine in the sale"}
                                      : {es:"Con el servicio en la venta", pt:"Com o serviço na venda", en:"With the service in the sale"};     // ReceiptFormatter.cardTenderLine(brand, lastFour, null)
 
+/* scroll the home grid just enough to show the [data-scrollto] tile after every draw (copied from VS2), then the engine places the ring again */
+const scrollToTarget = () => { let moved = false; document.querySelectorAll("#app [data-scrollto]").forEach(g => {
+  const el = g.querySelector(`[data-t="${g.dataset.scrollto}"]`); if(!el) return;
+  const over = el.getBoundingClientRect().bottom - g.getBoundingClientRect().bottom + 8;
+  if(over > 0.5){ g.scrollTop += over; moved = true; } }); if(moved) window.dispatchEvent(new Event("resize")); };
+new MutationObserver(scrollToTarget).observe(document.getElementById("root"), {childList:true, subtree:true});
+if(document.fonts) document.fonts.ready.then(scrollToTarget);
 function render(st){
   if(st.screen==="home") return X(svcHome(st.lines));
   if(st.screen==="pay") return X(payScreen({lines:SALE, others:1, qr:true, card:CARDC?"ready":"none", cardLink:STRIPE}) +

@@ -56,3 +56,8 @@
   in readCardIdentity (or in cardTenderLine).
 - Round-2 items seen: 2, 9, 17, 21 (tile) fixed; 7 fixed (both links, brand + last four); 14 fixed; 31 fixed (the Stripe location
   warning is gated on stripeTenderAvailable, PaymentMethodsScreen.kt:441); 32 fixed.
+- Batch az (A-Z): the home grid with "Todos" picked now lists the services A-Z (PosDao.kt:334 getAllProducts "ORDER BY name ASC",
+  SQLite binary order; ServicesLibrarySplit.kt only filters; MenuOrder.inCategory only for the trade chip, ProductLibraryView.kt:216-220);
+  it used the menu order. A-Z puts the sold Vacunación on the last row, so the grid is scrolled to show it (scrollToTarget, as VS2),
+  because line 1 says "Con la vacuna en la venta". Script unchanged; no tile is ringed; timing unchanged (real clips, CO and MX);
+  checker OK CO/BR/MX; cut_price_scan OK.
