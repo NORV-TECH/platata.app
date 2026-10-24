@@ -453,7 +453,9 @@ const SIGNED = RECEIPT.trimEnd() + "\n\n" + t("whatsapp_signature");     // What
 
 /* ---- ServicesTransactionsScreen.kt:118-260: back arrow + TabRow (Ventas | Agenda with the count), the search box,
    day headers ("Hoy", "Mañana") and BookingRow :369-470 ("Viene" and the hour only: the day is the header's since R2-2
-   item 24 | the client, the first line's name · the phone READ by formatWhatsappForReading, :270-276, item 12 | the amount) ---- */
+   item 24 | the client, the first line's name · the phone READ by formatWhatsappForReading, :270-276, item 12, then the booking's
+   where mode: a one-way shop stores "En el local" on every booking, SavedTicketActions.kt:294 + CartActions.kt:726-737, and the
+   row prints it, :449-466 | the amount) ---- */
 function agendaRows(){
   const rows = [{t:"11:30", day:0, client:CLIENT.name, name:LINE.name, phone:DIG, amount:TOTAL, mine:true}]
     .concat(C.bookings.map(b => { const cl = C.clients.find(c=>c.name===b.client);
@@ -469,7 +471,7 @@ function agenda(){
   rows.filter(r=>r.day<=1).forEach(r => {
     if(r.day!==lastDay){ list += head(r.day); lastDay = r.day; }
     list += `<div class="ag-row"${r.mine?' data-t="appt"':""}><div class="ag-l"><b>${esc(t(V.isOrder?"sx_order_ready":"sx_comes"))}</b><small>${esc(fmtTime(minsOf(r.t)))}</small></div>
-      <div class="ag-m"><b>${esc(r.client)}</b><small>${esc(r.name)} · ${esc(readPhone(r.phone))}</small></div><b class="ag-a">${r.amount>0?money(r.amount):"—"}</b></div>`;
+      <div class="ag-m"><b>${esc(r.client)}</b><small>${esc(r.name)} · ${esc(readPhone(r.phone))}</small><small>${esc(t("where_mode_local"))}</small></div><b class="ag-a">${r.amount>0?money(r.amount):"—"}</b></div>`;
   });
   return `<div class="ag-top"><span class="ib">${J.back}</span><div class="ag-tabs"><span>${esc(t("tx_tab_all"))}</span><span class="on">${esc(t("sx_agenda"))}<i>${rows.length}</i></span></div></div>
     <div class="ag-search">${I2.search}<span>${esc(t("sx_search"))}</span></div><div class="ag-list">${list}</div>` + nav("agenda");
