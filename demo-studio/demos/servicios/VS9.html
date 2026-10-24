@@ -103,8 +103,11 @@ const TRADE_TILE = {peluqueria:"#F8E8EC", unas:"#F8E8EC", veterinaria:"#F0F2E3",
 const TRADE_SVG = TRADE_ICONS[V.biz];
 /* the left footer word follows the trade (sync/ServiceActionLabel.kt, data/TradeFamily): "Crear orden" for a workshop, else "Agendar" */
 const ACTION_WORD = t(V.isOrder ? "services_action_crear_orden" : "services_action_agendar");
-/* the home grid shows the services in the owner's menu order; the trade name is the one category (GuideActions.kt:221-226) */
-const SERVICES = C.services;
+/* the home grid with "Todos" picked lists the services A-Z: PosDao.kt:334 getAllProducts "ORDER BY name ASC" (SQLite binary order),
+   split by ServicesLibrarySplit.kt (it only filters); the owner's menu order (MenuOrder.inCategory, DB-2) applies only when the trade
+   category chip is picked (ProductLibraryView.kt:216-220). Round 3 fix: the page used the menu order with "Todos". The trade name is the
+   one category (GuideActions.kt:221-226) */
+const SERVICES = C.services.slice().sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0);
 const svcPriceLabel = s => s.mode==="ask" ? t("items_price_unset") : s.mode==="from" ? t("items_price_from", money(s.price)) : money(s.price);
 
 /* the one service each page rings. Peluquería: "Corte de caballero / hombre", a fixed price in every country with its researched options

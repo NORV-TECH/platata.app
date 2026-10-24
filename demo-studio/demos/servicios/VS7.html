@@ -196,7 +196,9 @@ function svcHome(lines){
   const edit = `<div class="hedit"><span>${I2.edit}${esc(t("common_edit"))}</span></div>`;
   const chips = `<div class="mcats"><span style="background:${hexA("#607D8B",.22)};border:calc(var(--u)*1.5) solid #607D8B;color:#607D8B">${J.check}${esc(t("items_filter_all"))}</span>` +
     `<span style="background:${hexA("#81C784",.05)};border:1px solid ${hexA("#81C784",.3)}">${esc(V.tradeName)}</span></div>`;
-  const grid = `<div class="vgrid">${V.services.map(svcTile).join("")}</div>`;
+  /* "Todos" picked = PosDao.kt:334 getAllProducts "ORDER BY name ASC" (binary), split by ServicesLibrarySplit.kt; the owner's menu
+     order (MenuOrder.inCategory) only when the trade chip is picked (ProductLibraryView.kt:216-220). Round 3 fix: the page used the menu order. */
+  const grid = `<div class="vgrid">${V.services.slice().sort((a, b) => a.name < b.name ? -1 : a.name > b.name ? 1 : 0).map(svcTile).join("")}</div>`;
   const foot = `<div class="vfoot"><div class="vkey"><span>${esc(t("scan_row_manual"))}</span></div>
     ${n?`<div class="cstrip"><span>${esc(tp("home_current_sale_services", n, n))}</span><i>›</i></div>`:""}
     <div class="vpair"><div class="sb sec pill${n?"":" off"}" data-t="book"><span>${esc(t(V.isOrder ? "services_action_crear_orden" : "services_action_agendar"))}</span></div>
