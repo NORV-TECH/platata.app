@@ -5,7 +5,7 @@ Each item: what is wrong, where (file:line), a one-line fix, and how much it mat
 reviewer while re-checking a demo, verified in the code by them, and re-checked by me before it went in.
 Totals: **2 blocking** (1 blocks two demo videos, 1 blocks real bookings), **3 money display**, **19 small**.
 Mexico card items are in `handoff/research/mexico/CODER-PROMPTS-MEXICO.md` (round 3 section: the lower-case "visa ••4242" after a tap sale).
-Round 2 (`CODER-PROMPTS-SERVICES-ROUND2.md`): every item the demos touch was seen FIXED at 37db6d6c, except the half-fixed words in items 4, 13, 22 below.
+Round 2 (`CODER-PROMPTS-SERVICES-ROUND2.md`): every item the demos touch was seen FIXED at 37db6d6c, except the half-fixed ones carried into items 1, 4 ("Desde" price, round 2 item 9), 6 and 7 (services words, round 2 items 42, 47) below.
 
 ## Blocking
 
