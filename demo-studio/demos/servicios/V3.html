@@ -42,6 +42,7 @@
 .mat .mcats span{flex:0 0 auto;display:flex;align-items:center;gap:calc(var(--u)*6);padding:calc(var(--u)*8) calc(var(--u)*16);border-radius:calc(var(--u)*24);font-size:calc(var(--u)*14);font-weight:600;line-height:calc(var(--u)*20);color:#6E6E73;white-space:nowrap}
 .mat .mcats span svg{width:calc(var(--u)*16);height:calc(var(--u)*16);fill:currentColor}
 .mat .sgrid{flex:1;min-height:0;overflow:hidden;padding:calc(var(--u)*16);padding-top:calc(var(--u)*8);display:grid;grid-template-columns:repeat(3,1fr);gap:calc(var(--u)*8);align-content:start;align-items:start}
+.mat .sgrid>.stile{transform:translateY(var(--gdy,0))}
 .mat .stile{border:calc(var(--u)*1.5) solid #E5E5EA;border-radius:calc(var(--u)*12);background:#fff;padding:calc(var(--u)*12);display:flex;flex-direction:column;gap:calc(var(--u)*8);min-width:0}
 .mat .stile .ibx{width:calc(var(--u)*40);height:calc(var(--u)*40);border-radius:calc(var(--u)*12);display:grid;place-items:center}
 .mat .stile .ibx svg{width:calc(var(--u)*26);height:calc(var(--u)*26)}
@@ -369,6 +370,20 @@ function scrolled(html, sel, o={}){
   return html.replace('class="scr-in', `style="transform:translateY(calc(var(--u)*-${(dy/u).toFixed(1)}))" class="scr-in`);
 }
 
+/* the till's grid scrolls (a LazyVerticalGrid): when the tile a step needs sits under the footer (a long name in another
+   language makes the tiles taller), the demo scrolls the tiles up inside the grid, the way the owner's finger would */
+function tillScrolled(html, sel){
+  const app = document.getElementById("app"); if(!app || !sel) return html;
+  app.innerHTML = html;
+  const grid = app.querySelector(".sgrid"), el = app.querySelector(sel);
+  if(!grid || !el) return html;
+  const u = document.getElementById("screen").getBoundingClientRect().width / 412;
+  const g = grid.getBoundingClientRect(), e = el.getBoundingClientRect();
+  const dy = e.bottom - g.bottom + 16*u;
+  if(dy <= 0) return html;
+  return html.replace('<div class="sgrid">', `<div class="sgrid" style="--gdy:calc(var(--u)*-${(dy/u).toFixed(1)})">`);
+}
+
 /* ---------- the owner's till for services: ui/screens/home/HomeScreen.kt ----------
    top (:590-692): TabRow "Servicios · N | Productos · N" (HomeTabLabels.kt:28-31, labelLarge, selected bold, 3 dp primary
    indicator, 16 dp sides) → RegisterClosedBar (:681-686, RegisterClosedBar.kt) → OfflineStrip (:692, OfflineStrip.kt)
@@ -596,8 +611,8 @@ const NOW = 8*60 + 5;                      /* before the register is opened (V4 
    who = preferredName, noun = cita (arrival = CITA, appt_wa_appointment), shop = the business name, service = the first line */
 const WA_TEXT = signed(t("appt_wa_booked", CL[WHO_CLIENT].first, t("appt_wa_appointment"), C.place, waWhen(BOOK_DAY, BOOK_MIN), DEMO_SVC.name));
 function render(st){
-  if(st.screen==="till") return till({cart:st.cart, regClosed:true, overlay: st.sheet ? optionSheet(DEMO_SVC) : "",
-    snack: st.snack ? snack(t("booking_saved_snackbar", dayLabel(BOOK_DAY)+" · "+fmtTime(BOOK_MIN)), t("booking_saved_see_agenda")) : ""});
+  if(st.screen==="till") return tillScrolled(till({cart:st.cart, regClosed:true, overlay: st.sheet ? optionSheet(DEMO_SVC) : "",
+    snack: st.snack ? snack(t("booking_saved_snackbar", dayLabel(BOOK_DAY)+" · "+fmtTime(BOOK_MIN)), t("booking_saved_see_agenda")) : ""}), `[data-t="svc-${DEMO_SVC.id}"]`);
   if(st.screen==="book") return scrolled(bookingScreen(Object.assign({}, st.bk, {now:NOW, overlay: st.picker ? clientPicker() : ""})), st.scrollTo, st.scrollTop ? {top:true} : {});
   if(st.screen==="wa") return waChat({client:WHO_CLIENT, text:WA_TEXT, sent:st.sent, clock:fmtTime(NOW)});
   return "";

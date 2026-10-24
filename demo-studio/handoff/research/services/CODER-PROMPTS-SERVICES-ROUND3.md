@@ -51,3 +51,11 @@ and re-checked by me before they go in. Status: IN PROGRESS (more items arrive a
 
 ### 8. The Agenda row gives no sign when an online booking lands on a time already taken
 - Where: the Agenda list (owner phone). Fix: mark a row that overlaps another booking.
+
+### 9. Branch setup: "Se llamará ." when the branch name opens empty
+- Where: `ui/screens/.../BranchSetupScreen.kt:277-279`: a parent name of 22 or more letters opens the field empty (item 50's rule), and the line under it
+  then reads "Se llamará ." Fix: draw that line only when the name is not blank.
+
+### 10. Security: the services "delete data" line still says "categorías"
+- Where: string `security_protect_delete_data_desc_services` (shown by `ui/screens/settings/SecurityScreen.kt:182-191`). A services owner cannot create,
+  rename or delete categories (choke point 23). Fix: "Servicios, adicionales y opciones" (and the pt/en/fr values).
