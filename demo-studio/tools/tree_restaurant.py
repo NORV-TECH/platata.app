@@ -56,10 +56,10 @@ for biz, typ in (("tienda", ""), ("farmacia", "&type=pharmacy")):
         out.append(f' "{biz}:{fid}":{{ only:{RET_ALL!r}, page:(c,l)=>`demos/tienda/{page}.html?embed=1&country=${{c}}&lang=${{l}}{typ}`, video:{{{vv}}} }},'.replace("'", '"'))
 # ---- services: the four demo businesses share the pages demos/servicios/V<n>.html (own) and VS<n>.html (shared), with &biz=<trade>.
 #      Videos are made for CO es and BR pt with each page's own business (shown for all four); a "-MX" script's video is shown for the
-#      countries it speaks for. US and Canada are on hold (Monti, 21 Oct): no services pages there yet. V9 and S20 wait for Monti's go.
+#      countries it speaks for. US and Canada are on hold (Monti, 21 Oct): no services pages there yet. V9 and S20 joined on 24 Oct (round 3; the booking page is deployed): page everywhere, Brazil video held for the booking page's "Desde" price.
 SERV_BIZ = {"peluqueria": "peluqueria", "veterinaria": "veterinaria", "motos": "taller-motos", "unas": "unas"}
 SERV_CL = [cl for cl in ALL_CL if not cl.startswith(("US", "CA"))]
-SERV_HOLD = {"V9", "VS20"}
+SERV_HOLD = set()
 NOT_CO = ["MX", "PE", "CL", "EC", "AR", "PA"]
 MX_SPEAKS_FOR = {"V1": NOT_CO, "V2": NOT_CO, "VS18": NOT_CO}   # no suggested prices / the cut has choices: true in every Spanish country but Colombia
 for tree_id, slug in SERV_BIZ.items():
