@@ -171,7 +171,9 @@ const btn = (text, kind, dt, o) => { o=o||{}; return `<div class="sv-b ${kind||"
 const sw = (on, tag, dis) => `<span class="sv-sw${on?" on":""}${dis?" dis":""}"${tag?` data-t="${tag}"`:""}><i></i></span>`;
 // KEYS: rp_strip_support,rp_strip_support_sub,rp_my_title,rp_sheet_my_reports_none
 /* SupportStripDock under every LEVEL_2 page (ui/screens/reports/SupportStrip.kt; ReportLevels.kt:41 settings_hub, where_modes,
-   appointment_detail, discounts_workspace = level 2; register_home, transactions, open_register, receipt_options have none) */
+   appointment_detail, discounts_workspace = level 2; register_home, transactions, open_register, receipt_options have none). The badge is the
+   business accent (PlatataApp.kt:487 accent = rules.colorKey = SERVICIOS, PaperColor.kt:57 ServiciosBtn #7C55E0; it was drawn in the
+   restaurant colour #C44B28 before round 3) */
 const strip = () => `<div class="sv-strip"><div class="h"><span class="bd">${I.support}</span><div><b>${esc(S("rp_strip_support"))}</b><small>${esc(S("rp_strip_support_sub"))}</small></div></div><i></i>
   <div class="h"><div><b>${esc(S("rp_my_title"))}</b><small>${esc(S("rp_sheet_my_reports_none"))}</small></div>${I.chev}</div></div>`;
 // KEYS: mamaship_tab_register,sx_agenda,home_tab_my_business
@@ -424,7 +426,7 @@ const SV_CSS = `
 .mat .sv-strip>i{position:absolute;left:50%;top:0;bottom:0;width:1px;background:#E6E2D9}
 .mat .sv-strip .h{flex:1;display:flex;align-items:center;gap:calc(var(--u)*10);padding:calc(var(--u)*8) calc(var(--u)*12);min-width:0}
 .mat .sv-strip .h>div{flex:1;min-width:0}
-.mat .sv-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#C44B28;color:#fff;display:grid;place-items:center;flex:0 0 auto}
+.mat .sv-strip .bd{width:calc(var(--u)*36);height:calc(var(--u)*36);border-radius:50%;background:#7C55E0;color:#fff;display:grid;place-items:center;flex:0 0 auto}
 .mat .sv-strip .bd svg{width:calc(var(--u)*22);height:calc(var(--u)*22)}
 .mat .sv-strip b{display:block;font-size:calc(var(--u)*15);font-weight:700;color:#17181B}
 .mat .sv-strip small{display:block;font-size:calc(var(--u)*13);color:#737883;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}

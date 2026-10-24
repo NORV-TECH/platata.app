@@ -2,7 +2,7 @@
 
 App commit read: **37db6d6c** (sim/usa-canada, Fusion 28). Monti passes this to the coder. Each item: what is wrong, where (file:line),
 a one-line fix, and how much it matters ("BLOCKS A DEMO", "money", "small"). Items are verified in the code by the builder who found them
-and re-checked by me before they go in. Status: IN PROGRESS (more items arrive as the re-check of every services page finishes).
+and re-checked by me before they go in. Status: IN PROGRESS (more items arrive as the re-check of every services page finishes). Mexico card items are in `handoff/research/mexico/CODER-PROMPTS-MEXICO.md` (round 3 section).
 
 ## Blocking / money
 

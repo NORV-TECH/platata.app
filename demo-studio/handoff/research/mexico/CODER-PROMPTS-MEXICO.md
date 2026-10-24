@@ -46,3 +46,15 @@ Items from the services list that are also about Mexico stay there (round 2 item
 ## For the architect (not a coder bug, a release fact)
 - `sync/TapToPayMode.kt:25` `REAL_TAP_TO_PAY = false`: the build still selects Stripe's simulated reader in every Stripe country. The Mexico tap
   videos show the flow the app is built for; a real card can be taken only once that flag (and the TapToPayProfile) ships.
+
+## Round 3 (37db6d6c, 24 Oct)
+Round 2 item 7 and Mexico items 1, 2 and 3 above are FIXED at 37db6d6c (both links on two labelled rows; short card hint; plain Card button for a
+linked account; no "can't take cards" strip on a link phone; card brand and last four on a tap sale). Item 4 is answered: the sentence was removed (LINKCOST-1).
+
+### 5. SMALL, shows in the RS5-MX and TS5-MX videos. A Tap to Pay sale prints "visa ••4242" in lower case; a link sale prints "VISA ••4242"
+- Where: `utils/TerminalReaderManager.kt:646-651` (`readCardIdentity` returns Stripe's raw brand, which is lower case); the link path upper-cases it in
+  `sync/PosLinkRules.kt:149-150` (`brandForReceipt`).
+- Fix (one line): pass the tap brand through `PosLinkResult.brandForReceipt` too. Then re-record RS5-MX and TS5-MX (voice unchanged).
+
+### Doc drift
+- `ui/pos/StripePaymentActions.kt:41` still says the brand is "null in v1"; `:107` says the single payment is "US/Canada" only.
