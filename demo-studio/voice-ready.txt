@@ -129,3 +129,4 @@ TS5-MX
 RS25-MX
 V9
 VS20
+# round 3 (24 Oct): V5 Brazil lines 4, 5, 8
