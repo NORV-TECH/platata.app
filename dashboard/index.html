@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Platata dashboard</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="https://platata.app/en/dashboard/">
+<meta http-equiv="refresh" content="0; url=/en/dashboard/">
+<script>
+  (function () {
+    var langs = (navigator.languages || [navigator.language || "en"]).map(function (l) { return String(l).toLowerCase(); });
+    var pick = "en";
+    for (var i = 0; i < langs.length; i++) {
+      var l = langs[i].slice(0, 2);
+      if (l === "es" || l === "fr" || l === "pt" || l === "en") { pick = l; break; }
+    }
+    location.replace("/" + pick + "/dashboard/" + location.search + location.hash);
+  })();
+</script>
+</head>
+<body>
+<p><a href="/en/dashboard/">Open the Platata dashboard</a></p>
+</body>
+</html>
